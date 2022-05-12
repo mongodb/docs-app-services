@@ -1,6 +1,18 @@
 # docs-app-services
 
-[Your words here].
+This repository contains documentation for MongoDB App Services.
+
+## Contribute
+
+The MongoDB Documentation Project is governed by the terms of the
+`MongoDB Contributor Agreement
+<https://www.mongodb.com/legal/contributor-agreement>`_.
+
+To contribute to the documentation,
+
+- If you have not done so already, please sign the `MongoDB Contributor Agreement <https://www.mongodb.com/legal/contributor-agreement>`_.
+
+- Fork this repository on GitHub and issue a pull request.
 
 ## Report Issues
 
