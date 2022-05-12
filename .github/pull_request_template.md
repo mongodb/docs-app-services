@@ -6,7 +6,7 @@
 
 ### Staged Changes (Requires MongoDB Corp SSO)
 
-- [PAGE_NAME](https://docs-mongodbcom-staging.corp.mongodb.com/realm/docsworker-xlarge/BRANCH_NAME/)
+- [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/)
 
 ### Review Guidelines
 
