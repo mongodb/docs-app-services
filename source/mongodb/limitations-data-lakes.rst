@@ -7,7 +7,7 @@ mind when working with a Data Lake:
 
 - You can only access a Data Lake from a :ref:`system function <system-functions>`.
 
-- You cannot connect to a Data Lake via the wire protocol.
+- You cannot connect to a Data Lake via the :ref:`wire protocol <wire-protocol>`.
 
 - You cannot define :ref:`roles and permissions <define-roles-and-permissions>` for a Data Lake.
 
