@@ -1,5 +1,24 @@
-- Log in to the Realm UI, and then click :guilabel:`App Users` in the left 
-  hand panel.
+If you have not yet created a secondary Linked Data Source, you must to that 
+first so that the functions can bypass the default Sync rules when writing 
+Custom User Data. To do this, follow these steps:
+
+-  Log in to the Realm UI, and then click :guilabel:`Linked Data Sources`.
+
+- Click the :guilabel:`Link a Data Source` button, and then provide the 
+  following values:
+
+  - :guilabel:`Data Source`: select the name of the data source currently used 
+    by this app.
+
+  - :guilabel:`Realm Service Name`: "custom-user-data"
+  
+  - :guilabel:`Read Preference`: "primary"
+
+- Click :guilabel:`Save`.
+
+After you have a secondary data source, follow these steps:
+
+- Click :guilabel:`App Users` in the left hand panel.
 
 - Select the :guilabel:`Custom User Data` tab.
 

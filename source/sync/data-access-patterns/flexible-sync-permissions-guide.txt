@@ -357,29 +357,30 @@ object when a user authenticates for the first time. To do so, follow these step
 
 .. include:: /includes/create-auth-trigger.rst
 
-.. code-block:: javascript
-   
-   exports = function(authEvent) {
-   const user = authEvent.user;
+      .. code-block:: javascript
+         
+         exports = function(authEvent) {
+         const user = authEvent.user;
 
-   //Access the mongodb service for custom user data:
-   const collection = context.services.get("custom-user-data").db("Item").collection("User");
-   const newDoc = {
-      _id: user.id,
-      _owner_id: user.id,
-      team: '',
-      isTeamAdmin: false
-   };
-   
-   // It's OK to do an insert and not a upsert because this function 
-   // only runs when a new user account is created
-   var result = collection.insertOne(newDoc);
-   
-   console.log(JSON.stringify(result));
-   console.log(JSON.stringify($user.custom_data.subscribedTo));
-   };
+         //Access the mongodb service for custom user data:
+         const collection = context.services.get("custom-user-data").db("Item").collection("User");
+         const newDoc = {
+            _id: user.id,
+            _owner_id: user.id,
+            team: '',
+            isTeamAdmin: false
+         };
+         
+         // It's OK to do an insert and not a upsert because this function 
+         // only runs when a new user account is created
+         var result = collection.insertOne(newDoc);
+         
+         console.log(JSON.stringify(result));
+         console.log(JSON.stringify($user.custom_data.subscribedTo));
+         };
 
-Create AddToTeam Function
+
+Create joinTeam Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We now need a function that adds a user to a team. Note that this function 
@@ -396,7 +397,7 @@ To create the function, follow these steps:
 
 - Specify the following values:
 
-  - :guilabel:`Name`: "addToTeam"
+  - :guilabel:`Name`: "joinTeam"
   
   - :guilabel:`Authentication`: "System"
   
@@ -415,7 +416,6 @@ To create the function, follow these steps:
       let result = await collection.updateOne(filter, update, options);
       return result;
       };
-
 
 Define Sync Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~
