@@ -229,14 +229,14 @@ The examples in this section demonstrate calling a simple function named
 
 .. _call-function-from-function:
 
-Functions
-~~~~~~~~~
+Call from a Function
+~~~~~~~~~~~~~~~~~~~~
 
-You can call a function through the :ref:`context.functions
-<context-functions>` interface, which is available as a global variable
-in any function. This include HTTPS endpoints, triggers, and GraphQL
-customer resolvers. The called function runs in the same context as the
-function that called it.
+You can call a function from another function through the
+:ref:`context.functions <context-functions>` interface, which is
+available as a global variable in any function. This include HTTPS
+endpoints, triggers, and GraphQL customer resolvers. The called function
+runs in the same context as the function that called it.
 
 .. code-block:: javascript
    
@@ -247,8 +247,8 @@ function that called it.
 
 .. _call-function-from-realm-cli:
 
-{+cli+}
-~~~~~~~~~
+Call from {+cli+}
+~~~~~~~~~~~~~~~~~~~
 
 You can call a function through {+cli+} with the :ref:`function run
 <realm-cli-function-run>` command. The command returns the function
@@ -274,8 +274,8 @@ user, include their User ID in the ``--user`` argument.
 
 .. _call-function-json-expression:
 
-Rule Expressions
-~~~~~~~~~~~~~~~~
+Call from Rule Expressions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can call a function from a :ref:`rule expression <expressions>` by
 using the :json-operator:`%function` operator. The operator evaluates to
@@ -296,8 +296,8 @@ expression evaluates to ``false``.
      }
    }
 
-Realm SDKs
-~~~~~~~~~~
+Call from Realm SDKs
+~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/important-sanitize-client-data-in-functions.rst
 
