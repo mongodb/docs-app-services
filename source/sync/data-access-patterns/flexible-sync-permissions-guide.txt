@@ -38,6 +38,9 @@ In this case, users may not read or write any data but their own. Consider a
 notes app where the user wants their notes to be persisted and shared across
 their own devices but kept private to their user account.
 
+This strategy permits a user to create and edit a document if and only if that
+document's ``owner_id`` field equals the user's ID.
+
 To set this up, follow these steps:
 
 .. include:: /includes/use-flex-sync-templates
@@ -317,7 +320,81 @@ steps:
 Dynamic Collaboration
 ---------------------
 
-.. TODO
+In the Dynamic Collaboration strategy, users can create documents and add other
+users as editors of that document.
+
+Like the Read & Write Own Data strategy, this strategy permits a user to create
+and edit a document if that document's ``owner_id`` field equals the user's ID.
+Additionally, a user may edit the document if the document's ``collaborators``
+array field contains their ID.
+
+To implement this strategy, follow these steps:
+
+.. include:: /includes/use-flex-sync-templates
+
+- Also in :guilabel:`Select Queryable Fields`: type in ``collaborators`` as well. This
+  will be the field that stores the IDs of users who can also read and write
+  the document.
+- :guilabel:`Define Permissions`: use the template dropdown to
+  select the "Custom (start from scratch)". Paste the following into the rule
+  expression box: 
+
+  .. code-block:: json
+
+     {
+       "rules": {},
+       "defaultRoles": [
+         {
+           "name": "read-only",
+           "applyWhen": {},
+           "write": {
+             "$or": [
+               {
+                 "owner_id": "%%user.id"
+               },
+               {
+                 "collaborators": "%%user.id"
+               }
+             ]
+           }
+         }
+       ]
+     }
+  
+  Take a look at the "write" expression. ``$or`` takes an array of options. We
+  have two possible conditions where a user may write the document:
+  
+  - The ``owner_id`` field of the document equals the user's ID
+  - The ``collaborators`` array field of the document contains the user's ID.
+
+  If granted write permission, the user automatically gets read permission.
+  Therefore, we omitted the "read" expression as it would be redundant in this
+  case.
+
+A user can add a collaborator to their document by adding the collaborator's
+user ID to the ``collaborators`` array field on their document. This can be done
+on the client side.
+
+How exactly you get the potential collaborator's user ID depends on the details
+of your app and your UI. There is no built-in functionality for searching for
+users -- you need to set this up according to your app's needs. For example,
+your app might use email/password authentication. When a user wants to add a
+collaborator to a document, you might have a search box that accepts an email
+address. Upon entering an email address, the client calls a Realm backend
+function that queries your user data collection. You had set up an
+authentication trigger to fire upon user registration. The trigger function
+stores each new user's email address and ID in the user data collection. So, if
+the email address was found by the search function, the user ID can be returned
+to the client. The client can then add the collaborator user ID to the
+document's collaborators list.
+
+Caveats
+~~~~~~~
+
+If a user has write access to a document, they may write to any field of the
+document. Consequently, this strategy **allows collaborators to add
+collaborators**. It would also allow a collaborator to edit the ``owner_id``
+field. We don't recommend using this model for highly sensitive data.
 
 .. _tiered-privileges:
 
