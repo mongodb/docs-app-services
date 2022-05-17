@@ -349,53 +349,72 @@ To enable custom user data, follow these steps:
 
 .. include:: /includes/define-custom-user-data.rst
 
-Create Custom User Data Functions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Create Authentication Trigger Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 We need to create a authentication trigger function that creates a custom user 
 object when a user authenticates for the first time. To do so, follow these steps:  
 
 .. include:: /includes/create-auth-trigger.rst
 
-   .. code-block:: javascript
-      
-      exports = function(authEvent) {
-      const user = authEvent.user;
+.. code-block:: javascript
+   
+   exports = function(authEvent) {
+   const user = authEvent.user;
 
-      //Access the mongodb service for custom user data:
-      const collection = context.services.get("mongodb-atlas-cud").db("Item").collection("User");
-      const newDoc = {
-         _id: user.id,
-         _owner_id: user.id,
-         team: '',
-         isTeamAdmin: false
-      };
-      
-      // It's OK to do an insert and not a upsert because this function 
-      // only runs when a new user account is created
-      var result = collection.insertOne(newDoc);
-      
-      console.log(JSON.stringify(result));
-      console.log(JSON.stringify($user.custom_data.subscribedTo));
-      };
+   //Access the mongodb service for custom user data:
+   const collection = context.services.get("custom-user-data").db("Item").collection("User");
+   const newDoc = {
+      _id: user.id,
+      _owner_id: user.id,
+      team: '',
+      isTeamAdmin: false
+   };
+   
+   // It's OK to do an insert and not a upsert because this function 
+   // only runs when a new user account is created
+   var result = collection.insertOne(newDoc);
+   
+   console.log(JSON.stringify(result));
+   console.log(JSON.stringify($user.custom_data.subscribedTo));
+   };
 
+Create AddToTeam Function
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We now need a function that adds a user to a team. Note that this function 
-runs under System authentication and writes to the custom user data. It does not 
-perform an upsert because the user custom data was created when the user 
+will run under System authentication and writes to the custom user data. It 
+does not perform an upsert because the user custom data was created when the user 
 successfully authenticated for the first time.
 
-.. code-block:: json
+To create the function, follow these steps:
 
-   exports = async function(userId, teamName) {
-     var collection = context.services.get("mongodb-atlas-cud").db("Item").collection("User");
+- Log in to the Realm UI, and then click :guilabel:`Functions` in the left 
+  hand panel.
 
-     const filter = { _id: userId };
-     const update = { $set: { team: teamName }};
-     const options = { upsert: false };
+- Click the :guilabel:`Create New Function` button.
 
-     let result = await collection.updateOne(filter, update, options);
-     return result;
-   };
+- Specify the following values:
+
+  - :guilabel:`Name`: "addToTeam"
+  
+  - :guilabel:`Authentication`: "System"
+  
+- Switch to the :guilabel:`Function Editor` tab and replace the placeholder text 
+  with the following code: 
+
+   .. code-block:: json
+
+      exports = async function(userId, teamName) {
+      var collection = context.services.get("custom-user-data").db("Item").collection("User");
+
+      const filter = { _id: userId };
+      const update = { $set: { team: teamName }};
+      const options = { upsert: false };
+
+      let result = await collection.updateOne(filter, update, options);
+      return result;
+      };
 
 
 Define Sync Permissions
@@ -453,4 +472,3 @@ The following {+sync-short+} permissions specify two roles:
 
    :ref:`<custom-user-data>`
 
-   
