@@ -401,48 +401,151 @@ field. We don't recommend using this model for highly sensitive data.
 Tiered Privileges
 -----------------
 
-In this permission strategy, users with the ``globalAdmin`` session role
-can read and write to any document. Users with the ``departmentAdmin``
-session role can read any document, but can only write to documents in
-their department. Users with the ``departmentMember`` session role can
-read any document in their department, but can't write to any documents.
-Members can only read documents in their own departments; they cannot
-read documents for other departments.
+In this permission strategy, we will introduce **roles** as well as rules. Their 
+are two roles: **a team member** and **a team administrator**. The rules are as 
+follows:
+
+- Each user is a member of a team. 
+- A user can read and write their own documents.
+- All members of the team can read all documents created by team members. 
+- Each team has a team administrator, who has read & write permissions on every 
+  team document.
+
+To make this work, we need to do the following:
+
+- Enable custom user data
+- Create a trigger function to create a new custom user data object for each 
+  new user
+- Create a function to add a user to a team
+- Define the Sync permissions
+
+Configure Custom User Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To enable custom user data, follow these steps:
+
+.. include:: /includes/define-custom-user-data.rst
+
+Create Authentication Trigger Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We need to create a authentication trigger function that creates a custom user 
+object when a user authenticates for the first time. To do so, follow these steps:  
+
+.. include:: /includes/create-auth-trigger.rst
+
+      .. code-block:: javascript
+         
+         exports = function(authEvent) {
+         const user = authEvent.user;
+
+         //Access the mongodb service for custom user data:
+         const collection = context.services.get("custom-user-data").db("Item").collection("User");
+         const newDoc = {
+            _id: user.id,
+            _owner_id: user.id,
+            team: '',
+            isTeamAdmin: false
+         };
+         
+         // It's OK to do an insert and not a upsert because this function 
+         // only runs when a new user account is created
+         var result = collection.insertOne(newDoc);
+         
+         console.log(JSON.stringify(result));
+         console.log(JSON.stringify($user.custom_data.subscribedTo));
+         };
+
+
+Create joinTeam Function
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We now need a function that adds a user to a team. Note that this function 
+will run under System authentication and writes to the custom user data. It 
+does not perform an upsert because the user custom data was created when the user 
+successfully authenticated for the first time.
+
+To create the function, follow these steps:
+
+- Log in to the Realm UI, and then click :guilabel:`Functions` in the left 
+  hand panel.
+
+- Click the :guilabel:`Create New Function` button.
+
+- Specify the following values:
+
+  - :guilabel:`Name`: "joinTeam"
+  
+  - :guilabel:`Authentication`: "System"
+  
+- Switch to the :guilabel:`Function Editor` tab and replace the placeholder text 
+  with the following code: 
+
+   .. code-block:: json
+
+      exports = async function(userId, teamName) {
+      var collection = context.services.get("custom-user-data").db("Item").collection("User");
+
+      const filter = { _id: userId };
+      const update = { $set: { team: teamName }};
+      const options = { upsert: false };
+
+      let result = await collection.updateOne(filter, update, options);
+      return result;
+      };
+
+Define Sync Permissions
+~~~~~~~~~~~~~~~~~~~~~~~
+The following {+sync-short+} permissions specify two roles:
+
+- **teamAdmin** applies only when the user's custom data has 
+  ``isTeamAdmin = true``. If so, the user can read and write all documents where 
+  the document's ``team`` value matches the user's ``team`` value.
+- **teamMember** applies to every user. The user can write their own 
+  documents and read all documents where the document's ``team`` value matches 
+  the user's ``team`` value.
 
 .. code-block:: json
 
    {
-    "Employees": [{
-        "name": "globalAdmin",
-        "applyWhen": {
-          "%%user.custom_data.isGlobalAdmin": true
-        },
-        "read": {},
-        "write": {}
-      },
-      {
-        "name": "departmentAdmin",
-        "applyWhen": {
-          "%%user.custom_data.isLocalAdmin": true
-        },
-        "read": {},
-        "write": {
-          "department": "%%user.custom_data.department"
-        }
-      },
-      {
-        "name": "departmentMember",
-        "applyWhen": {},
-        "read": {
-          "department": "%%user.custom_data.department"
-        },
-        "write": false
-      }
-    ]
+     "rules": {},
+     "defaultRoles": [
+       {
+         "name": "teamAdmin",
+         "applyWhen": {
+           "%%user.custom_data.isTeamAdmin": true
+         },
+         "read": {
+           "team": "%%user.custom_data.team"
+         },
+         "write": {
+           "team": "%%user.custom_data.team"
+         }
+       },
+       {
+         "name": "teamMember",
+         "applyWhen": {},
+         "read": {
+           "team": "%%user.custom_data.team"
+         },
+         "write": {
+           "owner_id": "%%user.id"
+         }
+       }
+     ]
    }
 
 
+.. note:: Take it Further
+
+   This strategy can be expanded to support a "globalAdmin" role. The global 
+   admin would have read & read permissions on any doc created in any team. 
+
+.. seealso:: Authentication Triggers
+
+   :ref:`<authentication-triggers>`.
 
 .. seealso:: Enable Custom User Data
 
    :ref:`<custom-user-data>`
+
