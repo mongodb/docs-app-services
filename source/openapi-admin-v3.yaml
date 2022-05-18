@@ -3064,6 +3064,84 @@ paths:
               schema:
                 properties: {}
 
+  /groups/{groupId}/apps/{appId}/graphql:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    post:
+      tags:
+        - graphql
+      operationId: adminRunGraphQLOperation
+      summary: Run a query or mutation
+      description: |-
+        Run a query or mutation as a system user that bypasses
+        authentication and data access rules. You can access metadata
+        about your API, including its schema, with an
+        [introspection](https://graphql.org/learn/introspection/) query.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["query"]
+              properties:
+                query:
+                  type: string
+                  description: |-
+                    A GraphQL file string that contains one or more
+                    valid GraphQL operations for your API. If more than
+                    one operation is defined, you must specify which
+                    operation to run in `operationName`.
+                variables:
+                  type: string
+                  description: |-
+                    A JSON string where each field name maps a value to
+                    a variable in the specified operation.
+                operationName:
+                  type: string
+                  description: |-
+                    The name of the GraphQL operation specified in
+                    `query` to run.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The result of the specified operation.
+                required: ["data"]
+                properties:
+                  data:
+                    type: object
+                    nullable: true
+                    description: The result of a successful operation. If `null`, the operation had errors.
+                  errors:
+                    type: array
+                    description: A list of errors encountered while running an operation.
+                    minItems: 1
+                    items:
+                      type: object
+                      description: An error encountered while running an operation.
+                      required: ["message", "locations"]
+                      properties:
+                        message:
+                          type: string
+                          description: A message that describes the error.
+                        locations:
+                          type: array
+                          description: A list of one or more locations in the operation that caused the error.
+                          items:
+                            type: object
+                            required: ["line", "column"]
+                            minItems: 1
+                            description: The operation line and column numbers that caused an error.
+                            properties:
+                              line:
+                                type: integer
+                              column:
+                                type: integer
+
   /groups/{groupId}/apps/{appId}/graphql/custom_resolvers:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4536,7 +4614,7 @@ tags:
     description: View and manage your app's [functions](https://www.mongodb.com/docs/realm/functions/).
   - name: graphql
     x-displayName: GraphQL API
-    description: View and manage GraphQL custom resolvers and request validation settings.
+    description: Configure and run GraphQL API operations.
   - name: hosting
     x-displayName: Hosting
     description: |
