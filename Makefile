@@ -14,10 +14,10 @@ stagel:
 	@ rm -rf build_scripts
  
 commit:
-		@:
+	@:
  
 local:
-		@:
+	@:
  
 clean:
 	rm -rf build
