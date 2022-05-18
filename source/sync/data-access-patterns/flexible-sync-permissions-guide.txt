@@ -19,7 +19,7 @@ following common use cases:
 - :ref:`write-own-data-read-all-data`
 - :ref:`admin-privileges`
 - :ref:`restricted-news-feed`
-- :ref:`dynamic-collaboration` - not currently possible.
+- :ref:`dynamic-collaboration`
 - :ref:`tiered-privileges`
 
 These assume you have already created a Realm app.
@@ -328,6 +328,9 @@ and edit a document if that document's ``owner_id`` field equals the user's ID.
 Additionally, a user may edit the document if the document's ``collaborators``
 array field contains their ID.
 
+Set Up Permissions
+~~~~~~~~~~~~~~~~~~
+
 To implement this strategy, follow these steps:
 
 .. include:: /includes/use-flex-sync-templates
@@ -371,30 +374,91 @@ To implement this strategy, follow these steps:
   Therefore, we omitted the "read" expression as it would be redundant in this
   case.
 
-A user can add a collaborator to their document by adding the collaborator's
-user ID to the ``collaborators`` array field on their document. This can be done
-on the client side.
+Adding a Collaborator
+~~~~~~~~~~~~~~~~~~~~~
 
-How exactly you get the potential collaborator's user ID depends on the details
-of your app and your UI. There is no built-in functionality for searching for
-users -- you need to set this up according to your app's needs. For example,
-your app might use email/password authentication. When a user wants to add a
-collaborator to a document, you might have a search box that accepts an email
-address. Upon entering an email address, the client calls a Realm backend
-function that queries your user data collection. You had set up an
-authentication trigger to fire upon user registration. The trigger function
-stores each new user's email address and ID in the user data collection. So, if
-the email address was found by the search function, the user ID can be returned
-to the client. The client can then add the collaborator user ID to the
-document's collaborators list.
+A user can grant write access on their document to another user by adding that
+user's ID to the ``collaborators`` array field on their document. This can be
+done on the client side.
 
-Caveats
-~~~~~~~
+Security
+~~~~~~~~
 
-If a user has write access to a document, they may write to any field of the
-document. Consequently, this strategy **allows collaborators to add
+We don't recommend using this model for highly sensitive data.
+
+This model uses the flexible sync permissions system to keep documents private
+between the document creator and the collaborators they add to the document.
+
+However, if a user has write access to a document, they may write to any field
+of the document. Consequently, this strategy **allows collaborators to add other
 collaborators**. It would also allow a collaborator to edit the ``owner_id``
-field. We don't recommend using this model for highly sensitive data.
+field. Finer control of permissions are not possible without field-level
+permissions, which are not currently available.
+
+User Search
+~~~~~~~~~~~
+
+How exactly to get the other user's ID depends on the details of your app. For
+example, when a user wants to add another user to a document, you might have a
+search box that accepts an email address. If the given email address corresponds
+to another user, the client can add that user's ID to the document's
+``collaborators`` array.
+
+Realm has no built-in way to search users. Generally, the flow for searching
+users is as follows:
+
+- Set up an authentication trigger to create a user document when a user
+  registers. The user document contains information you'll use to look up later,
+  such as the user's email address.
+- Create a function that queries the user data collection for a user.
+- Call the function from the client side when the user wants to find another user.
+
+To create an authentication trigger, follow these steps:
+
+.. include:: /includes/create-auth-trigger.rst
+
+- 
+   - 
+      .. code-block:: javascript
+         
+          exports = function(authEvent) {
+            const user = authEvent.user;
+
+            //Access the mongodb service for custom user data:
+            const collection = context.services.get("custom-user-data").db("Item").collection("User");
+            const newDoc = {
+              _id: user.id,
+              email: user.data.email, // Assumes email/password authentication
+            };
+            
+            // It's OK to do an insert and not a upsert because this function 
+            // only runs when a new user account is created
+            return collection.insertOne(newDoc);
+         };
+
+Next, create a system function called ``findUser``:
+
+.. include:: /includes/create-a-system-function.rst
+
+In the :guilabel:`Function Editor`, paste the following code and save:
+
+.. code-block:: javascript
+
+   exports = async function(email) { 
+     // Access the mongodb service for custom user data:
+     const collection = context.services.get("custom-user-data").db("Item").collection("User");
+     const filter = {
+       email,
+     };
+     // Search for the user by email
+     const result = await collection.findOne(filter);
+     // Return null or the corresponding user id
+     return result && result._id;
+   };
+
+From your client, you can now call this function. The function's only argument
+is an email address string. If the email corresponds to a user, the function
+returns the user's ID. Otherwise, it returns null.
 
 .. _tiered-privileges:
 
