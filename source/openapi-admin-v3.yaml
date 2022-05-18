@@ -1806,8 +1806,8 @@ paths:
               - SCHEMA_GENERATION
               - SCHEMA_VALIDATION
               - LOG_FORWARDER
-            description: The kind of log you would like to retrieve.
-            required: false
+          description: The kind of log you would like to retrieve.
+          required: false
       responses:
         "200":
           description: Successfully retrieved.
@@ -3064,6 +3064,123 @@ paths:
               schema:
                 properties: {}
 
+  /groups/{groupId}/apps/{appId}/graphql/custom_resolvers:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetAllCustomResolvers
+      summary: Get all custom resolvers
+      description: Get all [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configurations from your app's GraphQL API.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CustomResolver"
+    post:
+      tags:
+        - graphql
+      operationId: adminCreateCustomResolver
+      summary: Create a custom resolver
+      description: Create a new [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/).
+      requestBody:
+        description: A valid [custom resolver configuration](https://www.mongodb.com/docs/realm/manage-apps/configure/config/graphql/#appconfig-custom-resolver) object.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CustomResolver"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CustomResolver"
+  /groups/{groupId}/apps/{appId}/graphql/custom_resolvers/{customResolverId}:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/CustomResolverId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetCustomResolver
+      summary: Get a custom resolver
+      description: Get a specific [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CustomResolver"
+    put:
+      tags:
+        - graphql
+      operationId: adminModifyCustomResolver
+      summary: Modify a custom resolver
+      description: Modify an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      requestBody:
+        description: A valid, updated [custom resolver configuration](https://www.mongodb.com/docs/realm/manage-apps/configure/config/graphql/#appconfig-custom-resolver) object.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CustomResolver"
+      responses:
+        "204":
+          description: Updated
+    delete:
+      tags:
+        - graphql
+      operationId: adminDeleteCustomResolver
+      summary: Delete a custom resolver
+      description: Delete an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      responses:
+        "204":
+          description: Deleted
+
+  /groups/{groupId}/apps/{appId}/validation_settings/graphql:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetValidationSettings
+      summary: Get validation settings
+      description: Get the current validation level and action for reads and writes.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ValidationSettings"
+    put:
+      tags:
+        - graphql
+      operationId: adminSetValidationSettings
+      summary: Modify validation settings
+      description: Set the validation level and action for reads and writes.
+      requestBody:
+        description: The updated validation levels and actions.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ValidationSettings"
+      responses:
+        "204":
+          description: Updated
+
 components:
   parameters:
     AssetResourcePath:
@@ -3241,6 +3358,13 @@ components:
     EndpointId:
       name: endpointId
       description: The endpoint's `_id` ObjectID value.
+      in: path
+      required: true
+      schema:
+        type: string
+    CustomResolverId:
+      name: customResolverId
+      description: The resolver's `_id` ObjectID value
       in: path
       required: true
       schema:
@@ -4205,6 +4329,98 @@ components:
         collection:
           type: string
           description: The collection name.
+    CustomResolver:
+      type: object
+      required:
+        - _id
+        - function_id
+        - on_type
+        - field_name
+      properties:
+        _id:
+          type: string
+          description: The custom resolver's unique ID.
+        function_id:
+          type: string
+          description: The resolver function's unique ID.
+        on_type:
+          type: string
+          description: |-
+            The name of the resolver's parent type. This can be
+            `"Query"`, `"Mutation"`, or the name of a generated type if
+            this is a computed property.
+        field_name:
+          type: string
+          description: The name of the custom resolver field that appears in the GraphQL schema.
+        input_type:
+          oneOf:
+            - type: string
+            - type: object
+          description: |-
+            The type of the custom resolver's `input` parameter. This
+            can be a scalar, the name of an existing generated type, or
+            a custom JSON schema object. If undefined, the resolver does
+            not accept an input.
+        input_type_format:
+          type: string
+          enum:
+            - scalar
+            - scalar-list
+            - generated
+            - generated-list
+            - custom
+          description: |-
+            The kind of input type the custom resolver uses. This value
+            must agree with the value of `input_type`:
+
+            - A scalar input type must use `"scalar"` or `"scalar-list"`
+            - A generated input type must use `"generated"` or `"generated-list"`
+            - A custom input type must use `"custom"`
+
+            If undefined, the resolver does not accept an input.
+        payload_type:
+          oneOf:
+            - type: string
+            - type: object
+          description: |-
+            The type of the value returned by the custom resolver. This
+            can be a scalar, the name of an existing generated type, or
+            a custom JSON schema object. If undefined, the resolver
+            returns a `DefaultPayload` object.
+        payload_type_format:
+          type: string
+          enum:
+            - scalar
+            - scalar-list
+            - generated
+            - generated-list
+            - custom
+          description: |-
+            The kind of payload type the custom resolver uses. This value
+            must agree with the value of `payload_type`:
+
+            - A scalar payload type must use `"scalar"` or `"scalar-list"`
+            - A generated payload type must use `"generated"` or `"generated-list"`
+            - A custom payload type must use `"custom"`
+
+            If undefined, the resolver returns a `DefaultPayload` object.
+    ValidationLevel:
+      type: string
+      enum: ["STRICT", "OFF"]
+    ValidationAction:
+      type: string
+      enum: ["ERROR", "WARN"]
+    ValidationSettings:
+      type: object
+      properties:
+        read_validation_action:
+          $ref: "#/components/schemas/ValidationAction"
+        read_validation_level:
+          $ref: "#/components/schemas/ValidationLevel"
+        write_validation_action:
+          $ref: "#/components/schemas/ValidationAction"
+        write_validation_level:
+          $ref: "#/components/schemas/ValidationLevel"
   securitySchemes:
     tokenAuth:
       type: http
@@ -4318,6 +4534,9 @@ tags:
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/realm/functions/).
+  - name: graphql
+    x-displayName: GraphQL API
+    description: View and manage GraphQL custom resolvers and request validation settings.
   - name: hosting
     x-displayName: Hosting
     description: |
