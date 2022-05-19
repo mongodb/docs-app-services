@@ -3088,20 +3088,23 @@ paths:
                 query:
                   type: string
                   description: |-
-                    A GraphQL file string that contains one or more
-                    valid GraphQL operations for your API. If more than
-                    one operation is defined, you must specify which
-                    operation to run in `operationName`.
+                    A stringified `.graphql` file that contains one or
+                    more valid GraphQL operations for your API. If more
+                    than one operation is defined, you must specify
+                    which operation to run in `operationName`.
+                  example: 'query AllTasks { tasks(query: { status: $status }) { _id owner } }'
                 variables:
                   type: string
                   description: |-
-                    A JSON string where each field name maps a value to
-                    a variable in the specified operation.
+                    A stringified JSON object where each field name maps
+                    a value to a variable in the specified operation.
+                  example: '{ "status": "complete" }'
                 operationName:
                   type: string
                   description: |-
                     The name of the GraphQL operation specified in
                     `query` to run.
+                  example: AllTasks
       responses:
         "200":
           description: Ok
@@ -3232,7 +3235,7 @@ paths:
     get:
       tags:
         - graphql
-      operationId: adminGetValidationSettings
+      operationId: adminGetGraphQLValidationSettings
       summary: Get validation settings
       description: Get the current validation level and action for reads and writes.
       responses:
@@ -3241,11 +3244,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ValidationSettings"
+                "$ref": "#/components/schemas/GraphQLValidationSettings"
     put:
       tags:
         - graphql
-      operationId: adminSetValidationSettings
+      operationId: adminSetGraphQLValidationSettings
       summary: Modify validation settings
       description: Set the validation level and action for reads and writes.
       requestBody:
@@ -3254,7 +3257,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/ValidationSettings"
+              "$ref": "#/components/schemas/GraphQLValidationSettings"
       responses:
         "204":
           description: Updated
@@ -4463,8 +4466,16 @@ components:
           description: |-
             The type of the value returned by the custom resolver. This
             can be a scalar, the name of an existing generated type, or
-            a custom JSON schema object. If undefined, the resolver
-            returns a `DefaultPayload` object.
+            a custom JSON schema object.
+            
+            If undefined, the resolver returns a `DefaultPayload`
+            object:
+
+            ```graphql
+            type DefaultPayload {
+              status: String!
+            }
+            ```
         payload_type_format:
           type: string
           enum:
@@ -4482,23 +4493,23 @@ components:
             - A custom payload type must use `"custom"`
 
             If undefined, the resolver returns a `DefaultPayload` object.
-    ValidationLevel:
+    GraphQLValidationLevel:
       type: string
       enum: ["STRICT", "OFF"]
-    ValidationAction:
+    GraphQLValidationAction:
       type: string
       enum: ["ERROR", "WARN"]
-    ValidationSettings:
+    GraphQLValidationSettings:
       type: object
       properties:
         read_validation_action:
-          $ref: "#/components/schemas/ValidationAction"
+          $ref: "#/components/schemas/GraphQLValidationAction"
         read_validation_level:
-          $ref: "#/components/schemas/ValidationLevel"
+          $ref: "#/components/schemas/GraphQLValidationLevel"
         write_validation_action:
-          $ref: "#/components/schemas/ValidationAction"
+          $ref: "#/components/schemas/GraphQLValidationAction"
         write_validation_level:
-          $ref: "#/components/schemas/ValidationLevel"
+          $ref: "#/components/schemas/GraphQLValidationLevel"
   securitySchemes:
     tokenAuth:
       type: http
