@@ -270,6 +270,85 @@ includes methods that you can call to configure the response.
                "min-fresh=60"
              )
 
+.. _endpoint-return-types:
+
+Return Types
+------------
+
+Endpoints can return data as JSON or :manual:`MongoDB Extended JSON
+</reference/mongodb-extended-json/>` (EJSON).
+
+You can control the default response encoding with the :guilabel:`Return Type`
+option in your endpoint configuration:
+
+.. figure:: /images/endpoint-return-type.png
+   :alt: the return type option in endpoint configuration
+
+.. note:: EJSON to JSON Translation May Lose Information
+
+   MongoDB stores data as BSON and uses :manual:`MongoDB Extended JSON
+   </reference/mongodb-extended-json/>`, or EJSON, to
+   represent types that do not exist in the JSON format.
+   When you use the JSON return type, endpoints
+   translate fields into JSON values when possible and
+   omit the values of EJSON fields that have no JSON equivalent.
+
+   To avoid any field value translations or omissions, configure
+   your endpoint to respond with EJSON.
+
+Return Type Override
+~~~~~~~~~~~~~~~~~~~~
+
+When calling an endpoint, use the ``Accept`` header to control the
+response type:
+
+.. tabs::
+
+    .. tab:: JSON
+       :tabid: json
+
+       ``Accept`` header value:
+
+       .. code-block::
+
+          application/json
+
+       Example response containing a MongoDB document:
+
+       .. code-block:: json
+
+          {
+             "Name": "Mango",
+             "Year": 2022,
+             "Weight": {},
+             "Date": "2022-01-12T02:33:23.067Z"
+          }
+
+    .. tab:: EJSON
+       :tabid: ejson
+
+       ``Accept`` header value:
+
+       .. code-block::
+
+          application/ejson
+
+       Example response containing a MongoDB document:
+
+       .. code-block:: json
+
+          {
+             "Name": "Mango",
+             "Year": { "$numberLong": "2022" },
+             "Weight": { "$numberDecimal": "9823.1297" },
+             "Date": { "$date": { "$numberLong": "1641954803067" } }
+          }
+
+.. seealso::
+
+   For more information about the differences between JSON and EJSON
+   responses, see the :atlas:`Atlas Data API documentation </api/data-api/#extended-json-responses>`.
+
 .. _endpoint-authentication:
 
 Authentication
