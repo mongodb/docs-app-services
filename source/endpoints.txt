@@ -275,17 +275,32 @@ includes methods that you can call to configure the response.
 Return Types
 ------------
 
-By default, endpoints encode response body content in JSON.
-MongoDB stores data as BSON and uses :manual:`MongoDB Extended JSON
-</reference/mongodb-extended-json/>`, or EJSON, to
-represent types that do not exist in the JSON format.
-To translate MongoDB EJSON data into JSON responses, endpoints
-translate fields into JSON values when possible and
-omit the values of EJSON fields that have no JSON equivalent.
+Endpoints can return data as JSON or :manual:`MongoDB Extended JSON
+</reference/mongodb-extended-json/>` (EJSON).
 
-To avoid any field value translations or omissions, configure
-your endpoint to respond with EJSON. Use the ``Accept``
-header to control the response type:
+You can control the default response encoding with the :guilabel:`Return Type`
+option in your endpoint configuration:
+
+.. figure:: /images/endpoint-return-type.png
+   :alt: the return type option in endpoint configuration
+
+.. note:: EJSON to JSON Translation May Lose Information
+
+   MongoDB stores data as BSON and uses :manual:`MongoDB Extended JSON
+   </reference/mongodb-extended-json/>`, or EJSON, to
+   represent types that do not exist in the JSON format.
+   When you use the JSON return type, endpoints
+   translate fields into JSON values when possible and
+   omit the values of EJSON fields that have no JSON equivalent.
+
+   To avoid any field value translations or omissions, configure
+   your endpoint to respond with EJSON.
+
+Return Type Override
+~~~~~~~~~~~~~~~~~~~~
+
+When calling an endpoint, use the ``Accept`` header to control the
+response type:
 
 .. tabs::
 
@@ -328,12 +343,6 @@ header to control the response type:
              "Weight": { "$numberDecimal": "9823.1297" },
              "Date": { "$date": { "$numberLong": "1641954803067" } }
           }
-
-You can control the default response encoding with the :guilabel:`Return Type`
-option in your endpoint configuration:
-
-.. figure:: /images/endpoint-return-type.png
-   :alt: the return type option in endpoint configuration
 
 .. seealso::
 
