@@ -1806,8 +1806,8 @@ paths:
               - SCHEMA_GENERATION
               - SCHEMA_VALIDATION
               - LOG_FORWARDER
-            description: The kind of log you would like to retrieve.
-            required: false
+          description: The kind of log you would like to retrieve.
+          required: false
       responses:
         "200":
           description: Successfully retrieved.
@@ -3064,6 +3064,204 @@ paths:
               schema:
                 properties: {}
 
+  /groups/{groupId}/apps/{appId}/graphql:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    post:
+      tags:
+        - graphql
+      operationId: adminRunGraphQLOperation
+      summary: Run a query or mutation
+      description: |-
+        Run a query or mutation as a system user that bypasses
+        authentication and data access rules. You can access metadata
+        about your API, including its schema, with an
+        [introspection](https://graphql.org/learn/introspection/) query.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: ["query"]
+              properties:
+                query:
+                  type: string
+                  description: |-
+                    A stringified `.graphql` file that contains one or
+                    more valid GraphQL operations for your API. If more
+                    than one operation is defined, you must specify
+                    which operation to run in `operationName`.
+                  example: 'query AllTasks { tasks(query: { status: $status }) { _id owner } }'
+                variables:
+                  type: string
+                  description: |-
+                    A stringified JSON object where each field name maps
+                    a value to a variable in the specified operation.
+                  example: '{ "status": "complete" }'
+                operationName:
+                  type: string
+                  description: |-
+                    The name of the GraphQL operation specified in
+                    `query` to run.
+                  example: AllTasks
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The result of the specified operation.
+                required: ["data"]
+                properties:
+                  data:
+                    type: object
+                    nullable: true
+                    description: The result of a successful operation. If `null`, the operation had errors.
+                  errors:
+                    type: array
+                    description: A list of errors encountered while running an operation.
+                    minItems: 1
+                    items:
+                      type: object
+                      description: An error encountered while running an operation.
+                      required: ["message", "locations"]
+                      properties:
+                        message:
+                          type: string
+                          description: A message that describes the error.
+                        locations:
+                          type: array
+                          description: A list of one or more locations in the operation that caused the error.
+                          items:
+                            type: object
+                            required: ["line", "column"]
+                            minItems: 1
+                            description: The operation line and column numbers that caused an error.
+                            properties:
+                              line:
+                                type: integer
+                              column:
+                                type: integer
+
+  /groups/{groupId}/apps/{appId}/graphql/custom_resolvers:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetAllCustomResolvers
+      summary: Get all custom resolvers
+      description: Get all [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configurations from your app's GraphQL API.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CustomResolver"
+    post:
+      tags:
+        - graphql
+      operationId: adminCreateCustomResolver
+      summary: Create a custom resolver
+      description: Create a new [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/).
+      requestBody:
+        description: A valid [custom resolver configuration](https://www.mongodb.com/docs/realm/manage-apps/configure/config/graphql/#appconfig-custom-resolver) object.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CustomResolver"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CustomResolver"
+  /groups/{groupId}/apps/{appId}/graphql/custom_resolvers/{customResolverId}:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/CustomResolverId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetCustomResolver
+      summary: Get a custom resolver
+      description: Get a specific [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CustomResolver"
+    put:
+      tags:
+        - graphql
+      operationId: adminModifyCustomResolver
+      summary: Modify a custom resolver
+      description: Modify an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      requestBody:
+        description: A valid, updated [custom resolver configuration](https://www.mongodb.com/docs/realm/manage-apps/configure/config/graphql/#appconfig-custom-resolver) object.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CustomResolver"
+      responses:
+        "204":
+          description: Updated
+    delete:
+      tags:
+        - graphql
+      operationId: adminDeleteCustomResolver
+      summary: Delete a custom resolver
+      description: Delete an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      responses:
+        "204":
+          description: Deleted
+
+  /groups/{groupId}/apps/{appId}/validation_settings/graphql:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetGraphQLValidationSettings
+      summary: Get validation settings
+      description: Get the current validation level and action for reads and writes.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GraphQLValidationSettings"
+    put:
+      tags:
+        - graphql
+      operationId: adminSetGraphQLValidationSettings
+      summary: Modify validation settings
+      description: Set the validation level and action for reads and writes.
+      requestBody:
+        description: The updated validation levels and actions.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GraphQLValidationSettings"
+      responses:
+        "204":
+          description: Updated
+
 components:
   parameters:
     AssetResourcePath:
@@ -3241,6 +3439,13 @@ components:
     EndpointId:
       name: endpointId
       description: The endpoint's `_id` ObjectID value.
+      in: path
+      required: true
+      schema:
+        type: string
+    CustomResolverId:
+      name: customResolverId
+      description: The resolver's `_id` ObjectID value
       in: path
       required: true
       schema:
@@ -4205,6 +4410,106 @@ components:
         collection:
           type: string
           description: The collection name.
+    CustomResolver:
+      type: object
+      required:
+        - _id
+        - function_id
+        - on_type
+        - field_name
+      properties:
+        _id:
+          type: string
+          description: The custom resolver's unique ID.
+        function_id:
+          type: string
+          description: The resolver function's unique ID.
+        on_type:
+          type: string
+          description: |-
+            The name of the resolver's parent type. This can be
+            `"Query"`, `"Mutation"`, or the name of a generated type if
+            this is a computed property.
+        field_name:
+          type: string
+          description: The name of the custom resolver field that appears in the GraphQL schema.
+        input_type:
+          oneOf:
+            - type: string
+            - type: object
+          description: |-
+            The type of the custom resolver's `input` parameter. This
+            can be a scalar, the name of an existing generated type, or
+            a custom JSON schema object. If undefined, the resolver does
+            not accept an input.
+        input_type_format:
+          type: string
+          enum:
+            - scalar
+            - scalar-list
+            - generated
+            - generated-list
+            - custom
+          description: |-
+            The kind of input type the custom resolver uses. This value
+            must agree with the value of `input_type`:
+
+            - A scalar input type must use `"scalar"` or `"scalar-list"`
+            - A generated input type must use `"generated"` or `"generated-list"`
+            - A custom input type must use `"custom"`
+
+            If undefined, the resolver does not accept an input.
+        payload_type:
+          oneOf:
+            - type: string
+            - type: object
+          description: |-
+            The type of the value returned by the custom resolver. This
+            can be a scalar, the name of an existing generated type, or
+            a custom JSON schema object.
+            
+            If undefined, the resolver returns a `DefaultPayload`
+            object:
+
+            ```graphql
+            type DefaultPayload {
+              status: String!
+            }
+            ```
+        payload_type_format:
+          type: string
+          enum:
+            - scalar
+            - scalar-list
+            - generated
+            - generated-list
+            - custom
+          description: |-
+            The kind of payload type the custom resolver uses. This value
+            must agree with the value of `payload_type`:
+
+            - A scalar payload type must use `"scalar"` or `"scalar-list"`
+            - A generated payload type must use `"generated"` or `"generated-list"`
+            - A custom payload type must use `"custom"`
+
+            If undefined, the resolver returns a `DefaultPayload` object.
+    GraphQLValidationLevel:
+      type: string
+      enum: ["STRICT", "OFF"]
+    GraphQLValidationAction:
+      type: string
+      enum: ["ERROR", "WARN"]
+    GraphQLValidationSettings:
+      type: object
+      properties:
+        read_validation_action:
+          $ref: "#/components/schemas/GraphQLValidationAction"
+        read_validation_level:
+          $ref: "#/components/schemas/GraphQLValidationLevel"
+        write_validation_action:
+          $ref: "#/components/schemas/GraphQLValidationAction"
+        write_validation_level:
+          $ref: "#/components/schemas/GraphQLValidationLevel"
   securitySchemes:
     tokenAuth:
       type: http
@@ -4318,6 +4623,9 @@ tags:
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/realm/functions/).
+  - name: graphql
+    x-displayName: GraphQL API
+    description: Configure and run GraphQL API operations.
   - name: hosting
     x-displayName: Hosting
     description: |
