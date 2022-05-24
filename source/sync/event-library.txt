@@ -28,7 +28,7 @@ Additionally, you can configure custom events to record things like
 button presses, or what the user is seeing in the frontend application.
 
 This level of detail enables auditors or other interested parties to
-replay exactly what happened, and when.
+assess exactly what happened, and when.
 
 Use Case
 ~~~~~~~~
@@ -59,7 +59,7 @@ financial services.
    reasonable. Without this information, the legal department can't know
    and prove whether the nurse's actions were reasonable.
 
-How it Works
+How It Works
 ~~~~~~~~~~~~
 
 The Event Library opens a separate "event" realm on the user's device. This 
@@ -84,7 +84,7 @@ data source.
 Access Event Library Data
 -------------------------
 
-The Event Library records event data in collection called ``AuditEvent`` 
+The Event Library records event data in a collection called ``AuditEvent`` 
 in your linked Atlas database. You must create an ``AuditEvent`` collection
 before you use the Event Library to record client application events.
 
@@ -99,19 +99,82 @@ Event Library Schema
 Your ``AuditEvent`` collection must have a schema containing the following
 fields:
 
-- ``_id``: ``ObjectId``
-- ``activity``: ``String``
-- ``event``: ``String?``
-- ``data``: ``String?``
-- ``timestamp``: ``Date``
+.. list-table::
 
-Additionally, the schema must contain an optional string field (``String?``)
-for each metadata key you use.
+   * - ``_id``
+     - ``activity``
+     - ``_partition``
+     - ``timestamp``
+     - ``event``
+     - ``data``
+
+   * - ObjectId
+     - String
+     - String
+     - String
+     - String
+     - String
+
+   * - Required
+     - Required
+     - Required
+     - Required
+     - Optional
+     - Optional
+
+Additionally, the schema must contain an optional string field
+for each metadata key you use. For example:
+
+.. code-block:: json
+
+   { 
+     "<Metadata Key>": { 
+       "bsonType": "string" 
+     } 
+   }
 
 .. seealso::
 
    For information on how to add a schema to your collection, see: 
    :ref:`Enforce a Schema <enforce-a-schema>`.
+
+.. example::
+
+   If you're not using any custom metadata, your schema might look like this:
+
+   .. code-block:: json
+      :caption: AuditEvent Collection Schema
+
+      {
+        "title": "AuditEvent",
+        "bsonType": "object",
+        "required": [
+          "_id",
+          "_partition",
+          "activity",
+          "timestamp"
+        ],
+        "properties": {
+          "_id": {
+            "bsonType": "objectId"
+          },
+          "_partition": {
+            "bsonType": "string"
+          },
+          "activity": {
+            "bsonType": "string"
+          },
+          "data": {
+            "bsonType": "string"
+          },
+          "event": {
+            "bsonType": "string"
+          },
+          "timestamp": {
+            "bsonType": "string"
+          }
+        }
+      }
 
 Event Types
 -----------
@@ -171,7 +234,22 @@ The Event Library discards:
 
 The Event Library merges:
 
-- Multiple queries on the same table a merged into a single query.
+- Multiple queries on the same table into a single merged query.
+
+Read Event Format
+`````````````````
+
+A read event object has this format:
+
+.. code-block:: json
+
+   {
+     "type": "ClassName",
+     "value": [{
+       "_id": "1-2-3",
+       "str": "abc"
+     }]
+   }
 
 Embedded Object Read Events
 ```````````````````````````
@@ -214,22 +292,6 @@ This also produces a top-level object read.
           }]
         }]
       }
-
-Read Event Format
-`````````````````
-
-A read event object has this format:
-
-.. code-block:: json
-
-   {
-     "type": "ClassName",
-     "value": [{
-       "_id": "1-2-3",
-       "str": "abc"
-     }]
-   }
-
 
 .. _event-library-write-events:
 
