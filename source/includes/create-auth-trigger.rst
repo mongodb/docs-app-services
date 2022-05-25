@@ -31,7 +31,7 @@
           const user = authEvent.user;
 
           //Access the mongodb service for custom user data:
-          const collection = context.services.get("custom-user-data").db("Item").collection("User");
+          const collection = context.services.get("mongodb-atlas").db("Item").collection("User");
           const newDoc = {
               _id: user.id,
               _owner_id: user.id,

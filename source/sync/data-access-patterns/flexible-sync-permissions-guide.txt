@@ -476,7 +476,7 @@ To create the function, follow these steps:
    .. code-block:: json
 
       exports = async function(userId, teamName) {
-      var collection = context.services.get("custom-user-data").db("Item").collection("User");
+      var collection = context.services.get("mongodb-atlas").db("Item").collection("User");
 
       const filter = { _id: userId };
       const update = { $set: { team: teamName }};
