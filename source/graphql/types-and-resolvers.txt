@@ -557,8 +557,12 @@ RelationInput
 
 A ``RelationInput`` defines a new set of related documents for a relationship
 field in the mutated document. You can reference documents that already exist in
-the related collection with the ``link`` field and insert new documents into the
+the related collection with the ``link`` field or insert new documents into the
 related collection with the ``create`` field.
+
+You cannot use both ``link`` and ``create`` at the same time. If both
+are specified, the ``create`` operation takes precedence and the
+``link`` is ignored.
 
 .. code-block:: graphql
    
