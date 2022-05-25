@@ -25,5 +25,25 @@
     - :guilabel:`Function`: Replace the placeholder text with the following 
       function:
 
-    
+    .. code-block:: javascript
+         
+       exports = function(authEvent) {
+          const user = authEvent.user;
+
+          //Access the mongodb service for custom user data:
+          const collection = context.services.get("custom-user-data").db("Item").collection("User");
+          const newDoc = {
+              _id: user.id,
+              _owner_id: user.id,
+              team: '',
+              isTeamAdmin: false
+          };
+          
+          // It's OK to do an insert and not a upsert because this function 
+          // only runs when a new user account is created
+          var result = collection.insertOne(newDoc);
+          
+          console.log(JSON.stringify(result));
+          console.log(JSON.stringify($user.custom_data.subscribedTo));
+        };
 

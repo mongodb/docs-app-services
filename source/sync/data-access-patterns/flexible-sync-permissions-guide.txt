@@ -219,12 +219,6 @@ strategy. To do so, follow these steps:
 Restricted News Feed
 --------------------
 
-TODO: list of subscribed to <16KB
-TODO: must do client reset when that array changes
-TODO: permissions to edit CUD -- do this as function. still need to create 2nd data source
-
-
-
 In this permission strategy, users can create their own content and subscribe 
 to other creators' content. As with the Admin Privileges scenario, we will 
 make use of a Custom User Data collection to define which authors' content 
@@ -235,6 +229,20 @@ within a user data object. This array contains IDs of the authors that this user
 is authorized to "follow". We then set up a subscription that says, in essence, 
 "Give me all documents where I am the author, or the author's ID is in the array  
 of authors in my custom user data."
+
+.. important:: Client Reset Required on Array Change
+
+   When a user subscribes or unsubscribes from an author, we update the array 
+   in the custom user data, but the changes don't take effect until the current 
+   session is closed and a new session is started.
+
+.. note:: Size Limitations
+
+   In this example, we are creating an array in the Custom User Data. The 
+   size of this array is not limited by {+realm+}, but because the data is 
+   included in each request, we recommend keeping the size under 16KB, which 
+   is enough space for 1000 128-bit GUID-style user IDs.
+
  
 Configure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -242,6 +250,14 @@ Configure Custom User Data
 To enable custom user data, follow these steps:
 
 .. include:: /includes/define-custom-user-data.rst
+
+Create Authentication Trigger Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We need to create a authentication trigger function that creates a custom user 
+object when a user authenticates for the first time. To do so, follow these steps:  
+
+.. include:: /includes/create-auth-trigger.rst
 
 Set Up Restricted Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -258,7 +274,7 @@ and "789":
       "_id" : "1234",
       "firstName": "Lily",
       "lastName": "Realmster",
-      "subscriptions": [
+      "user.custom_data.subscribedTo": [
         "456",
         "789"
       ]
@@ -303,7 +319,7 @@ steps:
           "read": {"$or" : [
               {"owner_id": "%%user.id"},
               {"owner_id": {"$in": [
-                "%%user.custom_data.subscriptions"
+                "%%user.custom_data.user.custom_data.subscribedTo"
               ]}}
             ]},
           "write": {"owner_id": "%%user.id"}
@@ -312,8 +328,6 @@ steps:
     }
 
 - Update the rule expression box with this new logic and save the changes.
-
-
 
 .. _dynamic-collaboration:
 
@@ -391,7 +405,7 @@ document's collaborators list.
 Caveats
 ~~~~~~~
 
-If a user has write access to a document, they may write to any field of the
+If a user has write access to a document, they may write to any field of the
 document. Consequently, this strategy **allows collaborators to add
 collaborators**. It would also allow a collaborator to edit the ``owner_id``
 field. We don't recommend using this model for highly sensitive data.
@@ -434,30 +448,6 @@ object when a user authenticates for the first time. To do so, follow these step
 
 .. include:: /includes/create-auth-trigger.rst
 
-- 
-   - 
-      .. code-block:: javascript
-         
-         exports = function(authEvent) {
-         const user = authEvent.user;
-
-         //Access the mongodb service for custom user data:
-         const collection = context.services.get("custom-user-data").db("Item").collection("User");
-         const newDoc = {
-            _id: user.id,
-            _owner_id: user.id,
-            team: '',
-            isTeamAdmin: false
-         };
-         
-         // It's OK to do an insert and not a upsert because this function 
-         // only runs when a new user account is created
-         var result = collection.insertOne(newDoc);
-         
-         console.log(JSON.stringify(result));
-         console.log(JSON.stringify($user.custom_data.subscribedTo));
-         };
-
 
 Create joinTeam Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -496,12 +486,13 @@ To create the function, follow these steps:
       return result;
       };
 
+
 Define Sync Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~
 The following {+sync-short+} permissions specify two roles:
 
 - **teamAdmin** applies only when the user's custom data has 
-  ``isTeamAdmin = true``. If so, the user can read and write all documents where 
+  ``isTeamAdmin: true``. If so, the user can read and write all documents where 
   the document's ``team`` value matches the user's ``team`` value.
 - **teamMember** applies to every user. The user can write their own 
   documents and read all documents where the document's ``team`` value matches 
@@ -510,31 +501,30 @@ The following {+sync-short+} permissions specify two roles:
 .. code-block:: json
 
    {
-     "rules": {},
-     "defaultRoles": [
-       {
-         "name": "teamAdmin",
+      "rules": {},
+      "defaultRoles": [
+      {
+         "name": "admin",
          "applyWhen": {
-           "%%user.custom_data.isTeamAdmin": true
+         "%%user.custom_data.isTeamAdmin": true
          },
          "read": {
-           "team": "%%user.custom_data.team"
+         "team": "%%user.custom_data.team"
          },
          "write": {
-           "team": "%%user.custom_data.team"
+         "team": "%%user.custom_data.team"
          }
-       },
-       {
-         "name": "teamMember",
+      },
+      {
+         "name": "user",
          "applyWhen": {},
          "read": {
-           "team": "%%user.custom_data.team"
+         "team": "%%user.custom_data.team"
          },
          "write": {
-           "owner_id": "%%user.id"
+         "owner_id": "%%user.id"
          }
-       }
-     ]
+      }]
    }
 
 
