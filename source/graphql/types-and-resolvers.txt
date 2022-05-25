@@ -156,6 +156,19 @@ GraphQL types that they map to:
    * - ``timestamp``
      - ``DateTime``
 
+.. note:: 
+   
+   JSON supports two types that represent "no value": ``undefined`` and
+   ``null``. The GraphQL spec supports ``null`` but not ``undefined``,
+   so your app converts ``undefined`` values in the following way:
+   
+   - If a document field is explicitly set to ``undefined`` then the
+     corresponding GraphQL type is an empty object, i.e. ``{}``.
+   
+   - If the field name is not defined for the document at all, or if the
+     value is explicitly set to ``null``, then the corresponding GraphQL
+     type is ``null``.
+
 .. _graphql-input-types:
 
 Input Types
