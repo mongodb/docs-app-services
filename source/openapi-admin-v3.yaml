@@ -412,6 +412,20 @@ paths:
         - triggers
       operationId: adminResumeTrigger
       summary: Resume a suspended trigger
+      requestBody:
+        description: Configuration options for the resume operation
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                disable_token:
+                  type: boolean
+                  description: |-
+                    If `true`, attempts to resume the trigger from the
+                    first change event after it failed by using a resume
+                    token. Otherwise, resumes the trigger without
+                    processing missed events.
       responses:
         "204":
           description: Successfully resumed the trigger.
