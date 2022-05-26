@@ -106,6 +106,13 @@ collection name instead.
 For more information on how to expose a collection and name its data
 type, see :ref:`Expose Data in a Collection <graphql-expose-data>`.
 
+.. note::
+   
+   GraphQL mutation and custom resolver requests use MongoDB
+   transactions to ensure correctness across multiple database
+   operations. If any operation in a request fails, then the entire
+   transaction fails and no operations are committed to the database.
+
 Queries
 ~~~~~~~
 
