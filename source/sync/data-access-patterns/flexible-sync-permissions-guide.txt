@@ -534,18 +534,18 @@ To create the function, follow these steps:
 - Switch to the :guilabel:`Function Editor` tab and replace the placeholder text 
   with the following code: 
 
-   .. code-block:: json
+  .. code-block:: json
 
-      exports = async function(userId, teamName) {
-      var collection = context.services.get("mongodb-atlas").db("Item").collection("User");
+     exports = async function(userId, teamName) {
+     var collection = context.services.get("mongodb-atlas").db("Item").collection("User");
 
-      const filter = { _id: userId };
-      const update = { $set: { team: teamName }};
-      const options = { upsert: false };
+     const filter = { _id: userId };
+     const update = { $set: { team: teamName }};
+     const options = { upsert: false };
 
-      let result = await collection.updateOne(filter, update, options);
-      return result;
-      };
+     let result = await collection.updateOne(filter, update, options);
+     return result;
+     };
 
 
 Define Sync Permissions
