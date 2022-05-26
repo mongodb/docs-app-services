@@ -68,6 +68,7 @@ Synchronized:
   - Avoid writing complex synchronization logic with the :ref:`Database SDKs <realm-sdks>`.
 
 .. _intro-web-users:
+.. _intro-user-authentication:
 
 User Authentication and Management
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -186,6 +187,25 @@ You can query {+atlas-short+} like you're using a database driver and {+service-
 :ref:`data access rules <intro-web-schema>` rules for all requests.
 
 To learn more about the built-in MongoDB service, see :ref:`data-sources`.
+
+.. _intro-device-sync:
+
+Synchronize Data Across Devices
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Synchronizing data is a hard problem for mobile app developers. Realm Sync
+provides offline-first sync capabilities for your mobile application. 
+Client applications use :ref:`Realm Database <intro-realm-database>` to 
+persist data to the local device. When the device has a network connection, 
+Sync seamlessly sends the data to the Realm App. The app stores the data 
+to a linked :ref:`MongoDB Atlas data source <data-sources>`, and updates 
+the data on other client devices.
+
+Realm Sync provides :ref:`conflict resolution <conflict-resolution>` to 
+handle multiple users updating the same data. When combined with :ref:`user 
+authentication and management <intro-user-authentication>` and :ref:`schema 
+validation and data access <intro-web-schema>`, Realm Sync provides a secure
+way for your mobile clients to sync data across devices and with the cloud.
 
 Get Started with MongoDB Realm
 ------------------------------
