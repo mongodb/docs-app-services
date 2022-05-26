@@ -667,11 +667,10 @@ paths:
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/rules":
     get:
       tags:
-        - services
         - rules
       operationId: adminListRules
-      summary: List rules
-      description: List [rules](https://www.mongodb.com/docs/realm/rules#std-label-mongodb-rules).
+      summary: Get all rules
+      description: List all [data access rules](https://www.mongodb.com/docs/atlas/app-services/rules).
       responses:
         "200":
           description: Successfully listed.
@@ -679,21 +678,24 @@ paths:
             application/json:
               schema:
                 items:
-                  "$ref": "#/components/schemas/Rule"
+                  oneOf:
+                    - "$ref": "#/components/schemas/Rule"
+                    - "$ref": "#/components/schemas/ThirdPartyServiceRule"
     post:
       tags:
-        - services
         - rules
       operationId: adminCreateRule
       summary: Create a rule
-      description: Create a [rule](https://www.mongodb.com/docs/realm/rules#std-label-mongodb-rules).
+      description: Create a [data access rule](https://www.mongodb.com/docs/atlas/app-services/rules).
       requestBody:
         required: true
         description: The rule to create.
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Rule"
+              oneOf:
+                - "$ref": "#/components/schemas/Rule"
+                - "$ref": "#/components/schemas/ThirdPartyServiceRule"
       responses:
         "201":
           description: Successfully created.
@@ -714,42 +716,43 @@ paths:
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/rules/{ruleId}":
     get:
       tags:
-        - services
         - rules
       operationId: adminGetRule
-      summary: Retrieve a rule
-      description: Retrieve a [rule](https://www.mongodb.com/docs/realm/rules#std-label-mongodb-rules).
+      summary: Get a rule
+      description: Get a specific [data access rule](https://www.mongodb.com/docs/atlas/app-services/rules).
       responses:
         "200":
           description: Successfully retrieved.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Rule"
+                oneOf:
+                  - "$ref": "#/components/schemas/Rule"
+                  - "$ref": "#/components/schemas/ThirdPartyServiceRule"
     delete:
       tags:
-        - services
         - rules
       operationId: adminDeleteRule
       summary: Delete a rule
-      description: Delete a [rule](https://www.mongodb.com/docs/realm/rules#std-label-mongodb-rules).
+      description: Delete a [data access rule](https://www.mongodb.com/docs/atlas/app-services/rules).
       responses:
         "204":
           description: Successfully deleted.
     put:
       tags:
-        - services
         - rules
       operationId: adminUpdateRule
       summary: Update a rule
-      description: Update a [rule](https://www.mongodb.com/docs/realm/rules#std-label-mongodb-rules).
+      description: Update a [data access rule](https://www.mongodb.com/docs/atlas/app-services/rules).
       requestBody:
         required: true
         description: The new state of the rule.
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Rule"
+              oneOf:
+                - "$ref": "#/components/schemas/Rule"
+                - "$ref": "#/components/schemas/ThirdPartyServiceRule"
       responses:
         "200":
           description: Successfully updated.
@@ -805,7 +808,6 @@ paths:
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/incoming_webhooks":
     get:
       tags:
-        - services
         - webhooks
       operationId: adminListWebhooks
       summary: List webhooks
@@ -819,7 +821,6 @@ paths:
                 "$ref": "#/components/schemas/IncomingWebhook"
     post:
       tags:
-        - services
         - webhooks
       operationId: adminCreateWebhook
       summary: Create a webhook
@@ -841,7 +842,6 @@ paths:
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/incoming_webhooks/{incomingWebhookId}":
     get:
       tags:
-        - services
         - webhooks
       operationId: adminGetWebhook
       summary: Retrieve a webhook
@@ -851,7 +851,6 @@ paths:
           description: Successfully retrieved.
     delete:
       tags:
-        - services
         - webhooks
       operationId: adminDeleteWebhook
       summary: Delete a webhook
@@ -861,7 +860,6 @@ paths:
           description: Successfully deleted.
     put:
       tags:
-        - services
         - webhooks
       operationId: adminUpdateWebhook
       summary: Update a webhook
@@ -3347,21 +3345,21 @@ components:
         type: boolean
     FunctionId:
       name: functionId
-      description: Function ID
+      description: The unique `_id` value of a function.
       in: path
       required: true
       schema:
         type: string
     ServiceId:
       name: serviceId
-      description: Service ID
+      description: The unique `_id` value of a service.
       in: path
       required: true
       schema:
         type: string
     SecretId:
       name: secretId
-      description: Secret ID
+      description: The unique `_id` value of a secret.
       in: path
       required: true
       schema:
@@ -3375,28 +3373,28 @@ components:
         type: string
     ValueId:
       name: valueId
-      description: Value ID
+      description: The unique `_id` value of a value.
       in: path
       required: true
       schema:
         type: string
     DraftId:
       name: draftId
-      description: Draft ID
+      description: The unique `_id` value of a draft.
       in: path
       required: true
       schema:
         type: string
     RuleId:
       name: ruleId
-      description: Rule ID
+      description: The unique `_id` value of a rule.
       in: path
       required: true
       schema:
         type: string
     IncomingWebhookId:
       name: incomingWebhookId
-      description: Incoming webhook ID
+      description: The unique `_id` value of an incoming webhook
       in: path
       required: true
       schema:
@@ -3424,42 +3422,42 @@ components:
         type: string
     ProviderId:
       name: providerId
-      description: Provider ID
+      description: The unique `_id` value of an authentication provider
       in: path
       required: true
       schema:
         type: string
     ApiKeyId:
       name: apiKeyId
-      description: API Key ID
+      description: The unique `_id` value of an API key
       in: path
       required: true
       schema:
         type: string
     TriggerId:
       name: triggerId
-      description: The trigger's `_id` ObjectID value.
+      description: The unique `_id` value of a trigger.
       in: path
       required: true
       schema:
         type: string
     SchemaId:
       name: schemaId
-      description: The schema's `_id` ObjectID value.
+      description: The unique `_id` value of a schema.
       in: path
       required: true
       schema:
         type: string
     EndpointId:
       name: endpointId
-      description: The endpoint's `_id` ObjectID value.
+      description: The unique `_id` value of an endpoint
       in: path
       required: true
       schema:
         type: string
     CustomResolverId:
       name: customResolverId
-      description: The resolver's `_id` ObjectID value
+      description: The unique `_id` value of a custom resolver.
       in: path
       required: true
       schema:
@@ -3879,7 +3877,122 @@ components:
       required:
         - name
         - type
+    Expression:
+      description: A [rule expression](https://mongodb.com/docs/atlas/app-services/rules/expressions/).
+      oneOf:
+        - type: object
+        - type: boolean
     Rule:
+      type: object
+      description: A data access rule that defines user roles and query filters for a collection in a linked data source.
+      required:
+        - database
+        - collection
+      properties:
+        _id:
+          type: string
+          description: The rule's unique ObjectId identifier.
+        database:
+          type: string
+          description: The name of a database in the linked data source.
+        collection:
+          type: string
+          description: The name of a collection in the specified `database`.
+        roles:
+          type: array
+          description: A list of data access roles.
+          items:
+            $ref: "#/components/schemas/Role"
+        filters:
+          type: array
+          description: A list of filters for incoming operations.
+          items:
+            $ref: "#/components/schemas/Filter"
+    Role:
+      type: object
+      description: A data access role that assigns read and write permissions to a user for each document
+      properties:
+        _id:
+          type: string
+          description: The role's unique ObjectId identifier.
+        name:
+          type: string
+          description: The role's name.
+        apply_when:
+          description: A rule expression that evaluates to `true` when this role applies to a user for a specific document.
+          $ref: "#/components/schemas/Expression"
+        write:
+          description: A rule expression that evaluates to `true` if the role has permission to add, modify, or remove all fields in the document.
+          $ref: "#/components/schemas/Expression"
+        insert:
+          description: A rule expression that evaluates to `true` if the role has permission to insert a new document into the collection.
+          $ref: "#/components/schemas/Expression"
+        delete:
+          description: A rule expression that evaluates to `true` if the role has permission to delete a document from the collection.
+          $ref: "#/components/schemas/Expression"
+        search:
+          description: A rule expression that evaluates to `true` if the role has permission to search the collection using [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/).
+          $ref: "#/components/schemas/Expression"
+        fields:
+          type: object
+          description: Field-level rules for any fields that are not explicitly configured in the role's `properties`.
+          $ref: "#/components/schemas/NestableFieldLevelPermissions"
+        additional_fields:
+          type: object
+          description: Field-level rules for any fields that are not explicitly configured in the role's `properties`.
+          $ref: "#/components/schemas/FieldLevelPermissions"
+    NestableFieldLevelPermissions:
+      description: An object that maps document field names to read and write permissions for the field and its children.
+      additionalProperties:
+        allOf:
+          - $ref: "#/components/schemas/FieldLevelPermissions"
+          - properties:
+              fields:
+                $ref: "#/components/schemas/NestableFieldLevelPermissions"
+    FieldLevelPermissions:
+      type: object
+      description: Read and write permissions for a field.
+      required:
+        - read
+        - write
+      properties:
+        read:
+          description: A rule expression that evaluates to `true` if the role can read the field's value.
+          $ref: "#/components/schemas/Expression"
+        write:
+          description: A rule expression that evaluates to `true` if the role can write the field's value.
+          $ref: "#/components/schemas/Expression"
+    Filter:
+      type: object
+      description: A filter that conditionally adds conditions to and projects incoming operations before they run.
+      properties:
+        _id:
+          type: string
+          description: The filter's unique ObjectId identifier.
+        name:
+          type: string
+          description: The filter's name.
+        apply_when:
+          description: A rule expression that evaluates to `true` if the filter applies to an incoming query.
+          $ref: "#/components/schemas/Expression"
+        query:
+          description: A MongoDB query object that is merged into an incoming query before the operation runs.
+          $ref: "#/components/schemas/Query"
+        projection:
+          description: A MongoDB projection object that is merged into an incoming query before the operation runs.
+          $ref: "#/components/schemas/Projection"
+    Query:
+      type: object
+      description: A MongoDB query object.
+    Projection:
+      type: object
+      description: A MongoDB projection object.
+      additionalProperties:
+        type: number
+        enum: [0, 1]
+    ThirdPartyServiceRule:
+      type: object
+      description: "[Deprecated] A rule for a third-party service."
       properties:
         name:
           type: string
@@ -4709,7 +4822,7 @@ tags:
     description: View and manage your application's [log forwarders](https://www.mongodb.com/docs/realm/logs/forward-logs/).
   - name: rules
     x-displayName: Rules
-    description: View and manage your application's [data access rules](https://www.mongodb.com/docs/realm/rules/).
+    description: View and manage your application's [data access rules](https://www.mongodb.com/docs/atlas/app-services/rules/).
   - name: schemas
     x-displayName: Schemas
     description: View and manage your application's [schemas](https://www.mongodb.com/docs/realm/schemas/).
