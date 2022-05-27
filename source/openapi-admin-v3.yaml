@@ -324,52 +324,42 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-    post:
-      tags:
-        - triggers
-      operationId: adminCreateTrigger
-      summary: Create a trigger
-      requestBody:
-        description: The trigger to create.
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/TriggerRequest"
-      responses:
-        "201":
-          description: Successfully created.
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/TriggerResponse"
-              example:
-                name: myTrigger
-                type: DATABASE
-                function_id: 5ae8a0c88f25b9dc5cabb21f
-                config:
-                  operation_types:
-                    - INSERT
-                    - UPDATE
-                    - DELETE
-                    - REPLACE
-                  database: HR
-                  collection: employees
-                  service_id: 5adeb649b8b998486770ae7c
-                  match: {}
-                  full_document: true
     get:
       tags:
         - triggers
       operationId: adminListTriggers
-      summary: List all triggers
+      summary: Get all triggers.
+      description: Get a list of all [triggers](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
       responses:
         "200":
           description: Successfully listed triggers.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/TriggerResponse"
+                type: array
+                description: A list of all database, authentication, and scheduled trigger defined for the app.
+                items:
+                  "$ref": "#/components/schemas/AnyTrigger"
+    post:
+      tags:
+        - triggers
+      operationId: adminCreateTrigger
+      summary: Create a trigger.
+      description: Create a new [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
+      requestBody:
+        description: A configuration for a database, scheduled, or authentication trigger.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Trigger"
+      responses:
+        "201":
+          description: Successfully created.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Trigger"
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -379,14 +369,15 @@ paths:
       tags:
         - triggers
       operationId: adminUpdateTrigger
-      summary: Update a trigger
+      summary: Update a trigger.
+      description: Modify an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
       requestBody:
-        description: The trigger to update.
+        description: The updated trigger configuration.
         required: true
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/TriggerRequest"
+              "$ref": "#/components/schemas/Trigger"
       responses:
         "204":
           description: Successfully updated the trigger.
@@ -400,19 +391,21 @@ paths:
       tags:
         - triggers
       operationId: adminGetTrigger
-      summary: Retrieve the configuration for a specific trigger
+      summary: Get a trigger.
+      description: Get the configuration for an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
       responses:
         "200":
           description: Successfully retrieved trigger.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/TriggerResponse"
+                "$ref": "#/components/schemas/Trigger"
     delete:
       tags:
         - triggers
       operationId: adminDeleteTrigger
-      summary: Delete a trigger
+      summary: Delete a trigger.
+      description: Remove an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) from your application.
       responses:
         "200":
           description: Successfully deleted the trigger.
@@ -430,8 +423,9 @@ paths:
         - triggers
       operationId: adminResumeTrigger
       summary: Resume a suspended trigger
+      description: Resume a [suspended](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#suspended-triggers) database trigger.
       requestBody:
-        description: Configuration options for the resume operation
+        description: Configuration options for the resume operation.
         content:
           application/json:
             schema:
@@ -1981,7 +1975,7 @@ paths:
           in: query
           description: |-
             The value of this field does not matter. If included in the request,
-            this endpoint only returns error logs (even if the value is set to ``false``).
+            this endpoint only returns error logs (even if the value is set to `false`).
             If this field is excluded from the request, this endpoint only returns non-error logs.
           schema:
             type: boolean
@@ -4734,152 +4728,235 @@ components:
           description: |-
             A list of valid partition keys based on the cluster's collection
             schemas.
-    TriggerResponse:
-      properties:
-        _id:
-          type: string
-          description: The unique ID of the trigger.
-        name:
-          type: string
-          description: The name of the trigger.
-        type:
-          type: string
-          description: The type of the trigger.
-        function_id:
-          type: string
-          description: The ID of the function associated with the trigger.
-        function_name:
-          type: string
-          description: The name of the function associated with the trigger.
-        disabled:
-          type: boolean
-          description: If true, the trigger is disabled and will not fire.
-    TriggerRequest:
+    AnyTrigger:
+      oneOf:
+        - $ref: "#/components/schemas/DatabaseTrigger"
+        - $ref: "#/components/schemas/AuthenticationTrigger"
+        - $ref: "#/components/schemas/ScheduledTrigger"
+    Trigger:
+      oneOf:
+        - $ref: "#/components/schemas/DatabaseTrigger"
+        - $ref: "#/components/schemas/AuthenticationTrigger"
+        - $ref: "#/components/schemas/ScheduledTrigger"
+      discriminator:
+        propertyName: type
+        mapping:
+          DATABASE: "#/components/schemas/DatabaseTrigger"
+          AUTHENTICATION: "#/components/schemas/AuthenticationTrigger"
+          SCHEDULED: "#/components/schemas/ScheduledTrigger"
+    BaseTrigger:
+      type: object
       required:
         - name
         - type
-        - function_id
+        - config
       properties:
+        _id:
+          type: string
+          description: The trigger's unique ID.
         name:
           type: string
-          description: The name of the trigger.
+          description: The trigger's name.
         type:
           type: string
-          description: The type of the trigger.
-          enum:
-            - DATABASE
-            - AUTHENTICATION
-            - SCHEDULED
-        function_id:
-          type: string
-          description: The ID of the function associated with the trigger.
         disabled:
           type: boolean
-          description: "Default: `false` If true, the trigger is disabled."
+          default: false
+          description: If `true`, the trigger is disabled and does not listen for events or execute.
         config:
           type: object
           description: An object that defines configuration values for the trigger.
-          required:
-            - database
-            - collection
-            - operation_types
-            - operation_type
-            - service_id
-            - providers
-          properties:
-            operation_types:
-              type: array
-              items:
-                type: string
-                enum:
-                  - INSERT
-                  - UPDATE
-                  - REPLACE
-                  - DELETE
-              description: |-
-                **Required for Database Triggers** -- The [database event operation
-                types](https://www.mongodb.com/docs/realm/triggers/database-triggers#std-label-database-events) to
-                listen for. This must contain at least one value.
-            operation_type:
-              type: string
-              description: |-
-                **Required for Authentication Triggers** -- The [authentication
-                operation
-                type](https://www.mongodb.com/docs/realm/triggers/authentication-triggers#std-label-authentication-event-operation-types)
-                to listen for.
-              enum:
-                - LOGIN
-                - CREATE
-                - DELETE
-            providers:
-              type: string
-              description: |-
-                **Only Available for Authentication Triggers** -- A list of one or more
-                [authentication
-                provider](https://www.mongodb.com/docs/realm/authentication/providers) id
-                values. The trigger will only listen for authentication events produced
-                by these providers.
-            database:
-              type: string
-              description: |-
-                **Required for Database Triggers** -- The name of the MongoDB database
-                that contains the watched collection.
-            collection:
-              type: string
-              description: |-
-                **Required for Database Triggers** -- The name of the MongoDB collection
-                that the trigger watches for change events. The collection must be part
-                of the specified database.
-            service_id:
-              type: string
-              description: |-
-                **Required for Database Triggers** -- The ID of the MongoDB Service
-                associated with the trigger.
-            match:
-              type: object
-              description: |-
-                **Only Available for Database Triggers** -- A
-                [$match](https://www.mongodb.com/docs/manual/reference/operator/aggregation/match)
-                expression document that App Services includes in the underlying change
-                stream pipeline for the trigger. This is useful when you want to filter
-                change events beyond their operation type. The trigger will only fire if
-                the expression evaluates to true for a given change event.
-            full_document:
-              type: boolean
-              description: |-
-                **Only Available for Database Triggers** -- If true, indicates that
-                `UPDATE` change events should include the most current
-                [majority-committed](https://www.mongodb.com/docs/manual/reference/read-concern-majority/)
-                version of the modified document in the `fullDocument` field.
-            full_document_before_change:
-              type: boolean
-              description: |-
-                **Only Available for Database Triggers** -- If true, indicates that the
-                `UPDATE` change event response should include a copy of the modified
-                document from before the update was applied.
-                [Preimages](https://www.mongodb.com/docs/realm/mongodb/preimages/)
-                must be enabled.
-            schedule:
-              type: string
-              description: |-
-                **Only Available for Scheduled Triggers** -- A [cron
-                expression](https://www.mongodb.com/docs/realm/triggers/cron-expressions)
-                that defines the trigger schedule.
-            unordered:
-              type: boolean
-              description: |-
-                **Only Available for Database Triggers** -- If ``true``,
-                event ordering is disabled and this trigger can process
-                events in parallel. If ``false``, event ordering is
-                enabled and the trigger executes serially.
+        function_name:
+          type: string
+          description: The name of the function that the trigger calls when it fires.
         event_processors:
           type: object
           description: |-
-            An object where each field name is an event processor ID and each value
-            is an object that configures its corresponding event processor. The
-            following event processors are supported: `AWS_EVENTBRIDGE` For an
-            example configuration object, see [Send Trigger Events to AWS
+            An object where each field name is an event processor ID and
+            each value is an object that configures its corresponding
+            event processor. For an example configuration object, see
+            [Send Trigger Events to AWS
             EventBridge](https://www.mongodb.com/docs/realm/triggers/examples/send-events-aws-eventbridge#std-label-event_processor_example).
+          properties:
+            AWS_EVENTBRIDGE:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum: ["AWS_EVENTBRIDGE"]
+                config:
+                  type: object
+                  properties:
+                    account_id:
+                      type: string
+                      description: An AWS Account ID.
+                    region:
+                      type: string
+                      description: An AWS region.
+    DatabaseTrigger:
+      example:
+        name: onNewEmployee
+        type: DATABASE
+        function_name: handleNewEmployeeEvent
+        config:
+          operation_types:
+            - INSERT
+          database: HR
+          collection: employees
+          service_id: 5adeb649b8b998486770ae7c
+          match: {}
+          full_document: true
+      allOf:
+        - $ref: "#/components/schemas/BaseTrigger"
+        - properties:
+            type:
+              type: string
+              description: The trigger type. For database triggers, this value is always `"DATABASE"`.
+              enum: ["DATABASE"]
+            config:
+              required:
+                - service_id
+                - database
+                - collection
+                - operation_types
+                - full_document
+                - full_document_before_change
+                - unordered
+                - match
+                - project
+              properties:
+                service_id:
+                  type: string
+                  description: The _id value of a linked MongoDB data source.
+                database:
+                  type: string
+                  description: The name of a database in the linked data source.
+                collection:
+                  type: string
+                  description: |-
+                    The name of a collection in the specified database. The
+                    trigger listens to events from this collection.
+                operation_types:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    enum:
+                      - INSERT
+                      - UPDATE
+                      - REPLACE
+                      - DELETE
+                  description: The type(s) of MongoDB change event that the trigger listens for.
+                match:
+                  type: object
+                  description: |-
+                    A [$match](https://www.mongodb.com/docs/manual/reference/operator/aggregation/match)
+                    expression filters change events. The trigger will only
+                    fire if the expression evaluates to true for a given
+                    change event.
+                full_document:
+                  type: boolean
+                  default: false
+                  description: |-
+                    If `true`, indicates that `UPDATE` change events should
+                    include the most current
+                    [majority-committed](https://www.mongodb.com/docs/manual/reference/read-concern-majority/)
+                    version of the modified document in the `fullDocument`
+                    field.
+                full_document_before_change:
+                  type: boolean
+                  default: false
+                  description: |-
+                    If true, indicates that `UPDATE` change events should
+                    include a snapshot of the modified document from
+                    immediately before the update was applied.
+
+                    You must enable [document
+                    preimages](https://www.mongodb.com/docs/atlas/app-services/mongodb/preimages/)
+                    for your cluster to include these snapshots.
+                skip_catchup_events:
+                  type: boolean
+                  default: false
+                  description: |-
+                    If `true`, enabling the trigger after it was disabled
+                    will not invoke events that occurred while the trigger
+                    was disabled.
+                unordered:
+                  type: boolean
+                  description: |-
+                    If `true`, event ordering is disabled and this trigger
+                    can process events in parallel. If `false`, event
+                    ordering is enabled and the trigger executes events
+                    serially.
+    AuthenticationTrigger:
+      example:
+        name: onNewApiKey
+        type: AUTHENTICATION
+        function_name: handleNewApiKeyUser
+        config:
+          operation_type:
+            - CREATE
+          providers:
+            - api-key
+      allOf:
+        - $ref: "#/components/schemas/BaseTrigger"
+        - properties:
+            type:
+              type: string
+              description: The trigger type. For database triggers, this value is always `"AUTHENTICATION"`.
+              enum: ["AUTHENTICATION"]
+            config:
+              required:
+                - operation_type
+                - providers
+              properties:
+                operation_type:
+                  type: string
+                  description: The type of authentication event that the trigger listens for.
+                  enum:
+                    - LOGIN
+                    - CREATE
+                    - DELETE
+                providers:
+                  type: string
+                  description: The type(s) of authentication provider that the trigger listens to.
+                  enum:
+                    - anon-user
+                    - api-key
+                    - custom-token
+                    - custom-function
+                    - local-userpass
+                    - oauth2-apple
+                    - oauth2-facebook
+                    - oauth2-google
+    ScheduledTrigger:
+      example:
+        name: createDailyReport
+        type: SCHEDULED
+        function_name: createReport
+        config:
+          schedule: "0 8 * * *"
+      allOf:
+        - $ref: "#/components/schemas/BaseTrigger"
+        - properties:
+            type:
+              type: string
+              description: The trigger type. For database triggers, this value is always `"SCHEDULED"`.
+              enum: ["SCHEDULED"]
+            config:
+              required:
+                - schedule
+              properties:
+                schedule:
+                  type: string
+                  description: A [cron expression](https://www.mongodb.com/docs/atlas/app-services/triggers/scheduled-triggers/#cron-expressions) that specifies when the trigger executes.
+                  example: "0 11 * * *"
+                skip_catchup_events:
+                  type: boolean
+                  description: |-
+                    If `true`, enabling the trigger after it was disabled
+                    will not invoke events that occurred while the trigger
+                    was disabled.
     MetadataAttribute:
       type: object
       properties:
@@ -5301,13 +5378,13 @@ tags:
     description: Log in and adminstrate App Services apps.
   - name: apikeys
     x-displayName: API Keys
-    description: View and manage API keys through the [API Key provider](https://www.mongodb.com/docs/realm/authentication/api-key/).
+    description: View and manage API keys through the [API Key provider](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key/).
   - name: apps
     x-displayName: Applications
     description: View and manage applications in an Atlas project.
   - name: authproviders
     x-displayName: Authentication Providers
-    description: View and manage [authentication providers](https://www.mongodb.com/docs/realm/authentication/providers/).
+    description: View and manage [authentication providers](https://www.mongodb.com/docs/atlas/app-services/authentication/providers/).
   - name: billing
     x-displayName: Billing
     description: View billed usage of your applications.
@@ -5316,7 +5393,7 @@ tags:
     description: |
       ## Draft and Deploy a Group of Changes
 
-      You can [deploy](https://www.mongodb.com/docs/realm/manage-apps/deploy#std-label-application-deployment) a
+      You can [deploy](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy#std-label-application-deployment) a
       group of application changes together by creating and deploying a draft.
       To create and deploy a set of draft changes:
 
@@ -5379,20 +5456,20 @@ tags:
     description: Manage your app's generated [Data API endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/).
   - name: dependencies
     x-displayName: Dependencies
-    description: Manage your application's [external dependencies](https://www.mongodb.com/docs/realm/functions/dependencies/).
+    description: Manage your application's [external dependencies](https://www.mongodb.com/docs/atlas/app-services/functions/dependencies/).
   - name: endpoints
     x-displayName: Endpoints
     description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
   - name: functions
     x-displayName: Functions
-    description: View and manage your app's [functions](https://www.mongodb.com/docs/realm/functions/).
+    description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
   - name: graphql
     x-displayName: GraphQL API
     description: Configure and run GraphQL API operations.
   - name: hosting
     x-displayName: Hosting
     description: |
-      Manage your application's [hosted files](https://www.mongodb.com/docs/realm/hosting/).
+      Manage your application's [hosted files](https://www.mongodb.com/docs/atlas/app-services/hosting/).
 
       ## Asset Metadata Document Example
 
@@ -5414,7 +5491,7 @@ tags:
   - name: logs
     x-displayName: Logs
     description: |
-      Access your application's [logs](https://www.mongodb.com/docs/realm/logs/).
+      Access your application's [logs](https://www.mongodb.com/docs/atlas/app-services/logs/).
 
       ## Pagination with the Logging API
 
@@ -5476,7 +5553,7 @@ tags:
     description: Get information about [sync](https://www.mongodb.com/docs/realm/sync/) for your application.
   - name: triggers
     x-displayName: Triggers
-    description: View and manage your application's [triggers](https://www.mongodb.com/docs/realm/triggers/).
+    description: View and manage your application's [triggers](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/).
   - name: users
     x-displayName: Users
     description: View and manage your application's [users](https://www.mongodb.com/docs/realm/authentication/).
@@ -5488,9 +5565,9 @@ tags:
     description: View and manage your application's [values](https://www.mongodb.com/docs/realm/values-and-secrets/).
   - name: notifications
     x-displayName: "[Deprecated] Push Notifications"
-    description: View and manage your application's [push notifications](https://www.mongodb.com/docs/realm/push-notifications/).
+    description: View and manage your application's [push notifications](https://www.mongodb.com/docs/atlas/app-services/push-notifications/).
   - name: webhooks
     x-displayName: "[Deprecated] Webhooks"
-    description: View and manage your application's [webhooks](https://www.mongodb.com/docs/realm/services/configure/service-webhooks/).
+    description: View and manage your application's [webhooks](https://www.mongodb.com/docs/atlas/app-services/services/configure/service-webhooks/).
 security:
   - tokenAuth: []
