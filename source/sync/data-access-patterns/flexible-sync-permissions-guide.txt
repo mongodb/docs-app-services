@@ -26,8 +26,8 @@ These assume you have already created a Realm app.
 
 .. seealso::
 
-   :ref:`create-realm-apps`
-   :ref:`flexible-sync-rules-and-permissions`
+   - :ref:`create-realm-apps`
+   - :ref:`flexible-sync-rules-and-permissions`
 
 .. _read-write-own-data:
 
@@ -35,20 +35,20 @@ Read & Write Own Data
 ---------------------
 
 In this case, users may not read or write any data but their own. Consider a
-notes app where the user wants their notes to be persisted and shared across
-their own devices but kept private to their user account.
+notes app where the user wants be persist and share notes across their own
+devices but keep them  private to their user account.
 
 This strategy permits a user to create and edit a document if and only if that
 document's ``owner_id`` field equals the user's ID.
 
-To set this up, follow these steps:
+To set up the "Read & Write Own Data" strategy, follow these steps:
 
 .. include:: /includes/use-flex-sync-templates
 
 - :guilabel:`Define Permissions`: use the template dropdown to
   select the template called "Users can only read and write their own data".
 
-  This populates the rule expression box with something like the following:
+  This populates the rule expression box with the following:
 
   .. code-block:: json
      :emphasize-lines: 6-7
@@ -69,11 +69,6 @@ To set this up, follow these steps:
   the requesting user's id. Realm replaces (or "expands") the expansion at
   evaluation time with the corresponding value -- in this case, the user object.
 
-  When a client accesses the data through Sync, Realm evaluates these
-  expressions to determine permissions. This expression says the requesting user
-  may read or write if the document's ``owner_id`` field is equal to the user's
-  ID.
-
 - Skip :guilabel:`Advanced Configuration`, and then click :guilabel:`Save Changes` 
   to enable Sync with these permissions.
 
@@ -83,11 +78,12 @@ To set this up, follow these steps:
 Write Own Data, Read All Data
 -----------------------------
 
-In this case, users can read all data, but write only their own data. Consider a 
-recipe app where users can read all recipes and add new recipes. The recipes 
-they add can be viewed by everyone using the app. 
+In this case, users can read all data, but write only their own data. Consider a
+recipe app where users can read all recipes and add new recipes. The recipes
+they add can be viewed by everyone using the app. Users may update or delete
+only the recipes they contributed.
 
-To set this up, follow these steps:
+To set up the "Write Own Data, Read All Data" strategy, follow these steps:
 
 .. include:: /includes/use-flex-sync-templates
 
@@ -117,11 +113,6 @@ To set this up, follow these steps:
   replaces (or "expands") the expansion at evaluation time with the
   corresponding value -- in this case, the user object.
 
-  When a user accesses the data through Sync, Realm evaluates these
-  expressions to determine permissions. This expression says the requesting user
-  may read all data, but write only if the document's ``owner_id`` field is equal 
-  to the user's ID.
-
 - Skip :guilabel:`Advanced Configuration`, and then click :guilabel:`Save Changes` 
   to enable Sync with these permissions.
 
@@ -139,9 +130,9 @@ MongoDB Realm has a feature called Custom User Data that allows you to associate
 arbitrary data with each user. Using this feature, you can create a document
 with a field that indicates whether the user has administrative privileges.
 While there are many ways to set this up, one approach is to add a boolean
-property called ``isAdmin``, which is set to ``true`` for those users with the
-elevated permissions. Another is to create a string field called ``role``, in
-which one of the expected values might be "admin". 
+property called ``isGlobalAdmin``, which is set to ``true`` for those users with
+the elevated permissions. Another is to create a string field called ``role``,
+in which one of the expected values might be "admin". 
 
 In the following example, the custom user object we'll create has an ``_id``
 field, which corresponds to the user's ID, and 3 additional fields:
@@ -156,6 +147,8 @@ field, which corresponds to the user's ID, and 3 additional fields:
       "isGlobalAdmin": true
    }
 
+.. include:: /includes/note-custom-user-data-and-permissions.rst
+
 Enable & Configure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -166,6 +159,10 @@ User ID field, which maps a custom user data document to an
 authenticated user's ID.
 
 .. include:: /includes/define-custom-user-data.rst
+
+.. seealso::
+
+   :ref:`custom-user-data`
 
 Set Up Admin Privileges
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -246,11 +243,16 @@ of authors in my custom user data."
    included in each request, we recommend keeping the size under 16KB, which 
    is enough space for 1000 128-bit GUID-style user IDs.
 
- 
-Configure Custom User Data
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. include:: /includes/note-custom-user-data-and-permissions.rst
+
+Enable & Configure Custom User Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/define-custom-user-data.rst
+
+.. seealso::
+
+   :ref:`custom-user-data`
 
 Create Authentication Trigger Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -499,8 +501,10 @@ To make this work, we need to do the following:
 - Create a function to add a user to a team
 - Define the Sync permissions
 
-Configure Custom User Data
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. include:: /includes/note-custom-user-data-and-permissions.rst
+
+Enable & Configure Custom User Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/define-custom-user-data.rst
 
