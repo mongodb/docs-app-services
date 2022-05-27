@@ -1,4 +1,4 @@
-:doc:`3rd party services </services>` are defined in the ``/services``
+:doc:`3rd party services </reference/services>` are defined in the ``/services``
 directory. Each service maps to its own sub-directory with the same name as the
 service.
 
