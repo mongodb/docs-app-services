@@ -34,43 +34,44 @@ These assume you have already created a Realm app.
 Read & Write Own Data
 ---------------------
 
-In this case, users may not read or write any data but their own. Consider a
-notes app where the user wants to persist and share notes across their own
-devices but keep them  private to their user account.
+In this case, users may read or write their own data, but not other users' data. 
+Consider a notes app where the user wants to persist and share notes across 
+their own devices but keep them  private to their user account.
 
 This strategy permits a user to create and edit a document if and only if that
 document's ``owner_id`` field equals the user's ID.
 
-To set up the "Read & Write Own Data" strategy, follow these steps:
+To set up the "Read & Write Own Data" strategy, follow the general steps:
 
 .. include:: /includes/use-flex-sync-templates
 
-- :guilabel:`Define Permissions`: use the template dropdown to
-  select the template called "Users can only read and write their own data".
+Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
+use the template dropdown to select the template called "Users can only 
+read and write their own data".
 
-  This populates the rule expression box with the following:
+This populates the rule expression box with the following:
 
-  .. code-block:: json
-     :emphasize-lines: 6-7
-  
-     {
-       "defaultRoles": [
-         {
-           "name": "owner-read-write", 
-           "applyWhen": {},
-           "read": {"owner_id": "%%user.id"},
-           "write": {"owner_id": "%%user.id"}
-         }
-       ]  
-     }
+.. code-block:: json
+    :emphasize-lines: 6-7
 
-  Note that the "read" and "write" expressions use the ``owner_id`` field we
-  marked as "queryable" above. It also uses the ``%%user`` "expansion" to read
-  the requesting user's id. Realm replaces (or "expands") the expansion at
-  evaluation time with the corresponding value -- in this case, the user object.
+    {
+      "defaultRoles": [
+        {
+          "name": "owner-read-write", 
+          "applyWhen": {},
+          "read": {"owner_id": "%%user.id"},
+          "write": {"owner_id": "%%user.id"}
+        }
+      ]  
+    }
 
-- Skip :guilabel:`Advanced Configuration`, and then click :guilabel:`Save Changes` 
-  to enable Sync with these permissions.
+Note that the "read" and "write" expressions use the ``owner_id`` field we
+marked as "queryable" above. It also uses the ``%%user`` "expansion" to read
+the requesting user's id. Realm replaces (or "expands") the expansion at
+evaluation time with the corresponding value -- in this case, the user object.
+
+To finish, skip :guilabel:`Advanced Configuration`, and then click 
+:guilabel:`Save Changes` to enable Sync with these permissions.
 
 
 .. _write-own-data-read-all-data:
@@ -83,38 +84,40 @@ recipe app where users can read all recipes and add new recipes. The recipes
 they add can be viewed by everyone using the app. Users may update or delete
 only the recipes they contributed.
 
-To set up the "Write Own Data, Read All Data" strategy, follow these steps:
+To set up the "Write Own Data, Read All Data" strategy, follow these general 
+steps:
 
 .. include:: /includes/use-flex-sync-templates
 
-- :guilabel:`Define Permissions`: use the template dropdown to
-  select the template called "Users can read all data but only write their own data".
+Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
+use the template dropdown to select the template called "Users can read all data 
+but only write their own data".
 
-  This populates the rule expression box with the following:
+This populates the rule expression box with the following:
 
-  .. code-block:: json
-     :emphasize-lines: 6-7
-  
-     {
-        "defaultRoles": [
-          {
-            "name": "owner-write", 
-            "applyWhen": {},
-            "read": true,
-            "write": {"owner_id": "%%user.id"}
-          }    
-        ]  
-      }
+.. code-block:: json
+    :emphasize-lines: 6-7
 
-  Note that the "read" expression is set to ``true``, indicating that no matter
-  which user is authenticated, they can access all of the data. The "write"
-  expression uses the ``owner_id`` field we marked as "queryable" above and uses
-  the ``%%user`` "expansion" to match against the requesting user's id. Realm
-  replaces (or "expands") the expansion at evaluation time with the
-  corresponding value -- in this case, the user object.
+    {
+      "defaultRoles": [
+        {
+          "name": "owner-write", 
+          "applyWhen": {},
+          "read": true,
+          "write": {"owner_id": "%%user.id"}
+        }    
+      ]  
+    }
 
-- Skip :guilabel:`Advanced Configuration`, and then click :guilabel:`Save Changes` 
-  to enable Sync with these permissions.
+Note that the "read" expression is set to ``true``, indicating that no matter
+which user is authenticated, they can access all of the data. The "write"
+expression uses the ``owner_id`` field we marked as "queryable" above and uses
+the ``%%user`` "expansion" to match against the requesting user's id. Realm
+replaces (or "expands") the expansion at evaluation time with the
+corresponding value -- in this case, the user object.
+
+To finish, skip :guilabel:`Advanced Configuration`, and then click 
+:guilabel:`Save Changes` to enable Sync with these permissions.
 
 .. _admin-privileges:
 
@@ -167,15 +170,15 @@ authenticated user's ID.
 Set Up Admin Privileges
 ~~~~~~~~~~~~~~~~~~~~~~~
 After you have custom user data enabled, you can implement the Admin Privileges 
-strategy. To do so, follow these steps:
+strategy. To do so, follow these general steps:
 
 .. include:: /includes/use-flex-sync-templates
 
-- :guilabel:`Define Permissions`: use the template dropdown to
-  select the template called "Users can read and write their own data, admins 
-  can read and write all data".
+Now you need to configure the permissions. Under :guilabel:`Define Permissions`,
+use the template dropdown to select the template called "Users can read and 
+write their own data, admins can read and write all data".
 
-  This populates the rule expression box with the following:
+This populates the rule expression box with the following:
 
 .. code-block:: json
 
@@ -210,8 +213,8 @@ strategy. To do so, follow these steps:
    users to read and/or write all data. See the previous sections to learn more 
    about these strategies.
 
-- Skip :guilabel:`Advanced Configuration`, and then click :guilabel:`Save Changes` 
-  to enable Sync with these permissions.
+To finish, skip :guilabel:`Advanced Configuration`, and then click 
+:guilabel:`Save Changes` to enable Sync with these permissions.
 
 
 .. _restricted-news-feed:
@@ -284,53 +287,54 @@ and "789":
    }
 
 You can now implement the Restricted Privileges strategy. To do so, follow these 
-steps:
+general steps:
 
 .. include:: /includes/use-flex-sync-templates
 
-- :guilabel:`Define Permissions`: use the template dropdown to
-  select the template called "Users can only read and write their own data". 
-  This populates the rule expression box with the following, which is not 
-  *exactly what we want*, but provides most of the logic for us:
+Now you need to configure the permissions. Under guilabel:`Define Permissions`, 
+use the template dropdown to select the template called "Users can only read 
+and write their own data". This populates the rule expression box with the 
+following, which is not *exactly what we want*, but provides most of the logic 
+for us:
 
-  .. code-block:: json
+.. code-block:: json
 
-    {
-      "defaultRoles": [
-        {
-          "name": "owner-read-write", 
-          "applyWhen": {},
-          "read": {"owner_id": "%%user.id"},
-          "write": {"owner_id": "%%user.id"}
-        }
-      ]  
-    }
+  {
+    "defaultRoles": [
+      {
+        "name": "owner-read-write", 
+        "applyWhen": {},
+        "read": {"owner_id": "%%user.id"},
+        "write": {"owner_id": "%%user.id"}
+      }
+    ]  
+  }
 
-  Note that a user can currently read only their own documents 
-  (``"read": {"owner_id": "%%user.id"}``). We need to add an ``$or`` statement to 
-  include all documents written by a subscribed author. Those authors' IDs are 
-  stored in an array, so we also use the ``$in`` operator. The expression looks 
-  like this:
+Note that a user can currently read only their own documents 
+(``"read": {"owner_id": "%%user.id"}``). We need to add an ``$or`` statement to 
+include all documents written by a subscribed author. Those authors' IDs are 
+stored in an array, so we also use the ``$in`` operator. The expression looks 
+like this:
 
-  .. code-block:: json
+.. code-block:: json
 
-    {
-      "defaultRoles": [
-        {
-          "name": "owner-write", 
-          "applyWhen": {},
-          "read": {"$or" : [
-              {"owner_id": "%%user.id"},
-              {"owner_id": {"$in": [
-                "%%user.custom_data.user.custom_data.subscribedTo"
-              ]}}
-            ]},
-          "write": {"owner_id": "%%user.id"}
-        }    
-      ]
-    }
+  {
+    "defaultRoles": [
+      {
+        "name": "owner-write", 
+        "applyWhen": {},
+        "read": {"$or" : [
+            {"owner_id": "%%user.id"},
+            {"owner_id": {"$in": [
+              "%%user.custom_data.user.custom_data.subscribedTo"
+            ]}}
+          ]},
+        "write": {"owner_id": "%%user.id"}
+      }    
+    ]
+  }
 
-- Update the rule expression box with this new logic and save the changes.
+Update the rule expression box with this new logic and save the changes.
 
 .. _dynamic-collaboration:
 
@@ -348,48 +352,49 @@ array field contains their ID.
 Set Up Permissions
 ~~~~~~~~~~~~~~~~~~
 
-To implement this strategy, follow these steps:
+To implement this strategy, follow these general steps:
 
 .. include:: /includes/use-flex-sync-templates
 
-- Also in :guilabel:`Select Queryable Fields`: type in ``collaborators`` as well. This
-  will be the field that stores the IDs of users who may also read and write
-  the document.
-- :guilabel:`Define Permissions`: use the template dropdown to
-  select the "Custom (start from scratch)". Paste the following into the rule
-  expression box: 
+In the :guilabel:`Select Queryable Fields` field, type in ``collaborators`` as 
+well. This will be the field that stores the IDs of users who may also read and 
+write the document.
 
-  .. code-block:: json
+Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
+use the template dropdown to select the "Custom (start from scratch)". Paste the 
+following into the rule expression box: 
 
-     {
-       "rules": {},
-       "defaultRoles": [
-         {
-           "name": "read-only",
-           "applyWhen": {},
-           "write": {
-             "$or": [
-               {
-                 "owner_id": "%%user.id"
-               },
-               {
-                 "collaborators": "%%user.id"
-               }
-             ]
-           }
-         }
-       ]
-     }
+.. code-block:: json
+
+    {
+      "rules": {},
+      "defaultRoles": [
+        {
+          "name": "read-only",
+          "applyWhen": {},
+          "write": {
+            "$or": [
+              {
+                "owner_id": "%%user.id"
+              },
+              {
+                "collaborators": "%%user.id"
+              }
+            ]
+          }
+        }
+      ]
+    }
   
-  Take a look at the "write" expression. ``$or`` takes an array of options. We
-  have two possible conditions where a user may write the document:
-  
-  - The ``owner_id`` field of the document equals the user's ID
-  - The ``collaborators`` array field of the document contains the user's ID.
+Take a look at the "write" expression. ``$or`` takes an array of options. We
+have two possible conditions where a user may write the document:
 
-  Generally speaking, when a user is granted write permission, that user
-  automatically gets read permission. Therefore, we omitted the "read"
-  expression as it would be redundant in this case.
+- The ``owner_id`` field of the document equals the user's ID
+- The ``collaborators`` array field of the document contains the user's ID.
+
+Generally speaking, when a user is granted write permission, that user
+automatically gets read permission. Therefore, we omitted the "read"
+expression as it would be redundant in this case.
 
 
 Adding a Collaborator
@@ -435,25 +440,6 @@ To create an authentication trigger, follow these steps:
 
 .. include:: /includes/create-auth-trigger.rst
 
-- 
-   - 
-      .. code-block:: javascript
-         
-          exports = function(authEvent) {
-            const user = authEvent.user;
-
-            //Access the mongodb service for custom user data:
-            const collection = context.services.get("custom-user-data").db("Item").collection("User");
-            const newDoc = {
-              _id: user.id,
-              email: user.data.email, // Assumes email/password authentication
-            };
-            
-            // It's OK to do an insert and not a upsert because this function 
-            // only runs when a new user account is created
-            return collection.insertOne(newDoc);
-         };
-
 Next, create a system function called ``findUser``:
 
 .. include:: /includes/create-a-system-function.rst
@@ -464,14 +450,15 @@ In the :guilabel:`Function Editor`, paste the following code and save:
 
    exports = async function(email) { 
      // Access the mongodb service for custom user data:
-     const collection = context.services.get("custom-user-data").db("Item").collection("User");
+     const collection = context.services.get("custom-user-data")
+       .db("Item").collection("User");
      const filter = {
        email,
      };
      // Search for the user by email
      const result = await collection.findOne(filter);
-     // Return null or the corresponding user id
-     return result && result._id;
+     // Return corresponding user id or null
+     return result != null ? result._id : null;
    };
 
 From your client, you can now call this function. The function's only argument
@@ -527,32 +514,37 @@ successfully authenticated for the first time.
 
 To create the function, follow these steps:
 
-- Log in to the Realm UI, and then click :guilabel:`Functions` in the left 
-  hand panel.
 
-- Click the :guilabel:`Create New Function` button.
 
-- Specify the following values:
+.. procedure::
+   
+   .. step:: Log in to the Realm UI, and then click :guilabel:`Functions` in the 
+      left hand panel.
 
-  - :guilabel:`Name`: "joinTeam"
-  
-  - :guilabel:`Authentication`: "System"
-  
-- Switch to the :guilabel:`Function Editor` tab and replace the placeholder text 
-  with the following code: 
+   .. step:: Click the :guilabel:`Create New Function` button.
 
-  .. code-block:: json
+   .. step:: Specify the following values:
 
-     exports = async function(userId, teamName) {
-     var collection = context.services.get("mongodb-atlas").db("Item").collection("User");
+      - :guilabel:`Name`: "joinTeam"
+      
+      - :guilabel:`Authentication`: "System"
+      
+   .. step:: Switch to the :guilabel:`Function Editor` tab and replace the 
+      placeholder text with the following code: 
 
-     const filter = { _id: userId };
-     const update = { $set: { team: teamName }};
-     const options = { upsert: false };
+      .. code-block:: json
 
-     let result = await collection.updateOne(filter, update, options);
-     return result;
-     };
+          exports = async function(userId, teamName) {
+            var collection = context.services.get("mongodb-atlas")
+              .db("Item").collection("User");
+
+            const filter = { _id: userId };
+            const update = { $set: { team: teamName }};
+            const options = { upsert: false };
+
+            let result = await collection.updateOne(filter, update, options);
+            return result;
+          };
 
 
 Define Sync Permissions
