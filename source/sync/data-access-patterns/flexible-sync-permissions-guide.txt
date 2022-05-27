@@ -351,7 +351,7 @@ To implement this strategy, follow these steps:
 .. include:: /includes/use-flex-sync-templates
 
 - Also in :guilabel:`Select Queryable Fields`: type in ``collaborators`` as well. This
-  will be the field that stores the IDs of users who can also read and write
+  will be the field that stores the IDs of users who may also read and write
   the document.
 - :guilabel:`Define Permissions`: use the template dropdown to
   select the "Custom (start from scratch)". Paste the following into the rule
@@ -385,9 +385,9 @@ To implement this strategy, follow these steps:
   - The ``owner_id`` field of the document equals the user's ID
   - The ``collaborators`` array field of the document contains the user's ID.
 
-  If granted write permission, the user automatically gets read permission.
-  Therefore, we omitted the "read" expression as it would be redundant in this
-  case.
+  Generally speaking, when a user is granted write permission, that user
+  automatically gets read permission. Therefore, we omitted the "read"
+  expression as it would be redundant in this case.
 
 
 Adding a Collaborator
