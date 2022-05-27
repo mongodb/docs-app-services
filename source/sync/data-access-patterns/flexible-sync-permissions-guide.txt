@@ -65,8 +65,9 @@ To set this up, follow these steps:
      }
 
   Note that the "read" and "write" expressions use the ``owner_id`` field we
-  marked as "queryable" above. It also uses the ``%%user`` expansion to read the
-  requesting user's id.
+  marked as "queryable" above. It also uses the ``%%user`` "expansion" to read
+  the requesting user's id. Realm replaces (or "expands") the expansion at
+  evaluation time with the corresponding value -- in this case, the user object.
 
   When a client accesses the data through Sync, Realm evaluates these
   expressions to determine permissions. This expression says the requesting user
@@ -109,11 +110,12 @@ To set this up, follow these steps:
         ]  
       }
 
-  Note that the "read" expression is set to ``true``, indicating that 
-  no matter which user is authenticated, they can access all of the data. 
-  The "write" expression uses the ``owner_id`` field we marked as "queryable" 
-  above and uses the ``%%user`` expansion to match against the requesting user's 
-  id. 
+  Note that the "read" expression is set to ``true``, indicating that no matter
+  which user is authenticated, they can access all of the data. The "write"
+  expression uses the ``owner_id`` field we marked as "queryable" above and uses
+  the ``%%user`` "expansion" to match against the requesting user's id. Realm
+  replaces (or "expands") the expansion at evaluation time with the
+  corresponding value -- in this case, the user object.
 
   When a user accesses the data through Sync, Realm evaluates these
   expressions to determine permissions. This expression says the requesting user
@@ -128,20 +130,21 @@ To set this up, follow these steps:
 Administrator Privileges
 ------------------------
 
-In this permission strategy, users with a specific "administrator" role can 
-read and write any document. Users who do not have the specified role can only 
-read and write their own data. To make this strategy work, you first need to 
-define which users have administrator permissions. You do this by enabling 
-Custom User Data and defining the document that contains the user data.
+In this permission strategy, users with a specific "administrator" role can read
+and write any document. Users who do not have the specified role can only read
+and write their own data. To make this strategy work, you first need to define
+which users have administrator permissions.
 
-In the custom user data document that you define, you create   
-a field that is used to indicate whether the user has administrative 
-privileges. While there are many ways to set this up, one approach is to add 
-a boolean property called ``isAdmin``, which is set to ``true`` for those 
-users with the elevated permissions. Another is to create a string field 
-called ``role``, in which one of the expected values might be "admin". 
+MongoDB Realm has a feature called Custom User Data that allows you to associate
+arbitrary data with each user. Using this feature, you can create a document
+with a field that indicates whether the user has administrative privileges.
+While there are many ways to set this up, one approach is to add a boolean
+property called ``isAdmin``, which is set to ``true`` for those users with the
+elevated permissions. Another is to create a string field called ``role``, in
+which one of the expected values might be "admin". 
 
-In the following example, the custom user object we have created has 3 fields: 
+In the following example, the custom user object we'll create has an ``_id``
+field, which corresponds to the user's ID, and 3 additional fields:
 ``firstName``, ``lastName``, and ``isGlobalAdmin``:
 
 .. code-block:: json
@@ -153,8 +156,8 @@ In the following example, the custom user object we have created has 3 fields:
       "isGlobalAdmin": true
    }
 
-Configure Custom User Data
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enable & Configure Custom User Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service+} stores MongoDB documents that correspond to custom user data
 in a linked MongoDB Atlas cluster. When you configure custom user data for your 
