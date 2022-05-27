@@ -291,7 +291,7 @@ general steps:
 
 .. include:: /includes/use-flex-sync-templates
 
-Now you need to configure the permissions. Under guilabel:`Define Permissions`, 
+Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
 use the template dropdown to select the template called "Users can only read 
 and write their own data". This populates the rule expression box with the 
 following, which is not *exactly what we want*, but provides most of the logic 
@@ -514,37 +514,33 @@ successfully authenticated for the first time.
 
 To create the function, follow these steps:
 
+1. Log in to the Realm UI, and then click :guilabel:`Functions` in the 
+   left hand panel.
 
+#. Click the :guilabel:`Create New Function` button.
 
-.. procedure::
+#. Specify the following values:
+
+   - :guilabel:`Name`: "joinTeam"
    
-   .. step:: Log in to the Realm UI, and then click :guilabel:`Functions` in the 
-      left hand panel.
+   - :guilabel:`Authentication`: "System"
+  
+#. Switch to the :guilabel:`Function Editor` tab and replace the 
+   placeholder text with the following code: 
 
-   .. step:: Click the :guilabel:`Create New Function` button.
+   .. code-block:: json
 
-   .. step:: Specify the following values:
+      exports = async function(userId, teamName) {
+        var collection = context.services.get("mongodb-atlas")
+          .db("Item").collection("User");
 
-      - :guilabel:`Name`: "joinTeam"
-      
-      - :guilabel:`Authentication`: "System"
-      
-   .. step:: Switch to the :guilabel:`Function Editor` tab and replace the 
-      placeholder text with the following code: 
+        const filter = { _id: userId };
+        const update = { $set: { team: teamName }};
+        const options = { upsert: false };
 
-      .. code-block:: json
-
-          exports = async function(userId, teamName) {
-            var collection = context.services.get("mongodb-atlas")
-              .db("Item").collection("User");
-
-            const filter = { _id: userId };
-            const update = { $set: { team: teamName }};
-            const options = { upsert: false };
-
-            let result = await collection.updateOne(filter, update, options);
-            return result;
-          };
+        let result = await collection.updateOne(filter, update, options);
+        return result;
+      };
 
 
 Define Sync Permissions
