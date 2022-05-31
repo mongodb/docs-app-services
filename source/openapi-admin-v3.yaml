@@ -2,7 +2,7 @@
 openapi: 3.0.1
 info:
   description: |-
-    Atlas App Services provides an API for programmatically performing
+    {+service+} provides an API for programmatically performing
     administrative tasks outside of the {+ui+}. This includes tasks such
     as modifying authentication providers, creating rules, and defining
     functions. Client applications should not use the admin API. Instead,
@@ -73,7 +73,7 @@ info:
       https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login
     ```
 
-    If authentication succeeds, Atlas App Services returns an access token as
+    If authentication succeeds, {+service+} returns an access token as
     part of the JSON response document:
 
     ```json
@@ -95,7 +95,7 @@ info:
     ```
 
   version: "3.0"
-  title: Atlas App Services API
+  title: {+service+} API
 servers:
   - url: https://realm.mongodb.com/api/admin/v3.0
     description: The root API resource and starting point for the {+service-short+} API.
@@ -1563,7 +1563,7 @@ paths:
       description: |-
         List the allowed [HTTP
         origins](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin)
-        from which Atlas App Services should allow requests.
+        from which {+service+} should allow requests.
       responses:
         "200":
           description: Successfully listed.
@@ -1580,7 +1580,7 @@ paths:
       description: |-
         Set the allowed [HTTP
         origins](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin)
-        from which Atlas App Services should allow requests.
+        from which {+service+} should allow requests.
       requestBody:
         required: true
         description: A list of HTTP origins.
@@ -1729,7 +1729,7 @@ paths:
       tags:
         - logs
       operationId: adminGetLogs
-      summary: Retrieve Atlas App Services logs
+      summary: Retrieve {+service+} logs
       parameters:
         - name: co_id
           in: query
@@ -1873,7 +1873,7 @@ paths:
                     type: string
                     description: |-
                       The end date and time of the next page of log entries in ISO 8601
-                      format. Atlas App Services paginates the result sets of queries that match
+                      format. {+service+} paginates the result sets of queries that match
                       more than 100 log entries and includes this field in paginated
                       responses. To get the next page of up to 100 entries, pass this value as
                       the `end_date` parameter in a subsequent request.
@@ -4377,7 +4377,7 @@ components:
               description: |-
                 **Only Available for Database Triggers** -- A
                 [$match](https://www.mongodb.com/docs/manual/reference/operator/aggregation/match)
-                expression document that Atlas App Services includes in the underlying change
+                expression document that {+service+} includes in the underlying change
                 stream pipeline for the trigger. This is useful when you want to filter
                 change events beyond their operation type. The trigger will only fire if
                 the expression evaluates to true for a given change event.

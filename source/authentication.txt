@@ -15,7 +15,7 @@ Users & Authentication
 Introduction
 ------------
 
-Atlas App Services manages authentication for your application's end users. 
+{+service+} manages authentication for your application's end users. 
 {+service-short+}:
 
 - Uses role-based :ref:`data access rules <mongodb-rules>` to determine 
@@ -42,13 +42,13 @@ Concepts
 Authentication Providers
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-In Atlas App Services, an **authentication provider** is a modular service. 
+In {+service+}, an **authentication provider** is a modular service. 
 These services provide identity verification, and maintain information 
 about app users.
 
 Users authenticate themselves by providing a set of credentials to an 
 authentication provider. With valid credentials, the provider returns a 
-unique identity associated with the user. Atlas App Services logs them in as 
+unique identity associated with the user. {+service+} logs them in as 
 the :ref:`active user <active-user>`.
 
 {+service-short+} includes built-in authentication providers for common use cases. 
@@ -92,14 +92,14 @@ with :ref:`custom data <custom-user-data>`.
 Authentication Provider Identities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Atlas App Services stores login metadata for a user in an 
+{+service+} stores login metadata for a user in an 
 **authentication provider identity**. {+service-short+} uses this metadata to 
 authenticate the user. 
 
 Upon first login with an authentication provider, {+service-short+} creates an 
 identity object. Each object contains a unique ID, and 
 :ref:`provider-specific metadata <user-metadata>` about the user. On later 
-logins, Atlas App Services refreshes the existing identity data.
+logins, {+service+} refreshes the existing identity data.
 
 A single user account can have more than one identity. {+service-short+} client SDKs 
 enable you to link identities to existing user accounts. This allows users 
@@ -116,7 +116,7 @@ In the {+client-sdks+}, you can log in more than one user, but only one account
 can be **active** at any given time. The **active user** is a user account 
 associated with an application request. 
 
-Atlas App Services executes requests from client applications as the active user. 
+{+service+} executes requests from client applications as the active user. 
 {+service-short+} replaces dynamic references to the user - e.g. :json-expansion:`%%user` 
 in a JSON expression - with the active user.
 
@@ -171,7 +171,7 @@ User Sessions
 data in your app. Authenticated users can use app data without re-entering 
 a password or re-authenticating.
 
-Atlas App Services manages sessions with access tokens and refresh tokens. Client 
+{+service+} manages sessions with access tokens and refresh tokens. Client 
 SDKs supply the logic to manage tokens, and provide them with requests.
 
 The access token for a session expires after thirty minutes. Clients can 
@@ -188,7 +188,7 @@ client, which does two things:
 
 - Deletes the local session information by deleting both the access and 
   refresh tokens.
-- Invalidates the refresh token in the Atlas App Services backend.
+- Invalidates the refresh token in the {+service+} backend.
 
 .. note::
 
@@ -210,10 +210,10 @@ Summary
   :ref:`authentication providers <authentication-providers>`. You can 
   associate users with more than one authentication provider.
 
-- Atlas App Services supports having more than one user logged in at the same 
+- {+service+} supports having more than one user logged in at the same 
   time. There is only one **active user** at a time.
 
-- The **system user** is a special user in Atlas App Services that bypasses 
+- The **system user** is a special user in {+service+} that bypasses 
   all rules.
 
 - {+client-sdks+} manage the access and refresh tokens that comprise a 
