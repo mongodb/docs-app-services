@@ -2,9 +2,9 @@
 .. _json-expressions:
 .. _rule-expressions:
 
-================
+===
 Rule Expressions
-================
+===
 
 .. default-domain:: mongodb
 
@@ -15,7 +15,7 @@ Rule Expressions
    :class: singlecol
 
 Overview
---------
+---
 
 A **rule expression** is a JSON object that you write to control data
 access with :ref:`rules <rules>`. Each expression defines the conditions
@@ -51,7 +51,7 @@ called :ref:`expansions <expansions>`, and can use built-in
    }
 
 Expression Syntax
------------------
+---
 
 An expression is either a boolean value (i.e. ``true`` or ``false``) or
 a JSON object.
@@ -72,7 +72,7 @@ Expression object have the following format:
 .. _embedded-expressions:
 
 Embedded Expressions
-~~~~~~~~~~~~~~~~~~~~
+~~~
 
 You can embed multiple expression documents in the fields of another expression
 document to handle complex evaluation logic. {+service+} evaluates expressions
@@ -97,7 +97,7 @@ of its embedded expressions.
       }
 
 Multi-Field Expressions
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 When you have more than one field in an expression, that expression evaluates to
 ``true`` if and only if every field in the expression evaluates to true. In
@@ -118,7 +118,7 @@ operation.
       }
 
 Expression Evaluation
----------------------
+---
 
 {+service+} evaluates expressions by first replacing expansions with
 their runtime values and then evaluating each field of the expanded
@@ -146,7 +146,7 @@ Expression fields evaluate based on the following rules:
 .. _expansions:
 
 Expansions
-----------
+---
 
 An expansion is a variable that represents a dynamic value in an
 expression. Expansions are denoted by two percent signs followed by the
@@ -172,7 +172,7 @@ and the context at the time of evaluation.
    rule expressions.
 
 Logical Expansions
-~~~~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%true
    
@@ -191,7 +191,7 @@ Logical Expansions
    must evaluate to ``false``.
 
 Value Expansions
-~~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%values
    
@@ -214,7 +214,7 @@ Value Expansions
          }
 
 Environment Expansions
-~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%environment
    
@@ -251,7 +251,7 @@ Environment Expansions
          }
 
 Request Expansions
-~~~~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%request
    
@@ -277,7 +277,7 @@ Request Expansions
       }
 
 User Expansions
-~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%user
    
@@ -382,7 +382,7 @@ User Expansions
 .. _mongodb-document-expansions:
 
 MongoDB Document Expansions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%this
    
@@ -430,7 +430,7 @@ MongoDB Document Expansions
       }
 
 Service Expansions
-~~~~~~~~~~~~~~~~~~
+~~~
 
 .. json-expansion:: %%args
    
@@ -464,7 +464,7 @@ Service Expansions
 .. _operators:
 
 Operators
----------
+---
 
 An expression operator represents an action or operation within an
 expression. Operators take in one or more arguments and evaluate to a
@@ -476,7 +476,7 @@ single percent sign (``%``) or a dollar sign (``$``). You can use them
 in any expression.
 
 Convert EJSON Values
-~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The following operators allow you to convert values between BSON/EJSON
 and JSON representations:
@@ -516,7 +516,7 @@ and JSON representations:
    object or an expansion that evaluates to one.
 
 Call a Function
-~~~~~~~~~~~~~~~
+~~~
 
 The following operators allow you to call functions in your {+service-short+}
 application:
@@ -540,7 +540,7 @@ application:
          }
 
 Check Existence
-~~~~~~~~~~~~~~~
+~~~
 
 The following operators allow you to determine if a value exists in an
 object or array:
@@ -597,7 +597,7 @@ object or array:
          }
 
 Compare Values
-~~~~~~~~~~~~~~
+~~~
 
 The following operators allow you to compare values, including
 :ref:`expanded <expansions>` values:

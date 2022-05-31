@@ -1,6 +1,6 @@
-===========================
+===
 GitHub Service [Deprecated]
-===========================
+===
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ GitHub Service [Deprecated]
 .. include:: /includes/note-third-party-services-deprecation.rst
 
 Overview
---------
+---
 
 GitHub is a web-based development platform for hosting and reviewing
 Git repositories.
@@ -24,7 +24,7 @@ a GitHub repository, such as new pull requests or issues.
 .. _github-service-configuration:
 
 Configuration Parameters
-------------------------
+---
 
 You will need to provide values for the following parameters when you
 :doc:`create a GitHub service interface </services/configure/services>`:
@@ -62,7 +62,7 @@ You will need to provide values for the following parameters when you
 .. _github-service-actions:
 
 Service Actions
----------------
+---
 
 GitHub Services do not provide any service actions. Use an
 :ref:`incoming webhook <github-incoming-webhooks>` to respond to events
@@ -71,7 +71,7 @@ in your GitHub repo.
 .. _github-incoming-webhooks:
 
 Incoming Webhooks
------------------
+---
 
 .. note:: Convert GitHub Webhooks to Endpoints
 
@@ -87,7 +87,7 @@ GitHub event types, see GitHub's :github-dev:`Webhook </webhooks>`
 documentation.
 
 Configuration
-~~~~~~~~~~~~~
+~~~
 
 .. tabs-realm-admin-interfaces::
 
@@ -173,7 +173,7 @@ Configuration
 .. _github-webhook-request-payload:
 
 Request Payload
-~~~~~~~~~~~~~~~
+~~~
 
 {+service-short+} automatically passes a ``payload`` document as the first argument
 to incoming webhook functions. In a GitHub Service incoming webhook the
@@ -189,7 +189,7 @@ call the webhook.
    documentation.
 
 Example Webhook Function
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The following webhook function inserts incoming data into a MongoDB
 collection.
@@ -215,10 +215,10 @@ information from the request.
 .. _configure-github:
 
 Configure GitHub
-----------------
+---
 
 Add a Webhook to a GitHub Repository
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 1. Log into :github:`GitHub <>`.
 

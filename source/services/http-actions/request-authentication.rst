@@ -1,5 +1,5 @@
 Request Authentication
-~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 You can authenticate an outbound HTTP request using one of the standard
 :mdn:`HTTP authentication schemes <Web/HTTP/Authentication>`. {+service+}

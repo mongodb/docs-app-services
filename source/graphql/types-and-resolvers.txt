@@ -1,8 +1,8 @@
 .. _graphql-types-and-resolvers:
 
-=======================================
+===
 GraphQL Types, Resolvers, and Operators
-=======================================
+===
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ GraphQL Types, Resolvers, and Operators
    :class: singlecol
 
 Overview
---------
+---
 
 {+service-short+} automatically generates a GraphQL schema for any collection that has a
 defined :ref:`schema <schemas>`. For each collection, {+service-short+} generates the
@@ -60,7 +60,7 @@ following:
 .. _graphql-scalar-types:
 
 Scalar Types
-------------
+---
 
 {+service-short+} supports all of the standard :graphql:`GraphQL scalar types
 <learn/schema/#scalar-types>` and also generates the ``ObjectId`` scalar.
@@ -78,7 +78,7 @@ The following scalar types are supported:
 .. _graphql-document-types:
 
 Document Types
---------------
+---
 
 {+service-short+} generates a single :graphql:`GraphQL type <learn/schema/>` for the
 documents in a collection based on the collection schema. The type uses the name
@@ -100,7 +100,7 @@ is specified.
 .. _graphql-field-mapping:
 
 Field Mapping
-~~~~~~~~~~~~~
+~~~
 
 {+service-short+} attempts to map fields in your collection schema directly to
 fields in your GraphQL types. The `definition of valid names
@@ -117,7 +117,7 @@ GraphQL types:
 .. _graphql-bson-type-mapping:
 
 BSON Type Mapping
-~~~~~~~~~~~~~~~~~
+~~~
 
 The GraphQL type system is similar but not identical to the BSON types that you
 can use in a :ref:`schema <schemas>`. {+service-short+} automatically attempts to map
@@ -172,7 +172,7 @@ GraphQL types that they map to:
 .. _graphql-input-types:
 
 Input Types
------------
+---
 
 GraphQL uses :graphql:`input types <learn/schema/#input-types>` to represent
 parameters that you pass to queries and mutations. This is a standard approach
@@ -181,7 +181,7 @@ used by all GraphQL APIs to define unambiguous, type-safe user inputs.
 .. _input-type-query:
 
 QueryInput
-~~~~~~~~~~
+~~~
 
 A ``QueryInput`` object defines a set of one or more conditions that a document
 must meet in order to be included in a query. The object may include fields from
@@ -516,7 +516,7 @@ Element operator fields have the following form:
 .. _input-type-insert:
 
 InsertInput
-~~~~~~~~~~~
+~~~
 
 An ``InsertInput`` object defines a document to insert into a collection. The
 document must conform to the GraphQL document type and include all required
@@ -544,7 +544,7 @@ fields.
 .. _input-type-update:
 
 UpdateInput
-~~~~~~~~~~~
+~~~
 
 An ``UpdateInput`` object defines a new value for one or more fields in a
 document. The updated document includes the new field values. Any fields that
@@ -566,7 +566,7 @@ GraphQL document type.
       }
 
 RelationInput
-~~~~~~~~~~~~~
+~~~
 
 A ``RelationInput`` defines a new set of related documents for a relationship
 field in the mutated document. You can reference documents that already exist in
@@ -612,7 +612,7 @@ are specified, the ``create`` operation takes precedence and the
 .. _input-type-sortby:
 
 SortByInput
-~~~~~~~~~~~
+~~~
 
 A ``SortByInput`` enum defines a sort order for documents returned by a query.
 You can sort in ascending and descending order by any root-level field that does
@@ -637,7 +637,7 @@ direction, either ``ASC`` or ``DESC``.
 .. _graphql-query-resolvers:
 
 Query Resolvers
----------------
+---
 
 {+service-short+} generates two :ref:`GraphQL queries <graphql-query-resolvers>`
 for each collection:
@@ -651,7 +651,7 @@ for each collection:
 .. _graphql-findOne:
 
 Find a Single Document
-~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The single document query field uses the same name as the data type
 that the collection contains. It returns a single document of the
@@ -689,7 +689,7 @@ queried type and accepts the following parameters:
 .. _graphql-findMany:
 
 Find Multiple Documents
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The multiple document query field uses the same name as the data type
 that the collection contains but has an additional ``"s"`` appended to
@@ -755,7 +755,7 @@ accepts the following parameters:
 .. _graphql-mutation-resolvers:
 
 Mutation Resolvers
-------------------
+---
 
 {+service-short+} generates a set of mutations for the documents in each
 collection. These allow you insert, modify, and delete one or more
@@ -764,7 +764,7 @@ documents.
 .. _graphql-insertOne:
 
 Insert a Single Document
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The single document insert mutation field uses the name
 ``insertOne<Type>`` where ``<Type>`` is the singular name of the data
@@ -804,7 +804,7 @@ accepts the following parameters:
 .. _graphql-insertMany:
 
 Insert Multiple Documents
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The multiple document insert mutation field uses the name
 ``insertMany<Type>s`` where ``<Type>`` is the singular name of the data
@@ -853,7 +853,7 @@ accepts the following parameters:
 .. _graphql-updateOne:
 
 Update a Single Document
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The single document update mutation field uses the name
 ``updateOne<Type>`` where ``<Type>`` is the singular name of the data
@@ -903,7 +903,7 @@ accepts the following parameters:
 .. _graphql-updateMany:
 
 Update Multiple Documents
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The multiple document update mutation field uses the name
 ``updateMany<Type>s`` where ``<Type>`` is the singular name of the data
@@ -954,7 +954,7 @@ modified and accepts the following parameters:
 .. _graphql-upsertOne:
 
 Upsert a Single Document
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The single document upsert mutation field uses the name
 ``upsertOne<Type>`` where ``<Type>`` is the singular name of the data
@@ -1011,7 +1011,7 @@ parameters:
 .. _graphql-replaceOne:
 
 Replace a Single Document
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The single document replacement mutation field uses the name
 ``replaceOne<Type>`` where ``<Type>`` is the singular name of the data
@@ -1066,7 +1066,7 @@ accepts the following parameters:
 .. _graphql-deleteOne:
 
 Delete a Single Document
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The single document delete mutation field uses the name
 ``deleteOne<Type>`` where ``<Type>`` is the singular name of the data
@@ -1108,7 +1108,7 @@ accepts the following parameters:
 .. _graphql-deleteMany:
 
 Delete Multiple Documents
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The multiple document delete mutation field uses the name
 ``deleteMany<Type>s`` where ``<Type>`` is the singular name of the data

@@ -1,8 +1,8 @@
 .. _appconfig-data_sources:
 
-=======================================
+===
 MongoDB Data Source Configuration Files
-=======================================
+===
 
 .. default-domain:: mongodb
 
@@ -25,12 +25,12 @@ MongoDB Data Source Configuration Files
                    └── rules.json
 
 Service Configuration
----------------------
+---
 
 .. _config-mongodb-cluster:
 
 MongoDB Clusters
-~~~~~~~~~~~~~~~~
+~~~
 
 .. code-block:: json
    :caption: config.json
@@ -83,7 +83,7 @@ MongoDB Clusters
 .. _config-datalake:
 
 MongoDB Data Lakes
-~~~~~~~~~~~~~~~~~~
+~~~
 
 .. code-block:: json
    :caption: /data_sources/<Service Name>/config.json
@@ -120,12 +120,12 @@ MongoDB Data Lakes
      - Required. The name of the data lake in Atlas.
 
 Databases & Collections
------------------------
+---
 
 .. _config-collection-schema:
 
 Collection Schema
-~~~~~~~~~~~~~~~~~
+~~~
 
 If you want to enforce a :ref:`schema <schemas>` for a collection, define a
 ``schema.json`` configuration file that contains a JSON schema for the
@@ -147,7 +147,7 @@ documents. The root level schema must be an :ref:`object schema
 .. _config-relationships:
 
 Relationships
-~~~~~~~~~~~~~
+~~~
 
 .. code-block:: json
    :caption: /data_sources/<service>/<database>/<collection>/relationships.json
@@ -225,7 +225,7 @@ Relationships
 .. _config-collection-rules:
 
 Collection Rules
-~~~~~~~~~~~~~~~~
+~~~
 
 If the data source is not a :doc:`synced cluster </sync>` or a :ref:`data lake
 <data-lake-caveats>`, then you can define collection-level rules in a
@@ -265,12 +265,12 @@ collection's ``rules.json`` configuration file.
      - An array of :ref:`Filter <filter-config>` configurations.
 
 Rule Configurations
--------------------
+---
 
 .. _role-config:
 
 Roles
-~~~~~
+~~~
 
 .. include:: /mongodb/tables/role-configuration.rst
 
@@ -278,6 +278,6 @@ Roles
 .. _filter-config:
 
 Filters
-~~~~~~~
+~~~
 
 .. include:: /mongodb/tables/query-filter-params.rst

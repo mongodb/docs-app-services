@@ -10,7 +10,7 @@ Each value is defined in its own JSON file named after the value.
        └── <value name>.json
 
 Configuration
-~~~~~~~~~~~~~
+~~~
 
 .. code-block:: json
    :caption: <value name>.json

@@ -1,6 +1,6 @@
-=============================
+===
 Authenticate GraphQL Requests
-=============================
+===
 
 .. default-domain:: mongodb
 
@@ -11,7 +11,7 @@ Authenticate GraphQL Requests
    :class: singlecol
 
 Overview
---------
+---
 
 The GraphQL API operates over HTTP, which means that you can access your
 :ref:`exposed data <graphql-expose-data>` using any HTTP or GraphQL client.
@@ -21,7 +21,7 @@ must include an application user's login credentials or a valid access token.
 .. _graphql-authorization-token-header:
 
 Authorization Header
---------------------
+---
 
 To authenticate a GraphQL request as an arbitrary logged in user from any
 provider, include a valid :ref:`user access token
@@ -50,7 +50,7 @@ provider, include a valid :ref:`user access token
 .. _graphql-authorization-credential-headers:
 
 Credential Headers
-------------------
+---
 
 .. important::
    
@@ -63,7 +63,7 @@ Credential Headers
    avoid :wikipedia:`CORS errors <Cross-origin_resource_sharing>`.
 
 Email/Password
-~~~~~~~~~~~~~~
+~~~
 
 To authenticate a GraphQL request as an :ref:`email/password
 <email-password-authentication>` user, include the user's credentials in the
@@ -91,7 +91,7 @@ request's ``email`` and ``password`` headers:
       --data-raw '{"query":"query AllMovies {\n  movies {\n    title\n    year\n  }\n}"}'
 
 API Key
-~~~~~~~
+~~~
 
 To authenticate a GraphQL request as an :ref:`API Key <api-key-authentication>`
 user, include the user or server API key in the request's ``apiKey`` header:
@@ -116,7 +116,7 @@ user, include the user or server API key in the request's ``apiKey`` header:
       --data-raw '{"query":"query AllMovies {\n  movies {\n    title\n    year\n  }\n}"}'
 
 Custom JWT
-~~~~~~~~~~
+~~~
 
 To authenticate a GraphQL request as a :ref:`custom JWT
 <custom-jwt-authentication>` user, include the JWT string in the request's

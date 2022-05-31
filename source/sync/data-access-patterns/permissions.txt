@@ -1,9 +1,9 @@
 .. _sync-permissions:
 .. _sync-rules:
 
-==========================
+===
 Sync Rules and Permissions
-==========================
+===
 
 .. default-domain:: mongodb
 
@@ -14,7 +14,7 @@ Sync Rules and Permissions
    :class: singlecol
 
 Rules
------
+---
 
 {+service+} enforces data access rules for all requests to a :term:`synced
 cluster`. Sync rules are dynamic :ref:`JSON expressions <expressions>` that
@@ -36,7 +36,7 @@ The way Sync rules work depends on whether you are using
 .. _partition-based-rules-and-permissions:
 
 Partition-Based Rules and Permissions
--------------------------------------
+---
 
 Whenever a user opens a synced realm from a client app, {+service-short+} evaluates your
 app's rules and determines if the user has read and write permissions for the
@@ -46,7 +46,7 @@ or delete objects. Write permission implies read permission, so if a user
 has write permission then they also have read permission.
 
 Partition-Based Sync Rule Behavior
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Sync rules apply to specific partitions and are coupled to your app's data model
 by the :term:`partition key`. Consider the following behavior when designing
@@ -69,7 +69,7 @@ don't accidentally leak sensitive information.
 .. _partition-based-sync-permissions:
 
 Partition-Based Sync Permissions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 {+service-short+} enforces dynamic, user-specific read and write permissions to secure the
 data in each :ref:`partition <sync-partitions>`. You define permissions with
@@ -84,7 +84,7 @@ a user's permissions every time they open a synced realm.
    determine a user's permissions based on the context of their request.
 
 Key Concepts
-~~~~~~~~~~~~
+~~~
 
 .. _sync-read-permissions:
 
@@ -108,7 +108,7 @@ before and after it's modified.
 .. _sync-permission-strategies:
 
 Permission Strategies
-~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 You can structure your read and write permission expressions as a set of
 permission strategies that apply to your :ref:`partition strategy
@@ -303,7 +303,7 @@ cannot express solely in JSON expressions.
 .. _flexible-sync-roles:
 
 Flexible Sync Session Roles and Rules
--------------------------------------
+---
 
 In flexible sync, a **session role** determines which permissions apply for the
 duration of a sync session.
@@ -361,7 +361,7 @@ change until the next session.
    - You cannot store permissions information (such as "which document IDs may this user access?") in the user object.
 
 Available Expansions in Flexible Sync Rules Quick Reference
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 .. list-table::
    :header-rows: 1
@@ -418,7 +418,7 @@ Available Expansions in Flexible Sync Rules Quick Reference
 .. _default-roles:
 
 Default Roles
-~~~~~~~~~~~~~
+~~~
 
 You can create one or more default session roles that apply across all
 collections. If a collection does not have any custom session roles
@@ -439,7 +439,7 @@ defined, session role resolution reverts to default session roles.
 
 
 Flexible Sync Rules
-~~~~~~~~~~~~~~~~~~~
+~~~
 
 You define a read and write rule expression pair for every session role.
 
@@ -490,7 +490,7 @@ read permissions, so any user that can modify data can also view that data
 before and after it's modified.
 
 Flexible Sync Permission Strategies
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 These common flexible sync permission strategies rely on session role
 names stored in :ref:`custom user data <custom-user-data>`. When a

@@ -1,8 +1,8 @@
 .. _relationships:
 
-=============
+===
 Relationships
-=============
+===
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Relationships
    :class: singlecol
 
 Overview
---------
+---
 
 A relationship is a connection between two documents. Relationships
 allow you to reference and query related documents in read and write
@@ -112,7 +112,7 @@ relationships.
       }
 
 Cardinality
------------
+---
 
 A relationship's cardinality determines the number of foreign documents
 that it can reference. {+service-short+} supports two relationship cardinalities:
@@ -121,7 +121,7 @@ that it can reference. {+service-short+} supports two relationship cardinalities
 .. _relationships-to-one:
 
 To-One
-~~~~~~
+~~~
 
 A to-one relationship links each source document with either a single
 document or an array of documents from the foreign collection.
@@ -182,7 +182,7 @@ or a null value in resolved GraphQL types and SDK models:
 .. _relationships-to-many:
 
 To-Many
-~~~~~~~
+~~~
 
 A to-many relationship links each source document with a list of
 documents from the foreign collection. 
@@ -241,7 +241,7 @@ or a null value in resolved GraphQL types and SDK models:
          }
 
 Embedded Object Relationships
------------------------------
+---
 
 Embedded Objects can have relationships with foreign collections. Use 
 dot notation to access properties in embedded objects.
@@ -249,7 +249,7 @@ dot notation to access properties in embedded objects.
 .. _relationships-from-embedded-object-to-another-collection:
 
 Embedded Object to Another Collection
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 An embedded object can have a relationship with an object in a foreign 
 collection.
@@ -286,7 +286,7 @@ foreign collection details and foreign key field.
 .. _relationships-to-embedded-object-within-list:
 
 Embedded Object Within a List
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 An embedded object that is within a list property can have a relationship
 with a foreign collection.
@@ -339,7 +339,7 @@ you can specify the foreign collection details and foreign key field.
 .. _define-a-relationship:
 
 Define a Relationship
----------------------
+---
 
 When you define a relationship, keep these limitations in mind:
 
@@ -348,14 +348,14 @@ When you define a relationship, keep these limitations in mind:
 - The foreign key must be the ``_id`` field of the collection the field is referencing
 
 1. Define Schemas
-~~~~~~~~~~~~~~~~~
+~~~
 
 In order to define a relationship, you must have a schema defined for
 both the source collection and the foreign collection. To learn how to
 define schemas, see :ref:`enforce-a-schema`.
 
 2. Create a New Relationship
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 You define a relationship for collections in a linked MongoDB data
 source alongside the schema.
@@ -390,7 +390,7 @@ source alongside the schema.
          }
 
 3. Configure the Relationship
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 A relationship definition maps from a field included in the source
 collection's schema and points to a field of the same type in the
@@ -430,7 +430,7 @@ foreign collection's schema.
         ``true``, otherwise set it to ``false``.
 
 4. Deploy the Relationship
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 .. tabs-realm-admin-interfaces::
 

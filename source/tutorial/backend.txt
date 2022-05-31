@@ -1,8 +1,8 @@
 .. _backend-tutorial:
 
-==============================================
+===
 Write a Serverless GitHub Contribution Tracker
-==============================================
+===
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Write a Serverless GitHub Contribution Tracker
    :class: singlecol
 
 Overview
---------
+---
 
 *Estimated time to complete: 30 minutes*
 
@@ -39,7 +39,7 @@ Once you've completed this tutorial, you will know how to:
 - Connect to an external service through an API
 
 Before You Start
-----------------
+---
 
 You'll need to have the following before you can begin this tutorial:
 
@@ -54,7 +54,7 @@ You'll need to have the following before you can begin this tutorial:
   <https://account.mongodb.com/account/register?tck=docs_realm>`__.
 
 Create a New {+app+}
-----------------------
+---
 
 First, you'll need to create an application in {+service-short+}. To create the app:
 
@@ -74,7 +74,7 @@ First, you'll need to create an application in {+service-short+}. To create the 
    :alt: The app creation screen with the app name set to "github-tracker-tutorial".
 
 Welcome New GitHub Contributors
--------------------------------
+---
 
 We'll connect the {+app+} to your GitHub repository using a `GitHub
 repository webhook
@@ -89,7 +89,7 @@ contributors whenever they open their first pull request or issue on a
 repository.
 
 Create an Endpoint
-~~~~~~~~~~~~~~~~~~
+~~~
 
 Webhooks work by sending a request about the event to a URL that your
 app controls. In your app, you'll need to expose a custom endpoint with
@@ -133,7 +133,7 @@ To create the endpoint:
    the next step.
 
 Connect the Endpoint to a GitHub Webhook
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Now that you've created the endpoint in your app, you need to set up a
 webhook in your GitHub repository that sends events to the endpoint.
@@ -187,7 +187,7 @@ To create the webhook in your repository:
       :alt: A log entry in GitHub that shows the custom endpoint's response to a ping event. The response has a status code of 200 and the response body says "Successfully received a GitHub webhook event".
 
 Get a GitHub Access Token
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The webhook is now set up to send events from GitHub to your endpoint.
 However, to respond to events in the endpoint with the GitHub API you'll
@@ -215,7 +215,7 @@ To `create a personal access token
    will never show you the token again after this point.
 
 Store the Token as a Value
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Back in your app, add a new value to hold the personal access token you
 just generated. You'll be able to reference the value from your endpoint
@@ -236,7 +236,7 @@ To create the value:
 #. Click :guilabel:`Save`.
 
 Install the GitHub API Client
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The endpoint will interact with GitHub's REST API to leave comments. You
 could write and send HTTP requests directly to the API using the
@@ -261,7 +261,7 @@ To add the Octokit library to your app:
    complete in a few seconds, but may take up to a minute.
 
 Write the Endpoint Logic
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Now that you have an access token and have installed Octokit, you can
 update the endpoint function to actually do something when it receives
@@ -288,7 +288,7 @@ To update the function:
 #. Click :guilabel:`Save` and deploy the endpoint.
 
 Test the Endpoint
-~~~~~~~~~~~~~~~~~
+~~~
 
 The welcome message endpoint should now be fully set up. To test that it
 works correctly, open a new issue or pull request on the repository. The
@@ -313,14 +313,14 @@ request log includes a response message from the endpoint.
    contribution.
 
 Generate a Weekly Community Report
-----------------------------------
+---
 
 Your app is connected to GitHub, stores information about contributions,
 and welcomes new contributors. Now we'll extend it to automatically
 analyze and generate reports for your repository.
 
 Specify Which Repos Should Generate Reports
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Your app needs a way to know which repositories it should generate
 reports for every week. For this tutorial, we'll hardcode the list in a
@@ -338,7 +338,7 @@ GitHub repository. Make sure to include an entry for your repository.
    ]
 
 Create a Function that Generates Reports
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 A report is a document that summarizes the contributions to a repository
 for some time period. We'll use a function to create on-demand reports
@@ -352,7 +352,7 @@ following code:
    :caption: functions/generateCommunityReport.js
 
 Generate And Save Reports Every Week
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The function you just created creates a report for a repository
 on-demand. However, at this point nothing calls the function and the
@@ -394,7 +394,7 @@ To create the trigger:
 #. Click :guilabel:`Save`.
 
 Send Report Notifications
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Your app will now automatically generate and save reports every week.
 However, the reports won't be very useful if nobody sees them. We'll
@@ -429,7 +429,7 @@ To set up the messages:
 #. Click :guilabel:`Save` and deploy the trigger.
 
 Test the Report Triggers
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Your app is set up to automatically generate, save, and send reports
 every week. To make sure that everything works, you can run this report
@@ -448,13 +448,13 @@ To confirm:
    message for each report
 
 What's Next?
-------------
+---
 
 Congratulations! You've succesfully set up a serverless GitHub
 contribution tracker and reached the end of this tutorial.
 
 Keep Building
-~~~~~~~~~~~~~
+~~~
 
 If you want to keep developing, you can try to add some new features to
 the tracker. For example, you could:
@@ -473,7 +473,7 @@ the tracker. For example, you could:
   SMS instead of just logging it.
 
 Explore the Documentation
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 {+service-short+} includes many services that can power your application. Check out
 the rest of the documentation to learn more about these services and how
@@ -488,7 +488,7 @@ you can use them.
 - :ref:`Static File Hosting <static-hosting>`
 
 Give Us Feedback
-~~~~~~~~~~~~~~~~
+~~~
 
 We're always working to improve our docs and tutorials. If you have a
 suggestion or had issues with this tutorial, click :guilabel:`Give
@@ -496,7 +496,7 @@ Feedback` at the bottom of this page to rate the tutorial and send us a
 comment.
 
 Join the Community
-~~~~~~~~~~~~~~~~~~
+~~~
 
 The official `MongoDB Community Forums
 <https://www.mongodb.com/community/forums/c/realm/9>`__ are a great

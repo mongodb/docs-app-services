@@ -1,8 +1,8 @@
 .. _realm-sync-local-to-sync:
 
-=======================================
+===
 Add Sync to a Local-Only App
-=======================================
+===
 
 .. default-domain:: mongodb
 
@@ -22,7 +22,7 @@ Add Sync to a Local-Only App
    - :ref:`Open Existing {+service-short+} with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
 
 Overview
---------
+---
 If you have a mobile app that uses a local {+client-database+} and you want to 
 convert the app to use {+sync+}, there are a few steps you 
 need to follow. You first need to set up a {+backend-short+} 
@@ -44,7 +44,7 @@ Finally, if needed, you will also need to copy your local data to the new
 synced {+realm+}.
 
 Create a Backend App
---------------------
+---
 To sync your data between devices and with {+atlas+}, you first need to create 
 a {+app+}. This app serves -- at a minimum -- two purposes: it provides a 
 gateway to the data, and it provides data security in the form of user 
@@ -54,7 +54,7 @@ To get started creating the backend app, follow the steps in
 :ref:`<create-a-realm-app>`.
 
 Enable Authentication
-~~~~~~~~~~~~~~~~~~~~~
+~~~
 User authentication plays a crucial role in {+sync+}. {+service-short+} provides 
 many different :ref:`Authentication Providers <authentication-providers>` such 
 as email/password and OAuth; once you have configured one or more providers,
@@ -65,7 +65,7 @@ authentication providers and follow the configuration steps for the provider(s)
 of your choice.
 
 Partition the Data 
-~~~~~~~~~~~~~~~~~~
+~~~
 
 Data :ref:`partitions <sync-partitions>` let you configure which users have
 access to which data. This process is often the most time-consuming part of
@@ -79,7 +79,7 @@ specify when you set up {+sync+}. If you have chosen a partition key that
 isn't already a part of your object models, you'll need to update those models.
 
 Update the Client App
----------------------
+---
 Now that you have the backend set up for {+sync-short+}, you need to make a few 
 changes in your client app. Follow the steps in the Quick Start for your 
 language/platform:
@@ -93,7 +93,7 @@ language/platform:
 .. _copy-local-data-to-synced-realm:
 
 Copy Existing Data
-----------------------
+---
 None of the data in your local {+realm+} will be automatically transferred to your 
 new synced {+realm+}; it is up to you to ensure the data you want to preserve is 
 copied to the new {+realm+}. How you go about doing this depends, in part, on your 
@@ -103,7 +103,7 @@ correctly, the impact on app performance after the initial copy will be
 minimal.
 
 App Logic
-~~~~~~~~~
+~~~
 
 .. figure:: /images/local_to_sync.png
    :alt: Flow chart showing the steps to convert from local to sync

@@ -1,8 +1,8 @@
 .. _https-endpoints:
 
-===============
+===
 HTTPS Endpoints
-===============
+===
 
 .. default-domain:: mongodb
 
@@ -25,7 +25,7 @@ HTTPS Endpoints
    see :ref:`convert-webhooks-to-endpoints`.
 
 Introduction
-------------
+---
 
 HTTPS endpoints are serverless functions that you call by sending
 requests from an HTTP client. An endpoint receives requests sent to a
@@ -49,7 +49,7 @@ call them. Instead, you send requests like this from any HTTP client:
 .. _endpoint-route:
 
 Endpoint Routes
-~~~~~~~~~~~~~~~
+~~~
 
 Every HTTPS endpoint has a unique route that serves as a name for the
 endpoint. You call an endpoint by appending its route to your app's base
@@ -74,7 +74,7 @@ URL specific to the app's :ref:`deployment region <realm-regions>` (e.g.
 .. _endpoint-http-method:
 
 HTTP Methods
-~~~~~~~~~~~~
+~~~
 
 You can configure an endpoint to accept only a specific :mdn:`HTTP
 method <Web/HTTP/Methods>` or allow any method and handle each type
@@ -91,7 +91,7 @@ HTTPS endpoints support the following standard HTTP methods:
 .. _endpoint-function:
 
 Endpoint Functions
-~~~~~~~~~~~~~~~~~~
+~~~
 
 Each request sent to an HTTPS endpoint calls an associated serverless
 :ref:`function <functions>` that handles the logic for the endpoint. The
@@ -140,12 +140,12 @@ Endpoint functions receive arguments that describe the incoming
 .. _endpoint-requests-and-responses:
 
 Requests & Responses
---------------------
+---
 
 .. _endpoint-request-object:
 
 Request Objects
-~~~~~~~~~~~~~~~
+~~~
 
 The first argument of an endpoint function is a ``request`` object that
 includes information about the incoming HTTP request that called the
@@ -181,7 +181,7 @@ endpoint.
 .. _endpoint-response-object:
 
 Response Objects
-~~~~~~~~~~~~~~~~
+~~~
 
 The second argument of an endpoint function is a ``response`` object
 that represents HTTPS response sent back to the caller. The object
@@ -273,7 +273,7 @@ includes methods that you can call to configure the response.
 .. _endpoint-return-types:
 
 Return Types
-------------
+---
 
 Endpoints can return data as JSON or :manual:`MongoDB Extended JSON
 </reference/mongodb-extended-json/>` (EJSON).
@@ -297,7 +297,7 @@ option in your endpoint configuration:
    your endpoint to respond with EJSON.
 
 Return Type Override
-~~~~~~~~~~~~~~~~~~~~
+~~~
 
 When calling an endpoint, use the ``Accept`` header to control the
 response type:
@@ -352,7 +352,7 @@ response type:
 .. _endpoint-authentication:
 
 Authentication
---------------
+---
 
 Endpoint requests can run as either an unauthenticated system user or an
 application user. Most endpoints use either system authentication or
@@ -363,7 +363,7 @@ appplication authentication.
    New endpoints that you create in the UI use System authentication by default.
 
 System Authentication
-~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 If the endpoint function is configured to run as the system user,
 incoming requests do not need to include any user credentials or tokens.
@@ -371,7 +371,7 @@ The endpoint will not enforce any :ref:`rules` or validate your
 :ref:`schemas`.
 
 Application Authentication
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 If the endpoint function is configured to use application
 authentication, incoming requests must include one or more headers that
@@ -412,7 +412,7 @@ following configured authentication providers:
 .. _endpoint-authorization:
 
 Authorization
--------------
+---
 
 You can configure authorization for each endpoint to determine whether
 or not an authenticated request is allowed to execute.
@@ -439,7 +439,7 @@ You can specify up to one of the following schemes:
 .. _endpoint-secret-query-parameter:
 
 Secret Query Parameter
-~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 The secret query parameter request validation option requires that
 incoming requests include the secret value as a `query parameter
@@ -467,7 +467,7 @@ Every request must include the secret value as the ``secret`` query parameter:
 .. _endpoint-payload-signature-verification:
 
 Payload Signature Verification
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Payload signature verification requires that incoming requests include
 an HTTP header where the value is a hexadecimal-encoded :abbr:`HMAC

@@ -27,7 +27,7 @@ Each service directory contains the following:
 .. _service-configuration-file:
 
 Service Configuration
-~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 .. code-block:: json
    :caption: config.json
@@ -93,7 +93,7 @@ Service Configuration
        :ref:`Secret <app-secret>` that stores the configuration value.
 
 Service Rules
-~~~~~~~~~~~~~
+~~~
 
 Rules for a specific external service are defined in the ``/<service
 name>/rules`` sub-directory.
@@ -139,7 +139,7 @@ Each rule maps to its own JSON file with the same name as the rule.
        the rule applies to a given request.
 
 Incoming Webhooks
-~~~~~~~~~~~~~~~~~
+~~~
 
 Incoming webhooks for a specific service are defined in the
 ``/<service name>/incoming_webhooks/`` sub-directory.

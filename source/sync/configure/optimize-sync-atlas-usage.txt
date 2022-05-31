@@ -1,8 +1,8 @@
 .. _optimize-sync-atlas-usage:
 
-=========================
+===
 Optimize Sync Atlas Usage
-=========================
+===
 
 .. default-domain:: mongodb
 
@@ -16,7 +16,7 @@ Optimize Sync Atlas Usage
    :keywords: maxOfflineTime, client, maximum, offline, time, client maximum offline time, maximum offline time, max, max offline time, client max offline time
 
 Overview
---------
+---
 
 {+sync+} uses space in your app's synced Atlas cluster to store utility
 data for sync. This includes a history of changes to each {+realm+}.
@@ -28,7 +28,7 @@ compaction.
 .. _sync-history:
 
 History
--------
+---
 
 The {+service-short+} backend keeps a history of :ref:`changes to
 underlying data <changesets>` for each {+realm+}, similar to the
@@ -39,7 +39,7 @@ uses this history to synchronize data between the backend and clients.
 .. _backend-compaction:
 
 Backend Compaction
-------------------
+---
 
 **Backend compaction** is a maintenance process that automatically
 runs for all {+app+}s. During compaction, the backend optimizes a
@@ -86,7 +86,7 @@ Backend compaction runs regularly on all synced clusters as part of
 .. _advanced-backend-compaction:
 
 Advanced Backend Compaction
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 **Advanced backend compaction** uses client sync states to further
 optimize a changeset. However, this optimization can prevent convergence
@@ -145,7 +145,7 @@ offline time experiences advanced backend compaction.
 .. _client-maximum-offline-time:
 
 Client Maximum Offline Time
----------------------------
+---
 
 The **client maximum offline time** controls the age limit of history
 optimized with :ref:`advanced backend compaction <advanced-backend-compaction>`.
@@ -173,7 +173,7 @@ usually result in less storage usage in the synced Atlas cluster.
    disabling the feature. Use caution before enabling.
 
 Key Concepts
-~~~~~~~~~~~~
+~~~
 
 Sync should always converge at the same end state on all clients. In
 order to converge during a sync, clients require the full history of
@@ -236,7 +236,7 @@ accumulate many changes. With a large changeset, synchronization
 requires more time and data usage.
    
 Client Maximum Offline Time Does Not Immediately Influence Client Resets
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 Advanced backend compaction causes permanent, irreversible changes to
 history. As a result, increasing the client maximum offline time does
@@ -256,7 +256,7 @@ compaction job applies advanced backend compaction to the newly
 eligible history.
 
 Set the Client Maximum Offline Time
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
 
 .. tabs-realm-admin-interfaces::
 
@@ -314,7 +314,7 @@ Set the Client Maximum Offline Time
 .. _optimizing-performance-and-storage-flexible-sync:
 
 Optimizing Performance and Storage When Using Flexible Sync
------------------------------------------------------------
+---
 
 For Flexible Sync configuration, the amount of Atlas storage space used is
 directly proportional to the number of queryable fields you have set up.
@@ -351,7 +351,7 @@ for Sync, and select fewer fields that support those broad queries.
    or completion status to slice off a working set.
 
 Summary
--------
+---
 
 - {+sync+} uses space in your synced Atlas cluster to store change history.
 - Backend compaction reduces the space usage of this history.
