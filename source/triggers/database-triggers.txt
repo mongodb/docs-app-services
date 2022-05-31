@@ -1,8 +1,8 @@
 .. _database-trigger:
 
-===
+=================
 Database Triggers
-===
+=================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Database Triggers
    :class: singlecol
 
 Overview
----
+--------
 
 Database Triggers allow you to execute server-side logic whenever a
 document is added, updated, or removed in a
@@ -52,7 +52,7 @@ manual.
    instance <serverless-caveats>` or :ref:`data lake <data-lake-caveats>`.
 
 Example
----
+-------
 
 An online store wants to notify its customers whenever one of their
 orders changes location. They record each order in the ``store.orders``
@@ -144,7 +144,7 @@ a text message to the customer with the new location of the order.
 .. _database-triggers-configuration:
 
 Configuration
----
+-------------
 
 Database Triggers have the following configuration options:
 
@@ -265,7 +265,7 @@ Database Triggers have the following configuration options:
 .. _database-events:
 
 Database Change Events
----
+----------------------
 
 .. _database-event-operation-types:
 
@@ -319,7 +319,7 @@ Database change event objects have the following general form:
 .. _suspended_triggers:
 
 Suspended Triggers
----
+------------------
 
 Database Triggers may enter a suspended state in response to an event
 that prevents the Trigger's change stream from continuing. Events that
@@ -352,7 +352,7 @@ View your cluster's oplog throughput in the **Oplog GB/Hour** graph in the
 .. _last-cluster-time-processed:
 
 Last Cluster Time Processed
----
+---------------------------
 
 All Triggers keep track of the last time the Trigger executed, known as
 the **latest execution** in the {+ui+}. Database Triggers also keep track
@@ -375,12 +375,12 @@ mitigations:
 - Add resources by upgrading your {+atlas+} cluster.
 
 Performance Optimization
----
+------------------------
 
 .. _database-triggers-disable-event-ordering:
 
 Disable Event Ordering for Burst Operations
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider disabling event ordering if your trigger fires on a collection that
 receives short bursts of events (e.g. inserting data as part of a daily batch
@@ -400,7 +400,7 @@ multiple executions of a Trigger Function occur in event order.
 .. _database-triggers-disable-collection-level-preimages:
 
 Disable Collection-Level Preimages
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           
 Document preimages use extra information stored in the oplog.
 The extra data may degrade trigger performance.
@@ -421,7 +421,7 @@ preimages for the collection.
 .. _database-triggers-match-expression:
 
 Use Match Expressions to Limit Trigger Invocations
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the :guilabel:`Match Expression` field, 
 limit the number of Trigger invocations by using Match expressions. The Trigger is only 
@@ -446,7 +446,7 @@ invoked if the document meets the criteria of the
 
 
 Use Project Expressions to Reduce Input Data Size
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the :guilabel:`Project Expression` field, 
 limit the number of fields that the Trigger processes by using a 

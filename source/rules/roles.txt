@@ -1,9 +1,9 @@
 .. _roles:
 .. _permissions:
 
-===
+======================
 Role-based Permissions
-===
+======================
 
 .. default-domain:: mongodb
 
@@ -16,10 +16,10 @@ Role-based Permissions
 .. include:: /includes/non-sync-rules-note.rst
 
 Overview
----
+--------
 
 What are Permissions?
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 A **permission** is a status that {+service-short+} assigns to individual users to control what
 they can and cannot do in your app. {+service-short+} uses both document-level and
@@ -35,7 +35,7 @@ field-level permissions:
   subset of the entire document.
 
 What are Roles?
-~~~
+~~~~~~~~~~~~~~~
 
 A **role** is a named set of permissions that a user may have for documents in a
 MongoDB collection. Each role represents a possible relationship between a user
@@ -142,7 +142,7 @@ its fields, {+service-short+} omits the document or fields from the results.
             }
 
 Why Define a Role?
-~~~
+~~~~~~~~~~~~~~~~~~
 
 A role carries a specific set of permissions that you might expose to your app's
 users. A user may play at most one role for each document, so each distinct set of
@@ -178,7 +178,7 @@ data from the perspective of your app's users and what it might mean to them.
       }
 
 How {+service-short+} Assigns Roles
----
+-----------------------
 
 {+service-short+} dynamically assigns roles for every request. A user may play different
 roles between documents in the same request and their role for a given document
@@ -244,7 +244,7 @@ A role applies to a given document if its Apply When :ref:`expression
             }
 
 Role Configuration
----
+------------------
 
 .. note::
 

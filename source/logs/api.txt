@@ -1,6 +1,6 @@
-===
+==============================
 Access Logs with the Admin API
-===
+==============================
 
 .. default-domain:: mongodb
 
@@ -11,7 +11,7 @@ Access Logs with the Admin API
    :class: singlecol
 
 Overview
----
+--------
 
 You can request an application's logs programmatically by accessing the
 logging endpoints of the :doc:`{+service-short+} Admin API </admin/api/v3>`.
@@ -45,7 +45,7 @@ The examples in this section use the following helper functions in a
    }
    
 Application ID
----
+-------------- 
    
 In order to request your application's log entries, you'll need the application's 
 object ID. You can find your application ID in the URL when you are accessing 
@@ -66,7 +66,7 @@ You can also get the :admin-api-endpoint:`application ID via curl <section/Get-A
   
 
 Get Recent Logs
-~~~
+~~~~~~~~~~~~~~~
 
 To return the 100 most recent log entries for your application, call the
 Logging endpoint with no additional parameters:
@@ -99,7 +99,7 @@ Logging endpoint with no additional parameters:
    }
 
 Get Logs for a Date Range
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To return log entries for a specific date range, call the Logging
 endpoint with either or both of the ``start_date`` and ``end_date``
@@ -144,7 +144,7 @@ fields:
 .. _logging-get-paginated-logs:
 
 Get Paginated Logs
-~~~
+~~~~~~~~~~~~~~~~~~
 
 {+backend+} returns a maximum of 100 log entries for each request. If a
 query matches more than 100 log entries, the API returns the

@@ -1,8 +1,8 @@
 .. _mongodb-aggregate:
 
-===
+===========================================
 Aggregate Data in MongoDB Atlas - Functions
-===
+===========================================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Aggregate Data in MongoDB Atlas - Functions
    :class: singlecol
 
 Overview
----
+--------
 
 The examples on this page demonstrate how to use the MongoDB Query API
 in a function to aggregate documents in your Atlas cluster.
@@ -27,7 +27,7 @@ documents.
 .. include:: /mongodb/supported-aggregation-stages.rst
 
 Data Model
-~~~
+~~~~~~~~~~
 
 The examples on this page use a collection named ``store.purchases``
 that contains information about historical item sales in an online
@@ -61,7 +61,7 @@ unique ID value for the customer that purchased the items.
 .. include:: /functions/mongodb/api/snippets/setup.rst
 
 Run an Aggregation Pipeline
----
+---------------------------
 
 You can execute an aggregation pipeline using the
 :method:`collection.aggregate()` method.
@@ -79,10 +79,10 @@ number of items each customer purchases at a time,
 .. _mongodb-aggregation-stages:
 
 Aggregation Stages
----
+------------------
 
 Filter Documents
-~~~
+~~~~~~~~~~~~~~~~
 
 You can use the :manual:`$match </reference/operator/aggregation/match/>` stage
 to filter incoming documents using standard MongoDB :manual:`query syntax
@@ -116,7 +116,7 @@ to filter incoming documents using standard MongoDB :manual:`query syntax
       }
 
 Group Documents
-~~~
+~~~~~~~~~~~~~~~
 
 You can use the :manual:`$group
 </reference/operator/aggregation/group/>` stage to aggregate summary
@@ -155,7 +155,7 @@ on the ``_id`` expression.
       }
 
 Project Document Fields
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use the :manual:`$project
 </reference/operator/aggregation/project/>` stage to include or omit
@@ -197,7 +197,7 @@ value to ``0``.
       }
 
 Add Fields to Documents
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use the :manual:`$addFields
 </reference/operator/aggregation/addFields/>` stage to add new fields
@@ -225,7 +225,7 @@ with calculated values using :manual:`aggregation operators
       }
 
 Unwind Array Values
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 You can use the :manual:`$unwind
 </reference/operator/aggregation/unwind/>` stage to aggregate

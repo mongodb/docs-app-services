@@ -1,8 +1,8 @@
 .. _graphql-expose-data:
 
-===
+===========================
 Expose Data in a Collection
-===
+===========================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Expose Data in a Collection
    :class: singlecol
 
 Overview
----
+--------
 
 You can expose data from a MongoDB collection to client applications through the
 GraphQL API. {+service-short+} automatically generates GraphQL types and resolvers based on
@@ -21,10 +21,10 @@ the :ref:`collection schema <schemas>` and enforces :ref:`collection rules
 <rules>` for all GraphQL operations.
 
 Procedure
----
+---------
 
 1. Configure Roles for the Collection
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service-short+} enforces :ref:`collection rules <mongodb-rules>` for all incoming
 GraphQL requests, so you need to define at least one :doc:`collection
@@ -38,7 +38,7 @@ and documents that the user has permission to see. If {+service-short+} omits a
 field, the field has a ``null`` value in the returned document.
 
 2. Define a Schema for Documents in the Collection
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 GraphQL requires that all data conforms to a well-defined type, so you
 must :ref:`define a schema <enforce-a-schema>` for
@@ -57,7 +57,7 @@ schema changes.
    schema based on the mock.
 
 3. Define Relationships to Other Collections
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can define :ref:`relationships <relationships>` that connect each
 document in the collection to one or more documents in a foreign
@@ -87,7 +87,7 @@ children from the same ``people`` collection:
    }
 
 4. Name the Data Type
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 {+service-short+} names the GraphQL types that it generates based on the data type
 that documents in the collection conform to. You can configure the name
@@ -172,7 +172,7 @@ There are three situations where you can set the ``title`` field:
          }
 
 Next Steps
----
+----------
 
 Once you have defined a schema for the collection, {+service-short+} automatically exposes
 the documents in the collection through the GraphQL API. You can now connect

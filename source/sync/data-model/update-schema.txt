@@ -2,9 +2,9 @@
 .. _destructive-changes-synced-schema:
 .. _additive-changes-synced-schema:
 
-===
+==================
 Update Your Schema
-===
+==================
 
 .. default-domain:: mongodb
 
@@ -15,7 +15,7 @@ Update Your Schema
    :class: singlecol
 
 Overview
----
+--------
 
 When developing an application using {+sync+}, you may need to make changes to
 your schema at some point, such as when you need to: 
@@ -47,7 +47,7 @@ work with the new schema changes.
    the {+ui+}.
 
 Breaking vs. Non-Breaking Change Quick Reference
----
+------------------------------------------------
 
 A breaking change is a change that you can make in your server-side
 schema that requires additional action to handle. Failing to handle these 
@@ -128,13 +128,13 @@ the client-side object model. For more details, see relevant sections below.
 .. _schema-update-add-object-type:
 
 Add an Object Type
----
+------------------
 
 You can add an object type to either the server-side schema or the client 
 object model without doing any additional handling. 
 
 How to Add an Object Type
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to add an object type to both the server-side schema and the 
 client object model, you can add the object type to the object model, and 
@@ -159,7 +159,7 @@ information, see your preferred SDK's migration page.
 .. _schema-update-add-required-property:
 
 Add a Required Property
----
+-----------------------
 
 You can add a required property to the client object model without doing 
 any additional handling. 
@@ -172,7 +172,7 @@ any additional handling.
    has been lost.
 
 How to Add a Required Property
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. note:: Consider adding an optional property
 
@@ -196,7 +196,7 @@ required property to both the model and the schema.
    even though the change you're making is a non-breaking change.
 
 Handle Existing Atlas Documents
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you add a new required property to the server-side schema, you must 
 update existing documents with that new property or they do not sync 
@@ -228,13 +228,13 @@ information, see your preferred SDK's migration page.
 .. _schema-update-add-optional-property:
 
 Add an Optional Property
----
+------------------------
 
 You can add an optional property to either the server-side schema or the 
 client object model without doing any additional handling. 
 
 How to Add an Optional Property
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to add an optional property to both the server-side schema and 
 the client object model, you can add the optional property to the object 
@@ -259,14 +259,14 @@ information, see your preferred SDK's migration page.
 .. _schema-update-remove-object-type:
 
 Remove an Object Type
----
+---------------------
 
 If you remove an object type from the server-side schema, this is a breaking 
 or destructive change. However, you can remove an object type from the object 
 model as a non-breaking change.
 
 How to Remove an Object Type
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -287,14 +287,14 @@ information, see your preferred SDK's migration page.
 .. _schema-update-remove-required-property:
 
 Remove a Required Property
----
+--------------------------
 
 If you remove a required property from the server-side schema, this is
 a breaking or destructive change. However, you can remove a required 
 property from the object model as a non-breaking change.
 
 How to Remove a Required Property
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -323,14 +323,14 @@ information, see your preferred SDK's migration page.
 .. _schema-update-remove-optional-property:
 
 Remove an Optional Property
----
+---------------------------
 
 If you remove an optional property from the server-side schema, this is
 a breaking or destructive change. However, you can remove an optional 
 property from the object model as a non-breaking change.
 
 How to Remove an Optional Property
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -359,13 +359,13 @@ information, see your preferred SDK's migration page.
 .. _schema-update-change-object-type-name:
 
 Change an Object Type Name
----
+--------------------------
 
 If you change an object type's name, this is a breaking or destructive change 
 to both the server-side schema and the client-side object model.
 
 How to Change an Object Type Name
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -405,7 +405,7 @@ application must perform a :ref:`client reset <client-resets>`.
 .. _schema-update-change-property-name:
 
 Change a Property Name
----
+----------------------
 
 If you change a property's name, this is a breaking or destructive change 
 to both the server-side schema and the client-side object model.
@@ -418,7 +418,7 @@ to both the server-side schema and the client-side object model.
    has been lost.
 
 How to Change a Property Name
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tip:: Change a property name
 
@@ -458,7 +458,7 @@ manually update the schema. :ref:`Development Mode <enable-development-mode>`
 does not automatically update your schema for breaking changes.
 
 Handle Existing Atlas Documents
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you choose to terminate and re-enable sync, you must update existing Atlas 
 documents to enable them to Sync with your client applications. 
@@ -491,7 +491,7 @@ application must perform a :ref:`client reset <client-resets>`.
 .. _schema-update-change-property-type-but-keep-name:
 
 Change Property Type but Keep the Name
----
+--------------------------------------
 
 If you change a property's type while keeping the name, this is a breaking 
 or destructive change to both the server-side schema and the client-side 
@@ -505,7 +505,7 @@ object model.
    has been lost.
 
 How to Change a Property Type but Keep the Name
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -531,7 +531,7 @@ manually update the schema. :ref:`Development Mode <enable-development-mode>`
 does not automatically update your schema for breaking changes.
 
 Handle Existing Atlas Documents
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you choose to terminate and re-enable sync, you must update existing Atlas 
 documents to enable them to Sync with your client applications. 
@@ -564,14 +564,14 @@ application must perform a :ref:`client reset <client-resets>`.
 .. _schema-update-change-property-from-optional-to-required:
 
 Change Property from Optional to Required
----
+-----------------------------------------
 
 If you change a property from optional to required, this is a breaking or 
 destructive change to both the server-side schema and the client-side object 
 model.
 
 How to Change a Property from Optional to Required
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -611,14 +611,14 @@ application must perform a :ref:`client reset <client-resets>`.
 .. _schema-update-change-property-from-required-to-optional:
 
 Change Property from Required to Optional
----
+-----------------------------------------
 
 If you change a property from required to optional, this is a breaking or 
 destructive change to both the server-side schema and the client-side object 
 model.
 
 How to Change a Property from Required to Optional
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
@@ -656,7 +656,7 @@ collection strategy to resolve this type of breaking change, your client
 application must perform a :ref:`client reset <client-resets>`.
 
 Summary
----
+-------
 
 - Non-breaking schema changes on synced {+realms+} are backward compatible, allowing old clients to sync with newer ones.
 - Non-breaking changes to the schema of a synced {+realm+} do not require any additional configuration. However, you may need to migrate client realm files even when making non-breaking changes.

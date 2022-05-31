@@ -1,8 +1,8 @@
 .. _forward-logs:
 
-===
+=========================
 Forward Logs to a Service
-===
+=========================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Forward Logs to a Service
    :class: singlecol
 
 Overview
----
+--------
 
 You can configure a log forwarder to automatically store your
 application's server-side logs in a MongoDB collection or send them to
@@ -29,7 +29,7 @@ A log forwarder consists of the following components:
 - A **policy** that controls whether {+service-short+} batches logs or forwards them individually.
 
 Why Should I Configure Log Forwarding?
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider setting up a log forwarder if you need to do any of the
 following:
@@ -41,7 +41,7 @@ following:
 - Access logs in Atlas Search, Online Archive, and Charts
 
 How is Log Forwarding Billed?
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each log forward action invocation (on either an individual log or a
 batch) is billed as one :ref:`{+service-short+} request <billing-requests>`.
@@ -49,10 +49,10 @@ batch) is billed as one :ref:`{+service-short+} request <billing-requests>`.
 .. _set-up-log-forwarder:
 
 Set Up a Log Forwarder
----
+----------------------
 
 1. Create a Log Forwarder
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tabs-realm-admin-interfaces::
    
@@ -80,7 +80,7 @@ Set Up a Log Forwarder
          }
 
 2. Choose Which Logs to Forward
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service-short+} can forward all of your app's logs or send only a subset to the
 target collection or service. You control this subset for each log
@@ -151,7 +151,7 @@ action.
       { "type": "schema", "status": "error", ... }
 
 3. Configure Log Batching
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service-short+} can combine multiple logs in to a single batched request to reduce
 overhead. The way that {+service-short+} groups logs into batches is controlled by a
@@ -197,7 +197,7 @@ batching policy.
          }
 
 5. Define an Action
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 A log forwarder can automatically store logs in a linked MongoDB
 collection or call a custom function that sends the logs to an external
@@ -304,7 +304,7 @@ log forwarder by name.
          }
 
 6. Save and Deploy your Changes
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tabs-realm-admin-interfaces::
    
@@ -326,7 +326,7 @@ log forwarder by name.
          realm-cli push
 
 Restart a Suspended Log Forwarder
----
+---------------------------------
 
 A log forwarder may suspend in response to an event that prevents it
 from continuing, such as a network disruption or a change to the

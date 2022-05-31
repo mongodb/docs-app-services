@@ -1,8 +1,8 @@
 .. _mongodb-read:
 
-===
+========================================
 Read Data from MongoDB Atlas - Functions
-===
+========================================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Read Data from MongoDB Atlas - Functions
    :class: singlecol
 
 Overview
----
+--------
 
 The examples on this page demonstrate how to use the MongoDB Query API
 in a function to read documents from your Atlas cluster.
@@ -30,12 +30,12 @@ that let you write expressive match filters, and some :ref:`patterns
 .. _mongodb-query-methods:
 
 Query Methods
----
+-------------
 
 .. _mongodb-find-a-single-document:
 
 Find a Single Document (``findOne()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can find a single document using the :method:`collection.findOne()`
 method.
@@ -49,7 +49,7 @@ than or equal to ``25``:
 .. _mongodb-find-one-or-more-documents:
 
 Find One or More Documents (``find()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can find multiple documents using the :method:`collection.find()`
 method.
@@ -63,7 +63,7 @@ sorted by ``name`` with the ``_id`` field omitted:
 .. _mongodb-count-documents:
 
 Count Documents in the Collection (``count()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can count documents in a collection using the
 :method:`collection.count()` method. You can specify a query to
@@ -78,12 +78,12 @@ documents in the ``items`` collection that have at least one review:
 .. _mongodb-query-patterns:
 
 Query Patterns
----
+--------------
 
 .. _query-pattern-document-id:
 
 Find by Document ID
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 You can query a collection to find a document that has a specified ID.
 MongoDB automatically stores each document's ID as an ``ObjectId`` value
@@ -105,7 +105,7 @@ in the document's ``_id`` field.
 .. _query-pattern-date:
 
 Find by Date
-~~~
+~~~~~~~~~~~~
 
 You can query a collection to find documents that have a field with a
 specific date value, or query for a documents within a range of dates.
@@ -140,7 +140,7 @@ specific date value, or query for a documents within a range of dates.
 .. _query-pattern-root-level-field:
 
 Match a Root-Level Field
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can query a collection based on the value of a root-level field in
 each document. You can specify either a specific value or a nested
@@ -165,7 +165,7 @@ For more information, see the :manual:`Query Documents
 .. _query-pattern-multiple-fields:
 
 Match Multiple Fields
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 You can specify multiple query conditions in a single query document.
 Each root-level field of a query document maps to a field in the
@@ -199,7 +199,7 @@ Server Manual.
 .. _query-pattern-embedded-field:
 
 Match an Embedded Document Field
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can query a collection based on the value of embedded document
 fields. To specify an embedded document field, use multiple nested query
@@ -235,7 +235,7 @@ Server Manual.
 .. _query-pattern-array-of-values:
 
 Match an Array of Values
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can query a collection based on all the elements contained in an
 array field.
@@ -283,7 +283,7 @@ For more information, see the :manual:`Query an Array
 .. _query-pattern-array-field:
 
 Match an Array Element
-~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 You can query a collection based on the value of one or more elements in
 an array field.
@@ -339,12 +339,12 @@ For more information, see the :manual:`Query an Array
 .. _mongodb-query-operators:
 
 Query Operators
----
+---------------
 
 .. _query-operators-comparison:
 
 Compare Values
-~~~
+~~~~~~~~~~~~~~
 
 You can use a :manual:`comparison operator
 </reference/operator/query-comparison>` to compare the value of a
@@ -409,7 +409,7 @@ The following comparison operators are available:
 .. _query-operators-logical:
 
 Evaluate a Logical Expression
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use a :manual:`logical operator
 </reference/operator/query-logical>` to evaluate multiple expressions
@@ -465,7 +465,7 @@ The following logical operators are available:
 .. _query-operators-regex:
 
 Evaluate a Regular Expression
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can use the :manual:`$regex </reference/operator/query/regex>` query
 operator to return documents with fields that match a

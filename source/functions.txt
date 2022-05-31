@@ -1,8 +1,8 @@
 .. _functions:
 
-===
+=========
 Functions
-===
+=========
 
 .. default-domain:: mongodb
 
@@ -23,7 +23,7 @@ Functions
    JavaScript Support </functions/javascript-support>
 
 Overview
----
+--------
 
 A **{+service-short+} Function** is a piece of server-side JavaScript
 code that you write to define your app's behavior. You can call your
@@ -36,7 +36,7 @@ global utilities, support common Node.js built-in modules, and can
 import and use external packages from the npm registry.
 
 Functions are Serverless
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 When a function is called, your app routes the request to a managed app
 server that evaluates your code and returns the result. This model makes
@@ -45,7 +45,7 @@ manage a server to run the code. Instead, you write the function source
 code and your app handles the execution environment.
 
 Functions have Context
-~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 A function runs in a context that reflects its execution environment.
 The context includes the user that called the function, how they called
@@ -56,7 +56,7 @@ To learn more about how to work with function context, see :ref:`Context
 <function-context>`.
 
 When To Use Functions
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 Functions can run arbitrary JavaScript code that you define, which means
 you can use them for almost anything. Common use cases include
@@ -80,7 +80,7 @@ information from the change event and response appropriately.
    - :ref:`Email/Password Registration <email-password-authentication>`
 
 How to Write a Function
----
+-----------------------
 
 The code for a function is essentially a named JavaScript source file,
 which means you can define multiple JavaScript functions in a single
@@ -162,7 +162,7 @@ value and then return the stringified result:
 .. _system-functions:
 
 User and System Functions
----
+-------------------------
 
 A function can run in two contexts depending on how they're configured
 and called:
@@ -192,7 +192,7 @@ and called:
 .. _define-a-function:
 
 Define a Function
----
+-----------------
 
 You can create and manage functions in your application from the {+service-short+}
 UI or by importing the function configuration and source code with
@@ -211,7 +211,7 @@ UI or by importing the function configuration and source code with
       .. include:: /includes/steps/define-a-function-import-export.rst
 
 Call a Function
----
+---------------
 
 You can call a function from other functions, from a connected client
 application, or with {+cli+}.
@@ -229,7 +229,7 @@ The examples in this section demonstrate calling a simple function named
 .. _call-function-from-function:
 
 Call from a Function
-~~~
+~~~~~~~~~~~~~~~~~~~~
 
 You can call a function from another function through the
 :ref:`context.functions <context-functions>` interface, which is
@@ -247,7 +247,7 @@ runs in the same context as the function that called it.
 .. _call-function-from-realm-cli:
 
 Call from {+cli+}
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 You can call a function through {+cli+} with the :ref:`function run
 <realm-cli-function-run>` command. The command returns the function
@@ -274,7 +274,7 @@ user, include their User ID in the ``--user`` argument.
 .. _call-function-json-expression:
 
 Call from Rule Expressions
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can call a function from a :ref:`rule expression <expressions>` by
 using the :json-operator:`%function` operator. The operator evaluates to
@@ -296,7 +296,7 @@ expression evaluates to ``false``.
    }
 
 Call from {+client-sdks+}
-~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/important-sanitize-client-data-in-functions.rst
 
@@ -344,7 +344,7 @@ an SDK or over the wire protocol.
 .. _function-constraints:
 
 Constraints
----
+-----------
 
 - Functions are capped at 120 seconds of runtime per request, after
   which a function will time out and fail.

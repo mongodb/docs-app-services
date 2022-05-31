@@ -1,6 +1,6 @@
-===
+=========================================
 Webhook Requests & Responses [Deprecated]
-===
+=========================================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Webhook Requests & Responses [Deprecated]
 .. include:: /includes/note-third-party-services-deprecation.rst
 
 Overview
----
+--------
 
 Depending on the service, :ref:`incoming webhooks <incoming-webhooks>`
 offer several ways to validate requests and customize the response that
@@ -22,7 +22,7 @@ offer several ways to validate requests and customize the response that
 .. _webhook-request-validation:
 
 Request Validation Methods
----
+--------------------------
 
 To validate that a webhook request is coming from a trusted source, some
 external services require that incoming requests incorporate a secret
@@ -45,7 +45,7 @@ and :ref:`Secret as a Query Parameter <webhook-secret-query-parameter>`.
 .. _webhook-verify-payload-signature:
 
 Payload Signature Verification
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :guilabel:`Verify Payload Signature` request validation option
 requires that incoming requests include a hexadecimal-encoded
@@ -96,7 +96,7 @@ generated from the request body and ``secret`` string in the
 .. _webhook-secret-query-parameter:
 
 Secret as a Query Parameter
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The :guilabel:`Require Secret as Query Param` request validation option
 requires that incoming requests include the specified ``secret`` string
@@ -125,7 +125,7 @@ appended to the end of the URL.
 .. _webhook-response-object:
 
 Webhook Response Object
----
+-----------------------
 
 {+service-short+} automatically passes a ``response`` object that represents the
 webhook's HTTP response as the second argument to webhook Function.

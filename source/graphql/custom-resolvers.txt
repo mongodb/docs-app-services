@@ -1,8 +1,8 @@
 .. _graphql-custom-resolvers:
 
-===
+========================
 Define a Custom Resolver
-===
+========================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Define a Custom Resolver
    :class: singlecol
 
 Overview
----
+--------
 
 You can define custom resolvers that extend the GraphQL API for your app's use
 cases. Custom resolvers allow you to define new root-level operations that are
@@ -24,15 +24,15 @@ types <graphql-document-types>` that dynamically evaluate a result whenever an
 operation reads a document of the extended type.
 
 Procedure
----
+---------
 
 .. include:: /includes/steps/custom-resolvers-ui.rst
 
 Custom Resolver Examples
----
+------------------------
 
 Scenario & Schemas
-~~~
+~~~~~~~~~~~~~~~~~~
 
 Consider a hypothetical dashboard that a sales team uses to show various
 statistics and other performance metrics for a given time period. The dashboard
@@ -82,7 +82,7 @@ The resolvers all reference ``Sale`` documents, which have the following schema:
 .. _example-graphql-custom-query:
 
 Custom Query Resolver
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 The sales team's hypothetical dashboard uses a custom query resolver that
 returns aggregated sales data for a specific month.
@@ -250,7 +250,7 @@ To call this custom query, you could use the following operation and variables:
 .. _example-graphql-custom-mutation:
 
 Custom Mutation
-~~~
+~~~~~~~~~~~~~~~
 
 The sales team's hypothetical dashboard uses a custom mutation resolver that
 adds a string note to a specific ``Sale`` document, identified by its ``_id``.
@@ -410,7 +410,7 @@ To call this custom query, you could use the following operation and variables:
 .. _example-graphql-computed-property:
 
 Computed Properties
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 The sales team's hypothetical dashboard uses a custom resolver that adds a new
 computed property to each ``Sale`` document. When an operation requests the

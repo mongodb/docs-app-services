@@ -1,7 +1,7 @@
 .. _backend_20220519:
 
 19 May 2022 Release
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 - Introduced option to encode HTTPS Endpoint responses as :ref:`EJSON or JSON <endpoint-return-types>`.
 - Added support for serverless Atlas instances as data sources. Serverless instances do not yet
@@ -10,7 +10,7 @@
 .. _backend_20220420:
 
 20 April 2022 Release
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 - Introduced ability to accept null values as optional types in {+service-short+} Schema.
 - Added ability to download logs from the UI.
@@ -20,7 +20,7 @@
 .. _backend_20220325:
 
 25 March 2022 Release
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 - Performance improvements for Functions, particularly aimed at decreasing the 
   runtime for those dependencies that make external requests. 
 
@@ -30,7 +30,7 @@
 .. _backend_20220126:
 
 26 January 2022 Release
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 - Visually refreshed the :ref:`Schema UI <enforce-a-schema>`.
 - Introduced :ref:`Log Forwarding <forward-logs>`, which automatically stores your
@@ -40,6 +40,6 @@
 .. _backend_20220119:
 
 19 January 2022 Release
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 - Introduced :ref:`Flexible Sync (preview) <flexible-sync>`, which allows clients to sync data without the need for partition keys.

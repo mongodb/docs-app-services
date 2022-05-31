@@ -9,7 +9,7 @@ directory.
    └── config.json
 
 Configuration
-~~~
+~~~~~~~~~~~~~
 
 .. code-block:: javascript
    :caption: config.json

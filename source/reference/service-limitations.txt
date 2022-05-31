@@ -1,8 +1,8 @@
 .. _mongodb-service-limitations:
 
-===
+===================
 Service Limitations
-===
+===================
 
 .. default-domain:: mongodb
 
@@ -15,7 +15,7 @@ Service Limitations
 .. _mongodb-service-limitations-overview:
 
 Overview
----
+--------
 
 {+service+} has several guidelines to keep in mind when architecting how
 your tools and clients interact with MongoDB through {+service-short+}.
@@ -28,7 +28,7 @@ how to handle concurrent workloads.
 .. _mongodb-service-limitations-aggregation:
 
 Aggregation
----
+-----------
 
 {+service-short+} supports all :manual:`aggregation pipeline
 stages </reference/operator/aggregation-pipeline/>` in
@@ -44,33 +44,33 @@ context, see :ref:`Aggregation <mongodb-crud-and-aggregation-apis-aggregation>`.
 .. _mongodb-service-limitations-atlas-support:
 
 Atlas
----
+-----
 
 Batch Loading
-~~~
+~~~~~~~~~~~~~
 
 When data is bulk/batch loaded into {+atlas+}, you may see a delay in
 data appearing on devices while {+service+} processes changes.
 
 Data Lakes
-~~~
+~~~~~~~~~~
 
 .. include:: /mongodb/limitations-data-lakes.rst
 
 Serverless Instances
-~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /mongodb/limitations-serverless-instances.rst
 
 Sharded Clusters
-~~~
+~~~~~~~~~~~~~~~~
 
 {+sync+} does not currently support sharded {+atlas+} clusters. However,
 you can add a sharded cluster as a data source and access it from a
 :ref:`function <functions>`.
 
 Time Series Collections
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 :manual:`Time series collections </core/timeseries-collections/>` do not
 yet support :manual:`change streams </changeStreams/>`. Therefore,
@@ -79,7 +79,7 @@ you cannot define triggers on or sync to a time series collection.
 .. _mongodb-service-limitations-change-streams:
 
 Change Streams
----
+--------------
 
 {+service-short+} limits the total number of change streams open against a given
 cluster across all {+app+}s based on the cluster's size. It also limits the
@@ -140,7 +140,7 @@ following table lists the limitations for each cluster size:
 .. _mongodb-service-limitations-database-commmands:
 
 Database Commands
----
+-----------------
 
 {+service-short+} does not support any :manual:`database commands
 </reference/command>` in the Client SDKs or :doc:`Functions
@@ -153,7 +153,7 @@ protocol <wire-protocol>`. For a list of supported commands, see
 .. _mongodb-service-limitations-version-requirements:
 
 MongoDB Version Requirements
----
+----------------------------
 
 You can access most of the CRUD and Aggregation functionality of MongoDB
 version 3.6 with the :doc:`MongoDB service </mongodb>`; however, {+service+}
@@ -169,7 +169,7 @@ MongoDB 4.4.0 or greater.
 .. _mongodb-service-limitations-query-options:
 
 Query Options
----
+-------------
 
 {+service-short+} supports all query options in :ref:`system functions
 <system-functions>`. {+service-short+} does not support certain options for
@@ -181,7 +181,7 @@ list of specific options that are available when you connect to MongoDB through
 .. _mongodb-service-limitations-query-results:
 
 Query Results
----
+-------------
 
 MongoDB queries executed through {+service-short+} can return a maximum of 50,000
 documents. If you need to return more documents, consider paginating
@@ -190,7 +190,7 @@ your query.
 .. _mongodb-service-limitations-request-traffic:
 
 Request Traffic
----
+---------------
 
 {+service+} limits request traffic to 5,000 concurrent requests. Any 
 requests made beyond this limit return an HTTP response status code of 
@@ -201,7 +201,7 @@ You can request a higher limit by `filing a support ticket
 .. _mongodb-service-limitations-rules:
 
 Rules 
----
+-----
 
 {+sync+} supports :ref:`{+sync-short+} rules<sync-rules>`.
 {+sync+} does not support :ref:`roles/field-level
@@ -210,7 +210,7 @@ rules<define-roles-and-permissions>` at this time.
 .. _mongodb-service-limitations-static-hosting:
 
 Static Hosting
----
+--------------
 
 {+service-short+} enforces a 25MB maximum file size constraint on
 :doc:`static hosting </hosting/>`.
@@ -218,7 +218,7 @@ Static Hosting
 .. _mongodb-service-limitations-concurrent-workloads:
 
 Sync - Concurrent Workloads
----
+---------------------------
 
 Writing:
   {+service+} supports up to 30 users concurrently writing data to an

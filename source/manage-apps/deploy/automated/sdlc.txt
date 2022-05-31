@@ -1,8 +1,8 @@
 .. _ci-cd-pipeline:
 
-===
+=======================
 Set Up a CI/CD Pipeline
-===
+=======================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Set Up a CI/CD Pipeline
    :local:
 
 Overview
----
+--------
 
 Many developers use :wikipedia:`continuous integration, delivery, and deployment
 pipelines <CI/CD>` to automatically test and publish their applications whenever
@@ -35,13 +35,13 @@ your {+service-short+} applications.
    on the MongoDB Developer Hub.
 
 Pipeline Stages
----
+---------------
 
 At a high level most pipelines share a common pattern of moving through multiple
 stages that each handle different concerns.
 
 Development
-~~~
+~~~~~~~~~~~
 
 The Development stage is the first step for creating new features and fixing
 bugs in a {+app+}. In this stage you work with your application's
@@ -66,7 +66,7 @@ To develop new features for an existing app:
    regressions or unintended behavior.
 
 Staging
-~~~
+~~~~~~~
 
 The Staging stage, which you might also call QA (Quality Assurance), Testing, or
 Pre-Production, is a step that simulates your development changes in an
@@ -96,7 +96,7 @@ However, you can use the following high level procedure to set it up:
    behavior, or getting approval through a user-acceptance test.
 
 Production
-~~~
+~~~~~~~~~~
 
 The Production stage is the final deployment step where your modified app is
 deployed into your production environment. Ideally at this stage you have
@@ -105,14 +105,14 @@ to deploy. You can either deploy to production manually or automatically as part
 of your CI/CD workflow by :ref:`updating your production app <sdlc-update-app>`.
 
 Build Tasks
----
+-----------
 
 This section outlines common tasks that you will perform in your CI/CD pipeline.
 You may not always do all of these tasks depending on your use case and pipeline
 stage, but in general most pipelines will perform all of these at least once.
 
 Configure the Environment
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The configuration and code for your app should generally be similar between
 development stages. However, you'll want to change the value of certain
@@ -138,7 +138,7 @@ the Development stage or use your production App ID in the Production stage.
    <sdlc-create-app>`.
 
 Set Up {+cli+}
-~~~
+~~~~~~~~~~~~~~~~
 
 :ref:`{+cli+} <realm-cli>` is the easiest way to programmatically create,
 configure, and manage App Services apps. You should :ref:`install <install-realm-cli>`
@@ -178,7 +178,7 @@ in with that profile:
 .. _sdlc-create-app:
 
 Create a {+app+}
-~~~
+~~~~~~~~~~~~~~~~~~
 
 You can use {+cli+} to create new apps to use in development and testing. If
 your pipeline is in the Development or Staging phase, you should deploy and test
@@ -214,7 +214,7 @@ To use a new app for your development or staging branch:
 .. _sdlc-update-app:
 
 Update a {+app+}
-~~~
+~~~~~~~~~~~~~~~~~~
 
 You can use {+cli+} to update an existing app, like a shared staging app or
 your production deployment. The app already exists, so you should be able to
@@ -227,7 +227,7 @@ To update an existing app, specify its App ID in the ``--remote`` flag:
    realm-cli push --remote=$REALM_APP_ID -y
 
 Run Tests Against the {+app+}
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your app should include automated unit and integration test suites that you can
 run to verify that everything works. The specifics of your test setup will vary
@@ -239,7 +239,7 @@ integration tests against the current version of the {+app+} to ensure
 backwards compatibility.
 
 Clean Up the Job
-~~~
+~~~~~~~~~~~~~~~~
 
 At the end of a CI/CD stage or pipeline you may want to clean up resources that
 you created specifically for that test. For example, if you create a new

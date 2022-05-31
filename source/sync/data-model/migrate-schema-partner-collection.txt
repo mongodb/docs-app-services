@@ -1,9 +1,9 @@
 .. _migrate-schema-partner-collection:
 .. _partner_collections:
 
-===
+============================
 Make Breaking Schema Changes
-===
+============================
 
 .. default-domain:: mongodb
 
@@ -14,7 +14,7 @@ Make Breaking Schema Changes
    :class: singlecol
 
 Overview
----
+--------
 If you need to make changes to an object schema that is used in {+sync+}, you 
 can make :ref:`non-breaking <additive-changes-synced-schema>` without any 
 additional work. :ref:`Breaking changes <destructive-changes-synced-schema>`, 
@@ -37,7 +37,7 @@ If you need to make a breaking schema change, you have two choices:
 .. include:: /includes/warn-terminate-sync-client-reset.rst
 
 Partner Collections
----
+-------------------
 In the following procedure, the *initial* collection uses the JSON Schema below 
 for a ``Task`` collection. Note that the schema for the ``Task`` contains an 
 ``_id`` field of type ``objectId``:
@@ -94,6 +94,6 @@ The *new* schema is the same, except we want the ``_id`` field to be a string:
 
 
 Procedure
----
+---------
 
 .. include:: /includes/steps/perform-destructive-changes-synced-schema.rst

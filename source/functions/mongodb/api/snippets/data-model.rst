@@ -1,5 +1,5 @@
 Data Model
-~~~
+~~~~~~~~~~
 
 The examples on this page use a collection named ``store.items`` that
 models various items available for purchase in an online store. Each

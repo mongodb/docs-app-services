@@ -1,8 +1,8 @@
 .. _custom-function-authentication:
 
-===
+==============================
 Custom Function Authentication
-===
+==============================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Custom Function Authentication
    :class: singlecol
 
 Overview
----
+--------
 
 The **custom function** authentication provider allows you to define a
 custom authentication flow using a :ref:`serverless function
@@ -21,7 +21,7 @@ custom authentication flow using a :ref:`serverless function
 authentication logic or integrate an external authentication system.
 
 When to Use Custom Function Authentication
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Custom function authentication is the most flexible form of
 authentication. However, it also requires you to manually define and
@@ -56,7 +56,7 @@ Consider using the custom function provider in your app if:
 .. _authentication-function:
 
 The Authentication Function
----
+---------------------------
 
 The authentication function is a JavaScript function that holds your
 custom user authentication code. It runs whenever a user logs in through
@@ -72,7 +72,7 @@ package from npm.
    :language: javascript
 
 Receive a Custom Credential Payload
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``payload`` object passed to the function contains data that was
 included with the custom function provider credential in the client app.
@@ -135,7 +135,7 @@ actual field names and values depend on your implementation.
             ])
 
 Return an Authenticated User ID
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If authentication is successful, the function should return a unique
 string identifier for the user. For example, you could return the user
@@ -202,7 +202,7 @@ The identity object for the custom function provider is stored in the
        }
 
 Throw an Error for Failed Authentication
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If the user provided invalid credentials or the function otherwise fails
 to authenticate the user, throw an error with a descriptive message.
@@ -215,7 +215,7 @@ the SDK.
 .. _config-custom-function:
 
 Set Up the Custom Function Provider
----
+-----------------------------------
 
 You can configure custom function authentication using any supported
 deployment method.
@@ -233,7 +233,7 @@ deployment method.
       .. include:: /includes/steps/configure-custom-function-auth-import-export.rst
 
 Configure Custom User Data
----
+--------------------------
 
 You can associate :ref:`custom data <custom-user-data>` in a MongoDB
 Atlas collection with user accounts in your app. This can be helpful if
@@ -289,7 +289,7 @@ custom function provider users:
       :language: javascript
 
 Log In from a {+client-sdk+}
----
+-----------------------
 
 To log in from a client application, use a Custom Function credential
 that contains your login payload data.

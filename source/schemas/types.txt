@@ -1,8 +1,8 @@
 .. _schema-types:
 
-===
+============
 Schema Types
-===
+============
 
 .. default-domain:: mongodb
 
@@ -15,7 +15,7 @@ Schema Types
 .. _schema-type-all:
 
 All Schema Types
----
+----------------
 
 The following fields are available for all BSON schemas regardless of type:
 
@@ -103,12 +103,12 @@ The following fields are available for all BSON schemas regardless of type:
        schema validation.
 
 BSON Types
----
+----------
 
 .. _schema-type-array:
 
 Array
-~~~
+~~~~~
 
 An ``array`` contains multiple values of a specific type. BSON ``array`` schemas
 use the standard `JSON Schema array
@@ -175,7 +175,7 @@ format.
 .. _schema-type-boolean:
 
 Boolean
-~~~
+~~~~~~~
 
 A ``bool`` is either ``true`` or ``false``.
 
@@ -186,7 +186,7 @@ A ``bool`` is either ``true`` or ``false``.
 .. _schema-type-mixed:
 
 Mixed
-~~~
+~~~~~
 
 A ``mixed`` field may contain any schema type except for :ref:`arrays
 <schema-type-array>`, :ref:`embedded objects <schema-type-object>`,
@@ -205,7 +205,7 @@ the database name, collection name, and primary key of the link.
 .. _schema-type-number:
 
 Number
-~~~
+~~~~~~
 
 A ``number`` generically configures some type of number. BSON schemas extend
 `JSON Schema numerics
@@ -258,7 +258,7 @@ with additional types to define integers, floats, and decimals.
 .. _schema-type-object:
 
 Object
-~~~
+~~~~~~
 
 An ``object`` is a structured object with ``string`` keys that each have a typed
 value. Objects represent {+service-short+} objects and embedded objects in synced realms as
@@ -337,7 +337,7 @@ well as the documents they map to in MongoDB.
 .. _schema-type-objectid:
 
 ObjectId
-~~~
+~~~~~~~~
 
 An ``objectId`` is a 12-byte identifier for :manual:`BSON
 </reference/bson-types/>` objects. ObjectId values are most commonly used as the
@@ -351,7 +351,7 @@ synced realm.
 .. _schema-type-string:
 
 String
-~~~
+~~~~~~
 
 A ``string`` is text encoded as a series of characters. BSON ``string`` schemas
 use the standard `JSON Schema string
@@ -386,7 +386,7 @@ format.
 .. _schema-type-uuid:
 
 UUID
-~~~
+~~~~
 
 A ``uuid`` (Universal Unique Identifier) is a :rfc:`standardized <rfc4122>`
 16-byte unique object identifier.
@@ -398,7 +398,7 @@ A ``uuid`` (Universal Unique Identifier) is a :rfc:`standardized <rfc4122>`
 .. _schema-type-bindata:
 
 Binary Data
-~~~
+~~~~~~~~~~~
 
 A ``binData`` is a piece of unstructured binary data. Maps to the `binary
 BSON type <https://bsonspec.org/spec.html>`__. Always uses subtype 0.
@@ -408,7 +408,7 @@ BSON type <https://bsonspec.org/spec.html>`__. Always uses subtype 0.
    { "bsonType": "binData" }
 
 {+client-database+} Types
----
+--------------------
 
 .. _schema-type-set:
 
@@ -433,7 +433,7 @@ A set schema is an ``array`` schema where ``uniqueItems`` is set to ``true``.
 .. _schema-type-dictionary:
 
 Dictionary
-~~~
+~~~~~~~~~~
 
 A dictionary is a collection of dynamic and unique ``string`` keys paired with
 values of a given type. A dictionary is functionally an object or document

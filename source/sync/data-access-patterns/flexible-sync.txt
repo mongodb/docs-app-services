@@ -1,8 +1,8 @@
 .. _flexible-sync:
 
-===
+=============
 Flexible Sync
-===
+=============
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Flexible Sync
    :class: singlecol
 
 Overview
----
+--------
 
 {+service+} Flexible Sync lets you define a query in the client, and 
 sync only the objects that match the query. With client-side subscriptions, 
@@ -43,7 +43,7 @@ run-time from the device.
 .. _queryable-fields:
 
 Queryable Fields
----
+----------------
 
 When you configure Flexible Sync, you specify one or more fields 
 from your :ref:`Sync Schema <sync-schema-overview>` that your client 
@@ -63,7 +63,7 @@ control on individual collections.
 .. _flexible-sync-eligible-field-types:
 
 Eligible Field Types
-~~~
+~~~~~~~~~~~~~~~~~~~~
 Flexible Sync only supports top-level primitive fields with a scalar type as 
 queryable fields. You can also include arrays of these primitives as queryable 
 fields. Flexible Sync does not support embedded objects or arrays of 
@@ -78,12 +78,12 @@ objects as queryable fields.
 .. _flexible-sync-reserved-field-names:
 
 Reserved Field Names
-~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/reserved-field-names.rst
 
 Performance and Storage
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Queryable fields use storage on the backing Atlas cluster. The more queryable
 fields you configure, the more storage you use on the backing cluster. You can
@@ -96,10 +96,10 @@ configure up to 10 queryable fields per application for Flexible Sync.
 .. _get-started-flexible-sync:
 
 Get Started with Flexible Sync
----
+------------------------------
 
 Define a Schema
-~~~
+~~~~~~~~~~~~~~~
 
 To use Flexible Sync, create a schema for your {+app+}. The :ref:`eligible 
 fields <flexible-sync-eligible-field-types>` in your schema become queryable fields
@@ -113,7 +113,7 @@ fields with :ref:`Development Mode <concept-development-mode>`.
    :ref:`create-schema-for-backend-realm-app`
 
 Enable Sync
-~~~
+~~~~~~~~~~~
 
 After you have defined a schema, or decided to create your data model on the 
 client side and use :ref:`Development Mode <concept-development-mode>` to 
@@ -166,7 +166,7 @@ roles.
 .. _flexible-sync-query-subscription:
 
 Create Queries in Your Client Application
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 With Flexible Sync enabled, you can start creating queries from 
 your client application. 

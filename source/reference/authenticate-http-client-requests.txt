@@ -1,13 +1,13 @@
 .. _authenticate-http-client-requests:
 
----
+---------------------------------
 Authenticate HTTP Client Requests
----
+---------------------------------
 
 .. default-domain:: mongodb
 
 Overview
----
+--------
 
 {+service+} enforces :ref:`non-sync rules <mongodb-rules>` and :ref:`sync rules
 <sync-rules>` for all client operations. This means that requests must be made
@@ -22,7 +22,7 @@ by a logged in :doc:`user </authentication>` of your :term:`{+app+}`.
 .. _authenticate-client-api-access-token:
 
 Authenticate Requests with a Client API Access Token
----
+----------------------------------------------------
 
 To authenticate a GraphQL request as an arbitrary logged in user from any
 provider, include a valid :ref:`user access token
@@ -46,7 +46,7 @@ provider, include a valid :ref:`user access token
 .. _get-client-api-access-token:
 
 Get a Client API Access Token
----
+-----------------------------
 
 To get an access token, you need to authenticate with the {+realm+} Client
 HTTP API using the user's login credentials. The Client API
@@ -146,7 +146,7 @@ The ``hostname`` is in the response:
 .. _refresh-client-api-access-token:
 
 Refresh a Client API Access Token
----
+---------------------------------
    
 Access tokens expire 30 minutes after {+service+} grants them. When an access
 token expires, you can either request another access token using the
@@ -179,7 +179,7 @@ following URL:
 .. _verify-client-access-token:
 
 Verify a Client Access Token
----
+----------------------------
 
 If you want to verify that a client access token is valid, you can do so using
 the :admin-api-endpoint:`verify access token endpoint <operation/adminVerifyUserAccessToken>` 
@@ -225,7 +225,7 @@ token is valid:
 .. _verify-client-access-token-responses:
 
 Responses
-~~~
+~~~~~~~~~
 
 **Valid access token**: If you get a ``200 OK`` with a response that contains the following fields, the <Client Access Token> is valid:
 

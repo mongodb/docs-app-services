@@ -14,7 +14,7 @@ authentication provider, see that provider's reference page.
        └── <provider name>.json
 
 Configuration
-~~~
+~~~~~~~~~~~~~
 
 .. code-block:: json
    :caption: <provider name>.json

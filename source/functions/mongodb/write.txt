@@ -1,8 +1,8 @@
 .. _mongodb-write:
 
-===
+=======================================
 Write Data in MongoDB Atlas - Functions
-===
+=======================================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Write Data in MongoDB Atlas - Functions
    :class: singlecol
 
 Overview
----
+--------
 
 The examples on this page demonstrate how to use the MongoDB Query API
 in a function to insert, update, and delete data in your Atlas cluster.
@@ -27,7 +27,7 @@ in a function to insert, update, and delete data in your Atlas cluster.
 .. _mongodb-insert:
 
 Insert
----
+------
 
 Insert operations take one or more documents and add them to a MongoDB collection.
 
@@ -36,7 +36,7 @@ They return documents that describe the results of the operation.
 .. _mongodb-insert-a-single-document:
 
 Insert a Single Document (``insertOne()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can insert a single document using the
 :method:`collection.insertOne()` method.
@@ -50,7 +50,7 @@ document into the ``items`` collection:
 .. _mongodb-insert-one-or-more-documents:
 
 Insert One or More Documents (``insertMany()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can insert multiple documents at the same time using the
 :method:`collection.insertMany()` method.
@@ -63,7 +63,7 @@ documents into the ``items`` collection:
 .. _mongodb-update:
 
 Update
----
+------
 
 Update operations find existing documents in a MongoDB collection and
 modify their data. You use standard MongoDB query syntax to specify
@@ -82,7 +82,7 @@ matching documents.
 .. _mongodb-update-a-single-document:
 
 Update a Single Document (``updateOne()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can update a single document using the
 :method:`collection.updateOne()` method.
@@ -96,7 +96,7 @@ of a single document in the ``items`` collection from ``lego`` to
 .. _mongodb-update-one-or-more-documents:
 
 Update One or More Documents (``updateMany()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can update multiple documents in a collection using the
 :method:`collection.updateMany()` method.
@@ -110,7 +110,7 @@ in the ``items`` collection by multiplying their ``quantity`` values by
 .. _mongodb-upsert-documents:
 
 Upsert Documents
-~~~
+~~~~~~~~~~~~~~~~
 
 If an update operation does not match any document in the collection,
 you can automatically insert a single new document into the collection
@@ -129,7 +129,7 @@ game"`` and the ``quantity`` value set to ``5``:
 .. _mongodb-update-operators-fields:
 
 Field Update Operators
-~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 Field operators let you modify the fields and values of a document.
 
@@ -179,7 +179,7 @@ field. The number can be positive or negative.
 .. _mongodb-update-operators-arrays:
 
 Array Update Operators
-~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 Array operators let you work with values inside of arrays.
 
@@ -314,7 +314,7 @@ elements in an array field based on an array filter:
 .. _mongodb-delete:
 
 Delete
----
+------
 
 Delete operations find existing documents in a MongoDB collection and
 remove them. You use standard MongoDB query syntax to specify which
@@ -323,7 +323,7 @@ documents to delete.
 .. _mongodb-delete-a-single-document:
 
 Delete a Single Document (``deleteOne()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can delete a single document from a collection using the
 :method:`collection.deleteOne()` method.
@@ -336,7 +336,7 @@ in the ``items`` collection that has a ``name`` value of ``lego``:
 .. _mongodb-delete-one-or-more-documents:
 
 Delete One or More Documents (``deleteMany()``)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can delete multiple items from a collection using the
 :method:`collection.deleteMany()` method.
@@ -349,7 +349,7 @@ that do not have any ``reviews``:
 .. _bulk-writes:
 
 Bulk Writes
----
+-----------
 
 A bulk write combines multiple write operations into a single operation.
 You can issue a bulk write command using the
@@ -360,7 +360,7 @@ You can issue a bulk write command using the
 .. _transactions:
 
 Transactions
----
+------------
 
 MongoDB supports :manual:`multi-document transactions
 </core/transactions/>` that let you read and write multiple documents

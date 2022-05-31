@@ -1,8 +1,8 @@
 .. _logs:
 
-===
+================
 Application Logs
-===
+================
 
 .. default-domain:: mongodb
 
@@ -29,7 +29,7 @@ Application Logs
    Sync Logs </logs/sync>
 
 Introduction
----
+------------
 
 {+service+} logs all incoming requests and application events such as user
 authentication, trigger execution, and service interactions. You
@@ -39,10 +39,10 @@ can access your application's logs from the :guilabel:`Logs` page in the
 {+log-retention-time+}.
 
 Concepts
----
+--------
 
 Log Entry
-~~~
+~~~~~~~~~
 
 A log entry describes a single event within {+backend+}.
 Different events in {+backend+} execute in different ways, requiring
@@ -75,7 +75,7 @@ logs may include entries of the following types:
   data synchronization between client devices and MongoDB Atlas.
 
 Parts of a Log Entry
-~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -109,7 +109,7 @@ Parts of a Log Entry
        what caused the issue.
 
 Log Filters
-~~~
+~~~~~~~~~~~
 
 Because {+backend+} creates log entries for most common kinds of user
 interaction, it can become difficult to find a specific group of logs
@@ -120,7 +120,7 @@ timestamp, user, and request ID to return only logs that are relevant to
 your query.
 
 Error Logs
-~~~
+~~~~~~~~~~
 
 All {+service+} log entries have one of two possible statuses:
 ``OK`` and ``Error``. If an event exits successfully, {+backend+}
@@ -136,10 +136,10 @@ caused the problem. You may encounter errors if you:
   parameters
 
 Constraints
----
+-----------
 
 Log Lines
-~~~
+~~~~~~~~~
 
 Functions can log information using JavaScript's ``console.log()``
 method. {+backend+} stringifies each console log and stores each string
@@ -154,7 +154,7 @@ counts.
 ``Logs`` field.
 
 Log Retention
-~~~
+~~~~~~~~~~~~~~
 
 {+service+} retains logs for {+log-retention-time+}, after which they
 are deleted.
@@ -165,7 +165,7 @@ If you require logs older than {+log-retention-time+}, you can set up a
 externally store your log history.
 
 Reference Documentation
----
+-----------------------
 
 .. list-table::
    :header-rows: 1

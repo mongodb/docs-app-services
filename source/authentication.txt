@@ -1,8 +1,8 @@
 .. _users-and-authentication:
 
----
+----------------------
 Users & Authentication
----
+----------------------
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Users & Authentication
    :class: singlecol
 
 Introduction
----
+------------
 
 {+service+} manages authentication for your application's end users. 
 {+service-short+}:
@@ -35,12 +35,12 @@ and Google. Custom providers allow you to integrate any external
 authentication system.
 
 Concepts
----
+--------
 
 .. _auth-providers:
 
 Authentication Providers
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 In {+service+}, an **authentication provider** is a modular service. 
 These services provide identity verification, and maintain information 
@@ -79,7 +79,7 @@ systems.
 .. _user-accounts:
 
 User Accounts
-~~~
+~~~~~~~~~~~~~
 
 A **user account** represents a single, distinct user of
 your application. {+service-short+} creates the user when an authentication provider 
@@ -90,7 +90,7 @@ with :ref:`custom data <custom-user-data>`.
 .. _authentication-provider-identities:
 
 Authentication Provider Identities
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service+} stores login metadata for a user in an 
 **authentication provider identity**. {+service-short+} uses this metadata to 
@@ -110,7 +110,7 @@ client SDK.
 .. _active-user:
 
 Active User
-~~~
+~~~~~~~~~~~
 
 In the {+client-sdks+}, you can log in more than one user, but only one account 
 can be **active** at any given time. The **active user** is a user account 
@@ -126,7 +126,7 @@ Functions.
 .. _system-user:
 
 System User
-~~~
+~~~~~~~~~~~
 
 The **system user** is an internal user that has advanced privileges.
 The system user bypasses all rules. You can execute :ref:`functions
@@ -165,7 +165,7 @@ The system user is useful for administrative tasks. This includes:
 .. _user-sessions:
 
 User Sessions
-~~~
+~~~~~~~~~~~~~
 
 **User session** describes the period when an authenticated user can access 
 data in your app. Authenticated users can use app data without re-entering 
@@ -204,7 +204,7 @@ access tokens and refresh tokens for that user. See the :ref:`Revoking User
 Sessions <revoke-user-sessions>` page for the specific steps.
 
 Summary
----
+-------
 
 - {+service-short+} supports authentication and user accounts through a variety of 
   :ref:`authentication providers <authentication-providers>`. You can 

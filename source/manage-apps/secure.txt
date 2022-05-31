@@ -1,8 +1,8 @@
 .. _application-security:
 
-===
+====================
 Application Security
-===
+====================
 
 .. default-domain:: mongodb
 
@@ -20,7 +20,7 @@ Application Security
    Manage IP Access </manage-apps/secure/manage-ip-access>
 
 Overview
----
+--------
 
 {+service+} provides a variety of security features to protect your data
 and prevent unauthorized access to your application. This includes things 
@@ -34,7 +34,7 @@ like:
 .. _security-app-users:
 
 Application Users
----
+-----------------
 
 You can secure {+service+} applications with :ref:`built-in user management 
 <users-and-authentication>`. With {+service-short+}'s built-in user 
@@ -59,7 +59,7 @@ client SDKs.
 .. _security-data-access:
 
 Data Access Permissions
----
+-----------------------
 
 Use {+service+} data access rules to grant read and write access to data. 
 {+app+}s that use {+sync+} define data access permissions during the process
@@ -74,7 +74,7 @@ cannot view or modify data.
 .. _security-sync-permissions:
 
 {+service+} Applications with Sync
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you enable {+sync+} for your {+app+}, you define data access rules
 that determine which data users can read and write. The :ref:`Sync Mode 
@@ -115,7 +115,7 @@ sync to the client application.
 .. _security-atlas-permissions:
 
 MongoDB Atlas Data Sources
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you access `{+atlas+}
 <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_
@@ -140,7 +140,7 @@ search or read data.
 .. _security-developer-access:
 
 Developer Access
-~~~
+~~~~~~~~~~~~~~~~
 
 Every {+service+} application is associated with a specific :atlas:`MongoDB
 Atlas organization and project </organizations-projects>`. {+service-short+} determines the
@@ -172,7 +172,7 @@ project role:
 .. _security-network:
 
 Network Security
----
+----------------
 
 {+service+} utilizes a range of network security protocols to prevent
 unauthorized access to your data. This includes:
@@ -185,7 +185,7 @@ unauthorized access to your data. This includes:
 .. _security-tls:
 
 Transport Layer Security (TLS)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service+} uses `TLS 1.3 <https://datatracker.ietf.org/doc/html/rfc8446>`__ 
 to secure all network requests to and from your application, including:
@@ -200,7 +200,7 @@ The TLS certificate is pre-defined and cannot be customized or disabled.
 .. _firewall-configuration:
 
 Firewall Configuration
-~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 {+service+} only sends requests from the following IP addresses. You can
 copy this list to an allowlist on your firewall:
@@ -253,7 +253,7 @@ CSV
 .. _security-allowed-request-origins:
 
 Allowed Request Origins
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 You can define this :ref:`configuration option <appconfig-app>` in the 
 app-level ``realm_config.json`` file. This field accepts an array of 
@@ -264,7 +264,7 @@ an origin that is not listed.
 .. _security-ip-access-list:
 
 IP Access List
-~~~
+~~~~~~~~~~~~~~
 
 {+service+} allows client requests from the enabled entries in the app's
 :ref:`IP access list <manage-ip-access>`. Allowed requests will still use 
@@ -281,7 +281,7 @@ an IP that is not on the access list.
 .. _security-api-access-list:
 
 API Access List
-~~~
+~~~~~~~~~~~~~~~
 
 When you :ref:`create an API key <cli-auth-with-api-token>`, you can specify 
 IP addresses that can use this API key to access your project or organization. 
@@ -296,7 +296,7 @@ from an IP address that is not on the access list.
 .. _security-values:
 
 Values and Secrets
----
+------------------
 
 {+service+} enables you to define :ref:`values and secrets <values-and-secrets>`
 that you can access or link to from your application. This enables you to 
@@ -305,7 +305,7 @@ your app's business logic. Instead, you refer to it by name and
 {+service-short+} substitutes the value when executing your request.
 
 Summary
----
+-------
 
 - Built-in user management handles authentication and ensures only logged-in
   users can access your {+app+}. 

@@ -19,7 +19,7 @@ file's metadata attributes.
 .. _hosting-metadata-json:
 
 Metadata Configuration
-~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
    :caption: metadata.json

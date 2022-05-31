@@ -1,8 +1,8 @@
 .. _custom-jwt-authentication:
 
-===
+=========================
 Custom JWT Authentication
-===
+=========================
 
 .. default-domain:: mongodb
 
@@ -15,7 +15,7 @@ Custom JWT Authentication
 .. _custom-jwt-authentication-overview:
 
 Overview
----
+--------
 
 The Custom JWT authentication provider allows users to authenticate with
 an authentication system that is independent from {+service+}. The external
@@ -37,7 +37,7 @@ otherwise identify themself.
 .. _config-custom-jwt:
 
 Configuration
----
+-------------
 
 .. tabs-realm-admin-interfaces::
 
@@ -97,7 +97,7 @@ Configuration
 .. _custom-jwt-authentication-configuration-audience:
 
 Audience
-~~~
+~~~~~~~~
 
 The :guilabel:`Audience` of a JWT specifies its intended recipient. JWTs
 describe their audience in the ``aud`` claim. By default, {+service-short+} expects
@@ -133,7 +133,7 @@ value, then you can configure the provider to use that value instead.
 .. _custom-jwt-authentication-configuration-verification-method:
 
 Verification Method
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 The :guilabel:`Verification Method` configures how the provider
 determines which signing algorithm and signing keys the external
@@ -268,7 +268,7 @@ signing algorithm and keys. When enabled, each token must include a
 .. _custom-jwt-authentication-configuration-metadata-fields:
 
 Metadata Fields
-~~~
+~~~~~~~~~~~~~~~
 
 :guilabel:`Metadata Fields` are additional data that describe each user.
 {+service-short+} determines the value of each metadata field from the value of
@@ -451,7 +451,7 @@ whenever they log in and exposes the fields in the ``data`` object of the
 .. _json-web-tokens:
 
 JSON Web Tokens
----
+---------------
 
 The external authentication system must return a `JSON web token
 <https://jwt.io/introduction/>`_ that uniquely identifies the
@@ -467,7 +467,7 @@ parts: a header, a payload and a signature and has the following form:
 .. _custom-jwt-authentication-jwt-header:
 
 JWT Header
-~~~
+~~~~~~~~~~
 
 The header portion of the JWT consists of a ``Base64UrlEncoded``
 document of the following form:
@@ -520,7 +520,7 @@ document of the following form:
 .. _custom-jwt-authentication-jwt-payload:
 
 JWT Payload
-~~~
+~~~~~~~~~~~
 
 The payload portion of the JWT consists of a ``Base64UrlEncoded``
 document of the following form:
@@ -595,7 +595,7 @@ document of the following form:
 .. _custom-jwt-authentication-usage-jwt-signature:
 
 JWT Signature
-~~~
+~~~~~~~~~~~~~
 
 The signature portion of the JWT is a hash of the encoded
 token header and payload. To form the signature,
@@ -615,7 +615,7 @@ algorithm specified in the ``"alg"`` field of the header.
 .. _custom-jwt-authentication-firebase: 
 
 Firebase JWT Authentication
----
+---------------------------
 
 You can use the `Firebase Authentication <https://firebase.google.com/docs/auth>`__
 service to authenticate users into App Services apps as well as Firebase apps. 
@@ -760,7 +760,7 @@ To set up Firebase Authentication as your Custom JWT provider in {+service-short
 .. _custom-jwt-authentication-examples:
 
 Examples
----
+--------
 
 For code examples that demonstrate how to register and log in using
 Custom JWT authentication, see the documentation for the {+client-sdks+}:
@@ -806,7 +806,7 @@ Custom JWT authentication, see the documentation for the {+client-sdks+}:
 .. _custom-jwt-authentication-summary:
 
 Summary
----
+-------
 
 - Custom JWT authentication allows you to identify your application's
   users via a JSON Web Token issued outside of {+service-short+}.

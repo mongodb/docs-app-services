@@ -1,8 +1,8 @@
 .. _aws-service:
 
-===
+========================
 AWS Service [Deprecated]
-===
+========================
 
 .. default-domain:: mongodb
 
@@ -16,7 +16,7 @@ AWS Service [Deprecated]
 .. include:: /includes/note-third-party-services-deprecation.rst
 
 Overview
----
+--------
 
 `Amazon Web Services (AWS) <https://aws.amazon.com/>`_ provides an
 extensive collection of cloud-based services. {+service-short+} provides a
@@ -26,7 +26,7 @@ services.
 .. _aws-service-configuration:
 
 Configuration Parameters
----
+------------------------
 
 You will need to provide values for the following parameters when you
 :doc:`create an AWS service interface </services/configure/services>`:
@@ -91,7 +91,7 @@ You will need to provide values for the following parameters when you
      <UserGuide/best-practices.html#create-iam-users>`
 
 Service Actions
----
+---------------
 
 Each AWS service has different actions that you can perform on that
 service. {+service-short+} uses the action names specified in the `AWS SDK
@@ -113,7 +113,7 @@ input type of :aws-go:`PutObjectInput <s3/#PutObjectInput>`, and returns
 either a :aws-go:`PutObjectOutput <s3/#PutObjectOutput>` or an error.
 
 AWS Service Rules
----
+-----------------
 
 You must specify rules to enable the AWS services and actions. Each rule
 applies to a single service API, plus one or all actions on that service.
@@ -148,7 +148,7 @@ after the service name indicates that all actions of that service are enabled:
 .. _aws-rule-conditions:
 
 Rule Conditions
----
+---------------
 
 For each service action, the rule you create may include any of the
 properties of the input object for that action as a condition for
@@ -156,7 +156,7 @@ validating the rule. The ``%%args`` expansion provides access to these
 properties.
 
 Example
-~~~
+~~~~~~~
 
 ``S3 PutObject``
 ++++++++++++++++
@@ -228,12 +228,12 @@ This can also be expressed as the following JSON:
 
 
 Usage
----
+-----
 You can call an AWS service from a {+service-short+} function and from the
 SDKs. The following sections show each of these processes.
 
 Call an AWS Service from a {+service-short+} Function
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following examples show how to call various AWS services from within
 a {+service-short+} function. In each example, it is assumed the named
@@ -245,7 +245,7 @@ S3 Service
 ++++++++++
 
 ``S3 PutObject``
-___
+________________
 
 .. code-block:: javascript
 
@@ -261,7 +261,7 @@ ___
    };
 
 ``S3 GetObject``
-___
+________________
 
 .. code-block:: javascript
 
@@ -277,7 +277,7 @@ ___
    };
 
 ``S3 PresignURL``
-___
+_________________
 
 .. code-block:: javascript
    
@@ -374,7 +374,7 @@ SES Service
 Refer to the :aws-go:`SES API Reference <ses>` for implementation details.
 
 Supported AWS Services
----
+----------------------
 Your {+app+} can connect to the following AWS services:
 
 - Athena

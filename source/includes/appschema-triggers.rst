@@ -12,7 +12,7 @@ trigger.
        └── <trigger name>.json
 
 Configuration
-~~~
+~~~~~~~~~~~~~
 
 .. code-block:: json
    :caption: <trigger name>.json

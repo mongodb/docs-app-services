@@ -15,7 +15,7 @@ defined in ``source.js``.
            └── source.js
 
 Configuration
-~~~
+~~~~~~~~~~~~~
 
 .. code-block:: json
    :caption: config.json
@@ -84,7 +84,7 @@ Configuration
        ``run_as_user_id``.
 
 Source Code
-~~~
+~~~~~~~~~~~
 
 .. code-block:: javascript
    :caption: source.js

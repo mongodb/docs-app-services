@@ -1,8 +1,8 @@
 .. _mongodb-api-reference:
 
-===
+=====================
 MongoDB API Reference
-===
+=====================
 
 .. default-domain:: mongodb
 
@@ -15,7 +15,7 @@ MongoDB API Reference
 .. _mongodb-db:
 
 ``mongodb.db()``
----
+----------------
 
 .. class:: hidden
    
@@ -30,7 +30,7 @@ Gets a handle for a database in a linked MongoDB data source.
    const db = mongodb.db("myDB");
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
    
@@ -49,7 +49,7 @@ Parameters
      - The name of the database.
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``mongodb.db()`` method returns a ``Database`` object that allows
 you to access collections in the specified database.
@@ -59,7 +59,7 @@ See :method:`database.collection()`
 .. _mongodb-db-collection:
 
 ``database.collection()``
----
+-------------------------
 
 .. class:: hidden
    
@@ -76,7 +76,7 @@ Gets a handle for a collection in a linked MongoDB data source from a
    const collection = db.collection("myCollection");
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -95,7 +95,7 @@ Parameters
      - The name of the collection.
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``database.collection()`` method returns a collection object that
 allows you to query the specified collection.
@@ -103,7 +103,7 @@ allows you to query the specified collection.
 .. _mongodb-collection-find:
 
 ``collection.find()``
----
+---------------------
 
 .. class:: hidden
    
@@ -116,7 +116,7 @@ matching documents.
 .. include:: /functions/mongodb/api/snippets/findMany.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -155,7 +155,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.find()`` method returns a cursor object that points to
 any documents that match the specified query. You can manipulate and
@@ -251,7 +251,7 @@ methods:
 .. _mongodb-collection-findOne:
 
 ``collection.findOne()``
----
+------------------------
 
 .. class:: hidden
    
@@ -264,7 +264,7 @@ the query's sort order or :term:`natural order`.
 .. include:: /functions/mongodb/api/snippets/findOne.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -303,7 +303,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.findOne()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that resolves to the
@@ -317,7 +317,7 @@ match the specified query, the promise resolves to ``null``.
 .. _mongodb-collection-findOneAndUpdate:
 
 ``collection.findOneAndUpdate()``
----
+---------------------------------
 
 .. class:: hidden
    
@@ -331,7 +331,7 @@ document in either its pre-update or post-update form.
 .. include:: /functions/mongodb/api/snippets/findOneAndUpdate.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -382,7 +382,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.findOneAndUpdate()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that resolves to a
@@ -398,7 +398,7 @@ specified query, the promise resolves to ``null``.
 .. _mongodb-collection-findOneAndReplace:
 
 ``collection.findOneAndReplace()``
----
+----------------------------------
 
 .. class:: hidden
    
@@ -412,7 +412,7 @@ document in either its pre-replacement or post-replacement form.
 .. include:: /functions/mongodb/api/snippets/findOneAndReplace.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -463,7 +463,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.findOneAndReplace()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that resolves to a
@@ -479,7 +479,7 @@ specified query, the promise resolves to ``null``.
 .. _mongodb-collection-findOneAndDelete:
 
 ``collection.findOneAndDelete()``
----
+---------------------------------
 
 .. class:: hidden
    
@@ -493,7 +493,7 @@ document as it was immediately before it was deleted.
 .. include:: /functions/mongodb/api/snippets/findOneAndDelete.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -531,7 +531,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.findOneAndDelete()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that resolves to a
@@ -545,7 +545,7 @@ specified query, the promise resolves to ``null``.
 .. _mongodb-collection-insertOne:
 
 ``collection.insertOne()``
----
+--------------------------
 
 .. class:: hidden
    
@@ -557,7 +557,7 @@ the inserted document.
 .. include:: /functions/mongodb/api/snippets/insertOne.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -576,7 +576,7 @@ Parameters
      - A document to insert into the collection.
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.insertOne()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -602,7 +602,7 @@ resolves to a document that describes the insert operation.
 .. _mongodb-collection-insertMany:
 
 ``collection.insertMany()``
----
+---------------------------
 
 .. class:: hidden
    
@@ -614,7 +614,7 @@ contains the ``_id`` value for each inserted document.
 .. include:: /functions/mongodb/api/snippets/insertMany.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -633,7 +633,7 @@ Parameters
      - An array of documents to insert into the collection.
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.insertMany()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -660,7 +660,7 @@ resolves to a document that describes the insert operation.
 .. _mongodb-collection-updateOne:
 
 ``collection.updateOne()``
----
+--------------------------
 
 .. class:: hidden
    
@@ -672,7 +672,7 @@ operation.
 .. include:: /functions/mongodb/api/snippets/updateOnePush.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -711,7 +711,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.updateOne()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -748,7 +748,7 @@ resolves to a document that describes the update operation.
 .. _mongodb-collection-updateMany:
 
 ``collection.updateMany()``
----
+---------------------------
 
 .. class:: hidden
    
@@ -760,7 +760,7 @@ the operation.
 .. include:: /functions/mongodb/api/snippets/updateMany.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -799,7 +799,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.updateMany()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -836,7 +836,7 @@ resolves to a document that describes the update operation.
 .. _mongodb-collection-deleteOne:
 
 ``collection.deleteOne()``
----
+--------------------------
 
 .. class:: hidden
    
@@ -847,7 +847,7 @@ Removes a single document from a collection.
 .. include:: /functions/mongodb/api/snippets/deleteOne.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -877,7 +877,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.deleteOne()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -903,7 +903,7 @@ resolves to a document that describes the delete operation.
 .. _mongodb-collection-deleteMany:
 
 ``collection.deleteMany()``
----
+---------------------------
 
 .. class:: hidden
    
@@ -914,7 +914,7 @@ Remove one or more documents from a collection.
 .. include:: /functions/mongodb/api/snippets/deleteMany.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -944,7 +944,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.deleteMany()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -970,7 +970,7 @@ resolves to a document that describes the delete operation.
 .. _mongodb-collection-aggregate:
 
 ``collection.aggregate()``
----
+--------------------------
 
 .. class:: hidden
    
@@ -982,7 +982,7 @@ cursor that allows you to access the pipeline's output documents.
 .. include:: /functions/mongodb/api/snippets/aggregate.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -1015,7 +1015,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.aggregate()`` method returns a cursor object
 that points to any documents output from the final stage of the
@@ -1073,7 +1073,7 @@ in the aggregation result set with the following methods:
 .. _mongodb-collection-count:
 
 ``collection.count()``
----
+----------------------
 
 .. class:: hidden
    
@@ -1085,7 +1085,7 @@ given query.
 .. include:: /functions/mongodb/api/snippets/count.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -1119,7 +1119,7 @@ Parameters
        :ref:`Transactions <transactions>`.
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.count()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that
@@ -1147,7 +1147,7 @@ that match the query.
 .. _mongodb-collection-distinct:
 
 ``collection.distinct()``
----
+-------------------------
 
 .. class:: hidden
    
@@ -1171,7 +1171,7 @@ distinct values for a specific field across all matched documents.
      .catch(err => console.error(err))
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
 
@@ -1207,7 +1207,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.distinct()`` method returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that resolves to an
@@ -1220,7 +1220,7 @@ array of distinct values.
 .. _mongodb-collection-bulkWrite:
 
 ``collection.bulkWrite()``
----
+--------------------------
 
 .. class:: hidden
    
@@ -1244,7 +1244,7 @@ or more of the following write operations:
 .. include:: /functions/mongodb/api/snippets/bulkWrite.rst
 
 Parameters
-~~~
+~~~~~~~~~~
 
 .. code-block:: typescript
    
@@ -1297,7 +1297,7 @@ Parameters
      - .. include:: /functions/mongodb/api/parameter-options-session.rst
 
 Return Value
-~~~
+~~~~~~~~~~~~
 
 The ``collection.bulkWrite()`` function returns a :mdn:`Promise
 <Web/JavaScript/Reference/Global_Objects/Promise>` that resolves to

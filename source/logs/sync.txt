@@ -1,6 +1,6 @@
-===
+=========
 Sync Logs
-===
+=========
 
 .. default-domain:: mongodb
 
@@ -11,14 +11,14 @@ Sync Logs
    :class: singlecol
 
 Overview
----
+--------
 
 {+service+} creates sync logs whenever a user interacts with Sync. This
 includes writing data to {+backend+} from clients, reading changes from
 {+backend+} to clients, and starting or ending a connection.
 
 Connections
-~~~
+~~~~~~~~~~~
 
 Every user communicates with {+backend+} using a *connection*. Each
 connection uses a single websocket to push and pull information to and
@@ -26,14 +26,14 @@ from a single user. Logging in a user using any authentication provider
 starts a connection. Logging out that user ends the connection.
 
 Sessions
-~~~
+~~~~~~~~
 
 Users download and upload changes to a synced {+realm+} using a *session*. 
 Instantiating a local instance of a synced {+realm+} starts a session. 
 Destroying that {+realm+} object ends the session.
 
 MongoDB Atlas Sync Events
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Every sync event is associated with a user identity that tells you
 exactly which user caused the event to occur. However, you may notice
@@ -45,7 +45,7 @@ may see a large number of MongoDB Atlas synchronization events when you
 initialize sync if your cluster already contains a large amount of data.
 
 Fields
-~~~
+~~~~~~
 
 .. list-table::
    :header-rows: 1

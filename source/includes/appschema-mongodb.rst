@@ -31,14 +31,14 @@ the ``/rules`` sub-directory.
 .. _mongodb-service-configuration-file:
 
 Service Configuration
-~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/data-source-configuration.rst
 
 .. _mongodb-service-sync-rules:
 
 Synced Cluster Configuration
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The ``config.sync`` field of ``config.json`` determines if a cluster is
 :doc:`synced </sync>` and, if it is, defines the rules for sync operations on
@@ -117,7 +117,7 @@ the cluster.
 .. _mongodb-service-rules:
 
 MongoDB Collection Rules (Non-Sync)
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For non-synced clusters, you can define collection-level rules that {+service-short+}
 evaluates dynamically for each request. Each collection's rules are stored in

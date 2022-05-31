@@ -3,9 +3,9 @@
 .. _sync-overview:
 .. _realm-sync-get-started:
 
-===
+===================
 {+sync+} Overview
-===
+===================
 
 .. contents:: On this page
    :local:
@@ -14,7 +14,7 @@
    :class: singlecol
 
 Overview
----
+--------
 
 {+sync+} is a {+app+} feature that synchronizes data on client devices with 
 a data source linked to your {+backend+} back end. {+sync+} handles network 
@@ -24,7 +24,7 @@ The :term:`{+service-short+} data model` makes it easy to manage a consistent
 schema of objects in your database and across all client platforms.
 
 Why Use {+sync+}?
----
+-------------------
 Most mobile apps are data-dependent. Eventually, many apps
 need to share that data with other apps and the outside world. {+sync+} is 
 an out-of-the-box that meets this need.
@@ -73,7 +73,7 @@ and across all client platforms.
 .. _offline-first-overview:
 
 Offline-First
-~~~
+~~~~~~~~~~~~~
 
 {+sync+} is built on the assumption that connectivity will
 drop. We call this mentality **offline-first**. After you
@@ -101,7 +101,7 @@ includes :ref:`automatic conflict resolution <conflict-resolution-overview>`.
 .. _live-objects-overview:
 
 Live Objects
-~~~
+~~~~~~~~~~~~
 {+service-short+}'s :term:`Live objects <live objects>` means that you can update data in 
 one place (a mobile app, for example), and that data is updated everywhere. 
 Live objects always reflect the latest data stored in {+client-database+}. 
@@ -112,7 +112,7 @@ easy to update the application UI to react to local and remote changes.
 .. _conflict-resolution-overview:
 
 Conflict Resolution
-~~~
+~~~~~~~~~~~~~~~~~~~
 
 {+service+}'s :term:`sync conflict resolution engine <sync protocol>` is
 deterministic. Changes received out-of-order eventually converge on the
@@ -142,7 +142,7 @@ example, insertions into lists.
    :ref:`Conflict Resolution <conflict-resolution>`
 
 Using {+sync+} in Your App
----
+-----------------------------------
 
 To sync data across devices, you :ref:`enable {+sync+} <enable-sync>` for your
 {+app+} and then use the sync-related methods and properties in the SDKs.
@@ -153,7 +153,7 @@ To sync data across devices, you :ref:`enable {+sync+} <enable-sync>` for your
    with clients for common platforms that {+service-short+} supports.
 
 Before You Start
----
+----------------
 
 - If you don't already have one, `sign up for a free MongoDB Atlas account
   <https://www.mongodb.com/cloud/atlas/register?tck=docs_realm>`__.
@@ -168,10 +168,10 @@ Before You Start
   <create-a-realm-app>` linked to your Atlas cluster.
 
 Configure Your Data Model
----
+-------------------------
 
 Choose an SDK
-~~~
+~~~~~~~~~~~~~
 
 The :ref:`{+client-sdks+} <realm-sdks>`, available for multiple languages and
 platforms, include everything you need to work with synced Realms in your client
@@ -197,7 +197,7 @@ check out the SDK docs:
    GraphQL APIs.
 
 Define Data Model
-~~~
+~~~~~~~~~~~~~~~~~
 
 A synced realm uses object models that you define to determine the type of
 objects in the realm. Additionally, Sync requires a server-side document schema
@@ -247,13 +247,13 @@ type:
   or struct in your preferred programming language.
 
 Define Data Access Patterns
----
+---------------------------
 
 Once you have decided on your app's data model, you can define a data access 
 pattern and access rules for your app's data. 
 
 Choose a Sync Mode
-~~~
+~~~~~~~~~~~~~~~~~~
 
 When you use :ref:`Partition-Based Sync <partition-based-sync>`, you must:
 
@@ -274,7 +274,7 @@ which objects to sync. Then, {+service-short+} applies rules and default roles t
 determine whether users can read or write the objects that match the query.
 
 Define Data Access Rules
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Data access rules determine which data to sync, as well as each user's 
 ability to read and write data. Rules are closely linked to your app's data 
@@ -304,21 +304,21 @@ access, but you can restrict a session role to a specific collection by
 specifying the collection name.
 
 Configure and Enable Sync
----
+-------------------------
 
 Once you have defined a data model and corresponding access rules, you can
 enable sync for your app. You can also optimize sync data usage by
 specifying a client maximum offline time.
 
 Enable Sync
-~~~
+~~~~~~~~~~~
 
 When you enable Sync, you specify how clients can access data in your
 {+app+}. For a walkthrough of how to turn on sync, see :ref:`Enable {+service-short+} 
 Sync <enable-sync>`.
 
 Optimize Sync Data Usage
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service-short+} syncs all data from collections with a defined
 :ref:`schema <schemas>` in your :term:`Atlas cluster <linked cluster>`.
@@ -335,7 +335,7 @@ our guide to :ref:`Optimize {+sync+} Atlas Usage
 .. _realm-sync-best-practices:
 
 Best Practices
----
+--------------
 
 In addition to the information in this guide, we recommend following these best
 practices to ensure optimal performance and a smooth user experience:
@@ -381,7 +381,7 @@ Production Load Testing
   deployment with :ref:`sync-production-load-testing`.
 
 Summary
----
+-------
 
 - {+sync+} is the part of {+realm+} that handles data synchronization between 
   a {+client-database+} on one or more clients and MongoDB Atlas.

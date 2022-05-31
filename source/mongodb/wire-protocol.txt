@@ -1,8 +1,8 @@
 .. _wire-protocol:
 
-===
+=============
 Wire Protocol
-===
+=============
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Wire Protocol
    :class: singlecol
 
 Overview
----
+--------
 
 {+service+} natively implements a subset of the MongoDB wire protocol,
 which allows you to connect to a {+app+} through one of its :ref:`linked
@@ -34,7 +34,7 @@ connect to {+service+}.
 .. include:: /includes/data-lake-wire-protocol-note.rst
 
 Compatible Clients
----
+------------------
 
 You can use the following tools and drivers to communicate with {+backend+}
 using a connection string:
@@ -56,7 +56,7 @@ using a connection string:
 .. _connection-strings:
 
 Connection Strings
----
+------------------
 
 To connect to {+backend+} over the wire protocol, you must construct a
 :manual:`MongoDB connection string </reference/connection-string>` that
@@ -78,7 +78,7 @@ application-specific ``appName`` query parameter.
 .. _wire-protocol-credentials:
 
 Credentials
-~~~
+~~~~~~~~~~~
 
 All {+service+} operations that you issue over the wire protocol run in
 the context of a specific application user that you specify in the
@@ -175,7 +175,7 @@ authentication provider with which the user registered:
 .. _wire-protocol-parameters:
 
 Parameters
-~~~
+~~~~~~~~~~
 
 {+service+} requires specific connection string options that identify
 the application you want to connect to and the authentication provider
@@ -231,7 +231,7 @@ associated with the :ref:`credentials
 
 
 Enable Wire Protocol Connections
----
+--------------------------------
 
 You must enable wire protocol connections for a linked clusters before
 you can connect to a {+service-short+} app with a connection string.
@@ -251,10 +251,10 @@ you can connect to a {+service-short+} app with a connection string.
 .. _wire-protocol-connect:
 
 Connect Over the Wire Protocol
----
+------------------------------
 
 Connect to {+service-short+} with a Connection String
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
 To connect to {+backend+} over the wire protocol, pass a
 :wikipedia:`URL-encoded <Percent-encoding>` :ref:`{+service+} connection
@@ -288,7 +288,7 @@ with a regular :manual:`connection string
          mongocxx::client client(uri);
 
 Read and Modify Data
-~~~
+~~~~~~~~~~~~~~~~~~~~
         
 While connected to {+backend+} over the wire protocol you can use
 standard MongoDB CRUD operations. {+service+} applies :ref:`role-based data
@@ -363,7 +363,7 @@ authenticated user specified in the connection string :ref:`credentials
 .. _wire-protocol-call-function:
 
 Call a Function
-~~~
+~~~~~~~~~~~~~~~
         
 You can call functions using the ``callFunction`` database command.
         
@@ -452,7 +452,7 @@ You can call functions using the ``callFunction`` database command.
          });
 
 Call a Service Action [DEPRECATED]
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
 You can call service actions using the ``callServiceFunction`` database
 command.
@@ -586,7 +586,7 @@ command.
          });
 
 Get the Logged In User's Data
-~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
 You can get the :ref:`user object <user-objects>` for the authenticated
 user using the ``userProfile`` database command.

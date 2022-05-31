@@ -1,8 +1,8 @@
 .. _convert-webhooks-to-endpoints:
 
-===
+===================================
 Convert Webhooks to HTTPS Endpoints
-===
+===================================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Convert Webhooks to HTTPS Endpoints
    :class: singlecol
 
 Overview
----
+--------
 
 {+service+}'s third-party service webhooks are deprecated in favor of
 custom HTTPS endpoints. HTTPS endpoints are functionally almost
@@ -26,7 +26,7 @@ URLs, you should define an HTTPS endpoint.
 .. _migrate-http-webhooks-to-endpoints:
 
 Automatically Convert Existing HTTP Webhooks
----
+--------------------------------------------
 
 {+service-short+} can automatically convert any existing HTTP service
 webhooks in your app into HTTPS endpoints. This conversion is one-way
@@ -54,7 +54,7 @@ in your application:
    propogate those changes to your new endpoints.
 
 Manually Convert GitHub and Twilio Webhooks
----
+-------------------------------------------
 
 {+service-short+} cannot automatically convert GitHub and Twilio
 webhooks to HTTPS endpoints because they use deprecated client
@@ -64,7 +64,7 @@ services to new HTTPS endpoints.
 .. _migrate-github-webhooks-to-endpoints:
 
 GitHub Webhooks
-~~~
+~~~~~~~~~~~~~~~
 
 To migrate a GitHub webhook to an HTTPS endpoint:
 
@@ -98,7 +98,7 @@ To migrate a GitHub webhook to an HTTPS endpoint:
 .. _migrate-twilio-webhooks-to-endpoints:
 
 Twilio Webhooks
-~~~
+~~~~~~~~~~~~~~~
 
 To migrate a Twilio webhook to an HTTPS endpoint:
 
@@ -149,7 +149,7 @@ To migrate a Twilio webhook to an HTTPS endpoint:
       }
 
 Update Callback URLs in Client Apps & Services
----
+----------------------------------------------
 
 HTTPS endpoints use a different URL scheme than service webhooks. You
 should update any apps or services that call your webhooks to instead
@@ -190,7 +190,7 @@ To migrate to the converted HTTPS endpoint URLs:
 .. _differences-webhooks-converted-endpoints: 
 
 Differences between Webhooks and Their Converted Endpoints
----
+----------------------------------------------------------
 
 If you configured your converted HTTPS endpoint to use :ref:`Respond with Result <configure-endpoints>`
 and the webhook function it's based on returns a value but does not invoke ``response.setBody()``,

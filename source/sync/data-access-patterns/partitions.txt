@@ -1,9 +1,9 @@
 .. _partition-based-sync:
 .. _sync-partitions:
 
-===
+==========
 Partitions
-===
+==========
 
 .. default-domain:: mongodb
 
@@ -14,7 +14,7 @@ Partitions
    :class: singlecol
 
 Overview
----
+--------
 
 **Partitions** are the abstraction between the {+frontend-schema+} and the 
 MongoDB document model. Each model operates under different constraints 
@@ -53,12 +53,12 @@ At a high level:
    each shape's ``color``: red, green, or blue.
 
 Key Terms
----
+---------
 
 .. _partition-key:
 
 Partition Key
-~~~
+~~~~~~~~~~~~~
 
 A **partition key** is a named field that you specify when you 
 :ref:`configure {+sync+} <enable-sync>`. {+sync+} uses this key to 
@@ -158,7 +158,7 @@ into new realms.
 .. _partition-value:
 
 Partition Value
-~~~
+~~~~~~~~~~~~~~~
 
 A **partition value** is a value of the partition key field for a given 
 document. Documents with the same partition value belong to the same 
@@ -182,7 +182,7 @@ the change as two operations:
 .. _partition-strategies:
 
 Partition Strategy
----
+------------------
 
 A **partition strategy** is a key/value pattern to divide objects into 
 partitions. Different use cases call for different partition strategies. 
@@ -224,7 +224,7 @@ When developing a partition strategy, consider:
 .. _partition-strategy-firehose:
 
 Firehose Strategy
-~~~
+~~~~~~~~~~~~~~~~~
 
 A firehose partition strategy groups all documents into a single partition. 
 With this structure, every user syncs all of your app's data to their device. 
@@ -296,7 +296,7 @@ across all clients could use the partition value ``"MyPartitionValue"``.
 .. _partition-strategy-user:
 
 User Strategy
-~~~
+~~~~~~~~~~~~~
 
 A user partition strategy groups private documents for each user. These 
 documents go into a partition specific to that user. This works when each 
@@ -368,7 +368,7 @@ identifies the owner makes a natural partition key.
 .. _partition-strategy-team:
 
 Team Strategy
-~~~
+~~~~~~~~~~~~~
 
 A team partition strategy groups private documents shared by a team of users. 
 A team might include a store location's employees or a band's members. Each 
@@ -456,7 +456,7 @@ access and ownership of the team's documents.
 .. _partition-strategy-channel:
 
 Channel Strategy
-~~~
+~~~~~~~~~~~~~~~~
 
 A channel partition strategy groups documents for a common topic or domain. 
 Each topic or domain has its own partition. Users can choose to access or 
@@ -544,7 +544,7 @@ in a public list.
 .. _partition-strategy-region:
 
 Region Strategy
-~~~
+~~~~~~~~~~~~~~~
 
 A region partition strategy groups documents related to a location or region. 
 Each partition contains documents specific to those areas.
@@ -602,7 +602,7 @@ Each partition contains documents specific to those areas.
 .. _partition-strategy-bucket:
 
 Bucket Strategy
-~~~
+~~~~~~~~~~~~~~~
 
 A bucket partition strategy groups documents by range. When documents range 
 along a dimension, a partition contains a subrange. Consider time-based 

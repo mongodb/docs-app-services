@@ -1,8 +1,8 @@
 .. _conflict-resolution:
 
-===
+===================
 Conflict Resolution
-===
+===================
 
 .. default-domain:: mongodb
 
@@ -13,7 +13,7 @@ Conflict Resolution
    :class: singlecol
 
 Overview
----
+--------
 
 Conflicts arise when two or more users make changes to the same piece of
 data independently. This can happen due to latency between device and
@@ -34,7 +34,7 @@ meet.
 .. _rules-of-conflict-resolution:
 
 Rules of Conflict Resolution
----
+----------------------------
 
 At a very high level, the rules are as follows:
 
@@ -72,10 +72,10 @@ Primary keys designate object identity.
 .. _conflict-resolution-special-considerations:
 
 Special Considerations
----
+----------------------
 
 Counters
-~~~
+~~~~~~~~
 
 Using integers for counting is a special case. The way that most
 programming languages would implement an increment operation (like ``v
@@ -92,7 +92,7 @@ update the entire value or edit it in a way that conveys more meaning,
 allowing you to get more precise control of the conflict resolution.
 
 Strings
-~~~
+~~~~~~~
 
 {+service-short+} interprets the value of a string as a whole and does not merge
 conflicts on a per-character basis. For example, this means that if a character 
@@ -102,7 +102,7 @@ this as a replacement of the entire value of the string.
 .. _custom-conflict-resolution:
 
 Custom Conflict Resolution
----
+--------------------------
 
 Generally speaking, the conflict resolution of {+service-short+} should
 work for most purposes, and you should not need to customize it. That
@@ -114,7 +114,7 @@ write wins, last write wins, or any other kind of resolution you can
 think of.
 
 Summary
----
+-------
 
 - {+service+} Sync implements a conflict resolution system to allow multiple offline writers to write simultaneously and still eventually converge on the same result.
 - The conflict resolution system follows four rules: deletes always win, the last update wins, inserts in lists are ordered by time, and primary keys designate object identity.

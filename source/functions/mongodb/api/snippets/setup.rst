@@ -1,5 +1,5 @@
 Snippet Setup
-~~~
+~~~~~~~~~~~~~
 
 
 To use a code snippet in a :doc:`function </functions>`, you
