@@ -1,4 +1,4 @@
-To enable Custom User Data, follow these steps:
+To enable Custom User Data in the {+ui+}, follow these steps:
 
 1. Click :guilabel:`App Users` in the left hand panel.
 
