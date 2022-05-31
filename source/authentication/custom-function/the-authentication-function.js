@@ -5,7 +5,7 @@ exports = async function (payload) {
 
   // 2. Create a new user or log in an existing user in the external
   //    authentication service.
-  
+
   // You can use a client library from npm
   const auth = require("fake-auth-service");
   const user = await auth.login({ username, password });
@@ -16,13 +16,13 @@ exports = async function (payload) {
     headers: {
       Authorization: ["Basic bmlja0BleGFtcGxlLmNvbTpQYTU1dzByZA=="],
     },
-    body: JSON.stringify({ username, password })
+    body: JSON.stringify({ username, password }),
   });
 
   // 3. Return a unique identifier for the user. Typically this is the
   //    user's ID in the external authentication system or the _id of a
   //    stored MongoDB document that describes them.
   //
-  //    !!! This is NOT the user's internal Realm account ID. !!!
-  return user.id
+  //    !!! This is NOT the user's internal {+service-short+} account ID. !!!
+  return user.id;
 };

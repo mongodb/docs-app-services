@@ -618,10 +618,10 @@ Firebase JWT Authentication
 ---------------------------
 
 You can use the `Firebase Authentication <https://firebase.google.com/docs/auth>`__
-service to authenticate users into Realm apps as well as Firebase apps. 
-Use Realm Custom JWT authentication to access Realm services with Firebase credentials. 
+service to authenticate users into App Services apps as well as Firebase apps. 
+Use {+service-short+} Custom JWT authentication to access {+service-short+} services with Firebase credentials. 
 
-To set up Firebase Authentication as your Custom JWT provider in Realm: 
+To set up Firebase Authentication as your Custom JWT provider in {+service-short+}: 
 
 .. procedure:: 
 
@@ -630,7 +630,7 @@ To set up Firebase Authentication as your Custom JWT provider in Realm:
       Follow `the official docs <https://firebase.google.com/docs/auth>`__ to set up
       Firebase Authentication for your project.
 
-   .. step::  Configure Realm JWT Authentication
+   .. step::  Configure {+service-short+} JWT Authentication
 
       .. tabs-realm-admin-interfaces::
 
@@ -647,9 +647,9 @@ To set up Firebase Authentication as your Custom JWT provider in Realm:
             
             #. While you don't *need* to add any data for :guilabel:`Metadata Fields`, 
                it is useful for getting basic user information from the Firebase JWT 
-               into your :ref:`Realm User object <user-objects>`. 
+               into your :ref:`{+service-short+} User object <user-objects>`. 
 
-               The following is a basic mapping from the Firebase JWT to a Realm user.
+               The following is a basic mapping from the Firebase JWT to a {+service-short+} user.
                You can add these to the table in the UI. Modify as you wish following
                the :ref:`Metadata Fields documentation <custom-jwt-authentication-configuration-metadata-fields>`.
 
@@ -734,7 +734,7 @@ To set up Firebase Authentication as your Custom JWT provider in Realm:
                             "name": "user_id",
                             "field_name": "userId"
                         }
-                        ...any other fields you want to map into Realm
+                        ...any other fields you want to map into {+service-short+}
                     ]
                   },
                   ...rest of config
@@ -743,18 +743,18 @@ To set up Firebase Authentication as your Custom JWT provider in Realm:
       For more details, refer to the :ref:`JWT authentication configuration documentation 
       <config-custom-jwt>`.
 
-   .. step::  Log In to Realm Using Firebase JWT with Client SDK
+   .. step::  Log In to {+service-short+} Using Firebase JWT with Client SDK
 
-      Now that you've configured Realm to work with Firebase JWTs, you can
-      log users in using Firebase and Realm client SDKs in languages supported by both. 
+      Now that you've configured {+service-short+} to work with Firebase JWTs, you can
+      log users in using Firebase and {+service-short+} client SDKs in languages supported by both. 
 
       #. Log the user into Firebase. See the relevant `Firebase SDK documentation 
          <https://firebase.google.com/docs/auth>`__. 
       #. Retrieve the user's Firebase JWT. See the documentation on 
          `using a client Firebase SDK to get  a user's JWT
          <https://firebase.google.com/docs/auth/admin/verify-id-tokens#retrieve_id_tokens_on_clients>`__. 
-      #. Pass the Firebase JWT to a a Realm SDK Custom JWT authentication method. 
-         For more information how to use Realm SDKs to perform Custom JWT authentication, 
+      #. Pass the Firebase JWT to a a {+client-sdk+} Custom JWT authentication method. 
+         For more information how to use {+client-sdks+} to perform Custom JWT authentication, 
          refer to :ref:`Custom JWT Examples <custom-jwt-authentication-examples>`. 
 
 .. _custom-jwt-authentication-examples:
@@ -763,7 +763,7 @@ Examples
 --------
 
 For code examples that demonstrate how to register and log in using
-Custom JWT authentication, see the documentation for the Realm SDKs:
+Custom JWT authentication, see the documentation for the {+client-sdks+}:
 
 .. tabs-realm-sdks::
 

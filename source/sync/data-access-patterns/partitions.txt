@@ -16,21 +16,21 @@ Partitions
 Overview
 --------
 
-**Partitions** are the abstraction between the Realm object model and the 
+**Partitions** are the abstraction between the {+frontend-schema+} and the 
 MongoDB document model. Each model operates under different constraints 
 and assumptions.
 
 A MongoDB Atlas cluster consists of several remote servers. These servers 
 provide the storage for your synced data. The Atlas cluster stores 
-documents in collections. Each MongoDB collection maps to a different Realm 
-object type. Each document in a collection represents a specific Realm object.
+documents in collections. Each MongoDB collection maps to a different {+service-short+} 
+object type. Each document in a collection represents a specific {+service-short+} object.
 
 A synced realm is a local file on a device. A synced realm may contain 
 some or all the objects relevant to the end user. A client app 
 may use more than one synced realm to access all the objects that the 
 application needs.
 
-Partitions link objects in Realm Database to documents in MongoDB. When 
+Partitions link objects in {+client-database+} to documents in MongoDB. When 
 you initialize a synced realm file, one of its parameters is a partition 
 value. Your client app creates objects in the synced realm. When those 
 objects sync, the partition value becomes a field in the MongoDB documents. 
@@ -41,7 +41,7 @@ At a high level:
 
 - A partition maps to a subset of the documents in a synced cluster. 
 - All documents in a partition have the same read/write permissions for a given user. 
-- Realm maps each partition to an individual synced ``.realm`` file. 
+- {+service-short+} maps each partition to an individual synced ``.realm`` file. 
 - Each object in a synced realm has a corresponding document in the partition.
 
 .. figure:: /images/partitioning.png
@@ -61,7 +61,7 @@ Partition Key
 ~~~~~~~~~~~~~
 
 A **partition key** is a named field that you specify when you 
-:ref:`configure Realm Sync <enable-sync>`. Realm Sync uses this key to 
+:ref:`configure {+sync+} <enable-sync>`. {+sync+} uses this key to 
 determine which partition contains a given document.
 
 Depending on your data model and the complexity of your app, your partition 
@@ -76,14 +76,14 @@ key could be either:
   natural partition key.
 
 You can make the partition key required or optional on your objects. 
-Realm maps any object that does not include a partition key to a default 
+{+service-short+} maps any object that does not include a partition key to a default 
 partition - *null partition*.
 
 Consider the following when choosing a partition key:
 
 - Partition keys must be one of these types: ``String``, ``ObjectID``, 
   ``Long``, or ``UUID``.
-- Realm clients should never modify the partition value directly. You 
+- {+service-short+} clients should never modify the partition value directly. You 
   cannot use any field that clients can modify as a partition key.
 - Partition keys use the same field name in every synced document. The 
   partition key should not collide with any field name in any object's model.
@@ -167,7 +167,7 @@ access permissions.
 
 A partition's value is the identifier for its corresponding synced realm. 
 You specify the partition's value when you open it as a synced realm in 
-the client. If you change a partition value in Atlas, Realm interprets 
+the client. If you change a partition value in Atlas, {+service-short+} interprets 
 the change as two operations:
 
 - A delete from the old partition.
@@ -241,7 +241,7 @@ for basic applications or small public data sets.
 
 
 One way to create a firehose is to set the partition key as an optional 
-field. Don't include a value for this field in any document. Realm maps 
+field. Don't include a value for this field in any document. {+service-short+} maps 
 any document that doesn't include a partition value to the **null partition**.
 
 You can also set a **static partition value**. This is when the partition 

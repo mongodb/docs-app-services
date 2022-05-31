@@ -1,6 +1,6 @@
 .. note::
 
-   Realm does not automatically delete any data in your :term:`linked {+atlas+}
+   {+service-short+} does not automatically delete any data in your :term:`linked {+atlas+}
    cluster <linked cluster>` that you have associated with a deleted user. 
    For example, if your application allows users to create data that linked
    to a user by including their ID in an ``owner_id`` field, deleting the 

@@ -21,8 +21,8 @@ Overview
 What are Permissions?
 ~~~~~~~~~~~~~~~~~~~~~
 
-A **permission** is a status that Realm assigns to individual users to control what
-they can and cannot do in your app. Realm uses both document-level and
+A **permission** is a status that {+service-short+} assigns to individual users to control what
+they can and cannot do in your app. {+service-short+} uses both document-level and
 field-level permissions:
 
 - Document-level permissions control whether a user can insert, delete, modify,
@@ -42,15 +42,15 @@ MongoDB collection. Each role represents a possible relationship between a user
 and an individual document. A user may play at most one role per document in
 a request.
 
-You define the roles a user can play for the documents in a collection. Realm
+You define the roles a user can play for the documents in a collection. {+service-short+}
 automatically assigns roles to the user at request time. Each role includes an
-Apply When :ref:`expression <expressions>` that determines when Realm should
+Apply When :ref:`expression <expressions>` that determines when {+service-short+} should
 assign the role to a user as well as a set of document-level and field-level
 permissions that apply to the role.
 
-Realm only commits operations that a user is authorized to do based on their
+{+service-short+} only commits operations that a user is authorized to do based on their
 assigned roles. If a role does not have permission to read a document or some of
-its fields, Realm omits the document or fields from the results.
+its fields, {+service-short+} omits the document or fields from the results.
 
 .. example::
 
@@ -177,21 +177,21 @@ data from the perspective of your app's users and what it might mean to them.
         }
       }
 
-How Realm Assigns Roles
+How {+service-short+} Assigns Roles
 -----------------------
 
-Realm dynamically assigns roles for every request. A user may play different
+{+service-short+} dynamically assigns roles for every request. A user may play different
 roles between documents in the same request and their role for a given document
 may differ between requests.
 
-When Realm receives a MongoDB request, it applies :ref:`filters <filters>` to
-the request and then runs the filtered request query. Realm evaluates and
+When {+service-short+} receives a MongoDB request, it applies :ref:`filters <filters>` to
+the request and then runs the filtered request query. {+service-short+} evaluates and
 assigns roles individually for each document that this query matches and
 returns.
 
 .. example::
    
-   This request would cause Realm to evaluate a role for every document in the
+   This request would cause {+service-short+} to evaluate a role for every document in the
    ``restaurants`` collection where the ``city`` field is set to ``"Chicago"``:
    
    .. code-block:: javascript
@@ -204,10 +204,10 @@ returns.
 A role applies to a given document if its Apply When :ref:`expression
 <expressions>` evaluates to ``true`` when run against the document.
 
-- If one or more roles apply to a given document, Realm assigns only the first
+- If one or more roles apply to a given document, {+service-short+} assigns only the first
   matching role based on the order in which the roles are defined.
 
-- If no roles apply to a document, then Realm prevents the user from reading,
+- If no roles apply to a document, then {+service-short+} prevents the user from reading,
   writing, or searching the document in any way.
 
 .. example::

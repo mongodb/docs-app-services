@@ -12,7 +12,7 @@
 20 April 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~
 
-- Introduced ability to accept null values as optional types in Realm Schema.
+- Introduced ability to accept null values as optional types in {+service-short+} Schema.
 - Added ability to download logs from the UI.
 - Added Flexible Sync support for queries using ``BETWEEN`` and the string operators ``BEGINSWITH``, ``ENDSWITH``, ``CONTAINS``.
 - Added Flexible Sync support for queries on arrays of primitives.
@@ -25,7 +25,7 @@
   runtime for those dependencies that make external requests. 
 
 - MongoDB Atlas moved to Let's Encrypt as the new Certificate 
-  Authority for TLS certificates for all Realm services.
+  Authority for TLS certificates for all {+service-short+} services.
 
 .. _backend_20220126:
 

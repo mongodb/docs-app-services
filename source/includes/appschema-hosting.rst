@@ -1,4 +1,4 @@
-Files that you want to :doc:`host on Realm </hosting>` should be
+Files that you want to :doc:`host on {+service-short+} </hosting>` should be
 included in your application's ``/hosting`` directory. Each file will be
 uploaded with the metadata defined in ``metadata.json``.
 
@@ -69,7 +69,7 @@ Metadata Configuration
               | String
             - The name of the metadata attribute. This should be one of
               the :doc:`file metadata attributes
-              </hosting/file-metadata-attributes>` that Realm supports.
+              </hosting/file-metadata-attributes>` that {+service-short+} supports.
 
           * - | ``value``
               | String

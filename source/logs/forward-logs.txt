@@ -17,16 +17,16 @@ Overview
 
 You can configure a log forwarder to automatically store your
 application's server-side logs in a MongoDB collection or send them to
-an external service. Realm can forward logs individually as they're
+an external service. {+service-short+} can forward logs individually as they're
 created or batch logs together to reduce overhead.
 
 A log forwarder consists of the following components:
 
-- An **action** that controls how and where Realm forwards logs.
+- An **action** that controls how and where {+service-short+} forwards logs.
 
-- A **filter** that controls which logs Realm forwards.
+- A **filter** that controls which logs {+service-short+} forwards.
 
-- A **policy** that controls whether Realm batches logs or forwards them individually.
+- A **policy** that controls whether {+service-short+} batches logs or forwards them individually.
 
 Why Should I Configure Log Forwarding?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ Why Should I Configure Log Forwarding?
 Consider setting up a log forwarder if you need to do any of the
 following:
 
-- Store logs for longer than Realm's retention period of {+log-retention-time+}.
+- Store logs for longer than {+service-short+}'s retention period of {+log-retention-time+}.
 
 - Integrate logs into an external logging service
 
@@ -44,7 +44,7 @@ How is Log Forwarding Billed?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each log forward action invocation (on either an individual log or a
-batch) is billed as one :ref:`Realm request <billing-requests>`.
+batch) is billed as one :ref:`{+service-short+} request <billing-requests>`.
 
 .. _set-up-log-forwarder:
 
@@ -82,7 +82,7 @@ Set Up a Log Forwarder
 2. Choose Which Logs to Forward
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Realm can forward all of your app's logs or send only a subset to the
+{+service-short+} can forward all of your app's logs or send only a subset to the
 target collection or service. You control this subset for each log
 forwarder by defining filters for the log type (e.g. functions, sync,
 etc.) and status (i.e. success or error) that invoke the forwarder's
@@ -121,17 +121,17 @@ action.
            "log_statuses": [ "<status>", ... ]
          }
       
-      Realm supports forwarding the following log types:
+      {+service-short+} supports forwarding the following log types:
       
       .. include:: /includes/log-forwarder-types.rst
       
-      Realm supports forwarding the following log statuses:
+      {+service-short+} supports forwarding the following log statuses:
       
       .. include:: /includes/log-forwarder-statuses.rst
 
 .. important::
    
-   Realm only forwards a given log if both its type *and* status are
+   {+service-short+} only forwards a given log if both its type *and* status are
    specified in the filter.
 
    For example, consider a forwarder that filters for ``sync`` logs with
@@ -153,18 +153,18 @@ action.
 3. Configure Log Batching
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Realm can combine multiple logs in to a single batched request to reduce
-overhead. The way that Realm groups logs into batches is controlled by a
+{+service-short+} can combine multiple logs in to a single batched request to reduce
+overhead. The way that {+service-short+} groups logs into batches is controlled by a
 batching policy.
 
-Realm supports the following batching policies:
+{+service-short+} supports the following batching policies:
 
-- **No Batching:** Realm forwards logs individually as their
+- **No Batching:** {+service-short+} forwards logs individually as their
   corresponding requests occur.
 
 - **Batching:** The forwarder groups documents into a batch as they
   happen. Each batch may include up to 100 log entries. When a batch is
-  full, Realm forwards the entire batch in a single request. Realm
+  full, {+service-short+} forwards the entire batch in a single request. {+service-short+}
   forwards logs at least once a minute regardless of the number of logs
   in the current batch.
 
@@ -251,7 +251,7 @@ service through an API, SDK, or library.
 
 .. note::
    
-   Depending on your batching policy and log frequency, Realm may call a
+   Depending on your batching policy and log frequency, {+service-short+} may call a
    log forwarding function with an array of up to 100 log objects.
 
 The function should have the same signature as the following example:

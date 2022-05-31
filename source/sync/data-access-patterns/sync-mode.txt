@@ -36,7 +36,7 @@ Those documents form a **partition**.
 In Partition-Based Sync, you define a :ref:`partition key <partition-key>` 
 whose value determines whether the user can read or write a document. 
 {+service+} :ref:`evaluates a set of rules <partition-based-rules-and-permissions>` 
-to determine whether users can read or write to a given partition. Realm 
+to determine whether users can read or write to a given partition. {+service-short+} 
 directly maps a partition to individual synced ``.realm`` files. Each 
 object in a synced realm has a corresponding document in the partition.
 
@@ -66,7 +66,7 @@ Choose Partition-Based Sync when:
    Customers, meanwhile, could have read-only access to store inventory.
 
 In the client, you pass a value for the partition key when opening a synced 
-realm. Realm then syncs objects whose partition key value matches the 
+realm. {+service-short+} then syncs objects whose partition key value matches the 
 value passed in from the client application.
 
 .. example::
@@ -92,7 +92,7 @@ value passed in from the client application.
         },
       };
       try {
-        const realm = await Realm.open(config);
+        const realm = await {+service-short+}.open(config);
         realm.close();
       } catch (err) {
         console.error("failed to open realm", err.message);
@@ -117,7 +117,7 @@ In Flexible Sync, you define a set of :ref:`queryable fields
 You can then subscribe to queries on those fields from the client 
 application. When a client starts a Sync session, {+service-short+} 
 evaluates :ref:`rules <flexible-sync-rules-and-permissions>` to determine 
-which documents in the query the user can access. Realm maps the documents 
+which documents in the query the user can access. {+service-short+} maps the documents 
 that a user can access to a synced ``.realm`` file. Each object in a synced 
 realm gets translated to a corresponding document in {+atlas+}.
 
@@ -199,7 +199,7 @@ Choose Flexible Sync when:
    such as 30 days.
 
 In the client, you subscribe to a set of queries to determine the data 
-to sync. Realm then syncs objects that match the query, where the 
+to sync. {+service-short+} then syncs objects that match the query, where the 
 logged-in user has permission to read or read and write the data.
 
 .. example::

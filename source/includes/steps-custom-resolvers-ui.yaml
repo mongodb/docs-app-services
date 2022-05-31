@@ -3,10 +3,10 @@ ref: create-a-new-custom-resolver
 content: |
   In the {+ui+}, click :guilabel:`GraphQL` in the navigation sidebar and then
   select the :guilabel:`Custom Resolvers` tab.
-  
+
   Click the :guilabel:`Add a Custom Resolver` button to open the configuration
   screen for a new custom resolver.
-  
+
   .. figure:: /images/graphql-add-a-custom-resolver.png
      :alt: The custom resolvers screen in the {+ui+}
      :width: 750px
@@ -15,27 +15,27 @@ title: Define the Resolver Field Name
 ref: define-the-resolver-field-name
 content: |
   Specify a descriptive name for the resolver in the :guilabel:`GraphQL Field
-  Name` input. Realm exposes the custom resolver in its parent type using this
+  Name` input. {+service-short+} exposes the custom resolver in its parent type using this
   name, so the name should describe what the resolver does in a way that is
   useful to developers who work with the GraphQL API.
-  
+
   .. figure:: /images/custom-resolver-graphql-field-name.png
      :alt: The GraphQL Field Name input in the {+ui+}
 ---
 title: Define the Parent Type
 ref: define-the-parent-type
 content: |
-  Realm exposes every custom resolver as a field on a parent type. The parent
+  {+service-short+} exposes every custom resolver as a field on a parent type. The parent
   type can be a root-level :ref:`query <graphql-query-resolvers>`,
   :ref:`mutation <graphql-mutation-resolvers>`, or a :ref:`generated document
   type <graphql-document-types>`.
-  
+
   In the :guilabel:`Parent Type` dropdown, select one of the following options:
-  
+
   .. list-table::
      :header-rows: 1
      :widths: 20 80
-  
+
      * - Option
        - Description
 
@@ -94,18 +94,18 @@ content: |
   mutation. You can use an existing :ref:`generated input type
   <graphql-input-types>` or define a new custom input type specifically for the
   resolver.
-  
-  If you specify an input type, Realm exposes the ``input`` parameter in the
+
+  If you specify an input type, {+service-short+} exposes the ``input`` parameter in the
   custom resolver's generated GraphQL schema definition as an optional parameter
   that accepts the specified input type. If you don't specify an input type, the
   custom resolver does not accept any arguments.
-  
+
   In the :guilabel:`Input Type` dropdown, select one of the following options:
-  
+
   .. list-table::
      :header-rows: 1
      :widths: 20 80
-  
+
      * - Option
        - Description
 
@@ -174,7 +174,7 @@ content: |
                }
 
      * - :guilabel:`Custom Type`
-       - Realm generates a new input type specifically for the resolver based on
+       - {+service-short+} generates a new input type specifically for the resolver based on
          a :ref:`schema <schemas>` that you define. The schema must be an
          ``object`` that contains at least one property and a ``title`` field
          that defines a unique name for the generated input type.
@@ -204,16 +204,16 @@ content: |
   All GraphQL resolvers must return a payload that conforms to a specific type
   in the schema. For a custom resolver, you can use an existing :ref:`generated
   document type <graphql-document-types>`, define a new custom payload type
-  specifically for the resolver, or use a default payload. Realm includes the
+  specifically for the resolver, or use a default payload. {+service-short+} includes the
   specified payload type in the custom resolver's generated GraphQL schema
   definition.
-  
+
   In the :guilabel:`Payload Type` dropdown, select one of the following options:
-  
+
   .. list-table::
      :header-rows: 1
      :widths: 20 80
-  
+
      * - Option
        - Description
 
@@ -300,7 +300,7 @@ content: |
                }
 
      * - :guilabel:`Custom Type`
-       - Realm generates a new payload type specifically for the resolver based
+       - {+service-short+} generates a new payload type specifically for the resolver based
          on a :ref:`schema <schemas>` that you define. The schema must be an
          ``object`` that contains at least one property and a ``title`` field
          that defines a unique name for the generated input type.
@@ -330,14 +330,14 @@ content: |
   When a user calls a custom resolver {+backend-short+} executes the resolver
   function and returns the result, which must conform to the resolver's
   :guilabel:`Payload Type`.
-  
-  Realm passes the function any input data from the operation, if applicable. If
+
+  {+service-short+} passes the function any input data from the operation, if applicable. If
   the resolver is a computed property on a document type, {+backend-short+}
   passes the function the specific document that the resolver was called on.
-  
+
   A custom resolver function has one of two possible signatures, depending on
   whether or not it accepts an input:
-  
+
   .. tabs::
      
      .. tab:: Input
@@ -375,10 +375,10 @@ content: |
                "someValue": "abc123",
              };
            }
-  
+
   To define the resolver function, click the :guilabel:`Function` dropdown
   and either select an existing function or create a new one.
-  
+
   .. figure:: /images/custom-resolver-function.png
      :alt: A custom resolver configured to use the `myCustomResolver` function
 ---
@@ -388,4 +388,3 @@ content: |
   Once you have configured the resolver, click :guilabel:`Save` and then
   :doc:`deploy </manage-apps/deploy>` your application. Once deployed, you can call the
   custom resolver through the GraphQL API.
-...
