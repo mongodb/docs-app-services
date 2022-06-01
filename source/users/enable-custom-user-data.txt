@@ -49,7 +49,7 @@ documents, such as storing the time of their most recent login in the
 .. important:: Store One Document Per User
 
    Documents that contain user data must include the user's ID in a
-   :term:`specific field <user ID field>`. If multiple documents specify
+   specific field <user ID field>. If multiple documents specify
    the same user's ID, {+service+} only exposes the data from the
    document that was inserted first.
 
@@ -59,18 +59,18 @@ Configuration
 -------------
 
 {+service+} stores MongoDB documents that correspond to custom user data
-in a :term:`linked MongoDB Atlas cluster <linked cluster>`. When you
+in a linked MongoDB Atlas cluster <linked cluster>. When you
 configure custom user data for your application, you specify:
 
-- the :term:`custom user data cluster`
+- the custom user data cluster
 
-- the :term:`custom user data database`
+- the custom user data database
 
-- the :term:`custom user data collection` in which custom
+- the custom user data collection in which custom
   user data documents are stored
 
-- the :term:`user ID field` used to map custom user data documents
-  to users (via :term:`user ID`)
+- the user ID field used to map custom user data documents
+  to users (via user ID)
 
 .. _custom-user-data-permissions:
 
@@ -86,13 +86,13 @@ needs of your application, consider using one of the following permission
 models to restrict read and write access to privileged users only: 
 
 - Make your custom user data readable and writable by only the user
-  whose ID matches the :term:`user ID field` of each custom user data
+  whose ID matches the user ID field of each custom user data
   document. In this permissioning model, the user writes custom user
   data to a :ref:`MongoDB data source <data-sources>` either directly to
   or through :ref:`Sync <sync>`.
 
 - Make your custom user data readable and writable by only a
-  :term:`system user <system user>` in a :term:`system function`. Create
+  system user <system user> in a system function. Create
   a system function that handles edits to custom user data for a user
   using the ``user.id`` value provided by the :ref:`function context
   <context-user>`. In this permissioning model, the user writes custom
