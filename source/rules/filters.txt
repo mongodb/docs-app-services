@@ -22,7 +22,7 @@ What is a Filter?
 
 A **filter** modifies an incoming MongoDB query to return only a subset of the
 results matched by the query. Filters add additional query parameters and omit
-fields from query results *before* Realm runs the query.
+fields from query results *before* {+service-short+} runs the query.
 
 Every filter has three components:
 
@@ -30,7 +30,7 @@ Every filter has three components:
   the filter applies to an incoming request. You can use variables like
   :json-expansion:`%%user` and :json-expansion:`%%request` in this expression.
   However, you cannot use MongoDB variables like :json-expansion:`%%root`
-  because Realm applies filters before it reads any data.
+  because {+service-short+} applies filters before it reads any data.
 
 - An optional query document, which uses standard MongoDB query
   syntax and merges with the existing query of any request the filter applies
@@ -105,19 +105,19 @@ Consider using filters if you want a centralized system to:
 
 .. _filter-enforcement:
 
-How Realm Applies Filters
--------------------------
+How {+service-short+} Applies Filters
+-------------------------------------
 
-Realm evaluates and applies filters for every MongoDB request where rules apply,
+{+service-short+} evaluates and applies filters for every MongoDB request where rules apply,
 e.g. an SDK or a function run as a specific user. Multiple filters may apply to
 a single request.
 
 A filter applies to a given request if its Apply When :ref:`expression
 <expressions>` evaluates to ``true`` given that request's context. If a filter
-applies to a request, Realm merges the filter's query or projection into the
+applies to a request, {+service-short+} merges the filter's query or projection into the
 requested operation's existing query and projection.
 
-Realm applies filters to the request *before* it sends the request to MongoDB.
+{+service-short+} applies filters to the request *before* it sends the request to MongoDB.
 
 .. example::
 

@@ -158,7 +158,7 @@ Configuration
           * - | ``enabled``
               | Boolean
             
-            - If ``true``, Realm associates each user with a document
+            - If ``true``, {+service-short+} associates each user with a document
               that contains their data stored in the specified
               collection.
 

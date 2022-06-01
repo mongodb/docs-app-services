@@ -160,7 +160,7 @@ Configuration
      "can_evaluate": <Rule Expression>,
      "disable_arg_logs": <Boolean>,
      "run_as_system": <Boolean>,
-     "run_as_user_id": "<Realm User ID>",
+     "run_as_user_id": "<{+service-short+} User ID>",
      "run_as_user_id_script_source": "<Function Source Code>",
      "respond_result": <Boolean>,
      "options": {

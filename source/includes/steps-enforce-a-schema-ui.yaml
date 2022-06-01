@@ -3,40 +3,40 @@ ref: navigate-to-the-collection-schema-screen
 level: 4
 content: |
   In the {+leftnav+}, click :guilabel:`Schema` beneath :guilabel:`Data
-  Access` to open the schema editor. Realm scans your linked cluster for
+  Access` to open the schema editor. {+service-short+} scans your linked cluster for
   existing collections and lists them on the left side of the schema
   editor.
-  
+
   Find and select your collection from the menu to open the collection
   configuration screen.
 ---
 title: Generate a Schema
 ref: generate-a-schema
 level: 4
-content: |  
+content: |
   If you already have data in your collection, {+service-short+} can
   sample a subset of the documents in the collection and generate a
   schema for you based on the sample. This step is optional, so if you
   already have a schema or prefer to define one manually, skip this
   step.
-  
+
   You can configure the number of documents to sample and use the
   MongoDB query language to limit the sample to specific documents. By
   default, {+service-short+} randomly samples up to 500 documents from
   the entire collection.
 
   To generate a schema from existing data:
-  
+
   1. Click the :guilabel:`Generate Schema` button to open the sample configuration screen.
-  
+
   2. Specify the sample size, up to a maximum of 50,000 documents.
-  
+
   3. Optionally, click :guilabel:`Advanced` and specify a query,
      projection, and/or sort to refine the sample query. Use the query
      and sort filters to sample a specific subset of documents and use
      the projection filter to sample a specific subset of fields from
      each document.
-  
+
   4. Click :guilabel:`Generate` to run the sample query and generate a
      schema. The process may take up to a minute depending on the number
      and contents of the sampled documents.
@@ -53,7 +53,7 @@ content: |
   of each collection schema is an ``object`` schema that represents a document
   in the collection. You can define additional schemas for document fields
   within the root schema's ``properties`` field.
-  
+
   The fields available in a JSON schema object depend on the type of value that
   the schema defines. For a list of supported types and details on how to
   configure them, see :ref:`schema types <schema-types>`.
@@ -181,19 +181,19 @@ level: 4
 content: |
   Once you have saved the collection schema, you can validate that
   existing documents in the collection conform to the schema.
-  
+
   {+service-short+} samples documents for validation as it does for
   automatic schema generation.
 
   To validate the data in a collection:
-  
+
   1. Click the :guilabel:`Run Validation` button to open the validation configuration window.
-  
+
   2. Specify the sample size, up to a maximum of 50,000 documents.
-  
+
   3. Optionally, click :guilabel:`Advanced` and specify a query and/or
      sort to refine the validation to a specific subset of documents.
-  
+
   4. Click :guilabel:`Run Validation` to sample documents from the collection
      and validate each document against the schema.
 
@@ -202,11 +202,11 @@ content: |
   table. Each row of the table represents a specific type of validation
   error for a particular field and indicates the number of documents
   that failed to validate in that way.
-  
+
   For each validation error, you can use the :guilabel:`Actions` menu to
   download the raw documents that failed or copy a MongoDB query that
   finds the failed documents.
-  
+
   .. figure:: /images/schema-validation-errors-table.png
      :alt: The table that displays schema validation errors in the {+ui+}
      :lightbox:

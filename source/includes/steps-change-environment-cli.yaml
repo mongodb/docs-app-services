@@ -4,7 +4,7 @@ content: |
   To change your app environment with {+cli-bin+}, you must log in to MongoDB 
   Cloud using an :atlas:`API key </configure-api-access/#programmatic-api-keys>` 
   scoped to the organization or project that contains the app.
-  
+
   .. code-block:: bash
      
      realm-cli login --api-key="<MongoDB Cloud Public API Key>" --private-api-key="<MongoDB Cloud Private API Key>"
@@ -15,11 +15,11 @@ content: |
   You'll need a local copy of your application's configuration files. To 
   :ref:`pull <realm-cli-pull>` a local copy of the latest version of your 
   app, run the following:
-  
+
   .. code-block:: bash
      
      realm-cli pull --remote="<Your App ID>"
-  
+
   .. tip::
      
      You can also download a copy of your application's configuration files from
@@ -37,8 +37,8 @@ content: |
      :emphasize-lines: 5
 
      {
-       "app_id": "<Realm Application ID>",
-       "name": "<Realm Application Name>",
+       "app_id": "<{+app+} ID>",
+       "name": "<{+app+} Name>",
        "config_version": "<Version Number>",
        "environment": "development",
        "allowed_request_origins": ["<Origin URL>", "..."],
@@ -52,11 +52,11 @@ content: |
   Once you've updated your app's configuration file, :ref:`push <realm-cli-push>` 
   to your remote app. {+cli+} immediately deploys the updated configurations
   on push.
-  
+
   .. code-block:: bash
      
      realm-cli push --remote="<Your App ID>"
-  
+
   .. tip::
      
      If you have :ref:`deployment drafts <deployment-draft>` 

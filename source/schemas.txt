@@ -27,11 +27,11 @@ What is a Schema?
 ~~~~~~~~~~~~~~~~~
 
 A schema is a JSON object that defines the the structure and contents of your
-data. You can use Realm's BSON schemas, which extend the `JSON Schema
+data. You can use {+service-short+}'s BSON schemas, which extend the `JSON Schema
 <https://json-schema.org/>`_ standard, to define your application's data model
 and validate documents whenever they're created, changed, or deleted.
 
-Schemas represent *types* of data rather than specific values. Realm supports
+Schemas represent *types* of data rather than specific values. {+service-short+} supports
 many built-in :ref:`schema types <schema-types>`. These include primitives, like
 strings and numbers, as well as structural types, like objects and arrays, which
 you can combine to create schemas that represent custom *object types*.
@@ -88,13 +88,13 @@ Why Define a Schema?
 ~~~~~~~~~~~~~~~~~~~~
 
 Schemas are the specification for your application's data model. Once you've
-defined a schema, Realm provides you with additional tools and services to work
+defined a schema, {+service-short+} provides you with additional tools and services to work
 with data that conforms to the schema.
 
-Realm uses schemas in many application services:
+{+service-short+} uses schemas in many application services:
 
-- :ref:`Realm Sync <sync>` uses schemas to sync data between realms and MongoDB
-  Atlas. Realm can also generate idiomatic SDK object models for you based on
+- :ref:`{+sync+} <sync>` uses schemas to sync data between realms and MongoDB
+  Atlas. {+service-short+} can also generate idiomatic SDK object models for you based on
   your schemas.
 
 - The :ref:`GraphQL API <graphql-api>` uses schemas to automatically generate a
@@ -103,7 +103,7 @@ Realm uses schemas in many application services:
   schemas.
 
 - :ref:`Data Access Rules <rules>` validate that data conforms to your schema
-  before and after every request. If any document fails validation, Realm
+  before and after every request. If any document fails validation, {+service-short+}
   prevents or rolls back the entire request.
 
 .. _define-a-schema:
@@ -148,7 +148,7 @@ configure the object's properties:
 
 .. _schema-enforcement:
 
-How Realm Enforces Schemas
+How {+service-short+} Enforces Schemas
 --------------------------
 
 {+backend+} validates all write operations (inserts, updates, and deletes) on a
@@ -156,7 +156,7 @@ MongoDB collection against its collection schema. It checks every document
 before and after every request to ensure that all properties conform to the
 schema and that no invalid changes occured.
 
-Realm evaluates the result of all document writes and compares them against the
+{+service-short+} evaluates the result of all document writes and compares them against the
 schema before committing the writes to your cluster. If the result of any write
 operation in a request does not match the schema, {+backend+} returns an error
 to the user without applying any changes in the request.

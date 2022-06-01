@@ -1,7 +1,7 @@
 .. _intro-backend-and-web:
 
 ============================================================
-Introduction to MongoDB Realm for Backend and Web Developers
+Introduction to {+service+} for Backend and Web Developers
 ============================================================
 
 .. default-domain:: mongodb
@@ -12,11 +12,11 @@ Introduction to MongoDB Realm for Backend and Web Developers
    :depth: 2
    :class: singlecol
 
-As a backend developer, you can use {+service+} to rapidly develop cloud-based applications.
-Realm apps can react to changes in your `{+atlas+}
-<https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ data, connect that data to other systems,
-and scale to meet demand. {+service-short+} does this without the need 
-to manage database and server infrastructure.
+As a backend developer, you can use {+service+} to rapidly develop cloud-based
+applications. {+service-short+} apps can react to changes in your `{+atlas+}
+<https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ data,
+connect that data to other systems, and scale to meet demand. {+service-short+}
+does this without the need to manage database and server infrastructure.
 
 As a web developer, you have to deal with lots of overhead when sending 
 data from a server to the browser. This includes things like authentication 
@@ -27,16 +27,16 @@ Selecting the best ones for your project requires deep understanding of the trad
 As a mobile app developer, syncing data across devices poses challenges. 
 You might write a lot of custom conflict resolution code yourself,
 or you might use a platform-specific backend like CloudKit that's not designed 
-for developing cross-platform applications. Realm Sync provides an 
+for developing cross-platform applications. {+sync+} provides an 
 offline-first, cross-platform solution for syncing data between a backend and
-mobile devices. When you combine this with Realm's authentication and data 
+mobile devices. When you combine this with {+service-short+}'s authentication and data 
 validation, you solve a host of common mobile app development issues.
 
 {+backend+} is a serverless application backend that streamlines solving these 
 common challenges. {+backend-short+} provides configurable functions, integrated data access, and security rules.
 With {+backend-short+}, you can focus on building unique features instead of boilerplate backend code.
 
-What Problem Does MongoDB Realm Solve?
+What Problem Does {+service+} Solve?
 --------------------------------------
 
 It takes time, resources, and expertise to build, administer, and maintain
@@ -49,30 +49,28 @@ This frees you to focus on the features that makes your app special, not boilerp
 Serverless:
   - Deploy server-side applications without having to set up and manage server infrastructure. 
     {+service-short+} includes provisioning, deployment, operating systems, web servers, logging, backups, and redundancy.
-  - Run cloud-based :term:`{+service-short+} Functions <{+service-short+}
-    Function>` that can crunch data or interact with Node.js modules.
+  - Run cloud-based {+service-short+} Functions that can crunch data or interact with Node.js modules.
   - Skip writing an authentication API on top of your {+service+} service.
     Authenticated clients can interact with parts of the database based on their permissions.
 
 Dynamic and responsive:
-  - React to data changes in :term:`{+atlas+}`, process data from HTTPS endpoints,
+  - React to data changes in {+atlas+}, process data from HTTPS endpoints,
     or run {+service-short+} Functions on a schedule with 
-    :term:`{+service-short+} Triggers <{+service-short+} Trigger>`.
+    {+service-short+} Triggers.
   - Get up and running quickly for free, then scale according to the demands of your application.
   - Pay for and receive only the exact amount of compute you need at any given time
     with usage-based pricing. Usage under a certain amount per month is always free.
 
 Simply secure:
-  - Let users log in with familiar :term:`authentication providers
-    <authentication provider>` that are built into {+service+}.
+  - Let users log in with familiar authentication providers that are built into {+service+}.
   - Control which users may read and write data on a per-field basis with
     :ref:`role-based permissions <roles>` that you can define declaratively or
     with a function.
   - Enforce data integrity by defining :ref:`validation logic
-    <schemas>` with :term:`{+backend-schema+}`.
+    <schemas>` with {+backend-schema+}.
 
 Synchronized:
-  - Seamlessly sync data across devices with :term:`{+sync+} <{+sync+}>`.
+  - Seamlessly sync data across devices with {+sync+} .
   - Avoid writing complex synchronization logic with the :ref:`Database SDKs <realm-sdks>`.
 
 .. _intro-web-users:
@@ -87,8 +85,10 @@ authentication providers like Facebook and Google. These methods often require a
 complex boilerplate code.
 
 {+backend+} provides built-in user management and authentication methods. These
-features encapsulate complexity and make it easy to integrate third-party authentication
-providers. You can enable authentication providers in your server-side configuration then immediately log in from any client application using a {+backend-short+} SDK.
+features encapsulate complexity and make it easy to integrate third-party
+authentication providers. You can enable authentication providers in your
+server-side configuration then immediately log in from any client application
+using a Realm SDK.
 
 To learn more about authentication in {+backend+}, see :ref:`users-and-authentication`.
 
@@ -103,7 +103,7 @@ It's also important to make sure that any given piece of data is only accessible
 to an authorized user.  For example, you might grant a user access
 to only their own data.
 
-{+backend+} validates data with a {+backend-short+} schema you define in the `JSON schema <https://json-schema.org/>`__ standard.
+{+backend+} validates data with an  {+backend-short+} schema you define in the `JSON schema <https://json-schema.org/>`__ standard.
 A {+backend-short+} schema serves as the source of truth for defining data types in your application.
 {+backend-short+} also uses the schema to map data between your application and a 
 `{+atlas+} <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ collection.
@@ -127,10 +127,10 @@ logic deals with sensitive user data or interacting with external services. Apps
 also need to respond in real time when something happens in the app or in an external service.
 
 {+backend+} lets you define serverless JavaScript functions called {+backend-short+} Functions.
-You can use Realm Functions for the following common backend use cases:
+You can use {+service-short+} Functions for the following common backend use cases:
 
-- Call from client applications with the Realm Web SDK.
-- Execute Realm Functions in response to trigger events, like an update to a document in MongoDB or at a scheduled time.
+- Call from client applications with the {+realm-web+} SDK.
+- Execute {+service-short+} Functions in response to trigger events, like an update to a document in MongoDB or at a scheduled time.
 - HTTPS endpoints that execute a function in response to external applications.
 
 To learn more about defining and using serverless functions, see
@@ -144,7 +144,7 @@ Secure Client-Side Queries
 Developers need efficient, secure data access.
 If the data is on a server, you need an API to access the data and prevent unauthorized access.
 
-The Realm Database SDKs provide a secure MongoDB client to interact with data
+The {+client-database+} SDKs provide a secure MongoDB client to interact with data
 in your :ref:`MongoDB data sources <data-sources>`.
 
 {+backend-short+}'s server-side rules ensures that users only read and modify permitted documents. 
@@ -207,7 +207,7 @@ GraphQL has a couple of primary benefits for web developers:
 The API includes a set of CRUD operations that you can access with a GraphQL client
 or in a HTTP request. You can also create custom resolvers backed by :ref:`functions <intro-web-functions>`.
 
-To learn more about the Realm GraphQL API, see :ref:`graphql-api`.
+To learn more about the {+service-short+} GraphQL API, see :ref:`graphql-api`.
 
 .. _intro-web-mql:
 
@@ -230,32 +230,32 @@ To learn more about the built-in MongoDB service, see :ref:`data-sources`.
 Synchronize Data Across Devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Synchronizing data is a hard problem for mobile app developers. Realm Sync
+Synchronizing data is a hard problem for mobile app developers. {+sync+}
 provides offline-first sync capabilities for your mobile application. 
-Client applications use :ref:`Realm Database <intro-realm-database>` to 
+Client applications use :ref:`{+client-database+} <intro-realm-database>` to 
 persist data to the local device. When the device has a network connection, 
-Sync seamlessly sends the data to the Realm App. The app stores the data 
+Sync seamlessly sends the data to the {+app+}. The app stores the data 
 to a linked :ref:`MongoDB Atlas data source <data-sources>`, and updates 
 the data on other client devices.
 
-Realm Sync provides :ref:`conflict resolution <conflict-resolution>` to 
+{+sync+} provides :ref:`conflict resolution <conflict-resolution>` to 
 handle multiple users updating the same data. When combined with :ref:`user 
 authentication and management <intro-user-authentication>` and :ref:`schema 
-validation and data access <intro-web-schema>`, Realm Sync provides a secure
+validation and data access <intro-web-schema>`, {+sync+} provides a secure
 way for your mobile clients to sync data across devices and with the cloud.
 
-Get Started with MongoDB Realm
+Get Started with {+service+}
 ------------------------------
 
-You can ship your first app built with MongoDB Realm in minutes.
+You can ship your first app built with {+service+} in minutes.
 
 Tutorials
 ~~~~~~~~~
 
 Check out our :doc:`tutorials </tutorials>` to learn more about how to build 
-Realm applications. Tutorials start with git repositories you can clone
+{+service-short+} applications. Tutorials start with git repositories you can clone
 and run, and walk you through code excerpts that are specific to working
-with Realm.
+with {+service-short+}.
 
 To get started with your first web app, follow the :ref:`Task Tracker 
 application tutorial <tutorial-task-tracker-web>`. You can also refer to the 
@@ -268,18 +268,18 @@ Prebuilt Applications
 ~~~~~~~~~~~~~~~~~~~~~
 
 To explore a prebuilt app that you can customize, create a :ref:`template 
-app <template-apps>`. Template applications are working apps that use Realm 
+app <template-apps>`. Template applications are working apps that use {+service-short+} 
 services to do things like:
 
 - Use Sync to synchronize data between mobile clients and the linked 
   MongoDB Atlas collection.
 - Host a Todo web app using the :ref:`GraphQL API <graphql-api>`
-- Host a Todo web app using the :ref:`Realm Web SDK <web-intro>`
+- Host a Todo web app using the :ref:`{+realm-web+} SDK <web-intro>`
 - Manage event-driven :ref:`Database Triggers <database-trigger>` 
   to update views in a separate collection
 
 Template apps are working apps you can run and change to experiment with 
-Realm. These apps are a good choice for developers who prefer to learn by 
+{+service-short+}. These apps are a good choice for developers who prefer to learn by 
 experimentation, versus the more description-heavy tutorials above.
 
 Summary
@@ -287,7 +287,7 @@ Summary
 
 - {+backend+} is a serverless application platform that makes it easy to deploy
   and scale.
-- You can build a {+app+} with custom logic via functions and triggers, 
+- You can build an {+app+} with custom logic via functions and triggers, 
   custom permissions via rules, and authentication via third-party SSO.
 - {+service+}'s built-in :ref:`authentication system <users-and-authentication>` 
   simplifies user data access.

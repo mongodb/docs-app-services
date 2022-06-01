@@ -1,6 +1,6 @@
 // Create a custom jwt credential
 const jwt = await authenticateWithExternalSystem();
-const credentials = Realm.Credentials.jwt(jwt);
+const credentials = {+service-short+}.Credentials.jwt(jwt);
 try {
   const user = await app.logIn(credentials);
   console.log("Successfully logged in!", user.id);

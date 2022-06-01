@@ -21,7 +21,7 @@ operations, even if the documents are in separate databases or
 collections.
 
 You define a relationship for a "source" MongoDB collection and link to
-documents in a "foreign" collection. Realm automatically resolves
+documents in a "foreign" collection. {+service-short+} automatically resolves
 relationships in synced SDK data models and GraphQL operations by
 replacing the values in a source field with the foreign documents that
 they reference.
@@ -30,7 +30,7 @@ they reference.
 
 Relationships are unidirectional and don't enforce uniqueness or other
 foreign key constraints. If you reference a non-existent foreign value in
-a source field, Realm automatically omits the reference from resolved
+a source field, {+service-short+} automatically omits the reference from resolved
 relationships.
 
 .. example::
@@ -94,7 +94,7 @@ relationships.
         }
       }
    
-   With this relationship defined, Realm can return a customer and all
+   With this relationship defined, {+service-short+} can return a customer and all
    of their accounts in the same GraphQL query. Without a relationship,
    the query would return a list of just ``account_id`` values instead
    of the full ``Account`` objects.
@@ -115,7 +115,7 @@ Cardinality
 -----------
 
 A relationship's cardinality determines the number of foreign documents
-that it can reference. Realm supports two relationship cardinalities:
+that it can reference. {+service-short+} supports two relationship cardinalities:
 "to-one" and "to-many".
 
 .. _relationships-to-one:
@@ -141,7 +141,7 @@ To indicate that a relationship has "to-one" cardinality, set
      }
    }
 
-Realm automatically replaces source values with the referenced objects
+{+service-short+} automatically replaces source values with the referenced objects
 or a null value in resolved GraphQL types and SDK models:
 
 .. tabs::
@@ -160,7 +160,7 @@ or a null value in resolved GraphQL types and SDK models:
            name: String!
          }
 
-   .. tab:: Realm SDK
+   .. tab:: {+client-sdk+}
       :tabid: sdk
       
       .. code-block:: json
@@ -202,7 +202,7 @@ To indicate that a relationship has "to-many" cardinality, set
      }
    }
 
-Realm automatically replaces source values with the referenced objects
+{+service-short+} automatically replaces source values with the referenced objects
 or a null value in resolved GraphQL types and SDK models:
 
 .. tabs::
@@ -221,7 +221,7 @@ or a null value in resolved GraphQL types and SDK models:
            pets: [Pet]
          }
 
-   .. tab:: Realm SDK
+   .. tab:: {+client-sdk+}
       :tabid: sdk
       
       .. code-block:: json

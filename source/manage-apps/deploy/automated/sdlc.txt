@@ -24,13 +24,13 @@ like git.
 This guide covers the high level stages common to most CI/CD pipelines and
 describes what you might do in each stage. Further, it includes a list of common
 tasks and actions you might perform within your pipelines to configure and test
-your Realm applications.
+your {+service-short+} applications.
 
 .. tip:: See a real example with GitHub Actions
    
    If you'd like to see an example CI/CD pipeline that manages testing,
    deployment, and other tasks for a real application, check out the article
-   `How to Build CI/CD Pipelines for MongoDB Realm Apps Using GitHub Actions
+   `How to Build CI/CD Pipelines for {+service+} Apps Using GitHub Actions
    <https://www.mongodb.com/developer/how-to/build-ci-cd-pipelines-realm-apps-github-actions/>`__
    on the MongoDB Developer Hub.
 
@@ -44,7 +44,7 @@ Development
 ~~~~~~~~~~~
 
 The Development stage is the first step for creating new features and fixing
-bugs in a Realm app. In this stage you work with your application's
+bugs in an {+app+}. In this stage you work with your application's
 configuration files and source code to implement your desired changes. 
 
 To develop new features for an existing app:
@@ -58,7 +58,7 @@ To develop new features for an existing app:
 2. Develop your application. This could involve updating or adding a client app
    screen, adding a new database trigger, or any other application features. You
    can use :ref:`Development Mode <concept-development-mode>` if you need to
-   make changes to your synced Realm object model.
+   make changes to your synced {+frontend-schema+}.
 
 3. Run automated tests locally to ensure that your code does not introduce any
    new errors. Tests that pass locally do not guarantee that your app is free of
@@ -81,8 +81,8 @@ However, you can use the following high level procedure to set it up:
    data sources with configurations that mirror production as closely as
    possible. For example, you might use an Atlas cluster named ``staging`` that
    otherwise has the same configuration as your ``production`` cluster.
-   Depending on your use case, you may have a consistent Realm app that you
-   reuse for all staging builds or you may create a new Realm app for each
+   Depending on your use case, you may have a consistent {+app+} that you
+   reuse for all staging builds or you may create a new {+app+} for each
    staging build.
 
 2. **Create or use an existing staging build.** You can automatically create a
@@ -134,14 +134,14 @@ the Development stage or use your production App ID in the Production stage.
 .. tip:: Find Your App ID
    
    You might not always be able to hardcode your App ID. You can look up a
-   specific App ID with Realm CLI. For an example, see :ref:`Create a Realm App
+   specific App ID with {+cli+}. For an example, see :ref:`Create an {+app+}
    <sdlc-create-app>`.
 
-Set Up Realm CLI
+Set Up {+cli+}
 ~~~~~~~~~~~~~~~~
 
-:ref:`Realm CLI <realm-cli>` is the easiest way to programmatically create,
-configure, and manage Realm apps. You should :ref:`install <install-realm-cli>`
+:ref:`{+cli+} <realm-cli>` is the easiest way to programmatically create,
+configure, and manage App Services apps. You should :ref:`install <install-realm-cli>`
 and use the latest version in your deployment scripts.
 
 .. code-block:: bash
@@ -173,14 +173,14 @@ in with that profile:
 .. tip::
    
    Make sure to use the ``--profile`` flag in all of your commands, otherwise
-   Realm CLI won't recognize that you're logged in.
+   {+cli+} won't recognize that you're logged in.
 
 .. _sdlc-create-app:
 
-Create a Realm App
+Create an {+app+}
 ~~~~~~~~~~~~~~~~~~
 
-You can use Realm CLI to create new apps to use in development and testing. If
+You can use {+cli+} to create new apps to use in development and testing. If
 your pipeline is in the Development or Staging phase, you should deploy and test
 changes with an app other than your live production app.
 
@@ -213,10 +213,10 @@ To use a new app for your development or staging branch:
 
 .. _sdlc-update-app:
 
-Update a Realm App
+Update an {+app+}
 ~~~~~~~~~~~~~~~~~~
 
-You can use Realm CLI to update an existing app, like a shared staging app or
+You can use {+cli+} to update an existing app, like a shared staging app or
 your production deployment. The app already exists, so you should be able to
 look up its App ID.
 
@@ -226,7 +226,7 @@ To update an existing app, specify its App ID in the ``--remote`` flag:
    
    realm-cli push --remote=$REALM_APP_ID -y
 
-Run Tests Against the Realm App
+Run Tests Against the {+app+}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Your app should include automated unit and integration test suites that you can
@@ -235,7 +235,7 @@ depending upon your app, but you may need to run tests across multiple platforms
 using a variety of simulators.
 
 If you have integration tests, you could checkout previous releases and run your
-integration tests against the current version of the Realm app to ensure
+integration tests against the current version of the {+app+} to ensure
 backwards compatibility.
 
 Clean Up the Job
