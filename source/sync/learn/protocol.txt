@@ -15,9 +15,9 @@
 Overview
 --------
 
-{+service+} uses a protocol to correctly and efficiently sync data changes in
+{+sync+} uses a protocol to correctly and efficiently sync data changes in
 real time across multiple clients that each maintain their own local
-{+service-short+} files. The protocol defines a set of pre-defined :ref:`request
+{+sync-short+} files. The protocol defines a set of pre-defined :ref:`request
 types <sync-request-types>` as well as a :ref:`process <sync-session-process>`
 by which a client, like a Realm SDK, can connect to an
 {+service-short+} application server and sync data.
@@ -26,7 +26,7 @@ by which a client, like a Realm SDK, can connect to an
    
    The a Realm SDKs internally implement and manage the sync protocol,
    so for most applications you don't need to understand the sync protocol to
-   use {+service-short+}. This page covers the protocol at a high level and is
+   use {+sync-short+}. This page covers the protocol at a high level and is
    not an implementation spec.
 
 Key Concepts
@@ -44,7 +44,7 @@ changesets to the {+service-short+} server whenever they perform a write
 operation. The server sends each connected client the changesets for write
 operations executed by other clients.
 
-The {+sync+} server accepts changesets from any connected sync
+The {+service-short+} sync server accepts changesets from any connected sync
 client (including changes in a synced MongoDB cluster) at any time and uses an
 operational transformation algorithm to serialize changes into a linear order
 and resolve conflicting changesets before sending them to connected clients.
@@ -67,21 +67,20 @@ Operational Transformation
 
 An **operational transformation** is a function that, given two changesets,
 produces a third changeset that represents logically applying one of the given
-changesets after the other. {+service-short+} uses operational transformation to
+changesets after the other. {+sync-short+} uses operational transformation to
 resolve conflicts between changesets from different sync clients that apply to
 the same base state.
 
-{+service-short+} is an offline-first local database even when sync is enabled,
-which means that any device may perform offline writes and upload the
-corresponding changesets later when network connectivity is re-established. The
-operational transformation algorithm is designed to gracefully handle changesets
-that arrive "out of order" with respect to the logical server clock such that
-every synced {+service-short+} file converges to the same version of each
-changed object.
+Realm is an offline-first local database even when sync is enabled, which means
+that any device may perform offline writes and upload the corresponding
+changesets later when network connectivity is re-established. The operational
+transformation algorithm is designed to gracefully handle changesets that arrive
+"out of order" with respect to the logical server clock such that every synced
+Realm file converges to the same version of each changed object.
 
 .. tip::
    
-   An operational transformation on {+service-short+} changesets is analogous to
+   An operational transformation on Realm changesets is analogous to
    a :git-scm:`rebase operation <docs/git-rebase>` in Git.
 
 .. _client-file-identifier:
@@ -90,7 +89,7 @@ Client File Identifier
 ~~~~~~~~~~~~~~~~~~~~~~
 
 A **client file identifier** is a value that uniquely identifies a synced client
-{+service-short+} file and its corresponding server file. The server generates a
+Realm file and its corresponding server file. The server generates a
 client file identifier whenever an SDK requests one during its initial sync of a
 Realm file. Each identifier is a 64-bit, non-zero, positive signed
 integer strictly less than 2^63.
@@ -124,7 +123,7 @@ The SDK negotiates a WebSocket connection over HTTP and then establishes a sync
 session by sending :sync-client-message:`BIND` and :sync-client-message:`IDENT`
 requests to the server over the WebSocket connection. 
 Once the session is established, the SDK and server send synced changesets for a given
-{+service-short+} file to each other via :sync-client-message:`UPLOAD` and
+Realm file to each other via :sync-client-message:`UPLOAD` and
 :sync-server-message:`DOWNLOAD` messages. To end the session, the SDK sends an
 :sync-client-message:`UNBIND` request.
 
@@ -171,7 +170,7 @@ The following table describes the request types that a sync client can send to a
      - Starts a new sync session on the server and provides a signed
        authorization token for the current application user. If the client does
        not yet possess a :ref:`client file identifier <client-file-identifier>`
-       for the {+service-short+} file it wants to sync, this also indicates that
+       for the Realm file it wants to sync, this also indicates that
        the server should generate one and send it back to the client.
        
        A client must send a BIND before it can send any other requests.
@@ -180,7 +179,7 @@ The following table describes the request types that a sync client can send to a
      - Provides the :ref:`client file identifier <client-file-identifier>` that
        indicates the following:
        
-       - the {+service-short+} file to sync
+       - the Realm file to sync
        - the client {+realm+}'s current version
        - the client {+realm+}'s most recently synced server version
        
@@ -215,7 +214,7 @@ The following table describes the request types that a sync client can send to a
    * - .. sync-client-message:: STATE_REQUEST
      - Requests that the server send one or more :sync-server-message:`STATE`
        messages, which the client uses to download the current server version of
-       the {+service-short+} file. Clients issue state requests when they
+       the Realm file. Clients issue state requests when they
        asynchronously open a synced {+realm+}.
    
    * - .. sync-client-message:: CLIENT_VERSION_REQUEST
@@ -260,7 +259,7 @@ server can send to a sync client:
        
        The changesets in a DOWNLOAD may not be the exact changesets uploaded by
        other clients. Instead, they may be equivalent changesets output by
-       {+service-short+}'s :ref:`operational transformation
+       {+sync-short+}'s :ref:`operational transformation
        <operational-transformations>` algorithm.
    
    * - .. sync-server-message:: UNBOUND
