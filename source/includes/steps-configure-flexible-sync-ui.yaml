@@ -13,13 +13,13 @@ content: |
 
   Below the :guilabel:`{+sync-short+} types` subheading, select the :guilabel:`Flexible`
   option to enable Flexible {+sync-short+}.
-  
+
   Next, under the :guilabel:`Development Mode` subheading, you can choose to
   toggle :ref:`Development Mode <enable-disable-development-mode>` on/off.
   Enabling ``Development Mode`` allows you to define schemas directly in your
   client application code and is suitable if you are in development and do not
   have application data in Atlas yet.
-  
+
   Finally, you can enable {+sync-short+} for a single :term:`linked cluster` in your
   application. Determine which cluster you want to use and select it from
   the :guilabel:`Select Cluster To {+sync-short+}` dropdown menu.
@@ -38,7 +38,7 @@ ref: select-queryable-fields
 content: |
   When configuring Flexible {+sync-short+}, specify one or more :ref:`queryable
   fields <queryable-fields>` from your {+sync-short+} Schema.
-  
+
   To configure queryable fields for your application, navigate to the
   :guilabel:`Select Queryable Fields` heading. Select up to 10 existing fields
   from your schema to query on. If you want to create a new field(s) to
@@ -58,10 +58,24 @@ content: |
 
   The ``Apply When`` :ref:`expression <expressions>` determines
   if a role applies to a given document. 
-  
+
   .. figure:: /images/flex-sync-define-permissions.png
      :width: 750px
      :alt: Define Permissions Settings
+---
+title: Configure Asymmetric Sync (Optional)
+ref: config-asym-sync
+content: |
+  1. Expand the :guilabel:`Advanced Configuration` section. 
+
+  #. The dropdown under the :guilabel:`Asymmetric Sync` heading shows the tables  
+     that you can select for this Asymmetric Sync. When you select a table, it is 
+     listed immediately below the dropdown. 
+    
+  #. If you have Dev Mode enabled, you can also create a new collection. When you 
+     select the dropdown, you can type in the name of the new collection, and 
+     {+backend-short+} creates the collection automatically.
+
 ---
 title: Turn On Sync
 ref: turn-on-sync
@@ -69,4 +83,3 @@ content: |
   Now that you've configured rules for your synced cluster, all that's left to
   do is turn on {+sync-short+} for client applications. Click :guilabel:`Enable {+sync-short+}`,
   take note of any recommendations that appear and then confirm your choice.
-

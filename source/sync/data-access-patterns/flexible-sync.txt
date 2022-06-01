@@ -163,6 +163,19 @@ roles.
 
    :ref:`flexible-sync-rules-and-permissions`
 
+Configure Asymmetric Sync
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Asymmetric Sync is a sync strategy that is optimized for applications 
+with many client-side writes and no need for conflict resolution. You enable it 
+for one or more collections. If your app could benefit from this faster 
+type of sync, you configure it in the :guilabel:`Advanced Options` section of 
+the Sync page.
+
+.. seealso::
+
+   :ref:`config-asym-sync`
+
 .. _flexible-sync-query-subscription:
 
 Create Queries in Your Client Application
@@ -207,3 +220,34 @@ sync objects with the backend {+app+} and can watch for and react to changes.
 
       To create queries from the .NET Client SDK, see the :ref:`.NET SDK 
       guide to Flexible Sync <dotnet-flexible-sync>`.
+
+Optimize Sync with Asymmetric Sync
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Asymmetric Sync is a sync strategy that is optimized for applications 
+with heavy client-side write workloads. You enable it for one or more collections. 
+It supports any collection type, including an {+atlas-short+} time-series 
+collection.
+
+For example, an IoT app that frequently logs sensor data has a significant 
+write workload, and essentially no read workload. The device may also be offline 
+for extended periods of time. Asymmetric sync bypasses some of the processing 
+required for bi-directional sync, significantly improving writes to a 
+{+atlas-short+} collection. 
+
+Other use cases include writing non-mutable data, such as invoices from as retail 
+app, or logging application events, neither of which requires conflict 
+resolution.
+
+After you have enabled Asymmetric Sync, you implement it in the client app 
+via the JavaScript SDK.
+
+.. TODO: add link to the js SDK
+
+.. note:: Additional SDK Support
+
+   Support for Asymmetric Sync in the other SDKs is forthcoming.
+
+.. seealso:: Configure Asymmetric Sync
+
+   :ref:`<config-asym-sync>`
