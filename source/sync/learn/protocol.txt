@@ -19,7 +19,7 @@ Overview
 real time across multiple clients that each maintain their own local
 {+service-short+} files. The protocol defines a set of pre-defined :ref:`request
 types <sync-request-types>` as well as a :ref:`process <sync-session-process>`
-by which a client, like an {+service-short+} SDK, can connect to a
+by which a client, like an {+service-short+} SDK, can connect to an
 {+service-short+} application server and sync data.
 
 .. note::
@@ -92,7 +92,7 @@ Client File Identifier
 A **client file identifier** is a value that uniquely identifies a synced client
 {+service-short+} file and its corresponding server file. The server generates a
 client file identifier whenever an SDK requests one during its initial sync of a
-{+service-short+} file. Each identifier is a 64-bit, non-zero, positive signed
+Realm file. Each identifier is a 64-bit, non-zero, positive signed
 integer strictly less than 2^63.
 
 .. note::
@@ -116,7 +116,7 @@ HTTPS using `TLS 1.3 <https://datatracker.ietf.org/doc/html/rfc8446>`__.
 Sync Session Process
 --------------------
 
-To initiate, execute, and terminate an {+service-short+} Database sync session, a
+To initiate, execute, and terminate an {+service-short+} Database sync session, an
 {+service-short+} SDK and application server send and receive a set of
 protocol-specific requests.
 
@@ -157,7 +157,7 @@ Request Types
 Client -> Server Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following table describes the request types that a sync client can send to a
+The following table describes the request types that a sync client can send to an
 {+service-short+} server:
 
 .. list-table::
