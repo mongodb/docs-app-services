@@ -1,0 +1,79 @@
+.. _asymmetric-sync:
+
+====
+Asymmetric Sync
+====
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Overview
+--------
+
+Asymmetric Sync is a flexible sync strategy that is optimized for applications 
+with heavy client-side write workloads. You enable it for one or more collections, 
+including an {+atlas-short+} time-series collection.
+
+For example, an IoT app that frequently logs sensor data has a significant 
+write workload, and essentially no read workload. The device may also be offline 
+for extended periods of time. Asymmetric sync bypasses some of the processing 
+required for bi-directional sync, significantly improving writes to a 
+{+atlas-short+} collection. 
+
+Other use cases include writing non-mutable data, such as invoices from as retail 
+app, or logging application events, neither of which requires conflict 
+resolution.
+
+.. important:: Flexible Sync Only
+
+   Asymmetric sync is part of Flexible Sync and therefore cannot be used in 
+   applications that use Partition-Based sync. 
+
+.. _config_asymmetric-sync:
+
+Configuring Asymmetric Sync
+---
+
+When enabling Asymmetric sync, you choose one or more collections to 
+use. By selecting individual collections, you ensure that the other sync 
+collections continue to use the default bi-directional sync. 
+
+To enable and configure Asymmetric sync, follow these steps:
+
+1. In the {+leftnav+}, select :guilabel:`Sync`. 
+
+#. :ref:`Enable and configure Flexible Sync <enable-flexible-sync>`.
+
+#. Expand the :guilabel:`Advanced Configuration` section. 
+
+#. The dropdown under the :guilabel:`Asymmetric Sync` heading shows the tables  
+   that you can select for this purpose. When you select a table, it is 
+   listed immediately below the dropdown. 
+   
+#. You can also create a new collection if you have Dev Mode enabled. When you 
+   select the dropdown, you can type in the name of the new collection, and 
+   {+backend-short+} creates the collection automatically. 
+
+Using Asymmetric Sync
+---
+
+After you have enabled Asymmetric Sync, your implement it in the client app 
+via the appropriate SDK.
+
+.. TODO => links to each SDK and add note about which SDKs do not yet support it.
+
+For More Information
+---
+
+- :ref:`<flexible-sync>`
+
+- :ref:`<enable-flexible-sync>`
+
+
+
+
