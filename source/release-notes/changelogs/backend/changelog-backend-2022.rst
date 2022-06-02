@@ -7,7 +7,7 @@
 - Released Data API as GA.
 - Introduced field-level permissions for Flexible Sync.
 - Released Asymmetric Sync, which optimizes Flexible Sync for write-heavy workloads.
-- Introduced Data API for any App.
+- Introduced Data API for all Apps.
 - Introduced local regions for Azure data sources.
 - Introduced Atlas Alerts for failed requests that have met a certain threshold.
 
