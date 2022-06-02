@@ -4,7 +4,7 @@
 .. _realm-sync-get-started:
 
 ===================
-Realm Sync Overview
+{+sync+} Overview
 ===================
 
 .. contents:: On this page
@@ -16,14 +16,14 @@ Realm Sync Overview
 Overview
 --------
 
-{+sync+} is a {+app+} feature that synchronizes data on client devices with 
+{+sync+} is an {+app+} feature that synchronizes data on client devices with 
 a data source linked to your {+backend+} back end. {+sync+} handles network 
 access and conflict resolution in a background thread of your application, so 
 your application logic stays the same regardless of network conditions. 
-The :term:`{+service-short+} data model` makes it easy to manage a consistent 
+The {+service-short+} data model makes it easy to manage a consistent 
 schema of objects in your database and across all client platforms.
 
-Why Use Realm Sync?
+Why Use {+sync+}?
 -------------------
 Most mobile apps are data-dependent. Eventually, many apps
 need to share that data with other apps and the outside world. {+sync+} is 
@@ -55,7 +55,7 @@ client platform:
 
 {+sync+} handles network access and conflict resolution in a
 background thread of your application, so your application logic stays
-the same regardless of network conditions. The :term:`{+service-short+} data model`
+the same regardless of network conditions. The {+service-short+} data model
 makes it easy to manage a consistent schema of objects in your database
 and across all client platforms.
 
@@ -67,7 +67,7 @@ and across all client platforms.
 
 .. seealso::
 
-   For a deep dive into how {+sync-short+} works, see: :ref:`Realm Sync 
+   For a deep dive into how {+sync-short+} works, see: :ref:`{+sync+} 
    Protocol <sync-protocol>`.
 
 .. _offline-first-overview:
@@ -77,9 +77,9 @@ Offline-First
 
 {+sync+} is built on the assumption that connectivity will
 drop. We call this mentality **offline-first**. After you
-make changes to the local {+realm+} on the client device, the {+service-short+}
+make changes to the local {+realm+} on the client device, the a Realm
 SDK automatically sends the changes to the server as soon
-as possible. Likewise, the {+service-short+} SDK automatically receives
+as possible. Likewise, the a Realm SDK automatically receives
 changes from the server and integrates those changes into
 the local {+realm+}. In effect, you continue to work with the
 local {+realm+} without moment-to-moment concern for network
@@ -88,7 +88,7 @@ connectivity or lack thereof.
 The offline-first design leads to one of the main benefits of {+service+}: a 
 seamless user experience. Users interact with local data with zero latency 
 regardless of their moment-to-moment connectivity, and because {+sync+} is 
-built into the {+service-short+} SDK, you do not need to write
+built into the a Realm SDK, you do not need to write
 your own synchronization protocol and deal with connectivity issues when 
 synchronizing data. 
 
@@ -102,11 +102,11 @@ includes :ref:`automatic conflict resolution <conflict-resolution-overview>`.
 
 Live Objects
 ~~~~~~~~~~~~
-Realm's :term:`Live objects <live objects>` means that you can update data in 
+{+service-short+}'s Live objects  means that you can update data in 
 one place (a mobile app, for example), and that data is updated everywhere. 
 Live objects always reflect the latest data stored in {+client-database+}. 
 This concept extends across devices: updates on one device sync to the corresponding 
-objects on other devices. :term:`Notifications` based on these updates make it 
+objects on other devices. Notifications based on these updates make it 
 easy to update the application UI to react to local and remote changes.
 
 .. _conflict-resolution-overview:
@@ -114,13 +114,13 @@ easy to update the application UI to react to local and remote changes.
 Conflict Resolution
 ~~~~~~~~~~~~~~~~~~~
 
-{+service+}'s :term:`sync conflict resolution engine <sync protocol>` is
+{+service+}'s sync conflict resolution engine  is
 deterministic. Changes received out-of-order eventually converge on the
 same state across the server and all clients. As such, {+sync+}
 is :wikipedia:`strongly eventually consistent
 <Eventual_consistency#Strong_eventual_consistency>`.
 
-.. note:: Realm Sync's Internal Conflict Resolution
+.. note:: {+sync+}'s Internal Conflict Resolution
 
    From {+service+}'s perspective, changesets may
    arrive any time that connectivity allows. There is no
@@ -149,8 +149,8 @@ To sync data across devices, you :ref:`enable {+sync+} <enable-sync>` for your
 
 .. tip:: Check out the tutorial
    
-   If you prefer to learn by example, check out the Realm `tutorial <https://www.mongodb.com/docs/realm/tutorial/>`_, which describes how to build a synced Task Tracker application
-   with clients for common platforms that Realm supports.
+   If you prefer to learn by example, check out the {+service-short+} `tutorial <https://www.mongodb.com/docs/realm/tutorial/>`_, which describes how to build a synced Task Tracker application
+   with clients for common platforms that {+service-short+} supports.
 
 Before You Start
 ----------------
@@ -164,7 +164,7 @@ Before You Start
   production applications. You cannot use sync with a :ref:`serverless
   instance <serverless-caveats>` or :ref:`data lake <data-lake-caveats>`.
 
-- If you don't already have one, :ref:`create a new Realm App
+- If you don't already have one, :ref:`create a new {+app+}
   <create-a-realm-app>` linked to your Atlas cluster.
 
 Configure Your Data Model
@@ -173,13 +173,13 @@ Configure Your Data Model
 Choose an SDK
 ~~~~~~~~~~~~~
 
-The :ref:`Realm SDKs <realm-sdks>`, available for multiple languages and
+The :ref:`{+client-sdks+} <realm-sdks>`, available for multiple languages and
 platforms, include everything you need to work with synced Realms in your client
 application code. You can use multiple SDKs to work with the same set of synced
 data across devices and platforms.
 
 This guide focuses on configuring sync with an SDK. For in-depth documentation
-that includes details on how to install and use the Realm SDKs more generally,
+that includes details on how to install and use the {+client-sdks+} more generally,
 check out the SDK docs:
 
 - :ref:`Java SDK <java-intro>`
@@ -192,7 +192,7 @@ check out the SDK docs:
 
 .. note::
 
-   The Web SDK does not currently support Realm Database or Realm Sync directly.
+   The Web SDK does not currently support {+client-database+} or {+sync+} directly.
    However, it is compatible with apps that use sync through the MongoDB and
    GraphQL APIs.
 
@@ -201,14 +201,14 @@ Define Data Model
 
 A synced realm uses object models that you define to determine the type of
 objects in the realm. Additionally, Sync requires a server-side document schema
-for each synced object type so that Realm can translate and apply changes
+for each synced object type so that {+service-short+} can translate and apply changes
 between synced realms and MongoDB Atlas.
 
 To define your synced object models, do one of the following for each object
 type:
 
 - **Sync object models from an SDK:** In :ref:`Development Mode
-  <concept-development-mode>`, Realm automatically generates a document schema
+  <concept-development-mode>`, {+service-short+} automatically generates a document schema
   for each synced object type and assigns that schema to a collection in the
   linked cluster with the same name as the object type. Development mode lets
   you configure your synced data model from a client application using the same
@@ -230,10 +230,10 @@ type:
      ``devModeDatabase`` while you build your data model and then change it
      later before you push to production.
 
-- **Generate object models from a document schema:** Realm can automatically
+- **Generate object models from a document schema:** {+service-short+} can automatically
   generate language-specific object models that you can use in your client
   applications. The generated models match the document schemas defined for your
-  app's synced cluster. You can define these schemas manually or Realm can
+  app's synced cluster. You can define these schemas manually or {+service-short+} can
   sample existing data in the cluster to create them automatically. This is
   useful if you prefer a server-first approach and/or plan to build apps with
   multiple SDKs.
@@ -270,7 +270,7 @@ When you use :ref:`Flexible Sync <flexible-sync>`, you must:
 - Configure data access rules and default roles
 
 Client applications can query the queryable fields you configure to determine
-which objects to sync. Then, Realm applies rules and default roles to 
+which objects to sync. Then, {+service-short+} applies rules and default roles to 
 determine whether users can read or write the objects that match the query.
 
 Define Data Access Rules
@@ -293,13 +293,13 @@ Flexible Sync Data Access Rules
 
 Flexible Sync does not require you to define a partition strategy.
 Instead, you specify which data to sync through queries for
-matching objects in a client application. Realm then evaluates
+matching objects in a client application. {+service-short+} then evaluates
 :ref:`session roles and rules <flexible-sync-roles>` to determine which
 of those matching objects a user can read and write.
 
 You can define session roles on specific collections. Default roles
 provide read and write permissions when more specific session roles do
-not apply. Default roles apply to all collections a Realm app can
+not apply. Default roles apply to all collections an {+app+} can
 access, but you can restrict a session role to a specific collection by
 specifying the collection name.
 
@@ -314,22 +314,22 @@ Enable Sync
 ~~~~~~~~~~~
 
 When you enable Sync, you specify how clients can access data in your
-{+app+}. For a walkthrough of how to turn on sync, see :ref:`Enable Realm 
+{+app+}. For a walkthrough of how to turn on sync, see :ref:`Enable {+service-short+} 
 Sync <enable-sync>`.
 
 Optimize Sync Data Usage
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 {+service-short+} syncs all data from collections with a defined
-:ref:`schema <schemas>` in your :term:`Atlas cluster <linked cluster>`.
-If you do not specify a field in your schema, Realm will not sync that
+:ref:`schema <schemas>` in your Atlas cluster.
+If you do not specify a field in your schema, {+service-short+} will not sync that
 field to the clients.
 
 Sync stores some utility data in your synced cluster to help synchronize
 data with clients. {+service-short+} has optimizations built-in to reduce
 the amount of utility data stored in synced clusters. If you'd like to
 reduce the amount of utility data further to suit your use case, see
-our guide to :ref:`Optimize Realm Sync Atlas Usage
+our guide to :ref:`Optimize {+sync+} Atlas Usage
 <optimize-sync-atlas-usage>`.
 
 .. _realm-sync-best-practices:
@@ -370,7 +370,7 @@ Atlas oplog:
   your synced cluster. For best results, keep 48 hours of oplog for a cluster
   using {+sync-short+}.
 
-Realm Sync Schema Data Consistency
+{+sync+} Schema Data Consistency
   If you create or modify {+sync+} documents using another tool, such as the 
   :binary:`~bin.mongo` shell or {+compass+}, be sure the documents validate 
   against the Sync object schema. For more information, see 
@@ -384,7 +384,7 @@ Summary
 -------
 
 - {+sync+} is the part of {+realm+} that handles data synchronization between 
-  a Realm Database on one or more clients and MongoDB Atlas.
+  a {+client-database+} on one or more clients and MongoDB Atlas.
 
 - {+sync+} enables offline-first app development by handling network
   loss and recovery automatically.

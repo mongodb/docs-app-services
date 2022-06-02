@@ -1,4 +1,4 @@
-# Reviewing Guidelines for the MongoDB Realm Documentation
+# Reviewing Guidelines for the Atlas App Services Documentation
 
 Realm Docs contributions typically go through two sets of reviewers:
 

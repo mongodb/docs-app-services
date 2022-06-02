@@ -1,8 +1,8 @@
 .. _appconfig-sync:
 
-==============================
-Realm Sync Configuration Files
-==============================
+============================
+{+sync+} Configuration Files
+============================
 
 .. default-domain:: mongodb
 
@@ -12,7 +12,7 @@ Realm Sync Configuration Files
    :depth: 2
    :class: singlecol
 
-You can configure :ref:`Realm sync <sync>` for your application in the ``sync``
+You can configure :ref:`{+sync+} <sync>` for your application in the ``sync``
 directory:
 
 .. code-block:: none
@@ -26,7 +26,7 @@ directory:
 Partition-Based Sync Configuration
 ----------------------------------
 
-When you use :ref:`Partition-Based Sync <partition-based-sync>`, your Realm 
+When you use :ref:`Partition-Based Sync <partition-based-sync>`, your {+service-short+} 
 app uses this Sync configuration:
 
 .. code-block:: json
@@ -74,14 +74,14 @@ app uses this Sync configuration:
    * - | ``development_mode_enabled``
        | Boolean
      - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
-       for the application. While enabled, Realm automatically stores synced
+       for the application. While enabled, {+service-short+} automatically stores synced
        objects in a specific database (specified in ``database_name``) and
        mirrors objects types in that database's collection schemas.
 
    * - | ``database_name``
        | String
-     - The name of a database in the synced cluster where Realm stores data in
-       :ref:`Development Mode <enable-development-mode>`. Realm automatically
+     - The name of a database in the synced cluster where {+service-short+} stores data in
+       :ref:`Development Mode <enable-development-mode>`. {+service-short+} automatically
        generates a schema for each synced type and maps each object type to a
        collection within the database.
 
@@ -134,7 +134,7 @@ app uses this Sync configuration:
 Flexible Sync Configuration
 ---------------------------
 
-When you use :ref:`Flexible Sync <flexible-sync>`, your Realm app uses this 
+When you use :ref:`Flexible Sync <flexible-sync>`, your {+app+} uses this 
 Sync configuration:
 
 .. code-block:: json
@@ -189,7 +189,7 @@ Sync configuration:
    * - | ``development_mode_enabled``
        | Boolean
      - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
-       for the application. While enabled, Realm automatically stores synced
+       for the application. While enabled, {+service-short+} automatically stores synced
        objects in a specific database (specified in ``database_name``) and
        mirrors objects types in that database's collection schemas.
 
@@ -201,8 +201,8 @@ Sync configuration:
 
    * - | ``database_name``
        | String
-     - The name of a database in the synced cluster where Realm stores data in
-       :ref:`Development Mode <enable-development-mode>`. Realm automatically
+     - The name of a database in the synced cluster where {+service-short+} stores data in
+       :ref:`Development Mode <enable-development-mode>`. {+service-short+} automatically
        generates a schema for each synced type and maps each object type to a
        collection within the database.
 
@@ -218,7 +218,7 @@ Sync configuration:
    * - | ``permissions.rules.<Coll>``
        | String
      - You can define rules that apply to a single collection by specifying
-       the collection name. Realm apps apply rules in order from the beginning
+       the collection name. App Services apps apply rules in order from the beginning
        of the array, so start with the most specific rules first.
 
    * - | ``rules.<Coll>.name``
@@ -254,16 +254,16 @@ Sync configuration:
 
    * - | ``permissions.defaultRoles``
        | String
-     - Your Realm app evaluates ``defaultRoles`` after ``rules``. If no 
+     - Your {+app+} evaluates ``defaultRoles`` after ``rules``. If no 
        collection-specific rule applies to a user's attempt to access 
-       data through a Realm app, Realm proceeds to evaluate ``defaultRoles`` 
+       data through an {+app+}, {+service-short+} proceeds to evaluate ``defaultRoles`` 
        until it finds a set of permissions that apply to the user. This 
        may occur when a collection does not have a specific set of rules 
        defined, or when none of the rules defined for a collection apply
        to a user. 
        
        You can have more than one ``defaultRole``, and they apply
-       across all the collections that your Realm app can access, even 
+       across all the collections that your {+app+} can access, even 
        when you have more specific collection rules defined.
 
    * - | ``defaultRoles.name``

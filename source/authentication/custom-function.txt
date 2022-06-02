@@ -82,7 +82,7 @@ actual field names and values depend on your implementation.
 .. example::
 
    The following code examples show how to create a function credential
-   using the Realm SDKs. The credential includes a ``payload`` object
+   using the {+client-sdks+}. The credential includes a ``payload`` object
    that is passed to the authentication function.
 
    .. tabs-realm-languages::
@@ -92,7 +92,7 @@ actual field names and values depend on your implementation.
    
          .. code-block:: javascript
          
-            const credentials = Realm.Credentials.function({
+            const credentials = {+service-short+}.Credentials.function({
               username: "mongolover",
               pin: "24601",
             });
@@ -273,7 +273,7 @@ custom function provider users:
       }
 
 2. Configure the custom function authentication provider and return a
-   unique external user ID from the authentication function. Realm
+   unique external user ID from the authentication function. {+service-short+}
    stores this ID in the ``id`` field of the user's ``custom-function``
    identity.
 
@@ -288,7 +288,7 @@ custom function provider users:
    .. literalinclude:: /authentication/custom-function/onNewCustomFunctionUser.js
       :language: javascript
 
-Log In from a Realm SDK
+Log In from a {+client-sdk+}
 -----------------------
 
 To log in from a client application, use a Custom Function credential

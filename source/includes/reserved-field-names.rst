@@ -1,7 +1,7 @@
-Realm reserves some keywords for the Realm Query Language and other purposes.
+{+service-short+} reserves some keywords for the {+rql+} and other purposes.
 You cannot use reserved keywords as field names.
 
-Realm reserves the following keywords with any capitalization:
+{+service-short+} reserves the following keywords with any capitalization:
 
 .. hlist::
    :columns: 3
@@ -34,7 +34,7 @@ Realm reserves the following keywords with any capitalization:
    You cannot use ``descending``, ``Descending``, ``DESCENDING``, or
    ``DeScEnDiNG`` as a field name.
 
-Realm also reserves the following keywords with the given exact capitalization:
+{+service-short+} also reserves the following keywords with the given exact capitalization:
 
 .. hlist::
    :columns: 3

@@ -19,7 +19,7 @@ Overview
 --------
 
 `Amazon Web Services (AWS) <https://aws.amazon.com/>`_ provides an
-extensive collection of cloud-based services. Realm provides a
+extensive collection of cloud-based services. {+service-short+} provides a
 generic AWS service that enables you to connect to many of these
 services.
 
@@ -94,21 +94,21 @@ Service Actions
 ---------------
 
 Each AWS service has different actions that you can perform on that
-service. Realm uses the action names specified in the `AWS SDK
+service. {+service-short+} uses the action names specified in the `AWS SDK
 for Go <https://docs.aws.amazon.com/sdk-for-go/api/>`_ for each service.
 
 .. note::
-   Realm uses the same names (and casing) for the AWS services
+   {+service-short+} uses the same names (and casing) for the AWS services
    and actions as the AWS Go SDK.
 
-For each supported AWS service, Realm supports any action that:
+For each supported AWS service, {+service-short+} supports any action that:
 
 1. Takes a single input parameter.
 
 #. Returns one of two objects: an output object, or an error.
 
 For example, the ``S3`` service includes a :aws-go:`PutObject <s3/#S3.PutObject>`
-action. Realm supports this action because it takes a single
+action. {+service-short+} supports this action because it takes a single
 input type of :aws-go:`PutObjectInput <s3/#PutObjectInput>`, and returns
 either a :aws-go:`PutObjectOutput <s3/#PutObjectOutput>` or an error.
 
@@ -117,7 +117,7 @@ AWS Service Rules
 
 You must specify rules to enable the AWS services and actions. Each rule
 applies to a single service API, plus one or all actions on that service.
-As with other service rules in Realm, a rule must evaluate
+As with other service rules in {+service-short+}, a rule must evaluate
 to ``true`` to enable the action.
 
 For example, the following rule enables all actions on the Kinesis
@@ -229,14 +229,14 @@ This can also be expressed as the following JSON:
 
 Usage
 -----
-You can call an AWS service from a Realm function and from the
+You can call an AWS service from an {+service-short+} function and from the
 SDKs. The following sections show each of these processes.
 
-Call an AWS Service from a Realm Function
+Call an AWS Service from an {+service-short+} Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following examples show how to call various AWS services from within
-a Realm function. In each example, it is assumed the named
+an {+service-short+} function. In each example, it is assumed the named
 service has already been created.
 
 .. _aws-usage-s3:
@@ -298,7 +298,7 @@ Refer to the :aws-go:`S3 API Reference <s3>` for implementation details.
 
 .. important:: Object Size Limitation
 
-   Realm supports a maximum file size of 4 Megabytes when working with
+   {+service-short+} supports a maximum file size of 4 Megabytes when working with
    AWS S3 objects.
 
 .. _aws-usage-kinesis:

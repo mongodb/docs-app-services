@@ -3,7 +3,7 @@ ref: define-environment-values
 content: |
   You can use expansions to template any environment. For each environment that
   you use, define values that you reference in your configuration files.
-  
+
   .. example::
      
      The following environments configure different MongoDB Atlas cluster names:
@@ -32,7 +32,7 @@ content: |
   You can reference any environment value from a configuration file with the
   ``%()`` replacement operator and the :json-expansion:`%%environment`
   expansion. Define expansions for each configuration file you want to template.
-  
+
   .. example::
      
      The following template configuration file for the ``mongodb-atlas`` data
@@ -60,10 +60,10 @@ content: |
   create a new app for a given environment. If you do not specify an
   environment, ``%%environment`` expansions resolve to values in
   ``environments/no-environment.json``.
-  
+
   .. example::
      
-     Realm uses the template configuration to generate new, resolved
+     {+service-short+} uses the template configuration to generate new, resolved
      configuration files on import:
      
      .. code-block:: shell

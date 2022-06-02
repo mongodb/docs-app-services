@@ -8,20 +8,20 @@ content: |
 title: Write the Function Source Code
 ref: write-the-function-source-code
 content: |
-  Realm functions run standard ES6+ JavaScript functions that you export from
+  {+service-short+} functions run standard ES6+ JavaScript functions that you export from
   individual files. Create a ``.js`` file with the same name as the function in
   the ``functions`` directory or one of its subdirectories.
-  
+
   .. code-block:: bash
      
      touch functions/myFunction.js
-  
+
   .. tip::
      
      You can define functions inside of nested folders in the
      ``functions`` directory. Use slashes in a function name to indicate
      its directory path.
-  
+
   Once you've created the function's ``.js`` file, write the function source code, e.g.:
 
   .. code-block:: javascript
@@ -38,11 +38,11 @@ content: |
        // Return values back to clients or other functions
        return sayHello(args[0])
      }
-  
+
   .. note::
      
      You can use most modern (ES6+) JavaScript features in functions, including
-     async/await, destructuring, and template literals. To see if Realm supports
+     async/await, destructuring, and template literals. To see if {+service-short+} supports
      a specific feature, see :ref:`JavaScript Support <js-support>`.
 ---
 title: Configure the Function
@@ -51,7 +51,7 @@ content: |
   In the ``functions`` directory of your application, open the ``config.json``
   file and add a :ref:`configuration object <appconfig-functions>` for your new
   function to the array. The object must have the following form:
-  
+
   .. code-block:: json
 
      {
@@ -60,7 +60,7 @@ content: |
        "can_evaluate": { <JSON Expression> },
        "disable_arg_logs": <Boolean>,
        "run_as_system": <Boolean>,
-       "run_as_user_id": "<Realm User ID>",
+       "run_as_user_id": "<{+service-short+} User ID>",
        "run_as_user_id_script_source": "<Function Source Code>"
      }
 
@@ -92,7 +92,7 @@ content: |
        
        {
          "run_as_system": false,
-         "run_as_user_id": "<Realm User Id>",
+         "run_as_user_id": "<{+service-short+} User Id>",
          "run_as_user_id_script_source": ""
        }
 
@@ -112,7 +112,7 @@ content: |
 
   Set Execution Logging
   =====================
-  
+
   To include any values that the function receives as arguments in its
   :doc:`log entry </logs/function>`, set ``disable_arg_logs`` to
   ``false``.
@@ -163,7 +163,7 @@ ref: deploy-the-function
 content: |
   Push the function configuration and source code to deploy it to your app. Once
   you have pushed the function, you can begin using it immediately.
-  
+
   .. code-block:: shell
      
      realm-cli push

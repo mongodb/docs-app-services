@@ -2,8 +2,8 @@
 openapi: 3.0.1
 info:
   description: |-
-    MongoDB Realm provides an API for programmatically performing
-    administrative tasks outside of the Realm UI. This includes tasks such
+    App Services provides an API for programmatically performing
+    administrative tasks outside of the App Services UI. This includes tasks such
     as modifying authentication providers, creating rules, and defining
     functions. Client applications should not use the admin API. Instead,
     use one of the Client SDKs for tasks like authenticating users, calling
@@ -13,8 +13,8 @@ info:
 
     **Note**: The terms _Project ID_ and _Group ID_ are interchangeable.
 
-    Realm APIs frequently require two parameters: your Atlas _Project/Group
-    ID_, and your Realm _Application ID_.
+    App Services APIs frequently require two parameters: your Atlas _Project/Group
+    ID_, and your App Services _Application ID_.
 
     ### Project ID
 
@@ -22,7 +22,7 @@ info:
 
     ### Application ID
 
-    To find an Application ID, make a request to the Realm [GET /groups/{groupid}/apps](#operation/adminListApplications)
+    To find an Application ID, make a request to the App Services [GET /groups/{groupid}/apps](#operation/adminListApplications)
     API endpoint.
 
     This request has the following format, referencing the `access_token`
@@ -34,7 +34,7 @@ info:
       https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps
     ```
 
-    This will return a list of objects describing each Realm app in the
+    This will return a list of objects describing each Atlas App Services app in the
     provided group. For Admin API requests, your Application ID is the
     ObjectId value in the `_id` field, _not_ the `client_app_id`.
 
@@ -58,7 +58,7 @@ info:
 
     ## Get Authentication Tokens
 
-    Every request to the Realm Admin API must include a valid and current
+    Every request to the App Services Admin API must include a valid and current
     authorization token from the MongoDB Cloud API as a bearer token in the
     `Authorization` header. You will need a valid [programmatic API key](https://docs.atlas.mongodb.com/configure-api-access)
     for MongoDB Atlas to get a token.
@@ -73,7 +73,7 @@ info:
       https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login
     ```
 
-    If authentication succeeds, MongoDB Realm returns an access token as
+    If authentication succeeds, App Services returns an access token as
     part of the JSON response document:
 
     ```json
@@ -95,17 +95,17 @@ info:
     ```
 
   version: "3.0"
-  title: MongoDB Realm API
+  title: Atlas App Services API
 servers:
   - url: https://realm.mongodb.com/api/admin/v3.0
-    description: The root API resource and starting point for the Realm API.
+    description: The root API resource and starting point for the App Services API.
 paths:
   "/auth/providers":
     get:
       tags:
         - admin
       operationId: getAdminAuthProviders
-      summary: Enumerate available Realm administration authentication providers
+      summary: Enumerate available App Services administration authentication providers
       responses:
         "200":
           description: Successfully enumerated available authentication providers.
@@ -122,9 +122,9 @@ paths:
       tags:
         - admin
       operationId: adminLogin
-      summary: Authenticate as a Realm administrator
+      summary: Authenticate as an App Services administrator
       description: |
-        Authenticate as a Realm administrator. Use [GET
+        Authenticate as an App Services administrator. Use [GET
         /auth/providers](#section/adminGetLogs) to list the available
         authentication providers.
       requestBody:
@@ -151,7 +151,7 @@ paths:
                     type: string
                     description: |-
                       An access token you may provide in the `Authorization` header of API
-                      requests. [The Realm API Authentication section](#section/Get-Authentication-Tokens) demonstrates how to use this token.
+                      requests. [The App Services API Authentication section](#section/Get-Authentication-Tokens) demonstrates how to use this token.
                   refresh_token:
                     type: string
                     description: |
@@ -214,9 +214,9 @@ paths:
       tags:
         - apps
       operationId: adminListApplications
-      summary: List all Realm apps in an Atlas project/group
+      summary: List all App Services apps in an Atlas project/group
       description: |-
-        List all Realm apps within an Atlas
+        List all App Services apps within an Atlas
         [project/group](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
       parameters:
         - name: product
@@ -239,7 +239,7 @@ paths:
       tags:
         - apps
       operationId: adminCreateApplication
-      summary: Create a new Realm app
+      summary: Create a new Atlas App Services app
       parameters:
         - name: defaults
           in: query
@@ -437,7 +437,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    description: A description of the error that Realm encountered.
+                    description: A description of the error that App Services encountered.
   "/groups/{groupId}/apps/{appId}/values":
     get:
       tags:
@@ -1435,11 +1435,11 @@ paths:
       tags:
         - authproviders
       operationId: adminListAuthProviders
-      summary: List authentication providers in a Realm app.
+      summary: List authentication providers in a Atlas App Services app.
       description: |-
         List [authentication
         providers](https://www.mongodb.com/docs/realm/authentication/providers)
-        within a Realm app.
+        within a Atlas App Services app.
       responses:
         "200":
           description: Successfully listed.
@@ -1563,7 +1563,7 @@ paths:
       description: |-
         List the allowed [HTTP
         origins](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin)
-        from which MongoDB Realm should allow requests.
+        from which App Services should allow requests.
       responses:
         "200":
           description: Successfully listed.
@@ -1580,7 +1580,7 @@ paths:
       description: |-
         Set the allowed [HTTP
         origins](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin)
-        from which MongoDB Realm should allow requests.
+        from which App Services should allow requests.
       requestBody:
         required: true
         description: A list of HTTP origins.
@@ -1602,7 +1602,7 @@ paths:
         - security
       operationId: allowedIPAccessListGet
       summary: List the allowed entries in the Access List
-      description: List the allowed entries in the Access List of your Realm app.
+      description: List the allowed entries in the Access List of your Atlas App Services app.
       responses:
         "200":
           description: ""
@@ -1643,7 +1643,7 @@ paths:
       operationId: allowedIPAccessListCreate
       summary: Create an IP address or CIDR block in the Access List
       description: |-
-        Create an IP address or CIDR block in the Access List for your Realm
+        Create an IP address or CIDR block in the Access List for your App Services
         app.
       responses:
         "201":
@@ -1676,7 +1676,7 @@ paths:
       operationId: allowedIPAccessListUpdate
       summary: Modify an IP address or CIDR block in the Access List
       description: |-
-        Modify an IP address or CIDR block in the Access List of your Realm
+        Modify an IP address or CIDR block in the Access List of your App Services
         app
       responses:
         "201":
@@ -1719,7 +1719,7 @@ paths:
       operationId: allowedIPAccessListDelete
       summary: Delete an IP address or CIDR block from the Access List
       description: |-
-        Delete an IP address or CIDR block from the Access List of your Realm
+        Delete an IP address or CIDR block from the Access List of your App Services
         app
       responses:
         "404":
@@ -1729,7 +1729,7 @@ paths:
       tags:
         - logs
       operationId: adminGetLogs
-      summary: Retrieve MongoDB Realm logs
+      summary: Retrieve App Services logs
       parameters:
         - name: co_id
           in: query
@@ -1848,7 +1848,7 @@ paths:
                           type: string
                           description: |-
                             The ObjectID of your application.
-                            [The Realm API Project and Application IDs section](#section/Project-and-Application-IDs) demonstrates how to find this
+                            [The App Services API Project and Application IDs section](#section/Project-and-Application-IDs) demonstrates how to find this
                             value.
                         group_id:
                           type: string
@@ -1873,7 +1873,7 @@ paths:
                     type: string
                     description: |-
                       The end date and time of the next page of log entries in ISO 8601
-                      format. MongoDB Realm paginates the result sets of queries that match
+                      format. App Services paginates the result sets of queries that match
                       more than 100 log entries and includes this field in paginated
                       responses. To get the next page of up to 100 entries, pass this value as
                       the `end_date` parameter in a subsequent request.
@@ -1881,7 +1881,7 @@ paths:
                     type: integer
                     description: |-
                       The offset into the next page of log entries in ISO 8601 format. MongoDB
-                      Realm paginates the result sets of queries that match more than 100 log
+                      App Services paginates the result sets of queries that match more than 100 log
                       entries and includes this field in paginated responses where the first
                       entry on the next page has the same timestamp as the last entry on this
                       page. To get the next page of up to 100 entries, pass this value, if it
@@ -1997,7 +1997,7 @@ paths:
       summary: List API keys
       description: |-
         List [API keys](https://www.mongodb.com/docs/realm/authentication/api-key)
-        associated with a Realm app.
+        associated with a Atlas App Services app.
       responses:
         "200":
           description: The API keys were successfully listed.
@@ -2115,7 +2115,7 @@ paths:
       summary: List secrets
       description: |-
         List [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets#std-label-define-secret)
-        associated with a Realm app.
+        associated with a Atlas App Services app.
       responses:
         "200":
           description: The Secrets were successfully listed.
@@ -2175,7 +2175,7 @@ paths:
       description: |-
         Modify a
         [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
-        associated with a Realm app.
+        associated with a Atlas App Services app.
       requestBody:
         description: The modified value of the Secret.
         required: true
@@ -2203,7 +2203,7 @@ paths:
       description: |-
         Delete a
         [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
-        associated with a Realm app.
+        associated with a Atlas App Services app.
       responses:
         "204":
           description: The Secret was successfully deleted.
@@ -2304,7 +2304,7 @@ paths:
       description: |-
         List [external
         dependencies](https://www.mongodb.com/docs/realm/functions/dependencies/) uploaded
-        to the Realm app.
+        to the Atlas App Services app.
       responses:
         "200":
           description: The function was successfully retrieved.
@@ -2444,7 +2444,7 @@ paths:
       operationId: adminEnableDisableHosting
       summary: Enable/Disable Hosting
       description: |
-        Enable or disable Realm Hosting for your app. 
+        Enable or disable App Services Hosting for your app. 
         Changes to hosting can take up to 15 minutes to take effect.
         This endpoint does not notify you when the changes have taken effect, 
         only that the change operation was successfully received by the server.
@@ -2461,12 +2461,12 @@ paths:
                 enabled:
                   type: boolean
                   description: |
-                    Set to `true` to enable Realm Hosting.
-                    Set to `false` to disable Realm Hosting.
+                    Set to `true` to enable App Services Hosting.
+                    Set to `false` to disable App Services Hosting.
       responses:
         204:
           description: |
-            Successfully enabled/disabled Realm Hosting.
+            Successfully enabled/disabled App Services Hosting.
 
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -2809,11 +2809,11 @@ paths:
                       ID](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
                   appId:
                     type: string
-                    description: The Realm app ID specified by the `appId` path parameter.
+                    description: The Atlas App Services app ID specified by the `appId` path parameter.
                   appName:
                     type: string
                     description:
-                      The name of the Realm app specified by the `appId`
+                      The name of the Atlas App Services app specified by the `appId`
                       path parameter.
                   measurements:
                     type: array
@@ -3104,7 +3104,7 @@ paths:
                     more valid GraphQL operations for your API. If more
                     than one operation is defined, you must specify
                     which operation to run in `operationName`.
-                  example: 'query AllTasks { tasks(query: { status: $status }) { _id owner } }'
+                  example: "query AllTasks { tasks(query: { status: $status }) { _id owner } }"
                 variables:
                   type: string
                   description: |-
@@ -3305,7 +3305,7 @@ components:
       name: appId
       description: |-
         The ObjectID of your application.
-        [The Realm API Project and Application IDs section](#section/Project-and-Application-IDs) demonstrates how to find this
+        [The App Services API Project and Application IDs section](#section/Project-and-Application-IDs) demonstrates how to find this
         value.
       in: path
       required: true
@@ -3639,7 +3639,7 @@ components:
           description: The unique ID of the deployment.
         app_id:
           type: string
-          description: The unique `_id` value of the Realm app.
+          description: The unique `_id` value of the Atlas App Services app.
         draft_id:
           type: string
           description: |-
@@ -3787,7 +3787,7 @@ components:
           properties:
             clusterName:
               type: string
-              description: Name of Atlas cluster associated with the Realm app.
+              description: Name of Atlas cluster associated with the Atlas App Services app.
           required:
             - clusterName
       required:
@@ -4377,7 +4377,7 @@ components:
               description: |-
                 **Only Available for Database Triggers** -- A
                 [$match](https://www.mongodb.com/docs/manual/reference/operator/aggregation/match)
-                expression document that MongoDB Realm includes in the underlying change
+                expression document that App Services includes in the underlying change
                 stream pipeline for the trigger. This is useful when you want to filter
                 change events beyond their operation type. The trigger will only fire if
                 the expression evaluates to true for a given change event.
@@ -4473,14 +4473,14 @@ components:
               properties:
                 app_default_domain:
                   type: string
-                  description: Default domain of hosted Realm app provided by Realm.
+                  description: Default domain of hosted Atlas App Services app provided by App Services.
                   example: myapp-qldqx.mongodbstitch.com
 
     HostedAssetMetadata:
       properties:
         appId:
           type: string
-          description: The unique App ID of the Realm app that is hosting the file.
+          description: The unique App ID of the Atlas App Services app that is hosting the file.
         last_modified:
           type: integer
           description: |-
@@ -4594,7 +4594,7 @@ components:
             The type of the value returned by the custom resolver. This
             can be a scalar, the name of an existing generated type, or
             a custom JSON schema object.
-            
+
             If undefined, the resolver returns a `DefaultPayload`
             object:
 
@@ -4665,7 +4665,7 @@ components:
 tags:
   - name: admin
     x-displayName: Administrator
-    description: Log in and adminstrate Realm apps.
+    description: Log in and adminstrate App Services apps.
   - name: apikeys
     x-displayName: API Keys
     description: View and manage API keys through the [API Key provider](https://www.mongodb.com/docs/realm/authentication/api-key/).
@@ -4717,7 +4717,7 @@ tags:
       ### 2. Make Changes to Your Application
 
       Once you've created a draft, make all of the changes that you want to
-      include in the draft. Realm adds any application changes that you make
+      include in the draft. App Services adds any application changes that you make
       to the draft so that you can deploy them together.
 
       ### 3. Deploy the Draft
