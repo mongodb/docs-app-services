@@ -59,8 +59,8 @@ This populates the rule expression box with the following:
         {
           "name": "owner-read-write", 
           "applyWhen": {},
-          "read": {"owner_id": "%%user.id"},
-          "write": {"owner_id": "%%user.id"}
+          "read": { "owner_id": "%%user.id" },
+          "write": { "owner_id": "%%user.id" }
         }
       ]  
     }
@@ -104,7 +104,7 @@ This populates the rule expression box with the following:
           "name": "owner-write", 
           "applyWhen": {},
           "read": true,
-          "write": {"owner_id": "%%user.id"}
+          "write": { "owner_id": "%%user.id" }
         }    
       ]  
     }
@@ -186,15 +186,17 @@ This populates the rule expression box with the following:
      "defaultRoles": [
        {
          "name": "admin", 
-         "applyWhen": { "%%user.custom_data.isGlobalAdmin": true},
+         "applyWhen": { 
+            "%%user.custom_data.isGlobalAdmin": true 
+         },
          "read": true,
          "write": true
        },
        {
          "name": "user", 
          "applyWhen": {},
-         "read": {"owner_id": "%%user.id"},
-         "write": {"owner_id": "%%user.id"}
+         "read": { "owner_id": "%%user.id" },
+         "write": { "owner_id": "%%user.id" }
        }
      ]  
    }
@@ -304,8 +306,8 @@ for us:
       {
         "name": "owner-read-write", 
         "applyWhen": {},
-        "read": {"owner_id": "%%user.id"},
-        "write": {"owner_id": "%%user.id"}
+        "read": { "owner_id": "%%user.id" },
+        "write": { "owner_id": "%%user.id" }
       }
     ]  
   }
@@ -323,13 +325,17 @@ like this:
       {
         "name": "owner-write", 
         "applyWhen": {},
-        "read": {"$or" : [
-            {"owner_id": "%%user.id"},
-            {"owner_id": {"$in": [
-              "%%user.custom_data.user.custom_data.subscribedTo"
-            ]}}
-          ]},
-        "write": {"owner_id": "%%user.id"}
+        "read": {
+           "$or" : [
+             { "owner_id": "%%user.id" },
+             { "owner_id": 
+                { "$in":
+                  "%%user.custom_data.subscribedTo"
+                }
+             }
+           ]
+        },
+        "write": { "owner_id": "%%user.id" }
       }    
     ]
   }
@@ -562,23 +568,23 @@ The following {+sync-short+} permissions specify two roles:
       {
          "name": "admin",
          "applyWhen": {
-         "%%user.custom_data.isTeamAdmin": true
+            "%%user.custom_data.isTeamAdmin": true
          },
          "read": {
-         "team": "%%user.custom_data.team"
+            "team": "%%user.custom_data.team"
          },
          "write": {
-         "team": "%%user.custom_data.team"
+            "team": "%%user.custom_data.team"
          }
       },
       {
          "name": "user",
          "applyWhen": {},
          "read": {
-         "team": "%%user.custom_data.team"
+            "team": "%%user.custom_data.team"
          },
          "write": {
-         "owner_id": "%%user.id"
+            "owner_id": "%%user.id"
          }
       }]
    }
@@ -594,3 +600,4 @@ The following {+sync-short+} permissions specify two roles:
    - :ref:`<authentication-triggers>`
 
    - :ref:`<custom-user-data>`
+
