@@ -26,7 +26,7 @@ call them. Instead, you send requests like this from any HTTP client:
    
    curl -X POST \
         -H 'api-key: <API Key>' \
-        -H 'Content-Type: application/ejson' \
+        -H 'Content-Type: application/json' \
         -H 'Accept: application/json' \
         -d '{ "message": "Hello, world!" }' \
         https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello
@@ -301,7 +301,7 @@ scheme for each custom endpoint by configuring the endpoint function.
             :emphasize-lines: 4
       
             curl -X POST \
-                 -H "Content-Type: application/ejson" \
+                 -H "Content-Type: application/json" \
                  -d '{ "message": "HELLO" }' \
                  https://data.mongodb-api.com/app/myapp-abcde/endpoint/sendMessage?secret=12345
    
@@ -340,7 +340,7 @@ scheme for each custom endpoint by configuring the endpoint function.
             :emphasize-lines: 3
             
             curl -X POST \
-              -H "Content-Type: application/ejson" \
+              -H "Content-Type: application/json" \
               -H "Endpoint-Signature::sha256=50d1c81c71e4fec2a6fb793ad4507e74de2d71e1acda4b5d4c3bcc8bb20c2d7e" \
               -d '{ "message": "Hello!" }' \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/sendMessage

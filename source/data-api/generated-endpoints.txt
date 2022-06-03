@@ -42,7 +42,7 @@ document in a linked cluster by calling the ``insertOne`` endpoint:
    .. output::
       :language: json
       
-      {"insertedId":"5f1a785e1536b6e6992fd588"}
+      { "insertedId": "5f1a785e1536b6e6992fd588" }
 
 When to Use the Data API
 ------------------------
@@ -277,11 +277,11 @@ Specify the Request Data Format
 Data API requests must include a ``Content-Type`` header to specify the
 :ref:`data format <data-api-data-formats>` used in the request body.
 
-- Use ``Accept: application/json`` to represent standard JSON types in a
+- Use ``Content-Type: application/json`` to represent standard JSON types in a
   Data API request body.
 
-- Use ``Accept: application/ejson`` to represent standard JSON types
-  *and* additional EJSON types in a Data API request body.
+- Use ``Content-Type: application/ejson`` to represent standard JSON
+  types *and* additional EJSON types in a Data API request body.
 
 .. tabs::
    
@@ -297,7 +297,7 @@ Data API requests must include a ``Content-Type`` header to specify the
             curl -X GET \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne \
               -H 'api-key: <API Key>' \
-              -H 'Accept: application/ejson' \
+              -H 'Content-Type: application/ejson' \
               --data-raw '{
                   "dataSource": "mongodb-atlas",
                   "database": "learn-data-api",
@@ -310,12 +310,8 @@ Data API requests must include a ``Content-Type`` header to specify the
          
          .. output::
             :language: json
-            :visible: false
             
-            {
-              "greeting": "Hello, Leafie!",
-              "date": { "$date": { "$numberLong": "1654589430998" } }
-            }
+            { "insertedId": "629971c0d71aad65bd59c595" }
    
    .. tab:: JSON
       :tabid: json
@@ -327,23 +323,24 @@ Data API requests must include a ``Content-Type`` header to specify the
             :emphasize-lines: 4
             
             curl -X POST \
-              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/updateOne \
               -H 'api-key: <API Key>' \
-              -H 'Accept: application/json' \
+              -H 'Content-Type: application/json' \
               --data-raw '{
                  "dataSource": "mongodb-atlas",
                  "database": "learn-data-api",
                  "collection": "hello",
+                 "filter": { "greeting": "Hello, world!" },
+                 "update": {
+                     "$set": { "greeting": "Hello, universe!" }
+                 }
               }'
          
          .. output::
             :language: json
             :visible: false
             
-            {
-              "greeting": "Hello, Leafie!",
-              "date": "2022-06-07T08:10:30.998Z"
-            }
+            { "matchedCount": 1, "modifiedCount": 1 }
 
 Choose a Response Data Format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -373,13 +370,14 @@ specified in your Data API configuration.
                  "dataSource": "mongodb-atlas",
                  "database": "learn-data-api",
                  "collection": "hello",
-                 "projection": { "_id": 0, "greeting": 1, "date": 1 }
+                 "projection": { "greeting": 1, "date": 1 }
               }'
          
          .. output::
             :language: json
             
             {
+              "_id": { "$oid": "629971c0d71aad65bd59c545"},
               "greeting": "Hello, Leafie!",
               "date": { "$date": { "$numberLong": "1654589430998" } }
             }
@@ -402,13 +400,14 @@ specified in your Data API configuration.
                  "dataSource": "mongodb-atlas",
                  "database": "learn-data-api",
                  "collection": "hello",
-                 "projection": { "_id": 0, "greeting": 1, "date": 1 }
+                 "projection": { "greeting": 1, "date": 1 }
               }'
          
          .. output::
             :language: json
             
             {
+              "_id": "629971c0d71aad65bd59c545",
               "greeting": "Hello, Leafie!",
               "date": "2022-06-07T08:10:30.998Z"
             }
@@ -573,7 +572,7 @@ If the action does not match any documents, the ``document`` field is
 .. _data-api-find:
 
 Find Multiple Documents
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -699,7 +698,7 @@ an empty array:
 .. _data-api-insertOne:
 
 Insert a Single Document
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -766,7 +765,7 @@ document as a string in the ``insertedId`` field:
 .. _data-api-insertMany:
 
 Insert Multiple Documents
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -833,7 +832,7 @@ documents as an array of strings in the ``insertedIds`` field:
 .. _data-api-updateOne:
 
 Update a Single Document
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -932,7 +931,7 @@ the ``upsertedId`` field:
 .. _data-api-updateMany:
 
 Update Multiple Documents
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -1031,7 +1030,7 @@ the ``upsertedId`` field:
 .. _data-api-replaceOne:
 
 Replace a Single Document
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -1127,7 +1126,7 @@ the ``upsertedId`` field:
 .. _data-api-deleteOne:
 
 Delete a Single Document
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -1192,7 +1191,7 @@ The ``deleteOne`` action returns the number of deleted documents in the
 .. _data-api-deleteMany:
 
 Delete Multiple Documents
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
@@ -1257,7 +1256,7 @@ The ``deleteMany`` action returns the number of deleted documents in the
 .. _data-api-aggregate:
 
 Run an Aggregation Pipeline
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
 ++++++++
