@@ -168,18 +168,6 @@ roles.
 
    :ref:`flexible-sync-rules-and-permissions`
 
-Configure Asymmetric Sync
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Asymmetric Sync is a sync strategy that is optimized for applications 
-with many client-side writes and no need for conflict resolution. You enable it 
-for one or more collections. If your app could benefit from this faster 
-type of sync, you configure it in the :guilabel:`Advanced Options` section of 
-the Sync page.
-
-.. seealso::
-
-   :ref:`config-asym-sync`
 
 .. _flexible-sync-query-subscription:
 
@@ -232,27 +220,38 @@ Optimize Sync with Asymmetric Sync
 Asymmetric Sync is a sync strategy that is optimized for applications 
 with heavy client-side write workloads. You enable it for one or more collections. 
 It supports any collection type, including an {+atlas-short+} time-series 
-collection.
+collection. 
+
+.. note::
+
+   Asymmetric Sync is a feature of Flexible Sync and cannot be enabled on apps 
+   that use Partition-Based Sync.
 
 For example, an IoT app that frequently logs sensor data has a significant 
 write workload, and essentially no read workload. The device may also be offline 
-for extended periods of time. Asymmetric sync bypasses some of the processing 
-required for bi-directional sync, significantly improving writes to a 
+for extended periods of time. Asymmetric Sync bypasses some of the processing 
+required for bi-directional sync, significantly improving write speed to an 
 {+atlas-short+} collection. 
 
-Other use cases include writing non-mutable data, such as invoices from as retail 
+Other use cases include writing immutable data, such as invoices from a retail 
 app, or logging application events, neither of which requires conflict 
 resolution.
 
+You can apply Asymmetric Sync to individual collections. This means 
+your app can use Asymmetric Sync for some data, but regular Flexible Sync on 
+other collections. 
+
+You configure and enable Asymmetric Sync in the :guilabel:`Advanced Options` 
+section of the Sync set up page. You must use Flexible Sync to enable 
+Asymmetric Sync. For more information on setting up Flexible Sync with 
+Asymmetric Sync, see :ref:`enable-flexible-sync`.
+
 After you have enabled Asymmetric Sync, you implement it in the client app 
-via the JavaScript SDK.
+via the client SDKs.
 
 .. TODO: add link to the js SDK
 
-.. note:: Additional SDK Support
+.. note:: SDK Support
 
-   Support for Asymmetric Sync in the other SDKs is forthcoming.
-
-.. seealso:: Configure Asymmetric Sync
-
-   :ref:`<config-asym-sync>`
+   The JavaScript SDK supports Asymmetric Sync. Support in the other SDKs is 
+   forthcoming.
