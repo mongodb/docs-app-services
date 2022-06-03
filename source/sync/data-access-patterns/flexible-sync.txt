@@ -214,8 +214,8 @@ sync objects with the backend {+app+} and can watch for and react to changes.
       To create queries from the .NET Client SDK, see the :ref:`.NET SDK 
       guide to Flexible Sync <dotnet-flexible-sync>`.
 
-Optimize Sync with Asymmetric Sync
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Optimize Sync with Asymmetric Sync (Optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Asymmetric Sync is a sync strategy that is optimized for applications 
 with heavy client-side *insert-only* workloads. You enable it for one or more 
@@ -228,7 +228,7 @@ collections. It supports writing to any collection type, including an
    that use Partition-Based Sync.
 
 For example, an IoT app that frequently logs sensor data has a significant 
-write workload, and essentially no read workload. The device may also be offline 
+write workload and no read workload. The device may also be offline 
 for extended periods of time. Asymmetric Sync bypasses some of the processing 
 required for bi-directional sync, significantly improving write speed to an 
 {+atlas-short+} collection. 
