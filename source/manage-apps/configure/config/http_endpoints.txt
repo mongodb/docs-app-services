@@ -37,6 +37,7 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        "http_method": "<HTTP method>",
        "function_name": "<Endpoint function name",
        "validation_method": "<Authorization scheme>",
+       "secret_name": "<Validation Secret Name>",
        "respond_result": <boolean>,
        "fetch_custom_user_data": <boolean>,
        "create_user_on_auth": <boolean>,
@@ -91,6 +92,13 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        - ``"SECRET_AS_QUERY_PARAM"``
        - ``"VERIFY_PAYLOAD"``
        - ``"NO_VALIDATION"``
+   
+   * - | ``secret_name``
+       | string
+     
+     - The name of a :ref:`secret <app-secret>` that contains a string.
+       If ``validation_method`` is set to ``SECRET_AS_QUERY_PARAM`` or
+       ``VERIFY_PAYLOAD``, this secret is used to authorize requests.
    
    * - | ``respond_result``
        | boolean

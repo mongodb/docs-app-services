@@ -50,9 +50,12 @@ When to Use the Data API
 You can use the Data API to integrate with any app or service that
 supports HTTPS requests. For example, you might:
 
-- call the API from a serverless edge function
+- call the API from a serverless edge function or client app
+
 - access test data and log events in a CI/CD workflow
+
 - integrate Atlas into a federated API gateway
+
 - connect from an environment not currently supported via a MongoDB
   Driver or Realm SDK
 
@@ -86,6 +89,8 @@ Endpoints in a locally deployed app use a base URL specific to the app's
    :caption: Endpoint Base URL (Local Apps)
 
    https://<Region>.aws.data.mongodb-api.com/app/<App ID>/endpoint/data/<Api Version>
+
+.. _data-api-setup:
 
 Set Up the Data API
 -------------------
@@ -175,15 +180,19 @@ authentication schemes to fit your application's needs.
       
       .. note::
          
-         You must enable an authentication provider before users can
-         authenticate through it.
+         You must :ref:`enable an authentication provider
+         <authentication-providers>` before users can authenticate with
+         it.
    
    .. tab:: User ID
       :tabid: auth-userid
 
-      User ID authentication runs all Data API requests as a single,
-      pre-selected application user. To select the user, specify their
-      User Account ID in your app's Data API configuration.
+      User ID authentication runs all requests as a single, pre-selected
+      application user. This is useful if all requests should have the
+      same permissions regardless of who called the endpoint.
+      
+      To select the user, specify their User Account ID in your app's
+      Data API configuration.
       
       .. code-block:: json
          :caption: http_endpoints/data_api_config.json
@@ -196,13 +205,17 @@ authentication schemes to fit your application's needs.
       :tabid: auth-script
    
       Script authentication calls a function to determine which
-      application user a Data API request runs as.
+      application user a request runs as. You can use this to implement
+      custom authentication and authorization schemes.
 
       The function must return an existing application user's Account ID
       as a string or ``{ "runAsSystemUser": true }`` to run the request
       as a :ref:`system user <system-user>` that has full access to
       MongoDB CRUD and Aggregation APIs and is not affected by any
       rules, roles, or permissions.
+
+      To define the function, specify the source code in your app's Data
+      API configuration.
       
       .. code-block:: json
          :caption: http_endpoints/data_api_config.json
@@ -229,6 +242,12 @@ JSON objects to fully represent the types that MongoDB supports. This
 preserves type information in responses but requires that your
 application understands how to parse and use EJSON.
 
+.. tip::
+   
+   The official MongoDB drivers include methods for working with EJSON.
+   You can also download a standalone parser like :npm:`bson
+   <package/bson>` on npm.
+
 .. tabs::
 
     .. tab:: JSON
@@ -254,10 +273,10 @@ application understands how to parse and use EJSON.
 Access Permissions
 ~~~~~~~~~~~~~~~~~~
 
-The Data API uses your app's :ref:`data access rules <rules>` and other
-to determine if a user can read and write data. To allow Data API
-requests to access a specific collection, you must first define rules
-for the collection.
+The Data API uses your app's :ref:`data access rules <rules>` to
+determine if a user can read and write data. To allow Data API requests
+to access a specific collection, you must first define rules for the
+collection.
 
 You can also set up an :ref:`IP Access List <ip-access-list>` for
 additional security.
@@ -296,12 +315,14 @@ Data API requests must include a ``Content-Type`` header to specify the
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne \
               -H 'api-key: <API Key>' \
               -H 'Content-Type: application/ejson' \
+              -H 'Accept: application/ejson' \
               --data-raw '{
                   "dataSource": "mongodb-atlas",
                   "database": "learn-data-api",
                   "collection": "hello",
                   "document": {
-                    "greeting": "Hello, EJSON!"
+                    "_id": { "$oid": "629971c0d71aad65bd59c595" },
+                    "greeting": "Hello, EJSON!",
                     "date": { "$date": { "$numberLong": "1654589430998" } }
                   }
               }'
@@ -309,7 +330,7 @@ Data API requests must include a ``Content-Type`` header to specify the
          .. output::
             :language: json
             
-            { "insertedId": "629971c0d71aad65bd59c595" }
+            { "insertedId": { "$oid": "629971c0d71aad65bd59c595" } }
    
    .. tab:: JSON
       :tabid: json
@@ -346,7 +367,7 @@ Choose a Response Data Format
 A request can include an ``Accept`` header to request a specific data
 format for the response body, either JSON or EJSON. If a request does
 not include a valid ``Accept`` header, the response uses the data format
-specified in your Data API configuration.
+specified in your :ref:`Data API configuration <data-api-response-type>`.
 
 .. tabs::
    
@@ -756,9 +777,21 @@ Response
 The ``insertOne`` action returns the ``_id`` value of the inserted
 document as a string in the ``insertedId`` field:
 
-.. code-block:: json
-   
-   { "insertedId": "6193504e1be4ab27791c8133" }
+.. tabs::
+
+   .. tab:: JSON
+      :tabid: json
+
+      .. code-block:: json
+         
+         { "insertedId": "6193504e1be4ab27791c8133" }
+
+   .. tab:: EJSON
+      :tabid: ejson
+
+      .. code-block:: json
+         
+         { "insertedId": { "$oid": "6193504e1be4ab27791c8133" } }
 
 .. _data-api-insertMany:
 

@@ -218,9 +218,12 @@ authentication schemes to fit your application's needs.
    .. tab:: User ID
       :tabid: auth-userid
 
-      User ID authentication runs all Data API requests as a single,
-      pre-selected application user. To select the user, specify their
-      User Account ID in the endpoint configuration.
+      User ID authentication runs all requests as a single, pre-selected
+      application user. This is useful if all requests should have the
+      same permissions regardless of who called the endpoint.
+      
+      To select the user, specify their User Account ID in the endpoint
+      configuration.
       
       .. code-block:: json
          :caption: http_endpoints/config.json
@@ -233,13 +236,17 @@ authentication schemes to fit your application's needs.
       :tabid: auth-script
    
       Script authentication calls a function to determine which
-      application user a request runs as.
+      application user a request runs as. You can use this to implement
+      custom authentication and authorization schemes.
 
       The function must return an existing application user's Account ID
       as a string or ``{ "runAsSystemUser": true }`` to run the request
       as a :ref:`system user <system-user>` that has full access to
       MongoDB CRUD and Aggregation APIs and is not subject to any
       rules, roles, or limited permissions.
+
+      To define the function, specify the source code in the endpoint
+      configuration.
       
       .. code-block:: json
          :caption: http_endpoints/config.json
@@ -289,21 +296,20 @@ scheme for each custom endpoint by configuring the endpoint function.
       :tabid: secret-parameter
       
       Authenticated users must prove that they are authorized to call
-      the endpoint by including a secret value as the value of the
+      the endpoint by including a specific string as the value of the
       ``secret`` query parameter.
+      
+      You define the string in a :ref:`secret <app-secret>` and
+      reference the secret by name in the endpoint configuration.
 
-      .. example::
+      .. code-block:: json
          
-         The following ``curl`` request uses secret query parameter
-         validation with the secret value ``12345``:
-      
-         .. code-block:: bash
-            :emphasize-lines: 4
-      
-            curl -X POST \
-                 -H "Content-Type: application/json" \
-                 -d '{ "message": "HELLO" }' \
-                 https://data.mongodb-api.com/app/myapp-abcde/endpoint/sendMessage?secret=12345
+         {
+            "verification_method": "SECRET_AS_QUERY_PARAM",
+            "secret_name": "secret_verification_string"
+         }
+
+      To learn how to include the secret in a request, see :ref:`Authorize the Request <endpoint-authorize>`.
    
    .. tab:: Payload Signature
       :tabid: payload-signature
@@ -312,38 +318,12 @@ scheme for each custom endpoint by configuring the endpoint function.
       the endpoint by including an ``Endpoint-Signature`` header that
       contains a hexadecimal-encoded :abbr:`HMAC (Hash-based Message
       Authentication Code)` SHA-256 hash generated from the request body
-      and the secret value.
+      and a secret string.
 
-      .. code-block:: none
-      
-         Endpoint-Signature::sha256=<hex encoded hash>
-      
-      You could use the following function to generate the payload signature:
-      
-      .. code-block:: javascript
-      
-         // Generate an HMAC request signature
-         exports = function signEndpointRequest(
-           secret, // the secret validation string e.g. 12345
-           body, // the endpoint request body e.g. { "message": "MESSAGE" }
-         ) {
-           const payload = EJSON.stringify(body)
-           return utils.crypto.hmac(payload, secret, "sha256", "hex");
-         }
+      You define the string in a :ref:`secret <app-secret>` and
+      reference the secret by name in the endpoint configuration.
 
-      .. example::
-         
-         The following ``curl`` includes a payload signature header
-         signed with the secret value ``12345``:
-
-         .. code-block:: bash
-            :emphasize-lines: 3
-            
-            curl -X POST \
-              -H "Content-Type: application/json" \
-              -H "Endpoint-Signature::sha256=50d1c81c71e4fec2a6fb793ad4507e74de2d71e1acda4b5d4c3bcc8bb20c2d7e" \
-              -d '{ "message": "Hello!" }' \
-              https://data.mongodb-api.com/app/myapp-abcde/endpoint/sendMessage
+      To learn how to sign your requests, see :ref:`Authorize the Request <endpoint-authorize>`.
 
 .. _endpoint-function:
 
@@ -385,14 +365,18 @@ Endpoint functions always receive two arguments:
           }
           const body = JSON.parse(request.body.text());
           // 2. Handle the request
-          await context.services
+          const { insertedId } = await context.services
             .get("mongodb-atlas")
             .db("myDb")
             .collection("myCollection")
             .insertOne({ date: new Date(), requestBody: body });
           // 3. Configure the response
           response.setStatusCode(201);
-          response.setBody("Successfully saved the request body");
+          // tip: You can also use EJSON.stringify instead of JSON.stringify.
+          response.setBody(JSON.stringify({
+             message: "Successfully saved the request body",
+             insertedId,
+          }));
         } catch (error) {
           response.setStatusCode(400);
           response.setBody(error.message);
@@ -674,3 +658,82 @@ authentication providers:
             -H 'jwtTokenString: <Custom JSON Web Token>' \
             -H 'Content-Type: application/json' \
             https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello
+
+.. _endpoint-authorize:
+
+Authorize the Request
+~~~~~~~~~~~~~~~~~~~~~
+
+Depending on the :ref:`endpoint configuration
+<endpoint-authentication>`, your requests may need to include additional
+authorization information.
+
+.. tabs::
+     
+   .. tab:: No Additional Authorization
+      :tabid: no-authorization
+   
+      All authenticated users are authorized to call the endpoint.
+      Authenticated requests do not need to include authorization
+      information.
+      
+   .. tab:: Secret Parameter
+      :tabid: secret-parameter
+      
+      Authenticated users must prove that they are authorized to call
+      the endpoint by including the endpoint's secret string as the
+      value of the ``secret`` query parameter.
+      
+      .. example::
+         
+         The following ``curl`` request uses secret query parameter
+         validation with the secret string ``"12345"``:
+      
+         .. code-block:: bash
+            :emphasize-lines: 4
+      
+            curl -X POST \
+                 -H "Content-Type: application/json" \
+                 -d '{ "message": "HELLO" }' \
+                 https://data.mongodb-api.com/app/myapp-abcde/endpoint/sendMessage?secret=12345
+   
+   .. tab:: Payload Signature
+      :tabid: payload-signature
+   
+      Authenticated users must prove that they are authorized to call
+      the endpoint by including an ``Endpoint-Signature`` header that
+      contains a hexadecimal-encoded :abbr:`HMAC (Hash-based Message
+      Authentication Code)` SHA-256 hash generated from the request body
+      and the endpoint's secret string.
+
+      .. code-block:: none
+         
+         Endpoint-Signature::sha256=<hex encoded hash>
+      
+      You could use the following function to generate the payload
+      signature:
+      
+      .. code-block:: javascript
+      
+         // Generate an HMAC request signature
+         exports = function signEndpointRequest(
+           secret, // the secret validation string e.g. 12345
+           body, // the endpoint request body e.g. { "message": "MESSAGE" }
+         ) {
+           const payload = EJSON.stringify(body)
+           return utils.crypto.hmac(payload, secret, "sha256", "hex");
+         }
+
+      .. example::
+         
+         The following ``curl`` includes a payload signature header
+         signed with the secret value ``12345``:
+
+         .. code-block:: bash
+            :emphasize-lines: 3
+            
+            curl -X POST \
+              -H "Content-Type: application/json" \
+              -H "Endpoint-Signature::sha256=50d1c81c71e4fec2a6fb793ad4507e74de2d71e1acda4b5d4c3bcc8bb20c2d7e" \
+              -d '{ "message": "Hello!" }' \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/sendMessage
