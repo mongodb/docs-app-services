@@ -218,9 +218,9 @@ Optimize Sync with Asymmetric Sync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Asymmetric Sync is a sync strategy that is optimized for applications 
-with heavy client-side write workloads. You enable it for one or more collections. 
-It supports any collection type, including an {+atlas-short+} time-series 
-collection. 
+with heavy client-side *insert-only* workloads. You enable it for one or more 
+collections. It supports writing to any collection type, including an 
+{+atlas-short+} time-series collection. 
 
 .. note::
 
@@ -238,13 +238,18 @@ app, or logging application events, neither of which requires conflict
 resolution.
 
 You can apply Asymmetric Sync to individual collections. This means 
-your app can use Asymmetric Sync for some data, but regular Flexible Sync on 
-other collections. 
+your app can use Asymmetric Sync to write some data, but bi-directional 
+Flexible Sync on other collections. 
+
+.. important::
+
+   Asymmetric Sync collections are only for writing data. You cannot use 
+   Flexible Sync queries against these collections. Instead, use 
+   :ref:`<data-sources>`.
 
 You configure and enable Asymmetric Sync in the :guilabel:`Advanced Options` 
-section of the Sync set up page. You must use Flexible Sync to enable 
-Asymmetric Sync. For more information on setting up Flexible Sync with 
-Asymmetric Sync, see :ref:`enable-flexible-sync`.
+section of the Sync set up page. For more information on setting up Flexible 
+Sync with Asymmetric Sync, see :ref:`enable-flexible-sync`.
 
 After you have enabled Asymmetric Sync, you implement it in the client app 
 via the client SDKs.
