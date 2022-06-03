@@ -202,24 +202,13 @@ endpoints <data-api-endpoints>` in ``http_endpoints/data_api_config.json``.
        provider. If a request includes a valid JWT from the external system
        that doesn't correspond to a registered user, this creates a new
        user with the JWT as an identity.
-
-   * - | ``run_as_system``
-       | boolean
-     - If ``true``, all Data API endpoints run as a :ref:`system user
-       <system-user>` that bypasses rules and schema validation and has
-       full read/write access to all collections in all linked data
-       sources.
-
-       .. include:: /includes/warning-data-api-system-auth-insecure.rst
-       
-       Cannot be used with ``run_as_user_id`` or ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id``
        | string
      - An application user's account ID. If defined, endpoints will
        always run as the specified user.
        
-       Cannot be used with ``run_as_system`` or ``run_as_user_id_script_source``.
+       Cannot be used with ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id_script_source``
        | string
@@ -228,7 +217,7 @@ endpoints <data-api-endpoints>` in ``http_endpoints/data_api_config.json``.
        execute the function on every request and run as the user with
        the ID returned from by the function.
        
-       Cannot be used with ``run_as_system`` or ``run_as_user_id``.
+       Cannot be used with ``run_as_user_id``.
 
 [Deprecated] HTTP Service Configuration
 ---------------------------------------
