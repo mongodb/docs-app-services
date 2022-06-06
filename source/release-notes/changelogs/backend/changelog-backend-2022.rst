@@ -8,7 +8,7 @@
 - Introduced field-level permissions for Flexible Sync.
 - Released :ref:`Asymmetric Sync <optimize-asymmetric-sync>`, which optimizes Flexible Sync for write-heavy workloads.
 - Introduced Data API for all Apps.
-- Introduced local regions for Azure data sources.
+- Introduced :ref:`local regions for Azure data sources <realm-regions>`.
 
 .. _backend_20220519:
 
