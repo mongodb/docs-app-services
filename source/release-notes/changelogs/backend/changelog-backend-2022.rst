@@ -4,7 +4,7 @@
 ~~~~~~~~~~~~~~~~~~~
 
 - Released Flexible Sync as GA.
-- Released Data API as GA.
+- Released :ref:`Data API <data-api>` as GA.
 - Introduced field-level permissions for Flexible Sync.
 - Released Asymmetric Sync, which optimizes Flexible Sync for write-heavy workloads.
 - Introduced Data API for all Apps.
