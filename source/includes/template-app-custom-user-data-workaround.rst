@@ -9,4 +9,4 @@ User Data`. Ensure :guilabel:`Enable Custom User Data` is ``ON``. If it was not
 on, turn it on and enter "mongodb-atlas", "Item", and "User" for
 :guilabel:`Cluster Name`, :guilabel:`Database Name`, and :guilabel:`Collection
 Name`, respectively. For :guilabel:`User ID Field`, enter ``_id``. Hit
-:guilabel:`Save`.
+:guilabel:`Save` (or :guilabel:`Save Draft`, then :ref:`deploy <deploy-ui>`).
