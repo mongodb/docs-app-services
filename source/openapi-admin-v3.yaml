@@ -3075,6 +3075,80 @@ paths:
             application/json:
               schema:
                 properties: {}
+  
+  "/groups/{groupId}/apps/{appId}/data_api/config":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - data-api
+      operationId: adminGetDataApiConfig
+      summary: Get the Data API Configuration
+      description: Get your app's [Data API](https://www.mongodb.com/docs/realm/data-api/generated-endpoints/) configuration.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DataApiConfig"
+    post:
+      tags:
+        - data-api
+      operationId: adminCreateDataApiConfig
+      summary: Enable the Data API
+      description: Create your app's [Data API](https://www.mongodb.com/docs/realm/data-api/generated-endpoints/) configuration.
+      requestBody:
+        description: A valid [configuration object](https://www.mongodb.com/docs/realm/manage-apps/configure/config/http_endpoints/#appconfig-data-api-endpoints) for the endpoint.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/DataApiConfig"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DataApiConfig"
+    patch:
+      tags:
+        - data-api
+      operationId: adminModifyDataApiConfig
+      summary: Modify the Data API
+      description: Update your app's [Data API](https://www.mongodb.com/docs/realm/data-api/generated-endpoints/) configuration.
+      requestBody:
+        description: A valid [configuration object](https://www.mongodb.com/docs/realm/manage-apps/configure/config/http_endpoints/#appconfig-data-api-endpoints) for the endpoint.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/DataApiConfig"
+      responses:
+        "204":
+          description: No content
+  
+  "/groups/{groupId}/apps/{appId}/data_api/versions":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - data-api
+      operationId: adminGetDataApiVersions
+      summary: List Data API versions
+      description: List all possible Data API versions.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DataApiVersion"
 
   /groups/{groupId}/apps/{appId}/graphql:
     parameters:
@@ -3735,6 +3809,9 @@ components:
             - "NO_VALIDATION"
             - "SECRET_AS_QUERY_PARAM"
             - "VERIFY_PAYLOAD"
+        return_type:
+          $ref: "#/components/schemas/EndpointDataFormat"
+          description: The default [data format](https://mongodb.com/docs/atlas/app-services/data-api/#data-formats) returned by custom HTTPS endpoints.
         respond_result:
           type: boolean
         fetch_custom_user_data:
@@ -3743,6 +3820,41 @@ components:
           type: boolean
         disabled:
           type: boolean
+    EndpointDataFormat:
+      type: string
+      description: A [data format](https://mongodb.com/docs/atlas/app-services/data-api/#data-formats) supported by the Data API & custom endpoints.
+      enum:
+        - JSON
+        - EJSON
+    DataApiVersion:
+      type: string
+      description: A supported version of the Data API.
+      enum:
+        - v1
+    DataApiConfig:
+      type: object
+      properties:
+        disabled:
+          type: boolean
+        versions:
+          type: array
+          items:
+            $ref: "#/components/schemas/DataApiVersion"
+        return_type:
+          $ref: "#/components/schemas/EndpointDataFormat"
+          description: The default [data format](https://mongodb.com/docs/atlas/app-services/data-api/#data-formats) returned by Data API endpoints.
+        create_user_on_auth:
+          type: boolean
+        run_as_user_id:
+          type: string
+          description: An application user's account ID. If defined, endpoints will always run as the specified user.
+        run_as_user_id_script_source:
+          type: string
+          description: |-
+            Stringified source code for a function that returns an
+            application user's account ID. If defined, endpoints execute
+            the function on every request and run as the user with the
+            ID returned from the function.
     Error:
       type: object
       properties:
@@ -4741,12 +4853,15 @@ tags:
       in the `Deployment` page. You can use the download to deploy your
       changes in the `realm-cli` or as a reference as you reapply changes in
       the UI.
+  - name: data-api
+    x-displayName: Data API
+    description: Manage your app's generated [Data API endpoints](https://www.mongodb.com/docs/realm/data-api/generated-endpoints/).
   - name: dependencies
     x-displayName: Dependencies
     description: Manage your application's [external dependencies](https://www.mongodb.com/docs/realm/functions/dependencies/).
   - name: endpoints
     x-displayName: Endpoints
-    description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/realm/endpoints/).
+    description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/realm/data-api/custom-endpoints/).
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/realm/functions/).
