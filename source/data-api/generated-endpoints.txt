@@ -1,0 +1,1397 @@
+.. _data-api-endpoints:
+
+==================
+Data API Endpoints
+==================
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+The Data API lets you securely read and write data using standard HTTPS
+requests. The API includes automatically generated endpoints that each
+represent a MongoDB operation. You can use the endpoints to create,
+read, update, delete, and aggregate documents in a MongoDB data source.
+
+For example, this :mdn:`POST <Web/HTTP/Methods/POST>` request stores a
+document in a linked cluster by calling the ``insertOne`` endpoint:
+
+.. io-code-block::
+   
+   .. input::
+      :language: bash
+      
+      curl --request POST \
+        'https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne' \
+        --header 'Content-Type: application/json' \
+        --header 'Accept: application/json' \
+        --header 'api-key: TpqAKQgvhZE4r6AOzpVydJ9a3tB1BLMrgDzLlBLbihKNDzSJWTAHMVbsMoIOpnM6' \
+        --data-raw '{
+            "dataSource": "mongodb-atlas",
+            "database": "learn-data-api",
+            "collection": "hello",
+            "document": {
+              "text": "Hello from the Data API!",
+            }
+        }'
+   
+   .. output::
+      :language: json
+      
+      { "insertedId": "5f1a785e1536b6e6992fd588" }
+
+When to Use the Data API
+------------------------
+
+You can use the Data API to integrate with any app or service that
+supports HTTPS requests. For example, you might:
+
+- call the API from a serverless edge function or client app
+
+- access test data and log events in a CI/CD workflow
+
+- integrate Atlas into a federated API gateway
+
+- connect from an environment not currently supported via a MongoDB
+  Driver or Realm SDK
+
+An operation called through an API endpoint will likely take longer than
+the corresponding MongoDB operation called through a connected MongoDB
+Driver. For high-load use-cases and latency sensitive applications, we
+recommend connecting directly to your database with a MongoDB driver. To
+learn more, visit the :driver:`MongoDB Drivers </>` documentation.
+
+.. _data-api-base-url:
+
+Base URL
+--------
+
+The Data API endpoints in an app share a base URL. The URL uses your App
+ID to uniquely point to your app and specifies which version of the Data
+API to call. Each endpoint has a unique URL formed by appending the
+endpoint's route to your app's base URL.
+
+Globally deployed apps use the following format:
+
+.. code-block:: none
+   :caption: Endpoint Base URL (Global Apps):
+
+   https://data.mongodb-api.com/app/<App ID>/endpoint/data/<Api Version>
+   
+Endpoints in a locally deployed app use a base URL specific to the app's
+:ref:`deployment region <realm-regions>` (e.g. ``us-east-1``)
+
+.. code-block:: none
+   :caption: Endpoint Base URL (Local Apps)
+
+   https://<Region>.aws.data.mongodb-api.com/app/<App ID>/endpoint/data/<Api Version>
+
+.. _data-api-setup:
+
+Set Up the Data API
+-------------------
+
+You can configure the Data API for your app from the {+ui+} or by
+deploying configuration files with Realm CLI:
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      1. Click :guilabel:`HTTPS Endpoints` in the {+leftnav+} and then
+         select the :guilabel:`Data API` tab.
+      
+      2. Enable the Data API for your app. This generates endpoints that
+         can access any MongoDB data source linked to your app.
+      
+      3. Choose an :ref:`authentication <data-api-authentication>`
+         method and enable authentication providers.
+      
+      4. Choose a :ref:`response type <data-api-response-type>`.
+      
+      5. Save the Data API configuration.
+      
+      6. Configure :ref:`access permissions <data-api-permissions>` by
+         defining rules for collections in your linked data sources to
+         allow requests to securely read and write data.
+      
+      7. Save and deploy your app.
+     
+   .. tab::
+      :tabid: cli
+      
+      1. Pull the latest version of your app.
+         
+         .. code-block:: bash
+
+            realm-cli pull --remote="<Your App ID>"
+      
+      2. Define a Data API configuration file.
+         
+         .. code-block:: bash
+            :caption: https_endpoints/data_api_config.json
+
+            {
+              "disabled": false,
+              "versions": ["v1"],
+              "return_type": <"JSON" | "EJSON">
+            }
+      
+      3. Deploy your app.
+         
+         .. code-block:: bash
+            
+            realm-cli push
+
+.. _data-api-authentication:
+
+Authentication
+~~~~~~~~~~~~~~
+
+Data API endpoints run in the context of a specific user, which allows
+your app to enforce rules and validate document schemas for each
+request.
+
+By default, endpoints use Application Authentication, which requires
+each request to include credentials for one of your application users,
+like an API key or JWT. You can also configure other custom
+authentication schemes to fit your application's needs.
+
+.. tabs::
+
+   .. tab:: Application
+      :tabid: auth-credentials
+
+      Application authentication requires users to authenticate each
+      Data API request by providing login credentials for one of the
+      following supported authentication providers:
+      
+      - :ref:`Email/Password <email-password-authentication>`
+      - :ref:`API Key <api-key-authentication>`
+      - :ref:`Custom JWT <custom-jwt-authentication>`
+      
+      To see how to include authentication credentials in Data API
+      requests, see :ref:`data-api-authenticate`.
+      
+      .. note::
+         
+         You must :ref:`enable an authentication provider
+         <authentication-providers>` before users can authenticate with
+         it.
+   
+   .. tab:: User ID
+      :tabid: auth-userid
+
+      User ID authentication runs all requests as a single, pre-selected
+      application user. This is useful if all requests should have the
+      same permissions regardless of who called the endpoint.
+      
+      To select the user, specify their User Account ID in your app's
+      Data API configuration.
+      
+      .. code-block:: json
+         :caption: http_endpoints/data_api_config.json
+
+         {
+           "run_as_user_id": "628e47baf4c2ac2796fc8a91"
+         }
+   
+   .. tab:: Script
+      :tabid: auth-script
+   
+      Script authentication calls a function to determine which
+      application user a request runs as. You can use this to implement
+      custom authentication and authorization schemes.
+
+      The function must return an existing application user's Account ID
+      as a string or ``{ "runAsSystemUser": true }`` to run the request
+      as a :ref:`system user <system-user>` that has full access to
+      MongoDB CRUD and Aggregation APIs and is not affected by any
+      rules, roles, or permissions.
+
+      To define the function, specify the source code in your app's Data
+      API configuration.
+      
+      .. code-block:: json
+         :caption: http_endpoints/data_api_config.json
+
+         {
+           "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
+         }
+
+.. _data-api-response-type:
+
+Response Type
+~~~~~~~~~~~~~
+
+Endpoints can return data in one of two :ref:`data formats
+<data-api-data-formats>`, either JSON or EJSON.
+
+By default, endpoints return JSON, which is a standard data format that
+is widely supported modern langauges and platforms. However, JSON cannot
+represent every data type that you can store in MongoDB and loses type
+information for some data types.
+
+You can also configure endpoints to return EJSON, which uses structured
+JSON objects to fully represent the types that MongoDB supports. This
+preserves type information in responses but requires that your
+application understands how to parse and use EJSON.
+
+.. tip::
+   
+   The official MongoDB drivers include methods for working with EJSON.
+   You can also download a standalone parser like :npm:`bson
+   <package/bson>` on npm.
+
+.. tabs::
+
+    .. tab:: JSON
+       :tabid: json
+
+       .. code-block:: json
+
+          {
+             "return_type": "JSON"
+          }
+
+    .. tab:: EJSON
+       :tabid: ejson
+
+       .. code-block:: json
+
+          {
+             "return_type": "EJSON"
+          }
+
+.. _data-api-permissions:
+
+Access Permissions
+~~~~~~~~~~~~~~~~~~
+
+The Data API uses your app's :ref:`data access rules <rules>` to
+determine if a user can read and write data. To allow Data API requests
+to access a specific collection, you must first define rules for the
+collection.
+
+You can also set up an :ref:`IP Access List <ip-access-list>` for
+additional security.
+
+Call a Data API Endpoint
+------------------------
+
+You can call a Data API endpoint from any standard HTTP client. Each
+request can include configuration headers and arguments in the request
+body.
+
+Specify the Request Data Format
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Data API requests must include a ``Content-Type`` header to specify the
+:ref:`data format <data-api-data-formats>` used in the request body.
+
+- Use ``Content-Type: application/json`` to represent standard JSON types in a
+  Data API request body.
+
+- Use ``Content-Type: application/ejson`` to represent standard JSON
+  types *and* additional EJSON types in a Data API request body.
+
+.. tabs::
+   
+   .. tab:: EJSON
+      :tabid: ejson
+      
+      .. io-code-block::
+         
+         .. input::
+            :language: bash
+            :emphasize-lines: 4
+            
+            curl -X GET \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne \
+              -H 'api-key: <API Key>' \
+              -H 'Content-Type: application/ejson' \
+              -H 'Accept: application/ejson' \
+              --data-raw '{
+                  "dataSource": "mongodb-atlas",
+                  "database": "learn-data-api",
+                  "collection": "hello",
+                  "document": {
+                    "_id": { "$oid": "629971c0d71aad65bd59c595" },
+                    "greeting": "Hello, EJSON!",
+                    "date": { "$date": { "$numberLong": "1654589430998" } }
+                  }
+              }'
+         
+         .. output::
+            :language: json
+            
+            { "insertedId": { "$oid": "629971c0d71aad65bd59c595" } }
+   
+   .. tab:: JSON
+      :tabid: json
+      
+      .. io-code-block::
+         
+         .. input::
+            :language: bash
+            :emphasize-lines: 4
+            
+            curl -X POST \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/updateOne \
+              -H 'api-key: <API Key>' \
+              -H 'Content-Type: application/json' \
+              --data-raw '{
+                 "dataSource": "mongodb-atlas",
+                 "database": "learn-data-api",
+                 "collection": "hello",
+                 "filter": { "greeting": "Hello, world!" },
+                 "update": {
+                     "$set": { "greeting": "Hello, universe!" }
+                 }
+              }'
+         
+         .. output::
+            :language: json
+            :visible: false
+            
+            { "matchedCount": 1, "modifiedCount": 1 }
+
+Choose a Response Data Format
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A request can include an ``Accept`` header to request a specific data
+format for the response body, either JSON or EJSON. If a request does
+not include a valid ``Accept`` header, the response uses the data format
+specified in your :ref:`Data API configuration <data-api-response-type>`.
+
+.. tabs::
+   
+   .. tab:: EJSON
+      :tabid: ejson
+      
+      .. io-code-block::
+         
+         .. input::
+            :language: bash
+            :emphasize-lines: 5
+            
+            curl -X GET \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+              -H 'api-key: <API Key>' \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/ejson' \
+              --data-raw '{
+                 "dataSource": "mongodb-atlas",
+                 "database": "learn-data-api",
+                 "collection": "hello",
+                 "projection": { "greeting": 1, "date": 1 }
+              }'
+         
+         .. output::
+            :language: json
+            
+            {
+              "_id": { "$oid": "629971c0d71aad65bd59c545"},
+              "greeting": "Hello, Leafie!",
+              "date": { "$date": { "$numberLong": "1654589430998" } }
+            }
+   
+   .. tab:: JSON
+      :tabid: json
+      
+      .. io-code-block::
+         
+         .. input::
+            :language: bash
+            :emphasize-lines: 5
+            
+            curl -X POST \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+              -H 'api-key: <API Key>' \
+              -H 'Content-Type: application/json' \
+              -H 'Accept: application/json' \
+              --data-raw '{
+                 "dataSource": "mongodb-atlas",
+                 "database": "learn-data-api",
+                 "collection": "hello",
+                 "projection": { "greeting": 1, "date": 1 }
+              }'
+         
+         .. output::
+            :language: json
+            
+            {
+              "_id": "629971c0d71aad65bd59c545",
+              "greeting": "Hello, Leafie!",
+              "date": "2022-06-07T08:10:30.998Z"
+            }
+
+.. _data-api-authenticate:
+
+Authenticate the Request
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+To keep your data secure and correct, generated Data API endpoints
+always run in the context of a specific, registered user and
+automatically enforce your app's :ref:`rules <rules>` and :ref:`schemas
+<schemas>`. Incoming requests must include one or more headers that
+contain valid user credentials for one of the following enabled
+authentication providers:
+
+- :ref:`Email/Password <email-password-authentication>`
+- :ref:`API Key <api-key-authentication>`
+- :ref:`Custom JWT <custom-jwt-authentication>`
+
+.. tabs-realm-auth-providers::
+   
+   .. tab::
+      :tabid: local-userpass
+
+      .. code-block:: bash
+         :emphasize-lines: 3-4
+         
+         curl -X POST \
+           https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+           -H 'email: <Email Address>' \
+           -H 'password: <Password>' \
+           -H 'Content-Type: application/json' \
+           --data-raw '{
+             "dataSource": "mongodb-atlas",
+             "database": "learn-data-api",
+             "collection": "hello",
+           }'
+   
+   .. tab::
+      :tabid: api-key
+
+      .. code-block:: bash
+         :emphasize-lines: 3
+         
+         curl -X POST \
+           https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+           -H 'api-key: <API Key>' \
+           -H 'Content-Type: application/json' \
+           --data-raw '{
+             "dataSource": "mongodb-atlas",
+             "database": "learn-data-api",
+             "collection": "hello",
+           }'
+   
+   .. tab::
+      :tabid: custom-token
+
+      .. code-block:: bash
+         :emphasize-lines: 3
+         
+         curl -X POST \
+           https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+           -H 'jwtTokenString: <Custom JSON Web Token>' \
+           -H 'Content-Type: application/json' \
+           --data-raw '{
+             "dataSource": "mongodb-atlas",
+             "database": "learn-data-api",
+             "collection": "hello",
+           }'
+
+Endpoints
+---------
+
+.. _data-api-findOne:
+
+Find a Single Document
+~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/findOne
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/findOne' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": {
+           "text": "Do the dishes"
+         }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": <query filter>,
+     "projection": <projection>
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Optional
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
+       The ``findOne`` action returns the first document in the
+       collection that matches this filter.
+       
+       If you do not specify a ``filter``, the action matches all
+       document in the collection.
+
+     - ``{}``
+
+   * - projection
+     - object
+     - Optional
+     - A :manual:`MongoDB Query Projection </tutorial/project-fields-from-query-results/>`.
+       Depending on the projection, the returned document will either
+       omit specific fields or include only specified fields or values
+     - ``{}``
+
+Response
+++++++++
+
+The ``findOne`` action returns the matched document in the ``document``
+field:
+
+.. code-block:: json
+   
+   { "document": { "_id": "6193504e1be4ab27791c8133", "test": "foo" } }
+
+If the action does not match any documents, the ``document`` field is
+``null``:
+
+.. code-block:: json
+   
+   { "document": null }
+
+.. _data-api-find:
+
+Find Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/find
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": {
+           "status": "complete"
+         },
+         "sort": { "completedAt": 1 },
+         "limit": 10
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": <query filter>,
+     "projection": <projection>,
+     "sort": <sort expression>,
+     "limit": <number>,
+     "skip": <number>
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Optional
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`. The
+       ``find`` action returns documents in the collection that match
+       this filter. 
+       
+       If you do not specify a ``filter``, the action matches all
+       document in the collection.
+
+       If the filter matches more documents than the specified
+       ``limit``, the action only returns a subset of them. You can use
+       ``skip`` in subsequent queries to return later documents in the
+       result set.
+     
+     - ``{}``
+
+   * - projection
+     - object
+     - Optional
+     - A :manual:`MongoDB Query Projection </tutorial/project-fields-from-query-results/>`.
+       Depending on the projection, the returned documents either omit
+       specific fields or include only specified fields and values.
+     - ``{}``
+
+   * - sort
+     - object
+     - Optional
+     - A :manual:`MongoDB Sort Expression </reference/operator/aggregation/sort/>`.
+       Matched documents are returned in ascending or descending order
+       of the fields specified in the expression.
+     - ``{}``
+
+   * - limit
+     - number
+     - Optional
+     - The maximum number of matched documents to include in the
+       returned result set. Each request may return up to 50,000
+       documents.
+     - 1000
+
+   * - skip
+     - number
+     - Optional
+     - The number of matched documents to skip before adding matched
+       documents to the result set.
+     - 0
+
+
+Response
+++++++++
+
+The ``find`` action returns an array of matched document in the
+``documents`` field:
+
+.. code-block:: json
+   
+   {
+     "documents": [
+       { "_id": "6193504e1be4ab27791c8133", ... },
+       { "_id": "6194604e1d38dc33792d8257", ... }
+     ]
+   }
+
+If the action does not match any documents, the ``documents`` field is
+an empty array:
+
+.. code-block:: json
+   
+   { "documents": [] }
+
+.. _data-api-insertOne:
+
+Insert a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/insertOne
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "document": {
+           "status": "open",
+           "text": "Do the dishes"
+         }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "document": { ... },
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - document
+     - object
+     - Required
+     - An :manual:`EJSON <reference/mongodb-extended-json/>` document
+       to insert into the collection.
+     - 
+
+Response
+++++++++
+
+The ``insertOne`` action returns the ``_id`` value of the inserted
+document as a string in the ``insertedId`` field:
+
+.. tabs::
+
+   .. tab:: JSON
+      :tabid: json
+
+      .. code-block:: json
+         
+         { "insertedId": "6193504e1be4ab27791c8133" }
+
+   .. tab:: EJSON
+      :tabid: ejson
+
+      .. code-block:: json
+         
+         { "insertedId": { "$oid": "6193504e1be4ab27791c8133" } }
+
+.. _data-api-insertMany:
+
+Insert Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/insertMany
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertMany' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "documents": [
+           { "status": "open", "text": "Mop the floor" },
+           { "status": "open", "text": "Clean the windows" }
+         ]
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "documents": [{ ... }, ...]
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - documents
+     - array of objects
+     - Required
+     - An array of one or more :manual:`EJSON <reference/mongodb-extended-json/>`
+       documents to insert into the collection.
+     - 
+
+Response
+++++++++
+
+The ``insertMany`` action returns the ``_id`` values of all inserted
+documents as an array of strings in the ``insertedIds`` field:
+
+.. code-block:: json
+   
+   { "insertedIds": ["61935189ec53247016a623c9", "61935189ec53247016a623ca"] }
+
+.. _data-api-updateOne:
+
+Update a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/updateOne
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/updateOne' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": { "_id": { "$oid": "6193ebd53821e5ec5b4f6c3b" } },
+         "update": {
+             "$set": {
+                 "status": "complete",
+                 "completedAt": { "$date": { "$numberLong": "1637083942954" } }
+             }
+         }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": { ... },
+     "update": { ... },
+     "upsert": true|false
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Required
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
+       The ``updateOne`` action modifies the first document in the
+       collection that matches this filter.
+     - 
+
+   * - update
+     - object
+     - Required
+     - A :manual:`MongoDB Update Expression </tutorial/update-documents/>`
+       that specifies how to modify the matched document.
+     - 
+
+   * - upsert
+     - boolean
+     - Optional
+     - The ``upsert`` flag only applies if no documents match the
+       specified ``filter``. If ``true``, the ``updateOne`` action
+       inserts a new document that matches the filter with the specified
+       ``update`` applied to it.
+     - false
+
+Response
+++++++++
+
+The ``updateOne`` action returns:
+
+- the number of documents that the filter matched in the ``matchedCount`` field
+- the number of matching documents that were updated in the ``modifiedCount`` field
+
+.. code-block:: json
+   
+   { "matchedCount": 1, "modifiedCount": 1 }
+
+If ``upsert`` is set to ``true`` and no documents match the filter, the
+action returns the ``_id`` value of the inserted document as a string in
+the ``upsertedId`` field:
+
+.. code-block:: json
+   
+   { "matchedCount": 0, "modifiedCount": 0, "upsertedId": "619353593821e5ec5b0f8944" }
+
+.. _data-api-updateMany:
+
+Update Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/updateMany
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/updateMany' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": { "status": "open" },
+         "update": {
+             "$set": {
+                 "status": "complete",
+                 "completedAt": { "$date": { "$numberLong": "1637083942954" } }
+             }
+         }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": { ... },
+     "update": { ... },
+     "upsert": true|false
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Required
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
+       The ``updateMany`` action modifies all documents in the
+       collection that match this filter.
+     - 
+
+   * - update
+     - object
+     - Required
+     - A :manual:`MongoDB Update Expression </tutorial/update-documents/>`
+       that specifies how to modify matched documents.
+     - 
+
+   * - upsert
+     - boolean
+     - Optional
+     - The ``upsert`` flag only applies if no documents match the
+       specified ``filter``. If ``true``, the ``updateMany`` action
+       inserts a new document that matches the filter with the specified
+       ``update`` applied to it.
+     - false
+
+Response
+++++++++
+
+The ``updateMany`` action returns:
+
+- the number of documents that the filter matched in the ``matchedCount`` field
+- the number of matching documents that were updated in the ``modifiedCount`` field
+
+.. code-block:: json
+   
+   { "matchedCount": 12, "modifiedCount": 12 }
+
+If ``upsert`` is set to ``true`` and no documents match the filter, the
+action returns the ``_id`` value of the inserted document as a string in
+the ``upsertedId`` field:
+
+.. code-block:: json
+   
+   { "matchedCount": 0, "modifiedCount": 0, "upsertedId": "619353593821e5ec5b0f8944" }
+
+.. _data-api-replaceOne:
+
+Replace a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/replaceOne
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/replaceOne' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": { "text": "Call Jessica" },
+         "replacement": {
+           "status": "open",
+           "text": "Call Amy"
+         }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": { ... },
+     "replacement": { ... },
+     "upsert": true|false
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Required
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
+       The ``replaceOne`` action overwrites the first document in the
+       collection that matches this filter.
+     - 
+
+   * - replacement
+     - object
+     - Required
+     - An :manual:`EJSON <reference/mongodb-extended-json/>` document
+       that overwrites the matched document.
+     - 
+
+   * - upsert
+     - boolean
+     - Optional
+     - The ``upsert`` flag only applies if no documents match the
+       specified ``filter``. If ``true``, the ``replaceOne`` action
+       inserts the ``replacement`` document.
+     - false
+
+Response
+++++++++
+
+The ``replaceOne`` action returns:
+
+- the number of documents that the filter matched in the ``matchedCount`` field
+- the number of matching documents that were replaced in the ``modifiedCount`` field
+
+.. code-block:: json
+   
+   { "matchedCount": 1, "modifiedCount": 1 }
+
+If ``upsert`` is set to ``true`` and no documents match the filter, the
+action returns the ``_id`` value of the inserted document as a string in
+the ``upsertedId`` field:
+
+.. code-block:: json
+   
+   { "matchedCount": 0, "modifiedCount": 0, "upsertedId": "619353593821e5ec5b0f8944" }
+
+.. _data-api-deleteOne:
+
+Delete a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/deleteOne
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/deleteOne' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": { "_id": { "$oid": "6193ebd53821e5ec5b4f6c3b" } }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": { ... }
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Required
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
+       The ``deleteOne`` action deletes the first document in the
+       collection that matches this filter.
+     - 
+
+Response
+++++++++
+
+The ``deleteOne`` action returns the number of deleted documents in the
+``deletedCount`` field:
+
+.. code-block:: json
+   
+   { "deletedCount": 1 }
+
+.. _data-api-deleteMany:
+
+Delete Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/deleteMany
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/deleteMany' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "filter": { "status": "complete" }
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "filter": { ... }
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - filter
+     - object
+     - Required
+     - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
+       The ``deleteMany`` action deletes all documents in the collection
+       that match this filter.
+     - 
+
+Response
+++++++++
+
+The ``deleteMany`` action returns the number of deleted documents in the
+``deletedCount`` field:
+
+.. code-block:: json
+   
+   { "deletedCount": 42 }
+
+.. _data-api-aggregate:
+
+Run an Aggregation Pipeline
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Endpoint
+++++++++
+
+.. code-block:: text
+   
+   POST /action/aggregate
+
+Example
++++++++
+
+.. code-block:: sh
+   
+   curl --request POST \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/aggregate' \
+     --header 'Content-Type: application/json' \
+     --header 'Access-Control-Request-Headers: *' \
+     --header 'api-key: <API Key>' \
+     --data-raw '{
+         "dataSource": "mongodb-atlas",
+         "database": "learn-data-api",
+         "collection": "tasks",
+         "pipeline": [
+           {
+             "$group": {
+               "_id": "$status",
+               "count": { "$sum": 1 },
+               "text": { "$push": "$text" }
+             }
+           },
+           { "$sort": { "count": 1 } }
+         ]
+     }'
+
+Request Body
+++++++++++++
+
+.. code-block:: json
+   
+   {
+     "dataSource": "<data source name>",
+     "database": "<database name>",
+     "collection": "<collection name>",
+     "pipeline": [<aggregation pipeline>]
+   }
+
+.. include:: /includes/data-api-body-params-common.rst
+
+.. list-table::
+   :stub-columns: 1
+   :widths: 20 14 11 45 10
+
+   * - pipeline
+     - array of objects
+     - Required
+     - A :manual:`MongoDB Aggregation Pipeline </core/aggregation-pipeline/>`.
+     - 
+
+Response
+++++++++
+
+The ``aggregate`` action returns the result set of the final stage of
+the pipeline as an array of documents in the ``documents`` field:
+
+.. code-block:: json
+   
+   { "documents": [{ ... }, ...] }
+
+.. _data-api-error-codes:
+
+Error Codes
+-----------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Code
+     - Description
+       
+   * - 400
+     - Bad request
+       
+       The request was invalid. This might mean:
+       
+       - A request header is missing.
+       - The request body is malformed or improperly encoded.
+       - A field has a value with an invalid type.
+       - The specified data source is disabled or does not exist.
+       - The specified database or collection does not exist.
+       
+   * - 401
+     - Unauthorized
+       
+       The request did not include an authorized and enabled
+       API Key. Ensure that your API Key is enabled
+       for the cluster.
+       
+   * - 404
+     - Not found
+       
+       The request was sent to an endpoint that does not exist.
+       
+   * - 500s 
+     - Server errors
+       
+       The Data API encountered an internal error and could not complete
+       the request.
