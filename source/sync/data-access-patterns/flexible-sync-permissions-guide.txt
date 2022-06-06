@@ -21,12 +21,40 @@ following common use cases:
 - :ref:`dynamic-collaboration`
 - :ref:`tiered-privileges`
 
-These assume you have already created a Realm app.
 
-.. seealso::
+Using the Template Apps
+-----------------------
 
-   - :ref:`create-realm-apps`
-   - :ref:`flexible-sync-rules-and-permissions`
+You can get these permissions models up and running quickly with our Flexible
+Sync Permissions Guide template apps. Each template app comes with a backend and
+a Node.js demo client. The backend has all functions, permissions, and triggers
+set up as described here. The demo client runs through a simple script to
+demonstrate how the backend works.
+
+You need an authenticated {+cli+} to use these templates.
+
+.. include:: /includes/install-realm-cli-v2.rst
+
+See :ref:`cli-auth-with-api-token` for login instructions.
+
+Once logged in, you can use the ``apps create`` command with the ``--template``
+flag to instantiate a template. 
+
+.. code-block:: bash
+
+   realm-cli apps create --template=TEMPLATE_NAME
+
+
+About These Examples
+--------------------
+
+The examples here use ``defaultRoles``. This means the same permissions rules
+apply to all collections in your app. As your app grows in complexity, you might
+need collection-specific roles that only apply to some collections and not
+others. In particular, if a rule in the ``defaultRoles`` uses a "queryable
+field" that doesn't exist on objects in a certain collection, you can override
+the rules for that collection by providing a collection-specific role. See
+:ref:`flexible-sync-roles`.
 
 .. _read-write-own-data:
 
@@ -222,6 +250,25 @@ To finish, skip :guilabel:`Advanced Configuration`, and then click
 Dynamic Collaboration
 ---------------------
 
+.. note:: Template Available!
+
+   To use the backend template and get the demo client, run the following command:
+
+   .. code-block:: bash
+
+      realm-cli apps create --name=add-collaborators --template=flex-sync-permissions.add-collaborators
+  
+   Next, go into the client directory, install the dependencies, and run the demo:
+
+   .. code-block::
+
+      cd add-collaborators/frontend/flex-sync-permissions.add-collaborators/
+      npm install
+      npm run demo
+
+   Read the output on your console to see what the demo is doing.
+
+
 In the Dynamic Collaboration strategy, users can create documents and add other
 users as editors of that document.
 
@@ -350,6 +397,24 @@ returns the user's ID. Otherwise, it returns null.
 
 Tiered Privileges
 -----------------
+
+.. note:: Template Available!
+
+   To use the backend template and get the demo client, run the following command:
+
+   .. code-block:: bash
+
+      realm-cli apps create --name=tiered --template=flex-sync-permissions.tiered
+  
+   Next, go into the client directory, install the dependencies, and run the demo:
+
+   .. code-block::
+
+      cd tiered/frontend/flex-sync-permissions.tiered/
+      npm install
+      npm run demo
+
+   Read the output on your console to see what the demo is doing.
 
 In this permission strategy, we will introduce **roles** as well as rules. Their 
 are two roles: **a team member** and **a team administrator**. The rules are as 
