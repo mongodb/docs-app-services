@@ -6,7 +6,7 @@
 - Released Flexible Sync as GA.
 - Released :ref:`Data API <data-api>` as GA.
 - Introduced field-level permissions for Flexible Sync.
-- Released Asymmetric Sync, which optimizes Flexible Sync for write-heavy workloads.
+- Released :ref:`Asymmetric Sync <optimize-asymmetric-sync>`, which optimizes Flexible Sync for write-heavy workloads.
 - Introduced Data API for all Apps.
 - Introduced local regions for Azure data sources.
 
