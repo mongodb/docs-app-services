@@ -26,17 +26,17 @@ following common use cases:
 Using the Template Apps
 -----------------------
 
-You can get these permissions models up and running quickly with our Flexible
-Sync Permissions Guide template apps. Each template app comes with a backend and
-a Node.js demo client. The backend has all functions, permissions, and triggers
-set up as described here. The demo client runs through a simple script to
-demonstrate how the backend works.
+You can get some of these permissions models up and running quickly with our
+Flexible Sync Permissions Guide template apps. Each template app comes with a
+backend and a Node.js demo client. The backend has all functions, permissions,
+and triggers set up as described here. The demo client connects to the backend
+and runs through a simple script to demonstrate how the backend works.
 
 You need an authenticated {+cli+} to use these templates.
 
 .. include:: /includes/install-realm-cli-v2.rst
 
-See :ref:`cli-auth-with-api-token` for login instructions.
+See :doc:`/reference/cli-auth-with-api-token` for login instructions.
 
 Once logged in, you can use the ``apps create`` command with the ``--template``
 flag to instantiate a template. 
@@ -359,35 +359,96 @@ for us:
     ]  
   }
 
-Note that a user can currently read only their own documents 
-(``"read": {"owner_id": "%%user.id"}``). We need to add an ``$or`` statement to 
-include all documents written by a subscribed author. Those authors' IDs are 
-stored in an array, so we also use the ``$in`` operator. The expression looks 
-like this:
+Note that a user can currently read only their own documents (``"read":
+{"owner_id": "%%user.id"}``). We can change this to include documents whose
+authors have IDs in the user's "subscribedTo" array. To do so, we use the
+``$in`` operator. The expression looks like this:
 
 .. code-block:: json
 
   {
     "defaultRoles": [
       {
-        "name": "owner-write", 
+        "name": "owner-write",
         "applyWhen": {},
         "read": {
-           "$or" : [
-             { "owner_id": "%%user.id" },
-             { "owner_id": 
-                { "$in":
-                  "%%user.custom_data.subscribedTo"
-                }
-             }
-           ]
+          "owner_id": {
+            "$in": "%%user.custom_data.subscribedTo"
+          }
         },
-        "write": { "owner_id": "%%user.id" }
-      }    
+        "write": {
+          "owner_id": "%%user.id"
+        }
+      }
     ]
   }
 
 Update the rule expression box with this new logic and save the changes.
+
+Note: we changed the "read" expression to only mention the authors in the
+subscribedTo array, but users still have "read" access to their own documents
+because of the "write" expression. If "write" applies, "read" permission is
+automatically granted.
+
+Create subscribeToUser Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We now need a function that subscribes one user to another. Our permissions are
+set up to consider a subscriber "subscribed" to an author if the author's user
+ID is in the subscriber's custom user data "subscribedTo" array. The
+"subscribeToUser" function takes a user's email address, finds the corresponding
+user ID in the custom user data collection, and adds the ID to the requesting
+user's "subscribedTo" array.
+
+Note that this function will run under System authentication and writes to the
+custom user data. When using custom user data for permissions, clients must
+never be allowed to directly edit custom user data. Otherwise, any user could
+grant themselves any permissions. Instead, modify user data on the backend with
+a System function. The function should do whatever checks necessary to ensure
+the user's request for permissions is valid.
+
+To create the function, follow these steps:
+
+1. Log in to the Realm UI, and then click :guilabel:`Functions` in the 
+   left hand panel.
+
+#. Click the :guilabel:`Create New Function` button.
+
+#. Specify the following values:
+
+   - :guilabel:`Name`: "subscribeToUser"
+   
+   - :guilabel:`Authentication`: "System"
+  
+#. Switch to the :guilabel:`Function Editor` tab and replace the 
+   placeholder text with the following code: 
+
+   .. code-block:: javascript
+
+      exports = async function(email) {
+        const collection = context.services.get("mongodb-atlas").db("Item").collection("User");
+        
+        // Look up the author object to get the user id from an email
+        const author = await collection.findOne({email});
+        if (author == null) {
+          return {error: `Author ${email} not found`};
+        }
+        
+        // Whoever called this function is the would-be subscriber
+        const subscriber = context.user;
+
+        try {
+          return await collection.updateOne(
+            {_id: subscriber.id},
+            {$addToSet: {
+                subscribedTo: author._id,
+              }
+            });
+        } catch (error) {
+          return {error: error.toString()};
+        }
+      };
+
 
 .. _dynamic-collaboration:
 
@@ -521,8 +582,7 @@ In the :guilabel:`Function Editor`, paste the following code and save:
 .. code-block:: javascript
 
    exports = async function(email) { 
-     // Access the mongodb service for custom user data:
-     const collection = context.services.get("custom-user-data")
+     const collection = context.services.get("mongodb-atlas")
        .db("Item").collection("User");
      const filter = {
        email,
@@ -618,18 +678,17 @@ To create the function, follow these steps:
 #. Switch to the :guilabel:`Function Editor` tab and replace the 
    placeholder text with the following code: 
 
-   .. code-block:: json
+   .. code-block:: javascript
 
       exports = async function(userId, teamName) {
-        var collection = context.services.get("mongodb-atlas")
+        const collection = context.services.get("mongodb-atlas")
           .db("Item").collection("User");
 
         const filter = { _id: userId };
         const update = { $set: { team: teamName }};
         const options = { upsert: false };
 
-        let result = await collection.updateOne(filter, update, options);
-        return result;
+        return collection.updateOne(filter, update, options);
       };
 
 

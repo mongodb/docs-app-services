@@ -28,21 +28,15 @@
      .. code-block:: javascript
           
         exports = function(authEvent) {
-           const user = authEvent.user;
-
-           //Access the mongodb service for custom user data:
-           const collection = context.services.get("mongodb-atlas").db("Item").collection("User");
-           const newDoc = {
-               _id: user.id,
-               _owner_id: user.id,
-               team: '',
-               isTeamAdmin: false
-           };
-           
-           // It's OK to do an insert and not a upsert because this function 
-           // only runs when a new user account is created
-           var result = collection.insertOne(newDoc);
-           
-           console.log(JSON.stringify(result));
-           console.log(JSON.stringify($user.custom_data.subscribedTo));
-         };
+            const user = authEvent.user;
+            const collection = context.services.get("mongodb-atlas").db("Item").collection("User");
+            const newDoc = {
+              _id: user.id,
+              email: user.data.email, // Useful for looking up user IDs by email later - assuming email/password auth is used
+              team: "", // Used for tiered privileges
+              isTeamAdmin: false, // Used for tiered privileges
+              isGlobalAdmin: false, // Used for admin privileges
+              subscribedTo: [], // Used for restricted feed
+            };
+            return collection.insertOne(newDoc);
+        };
