@@ -1,7 +1,19 @@
+.. _backend_20220607:
+
+7 June 2022 Release
+~~~~~~~~~~~~~~~~~~~
+
+- Released Flexible Sync as GA.
+- Released :ref:`Asymmetric Sync <optimize-asymmetric-sync>`, which optimizes Flexible Sync for write-heavy workloads.
+- Released :ref:`Data API <data-api>` as GA.
+- Introduced Data API for all Apps.
+- Introduced field-level permissions for Flexible Sync.
+- Introduced :ref:`local regions for Azure data sources <realm-regions>`.
+
 .. _backend_20220519:
 
 19 May 2022 Release
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 - Introduced option to encode HTTPS Endpoint responses as :ref:`EJSON or JSON <endpoint-return-types>`.
 - Added support for serverless Atlas instances as data sources. Serverless instances do not yet
