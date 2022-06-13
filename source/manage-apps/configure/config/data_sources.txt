@@ -133,7 +133,7 @@ documents. The root level schema must be an :ref:`object schema
 <schema-type-object>`, which has the following form:
 
 .. code-block:: json
-   :caption: /data_sources/<service>/<database>/<collection>/schema.json
+   :caption: /data_sources/<data source>/<database>/<collection>/schema.json
    
    {
      "title": "<Object Type Name>",
@@ -150,7 +150,7 @@ Relationships
 ~~~~~~~~~~~~~
 
 .. code-block:: json
-   :caption: /data_sources/<service>/<database>/<collection>/relationships.json
+   :caption: /data_sources/<data source>/<database>/<collection>/relationships.json
 
    {
      "<Source Field Name>": {
@@ -222,6 +222,41 @@ Relationships
         }
       }
 
+.. _config-default-rules:
+
+Default Rules
+~~~~~~~~~~~~~
+
+You can define default rules that apply to all collections in a data
+source that don't have more specific :ref:`collection-level rules
+<config-collection-rules>` defined.
+
+You define default rules in the data source's ``defaut_rule.json``
+configuration file.
+
+.. code-block:: json
+   :caption: /data_sources/<data source>/defaut_rule.json
+   
+   {
+     "roles": [<Role>],
+     "filters": [<Filter>]
+   }
+
+.. list-table::
+   :widths: 10 30
+   :header-rows: 1
+
+   * - Field
+     - Description
+
+   * - | ``roles``
+       | Array<Role>
+     - An array of :ref:`Role <role-config>` configurations.
+
+   * - | ``filters``
+       | Array<Filter>
+     - An array of :ref:`Filter <filter-config>` configurations.
+
 .. _config-collection-rules:
 
 Collection Rules
@@ -232,7 +267,7 @@ If the data source is not a :doc:`synced cluster </sync>` or a :ref:`data lake
 collection's ``rules.json`` configuration file.
 
 .. code-block:: json
-   :caption: /data_sources/<service>/<database>/<collection>/rules.json
+   :caption: /data_sources/<data source>/<database>/<collection>/rules.json
    
    {
      "database": "<Database Name>",
@@ -257,11 +292,11 @@ collection's ``rules.json`` configuration file.
      - The name of the collection.
 
    * - | ``roles``
-       | Array<RoleConfiguration>
+       | Array<Role>
      - An array of :ref:`Role <role-config>` configurations.
 
    * - | ``filters``
-       | Array<FilterConfiguration>
+       | Array<Filter>
      - An array of :ref:`Filter <filter-config>` configurations.
 
 Rule Configurations
