@@ -1,6 +1,6 @@
 # June 10, 2022
 
-The App Services docs release notes start here from week ending May 27, 2022. Prior to this, the App Services docs release notes were presented alongside the Realm docs release notes in the [Realm Docs repository](https://github.com/mongodb/docs-realm/blob/master/docs-release-notes.md).
+The App Services docs release notes start here from week ending May 27, 2022. Prior to this, the App Services docs release notes were presented alongside the Realm docs release notes in the [Realm Database Docs repository](https://github.com/mongodb/docs-realm/blob/master/docs-release-notes.md).
 
 ## Manage & Deploy Apps
 - Deploy/Deployment Models & Regions
@@ -17,7 +17,7 @@ The App Services docs release notes start here from week ending May 27, 2022. Pr
   - Sync Rules and Permissions: Add link to Flexible Sync Permissions Guide
   - Flexible Sync Permissions Guide
     - New page detailing Flexible Sync permissions patterns for common use cases, with setup procedures and code examples
-    - Update Restricted News Feed permission strategy with a subscribeToUser Function
+    - Update Restricted News Feed permission strategy with a `subscribeToUser` Function
     - Add workaround note for Custom User Data
 - Configure Sync
   - Enable Atlas Device Sync
