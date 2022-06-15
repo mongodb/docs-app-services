@@ -1,3 +1,10 @@
+.. _backend_20220615:
+
+15 June 2022 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Introduced ability to configure field-level permissions with :ref:`Data API <data-api>`.
+
 .. _backend_20220607:
 
 7 June 2022 Release
