@@ -24,7 +24,7 @@ In the following sections, you will learn to do the following on the backend:
 
 #. Create a new App in {+atlas+},
 #. Configure at least one authentication provider
-#. Choose queryable fields.
+#. Choose a Sync type.
 
 And then, in your client app, you will:
 
@@ -57,13 +57,27 @@ To set up an authentication provider, choose one of the
 providers and follow the configuration steps for the provider(s)
 of your choice.
 
-Choose Queryable Fields
-~~~~~~~~~~~~~~~~~~~~~~~
+Choose a Sync Type
+~~~~~~~~~~~~~~~~~~
 
-With Flexible Sync, clients synchronize subsets of data based
-on queries to **queryable fields**. When configuring flexible sync,
-you'll decide which fields clients can query upon. To learn more about
-configuring flexible sync, follow the steps in :ref:`<enable-flexible-sync>`.
+.. tabs::
+   
+   .. tab:: Partition Based Sync
+      :tabid: pbs
+
+      With Partition Based Sync, clients synchronize data based on
+      **partitions**. When configuring Partition Based Sync, you'll choose
+      a field whose discrete values represent those partitions. We call
+      this field the **partition key**. To learn more about how to
+      choose a partition key, see :ref:`<sync-partitions>`.
+
+   .. tab:: Flexible Sync
+      :tabid: flex
+
+      With Flexible Sync, clients synchronize subsets of data based
+      on queries to **queryable fields**. When configuring Flexible Sync,
+      you'll decide which fields clients can query upon. To learn more about
+      configuring flexible sync, follow the steps in :ref:`<enable-flexible-sync>`.
 
 Update the Client App
 ---------------------
@@ -103,19 +117,19 @@ App Logic
 .. figure:: /images/local_to_sync.png
    :alt: Flow chart showing the steps to convert from local to sync
 
-1. Check if a synced realm already exists.
+#. Check if a synced realm already exists.
 
-2. If not, create one. Open a connection to it and to the local realm.
+#. If not, create one. Open a connection to it and to the local realm.
 
-3. Read each record from the local realm and modify it to match the schema of the
+#. Read each record from the local realm and modify it to match the schema of the
    synced realm.
 
-4. Copy the modified record to the new synced realm. Sync automatically
+#. Copy the modified record to the new synced realm. Sync automatically
    copies the record to {+atlas+} when connected to your App.
 
-5. Confirm that all records you want to preserve are in the new realm.
+#. Confirm that all records you want to preserve are in the new realm.
 
-6. Delete the local realm file.
+#. Delete the local realm file.
 
-7. On each subsequent app load, check if the local realm has been
+#. On each subsequent app load, check if the local realm has been
    deleted.
