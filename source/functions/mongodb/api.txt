@@ -618,7 +618,10 @@ Parameters
 
 .. code-block:: typescript
 
-   insertMany(documents: object[]): Promise<object>
+   insertMany(
+     document: object,
+     options?:  { ordered?: boolean },
+   ): Promise<object>
 
 .. list-table::
    :header-rows: 1
@@ -631,6 +634,14 @@ Parameters
    * - ``documents``
      - ``object``
      - An array of documents to insert into the collection.
+
+   * - ``options``
+     - ``object``
+     - An object that specifies additional configuration options.
+   
+   * - ``options.ordered``
+     - ``boolean``
+     - Optional. A boolean specifying whether the :manual:`mongod </reference/program/mongod/#mongodb-binary-bin.mongod>` instance should perform an ordered or unordered insert. Defaults to ``true``.
 
 Return Value
 ~~~~~~~~~~~~
