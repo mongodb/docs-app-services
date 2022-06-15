@@ -12,10 +12,12 @@ realm-cli pull
    :depth: 1
    :class: singlecol
 
-Exports the latest version of your {+app+} into your local directory (alias: export)
+Exports the latest version of your App into your local directory (alias: export)
 
-Pulls changes from your remote {+app+} into your local directory. If
-applicable, Hosting Files and/or Dependencies associated with your {+app+} will be
+Exports the latest version of your App into your local directory
+
+Pulls changes from your remote App into your local directory. If
+applicable, Hosting Files and/or Dependencies associated with your App will be
 exported as well.
 
 Syntax
@@ -39,27 +41,31 @@ Options
    * - --local
      - string
      - false
-     - Specify a local filepath to export an {+app+} to
+     - Specify a local filepath to export an App to
    * - --remote
      - string
      - false
-     - Specify the name or ID of a remote {+app+} to export
-   * - -d, --include-dependencies
+     - Specify the name or ID of a remote App to export
+   * - --include-node-modules
      - 
      - false
-     - Export and include {+app+} dependencies
+     - Export and include App dependencies from a node_modules archive (Note: The allowed formats are as a directory or compressed into a ``.zip``, ``.tar``, ``.tar.gz``, or ``.tgz`` file)
+   * - --include-package-json
+     - 
+     - false
+     - Export and include App dependencies from a package.json file
    * - -s, --include-hosting
      - 
      - false
-     - Export and include {+app+} hosting files
+     - Export and include App hosting files
    * - -x, --dry-run
      - 
      - false
      - Run without writing any changes to the local filepath
    * - -t, --template
-     - string
+     - strings
      - false
-     - Specify the Template ID that is used for this {+app+}
+     - Specify the frontend Template ID(s) to export. (Note: Specified templates must be compatible with the remote App) (Allowed values: ``web.graphql.todo``, ``web.mql.todo``, ``triggers``, ``ios.swift.todo``, ``android.kotlin.todo``, ``react-native.todo``, ``xamarin.todo``)
    * - -h, --help
      - 
      - false
@@ -79,7 +85,7 @@ Inherited Options
    * - --profile
      - string
      - false
-     - Specify your profile (Default value: "default") (default "default")
+     - Specify your profile (Default value: "default") This value defaults to "default".
    * - --telemetry
      - String
      - false
