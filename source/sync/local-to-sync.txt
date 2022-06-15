@@ -12,74 +12,76 @@ Add Sync to a Local-Only App
    :depth: 2
    :class: singlecol
 
-.. note:: Alternate SDK Implementations
-
-   Some SDKs support an easier implementation for adding sync to a 
-   local-only realm than the steps outlined on this page. 
-
-   - :ref:`Open Non-Synced {+service-short+} as a Synced {+service-short+} - Swift SDK <ios-open-non-synced-as-synced-realm>`
-   - :ref:`Open Existing {+service-short+} with Different Configuration - Node.js SDK <node-open-existing-realm-different-configuration>`
-   - :ref:`Open Existing {+service-short+} with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
-
 Overview
 --------
-If you have a mobile app that uses a local {+client-database+} and you want to 
-convert the app to use {+sync+}, there are a few steps you 
-need to follow. You first need to set up an  {+backend-short+} 
-backend, and then you make code changes in your client app(s). 
+
+If you have a mobile app that uses a local realm and you want to 
+convert the app to use Sync, there are a few steps you 
+need to follow. You first need to set up an App
+backend. Then, make code changes in your client applications.
 
 In the following sections, you will learn to do the following on the backend:
 
-- Create a new App in {+atlas+},
-- Configure at least one User Authentication provider, and
-- Choose a partition strategy.
+#. Create a new App in {+atlas+},
+#. Configure at least one authentication provider
+#. Choose a Sync type.
 
 And then, in your client app, you will:
 
-- Update your Realm object models,
-- Connect to the new synced {+realm+} with a sync configuration file,
-- Authenticate the user.
+#. Update your Realm object models,
+#. Connect to the new synced realm with a sync configuration file,
+#. Authenticate the user.
 
-Finally, if needed, you will also need to copy your local data to the new 
-synced {+realm+}.
+Finally, if needed, you will also need to copy your local data to the new
+synced realm.
 
-Create a Backend App
---------------------
-To sync your data between devices and with {+atlas+}, you first need to create 
-an {+app+}. This app serves -- at a minimum -- two purposes: it provides a 
-gateway to the data, and it provides data security in the form of user 
-authentication, data encryption, and access control.
+Create an App
+~~~~~~~~~~~~~
+
+To sync your data between devices and {+atlas+}, you first need to create
+an {+app+}. This App provides a gateway to the data and data security
+in the form of user authentication, data encryption, and access control.
 
 To get started creating the backend app, follow the steps in 
 :ref:`<create-a-realm-app>`.
 
 Enable Authentication
 ~~~~~~~~~~~~~~~~~~~~~
-User authentication plays a crucial role in {+sync+}. {+service-short+} provides 
-many different :ref:`Authentication Providers <authentication-providers>` such 
+
+Sync requires authenticated users. App Services provides
+many different :ref:`Authentication Providers <authentication-providers>` such
 as email/password and OAuth; once you have configured one or more providers,
 you can then control exactly who has access to which data.
 
-To set up an auth provider, choose one of the  
-authentication providers and follow the configuration steps for the provider(s) 
+To set up an authentication provider, choose one of the
+providers and follow the configuration steps for the provider(s)
 of your choice.
 
-Partition the Data 
-~~~~~~~~~~~~~~~~~~~
+Choose a Sync Type
+~~~~~~~~~~~~~~~~~~
 
-Data :ref:`partitions <sync-partitions>` let you configure which users have
-access to which data. This process is often the most time-consuming part of
-setting up {+sync+}, as you as you consider what partition strategy is the best
-fit for your use case and data.
+.. tabs::
 
-As part of determining your :ref:`partition strategy <partition-strategies>`, 
-you'll choose a :ref:`partition key <partition-key>`. You might choose a 
-partition key that is already a part of your object models, which you can then 
-specify when you set up {+sync+}. If you have chosen a partition key that 
-isn't already a part of your object models, you'll need to update those models.
+   .. tab:: Flexible Sync
+      :tabid: flex
+
+      With Flexible Sync, clients synchronize subsets of data based
+      on queries to **queryable fields**. When configuring Flexible Sync,
+      you'll decide which fields clients can query upon. To learn more about
+      configuring flexible sync, follow the steps in :ref:`<enable-flexible-sync>`.
+
+   .. tab:: Partition Based Sync
+      :tabid: pbs
+
+      With Partition Based Sync, clients synchronize data based on
+      **partitions**. When configuring Partition Based Sync, you'll choose
+      a field whose discrete values represent those partitions. We call
+      this field the **partition key**. To learn more about how to
+      choose a partition key, see :ref:`<sync-partitions>`.
 
 Update the Client App
 ---------------------
+
 Now that you have the backend set up for {+sync-short+}, you need to make a few 
 changes in your client app. Follow the steps in the Quick Start for your 
 language/platform:
@@ -94,13 +96,22 @@ language/platform:
 
 Copy Existing Data
 ------------------
-None of the data in your local {+realm+} will be automatically transferred to your 
-new synced {+realm+}; it is up to you to ensure the data you want to preserve is 
-copied to the new {+realm+}. How you go about doing this depends, in part, on your 
-specific needs, but the following diagram and steps outline the process for 
-copying all of the data from the local {+realm+} to the synced {+realm+}. If done 
-correctly, the impact on app performance after the initial copy will be 
-minimal.
+
+.. note:: Alternate SDK Implementations
+
+   Some SDKs support an easier implementation for adding sync to a
+   local-only realm than the steps outlined on this section.
+
+   - :ref:`Open Non-Synced Realm as a Synced Realm - Swift SDK <ios-open-non-synced-as-synced-realm>`
+   - :ref:`Open Existing Realm with Different Configuration - Node.js SDK <node-open-existing-realm-different-configuration>`
+   - :ref:`Open Existing Realm with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
+
+None of the data in your local realm automatically transfers to a
+new synced realm [#f1]_. You must copy the data you want to preserve
+to the new realm. The following diagram and steps outline the process for
+copying all of the data from a local realm to a synced realm.
+
+.. [#f1] With the exception of apps migrated from local to synced realms using the easier implementations outlined in "Alternate SDK Implementations".
 
 App Logic
 ~~~~~~~~~
@@ -108,19 +119,19 @@ App Logic
 .. figure:: /images/local_to_sync.png
    :alt: Flow chart showing the steps to convert from local to sync
 
-1. Check if a synced {+realm+} already exists.
+#. Check if a synced realm already exists.
 
-2. If not, create one. Open a connection to it and to the local {+realm+}.
+#. If not, create one. Open a connection to it and to the local realm.
 
-3. Read each record from the local {+realm+} and modify it to meet the needs of the 
-   synced {+realm+} (adding a partition key, for example).
+#. Read each record from the local realm and modify it to match the schema of the
+   synced realm.
 
-4. Copy the modified record to the new synced {+realm+}. Sync will automatically 
-   copy the record to Atlas.
+#. Copy the modified record to the new synced realm. Sync automatically
+   copies the record to {+atlas+} when connected to your App.
 
-5. Confirm that all records you want to preserve are in the new {+realm+}.
+#. Confirm that all records you want to preserve are in the new realm.
 
-6. Delete the local {+realm+} file.
+#. Delete the local realm file.
 
-7. On each subsequent app load, simply check if the local {+realm+} has been 
+#. On each subsequent app load, check if the local realm has been
    deleted.
