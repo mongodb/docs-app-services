@@ -80,7 +80,7 @@ Globally deployed apps use the following format:
 .. code-block:: none
    :caption: Endpoint Base URL (Global Apps):
 
-   https://data.mongodb-api.com/app/<App ID>/endpoint/data/<Api Version>
+   https://data.mongodb-api.com/app/<App ID>/endpoint/data/<API Version>
    
 Endpoints in a locally deployed app use a base URL specific to the app's
 :ref:`deployment region <realm-regions>` (e.g. ``us-east-1``)
@@ -88,7 +88,7 @@ Endpoints in a locally deployed app use a base URL specific to the app's
 .. code-block:: none
    :caption: Endpoint Base URL (Local Apps)
 
-   https://<Region>.aws.data.mongodb-api.com/app/<App ID>/endpoint/data/<Api Version>
+   https://<Region>.aws.data.mongodb-api.com/app/<App ID>/endpoint/data/<API Version>
 
 .. _data-api-setup:
 
@@ -281,12 +281,37 @@ collection.
 You can also set up an :ref:`IP Access List <ip-access-list>` for
 additional security.
 
+.. _data-api-versions:
+
+API Versions
+~~~~~~~~~~~~
+
+The Data API uses a built-in versioning scheme to upgrade endpoints over
+time while maintaining backwards compatibility. Incoming requests can
+specify which version of an endpoint to use in the request URL and the
+Data API can serve any version that you have enabled.
+
+You must enable a new version before users can call endpoints with that
+version. You can always enable the most recent Data API version.
+However, you cannot enable an older version after a newer version has
+been released.
+
 Call a Data API Endpoint
 ------------------------
 
 You can call a Data API endpoint from any standard HTTP client. Each
 request can include configuration headers and arguments in the request
 body.
+
+Choose an API Version
+~~~~~~~~~~~~~~~~~~~~~
+
+Data API requests specify which version of the API to use in the request
+URL. A request can specify any version that is enabled for your app.
+
+.. code-block:: bash
+
+   https://data.mongodb-api.com/app/<App ID>/endpoint/data/<API Version>
 
 Specify the Request Data Format
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
