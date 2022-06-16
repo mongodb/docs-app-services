@@ -185,16 +185,12 @@ data from the perspective of your app's users and what it might mean to them.
 How {+service-short+} Assigns Roles
 ------------------------------
 
-{+service-short+} dynamically assigns roles for every request. A user may play different
-roles between documents in the same request and their role for a given document
-may differ between requests. The possible roles that a user may play are defined for each 
-collection. If a collection doesn't have any specific roles defined, the user can play one
-of the data source's default roles instead.
+{+service-short+} dynamically assigns roles for every request. The user
+is assigned a separate role, or no role, for each document that matches
+the incoming query.
 
-When {+service-short+} receives a MongoDB request, it applies :ref:`filters <filters>` to
-the request and then runs the filtered request query. {+service-short+} evaluates and
-assigns roles individually for each document that this query matches and
-returns.
+First, your App evaluates and applies :ref:`filters <filters>` and then
+runs the query.
 
 .. example::
    
@@ -208,14 +204,17 @@ returns.
         { "$set": { "city": "Chicago, IL" } }
       );
 
-A role applies to a given document if its Apply When :ref:`expression
-<expressions>` evaluates to ``true`` when run against the document.
+For each document returned by the query, your App evaluates possible
+roles in :ref:`role order <role-order>` and assigns the first applicable
+role, if any. A role applies to a given document if its Apply When
+:ref:`expression <expressions>` evaluates to ``true`` when run against
+the document.
 
-- If one or more roles apply to a given document, {+service-short+} assigns only the first
-  matching role based on the order in which the roles are defined.
-
-- If no roles apply to a document, then {+service-short+} prevents the user from reading,
-  writing, or searching the document in any way.
+The set of roles that a user may play for a given request depends on the
+collection they're accessing. If the collection has a set of
+collection-level roles defined, then a user may play any of those roles.
+If there are no collection-level rules, the request falls back to the
+data source's default roles.
 
 .. example::
    
