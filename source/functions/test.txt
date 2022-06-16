@@ -4,19 +4,146 @@
 Test App Services Functions
 ===========================
 
-INTRO TEXT
+This page describes some strategies you can use to test your Atlas App Services Functions code.
+As App Services Functions are written in JavaScript, you can use standard JavaScript testing
+frameworks and methods to unit test the functions locally.
+
+Due to some unique aspects and limitations of the the App Services Functions
+JavaScript runtime, there are some additional considerations that you should take
+into account when testing App Services Functions. This page covers how to handle
+the uniqueness of App Services Functions.
+
+.. important:: Integration test all App Services Functions
+
+   You should perform integration tests on all App Services Functions before deploying
+   them to production environments. Because the App Services runtime differs from
+   the standard Node.js runtime, you should test Functions deployed to Atlas App Services
+   before using them in a production environment.
+
+   For more information on the unique aspects of the App Services Functions JavaScript runtime,
+   refer to:
+
+   - :ref:`Function Constraints <function-constraints>`
+   - :ref:`JavaScript Support <js-support>`
 
 .. _unit-test-functions:
 
 Unit Test Functions
 -------------------
 
-Based on https://www.mongodb.com/developer/products/realm/unit-test-realm-serverless-functions/
+You can write unit tests to validate the functionality of your App Services Functions.
+Use any Node.js-compatible testing frameworks to test App Services Functions.
+The examples on this page use the `Jest testing framework <https://jestjs.io/>`__.
+
+You must use :wikipedia:`CommonJS modules <CommonJS>` to write unit tests for
+App Services Functions.
+
+.. procedure::
+
+   .. step:: Get a local copy of your App Services App
+
+      TODO: pull down with the CLI
+
+   .. step:: Create a new Function
+
+      TODO: explain how to create a new function
+
+   .. step:: Write Function code
+
+      TODO:
+
+      - talk about how can make modular, by separating code into smaller functions
+        that exist at file-level scope
+      - note that all code for functions must exist either on that page or as an
+        imported npm package. in other words, you cannot import code directly from another file
+        in your project.
+      - the next step explains how to import the code from the function file to a
+        separate unit test
+      
+      TODO: literal include the codeblock
+
+      .. code-block:: js
+
+         function greet(word){
+           return "hello " + word;
+         }
+
+         function greetWithPunctuation(word, punctuation){
+           return greet('mundo') + punctuation;
+         }
+
+         exports = myFunc;
+
+   .. step:: Export Function for unit tests
+
+      To use your code to use in separate Node.js unit test files,
+      you must use separate CommonJS export syntax that is not compatible with the
+      App Services Functions runtime.
+
+      At the bottom of your Function file, add the following code to handle export
+      to standard Node.js unit tests:
+
+      TODO: literal include the codeblock
+
+      .. code-block::
+
+         if (typeof module !== "undefined) {
+           module.exports = { CODE_TO_EXPORT }
+         }
+
+   .. step:: Unit test exported Function code
+
+      Now you can write unit tests for the objects that you exported from the function.
+
+      .. code-block:: js
+         :caption: hello.test.js
+
+         TODO: literal include the code block
+
 
 Creating Mocking Services
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+To write unit tests for Functions that use the :ref:`global context object <function-context>`
+or one of the :ref:`other global modules <function-global-modules>`,
+you must create mocks of their behavior.
+
+Attach these mocks to the Node.js global namespace to be able to call them in your
+unit tests the way you do in the App Services Functions runtime.
+
+.. code-block:: js
+
+   global.context = {
+     // whichever global context methods you want to mock.
+     // 'services', 'functions', values, etc.
+   }
+
+You may also want to declare and remove these mocks in before/after blocks so that
+they do not pollute the global namespace.
+
+TODO: literal include
+
+.. code-block:: js
+
+    beforeEach(() => {
+      global.context = {
+        values: {
+          get: (val) => {
+            const valsMap = {
+              greeting: "mundo bonito",
+            };
+            return valsMap[val];
+          },
+        },
+      };
+    });
+
+    afterEach(() => {
+      delete global.context;
+    });
+
 .. _integration-test-functions:
+
 
 Integration Test Functions
 --------------------------
