@@ -19,19 +19,6 @@ JavaScript and standard Node.js, there are some unique considerations that you s
 into account when testing App Services Functions. This page covers how to handle
 the uniqueness of App Services Functions.
 
-.. TODO: add back in when documenting integration tests
-.. .. important:: Integration test all App Services Functions
-
-..    You should perform integration tests on all App Services Functions before deploying
-..    them to production environments. Because the App Services runtime differs from
-..    the standard Node.js runtime, you should test Functions deployed to Atlas App Services
-..    before using them in a production environment.
-
-..    For more information on the unique aspects of the App Services Functions JavaScript runtime,
-..    refer to:
-
-..    - :ref:`Function Constraints <function-constraints>`
-..    - :ref:`JavaScript Support <js-support>`
 
 Before You Begin
 ----------------
@@ -233,3 +220,72 @@ so that they do not pollute the global namespace.
    .. literalinclude:: /examples/generated/functions/helloWithValue.test.snippet.test-with-mocking.js
       :language: js
       :caption: helloWithValue.test.js
+
+.. _integration-test-functions:
+
+Integration Tests for Functions
+-------------------------------
+
+You should perform integration tests on all App Services Functions before deploying
+them to production environments. Because the App Services runtime differs from
+the standard Node.js runtime, you should test Functions deployed to Atlas App Services
+before using them in a production environment.
+
+There is no single way to write integration tests for App Services Functions.
+As Functions can be used in a variety of different contexts for different purposes,
+each use case requires a different integration test strategy.
+
+For example, the way you create an integration test for a Function that you
+invoke from a Realm client SDK is different from the way you test
+a GraphQL Custom Resolver Function, which is different from how you would
+test a Database Trigger Function.
+
+However, there are some general steps that you can take to writing integration tests
+for App Services Functions. On a high level these steps are:
+
+#. Create a testing App Services App with the same configuration as your production
+   App Services App.
+#. Write integration tests that use the Realm client SDKs to interact with the test App.
+
+The remainder of this section explains how to implement integration tests for your
+App in more detail.
+
+.. seealso::
+
+   For more information on the unique aspects of the App Services Functions JavaScript runtime,
+   refer to:
+
+   - :ref:`Function Constraints <function-constraints>`
+   - :ref:`JavaScript Support <js-support>`
+
+   For more information on the different use cases for App Services Functions,
+   refer to :ref:`When to Use Functions <when-to-use-functions>`.
+
+.. procedure::
+
+   .. step:: Create a test App
+
+      Create an App Services App for testing purposes that has the same configuration
+      as your production App.
+
+      For more information on how you can create multiple Apps with the same configuration,
+      refer to :ref:`App Configuration <export-realm-app>`.
+
+   .. step:: Test using a Realm client SDK
+
+      Once you have deployed your test App, you can interact with it using the
+      :ref:`Realm client SDKs <intro-realm-database>`.
+      These SDKs provide first-class access to App Services.
+
+      In your testing suite, connect to your testing App with a Realm SDK.
+      Test the interaction with the App using the Realm SDK.
+
+      .. example:: Testing a Function called by the client
+
+         This example uses the Realm Node.js SDK and the Jest testing framework
+         to test a Function called directly from the client.
+
+         TODO: create Node integration test
+
+
+
