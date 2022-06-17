@@ -106,20 +106,8 @@ App Services Functions.
 
       You must export your function by assigning it to ``export``.
 
-      TODO: literalinclude. caption w filename
-
-      .. code-block:: js
-
-          function greet(word) {
-            return "hello " + word;
-          }
-
-          function greetWithPunctuation(word, punctuation) {
-            return greet(word) + punctuation;
-          }
-
-          // Function exported to App Services
-          exports = greetWithPunctuation;
+      .. literalinclude:: /examples/generated/functions/hello.snippet.function.js
+         :caption: hello.js
 
    .. step:: Export Function for unit tests
 
@@ -132,26 +120,9 @@ App Services Functions.
       You must perform this check because the App Services environment
       does not have the global ``module``.
 
-      TODO: literal include the codeblock w line highlighting. caption w filename
-
-      .. code-block::
-
-          function greet(word) {
-            return "hello " + word;
-          }
-
-          function greetWithPunctuation(word, punctuation) {
-            return greet(word) + punctuation;
-          }
-
-          // Function exported to App Services
-          exports = greetWithPunctuation;
-          // :snippet-end:
-
-          // export locally for use in unit test
-          if (typeof module !== "undefined") {
-            module.exports = { greet, greetWithPunctuation };
-          }
+      .. literalinclude:: /examples/generated/functions/hello.snippet.function-with-local-export.js
+         :caption: hello.js
+         :emphasize-lines: 12-15
 
    .. step:: Unit test exported Function code
 
@@ -162,22 +133,10 @@ App Services Functions.
 
          touch functions/hello.test.js
 
-      TODO: literal include the code block
+      Import the functions to test and add unit tests.
 
-      .. code-block:: js
+      .. literalinclude:: /examples/generated/functions/hello.test.snippet.greeting-test.js
          :caption: hello.test.js
-
-          const { greet, greetWithPunctuation } = require("./hello");
-
-          test("should greet", () => {
-            const helloWorld = greet("world");
-            expect(helloWorld).toBe("hello world");
-          });
-
-          test("should greet with punctuation", () => {
-            const excitedHelloWorld = greetWithPunctuation("world", "!!!");
-            expect(excitedHelloWorld).toBe("hello world!!!");
-          });
 
 .. _functions_mock_services:
 
@@ -190,9 +149,8 @@ that App Services Functions expose, you must create mocks of their behavior.
 
 In this example, the Function references an App Services Value via ``context.values.get()``.
 
-TODO: convert to literalinclude and highlight line accessing the value
-
 .. code-block:: js
+   :emphasize-lines: 2-3
 
     function accessAppServicesGlobals() {
       const mongodb = context.services.get("mongodb-atlas");
@@ -226,6 +184,7 @@ You may also want to declare and remove these mocks in setup and teardown blocks
 so that they do not pollute the global namespace.
 
 .. code-block:: js
+   :emphasize-lines: 3-5, 10
 
     // adds context mock to global namespace before each test
     beforeEach(() => {
@@ -247,21 +206,9 @@ so that they do not pollute the global namespace.
 
    The function in this example accesses a App Services Value and returns it.
 
-   TODO: literal include the codeblock. highlight the context line. caption w filename
-
-   .. code-block:: js
-
-      function greet() {
-        // the Value for greeting is 'beautiful world'
-        const greetingValue = context.values.get("greeting");
-        return "hello " + greetingValue;
-      }
-
-      exports = greet;
-
-      if (typeof module !== "undefined") {
-        module.exports = greet;
-      }
+   .. literalinclude:: /examples/generated/functions/helloWithValue.snippet.hello-with-context-value.js
+      :caption: helloWithValue.js
+      :emphasize-lines: 2
 
    Now create a test file ``helloWithValue.test.js``.
    The test file contains the following:
@@ -271,36 +218,5 @@ so that they do not pollute the global namespace.
      so that it does not pollute the global namespace.
    - A test of the imported function that uses the mock.
 
-   TODO: literalinclude the code example with filename in caption
-
-  .. code-block:: js
-     :caption: helloWithValue.test.js
-
-      const greet = require("./helloWithValue");
-
-      // wrap the mock in beforeEach/afterEach blocks to avoid
-      // pollution of the global namespace
-      beforeEach(() => {
-        // mock of context.values.get()
-        global.context = {
-          values: {
-            get: (val) => {
-              const valsMap = {
-                greeting: "magnificent morning",
-              };
-              return valsMap[val];
-            },
-          },
-        };
-      });
-
-      afterEach(() => {
-        // delete the mock to not pollute global namespace
-        delete global.context;
-      });
-
-      // test function using mock
-      test("should greet with value", () => {
-        const greeting = greet();
-        expect(greeting).toBe("hello magnificent morning");
-      });
+   .. literalinclude:: /examples/generated/functions/helloWithValue.test.snippet.test-with-mocking.js
+      :caption: helloWithValue.test.js
