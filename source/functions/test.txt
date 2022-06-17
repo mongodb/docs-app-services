@@ -8,29 +8,31 @@ This page describes some strategies you can use to test your Atlas App Services 
 As App Services Functions are written in JavaScript, you can use standard JavaScript testing
 frameworks and methods to unit test the functions locally.
 
-Due to some unique aspects and limitations of the the App Services Functions
-JavaScript runtime, there are some additional considerations that you should take
+Due to some aspects and limitations of the the App Services Functions
+JavaScript runtime, there are some unique considerations that you should take
 into account when testing App Services Functions. This page covers how to handle
 the uniqueness of App Services Functions.
 
-.. important:: Integration test all App Services Functions
+.. TODO: add back in when documenting integration tests
+.. .. important:: Integration test all App Services Functions
 
-   You should perform integration tests on all App Services Functions before deploying
-   them to production environments. Because the App Services runtime differs from
-   the standard Node.js runtime, you should test Functions deployed to Atlas App Services
-   before using them in a production environment.
+..    You should perform integration tests on all App Services Functions before deploying
+..    them to production environments. Because the App Services runtime differs from
+..    the standard Node.js runtime, you should test Functions deployed to Atlas App Services
+..    before using them in a production environment.
 
-   For more information on the unique aspects of the App Services Functions JavaScript runtime,
-   refer to:
+..    For more information on the unique aspects of the App Services Functions JavaScript runtime,
+..    refer to:
 
-   - :ref:`Function Constraints <function-constraints>`
-   - :ref:`JavaScript Support <js-support>`
+..    - :ref:`Function Constraints <function-constraints>`
+..    - :ref:`JavaScript Support <js-support>`
 
 Before You Begin
 ----------------
 
 #. :ref:`Create an App Services App <create-a-realm-app>`
-#. :ref:`Configure the CLI to work with your App <realm-cli>`
+#. :ref:`Configure the CLI to work with your App <realm-cli>` or
+   :ref:`automate deployment with Github <deploy-github>`
 
 .. _unit-test-functions:
 
@@ -48,11 +50,26 @@ App Services Functions.
 
    .. step:: Get a local copy of your App Services App
 
-      Pull the latest configuration of your App from the server.
+      .. tabs::
 
-      .. code-block:: sh
+         .. tab:: {+cli+}
+            :tabid: cli
 
-         realm-cli pull --remote <App ID>
+            Pull the latest configuration of your App from the server.
+
+            .. code-block:: sh
+
+              realm-cli pull --remote <App ID>
+
+         .. tab:: Github
+            :tabid: github
+
+            Pull the latest configuration of your App from Github.
+
+            .. code-block:: sh
+
+              git pull <Remote Name> <Branch name>
+
 
    .. step:: Create a new Function
 
@@ -228,4 +245,62 @@ so that they do not pollute the global namespace.
 
 .. example:: Mocking a Function that accesses ``context``
 
-   The hello beautiful world stuff 
+   The function in this example accesses a App Services Value and returns it.
+
+   TODO: literal include the codeblock. highlight the context line. caption w filename
+
+   .. code-block:: js
+
+      function greet() {
+        // the Value for greeting is 'beautiful world'
+        const greetingValue = context.values.get("greeting");
+        return "hello " + greetingValue;
+      }
+
+      exports = greet;
+
+      if (typeof module !== "undefined") {
+        module.exports = greet;
+      }
+
+   Now create a test file ``helloWithValue.test.js``.
+   The test file contains the following:
+
+   - Import the function exported from ``helloWithValue.js``.
+   - A mock of ``context.values.get()``. Wrap the mock in set up and tear down blocks
+     so that it does not pollute the global namespace.
+   - A test of the imported function that uses the mock.
+
+   TODO: literalinclude the code example with filename in caption
+
+  .. code-block:: js
+     :caption: helloWithValue.test.js
+
+      const greet = require("./helloWithValue");
+
+      // wrap the mock in beforeEach/afterEach blocks to avoid
+      // pollution of the global namespace
+      beforeEach(() => {
+        // mock of context.values.get()
+        global.context = {
+          values: {
+            get: (val) => {
+              const valsMap = {
+                greeting: "magnificent morning",
+              };
+              return valsMap[val];
+            },
+          },
+        };
+      });
+
+      afterEach(() => {
+        // delete the mock to not pollute global namespace
+        delete global.context;
+      });
+
+      // test function using mock
+      test("should greet with value", () => {
+        const greeting = greet();
+        expect(greeting).toBe("hello magnificent morning");
+      });

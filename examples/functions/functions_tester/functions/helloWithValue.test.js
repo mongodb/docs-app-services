@@ -1,8 +1,11 @@
 // :snippet-start: test-with-mocking
+// import the function
 const greet = require("./helloWithValue");
 
-// :snippet-start: mocking-context
+// wrap the mock in beforeEach/afterEach blocks to avoid
+// pollution of the global namespace
 beforeEach(() => {
+  // mock of context.values.get()
   global.context = {
     values: {
       get: (val) => {
@@ -16,10 +19,11 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  // delete the mock to not pollute global namespace
   delete global.context;
 });
-// :snippet-end:
 
+// test function using mock
 test("should greet with value", () => {
   const greeting = greet();
   expect(greeting).toBe("hello magnificent morning");
