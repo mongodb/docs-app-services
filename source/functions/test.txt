@@ -14,8 +14,8 @@ This page describes some strategies you can use to test your Atlas App Services 
 As App Services Functions are written in JavaScript, you can use standard JavaScript testing
 frameworks and methods to unit test the functions locally.
 
-Due to some aspects and limitations of the the App Services Functions
-JavaScript runtime, there are some unique considerations that you should take
+Due to some differences between the the App Services Functions
+JavaScript and standard Node.js, there are some unique considerations that you should take
 into account when testing App Services Functions. This page covers how to handle
 the uniqueness of App Services Functions.
 
@@ -42,8 +42,8 @@ Before You Begin
 
 .. _unit-test-functions:
 
-Unit Test Functions
--------------------
+Unit Tests for Functions
+------------------------
 
 You can write unit tests to validate the functionality of your App Services Functions.
 Use any Node.js-compatible testing frameworks to test App Services Functions.
@@ -105,49 +105,53 @@ App Services Functions.
    .. step:: Write Function code
 
       To make your Function code easy to test, you should keep it modular
-      by separating its concerns into distinct functions.
-      However, you must keep all code for the Function in the file you defined
+      by separating its concerns into distinct components.
+      You must keep all logic for the Function in the file you defined
       in the previous step. You cannot perform relative imports from other files
       in your project. You can also :ref:`import dependencies using npm <external-dependencies>`.
 
       You must export your function by assigning it to ``export``.
 
       .. literalinclude:: /examples/generated/functions/hello.snippet.function.js
+         :language: js
          :caption: hello.js
+         :emphasize-lines: 10
 
-   .. step:: Export Function for unit tests
+   .. step:: Export Function for use in unit tests
 
       To use your code to use in separate Node.js unit test files,
-      you must use separate CommonJS ``module.exports`` syntax that is not compatible with the
-      App Services Functions runtime.
+      you must use separate CommonJS ``module.exports`` syntax.
 
-      At the bottom of your Function file, add the ``module.exports`` statement.
-      Wrap the statement with a check to see if the global ``module`` object exists.
-      You must perform this check because the App Services environment
-      does not have the global ``module``.
+      However, this syntax is not compatible with the App Services Functions runtime.
+      The App Services environment does not have the global ``module``.
+      To export modules to your unit tests while keeping the file compatible with 
+      App Services Functions, you must wrap the  the ``module.exports`` statement
+      with a check to see if the global ``module`` object exists.
 
       .. literalinclude:: /examples/generated/functions/hello.snippet.function-with-local-export.js
+         :language: js
          :caption: hello.js
          :emphasize-lines: 12-15
 
    .. step:: Unit test exported Function code
 
-      Now you can write unit tests for the objects that you exported from the function.
-      Create a test file for the Function file.
+      Now you can write unit tests for the modules that you exported from the
+      Function file. Create a test file for the Function file.
 
       .. code-block:: sh
 
          touch functions/hello.test.js
 
-      Import the functions to test and add unit tests.
+      Import the modules you exported in the previous step and add unit tests.
 
       .. literalinclude:: /examples/generated/functions/hello.test.snippet.greeting-test.js
+         :language: js
          :caption: hello.test.js
 
 .. _functions_mock_services:
 
-Create Mocking Services
-~~~~~~~~~~~~~~~~~~~~~~~
+Mock Services
+~~~~~~~~~~~~~
 
 To write unit tests for Functions that use the :ref:`global context object <function-context>`
 or one of the :ref:`other global modules <function-global-modules>`
@@ -156,6 +160,7 @@ that App Services Functions expose, you must create mocks of their behavior.
 In this example, the Function references an App Services Value via ``context.values.get()``.
 
 .. code-block:: js
+   :caption: accessAppServicesGlobals.js
    :emphasize-lines: 2-3
 
     function accessAppServicesGlobals() {
@@ -171,8 +176,8 @@ In this example, the Function references an App Services Value via ``context.val
       module.exports = accessAppServicesGlobals;
     }
 
-Attach these mocks to the Node.js global namespace to call them in your
-unit tests the way you do in the App Services Functions runtime.
+Attach these mocks to the Node.js global namespace. This lets you call the mocks in your
+unit tests the same way you do in the App Services Functions runtime.
 
 .. code-block:: js
 
@@ -190,7 +195,7 @@ You may also want to declare and remove these mocks in setup and teardown blocks
 so that they do not pollute the global namespace.
 
 .. code-block:: js
-   :emphasize-lines: 3-5, 10
+   :emphasize-lines: 2-6, 9-11
 
     // adds context mock to global namespace before each test
     beforeEach(() => {
@@ -213,6 +218,7 @@ so that they do not pollute the global namespace.
    The function in this example accesses a App Services Value and returns it.
 
    .. literalinclude:: /examples/generated/functions/helloWithValue.snippet.hello-with-context-value.js
+      :language: js
       :caption: helloWithValue.js
       :emphasize-lines: 2
 
@@ -225,4 +231,5 @@ so that they do not pollute the global namespace.
    - A test of the imported function that uses the mock.
 
    .. literalinclude:: /examples/generated/functions/helloWithValue.test.snippet.test-with-mocking.js
+      :language: js
       :caption: helloWithValue.test.js
