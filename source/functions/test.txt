@@ -26,6 +26,12 @@ the uniqueness of App Services Functions.
    - :ref:`Function Constraints <function-constraints>`
    - :ref:`JavaScript Support <js-support>`
 
+Before You Begin
+----------------
+
+#. :ref:`Create an App Services App <create-a-realm-app>`
+#. :ref:`Configure the CLI to work with your App <realm-cli>`
+
 .. _unit-test-functions:
 
 Unit Test Functions
@@ -42,73 +48,149 @@ App Services Functions.
 
    .. step:: Get a local copy of your App Services App
 
-      TODO: pull down with the CLI
+      Pull the latest configuration of your App from the server.
+
+      .. code-block:: sh
+
+         realm-cli pull --remote <App ID>
 
    .. step:: Create a new Function
 
-      TODO: explain how to create a new function
+      Create a new Function. In the App's configuration files, create a new JavaScript
+      file in the ``functions`` directory for your function.
+
+      .. code-block:: sh
+
+         touch functions/hello.js
+
+
+      You also need to add configuration information for the Function to ``function/config.json``.
+
+      .. code-block:: json
+
+          {
+              "name": "hello",
+              "private": false,
+              "run_as_system": true
+          },
+
+      .. seealso::
+
+         For more information on creating a new App Services Function,
+         refer to :ref:`Define a Function <define-a-function>`.
 
    .. step:: Write Function code
 
-      TODO:
+      To make your Function code easy to test, you should keep it modular
+      by separating its concerns into distinct functions.
+      However, you must keep all code for the Function in the file you defined
+      in the previous step. You cannot perform relative imports from other files
+      in your project. You can also :ref:`import dependencies using npm <external-dependencies>`.
 
-      - talk about how can make modular, by separating code into smaller functions
-        that exist at file-level scope
-      - note that all code for functions must exist either on that page or as an
-        imported npm package. in other words, you cannot import code directly from another file
-        in your project.
-      - the next step explains how to import the code from the function file to a
-        separate unit test
-      
-      TODO: literal include the codeblock
+      You must export your function by assigning it to ``export``.
+
+      TODO: literalinclude. caption w filename
 
       .. code-block:: js
 
-         function greet(word){
-           return "hello " + word;
-         }
+          function greet(word) {
+            return "hello " + word;
+          }
 
-         function greetWithPunctuation(word, punctuation){
-           return greet('mundo') + punctuation;
-         }
+          function greetWithPunctuation(word, punctuation) {
+            return greet(word) + punctuation;
+          }
 
-         exports = myFunc;
+          // Function exported to App Services
+          exports = greetWithPunctuation;
 
    .. step:: Export Function for unit tests
 
       To use your code to use in separate Node.js unit test files,
-      you must use separate CommonJS export syntax that is not compatible with the
+      you must use separate CommonJS ``module.exports`` syntax that is not compatible with the
       App Services Functions runtime.
 
-      At the bottom of your Function file, add the following code to handle export
-      to standard Node.js unit tests:
+      At the bottom of your Function file, add the ``module.exports`` statement.
+      Wrap the statement with a check to see if the global ``module`` object exists.
+      You must perform this check because the App Services environment
+      does not have the global ``module``.
 
-      TODO: literal include the codeblock
+      TODO: literal include the codeblock w line highlighting. caption w filename
 
       .. code-block::
 
-         if (typeof module !== "undefined) {
-           module.exports = { CODE_TO_EXPORT }
-         }
+          function greet(word) {
+            return "hello " + word;
+          }
+
+          function greetWithPunctuation(word, punctuation) {
+            return greet(word) + punctuation;
+          }
+
+          // Function exported to App Services
+          exports = greetWithPunctuation;
+          // :snippet-end:
+
+          // export locally for use in unit test
+          if (typeof module !== "undefined") {
+            module.exports = { greet, greetWithPunctuation };
+          }
 
    .. step:: Unit test exported Function code
 
       Now you can write unit tests for the objects that you exported from the function.
+      Create a test file for the Function file.
+
+      .. code-block:: sh
+
+         touch functions/hello.test.js
+
+      TODO: literal include the code block
 
       .. code-block:: js
          :caption: hello.test.js
 
-         TODO: literal include the code block
+          const { greet, greetWithPunctuation } = require("./hello");
 
+          test("should greet", () => {
+            const helloWorld = greet("world");
+            expect(helloWorld).toBe("hello world");
+          });
 
-Creating Mocking Services
-~~~~~~~~~~~~~~~~~~~~~~~~~
+          test("should greet with punctuation", () => {
+            const excitedHelloWorld = greetWithPunctuation("world", "!!!");
+            expect(excitedHelloWorld).toBe("hello world!!!");
+          });
+
+.. _functions_mock_services:
+
+Create Mocking Services
+~~~~~~~~~~~~~~~~~~~~~~~
 
 To write unit tests for Functions that use the :ref:`global context object <function-context>`
-or one of the :ref:`other global modules <function-global-modules>`,
-you must create mocks of their behavior.
+or one of the :ref:`other global modules <function-global-modules>`
+that App Services Functions expose, you must create mocks of their behavior.
 
-Attach these mocks to the Node.js global namespace to be able to call them in your
+In this example, the Function references an App Services Value via ``context.values.get()``.
+
+TODO: convert to literalinclude and highlight line accessing the value
+
+.. code-block:: js
+
+    function accessAppServicesGlobals() {
+      const mongodb = context.services.get("mongodb-atlas");
+      const objectId = BSON.ObjectId()
+
+      // ... do stuff with these values
+    }
+
+    exports = accessAppServicesGlobals;
+
+    if (typeof module !== "undefined") {
+      module.exports = accessAppServicesGlobals;
+    }
+
+Attach these mocks to the Node.js global namespace to call them in your
 unit tests the way you do in the App Services Functions runtime.
 
 .. code-block:: js
@@ -118,43 +200,32 @@ unit tests the way you do in the App Services Functions runtime.
      // 'services', 'functions', values, etc.
    }
 
-You may also want to declare and remove these mocks in before/after blocks so that
-they do not pollute the global namespace.
+   // you can also mock other Functions global modules
+   global.BSON = {
+     // mock methods
+   }
 
-TODO: literal include
+You may also want to declare and remove these mocks in setup and teardown blocks
+so that they do not pollute the global namespace.
 
 .. code-block:: js
 
+    // adds context mock to global namespace before each test
     beforeEach(() => {
       global.context = {
-        values: {
-          get: (val) => {
-            const valsMap = {
-              greeting: "mundo bonito",
-            };
-            return valsMap[val];
-          },
-        },
+        // your mocking services
       };
     });
 
+    // removes context from global namespace after each test
     afterEach(() => {
       delete global.context;
     });
 
-.. _integration-test-functions:
+    test("should perform operation using App Services globals", () => {
+      // test function that uses context
+    });
 
+.. example:: Mocking a Function that accesses ``context``
 
-Integration Test Functions
---------------------------
-
-Based on https://www.mongodb.com/developer/products/realm/integration-test-realm-serverless-apps/
-note: this one isn't as goode as the unit test functions guide
-
-high level: use one of the realm client sdks that has access to call atlas app services
-serverless functions.
-
-note: don't think this would work for triggers. :/
-what about other function types?
-
-
+   The hello beautiful world stuff 

@@ -7,7 +7,7 @@ beforeEach(() => {
     values: {
       get: (val) => {
         const valsMap = {
-          greeting: "mundo bonito",
+          greeting: "magnificent morning",
         };
         return valsMap[val];
       },
@@ -22,6 +22,6 @@ afterEach(() => {
 
 test("should greet with value", () => {
   const greeting = greet();
-  expect(greeting).toBe("hello mundo bonito");
+  expect(greeting).toBe("hello magnificent morning");
 });
 // :snippet-end:
