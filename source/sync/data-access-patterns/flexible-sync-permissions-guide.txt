@@ -23,6 +23,34 @@ following common use cases:
 - :ref:`tiered-privileges`
 
 
+Using the Template Apps
+-----------------------
+
+You can get some of these permissions models up and running quickly with our
+Flexible Sync Permissions Guide template apps. Each template app comes with a
+backend and a Node.js demo client. The backend has all functions, permissions,
+and triggers set up as described here. The demo client connects to the backend
+and runs through a simple script to demonstrate how the backend works.
+
+You need an authenticated {+cli+} to use these templates.
+
+.. include:: /includes/install-realm-cli-v2.rst
+
+See :doc:`/reference/cli-auth-with-api-token` for login instructions.
+
+Once logged in, you can use the ``apps create`` command with the ``--template``
+flag to instantiate a template. 
+
+.. code-block:: bash
+
+   realm-cli apps create --template=TEMPLATE_NAME
+
+``TEMPLATE_NAME`` can be one of the following:
+
+- ``flex-sync-permissions.add-collaborators`` (corresponding to :ref:`dynamic-collaboration`)
+- ``flex-sync-permissions.restricted-feed`` (corresponding to :ref:`restricted-news-feed`)
+- ``flex-sync-permissions.tiered`` (corresponding to :ref:`tiered-privileges`)
+
 About These Examples
 --------------------
 
@@ -229,6 +257,28 @@ To finish, skip :guilabel:`Advanced Configuration`, and then click
 Restricted News Feed
 --------------------
 
+.. note:: Template Available!
+
+   To use the backend template and get the demo client, run the following command:
+
+   .. code-block:: bash
+
+      realm-cli apps create --name=restricted-feed --template=flex-sync-permissions.restricted-feed
+  
+   .. include:: /includes/template-app-custom-user-data-workaround.rst
+
+   Next, in your terminal, go into the client directory, install the
+   dependencies, and run the demo:
+
+   .. code-block::
+
+      cd restricted-feed/frontend/flex-sync-permissions.restricted-feed/
+      npm install
+      npm run demo
+
+   Read the output on your console to see what the demo is doing.
+
+
 In this permission strategy, users can create their own content and subscribe 
 to other creators' content. As with the Admin Privileges scenario, we will 
 make use of a Custom User Data collection to define which authors' content 
@@ -413,6 +463,25 @@ To create the function, follow these steps:
 Dynamic Collaboration
 ---------------------
 
+.. note:: Template Available!
+
+   To use the backend template and get the demo client, run the following command:
+
+   .. code-block:: bash
+
+      realm-cli apps create --name=add-collaborators --template=flex-sync-permissions.add-collaborators
+  
+   Next, go into the client directory, install the dependencies, and run the demo:
+
+   .. code-block::
+
+      cd add-collaborators/frontend/flex-sync-permissions.add-collaborators/
+      npm install
+      npm run demo
+
+   Read the output on your console to see what the demo is doing.
+
+
 In the Dynamic Collaboration strategy, users can create documents and add other
 users as editors of that document.
 
@@ -540,6 +609,27 @@ returns the user's ID. Otherwise, it returns null.
 
 Tiered Privileges
 -----------------
+
+.. note:: Template Available!
+
+   To use the backend template and get the demo client, run the following command:
+
+   .. code-block:: bash
+
+      realm-cli apps create --name=tiered --template=flex-sync-permissions.tiered
+  
+   .. include:: /includes/template-app-custom-user-data-workaround.rst
+
+   Next, in your terminal, go into the client directory, install the
+   dependencies, and run the demo:
+
+   .. code-block::
+
+      cd tiered/frontend/flex-sync-permissions.tiered/
+      npm install
+      npm run demo
+
+   Read the output on your console to see what the demo is doing.
 
 In this permission strategy, we will introduce **roles** as well as rules. Their 
 are two roles: **a team member** and **a team administrator**. The rules are as 
