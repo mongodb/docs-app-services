@@ -23,7 +23,7 @@ Event Library can record three types of events:
 - Write events
 - Custom events
 
-Developers can specify the read and write transactions they want to record.
+Developers can specify the read and write transactions to record.
 Additionally, you can configure custom events to record things like 
 button presses, or what the user is seeing in the frontend application.
 
@@ -85,13 +85,10 @@ Access Event Library Data
 -------------------------
 
 The Event Library records event data in a collection called ``AuditEvent`` 
-in your linked Atlas database. You must create an ``AuditEvent`` collection
-before you use the Event Library to record client application events.
-
-.. seealso::
-
-   For information on how to create a collection, see: :ref:`Create a 
-   Collection - Atlas UI <atlas-ui-create-a-collection>`.
+in your linked Atlas database. When you configure the Event Library,
+use :ref:`Development Mode <enable-development-mode>` to automatically 
+create this collection and derive a schema from synced events. Remember
+to turn Development Mode off before taking your application to production.
 
 Event Library Schema
 ~~~~~~~~~~~~~~~~~~~~
@@ -120,7 +117,7 @@ fields:
      - Required
 
    * - ``timestamp``
-     - String
+     - Date
      - Required
 
    * - ``event``
@@ -160,8 +157,8 @@ for each metadata key you use. For example:
         "required": [
           "_id",
           "_partition",
-          "activity",
-          "timestamp"
+          "timestamp",
+          "activity"
         ],
         "properties": {
           "_id": {
@@ -170,16 +167,16 @@ for each metadata key you use. For example:
           "_partition": {
             "bsonType": "string"
           },
-          "activity": {
-            "bsonType": "string"
+          "timestamp": {
+            "bsonType": "date"
           },
-          "data": {
+          "activity": {
             "bsonType": "string"
           },
           "event": {
             "bsonType": "string"
           },
-          "timestamp": {
+          "data": {
             "bsonType": "string"
           }
         }
@@ -253,11 +250,20 @@ A read event object has this format:
 .. code-block:: json
 
    {
-     "type": "ClassName",
-     "value": [{
-       "_id": "1-2-3",
-       "str": "abc"
-     }]
+     "_id": "62b396f4ebe94d2b871889bb",
+     "_partition":"events-62b396f4ebe94d2b871889ba",
+     "activity":"read object",
+     "data": "{
+         "type":"Person",
+         "value": [{
+           "_id": "62b396f4ebe94d2b871889b9",
+           "_partition":"",
+           "employeeId":1,
+           "name":"Anthony"
+         }]
+     }",
+     "event":"read",
+     "timestamp": 2022-06-23T14:54:37.756+00:00
    }
 
 Embedded Object Read Events
@@ -269,38 +275,77 @@ does not follow the link, the primary key is the only representation of
 the embedded object. When the user does follow the link, the embedded 
 object resolves within the parent object.
 
-This also produces a top-level object read.
+This also produces a top-level object read for the embedded object.
 
 .. example::
 
+   A ``Person`` object has an embedded object ``Office`` which contains details
+   about the location where the person works. When we do not follow the link
+   to view any of the ``office`` details, the parent ``Person`` object shows
+   only the embedded object's object ID.
+
    .. code-block:: json
-      :caption: Parent Object with an Unfollowed Link
+      :caption: Parent Object's ``data`` Payload with an Unfollowed Link for ``office``
    
       {
         "type": "Person",
         "value": [{
-          "_id": "1-2-3",
-          "name": "Frodo Baggins",
-          "address": "4-5-6"
+          "_id": "62b47624265ff7b58e9b204e",
+          "_partition": "",
+          "employeeId": 1,
+          "name": "Michael Scott",
+          "office": "62b47624265ff7b58e9b204f"
         }]
       }
 
+   When we do follow the link to view details of the embedded ``Office`` object,
+   this resolves the embedded object within the parent object. It *also* 
+   produces a second top-level read of just the child object - in this case,
+   our ``Office`` object.
+
    .. code-block:: json
-      :caption: Parent Object with a Followed Link
-   
+      :caption: Both Objects' ``data`` Payloads with a Followed Link for ``office``
+
       {
-        "type": "Person",
+        "type":"Person",
         "value": [{
-          "_id": "1-2-3",
-          "name": "Frodo Baggins",
-          "address": [{
-            "_id": "4-5-6",
-            "street": "1 Bag End",
-            "city": "Hobbiton Hill",
-            "state": "The Shire"
-          }]
+          "_id": "62b47975a33224558bdf8b4d",
+          "_partition": "",
+          "employeeId": 1,
+          "name": "Michael Scott",
+          "office": {
+            "_id": "62b47975a33224558bdf8b4e",
+            "_partition": "",
+            "city": "Scranton",
+            "locationNumber": 123,
+            "name": "Dunder Mifflin"
+          }
         }]
       }
+
+      {
+        "type": "Office",
+        "value": [{
+          "_id": "62b47975a33224558bdf8b4e",
+          "_partition": "",
+          "city": "Scranton",
+          "locationNumber": 123,
+          "name": "Dunder Mifflin"
+        }]
+      }
+
+   .. note:: Read event combining
+
+      Read Event Combining may affect the objects you see when you query 
+      for an object and then later follow an embedded object link.
+      
+      In the example above, if you previously queried for the ``Person``, 
+      that would produce an read event where the office object 
+      is unresolved within the person object; you'd see only the ObjectID
+      in the initial read event. Then, if you later follow a link that 
+      resolves the embedded object, you'd see the separate top-level read
+      for the embedded object, but would *not* get the parent object read
+      that shows the resolved embedded object within the parent object.
 
 .. _event-library-write-events:
 
@@ -343,31 +388,50 @@ Write Event Format
 A write event object has this format:
 
 .. code-block:: json
+   :caption: Inserted object's ``data`` payload
 
    {
-     "ClassName 1": {
-       "insertions": [
-         {"_id", "new object id", "foo": "new object value"}
-       ],
-       "modifications": [
-         {
-           "oldValue": {
-             "_id": "object id",
-             "foo": "old property value"
-           },
-           "newValue": {
-             "foo": "new property value"
-           }
+     "Person": {
+       "insertions": [{
+         "_id": "62b47ead6a178a314ae0eb52",
+         "_partition": "",
+         "employeeId": 1,
+         "name": "Anthony"
+       }]
+     }
+   }
+
+.. code-block:: json
+   :caption: Modified object's ``data`` payload
+   
+   {
+     "Person":{
+       "modifications": [{
+         "newValue": {
+           "name": "Tony"
+         },
+         "oldValue": {
+           "_id": "62b47d83cdac49f904c5737b",
+           "_partition": "",
+           "employeeId": 1,
+           "name": "Anthony"
          }
-       ],
-       "deletions": [
-         {"_id", "deleted object id", "foo": "property value of object before deletion"}
-       ],
-     },
-     "ClassName 2": {
-       "insertions": [
-         {"_id", "new object id", "bar": "new object value"}
-       ],
+       }]
+     }
+   }
+
+.. code-block:: json
+   :caption: Deleted object's ``data`` payload
+
+   {
+     "Person":{
+       "deletions":[{
+         "_id":"62b47ead6a178a314ae0eb52",
+         "_partition":"",
+         "employeeId":1,
+         "name":"Tony",
+         "userId":"tony.stark@starkindustries.com"
+       }]
      }
    }
 
@@ -388,3 +452,14 @@ screen. Then, you can infer that read and write events after the custom
 event recording the app screen loading all occurred on that app screen.
 
 Custom events can store whatever data a developer desires, or no data at all.
+
+.. code-block:: json
+   :caption: Example of a custom event
+
+   {
+     "_id": "62b4804c15659310991e5e0a",
+     "_partition": "events-62b4804b15659310991e5e09",
+     "activity": "login",
+     "event": "user presses Register button",
+     "timestamp": 2022-06-23T15:01:31.941+00:00
+   }
