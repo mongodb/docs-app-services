@@ -34,7 +34,7 @@ Each customer needs a document in the ``store.customers`` collection. Then, the 
 The collection must represent each customer. To guarantee this, the store 
 creates an authentication Trigger. This Trigger listens for newly created users
 in the :doc:`email/password </authentication/email-password>` authentication
-provider. It then waits to observe a ``CREATE`` event. When observed, it passes the
+provider. Then, it passes the
 :ref:`authentication event object <authentication-events>` to its linked
 function, ``createNewUserDocument``. The {+service-short+} Function creates a new document which describes the user and their activity. The function will then insert the document into the store.customers collection.
 
