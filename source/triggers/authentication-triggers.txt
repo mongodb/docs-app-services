@@ -18,8 +18,10 @@ Overview
 An authentication trigger fires when a user interacts with an 
 :doc:`authentication provider </authentication/providers>`. You can 
 use authentication triggers to implement advanced user management. Some uses include: 
-storing new user datain your linked cluster, maintaining data integrity upon user
-deletion, or calling a service with a user's information when they log in.
+
+- Storing new user data in your linked cluster
+- Maintaining data integrity upon user deletion
+- Calling a service with a user's information when they log in.
 
 Example
 -------
@@ -30,7 +32,7 @@ tck=docs_realm#atlas-form-container>`_.
 Each customer needs a document in the ``store.customers`` collection. Then, the store can record and query metadata in the customer's document.
 
 The collection must represent each customer. To guarantee this, the store 
-creates an authentication Trigger. This Trigger listens for newly created users
+creates an authentication trigger. This trigger listens for newly created users
 in the :doc:`email/password </authentication/email-password>` authentication
 provider. Then, it passes the
 :ref:`authentication event object <authentication-events>` to its linked
