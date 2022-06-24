@@ -29,14 +29,17 @@ Example
 An online store wants to store custom metadata for each of its customers
 in `{+atlas+} <https://www.mongodb.com/realm?
 tck=docs_realm#atlas-form-container>`_.
-Each customer needs a document in the ``store.customers`` collection. Then, the store can record and query metadata in the customer's document.
+Each customer needs a document in the ``store.customers`` collection. 
+Then, the store can record and query metadata in the customer's document.
 
 The collection must represent each customer. To guarantee this, the store 
 creates an authentication trigger. This trigger listens for newly created users
 in the :doc:`email/password </authentication/email-password>` authentication
 provider. Then, it passes the
 :ref:`authentication event object <authentication-events>` to its linked
-function, ``createNewUserDocument``. The function creates a new document which describes the user and their activity. The function then inserts the document into the store.customers collection.
+function, ``createNewUserDocument``. The function creates a new document 
+which describes the user and their activity. The function then inserts the document 
+into the ``store.customers`` collection.
 
 .. tabs-realm-admin-interfaces::
    
