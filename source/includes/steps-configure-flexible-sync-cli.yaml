@@ -88,19 +88,10 @@ content: |
 title: Define Read & Write Permissions
 ref: define-read-write-permissions
 content: |
-  You can define :ref:`JSON expressions <expressions>` to tell {+service+}
-  whether a user has read or write permissions on a given document.
-  {+service-short+} evaluates these expressions for a user when that user opens
-  a {+realm+}.
+  In the ``flexible_sync`` configuration field, you can define the session roles
+  and rules for your app.
 
-  {+sync-short+} rule expressions have access to :json-expansion:`%%user`, which resolves
-  to the user that opened the realm You can also use operators, including
-  :json-operator:`%function`, to handle more complex cases. For examples, see
-  :ref:`{+sync-short+} Permissions <sync-permissions>`.
-
-  Once you've determined how to decide a user's read and write permissions for a
-  given document, define the corresponding JSON expressions in the
-  ``read`` and ``write`` fields of ``config.sync.partition.permissions``.
+  For details, see :ref:`flexible-sync-rules-and-permissions`.
 
   In the following example, there is a user-defined role in the ``Employees``
   collection. This role takes precedent, and the default role is not applied for

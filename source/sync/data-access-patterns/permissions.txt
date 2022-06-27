@@ -308,13 +308,6 @@ Flexible Sync Session Roles and Rules
 In flexible sync, a **session role** determines which permissions apply for the
 duration of a sync session.
 
-A session role consists of:
-
-- A name 
-- An "apply when" :ref:`rule expression <rule-expressions>`
-- A set of :ref:`read <flexible-sync-read-permissions>` and :ref:`write 
-  <flexible-sync-write-permissions>` rule expressions
-
 You define Flexible Sync session roles on a per-collection basis. Each
 "collection" when using {+sync+} corresponds to a Realm Object type.
 
@@ -359,6 +352,179 @@ change until the next session.
    - You cannot use the :json-operator:`%function` operator in read and
      write rules. Functions would not operate on a per-document basis.
    - You cannot store permissions information (such as "which document IDs may this user access?") in the user object.
+
+
+.. _flexible-sync-roles-json-reference:
+
+Flexible Sync Roles JSON Reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A **Role** object can specify a specific collection's role or the default role
+used for any unspecified collection. You define field-level permissions with a
+**Fields** object in the Role.
+
+.. example::
+
+   The following JSON object describes a **Role** for a team admin. When granted this role, the user:
+
+   - May access any document for reading.
+   - May access a document for writing if the document's ``teamId`` field equals
+     the user's custom data ``teamId``.
+   - May write to any field of the ``address`` embedded object except
+     ``zipCode``.
+   - May write to the ``name`` field.
+   - May not read or write any other fields despite having access to the
+     document due to the ``additional_fields`` constraint.
+
+   .. code-block:: json
+
+    {
+      "name": "TeamAdmin",
+      "applyWhen": { "%%user.custom_data.isAdmin": true },
+      "read": {}, // evaluates to true
+      "write": { "teamId": "%%user.custom_data.teamId" },
+      "fields": {
+        "address": {
+          "fields": {
+            "zipCode": {
+              "write": false,
+              "read": true
+            }
+          },
+          "additional_fields": {
+            "write": true
+          }
+        },
+        "name": {}
+      },
+      "additional_fields": {
+        "write": false,
+        "read": false
+      }
+    }
+
+A **Role** object has the following properties:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Key
+     - Value Type
+     - Required
+     - Notes
+
+   * - name
+     - string
+     - Yes
+     - The name of the role.
+
+   * - applyWhen
+     - JSON expression
+     - Yes
+     - The rules system evaluates the expression at session start time
+       and assigns the first role whose ``applyWhen`` expression evaluates to
+       true.
+
+   * - write
+     - JSON expression
+     - No
+     - The rules system evaluates the expression for each document to
+       determine if the user may write to the given document. If true, the
+       system implicitly grants read access. The expression may only refer to
+       the pre-specified **queryable fields** of the document.
+
+   * - read
+     - JSON expression
+     - No
+     - The rules system evaluates the expression for each document to
+       determine if the user may write to the given document. If ``write``
+       evaluates to true, the system implicitly grants read access regardless of
+       the result of ``read``. The expression may only refer to the
+       pre-specified **queryable fields** of the document.
+
+   * - fields
+     - Fields object
+     - No
+     - Specifies field-level permissions in addition to document-level
+       permission. If omitted, document-level rules apply.
+
+   * - additional_fields
+     - Object
+     - No
+     - Specifies permissions for fields not explicitly listed in the
+       ``fields`` object.
+
+   * - additional_fields.read
+     - boolean
+     - No
+     - Specifies whether read access should be granted for fields not
+       explicitly listed in the ``fields`` object.
+       
+   * - additional_fields.write
+     - boolean
+     - No
+     - Specifies whether write access should be granted for fields not
+       explicitly listed in the ``fields`` object.
+
+The **Fields** object defines permissions for specific fields. The keys of the
+fields object are names of the field:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Key
+     - Value Type
+     - Required
+     - Notes
+
+   * - *arbitrary field name*
+     - **Permissions** object
+     - No
+     - Specifies the field-level permissions for the given field.
+
+The **Permissions** object has the following properties:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Key
+     - Value Type
+     - Required
+     - Notes
+
+   * - write
+     - boolean
+     - No
+     - If true, the system grants read and write access.
+
+   * - read
+     - boolean
+     - No
+     - If true, the system grants read access.
+
+   * - fields
+     - Fields object
+     - No
+     - For embedded object fields. Specifies field-level permissions.
+
+   * - additional_fields
+     - Object
+     - No
+     - For embedded object fields. Specifies permissions for fields not
+       explicitly listed in the ``fields`` object.
+
+   * - additional_fields.read
+     - boolean
+     - No
+     - For embedded object fields. Specifies whether read access should be
+       granted for fields not explicitly listed in the ``fields`` object.
+       
+   * - additional_fields.write
+     - boolean
+     - No
+     - For embedded object fields. Specifies whether write access should be
+       granted for fields not explicitly listed in the ``fields`` object.
+
 
 Available Expansions in Flexible Sync Rules Quick Reference
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -456,12 +622,6 @@ accidentally leak sensitive information.
   document. You control these permissions by defining 
   :ref:`JSON expressions <expressions>`.
 
-- There are no field-level permissions. Sync rules apply to all
-  documents in a query on a per-collection basis. If a user has read or
-  write permission for a given collection, then they can read or modify
-  all synced fields of any document that matches the sync query in the
-  collection.
-
 - Write permissions require read permissions, so a user with write access to a
   collection also has read access regardless of the defined (or undefined) read
   permission rule.
@@ -489,3 +649,14 @@ A user with write permissions for a given collection can modify the value of any
 field of any object matching the client-side query. Write permissions require
 read permissions, so any user that can modify data can also view that data
 before and after it's modified.
+
+.. _flexible-sync-field-level-permissions:
+
+Field-Level Permissions
+^^^^^^^^^^^^^^^^^^^^^^^
+
+You can refine document-level permissions on a per-field basis with the
+``fields`` and ``additional_fields`` properties of the **Role** configuration
+object.
+
+
