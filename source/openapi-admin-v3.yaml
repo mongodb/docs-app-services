@@ -714,6 +714,11 @@ paths:
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ServiceId"
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/rules/{ruleId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/ServiceId"
+      - "$ref": "#/components/parameters/RuleId"
     get:
       tags:
         - rules
@@ -756,11 +761,116 @@ paths:
       responses:
         "200":
           description: Successfully updated.
+  "/groups/{groupId}/apps/{appId}/services/{serviceId}/default_rule":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ServiceId"
-      - "$ref": "#/components/parameters/RuleId"
+    get:
+      tags:
+        - rules
+      operationId: adminGetDefaultRule
+      summary: Get default roles and filters
+      description: Get the current [default roles and filters](https://www.mongodb.com/docs/atlas/app-services/rules/#default-rules).
+      responses:
+        "200":
+          description: Ok.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DefaultRule"
+        "404":
+          description: No default rule is defined.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/schemas/BasicError"
+                  - properties:
+                      error:
+                        enum:
+                          - "default rule does not exist on service"
+    post:
+      tags:
+        - rules
+      operationId: adminCreateDefaultRule
+      summary: Create default roles and filters
+      description: Create [default roles and filters](https://www.mongodb.com/docs/atlas/app-services/rules/#default-rules) for a data source.
+      requestBody:
+        required: true
+        description: A default rule configuration object.
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/DefaultRule"
+      responses:
+        "201":
+          description: Created default rule.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DefaultRule"
+        "400":
+          description: Default rule already exists.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/schemas/BasicError"
+                  - properties:
+                      error:
+                        enum:
+                          - "default rule already exists"
+    put:
+      tags:
+        - rules
+      operationId: adminUpdateDefaultRule
+      summary: Update default roles and filters
+      description: Modify the [default roles and filters](https://www.mongodb.com/docs/atlas/app-services/rules/#default-rules) of a data source.
+      requestBody:
+        required: true
+        description: The updated default rule configuration object.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - "$ref": "#/components/schemas/DefaultRule"
+                - required: ["_id"]
+      responses:
+        "204":
+          description: Successfully modified the default rule.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/schemas/BasicError"
+                  - properties:
+                      error:
+                        enum:
+                          - "default rule does not exist"
+                          - "service default rule id mismatch"
+    delete:
+      tags:
+        - rules
+      operationId: adminDeleteDefaultRule
+      summary: Delete default roles and filters
+      description: Delete the [default roles and filters](https://www.mongodb.com/docs/atlas/app-services/rules/#default-rules) of a data source.
+      responses:
+        "204":
+          description: Deleted the default rule.
+        "404":
+          description: Default rule does not exist.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/schemas/BasicError"
+                  - properties:
+                      error:
+                        enum:
+                          - "default rule does not exist for app service"
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/commands/generate_schema":
     post:
       tags:
@@ -3616,6 +3726,11 @@ components:
         environment:
           type: string
           description: The environment the app is in.
+    BasicError:
+      type: object
+      properties:
+        error:
+          type: string
     BuildInfo:
       type: object
       properties:
@@ -3994,6 +4109,23 @@ components:
       oneOf:
         - type: object
         - type: boolean
+    DefaultRule:
+      type: object
+      description: A data access rule that define defines fallback user roles and query filters for collection's that don't have more specific permissions defined.
+      properties:
+        _id:
+          type: string
+          description: The default rule's unique ObjectId identifier.
+        roles:
+          type: array
+          description: An ordered list of default user roles.
+          items:
+            "$ref": "#/components/schemas/Role"
+        filters:
+          type: array
+          description: A list of default query filters.
+          items:
+            "$ref": "#/components/schemas/Filter"
     Rule:
       type: object
       description: A data access rule that defines user roles and query filters for a collection in a linked data source.
