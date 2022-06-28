@@ -227,8 +227,9 @@ Integration Tests for Functions
 -------------------------------
 
 You should perform integration tests on all App Services Functions before deploying
-them to production environments. Because the App Services runtime differs from
-the standard Node.js runtime, you should test Functions deployed to Atlas App Services
+them to production environments. Because the App Services Function JavaScript runtime
+differs from the standard Node.js runtime,
+you should test Functions deployed to Atlas App Services
 before using them in a production environment.
 
 There is no single way to write integration tests for App Services Functions.
@@ -280,12 +281,70 @@ App in more detail.
       In your testing suite, connect to your testing App with a Realm SDK.
       Test the interaction with the App using the Realm SDK.
 
-      .. example:: Testing a Function called by the client
+      .. example:: Testing a Database Trigger Function
 
          This example uses the Realm Node.js SDK and the Jest testing framework
-         to test a Function called directly from the client.
+         to test a Database Trigger.
 
-         TODO: create Node integration test
+         The Trigger Function sends creates a :wikipedia:`materialized view <Materialized_view>`
+         of total sales for a product whenever a new sale is made.
+
+         The Trigger fires every time an entry is added to the ``sales`` table.
+         It increments the ``total_sales`` field on the ``total_sales_materialized`` table.
+
+         The Database Trigger has the following configuration:
+
+         .. code-block:: json
+            :caption: triggers/materializeTotalSales.json
+
+            {
+               "id": "62bb0d9f852c6e062432c454",
+               "name": "materializeTotalSales",
+               "type": "DATABASE",
+               "config": {
+                  "operation_types": [
+                        "INSERT"
+                  ],
+                  "database": "store",
+                  "collection": "sales",
+                  "service_name": "mongodb-atlas",
+                  "match": {},
+                  "project": {},
+                  "full_document": true,
+                  "full_document_before_change": false,
+                  "unordered": false,
+                  "skip_catchup_events": false
+               },
+               "disabled": false,
+               "event_processors": {
+                  "FUNCTION": {
+                        "config": {
+                           "function_name": "materializeTotalSales"
+                        }
+                  }
+               }
+            }
+
+         The trigger invokes the following Function:
+
+         .. code-block:: js
+            :caption: functions/materializeTotalSales.js
+
+            exports = function(changeEvent) {
+               const _id = changeEvent.documentKey._id;
+               const totalSalesMaterialization = context.services.get("mongodb-atlas").db("store").collection("total_sales_materialized");
+               totalSalesMaterialization.update({ _id }, { $inc: { total_sales: 1 }}, { upsert: true });
+            };
+
+         This example tests the Trigger using the :ref:`Node.js Realm SDK <node-intro>`
+         to interact with {+atlas+}. You can also use a :ref:`Realm SDK <realm-sdks>`
+         with the MongoDB Query API or one of the :driver:`MongoDB drivers <>`.
+
+         .. code-block:: js
+            :caption: triggers/materializeTotalSales.test.js
+
+
+
 
 
 
