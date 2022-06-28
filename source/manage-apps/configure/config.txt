@@ -41,10 +41,12 @@ using structured JSON configuration and JavaScript source code files.
 .. important:: Reserved File Names
    
    You can include arbitrarily named files in your realm app config, with a few exceptions.
-   The following file names should not be used: ``stitch.json``, ``config.json``, 
-   ``realm_config.json``, and ``app_config.json``. Files with these names
-   conflict with pre-made files of the same name in their app structure's file
-   system. Using these file names throws an error when you import the app using the CLI.
+   Note the following names: ``stitch.json``, ``config.json``, 
+   ``realm_config.json``, and ``app_config.json``. These names are reserved specific 
+   files used to define and configure specific components in your app. As such, files 
+   of these names must conform to a specific schema for its component type. 
+   Using these file names when the file's content fails to conform to that schema
+   will throw an error when you import the app using the CLI.
    
 You'll work directly with configuration files if you prefer to develop and
 :ref:`deploy <application-deployment>` locally instead of through the {+ui+}.
