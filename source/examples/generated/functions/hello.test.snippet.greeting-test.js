@@ -1,4 +1,4 @@
-const { greet, greetWithPunctuation } = require("./hello");
+const { greet, greetWithPunctuation } = require("../../functions/hello");
 
 test("should greet", () => {
   const helloWorld = greet("world");

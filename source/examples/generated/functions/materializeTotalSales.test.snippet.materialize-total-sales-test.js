@@ -1,4 +1,3 @@
-// :snippet-start: materialize-total-sales-test
 const { app_id } = require("../../realm_config.json");
 const Realm = require("realm");
 const { BSON } = require("realm");
@@ -82,4 +81,3 @@ test("Trigger updates an existing materialization", async () => {
   });
   expect(allSaladSales.total_sales).toBe(2);
 });
-// :snippet-end:
