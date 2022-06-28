@@ -1,4 +1,4 @@
-const { app_id } = require("../realm_config.json");
+const { app_id } = require("../../realm_config.json");
 const Realm = require("realm");
 const { BSON } = require("realm");
 

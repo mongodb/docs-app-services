@@ -1,6 +1,6 @@
 // :snippet-start: test-with-mocking
 // import the function
-const greet = require("./helloWithValue");
+const greet = require("../../functions/helloWithValue");
 
 // wrap the mock in beforeEach/afterEach blocks to avoid
 // pollution of the global namespace
