@@ -15,9 +15,9 @@ async function sleep(ms) {
 
 beforeEach(async () => {
   const credentials = Realm.Credentials.anonymous();
-
   user = await app.logIn(credentials);
 });
+// Clean up. Removes user and data created in the test.
 afterEach(async () => {
   const db = user.mongoClient("mongodb-atlas").db("store");
   await db.collection("sales").deleteMany({});

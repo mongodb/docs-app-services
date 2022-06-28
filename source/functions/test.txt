@@ -10,15 +10,12 @@ Test App Services Functions
    :depth: 2
    :class: singlecol
 
-This page describes some strategies you can use to test your Atlas App Services Functions code.
-As App Services Functions are written in JavaScript, you can use standard JavaScript testing
-frameworks and methods to unit test the functions locally.
+This page describes some strategies you can use to test your Atlas App Services Functions.
 
 Due to some differences between the the App Services Functions
-JavaScript and standard Node.js, there are some unique considerations that you should take
+JavaScript runtime and the standard Node.js runtime, you must take some unique considerations
 into account when testing App Services Functions. This page covers how to handle
 the uniqueness of App Services Functions.
-
 
 Before You Begin
 ----------------
@@ -33,7 +30,7 @@ Unit Tests for Functions
 ------------------------
 
 You can write unit tests to validate the functionality of your App Services Functions.
-Use any Node.js-compatible testing frameworks to test App Services Functions.
+Use any Node.js-compatible testing framework to test App Services Functions.
 The examples on this page use the `Jest testing framework <https://jestjs.io/>`__.
 
 You must use :wikipedia:`CommonJS modules <CommonJS>` to write unit tests for
@@ -91,11 +88,12 @@ App Services Functions.
 
    .. step:: Write Function code
 
-      To make your Function code easy to test, you should keep it modular
+      To make your Function code easy to test, keep it modular
       by separating its concerns into distinct components.
       You must keep all logic for the Function in the file you defined
       in the previous step. You cannot perform relative imports from other files
-      in your project. You can also :ref:`import dependencies using npm <external-dependencies>`.
+      in your project in a Function file.
+      You can also :ref:`import dependencies using npm <external-dependencies>`.
 
       You must export your function by assigning it to ``export``.
 
@@ -109,15 +107,15 @@ App Services Functions.
       To use your code to use in separate Node.js unit test files,
       you must use separate CommonJS ``module.exports`` syntax.
 
-      However, this syntax is not compatible with the App Services Functions runtime.
-      The App Services environment does not have the global ``module``.
-      To export modules to your unit tests while keeping the file compatible with 
+      This syntax is not compatible with the App Services Functions runtime.
+      The App Services environment does not have the Node.js global ``module``.
+      To export modules to your unit tests while keeping the file compatible with
       App Services Functions, you must wrap the  the ``module.exports`` statement
       with a check to see if the global ``module`` object exists.
 
       .. literalinclude:: /examples/generated/functions/hello.snippet.function-with-local-export.js
          :language: js
-         :caption: hello.js
+         :caption: functions/hello.js
          :emphasize-lines: 12-15
 
    .. step:: Unit test exported Function code
@@ -125,7 +123,7 @@ App Services Functions.
       Now you can write unit tests for the modules that you exported from the
       Function file. Create a test file for the Function file.
 
-      Add your tests to a separate ``test`` directory in your App configuration files.
+      Add your tests to a separate ``test`` directory in your project.
 
       .. code-block:: sh
 
@@ -136,7 +134,7 @@ App Services Functions.
 
       .. literalinclude:: /examples/generated/functions/hello.test.snippet.greeting-test.js
          :language: js
-         :caption: hello.test.js
+         :caption: test/unit/hello.test.js
 
 .. _functions_mock_services:
 
@@ -205,7 +203,7 @@ so that they do not pollute the global namespace.
 
 .. example:: Mocking a Function that accesses ``context``
 
-   The function in this example accesses a App Services Value and returns it.
+   The function in this example accesses an App Services Value and returns it.
 
    .. literalinclude:: /examples/generated/functions/helloWithValue.snippet.hello-with-context-value.js
       :language: js
@@ -230,10 +228,9 @@ Integration Tests for Functions
 -------------------------------
 
 You should perform integration tests on all App Services Functions before deploying
-them to production environments. Because the App Services Function JavaScript runtime
-differs from the standard Node.js runtime,
-you should test Functions deployed to Atlas App Services
-before using them in a production environment.
+them to production environments. This is especially important because
+the App Services Function JavaScript runtime differs from the standard Node.js runtime.
+Unexpected errors can occur if you do not test functions deployed to App Services.
 
 There is no single way to write integration tests for App Services Functions.
 As Functions can be used in a variety of different contexts for different purposes,
@@ -289,7 +286,7 @@ App in more detail.
    This example uses the Realm Node.js SDK and the Jest testing framework
    to test a Database Trigger.
 
-   The Trigger Function sends creates a :wikipedia:`materialized view <Materialized_view>`
+   The Trigger Function creates a :wikipedia:`materialized view <Materialized_view>`
    of total sales for a product whenever a new sale is made.
 
    The Trigger fires every time an entry is added to the ``sales`` table.
@@ -309,7 +306,7 @@ App in more detail.
 
    This example tests the Trigger using the :ref:`Node.js Realm SDK <node-intro>`
    to interact with {+atlas+}. You can also use a :ref:`Realm SDK <realm-sdks>`
-   with the MongoDB Query API or one of the :driver:`MongoDB drivers <>`.
+   with the MongoDB Query API or one of the :driver:`MongoDB drivers <>` to query {+atlas+}.
 
    .. literalinclude:: /examples/generated/functions/materializeTotalSales.test.snippet.materialize-total-sales-test.js
       :language: js
