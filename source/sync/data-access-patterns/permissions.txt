@@ -663,4 +663,16 @@ You can refine document-level permissions on a per-field basis with the
 ``fields`` and ``additional_fields`` properties of the **Role** configuration
 object.
 
+If the user does not have document-level permissions to a document, field-level
+permissions cannot grant access to that document. Field-level permissions can
+only refine the permissions on documents that a user can access. For example,
+you can use field-level permissions to forbid writes on a specific field of a
+document that a user can otherwise write to.
 
+``additional_fields`` defines the field-level permissions for fields that you
+don't explicitly define in the ``fields`` object. If you don't define
+``additional_fields`` read or write, the system uses the corresponding
+document-level permission for any field not mentioned in ``fields``.
+
+In practice, you would use ``additional_fields`` with ``fields`` to greatly
+constrain document-level read or write access to a few specified fields.
