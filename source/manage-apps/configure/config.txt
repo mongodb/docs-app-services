@@ -38,6 +38,17 @@ using structured JSON configuration and JavaScript source code files.
 - ``.js`` files define serverless application logic used in functions, triggers,
   HTTPS endpoints, and custom resolvers.
 
+.. important:: Reserved File Names
+   
+   You can include arbitrarily named files in your realm app config, with a few exceptions.
+   The following filenames are used to define and configure components in your App:
+   ``stitch.json``, ``config.json``, ``realm_config.json``, and ``app_config.json``.
+   Files with these names must conform to a specific schema for their component type. 
+   Using these file names when the file's content fails to conform to that schema
+   throws an error when you import the app using the CLI.
+   
+   Refer to this section for reference information about configuring these files.
+   
 You'll work directly with configuration files if you prefer to develop and
 :ref:`deploy <application-deployment>` locally instead of through the {+ui+}.
 
