@@ -458,12 +458,20 @@ The **Permissions** object has the following properties:
    * - write
      - boolean
      - No
-     - If true, the system grants read and write access. If undefined, the system assumes 
+     - If the user has write permission at the document level:
+
+       - When ``write`` is ``true`` or undefined, the system grants read and write access.
+       - When ``write`` is ``false``, the system revokes write access.
 
    * - read
      - boolean
      - No
-     - If true, the system grants read access.
+     - First, if the user has write access, the user always has read access. If
+       the user does not have write access but does have document-level read
+       permission:
+       
+       - When ``read`` is ``true`` or undefined, the system grants read access.
+       - When ``read`` is ``false``, the system revokes read access.
 
    * - fields
      - Fields object
@@ -706,7 +714,7 @@ If the user does not have document-level permissions to a document, field-level
 permissions cannot grant access to that document. Field-level permissions can
 only refine the permissions on documents that a user can access. For example,
 you can use field-level permissions to forbid writes on a specific field of a
-document that a user can otherwise write to.
+document that a user may otherwise write to.
 
 The ``additional_fields`` property defines the field-level permissions for
 fields that you don't explicitly define in the ``fields`` object. If you don't
@@ -714,5 +722,15 @@ define ``additional_fields`` or its read/write properties, the system uses the
 corresponding document-level permission for any field not mentioned in
 ``fields``.
 
-In practice, you would use ``additional_fields`` with ``fields`` to greatly
-constrain document-level read or write access to a few specified fields.
+In practice, you can use ``additional_fields`` to start with all fields
+**restricted** and use ``fields`` to grant access to a few specific fields.
+Conversely, you can omit ``additional_fields`` to start with all fields
+**unrestricted** and use ``fields`` to restrict a few specific fields.
+
+In addition to ``read`` and ``write``, you can specify ``fields`` and
+``additional_fields`` rules for embedded object fields. In this case, ``read``
+and ``write`` are "document-level" to the embedded object field, while
+``fields`` and ``additional_fields`` are "field-level". In other words, ``read``
+and ``write`` determine permissions on the embedded object as a whole, while
+``fields`` and ``additional_fields`` refine those permissions on a per-field
+basis. 
