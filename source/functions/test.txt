@@ -1,8 +1,8 @@
 .. _test-functions:
 
-===========================
+====================
 Test Atlas Functions
-===========================
+====================
 
 .. contents:: On this page
    :local:
@@ -10,11 +10,11 @@ Test Atlas Functions
    :depth: 2
    :class: singlecol
 
-This page describes some strategies you can use to test your Functions.
+This page describes some strategies you can use to test your Atlas Functions.
 
 Due to some differences between the the Functions
 JavaScript runtime and the standard Node.js runtime, you must take some unique considerations
-into account when testing App Services Functions. This page covers how to handle
+into account when testing Functions. This page covers how to handle
 the uniqueness of Functions.
 
 Before You Begin
@@ -29,12 +29,12 @@ Before You Begin
 Unit Tests for Functions
 ------------------------
 
-You can write unit tests to validate the functionality of your App Services Functions.
-Use any Node.js-compatible testing framework to test App Services Functions.
+You can write unit tests to validate the functionality of your Functions.
+Use any Node.js-compatible testing framework to test Functions.
 The examples on this page use the `Jest testing framework <https://jestjs.io/>`__.
 
 You must use :wikipedia:`CommonJS modules <CommonJS>` to write unit tests for
-App Services Functions.
+Functions.
 
 .. procedure::
 
@@ -83,7 +83,7 @@ App Services Functions.
 
       .. seealso::
 
-         For more information on creating a new App Services Function,
+         For more information on creating a new Function,
          refer to :ref:`Define a Function <define-a-function>`.
 
    .. step:: Write Function code
@@ -107,10 +107,10 @@ App Services Functions.
       To use your code to use in separate Node.js unit test files,
       you must use separate CommonJS ``module.exports`` syntax.
 
-      This syntax is not compatible with the App Services Functions runtime.
-      The App Services environment does not have the Node.js global ``module``.
+      This syntax is not compatible with the Functions runtime.
+      The Atlas Functions environment does not have the Node.js global ``module``.
       To export modules to your unit tests while keeping the file compatible with
-      App Services Functions, you must wrap the  the ``module.exports`` statement
+      Functions, you must wrap the  the ``module.exports`` statement
       with a check to see if the global ``module`` object exists.
 
       .. literalinclude:: /examples/generated/functions/hello.snippet.function-with-local-export.js
@@ -143,7 +143,7 @@ Mock Services
 
 To write unit tests for Functions that use the :ref:`global context object <function-context>`
 or one of the :ref:`other global modules <function-global-modules>`
-that App Services Functions expose, you must create mocks of their behavior.
+that Functions expose, you must create mocks of their behavior.
 
 In this example, the Function references an App Services Value via ``context.values.get()``.
 
@@ -165,7 +165,7 @@ In this example, the Function references an App Services Value via ``context.val
     }
 
 Attach these mocks to the Node.js global namespace. This lets you call the mocks in your
-unit tests the same way you do in the App Services Functions runtime.
+unit tests the same way you do in the Functions runtime.
 
 .. code-block:: js
 
@@ -227,12 +227,12 @@ so that they do not pollute the global namespace.
 Integration Tests for Functions
 -------------------------------
 
-You should perform integration tests on all App Services Functions before deploying
+You should perform integration tests on all Functions before deploying
 them to production environments. This is especially important because
-the App Services Function JavaScript runtime differs from the standard Node.js runtime.
+the Atlas Function JavaScript runtime differs from the standard Node.js runtime.
 Unexpected errors can occur if you do not test functions deployed to App Services.
 
-There is no single way to write integration tests for App Services Functions.
+There is no single way to write integration tests for Functions.
 As Functions can be used in a variety of different contexts for different purposes,
 each use case requires a different integration test strategy.
 
@@ -242,7 +242,7 @@ a GraphQL Custom Resolver Function, which is different from how you would
 test a Database Trigger Function.
 
 However, there are some general steps that you can take to writing integration tests
-for App Services Functions. On a high level these steps are:
+for Functions. On a high level these steps are:
 
 #. Create a testing App Services App with the same configuration as your production
    App Services App.
@@ -253,13 +253,13 @@ App in more detail.
 
 .. seealso::
 
-   For more information on the unique aspects of the App Services Functions JavaScript runtime,
+   For more information on the unique aspects of the Functions JavaScript runtime,
    refer to:
 
    - :ref:`Function Constraints <function-constraints>`
    - :ref:`JavaScript Support <js-support>`
 
-   For more information on the different use cases for App Services Functions,
+   For more information on the different use cases for Functions,
    refer to :ref:`When to Use Functions <when-to-use-functions>`.
 
 .. procedure::
