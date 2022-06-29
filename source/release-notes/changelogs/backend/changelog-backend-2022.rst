@@ -1,3 +1,10 @@
+.. _backend_20220629:
+
+29 June 2022 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Introduced a refreshed UI for Rules.
+
 .. _backend_20220615:
 
 15 June 2022 Release
