@@ -47,6 +47,7 @@ test("Trigger creates a new materialization", async () => {
   const allSandwichSales = await totalSalesMaterialized.findOne({
     _id: sandwichId,
   });
+  // checks that Trigger increments creates and increments total_sales
   expect(allSandwichSales.total_sales).toBe(1);
 });
 
@@ -79,5 +80,6 @@ test("Trigger updates an existing materialization", async () => {
   const allSaladSales = await totalSalesMaterialized.findOne({
     _id: saladId,
   });
+  // checks that Trigger increments total_sales for each sale
   expect(allSaladSales.total_sales).toBe(2);
 });
