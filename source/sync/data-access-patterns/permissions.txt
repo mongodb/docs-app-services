@@ -363,86 +363,6 @@ A **Role** object can specify a role for a specific collection or the default
 role applied to all collections. You define field-level permissions with a
 **Fields** object in the Role.
 
-.. example::
-
-   The following JSON object describes a **Role** for a team admin:
-
-   .. code-block:: json
-
-    {
-      "name": "TeamAdmin",
-      "applyWhen": { "%%user.custom_data.isAdmin": true },
-      "read": {},
-      "write": { "teamId": "%%user.custom_data.teamId" },
-      "fields": {
-        "address": {
-          "fields": {
-            "zipCode": {
-              "write": false,
-              "read": true
-            }
-          },
-          "additional_fields": {
-            "write": true
-          }
-        },
-        "name": {}
-      },
-      "additional_fields": {
-        "write": false,
-        "read": false
-      }
-    }
-  
-   The following table explains the effect of each part of the Role:
-
-   .. list-table::
-      :header-rows: 1
-      :widths: 50 50
-
-      * - Role JSON
-        - Effect
-
-      * - ``"read": {}``
-        - May access any document for reading.
-
-      * - ``"write": { "teamId": "%%user.custom_data.teamId" }``
-        - May access a document for writing if the document's ``teamId`` field
-          equals the user's custom data ``teamId``. This assumes ``teamId`` was
-          declared as a queryable field in the Sync configuration.
-
-      * - .. code-block:: json
-
-            "fields": {
-              "address": {
-                "fields": {
-                  "zipCode": {
-                    "write": false,
-                    "read": true
-                  }
-                },
-                "additional_fields": {
-                  "write": true
-                }
-              },
-              "name": {}
-            },
-
-        - May write to any field of the ``address`` embedded object except
-          ``zipCode``. May write to the ``name`` field.
-      
-      * - .. code-block:: json
-
-            "additional_fields": {
-              "write": false,
-              "read": false
-            }
-
-        - May not read or write any other fields despite having document-level
-          access to the document.
-          
-
-
 A **Role** object has the following properties:
 
 .. list-table::
@@ -567,6 +487,86 @@ The **Permissions** object has the following properties:
      - No
      - For embedded object fields. Specifies whether write access should be
        granted for fields not explicitly listed in the ``fields`` object.
+
+
+.. example::
+
+   The following JSON object describes a **Role** for a team admin:
+
+   .. code-block:: json
+
+    {
+      "name": "TeamAdmin",
+      "applyWhen": { "%%user.custom_data.isAdmin": true },
+      "read": {},
+      "write": { "teamId": "%%user.custom_data.teamId" },
+      "fields": {
+        "address": {
+          "fields": {
+            "zipCode": {
+              "write": false,
+              "read": true
+            }
+          },
+          "additional_fields": {
+            "write": true
+          }
+        },
+        "name": {}
+      },
+      "additional_fields": {
+        "write": false,
+        "read": false
+      }
+    }
+  
+   The following table explains the effect of each part of the Role:
+
+   .. list-table::
+      :header-rows: 1
+      :widths: 50 50
+
+      * - Role JSON
+        - Effect
+
+      * - ``"read": {}``
+        - May access any document for reading.
+
+      * - ``"write": { "teamId": "%%user.custom_data.teamId" }``
+        - May access a document for writing if the document's ``teamId`` field
+          equals the user's custom data ``teamId``. This requires ``teamId`` to
+          be declared as a queryable field in the Sync configuration.
+
+      * - .. code-block:: json
+
+            "fields": {
+              "address": {
+                "fields": {
+                  "zipCode": {
+                    "write": false,
+                    "read": true
+                  }
+                },
+                "additional_fields": {
+                  "write": true
+                }
+              },
+              "name": {}
+            },
+
+        - May write to any field of the ``address`` embedded object except
+          ``zipCode``. May also write to the ``name`` field.
+      
+      * - .. code-block:: json
+
+            "additional_fields": {
+              "write": false,
+              "read": false
+            }
+
+        - May not read or write any other fields despite having document-level
+          access to the document.
+          
 
 
 Available Expansions in Flexible Sync Rules Quick Reference
