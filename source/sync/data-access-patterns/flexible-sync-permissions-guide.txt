@@ -553,12 +553,11 @@ We don't recommend using this model for highly sensitive data.
 
 This model uses the flexible sync permissions system to keep documents private
 between the document creator and the collaborators they add to the document.
-
 However, if a user has write access to a document, they may write to any field
 of the document. Consequently, this strategy **allows collaborators to add other
 collaborators**. It would also allow a collaborator to edit the ``owner_id``
-field. Finer control of permissions are not possible without field-level
-permissions, which are not currently available.
+field. Field-level permissions are boolean, so we can't limit writes to these
+fields to specific users.
 
 User Search
 ~~~~~~~~~~~
