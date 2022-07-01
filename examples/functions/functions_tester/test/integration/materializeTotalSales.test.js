@@ -12,7 +12,7 @@ const saladId = BSON.ObjectId();
 async function sleep(ms) {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
-
+// Set up. Ensures a user is logged in for every test.
 beforeEach(async () => {
   const credentials = Realm.Credentials.anonymous();
   user = await app.logIn(credentials);
@@ -38,7 +38,7 @@ test("Trigger creates a new materialization", async () => {
     timestamp: Date.now(),
   });
 
-  // give time for trigger to execute
+  // give time for the trigger to execute
   await sleep(1000);
 
   const totalSalesMaterialized = user

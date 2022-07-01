@@ -12,7 +12,7 @@ Test Atlas Functions
 
 This page describes some strategies you can use to test your Atlas Functions.
 
-Due to some differences between the the Functions
+Due to some differences between the Functions
 JavaScript runtime and the standard Node.js runtime, you must take some unique considerations
 into account when testing Functions. This page covers how to handle
 the uniqueness of Functions.
@@ -95,7 +95,7 @@ Functions.
       in your project in a Function file.
       You can also :ref:`import dependencies using npm <external-dependencies>`.
 
-      You must export your function by assigning it to ``export``.
+      You must export your function by assigning it to ``exports``.
 
       .. literalinclude:: /examples/generated/functions/hello.snippet.function.js
          :language: js
@@ -234,7 +234,7 @@ Unexpected errors can occur if you do not test functions deployed to App Service
 
 There is no single way to write integration tests for Functions.
 As Functions can be used in a variety of different contexts for different purposes,
-each use case requires a different integration test strategy.
+each use case requires a different integration testing strategy.
 
 For example, the way you create an integration test for a Function that you
 invoke from a Realm client SDK is different from the way you test
