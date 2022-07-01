@@ -7,4 +7,4 @@ currently support change streams, so the following features are limited:
 
 - You cannot use a serverless instance as your app's :ref:`synced <sync>` cluster.
 
-- You cannot watch collections for changes on a serverless instance.
+- You cannot watch collections for changes data sources that are serverless {+atlas+} instances.
