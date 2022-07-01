@@ -1,3 +1,26 @@
+# July 1, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference: Add warning about reserved file names
+
+## Atlas Device Sync
+- Define Data Access Patterns
+  - Choose Your Sync Mode: Specify devs can apply permissions on both document and field level
+  - Sync Rules and Permissions: Add field-level permissions details
+- Configure Sync/Enable Atlas Device Sync: Add link to new field-level permission info
+
+## Functions
+- Test Functions: New page w/guidance & tested code examples for testing Functions
+
+## Triggers
+- Authentication Triggers: Edits to improve readability
+
+## Other
+- Template Apps: Add Flexible Sync Template Apps to the list of available Template Apps
+- Admin API
+  - Move API reference from Reference to main sidebar navigation
+  - Add Default Rules endpoints and info
+
 # June 24, 2022
 
 ## Atlas Device Sync
