@@ -121,9 +121,8 @@ Functions.
    .. step:: Unit test exported Function code
 
       Now you can write unit tests for the modules that you exported from the
-      Function file. Create a test file for the Function file.
-
-      Add your tests to a separate ``test`` directory in your project.
+      Function file. Create a test file for the Function file in
+      a separate ``test`` directory somewhere in your project.
 
       .. code-block:: sh
 
@@ -145,7 +144,8 @@ To write unit tests for Functions that use the :ref:`global context object <func
 or one of the :ref:`other global modules <function-global-modules>`
 that Functions expose, you must create mocks of their behavior.
 
-In this example, the Function references an App Services Value via ``context.values.get()``.
+In this example, the Function references an :ref:`App Services Value <app-value>`
+via ``context.values.get()``.
 
 .. code-block:: js
    :caption: accessAppServicesGlobals.js
@@ -245,7 +245,8 @@ However, there are some general steps that you can take to writing integration t
 for Functions. On a high level these steps are:
 
 #. Create a testing App with the same configuration as your production App.
-#. Write integration tests that use the Realm client SDKs to interact with the test App.
+#. Write integration tests that interact with your Functions deployed
+   to a live testing environment.
 
 The remainder of this section explains how to implement integration tests for your
 App in more detail.
@@ -266,18 +267,20 @@ App in more detail.
    .. step:: Create a test App
 
       Create an App Services App for testing purposes that has the same configuration
-      as your production App.
+      as your production App, except using different data sources and backend
+      configuration.
 
       For more information on how you can create multiple Apps with the same configuration,
-      refer to :ref:`App Configuration <export-realm-app>`.
+      refer to :ref:`Environments <realm-app-environments>`.
 
-   .. step:: Test using a Realm client SDK
+   .. step:: Test in live environment
 
-      Once you have deployed your test App, you can interact with it using the
-      :ref:`Realm client SDKs <intro-realm-database>`.
-      These SDKs provide first-class access to App Services.
+      Once you have deployed your test App, test its functionality using
+      your preferred testing language and framework.
 
-      In your testing suite, connect to your testing App with a Realm SDK.
+      The :ref:`Realm client SDKs <intro-realm-database>` are useful for testing
+      Apps. These SDKs provide first-class access to App Services.
+      In your testing suite, you can connect to your testing App with a Realm SDK.
       Test the interaction with the App using the Realm SDK.
 
 .. example:: Testing a Database Trigger Function
@@ -305,7 +308,8 @@ App in more detail.
 
    This example tests the Trigger using the :ref:`Node.js Realm SDK <node-intro>`
    to interact with {+atlas+}. You can also use a :ref:`Realm SDK <realm-sdks>`
-   with the MongoDB Query API or one of the :driver:`MongoDB drivers <>` to query {+atlas+}.
+   with the MongoDB Query API or one of the :driver:`MongoDB drivers <>`
+   to query {+atlas+}.
 
    .. literalinclude:: /examples/generated/functions/materializeTotalSales.test.snippet.materialize-total-sales-test.js
       :language: js
