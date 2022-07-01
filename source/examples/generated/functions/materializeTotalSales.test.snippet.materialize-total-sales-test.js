@@ -12,6 +12,8 @@ async function sleep(ms) {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Set up. Creates and logs in a user, which you need to query MongoDB Atlas
+// with the Realm Node.js SDK
 beforeEach(async () => {
   const credentials = Realm.Credentials.anonymous();
   user = await app.logIn(credentials);
@@ -37,7 +39,7 @@ test("Trigger creates a new materialization", async () => {
     timestamp: Date.now(),
   });
 
-  // give time for trigger to execute
+  // give time for Trigger to execute on Atlas
   await sleep(1000);
 
   const totalSalesMaterialized = user
@@ -70,7 +72,7 @@ test("Trigger updates an existing materialization", async () => {
     timestamp: Date.now(),
   });
 
-  // give time for trigger to execute
+  // give time for Trigger to execute on Atlas
   await sleep(1000);
 
   const totalSalesMaterialized = user
