@@ -29,7 +29,7 @@ Before You Begin
 Unit Tests for Functions
 ------------------------
 
-You can write unit tests to validate the functionality of your Functions.
+You can validate the functionality of your Functions with unit tests.
 Use any Node.js-compatible testing framework to test Functions.
 The examples on this page use the `Jest testing framework <https://jestjs.io/>`__.
 
@@ -71,7 +71,7 @@ Functions.
          touch functions/hello.js
 
 
-      You also need to add configuration information for the Function to ``function/config.json``.
+      You also need to add configuration information for the Function to ``functions/config.json``.
 
       .. code-block:: json
 
@@ -108,7 +108,7 @@ Functions.
       you must use separate CommonJS ``module.exports`` syntax.
 
       This syntax is not compatible with the Functions runtime.
-      The Atlas Functions environment does not have the Node.js global ``module``.
+      The Atlas Functions environment does not provide the Node.js global ``module``.
       To export modules to your unit tests while keeping the file compatible with
       Functions, you must wrap the  the ``module.exports`` statement
       with a check to see if the global ``module`` object exists.
@@ -244,8 +244,7 @@ test a Database Trigger Function.
 However, there are some general steps that you can take to writing integration tests
 for Functions. On a high level these steps are:
 
-#. Create a testing App Services App with the same configuration as your production
-   App Services App.
+#. Create a testing App with the same configuration as your production App.
 #. Write integration tests that use the Realm client SDKs to interact with the test App.
 
 The remainder of this section explains how to implement integration tests for your
