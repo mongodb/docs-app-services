@@ -639,7 +639,11 @@ paths:
                 query:
                   type: object
                   default: {}
-                  description: A MongoDB query for the collection. Use this to include a specific subset of documents in the sample.
+                  description: |-
+                    A [MongoDB query](https://www.mongodb.com/docs/manual/tutorial/query-documents/)
+                    that matches documents in the collection. The result of running this query is the
+                    sample population. Use this to narrow the sample to a subset of documents in the
+                    collection.
                 limit:
                   type: number
                   default: 10000
@@ -4902,15 +4906,15 @@ components:
     NumberAnyOfValidationError:
       type: string
       const: "number_any_of"
-      description: A field does not match any schema in anyOf.
+      description: A field does not match any schema in [anyOf](https://json-schema.org/understanding-json-schema/reference/combining.html#anyof).
     NumberOneOfValidationError:
       type: string
       const: "number_one_of"
-      description: A field does not match exactly one schema in oneOf.
+      description: A field does not match exactly one schema in [oneOf](https://json-schema.org/understanding-json-schema/reference/combining.html#oneof).
     NumberAllOfValidationError:
       type: string
       const: "number_all_of"
-      description: A field does not match all schemas in allOf.
+      description: A field does not match all schemas in [allOf](https://json-schema.org/understanding-json-schema/reference/combining.html#allof).
     NumberNotValidationError:
       type: string
       const: "number_not"
@@ -5002,11 +5006,11 @@ components:
     ConditionThenValidationError:
       type: string
       const: "condition_then"
-      description: A value is not valid under a truthy conditional.
+      description: A value is not valid when a conditional expression evaluates to `true`.
     ConditionElseValidationError:
       type: string
       const: "condition_else"
-      description: A value is not valid under a falsy conditional.
+      description: A value is not valid when a conditional expression evaluates to `false`.
   securitySchemes:
     tokenAuth:
       type: http
