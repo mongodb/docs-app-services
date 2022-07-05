@@ -69,14 +69,15 @@ You can call the Data API from most HTTP clients. Supported environments include
 - Servers
 - Internet of things devices
 
-You **cannot** call the Data API from a web browser. Atlas provides alternative
-methods to query MongoDB from the web browser:
+You **cannot** call the Data API from a web browser or any other client that
+enforces the :mdn:`CORS protocol <Web/HTTP/CORS>`.
+Atlas provides alternative methods to query MongoDB from the web browser:
 
 - Use the :ref:`Realm Web SDK MongoDB client <web-query-mongodb>`.
 - Configure the :ref:`Atlas GraphQL API <graphql-api>`. Then call the GraphQL API
   from the browser :ref:`using a GraphQL client, like Apollo <graphql-api>`.
 - Create an :ref:`Atlas Function that queries MongoDB <functions-mongodb>`.
-  Then using the Realm Web SDK, :ref:`call the Function <web-call-a-function>`.
+  Then use the Realm Web SDK to :ref:`call the Function <web-call-a-function>`.
 
 .. _data-api-data-formats:
 
