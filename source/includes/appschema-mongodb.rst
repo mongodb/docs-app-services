@@ -6,9 +6,9 @@ name as the service.
 The primary service configuration for a MongoDB Atlas data source is
 ``config.json``, which defines connection parameters and sync rules.
 
-If the data source is not a :doc:`synced cluster </sync>` or :ref:`Data
-Lake <data-lake-caveats>`, then you can define collection-level rules in
-the ``/rules`` sub-directory.
+If the data source is not a :doc:`synced cluster </sync>` or
+:ref:`{+adf-instance+} <data-federation-caveats>`, then you can
+define collection-level rules in the ``/rules`` sub-directory.
 
 .. code-block:: none
    :copyable: False
@@ -25,8 +25,9 @@ the ``/rules`` sub-directory.
    MongoDB Service names are not necessarily the same as their linked
    data source's name in Atlas. You define the service name for a data
    source when you link it to your application. For linked clusters, the
-   default MongoDB service name is ``mongodb-atlas``. For linked Data
-   Lakes, the default service name is ``mongodb-datalake``.
+   default MongoDB service name is ``mongodb-atlas``. For
+   {+adf-datasource+}s, the default service name is
+   ``mongodb-datalake``.
 
 .. _mongodb-service-configuration-file:
 
@@ -124,7 +125,7 @@ evaluates dynamically for each request. Each collection's rules are stored in
 the ``/rules`` sub-directory in a JSON file with the same name as the collection
 namespace.
 
-.. include:: /includes/data-lake-rules-note.rst
+.. include:: /includes/adf-rules-note.rst
 
 .. code-block:: json
    :caption: <database.collection>.json
