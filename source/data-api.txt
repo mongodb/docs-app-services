@@ -20,7 +20,7 @@ Data API
 The Data API is a secure, serverless HTTPS API that lets you work with
 data stored in a linked data source or run custom application logic. You
 don't need to install any database drivers or opinionated libraries to
-work with the Data API. Instead, you send requests like this from any
+work with the Data API. Instead, you send requests like this from an
 HTTPS client:
 
 .. code-block:: bash
@@ -53,9 +53,30 @@ The Data API supports two types of endpoints:
 - **Custom Endpoints** are app-specific API routes handled by functions
   that you write. You can use custom endpoints to run your app's backend
   logic or as webhooks that integrate with external services.
-  
+
   To learn more, including how to create and call endpoints, see
   :ref:`Custom HTTPS Endpoints <custom-endpoints>`.
+
+.. _data-api-supported-platforms:
+
+Supported Platforms
+-------------------
+
+You can call the Data API from most HTTP clients. Supported platforms include:
+
+- Serverless functions
+- Mobile applications
+- Servers
+- Internet of things devices
+
+You **cannot** call the Data API from a web browser. Atlas provides alternative
+methods to query MongoDB from the web browser:
+
+- Use the :ref:`Realm Web SDK MongoDB client <web-query-mongodb>`.
+- Configure the :ref:`Atlas GraphQL API <graphql-api>`. Then call the GraphQL API
+  from the browser :ref:`using a GraphQL client, like Apollo <graphql-api>`.
+- Create an :ref:`Atlas Function that queries MongoDB <functions-mongodb>`.
+  Then using the Realm Web SDK, :ref:`call the Function <web-call-a-function>`.
 
 .. _data-api-data-formats:
 
