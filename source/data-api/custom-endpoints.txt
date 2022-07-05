@@ -65,15 +65,25 @@ Endpoint Routes
 ~~~~~~~~~~~~~~~
 
 Every HTTPS endpoint has a route that serves as a name for the endpoint.
-You call an endpoint by appending its route to your app's base URL and
-sending an HTTP request. Route names must begin with a forward slash
-(``/``) and may contain additional forward slashes to indicate a nested
-path.
+An endpoint's route is arbitrary and specific to your app. However, it
+appears in the endpoint URL path and so should represent the action the
+route performs.
+
+Route names must begin with a forward slash (``/``) and may contain
+additional forward slashes to indicate a nested path.
 
 .. code-block:: none
    :caption: An endpoint route
    
    /my/nested/route
+
+You call an endpoint by appending its route to your app's base URL and
+sending an HTTP request.
+
+.. code-block:: none
+   :caption: An endpoint URL
+   
+   https://data.mongodb-api.com/app/<App ID>/endpoint/my/nested/route
 
 .. _endpoint-http-method:
 
