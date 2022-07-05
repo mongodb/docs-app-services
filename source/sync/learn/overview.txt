@@ -340,19 +340,19 @@ Best Practices
 In addition to the information in this guide, we recommend following these best
 practices to ensure optimal performance and a smooth user experience:
 
-Avoid breaking changes:
+Avoid breaking changes
   Once you've enabled sync, there are limitations on how you can modify your
   data model. Specifically, sync does not support breaking changes to your
   object types such as changing a given property's type. If you want to make a
   breaking change you need to terminate and re-enable sync with the updated
   data models.
 
-Define a client reset handler:
+Define a client reset handler
   To recover from a serious error conditions where the client and server
   histories diverge, you should define a :ref:`client reset <client-resets>`
   handler when you open each synced realm with an SDK.
 
-Define a client maximum offline time:
+Define a client maximum offline time
   The {+service-short+} backend uses a history of changes to underlying
   data to synchronize clients. Configure a :ref:`client maximum offline time
   <client-maximum-offline-time>` to control the number of days of
@@ -360,12 +360,12 @@ Define a client maximum offline time:
   more than that number of days must perform a client reset the next
   time they connect to the backend.
 
-Deployment model and geographic regions:
+Deployment model and geographic regions
   Use a :ref:`local deployment model <local-deployment>` when building a
   {+sync+} application. Configure your {+app+} and MongoDB data source
   to run within the same geographic region and cloud provider.
 
-Atlas oplog:
+Atlas oplog
   {+sync+} requires access to the :atlas:`oplog </reference/atlas-oplog>` of
   your synced cluster. For best results, keep 48 hours of oplog for a cluster
   using {+sync-short+}.
@@ -379,6 +379,13 @@ Atlas oplog:
 Production Load Testing
   Measure performance and identify issues in a scaled-up production
   deployment with :ref:`sync-production-load-testing`.
+
+Write Transaction Size
+  When writing lots of data, consider using multiple small write
+  transactions over a single larger transaction. Depending on your Atlas
+  cluster version and configuration, large write transactions greater
+  than 16MB may be rejected by MongoDB and cause the sync operation to
+  fail.
 
 Summary
 -------
