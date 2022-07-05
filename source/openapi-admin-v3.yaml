@@ -1,5 +1,5 @@
 ---
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   description: |-
     App Services provides an API for programmatically performing
@@ -605,6 +605,93 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ServiceId"
+  "/groups/{groupId}/apps/{appId}/services/{datasourceId}/commands/validate_documents":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/DatasourceId"
+    post:
+      tags:
+        - schemas
+      operationId: adminValidateDocuments
+      summary: Sample & Validate Documents
+      description: |-
+        Query a subset of documents in a collection and validate each match against a schema.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - database_name
+                - collection_name
+                - from_schema
+              properties:
+                database_name:
+                  type: string
+                  description: The name of the database that contains the collection to validate.
+                collection_name:
+                  type: string
+                  description: The name of the collection to validate.
+                from_schema:
+                  type: object
+                  description: The EJSON schema to validate sampled documents against.
+                query:
+                  type: object
+                  default: {}
+                  description: |-
+                    A [MongoDB query](https://www.mongodb.com/docs/manual/tutorial/query-documents/)
+                    that matches documents in the collection. The result of running this query is the
+                    sample population. Use this to narrow the sample to a subset of documents in the
+                    collection.
+                limit:
+                  type: number
+                  default: 10000
+                  description: The maximum number of documents to sample.
+                sort:
+                  type: object
+                  default: {}
+                  description: A [MongoDB sort](https://www.mongodb.com/docs/manual/reference/method/cursor.sort/) for the collection.
+                  Use this to determine which end of a range query to start sampling from.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        error_code:
+                          "$ref": "#/components/schemas/ValidationError"
+                          description: The type of the schema validation error.
+                        error_count:
+                         type: number
+                         description: The number of sampled documents that failed this validation.
+                        field:
+                          type: string
+                          description: The path of the field that failed this validation.
+                          examples:
+                            - (root)._id
+                            - (root).name
+                        failed_ids:
+                          type: array
+                          description: A list of the `_id` values for sampled documents that failed this validation.
+                          items:
+                            type: string
+                        failed_documents_query:
+                          type: object
+                          description: A MongoDB query filter that matches sampled documents that failed this validation.
+                  total_processed_count:
+                    type: number
+                    description: The total number of documents that were sampled.
+                  total_error_count:
+                    type: number
+                    description: The total number of documents that failed any validation.
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/commands/{commandName}":
     post:
       tags:
@@ -3534,6 +3621,13 @@ components:
       required: true
       schema:
         type: string
+    DatasourceId:
+      name: datasourceId
+      description: The unique `_id` value of a MongoDB data source.
+      in: path
+      required: true
+      schema:
+        type: string
     ServiceId:
       name: serviceId
       description: The unique `_id` value of a service.
@@ -4881,6 +4975,174 @@ components:
           $ref: "#/components/schemas/GraphQLValidationAction"
         write_validation_level:
           $ref: "#/components/schemas/GraphQLValidationLevel"
+    ValidationError:
+      description: An EJSON schema validation error.
+      oneOf:
+        - $ref: "#/components/schemas/FalseValidationError"
+        - $ref: "#/components/schemas/RequiredValidationError"
+        - $ref: "#/components/schemas/InvalidTypeValidationError"
+        - $ref: "#/components/schemas/ItemsMustBeUniqueValidationError"
+        - $ref: "#/components/schemas/MissingDependencyValidationError"
+        - $ref: "#/components/schemas/InternalValidationError"
+        - $ref: "#/components/schemas/ConstValidationError"
+        - $ref: "#/components/schemas/EnumValidationError"
+        - $ref: "#/components/schemas/NumberAnyOfValidationError"
+        - $ref: "#/components/schemas/NumberOneOfValidationError"
+        - $ref: "#/components/schemas/NumberAllOfValidationError"
+        - $ref: "#/components/schemas/NumberNotValidationError"
+        - $ref: "#/components/schemas/NumberGTEValidationError"
+        - $ref: "#/components/schemas/NumberGTValidationError"
+        - $ref: "#/components/schemas/NumberLTEValidationError"
+        - $ref: "#/components/schemas/NumberLTValidationError"
+        - $ref: "#/components/schemas/MultipleOfValidationError"
+        - $ref: "#/components/schemas/ArrayNoAdditionalItemsValidationError"
+        - $ref: "#/components/schemas/ArrayMinItemsValidationError"
+        - $ref: "#/components/schemas/ArrayMaxItemsValidationError"
+        - $ref: "#/components/schemas/ArrayContainsValidationError"
+        - $ref: "#/components/schemas/ArrayMinPropertiesValidationError"
+        - $ref: "#/components/schemas/ArrayMaxPropertiesValidationError"
+        - $ref: "#/components/schemas/AdditionalPropertyNotAllowedValidationError"
+        - $ref: "#/components/schemas/InvalidPropertyPatternValidationError"
+        - $ref: "#/components/schemas/InvalidPropertyNameValidationError"
+        - $ref: "#/components/schemas/StringLengthGTEValidationError"
+        - $ref: "#/components/schemas/StringLengthLTEValidationError"
+        - $ref: "#/components/schemas/DoesNotMatchPatternValidationError"
+        - $ref: "#/components/schemas/DoesNotMatchFormatValidationError"
+        - $ref: "#/components/schemas/ConditionThenValidationError"
+        - $ref: "#/components/schemas/ConditionElseValidationError"
+    FalseValidationError:
+      type: string
+      const: "false"
+    RequiredValidationError:
+      type: string
+      const: "required"
+      description: A required field is missing.
+    InvalidTypeValidationError:
+      type: string
+      const: "invalid_type"
+      description: A field has an invalid value type.
+    MissingDependencyValidationError:
+      type: string
+      const: "missing_dependency"
+    InternalValidationError:
+      type: string
+      const: "internal"
+    ConstValidationError:
+      type: string
+      const: "const"
+      description: A field has an invalid constant value.
+    EnumValidationError:
+      type: string
+      const: "enum"
+      description: A field has an invalid enum value.
+    NumberAnyOfValidationError:
+      type: string
+      const: "number_any_of"
+      description: A field does not match any schema in [anyOf](https://json-schema.org/understanding-json-schema/reference/combining.html#anyof).
+    NumberOneOfValidationError:
+      type: string
+      const: "number_one_of"
+      description: A field does not match exactly one schema in [oneOf](https://json-schema.org/understanding-json-schema/reference/combining.html#oneof).
+    NumberAllOfValidationError:
+      type: string
+      const: "number_all_of"
+      description: A field does not match all schemas in [allOf](https://json-schema.org/understanding-json-schema/reference/combining.html#allof).
+    NumberNotValidationError:
+      type: string
+      const: "number_not"
+      description: A field matches an exclusive schema in not.
+    NumberGTEValidationError:
+      type: string
+      const: "number_gte"
+      description: A field contains a number that is not greater than or equal to the minimum value.
+    NumberGTValidationError:
+      type: string
+      const: "number_gt"
+      description: A field contains a number that is not strictly greater than the minimum value.
+    NumberLTEValidationError:
+      type: string
+      const: "number_lte"
+      description: A field contains a number that is not less than or equal to the maximum value.
+    NumberLTValidationError:
+      type: string
+      const: "number_lt"
+      description: A field contains a number that is not strictly less than the maximum value.
+    MultipleOfValidationError:
+      type: string
+      const: "multiple_of"
+      description: A field contains a number that is not a multiple of the specified value.
+    ItemsMustBeUniqueValidationError:
+      type: string
+      const: "unique"
+      description: A field contains a unique array with non-unique values.
+    ArrayNoAdditionalItemsValidationError:
+      type: string
+      const: "array_no_additional_items"
+      description: A field contains a closed tuple array with invalid additional elements.
+    ArrayMinItemsValidationError:
+      type: string
+      const: "array_min_items"
+      description: A field contains an array with too few elements.
+    ArrayMaxItemsValidationError:
+      type: string
+      const: "array_max_items"
+      description: A field contains an array with too many elements.
+    ArrayContainsValidationError:
+      type: string
+      const: "contains"
+      description: An array does not contain any element of its contained type.
+    ArrayMinPropertiesValidationError:
+      type: string
+      const: "array_min_properties"
+      description: An array does not contain enough elements of its contained type.
+    ArrayMaxPropertiesValidationError:
+      type: string
+      const: "array_max_properties"
+      description: An array contains too many elements of its contained type.
+    AdditionalPropertyNotAllowedValidationError:
+      type: string
+      const: "additional_property_not_allowed"
+      description: A field is present but not defined in a closed schema.
+    InvalidPropertyPatternValidationError:
+      type: string
+      const: "invalid_property_pattern"
+      description: A field name that matched a pattern property does not contain a valid value.
+    InvalidPropertyNameValidationError:
+      type: string
+      const: "invalid_property_name"
+      description: A field name is invalid.
+    StringLengthGTEValidationError:
+      type: string
+      const: "string_gte"
+      description: A field contains a string that is not greater than or equal to the minimum length.
+    StringLengthGTValidationError:
+      type: string
+      const: "string_gt"
+      description: A field contains a string that is not strictly greater than the minimum length.
+    StringLengthLTValidationError:
+      type: string
+      const: "string_lt"
+      description: A field contains a string that is not strictly less than the maximum length.
+    StringLengthLTEValidationError:
+      type: string
+      const: "string_lte"
+      description: A field contains a string that is not less than or equal to the maximum length.
+    DoesNotMatchPatternValidationError:
+      type: string
+      const: "pattern"
+      description: A field contains a string that does not match the field's pattern.
+    DoesNotMatchFormatValidationError:
+      type: string
+      const: "format"
+      description: A field contains a string with an invalid format.
+    ConditionThenValidationError:
+      type: string
+      const: "condition_then"
+      description: A value is not valid when a conditional expression evaluates to `true`.
+    ConditionElseValidationError:
+      type: string
+      const: "condition_else"
+      description: A value is not valid when a conditional expression evaluates to `false`.
   securitySchemes:
     tokenAuth:
       type: http
