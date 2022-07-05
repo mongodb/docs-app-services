@@ -3400,8 +3400,7 @@ paths:
                 required: ["data"]
                 properties:
                   data:
-                    type: object
-                    nullable: true
+                    type: [object, "null"]
                     description: The result of a successful operation. If `null`, the operation had errors.
                   errors:
                     type: array
@@ -5006,7 +5005,9 @@ components:
         - $ref: "#/components/schemas/InvalidPropertyPatternValidationError"
         - $ref: "#/components/schemas/InvalidPropertyNameValidationError"
         - $ref: "#/components/schemas/StringLengthGTEValidationError"
+        - $ref: "#/components/schemas/StringLengthGTValidationError"
         - $ref: "#/components/schemas/StringLengthLTEValidationError"
+        - $ref: "#/components/schemas/StringLengthLTValidationError"
         - $ref: "#/components/schemas/DoesNotMatchPatternValidationError"
         - $ref: "#/components/schemas/DoesNotMatchFormatValidationError"
         - $ref: "#/components/schemas/ConditionThenValidationError"
