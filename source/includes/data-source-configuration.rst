@@ -16,7 +16,7 @@ following form:
      }
    }
 
-The configuration file to link a Data Lake should have the following form:
+The configuration file for an {+adf-datasource+} should has the following form:
 
 .. code-block:: json
    :caption: config.json
@@ -26,12 +26,13 @@ The configuration file to link a Data Lake should have the following form:
      "name": "<Service Name>",
      "type": "datalake",
      "config": {
-        "dataLakeName": "<Data Lake>"
+        "dataLakeName": "<{+adf-instance+} name>"
       }
     }
 
 Exactly one of ``config.dataLakeName`` and ``config.clusterName`` is
-required, depending on whether you are linking a Data Lake or a cluster.
+required, depending on whether you are linking a cluster or a
+{+adf-datasource+}.
 
 .. list-table::
    :header-rows: 1
@@ -51,12 +52,12 @@ required, depending on whether you are linking a Data Lake or a cluster.
      - The name of the service. The name may be at most 64 characters
        long and can only contain ASCII letters, numbers, underscores,
        and hyphens. For clusters, the default name is ``mongodb-atlas``.
-       For Data Lakes, it is ``mongodb-datalake``.
+       For {+adf-datasource+}s, it is ``mongodb-datalake``.
    
    * - | ``type``
        | String
      - For MongoDB Atlas clusters, this value is always ``"mongodb-atlas"``.
-       For Data Lakes, this value is ``"datalake"``.
+       For {+adf-datasource+}s, this value is ``"datalake"``.
    
    * - | ``config.clusterName``
        | String
@@ -64,12 +65,12 @@ required, depending on whether you are linking a Data Lake or a cluster.
    
    * - | ``config.dataLakeName``
        | String   
-     - Required when linking a Data Lake. The name of the Data Lake that you want to link to your application.
+     - Required when linking an {+adf-datasource+}s. The name of the instance that you want to link to your application.
 
    * - | ``config.readPreference``
        | String
      - The :ref:`read preference <read-preference>` mode for queries sent
-       through the service. Not available for Data Lakes.
+       through the service. Not available for {+adf-datasource+}s.
        
        .. include:: /mongodb/tables/read-preference-modes.rst
    
@@ -77,7 +78,7 @@ required, depending on whether you are linking a Data Lake or a cluster.
        | Document
      - A configuration document that determines if a cluster is :doc:`synced
        </sync>` and, if it is, defines the rules for sync operations on the
-       cluster. Not available for Data Lakes.
+       cluster. Not available for {+adf-datasource+}s.
 
        For detailed information on sync configuration documents, see
        :ref:`Synced Cluster Configuration <mongodb-service-sync-rules>`.

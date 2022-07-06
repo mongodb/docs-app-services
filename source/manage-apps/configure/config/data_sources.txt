@@ -80,10 +80,10 @@ MongoDB Clusters
      - If ``true``, clients may :ref:`connect to the app over the MongoDB Wire
        Protocol <wire-protocol-connect>`.
 
-.. _config-datalake:
+.. _config-adf:
 
-MongoDB Data Lakes
-~~~~~~~~~~~~~~~~~~
+{+adf-instance+}s
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
    :caption: /data_sources/<Service Name>/config.json
@@ -92,7 +92,7 @@ MongoDB Data Lakes
      "name": "<Service Name>",
      "type": "datalake",
      "config": {
-        "dataLakeName": "<Data Lake>"
+        "dataLakeName": "<{+adf-instance+} name>"
       }
    }
 
@@ -107,17 +107,17 @@ MongoDB Data Lakes
        | String
      - Required. Default: ``mongodb-datalake``
        
-       The service name used to refer to the data lake within this {+service-short+}
+       The service name used to refer to the {+adf-instance+} within this {+service-short+}
        app. The name may be at most 64 characters long and must only
        contain ASCII letters, numbers, underscores, and hyphens.
    
    * - | ``type``
        | String
-     - Required. For MongoDB Atlas data lakes, this value is always ``"datalake"``.
+     - Required. For {+adf-instance+}, this value is always ``"datalake"``.
    
    * - | ``config.dataLakeName``
        | String   
-     - Required. The name of the data lake in Atlas.
+     - Required. The name of the {+adf-instance+} in Atlas.
 
 Databases & Collections
 -----------------------
@@ -262,8 +262,8 @@ configuration file.
 Collection Rules
 ~~~~~~~~~~~~~~~~
 
-If the data source is not a :doc:`synced cluster </sync>` or a :ref:`data lake
-<data-lake-caveats>`, then you can define collection-level rules in a
+If the data source is not a :doc:`synced cluster </sync>` or a :ref:`{+adf-datasource+}
+<data-federation-caveats>`, then you can define collection-level rules in a
 collection's ``rules.json`` configuration file.
 
 .. code-block:: json

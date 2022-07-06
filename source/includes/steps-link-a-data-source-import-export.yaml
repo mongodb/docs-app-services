@@ -1,7 +1,7 @@
 title: Pull the Latest Version of Your App
 ref: pull-the-latest-version-of-your-app
 content: |
-  To link a MongoDB Atlas cluster or data lake with {+cli-bin+}, you need a
+  To link a MongoDB Atlas cluster or {+adf-instance+} with {+cli-bin+}, you need a
   local copy of your application's configuration files.
   
   To pull a local copy of the latest version of your app, run the following:
@@ -29,7 +29,7 @@ title: Add a Data Source Configuration File
 ref: add-a-data-source-configuration-file
 content: |
   Add a file named ``config.json`` to the data source subdirectory. The file can
-  configure either a MongoDB Atlas cluster or an Atlas data lake.
+  configure either a MongoDB Atlas cluster or a {+adf-instance+}.
   
   The configuration file should have the following general form:
   
@@ -58,8 +58,8 @@ content: |
            file, see :ref:`Linked MongoDB Cluster Configuration
            <config-mongodb-cluster>`.
      
-     .. tab:: Atlas Data Lake
-        :tabid: datalake
+     .. tab:: {+adf+}
+        :tabid: adf
         
         .. code-block:: json
            :caption: /data_sources/<Service Name>/config.json
@@ -68,14 +68,13 @@ content: |
              "name": "<Service Name>",
              "type": "datalake",
              "config": {
-                "dataLakeName": "<Data Lake>"
+                "dataLakeName": "<{+adf-instance+} name>"
               }
            }
         
         .. note::
            
-           For detailed information on the contents of a data lake configuration
-           file, see :ref:`Linked Data Lake Configuration <config-datalake>`.
+           For more information, see :ref:`{+adf-instance+} Configuration <config-adf>`.
 ---
 title: Deploy the Data Source Configuration
 ref: deploy-the-data-source-configuration
