@@ -145,6 +145,24 @@ to be found in the JWT. This toggle only shows up when you list multiple audienc
            ],
            "requireAnyAudience": <boolean>,
          }
+         
+      .. list-table::
+        :header-rows: 1
+        :widths: 15 30
+
+        * - Field
+          - Description
+
+        * - ``audience``
+
+          - Array of Strings. The audience or audiences expected
+            to be found in your JWT. 
+
+        * - ``requireAnyAudience``
+
+          - Boolean. If ``false``, all of the listed audiences are 
+            required. This is also the value when there is only one audience.
+            If ``true``, any one of these audiences is required.
 
 .. _custom-jwt-authentication-configuration-verification-method:
 
@@ -255,24 +273,6 @@ signing algorithm and keys. When enabled, each token must include a
            "useJWKURI": <boolean>,
            "jwkURI": "<JWK or JWKS URL>"
          }
-      
-      .. list-table::
-        :header-rows: 1
-        :widths: 15 30
-
-        * - Field
-          - Description
-
-        * - ``audience``
-
-          - Array of Strings. The audience or audiences expected
-            to be found in your JWT. 
-
-        * - ``requireAnyAudience``
-
-          - Boolean. If ``false``, all of the listed audiences are 
-            required. This is also the value when there is only one audience.
-            If ``true``, any one of these audiences is required.
             
 .. list-table::
    :header-rows: 1
