@@ -108,10 +108,11 @@ If the external authentication system JWT specifies a different ``aud``
 value, then you can configure the provider to use that value instead.
 
 You can input a single audience or multiple audiences as a comma-separated list.
-If you add multiple audiences, you can toggle whether you want to require ``All of
-these audiences`` or ``Any one of these audiences``. If you require all audiences, 
-every one needs to be found in the JWT. If  you choose any audience, only one needs
-to be found in the JWT. This toggle only shows up when you list multiple audiences.
+If you add multiple audiences, a toggle appears containing the following options:
+
+- ``All of these audiences``: the JWT must include every audience in the list.
+- ``Any one of these audiences``: the JWT only needs to include one audience
+  from the list. 
 
 .. tabs-realm-admin-interfaces::
 
@@ -121,7 +122,7 @@ to be found in the JWT. This toggle only shows up when you list multiple audienc
       To override the default audience, specify a new value in the
       :guilabel:`Audience` input:
 
-      .. figure:: /images/custom-jwt-audience-2.png
+      .. figure:: /images/custom-jwt-audience.png
          :alt: The Custom JWT audience configuration input
 
       To require or allow for multiple audiences, 
