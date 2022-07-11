@@ -1,3 +1,26 @@
+# July 8, 2022
+
+## Atlas Device Sync
+- What is Sync/Overview: Add guidance to Best Practices regarding splitting large write transactions
+- Data Access Patterns/Choose a Sync Mode: Remove a mention of Flexible Sync being in preview
+
+## Users & Authentication
+- Authentication Providers/Email/Password Authentication: Refactor to improve readability
+
+## GraphQL API
+- Update naming at first mention on every page to `Atlas GraphQL API` to be consistent with naming guidance
+- Reorder pages in table of contents based on order of use/relevance
+
+## Data API
+- Data API Landing Page: Add section with information about Supported Environments
+- Data API Endpoints: Clarify that you can use Data API to query Atlas from a mobile application
+- Custom HTTPS Endpoints: Clarify custom endpoint routes
+- Correct Data API auth docs to use `runAsSystem` instead of `runAsSystemUser`
+
+## Other
+- Admin API: Add endpoint and info for Sampling and Validating Documents
+- Update "Data Lake" naming to "Data Federation" across many docs
+
 # July 1, 2022
 
 ## Manage & Deploy Apps
