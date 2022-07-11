@@ -51,7 +51,7 @@
   runtime for those dependencies that make external requests. 
 
 - MongoDB Atlas moved to Let's Encrypt as the new Certificate 
-  Authority for TLS certificates for all MongoDB Realm services.
+  Authority for TLS certificates for all App Services.
 
 .. _backend_20220126:
 
