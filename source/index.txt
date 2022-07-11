@@ -1,8 +1,14 @@
+:template: product-landing
+:hidefeedback: header
+:noprevnext:
+
 .. _realm-cloud:
 
-==================
-Atlas App Services
-==================
+==========================
+Atlas Application Services
+==========================
+
+.. default-domain:: mongodb
 
 .. toctree::
    :titlesonly:
@@ -32,145 +38,351 @@ Atlas App Services
    {+client-sdks+} <https://mongodb.com/docs/realm>
    Get Help </help>
 
-Atlas App Services provides a suite of managed cloud services including Atlas Device Sync,
-serverless cloud functions, declarative data access rules, and more. You can use
-App Services to write and host a full application in a managed cloud
-environment backed by MongoDB Atlas.
-
-.. button:: Create an Account
-   :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
-
-
-.. card-group::
-   :style: extra-compact
-   :columns: 2
-
-   .. card::
-      :headline: Create a New App
-      :url: https://www.mongodb.com/docs/atlas/app-services/manage-apps/create/create-with-ui/
-      :icon: /images/icons/realm/cross-platform.svg
-      :icon-alt: App Icon
-      
-      {+apps+} contain all of your hosted services. Learn how to set up your
-      Atlas cluster and create a new serverless application.
-
-   .. card::
-      :headline: Build a Serverless App Backend
-      :url: https://www.mongodb.com/docs/atlas/app-services/tutorial/backend/
-      :icon: /images/icons/realm/realm-lightning.svg
-      :icon-alt: DB Triggers Icon
-      
-      See how to use HTTPS endpoints and triggers to run a serverless GitHub issue
-      tracker.
-
-   .. card::
-      :headline: Explore Template Applications
-      :url: https://www.mongodb.com/docs/atlas/app-services/template-apps/
-      :icon: /images/icons/realm/realm-mobile.svg
-      :icon-alt: App Services Mobile Icon
-      
-      Explore working applications to learn how to implement Device Sync in
-      mobile applications or use App Services.
-
-   .. card::
-      :headline: Learn More About Services
-      :url: https://www.mongodb.com/docs/atlas/app-services/introduction/
-      :icon: /images/icons/realm/graphql.svg
-      :icon-alt: GraphQL Icon
-      
-      Learn more about the problems App Services solves - and how - to 
-      decide if App Services fits your use case.
-
-Explore Atlas App Services
---------------------------
-
-.. card-group::
-   :style: extra-compact
-   :columns: 2
-
-   .. card::
-      :headline: Atlas Device Sync
-      :url: https://www.mongodb.com/docs/realm/sync/learn/overview/
-      :icon: /images/icons/realm/mobile-sync.svg
-      :icon-alt: App Services Mobile Sync Icon
-      
-      Automatically synchronize data stored in {+client-database+} across devices and
-      users.
-
-   .. card::
-      :headline: User Authentication
-      :url: https://www.mongodb.com/docs/realm/authentication/
-      :icon: /images/icons/realm/user-authorization.svg
-      :icon-alt: User Auth Icon
-      
-      Configure one or more authentication providers that let users log in to
-      your application.
-
-   .. card::
-      :headline: Functions
-      :url: https://www.mongodb.com/docs/realm/functions/
-      :icon: /images/icons/realm/functions.svg
-      :icon-alt: Functions Icon
-      
-      Write serverless JavaScript code to handle your application logic in the
-      cloud.
-
-   .. card::
-      :headline: Schemas & Rules
-      :url: https://www.mongodb.com/docs/realm/rules/
-      :icon: /images/icons/realm/data-access-control.svg
-      :icon-alt: Data Access Controls Icon
-      
-      Define data types, control what users can read and write, and validate
-      data changes.
-
-   .. card::
-      :headline: Triggers
-      :url: https://www.mongodb.com/docs/realm/triggers/
-      :icon: /images/icons/realm/triggers-1.svg
-      :icon-alt: {+client-database+} Icon
-      
-      Run functions that automatically execute for events like data changes or
-      at scheduled times.
-
-   .. card::
-      :headline: HTTPS Endpoints
-      :url: https://www.mongodb.com/docs/realm/endpoints/
-      :icon: /images/icons/realm/https-endpoints.svg
-      :icon-alt: HTTPS Endpoints Icon
-      
-      Define HTTP endpoints for third-party apps and services to call. 
-
-   .. card::
-      :headline: GraphQL
-      :url: https://www.mongodb.com/docs/realm/graphql/
-      :icon: /images/icons/realm/graphql.svg
-      :icon-alt: GraphQL Icon
-      
-      Access your data with an automatically generated GraphQL API and write
-      custom query and mutation resolvers.
-
-   .. card::
-      :headline: Static File Hosting
-      :url: https://www.mongodb.com/docs/realm/hosting/
-      :icon: /images/icons/realm/web-sdk.svg
-      :icon-alt: Static Hosting Icon
-      
-      Host and publish static assets like images or source files for a website
-      on App Services's CDN.
-
-.. note:: Usage-Based Pricing & Free Tier
+.. introduction::
    
-   Application services have usage-based billing and include a generous monthly
-   free tier for small development and production apps, so you can get started
-   at no cost. For more details, see :doc:`Billing </billing>`.
+   MongoDB Atlas includes a suite of fully-managed services that power
+   user-facing applications and automated systems. You can use the
+   services to augment or replace a traditional application server.
 
-Build and Deploy an App
------------------------
+   Services let you write the code and configuration that matters for
+   your app without worrying about how to provision and manage the
+   infrastructure it runs on.
+   
+   .. button:: Start Building
+      :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
+   
+   .. note:: Usage-Based Pricing & Free Tier
+      
+      Application services have usage-based billing and include a generous monthly
+      free tier for small development and production apps, so you can get started
+      at no cost. For more details, see :doc:`Billing </billing>`.
 
-You can use any of the following interfaces to work with App Services:
+.. image:: /images/plp/logic-tech.png
+   :alt: Atlas App Services Illustration
 
-- :ref:`App Services UI <deploy-ui>`: Create and maintain your App from a web browser
-- :ref:`{+cli+} <deploy-cli>`: Define and deploy your app with local configuration files
-- :ref:`GitHub Deploy <deploy-github>`: Deploy your app based on configuration files in a GitHub repo
-- :ref:`Admin API <admin-api>`: Use standard HTTP requests to manage your application
+.. kicker:: Access Your Data
+
+Read And Write Data From Any App With Powerful APIs
+---------------------------------------------------
+
+Services have native access to data in your Atlas clusters and let you
+expose secure APIs to work with that data.
+
+.. tabs::
+
+   .. tab:: Device Sync
+      :tabid: device-sync
+
+      .. procedure::
+
+         .. step:: Create Your Data Model
+
+            Device Sync uses the native language objects to define a
+            data model and work with data.
+
+            .. tabs-realm-languages::
+
+               .. tab::
+                  :tabid: swift
+
+                  .. code-block:: swift
+                     
+                     class CoffeeDrink: Object {
+                         @Persisted var name = ""
+                         @Persisted var hotOrCold: String?
+                         @Persisted var rating = 0
+                     }
+
+               .. tab::
+                  :tabid: javascript
+
+                  .. code-block:: javascript
+                     
+                     const Cat = {
+                       name: "Cat",
+                       properties: {
+                         _id: "objectId",
+                         name: "string",
+                         age: "int",
+                         type: "string",
+                       },
+                     };
+
+               .. tab::
+                  :tabid: kotlin
+
+                  .. code-block:: swift
+                     
+                     class Frog : RealmObject {
+                         var name: String = ""
+                         var age: Int = 0
+                         var species: String? = null
+                         var owner: String? = null
+                     }
+
+         .. step:: Set Up Sync
+
+            In your Atlas App, specify which fields users can query and
+            define read and write permissions. Once Sync is turned on,
+            you can start syncing from any app with the Realm SDKs.
+
+         .. step:: Subscribe to Data
+            
+            In your client app, define subscriptions that use regular
+            Realm queries to sync a subset of all syncable data. Data
+            that you subscribe to is automatically kept up-to-date and
+            any changes you make get sent to all other Sync clients.
+            
+
+      .. image:: /images/plp/real-time-collaborations.png
+         :alt: Real-Time Collaboration
+
+   .. tab:: GraphQL
+      :tabid: graphql
+
+      .. procedure::
+
+         .. step:: Define Your Types
+
+            The GraphQL API automatically generates a schema for you
+            with queries and mutations based on object types that you
+            define.
+
+            .. tabs::
+
+               .. tab:: EJSON Schema
+                  :tabid: json
+
+                  .. code-block:: json
+
+                     {
+                       "title": "Meeting",
+                       "required": ["start", "end", "location"],
+                       "properties": {
+                         "_id": { "bsonType": "objectId" },
+                         "start": { "bsonType": "date" },
+                         "end": { "bsonType": "date" },
+                         "location": { "bsonType": "string" }
+                       }
+                     }
+
+               .. tab:: GraphQL Schema
+                  :tabid: graphql
+
+                  .. code-block:: graphql
+
+                     type Meeting {
+                       _id: ObjectId
+                       start: DateTime!
+                       end: DateTime!
+                       location: String!
+                     }
+
+         .. step:: Define Custom Queries & Mutations
+
+            You can extend your GraphQL API with custom resolvers to
+            handle even your app's most complex queries and mutations.
+
+            .. code-block:: graphql
+
+               query {
+                 hello(input: { name: "World" }) {
+                   greeting
+                 }
+               }
+
+         .. step:: Access Data Securely from Anywhere
+
+            The GraphQL API uses your app's built-in user authentication
+            and rules to make sure your data is safe.
+
+            .. io-code-block::
+            
+               .. input::
+                  :language: graphql
+
+                  query GetUpcomingMeetings($Now: DateTime!) {
+                    meetings(query: { start_gt: $Now }) {
+                      _id
+                      start
+                      end
+                      location
+                    }
+                  }
+            
+               .. output::
+                  :language: json
+                  :visible: false
+
+                  {
+                    "data": {
+                      "meetings": [
+                        {
+                          "_id": "62ebf7d17e964cfb6b2e6025",
+                          "start": "2022-08-01T12:15:00.000Z",
+                          "end": "2022-08-01T12:45:00.000Z",
+                          "location": "NYC-3738"
+                        }
+                      ]
+                    }
+                  }
+
+      .. image:: /images/plp/apis-tech.png
+         :alt: Build a Secure GraphQL API
+
+   .. tab:: Data API
+      :tabid: data-api
+
+      .. procedure::
+
+         .. step:: Generate CRUD & Aggregation Endpoints
+
+            The Data API includes built-in HTTPS endpoints that handle
+            generic read, write, and aggregation operations. To generate
+            them, just enable the Data API for your app.
+         
+         .. step:: Define Custom Endpoints
+
+            To tailor your API for your application's specific use
+            cases, you can define your own HTTPS endpoints that handle
+            incoming requests and return responses.
+
+         .. step:: Access Data Securely from Anywhere
+
+            The Data API uses your app's built-in user authentication
+            and rules to make sure your data is safe. You can call
+            endpoints from anywhere that supports HTTPS, including CI/CD
+            workflows, external service webhooks, and more.
+
+            .. code-block:: bash
+               
+               curl -X POST \
+                    https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello \
+                    -H 'api-key: <API Key>' \
+                    -H 'Content-Type: application/json' \
+                    -d '{ "message": "Hello, world!" }'
+
+      .. image:: /images/plp/power-applications.png
+         :alt: Build a Secure HTTPS API
+
+   .. tab:: Triggers
+      :tabid: triggers
+      
+      .. procedure::
+
+         .. step:: Choose a Trigger Type
+
+            You can respond to database events and application user
+            activity or run on a schedule.
+
+         .. step:: Specify how the trigger runs
+
+            Triggers only run when specific conditions that you define
+            are met. For example, a database trigger can run only for
+            events where a document's ``name`` property was updated.
+
+         .. step:: Write the Handler Function
+
+            When a trigger runs, it gets data about the event as the
+            arguments to a function. You can do anything you want in the
+            function!
+
+      .. image:: /images/plp/triggers.png
+         :alt: Respond to Events with Triggers
+
+.. kicker:: Power Your App
+
+Manage and Secure Your App with Rich Platform Services
+------------------------------------------------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :cta: Serverless JavaScript Functions
+      :url: https://www.mongodb.com/docs/atlas/app-services/functions/
+      :icon: /images/icons/atlas-functions.png
+      :icon-alt: Atlas Functions Icon
+
+      Run your application's backend logic and connect to external
+      services with functions that automatically scale to meet demand.
+
+   .. card::
+      :cta: Role-Based Permissions
+      :url: https://www.mongodb.com/docs/atlas/app-services/rules/
+      :icon: /images/icons/data-access-control.png
+      :icon-alt: Data Access Control Icon
+
+      Securely access data from anywhere with dynamic role-based
+      permissions.
+
+   .. card::
+      :cta: Schemas and Relationships
+      :url: https://www.mongodb.com/docs/atlas/app-services/schemas/
+      :icon: /images/icons/document-model.png
+      :icon-alt: Document Schema Icon
+
+      Define your application data model with standard schemas that you
+      can use to validate data and generate language-specific classes.
+
+   .. card::
+      :cta: User Authentication Providers
+      :url: https://www.mongodb.com/docs/atlas/app-services/authentication/
+      :icon: /images/icons/user-auth.png
+      :icon-alt: User Authentication Icon
+
+      Let users register and log in to your app with their preferred
+      authentication method.
+
+   .. card::
+      :cta: Values & Secrets
+      :url: https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/
+      :icon: /images/icons/features-list.png
+      :icon-alt: Value List Icon
+
+      Define and access global values and private secrets from your
+      app's functions and configuration files.
+
+   .. card::
+      :cta: Static File Hosting
+      :url: https://www.mongodb.com/docs/atlas/app-services/hosting/
+      :icon: /images/icons/static-hosting.png
+      :icon-alt: Static Hosting Icon
+
+      Host your website and static files like images and videos on a
+      global CDN.
+
+.. kicker:: Additional Resources
+
+Join the Community and Learn From Experts
+-----------------------------------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+   
+   .. card::
+      :cta: MongoDB Developer Center
+      :url: https://www.mongodb.com/developer/
+      :icon: /images/icons/community.png
+      :icon-alt: MongoDB Community Icon
+      
+      Meet other MongoDB developers and find tutorials and examples that
+      use your favorite tools.
+   
+   .. card::
+      :cta: MongoDB Feedback
+      :url: https://feedback.mongodb.com/
+      :icon: /images/icons/marketing-support.png
+      :icon-alt: Feedback Icon
+      
+      Submit and vote on feature requests for MongoDB products.
+
+   .. card::
+      :cta: MongoDB Support
+      :url: https://support.mongodb.com/
+      :icon: /images/icons/support.png
+      :icon-alt: MongoDB Support Icon
+
+      Get help from MongoDB's official team of support specialists.
