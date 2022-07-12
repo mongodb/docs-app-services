@@ -1,5 +1,5 @@
 =============
-Function Logs
+Endpoint Logs
 =============
 
 .. default-domain:: mongodb
@@ -21,7 +21,7 @@ Log Format
 
 Endpoint log entries have the following form:
 
-.. code-block:: javascript
+.. code-block:: json
 
    Logs:
    [
@@ -39,13 +39,9 @@ Endpoint log entries have the following form:
    }
 
    Function Call Location: <location>
-
    Endpoint Query Arguments: <arguments>
-
    Endpoint Headers: <headers>
-
    Compute Used: <number> bytes•ms
-
    Remote IP Address: <ip address>
 
 Fields
@@ -59,7 +55,9 @@ Fields
      - Description
 
    * - Logs
-     - Information about the Endpoint Call. Includes the name of the function, as well as the arguments passed to it. Among those are a list of headers
+     - Information about the Endpoint Call. Includes the name of the function, 
+       as well as the arguments passed to it. Also includes a list of `console.log`
+       outputs, when relevant.
      
    * - Function Call Location
      - The data center in which the function was executed.
@@ -74,10 +72,11 @@ Fields
      - The version of the platform that sent the request.
 
    * - Endpoint Query Arguments
-     - The parameters passed to the endpoint function.”
+     - The parameters passed to the endpoint function.
 
    * - Endpoint Headers
-     -
+     - A list of headers and the information passed to them, to be used
+       by the endpoint and its function.
 
 Error Fields
 ------------
