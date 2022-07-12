@@ -163,13 +163,14 @@ and write any document. Users who do not have the specified role can only read
 and write their own data. To make this strategy work, you first need to define
 which users have administrator permissions.
 
-MongoDB Realm has a feature called Custom User Data that allows you to associate
-arbitrary data with each user. Using this feature, you can create a document
-with a field that indicates whether the user has administrative privileges.
-While there are many ways to set this up, one approach is to add a boolean
-property called ``isGlobalAdmin``, which is set to ``true`` for those users with
-the elevated permissions. Another is to create a string field called ``role``,
-in which one of the expected values might be "admin". 
+Atlas Apps allow you to associate custom user data in your cluster with
+application users. Using this feature, you can create a document with a
+field that indicates whether the user has administrative privileges.
+While there are many ways to set this up, one approach is to add a
+boolean property called ``isGlobalAdmin``, which is set to ``true`` for
+those users with the elevated permissions. Another is to create a string
+field called ``role``, in which one of the expected values might be
+"admin".
 
 In the following example, the custom user object we'll create has an ``_id``
 field, which corresponds to the user's ID, and 3 additional fields:
@@ -754,4 +755,3 @@ The following {+sync-short+} permissions specify two roles:
    - :ref:`<authentication-triggers>`
 
    - :ref:`<custom-user-data>`
-
