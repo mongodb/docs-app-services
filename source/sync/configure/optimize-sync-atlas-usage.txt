@@ -19,7 +19,7 @@ Overview
 --------
 
 {+sync+} uses space in your app's synced Atlas cluster to store utility
-data for sync. This includes a history of changes to each {+realm+}.
+data for sync. This includes a history of changes to each realm.
 {+service+} minimizes that space usage via backend
 compaction, which runs automatically. You can optimize further by
 specifying a client maximum offline time, which enables advanced backend
@@ -31,7 +31,7 @@ History
 -------
 
 The {+service-short+} backend keeps a history of :ref:`changes to
-underlying data <changesets>` for each {+realm+}, similar to the
+underlying data <changesets>` for each realm, similar to the
 :manual:`MongoDB oplog </core/replica-set-oplog/>`. {+service-short+}
 uses this history to synchronize data between the backend and clients.
 {+service-short+} stores history in your synced Atlas cluster.
@@ -42,19 +42,19 @@ Backend Compaction
 ------------------
 
 **Backend compaction** is a maintenance process that automatically
-runs for all {+app+}s. During compaction, the backend optimizes a
-{+realm+}'s history by removing unneeded changesets. The process
+runs for all Apps. During compaction, the backend optimizes a
+realm's history by removing unneeded changesets. The process
 removes any instruction whose effect is later overwritten by a newer
 instruction.
 
-.. note:: Using Backend Compaction With Partition-Based Sync.
+.. note::
 
-   Backend Compaction is supported by Partition-Based Sync. {+service-short+}
-   does not currently support using backend compaction with Flexible Sync.
+   Flexible Sync uses :ref:`trimming <trimming>` instead of backend
+   compaction.
 
 .. example::
 
-   Consider the following {+realm+} history:
+   Consider the following realm history:
 
    .. code-block::
       :caption: Original History
@@ -96,7 +96,7 @@ advanced backend compaction only occurs for history older than the
 
 .. example::
 
-   Consider the following {+realm+} history:
+   Consider the following realm history:
 
    .. code-block::
       :caption: Original History
@@ -132,15 +132,26 @@ advanced backend compaction only occurs for history older than the
       CREATE table1.obj1
 
    Because ``table2.object2`` was deleted, it has no impact on the end
-   state of the {+realm+}. As a result, advanced backend compaction can
+   state of the realm. As a result, advanced backend compaction can
    completely remove *both* the CREATE and the DELETE operations for
    ``table2.object2`` from history. However, any clients that synchronized
    the CREATE operation but not the DELETE operation will not be able
    to converge to a common end state.
 
-Advanced backend compaction only runs on {+app+}s that specify a
+Advanced backend compaction only runs on Apps that specify a
 client maximum offline time. Only history older than the client maximum
 offline time experiences advanced backend compaction.
+
+.. _trimming:
+
+Trimming
+~~~~~~~~
+
+**Trimming** optimizes backend sync storage even further than
+:ref:`advanced backend compaction <advanced-backend-compaction>`.
+Instead of optimizing changes older than the client maximum offline time,
+trimming deletes those older changes. Trimming only occurs in Apps that
+use Flexible Sync, since Partition Based Sync does not support trimming.
 
 .. _client-maximum-offline-time:
 
@@ -159,18 +170,15 @@ The lower the client maximum offline time, the sooner compaction can
 apply advanced backend compaction to history. The resulting optimizations
 usually result in less storage usage in the synced Atlas cluster.
 
-
-.. note:: Using Client Maximum Offline Time With Partition-Based Sync.
-
-   Client Maximum Offline Time is supported by Partition-Based Sync. {+service-short+}
-   does not currently support setting client maximum offline time with Flexible Sync.
+New Apps automatically enable client maximum offline time with a default
+value of 30 days.
 
 .. warning:: Client Maximum Offline Time Causes Permanent Changes to History
 
    Client maximum offline time enables advanced backend compaction for
    older history. This kind of compaction permanently changes affected
    history, and can cause client resets in the future even after
-   disabling the feature. Use caution before enabling.
+   disabling the feature.
 
 Key Concepts
 ~~~~~~~~~~~~
@@ -219,9 +227,9 @@ such a client cannot synchronize.
 
 As a result, the client must complete a client reset before it can
 resume synchronization. In a client reset scenario, the client deletes
-the client-local copy of a {+realm+} and downloads the current state of
-that {+realm+} from the backend. Synchronization then resumes using the
-new copy of the {+realm+}.
+the client-local copy of a realm and downloads the current state of
+that realm from the backend. Synchronization then resumes using the
+new copy of the realm.
 
 The client maximum offline time controls how long your backend waits
 before applying advanced backend compaction. After the specified number
@@ -231,7 +239,7 @@ time they connect with the backend.
 Applications that do not specify the client maximum offline time never
 apply advanced backend compaction. This means that clients can connect
 after any period of time offline -- weeks, months, or even years --
-and synchronize changes. As time passes, frequently-edited {+realm+}s
+and synchronize changes. As time passes, frequently-edited realms
 accumulate many changes. With a large changeset, synchronization
 requires more time and data usage.
    
@@ -333,10 +341,10 @@ more granular control over who can access which collections.
    10 queryable fields. You must re-use queryable fields across collections 
    in order to sync objects from every collection.
 
-For best performance, open a synced {+realm+} with a broad query. Then, add 
+For best performance, open a synced realm with a broad query. Then, add 
 more refined queries to expose targeted sets of data in the client 
 application. Slicing off working sets from a broad query provides
-better performance than opening multiple synced {+realm+}s using more 
+better performance than opening multiple synced realms using more 
 granular queries.
 
 When you configure queryable fields, consider the broad queries you use 
