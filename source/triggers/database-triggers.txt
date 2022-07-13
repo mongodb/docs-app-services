@@ -337,8 +337,9 @@ can suspend a Trigger include:
 
 When :ref:`resuming the suspended Trigger <resume-a-suspended-trigger>`,
 your App attempts to resume the Trigger at the next change
-stream event after the change stream stopped. However, if the resume
-token is no longer in the cluster oplog, the Trigger begins listening to
+stream event after the change stream stopped. If the resume
+token is no longer in the cluster oplog, the Trigger must be started
+without a resume token. This means the Trigger begins listening to
 new events but does not process any missed past events.
 
 You can adjust the oplog size to keep the resume token for more time after a suspension
