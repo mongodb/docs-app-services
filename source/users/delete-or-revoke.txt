@@ -43,6 +43,18 @@ application when you use the SDK to delete users.
       Learn how to :ref:`delete a user from an Xamarin application 
       <dotnet-delete-user>`.
 
+   .. tab::
+      :tabid: node
+      
+      Learn how to :ref:`delete a user from a Node.js application 
+      <node-delete-user>`.
+
+   .. tab::
+      :tabid: react-native
+
+      Learn how to :ref:`delete a user from a React Native application 
+      <react-native-delete-user>`.
+
 
 Manually Delete a User
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -90,6 +102,66 @@ Manually Delete a User
             realm-cli users delete --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
 
 .. include:: /includes/note-delete-user.rst
+
+Delete a User with a Custom Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can write a custom function to delete a user. You might want to do this if
+your SDK does not yet support the delete users API. 
+
+:ref:`Create a function <define-a-function>` similar to our example below 
+that uses :guilabel:`Application Authentication`.
+
+For this example function, we have :ref:`created secrets for the 
+adminApiPublicKey and adminApiPrivateKey <values-and-secrets>`. 
+We would then add the :ref:`Project and Application IDs 
+<find-your-project-or-app-id>` to the ``apiUrl``.
+
+We can then :ref:`call this function from the SDK 
+<call-function-from-client-sdks>`, passing in the ``user.id``.
+
+.. code-block:: javascript
+
+   const apiUrl = "https://realm.mongodb.com/api/admin/v3.0/groups/{insert-your-groupId-here}/apps/{insert-your-appId-here}";
+
+   // deleteAUser() deletes a single user from the database using the Admin API 
+   // pass in an array with an object with the key userID (representing the app user's user.id)
+   // return value if successful = id of the deleted user
+   exports = async function(arg){
+   
+   if(!arg[0].userID){
+      return {
+         message: `An object with a userID must be passed into deleteAUser()`,
+         received: arg[0],
+         expected: { userID: "<your app user's user.id>" }
+      }
+   }
+   
+   async function adminLogIn() {
+      const username = context.values.get("adminApiPublicKey");
+      const apiKey = context.values.get("adminApiPrivateKey");
+      const response = await context.http.post({
+         url: "https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login",
+         body: {username, apiKey},
+         encodeBodyAsJSON: true,
+      });
+      const body = EJSON.parse(response.body.text());
+      return body.access_token;
+   }
+   
+   const token = await adminLogIn();
+
+   async function deleteUser(_id) {
+      await context.http.delete({
+         url: `${apiUrl}/users/${_id}`,
+         headers: {"Authorization": [`Bearer ${token}`]}
+      });
+      return _id;
+   }
+   
+   return deleteUser(arg[0].userID);
+
+   };
 
 .. _disable-user:
 
