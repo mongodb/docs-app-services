@@ -110,33 +110,33 @@ You can write a custom function to delete a user. You might want to do this if
 your SDK does not yet support the delete users API. 
 
 :ref:`Create a function <define-a-function>` similar to our example below 
-that uses :guilabel:`Application Authentication`.
+that uses :guilabel:`Application Authentication`. You might want to incorporate
+error handling in the event that the function does not successfully 
+authenticate, or it cannot delete the calling user. 
 
-For this example function, we have :ref:`created secrets for the 
+For this example function, we have :ref:`created values and secrets for the 
 adminApiPublicKey and adminApiPrivateKey <values-and-secrets>`. 
 We would then add the :ref:`Project and Application IDs 
 <find-your-project-or-app-id>` to the ``apiUrl``.
 
 We can then :ref:`call this function from the SDK 
-<call-function-from-client-sdks>`, passing in the ``user.id``.
+<call-function-from-client-sdks>`, passing in an argument. The example
+function below does not take any arguments, and deletes the user who
+calls the function. However, the SDK expects to provide an argument when you 
+call a function, so you can pass in an arbitrary argument like 
+"Delete this user."
 
 .. code-block:: javascript
 
-   const apiUrl = "https://realm.mongodb.com/api/admin/v3.0/groups/{insert-your-groupId-here}/apps/{insert-your-appId-here}";
+   const apiUrl = "https://realm.mongodb.com/api/admin/v3.0/groups/{insert-your-project-id}/apps/{insert-your-app-id}";
 
-   // deleteAUser() deletes a single user from the database using the Admin API 
-   // pass in an array with an object with the key userID (representing the app user's user.id)
-   // return value if successful = id of the deleted user
-   exports = async function(arg){
-   
-   if(!arg[0].userID){
-      return {
-         message: `An object with a userID must be passed into deleteAUser()`,
-         received: arg[0],
-         expected: { userID: "<your app user's user.id>" }
-      }
-   }
-   
+   exports = async function(){
+
+   // This function deletes the user who calls it. It gets this user's ID
+   // from the user in the function context. This is safer than accepting 
+   // a passed-in user ID, as the user can never delete any other user's account.
+   const callersUserId = context.user.id
+
    async function adminLogIn() {
       const username = context.values.get("adminApiPublicKey");
       const apiKey = context.values.get("adminApiPrivateKey");
@@ -159,7 +159,7 @@ We can then :ref:`call this function from the SDK
       return _id;
    }
    
-   return deleteUser(arg[0].userID);
+   return deleteUser(callersUserId);
 
    };
 
