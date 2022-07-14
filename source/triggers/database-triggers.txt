@@ -329,25 +329,28 @@ can suspend a Trigger include:
   such as ``dropDatabase``, ``renameCollection``, or those caused by
   a network disruption
 - the token required to resume the change stream is no longer in the
-  cluster :manual:`oplog </core/replica-set-oplog/>`
+  cluster :manual:`oplog </core/replica-set-oplog/>`. The App logs
+  refer to this as a ``ChangeStreamHistoryLost`` error.
+
 - importing an {+app+} with the ``replace`` strategy instead of the
   ``merge`` strategy and consequently removing the database user that
   created the Trigger's change stream
 
 When :ref:`resuming the suspended Trigger <resume-a-suspended-trigger>`,
-{+service-short+} attempts to resume the Trigger at the next change
-stream event after the change stream stopped. However, if the resume
-token is no longer in the cluster oplog, the Trigger begins listening to
-new events but does not process any missed past events. 
+your App attempts to resume the Trigger at the next change
+stream event after the change stream stopped. If the resume
+token is no longer in the cluster oplog, the Trigger must be started
+without a resume token. This means the Trigger begins listening to
+new events but does not process any missed past events.
 
 You can adjust the oplog size to keep the resume token for more time after a suspension
-by :atlas:`scaling your {+atlas-short+} cluster </scale-cluster/>`. 
+by :atlas:`scaling your Atlas cluster </scale-cluster/>`. 
 Maintain an oplog size a few times greater than
 your cluster's peak oplog throughput (GB/hour) to reduce the risk of a 
 suspended trigger's resume token dropping off the oplog 
 before the trigger executes. 
 View your cluster's oplog throughput in the **Oplog GB/Hour** graph in the 
-:atlas:`{+atlas-short+} cluster metrics </monitor-cluster-metrics/>`. 
+:atlas:`Atlas cluster metrics </monitor-cluster-metrics/>`.
 
 .. _last-cluster-time-processed:
 
