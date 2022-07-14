@@ -120,11 +120,14 @@ We would then add the :ref:`Project and Application IDs
 <find-your-project-or-app-id>` to the ``apiUrl``.
 
 We can then :ref:`call this function from the SDK 
-<call-function-from-client-sdks>`, passing in an argument. The example
-function below does not take any arguments, and deletes the user who
-calls the function. However, the SDK expects to provide an argument when you 
-call a function, so you can pass in an arbitrary argument like 
-"Delete this user."
+<call-function-from-client-sdks>`. The example function below does not 
+take any arguments, and deletes the user who calls the function. 
+
+In your function, consider that you may want to optionally delete pending 
+users, which involves a second endpoint:
+
+- :admin-api-endpoint:`Delete users <operation/adminDeleteUser>`
+- :admin-api-endpoint:`Delete pending users <operation/adminDeletePendingUser>`
 
 .. code-block:: javascript
 
