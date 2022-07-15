@@ -1,3 +1,48 @@
+# July 15, 2022
+
+## Manage & Deploy Apps
+- Create/Atlas App Services UI: Update screenshots, remove source constants, wording improvements
+- Configure/App Configuration Reference/MongoDB Data Sources: Typo fix
+
+## Device Sync
+- Configure & Update Your Data Model/Sync Schema Overview: Define JSON Schema title
+- Define Data Access Patterns/Flexible Sync Permissions Guide
+  - Update a name from "MongoDB Realm" to "Atlas Apps"
+  - Add CTA button to "Deploy a Template App"
+- Configure Sync/Optimize Sync Atlas Usage: 
+  - New section w/details about Trimming in Flexible Sync apps
+  - Update docs for Client Maximum Offline Time setting to add default of 30 days for new apps
+
+## Data API
+- Landing Page: Add note that App Services does not support private endpoints
+
+## Triggers
+- Database Triggers: Clarify that an error condition shows as a `ChangeStreamHistoryLost` error in logs
+
+## Users & Authentication
+- Landing Page: Add note about Apple account deletion requirements
+- Delete or Prevent Users From Accessing an App: Add deleteUser endpoints for Node.js & RN SDKs, add custom func example to delete users via Admin API
+- Authentication Providers/Custom JWT Authentication: Updated JWT configuration to reflect multiple audiences
+
+## Rules
+- Role-based Permissions: Typo fix
+
+## Logs
+- Endpoint Logs: New page documenting endpoint logs in the style of the other logs pages
+
+## Reference
+- Known Issues & Workarounds: Add section about `ChangeStreamHistoryLost` errors
+- Service Limitations: Add note that App Services does not support private endpoints
+
+## Other
+- App Services Landing Page: Add CTA button to "Create an Account"
+- Template Apps
+  - Add CTA button to "Check out the Template Apps"
+  - Update the App Services UI screenshot
+  - Wording improvements
+- Update App Services Table of Contents to shift main "Atlas" services more prominently in the ToC
+- Update page & section names per product naming guidelines
+
 # July 8, 2022
 
 ## Atlas Device Sync
