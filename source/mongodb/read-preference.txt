@@ -54,9 +54,150 @@ Procedure
    .. tab::
       :tabid: ui
       
-      .. include:: /includes/steps/specify-cluster-read-preference-realm-ui.rst
+      .. procedure::
+         :style: normal
+
+         .. step:: Navigate to the Cluster Configuration Screen
+
+            You can configure the read preference for a linked cluster from the cluster's
+            configuration screen in the {+ui+}. To get to the configuration screen, click
+            :guilabel:`Linked Data Sources` beneath :guilabel:`Manage` in the left-hand
+            navigation and then select the cluster for which you want to configure read
+            preference.
+
+
+         .. step:: Specify a Cluster Read Preference
+
+            On the cluster configuration screen, select a mode from the
+            :guilabel:`Read Preference` dropdown.
+
+            .. figure:: /images/cluster-read-preference-selector.png
+               :alt: The read preference dropdown menu
+
+            The following read preference modes are available:
+
+            .. include:: /mongodb/tables/read-preference-modes.rst
+
+
+         .. step:: Specify Read Preference Tags
+
+            If you specify a read preference other than ``primary``, you can also
+            specify one or more :manual:`read preference tags
+            </core/read-preference/#replica-set-read-preference-tag-sets>`. To
+            serve a read request, a :manual:`replica set member
+            </core/replica-set-members>` must include all of the specified read
+            preference tags in its node configuration.
+
+            .. note:: Atlas Cluster Tag Sets
+
+               `{+atlas+} <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ clusters
+               are configured with pre-defined tag sets for each
+               member node depending on the member's type. For detailed information
+               on which tags are defined nodes in an Atlas cluster, see :atlas:`Atlas
+               Replica Set Tags </reference/replica-set-tags>`.
+
+            To specify a read preference tag, click :guilabel:`Add Tag` and then
+            enter the tag's :guilabel:`Key` and :guilabel:`Value` in the new row
+            of the :guilabel:`Read Preference Tags` table.
+
+            .. figure:: /images/cluster-read-preference-tags-table.png
+               :alt: The read preference tags table
+
+
+         .. step:: Save the Cluster Configuration
+
+            Once you have specified a :guilabel:`Read Preference` and any
+            :guilabel:`Read Preference Tags`, click :guilabel:`Save`. Once saved,
+            {+backend+} routes all incoming database read requests for the cluster
+            according to your preference.
+
    
    .. tab::
       :tabid: cli
       
-      .. include:: /includes/steps/specify-cluster-read-preference-import-export.rst
+      .. procedure::
+         :style: normal
+
+         .. step:: Pull the Latest Version of Your App
+
+            To define the read preference for a linked cluster with {+cli-bin+}, you need
+            a local copy of your application's configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+
+
+         .. step:: Specify a Cluster Read Preference
+
+            To configure the read preference for a linked cluster, open the cluster's
+            ``config.json`` file and set the value of ``config.readPreference``:
+
+            .. code-block:: json
+               :emphasize-lines: 5
+               :caption: /data_sources/<Service Name>/config.json
+
+               {
+                  "name": "<MongoDB Service Name>",
+                  "type": "mongodb-atlas",
+                  "config": {
+                     "readPreference": "<Read Preference Mode>"
+                  }
+               }
+
+            The following read preference modes are available:
+
+            .. include:: /mongodb/tables/read-preference-modes.rst
+
+
+         .. step:: Specify Read Preference Tags
+
+            If you specify a read preference other than ``primary``, you can also
+            specify one or more :manual:`read preference tags
+            </core/read-preference/#replica-set-read-preference-tag-sets>`. To
+            serve a read request, a :manual:`replica set member
+            </core/replica-set-members>` must include all of the specified read
+            preference tags in its node configuration. To specify a read
+            preference tag set for a cluster, ensure that you have specified a
+            ``readPreference`` other than ``primary``, and then add one or more
+            tag definition objects to ``config.readPreferenceTagSets``:
+
+            .. code-block:: json
+               :emphasize-lines: 6-9
+               :caption: /data_sources/<Service Name>/config.json
+
+               {
+                  "name": "<MongoDB Service Name>",
+                  "type": "mongodb-atlas",
+                  "config": {
+                     "readPreference": "<Read Preference Mode (other than primary)>",
+                     "readPreferenceTagSets": [
+                        { <Tag Key>: <Tag Value> },
+                        ...
+                     ],
+                  }
+               }
+
+            .. note:: Atlas Cluster Tag Sets
+
+               Atlas clusters are configured with pre-defined tag sets for each
+               member node depending on the member's type. For detailed information
+               on which tags are defined nodes in an Atlas cluster, see :atlas:`Atlas
+               Replica Set Tags </reference/replica-set-tags>`.
+
+
+         .. step:: Deploy the Updated Data Source Configuration
+
+            Once you've set the read preference for the cluster, you can push the updated
+            config to your remote app. {+cli+} immediately deploys the update on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"

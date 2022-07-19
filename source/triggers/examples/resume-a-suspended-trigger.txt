@@ -25,9 +25,73 @@ importing an application directory with {+cli-bin+}.
    .. tab::
       :tabid: ui
       
-      .. include:: /includes/steps/restart-db-trigger-realm-ui.rst
+      .. procedure::
+         :style: normal
+
+         .. step:: Find the Suspended Trigger
+
+            On the :guilabel:`Database Triggers` tab of the :guilabel:`Triggers`
+            page, find the trigger that you want to resume in the list of
+            triggers. {+service+} marks suspended triggers with a :guilabel:`Status` of
+            :guilabel:`Suspended`.
+
+            .. figure:: /images/suspended-db-trigger.png
+               :alt: A database trigger that is marked Suspended in the UI
+
+
+         .. step:: Restart the Trigger
+
+            Click :guilabel:`Restart` in the trigger's :guilabel:`Actions` column.
+            You can choose to restart the trigger with a change stream
+            :manual:`resume token </changeStreams/#resume-a-change-stream>` or
+            open a new change stream. Indicate whether or not to use a resume
+            token and then click :guilabel:`Resume Database Trigger`.
+
+            .. note:: Resume Tokens
+
+               If you use a :manual:`resume token
+               </changeStreams/#resume-a-change-stream>`, {+service-short+}
+               attempts to resume the trigger's underlying change
+               stream at the event immediately following the last
+               change event it processed. If successful, the trigger
+               processes any events that occurred while it was
+               suspended. If you do not use a resume token, the
+               trigger begins listening for new events but will not
+               fire for any events that occurred while it was
+               suspended.
+
+            .. figure:: /images/resume-database-trigger-modal.png
+               :alt: The resume database trigger modal in the UI
+
 
    .. tab::
       :tabid: cli
       
-      .. include:: /includes/steps/restart-db-trigger-import-export.rst
+      .. procedure::
+         :style: normal
+
+         .. step:: Pull Your App's Latest Configuration Files
+
+            .. code-block:: shell
+
+               realm-cli pull --remote=<App ID>
+
+
+         .. step:: Verify that the Trigger Configuration File Exists
+
+            If you exported a new copy of your application, it should already include an
+            up-to-date configuration file for the suspended trigger. You can confirm that
+            the configuration file exists by looking in the ``/triggers`` directory for a
+            :ref:`trigger configuration file <config-database-trigger>` with the same name
+            as the trigger.
+
+
+         .. step:: Redeploy the Trigger
+
+            After you have verified that the trigger configuration file exists, push the
+            configuration back to your app. {+service+} automatically attempts to resume
+            any suspended triggers included in the deployment.
+
+            .. code-block:: shell
+
+               realm-cli push

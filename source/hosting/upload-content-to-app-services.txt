@@ -27,7 +27,34 @@ Procedure
    .. tab::
       :tabid: ui
       
-      .. include:: /includes/steps/upload-content-to-realm-realm-ui.rst
+      .. procedure::
+         :style: normal
+
+         .. step:: Navigate to the Hosting Configuration Page
+
+            To open the hosting configuration page, click :guilabel:`Hosting` in
+            the {+leftnav+} of the {+ui+}.
+
+
+         .. step:: Upload Files to {+service-short+}
+
+            You can upload files to {+service+} individually or select multiple files
+            or file directories to upload simultaneously. All files that you
+            upload must be available on your local filesystem.
+
+            There are two ways to upload files through the {+ui+}. You can
+            use either of the following methods:
+
+            - Drag and drop files from your local filesystem on to the
+              :guilabel:`Hosting` screen.
+
+            - Click :guilabel:`Upload Files` and select the files you wish to
+              upload from a file picker.
+
+            Once you have dropped in or selected your files, {+service-short+} will begin
+            uploading them immediately. The rate of upload time will vary depending
+            on network connection speed and the number and size of the files
+            selected.
 
    .. tab::
       :tabid: cli
@@ -35,7 +62,78 @@ Procedure
 
       .. include:: /includes/enable-hosting-in-ui-note.rst
       
-      .. include:: /includes/steps/upload-content-to-realm-import-export.rst
+      .. procedure::
+         :style: normal
+
+         .. step:: Pull Your App's Latest Configuration Files
+
+            .. code-block:: shell
+
+               realm-cli pull --remote=<App ID>
+
+
+         .. step:: Add a Hosting Directory
+
+            {+backend+} looks for files to upload in the ``/hosting/files``
+            subdirectory of your application directory. If this directory doesn't
+            already exist, create it:
+
+            .. code-block:: shell
+
+               mkdir -p hosting/files
+
+
+         .. step:: Add a Metadata Configuration File
+
+            To deploy hosted files through {+cli-bin+} you must include a
+            ``metadata.json`` file in the ``/hosting`` directory. If the
+            configuration file does not exist, create it:
+
+            .. code-block:: shell
+
+               touch hosting/metadata.json
+
+            The configuration does not need to specify metadata for any files but
+            must be present. For more information, see :doc:`Configure File
+            Metadata </hosting/configure-file-metadata>`.
+
+            .. include:: /hosting/includes/metadata-config-json.rst
+
+            .. note::
+
+               If you include an entry in ``metadata.json`` for a file that does
+               not exist, you will not be able to import your changes. The
+               metadata.json must only have hosted files represented.
+
+
+         .. step:: Add Files to the Hosting Directory
+
+            To upload or edit files, add them to the ``/hosting/files``
+            subdirectory of your application directory. When you import your
+            application, {+backend+} will map this subdirectory to the root of your
+            application's hosted file tree.
+
+            .. note::
+
+               You can nest additional directories inside of the
+               ``/hosting/files`` subdirectory. Nested directories are listed
+               before a file's name in its resource path.
+
+
+         .. step:: Upload the Files
+
+            To upload files from the ``/hosting/files`` subdirectory, push your
+            configuration directory with the ``--include-hosting`` flag:
+
+            .. code-block:: shell
+
+               realm-cli push --include-hosting
+
+            .. note::
+
+               The upload speed will vary depending on your network connection and the
+               number and size of the files that you upload.
+
 
 .. TODO(DOCSP-19662): when enable cli hosting functionality restored, 
 .. remove above note `.. include:: /includes/enable-hosting-in-ui-note.rst`
