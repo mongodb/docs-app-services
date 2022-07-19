@@ -73,12 +73,154 @@ Procedure
    .. tab::
       :tabid: ui
       
-      .. include:: /includes/steps/configure-user-metadata-realm-ui.rst
+      .. procedure::
+
+         .. step:: Navigate to the Authentication Provider Configuration Screen
+
+            You can configure and enable user metadata in the {+ui+}. To
+            get to the configuration page:
+
+            - Click :guilabel:`Authentication` in the {+leftnav+}.
+            - Select the :guilabel:`Authentication Providers` tab.
+            - Press the :guilabel:`EDIT` button for the provider whose metadata
+              you want to configure.
+
+
+         .. step:: Configure User Metadata
+
+
+            **Google or Facebook**
+
+            Select the checkboxes next to the metadata fields you want to enable.
+
+            .. figure:: /images/configure-user-metadata-google-facebook-realm-ui.png
+               :alt: The checkboxes to enable user metadata fields in the {+ui+}
+               :width: 750px
+               :lightbox:
+
+            **Custom JWT Authentication**
+
+            You can specify the metadata fields that your identity provider supports.
+            After you press the :guilabel:`Add Field` button, define:
+
+            - The path
+            - The field name
+            - Whether the field is optional or required
+
+            For more details, see: :ref:`JWT metadata fields
+            <custom-jwt-authentication-configuration-metadata-fields>`.
+
+            .. figure:: /images/configure-user-metadata-custom-jwt-realm-ui.png
+               :alt: Add metadata required/optional, path, and name in the {+ui+}
+               :width: 750px
+               :lightbox:
+
+            After you configure the metadata you want to access, press
+            the :guilabel:`Save Draft` button.
+
+
+         .. step:: Deploy the Updated Application
+
+            After you update the metadata configuration, you must deploy your
+            application. To deploy a draft application from the {+ui+}:
+
+            1. Click :guilabel:`Deploy` in the {+leftnav+}.
+
+            2. Find the draft in the deployment history table and then click
+               :guilabel:`Review & Deploy Changes`.
+
+            3. Review the diff of changes and then click :guilabel:`Deploy`.
+
+            Once the application successfully deploys, {+service-short+} begins to associate
+            metadata with users. When a user logs in, {+service-short+} requests user
+            permission to access the requested metadata. If the user approves,
+            {+service-short+} exposes the data in that user's :ref:`user object
+            <user-objects>`.
+
    
    .. tab::
       :tabid: cli
       
-      .. include:: /includes/steps/configure-user-metadata-import-export.rst
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To update your app with {+cli-bin+}, you need a local copy of its
+            configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the {+ui+}. Go to the :guilabel:`Deploy > Export App` screen from
+               the {+app+} Dashboard.
+
+
+         .. step:: Configure User Metadata
+
+            You can find authentication provider :ref:`metadata_fields
+            <config-auth-providers>` for your app in ``/auth/providers.json``.
+            Update this array to request user metadata from the authentication provider.
+
+            **Google or Facebook**
+
+            This array resembles:
+
+            .. code-block:: javascript
+               :caption: /auth/providers.json
+
+               { ...other config details...
+                 "metadata_fields": [
+                   {
+                     "required": false,
+                     "name": "name"
+                   },
+                   {
+                     "required": false,
+                     "name": "gender"
+                   }
+                 ]
+               }
+
+            **Custom JWT authentication**
+
+            The metadata_fields array has an additional property, ``field_name``.
+            In custom JWT authentication, ``name`` represents the path to the field.
+            The ``field_name`` represents the name of the field.
+
+            .. code-block:: javascript
+               :caption: /auth/providers.json
+
+               { ...other config details...
+                 "metadata_fields": [
+                   {
+                     "required": true,
+                     "name": "user.name",
+                     "field_name": "name"
+                   },
+                   {
+                     "required": false,
+                     "name": "user.favoriteColor",
+                     "field_name": "favoriteColor"
+                   }
+                 ]
+               }
+
+
+         .. step:: Deploy the Custom User Data Configuration
+
+            Once you've configured custom user data, you can push the updated config to
+            your remote app. {+cli+} immediately deploys the update on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"
+
 
 
 Access User Metadata from a Client Application

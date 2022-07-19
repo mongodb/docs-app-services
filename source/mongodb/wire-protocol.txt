@@ -241,12 +241,76 @@ you can connect to an {+service-short+} app with a connection string.
    .. tab::
       :tabid: ui
       
-      .. include:: /includes/steps/enable-wire-protocol-realm-ui.rst
+      .. procedure::
+
+         .. step:: Navigate to the Data Source Configuration Screen
+
+            In the :guilabel:`Manage` section of the {+leftnav+}, click
+            :guilabel:`Linked Data Sources`. On the next page, select the cluster for
+            which you want to enable wire protocol connections.
+
+
+         .. step:: Enable Connection Strings for the Cluster
+
+            Set the toggle for :guilabel:`MongoDB Connection String` to
+            :guilabel:`Enabled` and click :guilabel:`Save`.
+
+            .. figure:: /images/enable-wire-protocol.png
+               :alt: The enable wire protocol toggle in the UI
    
    .. tab::
       :tabid: cli
       
-      .. include:: /includes/steps/enable-wire-protocol-import-export.rst
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To enable MongoDB wire protocol connections with {+cli-bin+}, you need a local
+            copy of your application's configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+
+
+         .. step:: Enable Wire Protocol for the Cluster
+
+            To enable wire protocol connections for a linked cluster, open the cluster's
+            ``config.json`` file and set the value of ``config.wireProtocolEnabled`` to
+            ``true``:
+
+            .. code-block:: json
+               :emphasize-lines: 5
+
+               {
+                 "name": "mongodb-atlas",
+                 "type": "mongodb-atlas",
+                 "config": {
+                   "wireProtocolEnabled": true,
+                   ...
+                 }
+               }
+
+            .. include:: /includes/adf-wire-protocol-note.rst
+
+
+         .. step:: Deploy the Updated Data Source Configuration
+
+            Once you've enabled wire protocol connections for the cluster in
+            ``config.json``, you can push the config to your remote app. {+cli+}
+            immediately deploys the update on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"
+
 
 .. _wire-protocol-connect:
 

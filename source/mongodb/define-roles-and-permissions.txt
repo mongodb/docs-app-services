@@ -54,9 +54,343 @@ Procedure
    .. tab::
       :tabid: ui
       
-      .. include:: /includes/steps/define-roles-and-permissions-ui.rst
+      .. procedure::
+
+         .. step:: Navigate to the MongoDB Rules Screen
+
+            You can create and manage roles and permissions from the MongoDB rules
+            screen in the {+ui+}. To get to the rules screen, click
+            :guilabel:`Rules` beneath :guilabel:`Data Access` in the
+            {+leftnav+}.
+
+
+         .. step:: Add a MongoDB Collection Namespace
+
+            Data access roles and permissions are scoped to individual collections
+            in a linked MongoDB cluster. To define roles and permissions for a
+            collection, you need to create the collection namespace in the {+ui+}.
+
+            Find the linked cluster that you want to define access permissions for
+            in the rules sidebar and click its :guilabel:`context menu
+            (...)`. Select :guilabel:`Add Database/Collection`.
+
+            .. figure:: /images/add-database-collection.png
+               :alt: Add a Database/Collection button on the collection rules screen.
+
+
+         .. step:: Configure the Collection Namespace
+
+            Enter the :guilabel:`Database Name` and :guilabel:`Collection Name` of
+            the MongoDB collection that you want to use.
+
+            .. figure:: /images/collection-namespace-config-values.png
+               :alt: Collection namespace inputs.
+
+
+         .. step:: Select a Collection Rule Template
+
+            You can choose to apply a rule template to the collection to simplify
+            the process of configuring role permissions. Each template is a
+            pre-configured set of roles and permissions that represents a common
+            use case and data access pattern. You can also select :guilabel:`No
+            template`, which creates a default role that can insert and delete
+            documents but cannot read or update any fields.
+
+            Once you have selected and configured a template, click :guilabel:`Add
+            Collection`.
+
+            .. figure:: /images/collection-rule-templates.png
+               :alt: A list of available collection rule templates.
+
+            .. note::
+
+               Templates do not rely on hard-coded field names, so when you select a
+               template you will need to map certain fields in your documents to the
+               template's fields. For example, the :guilabel:`Users can only read and
+               write their own data` template requires that each document in the
+               collection contains the ID of the :doc:`user </authentication>` that owns it.
+               If you select that template, you will need to specify the name of the
+               field that contains the user id.
+
+               .. figure:: /images/rule-template-additional-fields.png
+                  :alt: Additional fields for a collection rule template.
+
+
+         .. step:: Create a New Role
+
+            Depending on the rule template you selected, there will already be one
+            or more pre-configured roles in the collection. You can use these
+            roles as they are, tweak them to fit your use case, or add additional
+            roles to cover more cases.
+
+            To add an additional role, click :guilabel:`New Role`. Enter a
+            :guilabel:`Name` for the new role on the role configuration screen.
+
+
+         .. step:: Define the Role's "Apply When" Condition
+
+            A role's :guilabel:`Apply When` condition determines whether or not
+            the role applies to a particular document for the user that issued a
+            query.
+
+            Enter a :ref:`rule expression <expressions>` in the role's :guilabel:`Apply
+            When` box. The expression should evaluate to ``true`` when the role applies to
+            a given document.
+
+            .. figure:: /images/role-apply-when.png
+               :alt: A MongoDB Role's Apply When Expression
+
+
+         .. step:: Define Document-Level Permissions
+
+            Document-level permissions determine a role's ability to insert, delete, and
+            :atlas:`search </reference/atlas-search/query-syntax/>` documents in the
+            collection. To define the role's :guilabel:`Document-Level Permissions`, check
+            the box for each operation that the role has permission to execute.
+
+            Once you have defined the role's document-level permissions, click
+            :guilabel:`Done Editing`.
+
+            .. figure:: /images/role-document-level-permissions.png
+               :alt: A MongoDB Role's Document-Level Permissions
+
+
+         .. step:: Define Field-Level Permissions
+
+            Field-level permissions determine if a role can read and write to
+            specific fields within a given document. You can define the
+            field-level permissions for a role in that role's column on the
+            :guilabel:`Rules` page.
+
+            .. list-table::
+               :widths: 20 10
+
+               * - **To define permissions for all fields:**
+
+                   Click :guilabel:`Add Field`, enter the field name, then click
+                   the green check next to the input box to confirm the name. In
+                   the new field's row, check the :guilabel:`Read` and
+                   :guilabel:`Write` boxes to indicate whether the role can read
+                   or write to the field.
+
+                 - .. figure:: /images/permissions-all-fields.png
+                      :alt: A role with permission to read and write to specific fields
+                      :width: 300px
+
+               * - **To define permissions for a specific field:**
+
+                   Click :guilabel:`Add Field`, enter the field name, then click
+                   the green check next to the input box to confirm the name. In
+                   the new field's row, check the :guilabel:`Read` and
+                   :guilabel:`Write` boxes to indicate whether the role can read
+                   or write to the field.
+
+                 - .. figure:: /images/permissions-specific-fields.png
+                      :alt: A role with permission to read and write to specific fields
+                      :width: 300px
+
+               * - **To define default permissions for unlisted fields:**
+
+                   Check the :guilabel:`Read` and :guilabel:`Write` boxes for
+                   :guilabel:`All Additional Fields` to indicate the role's read and
+                   write privileges for any fields that aren't specifically
+                   configured.
+
+                 - .. figure:: /images/permissions-additional-fields.png
+                      :alt: A role with permission to read any unspecified fields
+                      :width: 300px
+
+
+         .. step:: Add Additional Roles
+
+            Repeat steps 5 through 8 of this procedure for any additional roles
+            that you want to configure.
+
+            .. note::
+
+               {+service-short+} evaluates roles in order from left-to-right. A user can only
+               have one role per document, so once {+service-short+} finds a role that
+               applies to the current document it skips evaluating any remaining
+               roles and immediately begins evaluating a role for the next
+               document in the query.
+
+
+         .. step:: Save the Updated Collection Rules
+
+            Once you have finished defining roles for the collection, click
+            :guilabel:`Save`. {+service-short+} will immediately begin using the roles you
+            defined for all incoming queries on the collection.
+
    
    .. tab::
       :tabid: cli
       
-      .. include:: /includes/steps/define-roles-and-permissions-cli.rst
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To define roles and permissions for a collection with {+cli-bin+}, you need a
+            local copy of your application's configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+
+
+         .. step:: Add a Rule Configuration File
+
+            To define or modify roles for a collection, open the ``rules.json``
+            configuration file within the collection's configuration directory.
+
+            .. tip:: Scaffold the Collection
+
+               If you haven't already defined rules or a schema for the collection, you
+               need to manually create its configuration directory and ``schema.json``:
+
+               .. code-block:: bash
+
+                  # Create the collection's configuration directory
+                  mkdir -p data_sources/<service>/<db>/<collection>
+                  # Create the collection's schema file
+                  echo '{}' >> data_sources/<service>/<db>/<collection>/rules.json
+
+            The configuration file should have the following general form:
+
+            .. code-block:: json
+
+               {
+                 "database": "<Database Name>",
+                 "collection": "<Collection Name>",
+                 "roles": [],
+                 "filters": []
+               }
+
+            .. note::
+
+               This guide focuses on creating ``roles`` for the collection. Check out the
+               other configuration guides to learn how to :doc:`create filters
+               </mongodb/filter-incoming-queries>` and :ref:`enforce-a-schema`.
+
+
+         .. step:: Add One or More Roles
+
+            Add a document to the ``roles`` array for each role that you want to
+            configure. Role documents have the following form:
+
+            .. code-block:: javascript
+
+               {
+                 "name": "<Role Name>",
+                 "apply_when": <JSON Expression>,
+                 "insert": <boolean>,
+                 "delete": <boolean>,
+                 "read": <boolean>,
+                 "write": <boolean>,
+                 "search": <boolean>,
+                 "fields": {
+                   "<Field Name>": {
+                     "read": <boolean>,
+                     "write": <boolean>
+                   },
+                   ...
+                 },
+                 "additional_fields": {
+                   "read": <boolean>,
+                   "write": <boolean>
+                 }
+               }
+
+            .. list-table::
+               :header-rows: 1
+               :widths: 15 40
+
+               * - Field
+                 - Description
+
+               * - ``name``
+                 - Required. The name of the role. Limited to 100 characters or
+                   fewer.
+
+               * - ``apply_when``
+                 - Required. A :ref:`rule expression <expressions>` that determines when
+                   this role applies to a given document.
+
+               * - ``insert``
+                 - Optional. Default: ``true``. A boolean that, if ``true``,
+                   indicates that the role has permission to insert a new
+                   document. This document-level permission does not override any
+                   field-level permissions configured in ``fields``, i.e. the role
+                   must have permission to write to all inserted fields in
+                   addition to insert permission.
+
+               * - ``delete``
+                 - Optional. Default: ``true``. A boolean that, if ``true``,
+                   indicates that the role has permission to delete a new
+                   document.
+
+               * - ``search``
+                 - Optional. Default: ``true``. A boolean that, if ``true``,
+                   indicates that the role has permission to access the document in a
+                   :atlas:`$search </reference/atlas-search/query-syntax/>` aggregation.
+
+               * - ``read``
+                 - Optional. Default: ``false``. A boolean that, if ``true``,
+                   indicates that the role has permission to read *all* fields in
+                   a document. This document-level read permission overrides any
+                   field-level permissions configured in ``fields``.
+
+               * - ``write``
+                 - Optional. Default: ``false``. A boolean that, if ``true``,
+                   indicates that the role has permission to write to *all* fields
+                   in a document. Further, write permissions require matching read
+                   permissions, so if this is ``true``, then ``read`` is also
+                   ``true``. These document-level read and write permissions
+                   override any field-level permissions configured in ``fields``.
+
+               * - ``fields``
+                 - Required. A document where each field matches the name of a
+                   field in a collection document. The value of each field is a
+                   document that specifies read and write permissions for the
+                   field.
+
+                   .. example::
+
+                      .. code-block:: javascript
+
+                         "fields": {
+                           "id": {
+                              "read": true,
+                              "write": false
+                           },
+                         }
+
+               * - ``additional_fields``
+                 - Optional. Default: ``{ "read": false, "write": false }``. A
+                   document that specifies the role's default read and write
+                   permissions for any fields that are not explicitly defined.
+
+                   .. code-block:: javascript
+
+                      "additional_fields": {
+                           "read": true,
+                           "write": false
+                      }
+
+
+         .. step:: Deploy the Updated Rules
+
+            Once you've defined and saved ``rules.json`` you can push the updated config
+            to your remote app. {+cli+} immediately deploys the new roles and permissions
+            on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"
+

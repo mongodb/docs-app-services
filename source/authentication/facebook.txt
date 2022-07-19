@@ -172,7 +172,55 @@ authentication and user permissions. The following steps
 walk through creating the app, setting up Facebook Login,
 and configuring the provider to connect with the app.
 
-.. include:: /includes/steps/auth-facebook-app-setup.rst
+.. procedure::
+
+   .. step:: Create a Facebook App
+
+      Follow Facebook's `official guide
+      <https://developers.facebook.com/quickstarts/>`_ to create a new
+      Facebook app.
+
+
+   .. step:: Enable Facebook Login
+
+      From the app's :guilabel:`Dashboard` view, find the :guilabel:`Facebook
+      Login` card and click :guilabel:`Set Up`. You should see a list of
+      quickstart guides for each platform. Follow the guide for your
+      platform to enable Facebook Login.
+
+      .. note::
+
+         {+service-short+} web applications do not require you to install the Facebook
+         SDK to use the Facebook authentication provider. If you are
+         incorporating Facebook Login into a web application you can skip
+         any steps in the quickstart related to setting up the Facebook SDK
+         for JavaScript.
+
+
+   .. step:: Add {+service-short+} as a Valid OAuth Redirect URI
+
+      When a user completes the login flow for your Facebook app they need
+      to be redirected back to {+service-short+}. Facebook Login will only allow users
+      to redirect to a pre-approved list of URIs.
+
+      From the :guilabel:`Facebook Login > Settings` page, add an {+service-short+}
+      authentication callback URL that corresponds to the :doc:`deployment
+      region </manage-apps/deploy/deployment-models-and-regions>` of your application to
+      the list of :guilabel:`Valid OAuth Redirect URIs`.
+      The following table lists the callback URL for each region:
+
+      .. include:: /includes/deployment-region-auth-callback-urls.rst
+
+
+   .. step:: Configure the Facebook Authentication Provider
+
+
+      To connect your Facebook app to {+service-short+}, find your Facebook app's
+      :guilabel:`App ID` and :guilabel:`App Secret` values on the
+      :guilabel:`Settings > Basic` page and add them to your authentication
+      provider :ref:`configuration <auth-facebook-configuration>`.
+
+
 
 .. _facebook-authentication-examples:
 

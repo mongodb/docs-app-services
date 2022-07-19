@@ -33,7 +33,26 @@ Procedure
 
 Enable hosting from the UI with the following procedure: 
 
-.. include:: /includes/steps/enable-hosting-realm-ui.rst
+.. procedure::
+
+   .. step:: Navigate to the Hosting Configuration Page
+
+      To open the hosting configuration page, click :guilabel:`Hosting` in
+      the {+leftnav+} of the {+ui+}.
+
+
+   .. step:: Enable Hosting
+
+      On the :guilabel:`Hosting` configuration page, click :guilabel:`Enable
+      Hosting`. {+backend+} will begin provisioning hosting for your application.
+
+      .. note::
+
+         It may take a few minutes for {+backend+} to finish provisioning hosting
+         for your application once you've enabled it. You can :doc:`upload
+         content to {+backend+} </hosting/upload-content-to-app-services>` immediately,
+         but you will need to wait for provisioning to complete before
+         {+backend+} serves your files.
 
 .. Select a tab below to see instructions on enabling static hosting for
 .. the corresponding method.
@@ -43,9 +62,74 @@ Enable hosting from the UI with the following procedure:
 ..    .. tab::
 ..       :tabid: ui
       
-..       .. include:: /includes/steps/enable-hosting-realm-ui.rst
+..       .. procedure::
+..   :style: normal
+
+..   .. step:: Navigate to the Hosting Configuration Page
+
+..      To open the hosting configuration page, click :guilabel:`Hosting` in
+..      the {+leftnav+} of the {+ui+}.
+
+
+..   .. step:: Enable Hosting
+
+..      On the :guilabel:`Hosting` configuration page, click :guilabel:`Enable
+..      Hosting`. {+backend+} will begin provisioning hosting for your application.
+
+..      .. note::
+
+..         It may take a few minutes for {+backend+} to finish provisioning hosting
+..         for your application once you've enabled it. You can :doc:`upload
+..         content to {+backend+} </hosting/upload-content-to-app-services>` immediately,
+..         but you will need to wait for provisioning to complete before
+..         {+backend+} serves your files.
 
 ..    .. tab::
 ..       :tabid: cli
       
-..       .. include:: /includes/steps/enable-hosting-import-export.rst
+..       .. procedure::
+
+..         .. step:: Pull the Latest Version of Your App
+
+..            To enable static hosting with {+cli-bin+}, you need a local copy of your
+..            application's configuration files.
+
+..            To pull a local copy of the latest version of your app, run the following:
+
+..            .. code-block:: bash
+
+..               realm-cli pull --remote="<Your App ID>"
+
+..            .. tip::
+
+..               You can also download a copy of your application's configuration files from
+..               the :guilabel:`Deploy > Import/Export App` screen in the {+ui+}.
+
+
+..         .. step:: Create a Static Hosting Configuration
+
+..            In ``hosting/config.json``, set ``enabled`` to ``true``, then save the file.
+
+..            .. code-block:: json
+..               :caption: /hosting/config.json
+
+..               { "enabled": true }
+
+
+..         .. step:: Deploy the Static Hosting Configuration
+
+..            Once you've enabled static hosting, you can push the updated config to your
+..            remote app. {+cli+} immediately deploys your new configuration on push.
+
+..            .. code-block:: bash
+
+..               realm-cli push --remote="<Your App ID>  --include-hosting"
+
+..            .. note::
+
+..               It may take a few minutes for {+service-short+} to finish provisioning
+..               hosting for your application once you've enabled it. You can :doc:`upload
+..               content to {+service-short+} </hosting/upload-content-to-app-services>`
+..               immediately, but you will need to wait for provisioning to complete before
+..               {+service-short+} serves your files.
+
