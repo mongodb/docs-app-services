@@ -429,95 +429,97 @@ UI or by importing the function configuration and source code with
                  "run_as_user_id_script_source": "<Function Source Code>"
                }
 
-         .. step:: Set User Authentication
+            .. procedure::
 
-            Functions in {+service+} always execute in the context of a specific
-            application user or as a :ref:`system user <system-user>` (which
-            bypasses rules). To configure the function's execution user, specify
-            the type of authentication that {+service-short+} should use:
+               .. step:: Set User Authentication
 
-            - **System**
+                  Functions in {+service+} always execute in the context of a specific
+                  application user or as a :ref:`system user <system-user>` (which
+                  bypasses rules). To configure the function's execution user, specify
+                  the type of authentication that {+service-short+} should use:
 
-              To execute a function as a System user, use the following configuration:
+                  - **System**
 
-              .. code-block:: json
+                    To execute a function as a System user, use the following configuration:
 
-                 {
-                   "run_as_system": true,
-                   "run_as_user_id": "",
-                   "run_as_user_id_script_source": ""
-                 }
+                    .. code-block:: json
 
-            - **User**
+                       {
+                         "run_as_system": true,
+                         "run_as_user_id": "",
+                         "run_as_user_id_script_source": ""
+                       }
 
-              To execute a function as a specific user, use the following configuration:
+                  - **User**
 
-              .. code-block:: json
+                    To execute a function as a specific user, use the following configuration:
 
-                 {
-                   "run_as_system": false,
-                   "run_as_user_id": "<{+service-short+} User Id>",
-                   "run_as_user_id_script_source": ""
-                 }
+                    .. code-block:: json
 
-            - **Script**
+                       {
+                         "run_as_system": false,
+                         "run_as_user_id": "<{+service-short+} User Id>",
+                         "run_as_user_id_script_source": ""
+                       }
 
-              The third way to execute a function is to specify another function that
-              returns a user id. Your function will execute as this user. To do this,
-              use the following configuration:
+                  - **Script**
 
-              .. code-block:: json
+                    The third way to execute a function is to specify another function that
+                    returns a user id. Your function will execute as this user. To do this,
+                    use the following configuration:
 
-                 {
-                   "run_as_system": false,
-                   "run_as_user_id": "",
-                   "run_as_user_id_script_source": "<Function Source Code>"
-                 }
+                    .. code-block:: json
 
-         .. step:: Set Execution Logging
+                       {
+                         "run_as_system": false,
+                         "run_as_user_id": "",
+                         "run_as_user_id_script_source": "<Function Source Code>"
+                       }
 
-            To include any values that the function receives as arguments in its
-            :doc:`log entry </logs/function>`, set ``disable_arg_logs`` to
-            ``false``.
+               .. step:: Set Execution Logging
 
-         .. step:: Specify an Authorization Expression
+                  To include any values that the function receives as arguments in its
+                  :doc:`log entry </logs/function>`, set ``disable_arg_logs`` to
+                  ``false``.
 
-            You can dynamically authorize requests based on the contents of each request
-            by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`.
-            {+backend+} evaluates the expression whenever the function is called. If you
-            do not specify an expression then {+backend+} automatically authorizes all
-            authenticated incoming requests.
+               .. step:: Specify an Authorization Expression
 
-            The expression can expand standard :ref:`expression variables <expressions>`,
-            including the :json-expansion:`%%request` and :json-expansion:`%%user`
-            expansions.
+                  You can dynamically authorize requests based on the contents of each request
+                  by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`.
+                  {+backend+} evaluates the expression whenever the function is called. If you
+                  do not specify an expression then {+backend+} automatically authorizes all
+                  authenticated incoming requests.
 
-            .. example::
+                  The expression can expand standard :ref:`expression variables <expressions>`,
+                  including the :json-expansion:`%%request` and :json-expansion:`%%user`
+                  expansions.
 
-               The following expression only authorizes incoming requests if the
-               sender's IP address is not included in the specified list of addresses.
+                  .. example::
 
-               .. code-block:: json
+                     The following expression only authorizes incoming requests if the
+                     sender's IP address is not included in the specified list of addresses.
 
-                  {
-                      "%%request.remoteIPAddress": {
-                          "$nin": [
-                              "248.88.57.58",
-                              "19.241.23.116",
-                              "147.64.232.1"
-                          ]
-                      }
-                  }
+                     .. code-block:: json
 
-         .. step:: Configure the Function's Privacy Level
+                        {
+                            "%%request.remoteIPAddress": {
+                                "$nin": [
+                                    "248.88.57.58",
+                                    "19.241.23.116",
+                                    "147.64.232.1"
+                                ]
+                            }
+                        }
 
-            By default, you can call a function from client applications as well
-            as other functions in the same application. You can prevent client
-            applications from seeing or calling a function by setting ``private``
-            to ``true``.
+               .. step:: Configure the Function's Privacy Level
 
-            You can call a private function from a :ref:`rule expression <expressions>`
-            or another function, including HTTPS endpoints and triggers.
+                  By default, you can call a function from client applications as well
+                  as other functions in the same application. You can prevent client
+                  applications from seeing or calling a function by setting ``private``
+                  to ``true``.
+
+                  You can call a private function from a :ref:`rule expression <expressions>`
+                  or another function, including HTTPS endpoints and triggers.
 
 
          .. step:: Deploy the Function
