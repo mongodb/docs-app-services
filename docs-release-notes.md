@@ -1,3 +1,24 @@
+# July 29, 2022
+
+## Device Sync
+- What is Atlas Device Sync/Atlas Device Sync Overview: Fix typos in Offline-First section
+
+## Functions
+- Query MongoDB Atlas/Read: Use ISODate format in Atlas Functions
+
+## Other
+- Template Apps: Add link targets for linking from realm-docs
+- Fix broken links to .NET client reset page
+- Remove outdated "App Services Security" page, redirect to Manage & Deploy Apps/Application Security page
+
+# July 22, 2022
+
+## Functions
+- Functions Landing Page: Update socket limit from 5 to 25 using the net built-in module
+
+## Other
+- Switch all YAML step files to use new rST procedure directive
+
 # July 15, 2022
 
 ## Manage & Deploy Apps
