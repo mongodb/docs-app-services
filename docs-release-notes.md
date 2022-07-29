@@ -1,4 +1,4 @@
-## July 29, 2022
+# July 29, 2022
 
 ## Device Sync
 - What is Atlas Device Sync/Atlas Device Sync Overview: Fix typos in Offline-First section
