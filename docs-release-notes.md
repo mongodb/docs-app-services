@@ -5,6 +5,7 @@
 
 ## Functions
 - Query MongoDB Atlas/Read: Use ISODate format in Atlas Functions
+
 ## Other
 - Template Apps: Add link targets for linking from realm-docs
 - Fix broken links to .NET client reset page
