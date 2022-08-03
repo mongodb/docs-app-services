@@ -215,3 +215,8 @@ Limitations
   or mutation. If an operation specifies a relationship deeper than
   {+max-graphql-relationship-depth+} resolvers, the entire operation
   fails with the error message ``"max relationship depth exceeded"``.
+
+- The GraphQL API does not currently support relationships for fields
+  inside arrays of embedded objects. You can use a :ref:`custom resolver
+  <graphql-custom-resolvers>` to manually look up and resolve embedded
+  object array relationships.
