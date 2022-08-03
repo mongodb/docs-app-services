@@ -209,6 +209,24 @@ paths:
       responses:
         "401":
           description: "invalid refresh token: incorrect token type"
+  "/provider_regions":
+    get:
+      tags:
+        - deploy
+      operationId: adminListAppRegions
+      summary: List all available Atlas App cloud regions.
+      description: |-
+        Return a list of all supported cloud regions in which you can
+        deploy an Atlas App.
+      responses:
+        "200":
+          description: A list of all available Atlas App cloud region names.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/AppProviderRegion"
   "/groups/{groupId}/apps":
     get:
       tags:
@@ -3820,6 +3838,38 @@ components:
         environment:
           type: string
           description: The environment the app is in.
+    AppProviderRegion:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The short identifier for the region.
+          example: "aws-us-east-1"
+        name:
+          type: string
+          description: A descriptive name for the region.
+          example: "Virginia (us-east-1)"
+        cloud_provider:
+          type: string
+          description: The cloud provider that hosts the region.
+          example: "aws"
+        country:
+          type: string
+          description: The country where the region is physically hosted.
+          example: "usa"
+        deployment_models:
+          type: array
+          description: |-
+            The [deployment
+            models](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models)
+            that this region supports.
+          items:
+            type: string
+            description: todo
+            enum:
+              - "GLOBAL"
+              - "LOCAL"
+          example: ["GLOBAL", "LOCAL"]
     BasicError:
       type: object
       properties:
