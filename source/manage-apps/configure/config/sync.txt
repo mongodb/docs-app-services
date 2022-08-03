@@ -51,7 +51,7 @@ app uses this Sync configuration:
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 30
+   :widths: 10 40
 
    * - Field
      - Description
@@ -154,6 +154,11 @@ Sync configuration:
              "applyWhen": { <Expression> },
              "read": <Expression>,
              "write": <Expression>,
+             "fields": {
+               "read": <Boolean>,
+               "write": <Boolean>,
+               "fields": <Embedded Fields>,
+             }
              "additional_fields": {
                "read": <Boolean>,
                "write": <Boolean>
@@ -177,13 +182,14 @@ Sync configuration:
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 30
+   :widths: 10 40
 
    * - Field
      - Description
 
    * - | ``type``
        | String
+     
      - The :ref:`Sync Mode <sync-modes>` for the application.
        
        Valid Options:
@@ -192,6 +198,7 @@ Sync configuration:
 
    * - | ``development_mode_enabled``
        | Boolean
+     
      - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
        for the application. While enabled, {+service-short+} automatically stores synced
        objects in a specific database (specified in ``database_name``) and
@@ -199,12 +206,14 @@ Sync configuration:
 
    * - | ``service_name``
        | String
+     
      - The name of the Atlas cluster :ref:`data source <appconfig-data_sources>`
        to sync. You cannot use sync with a :ref:`serverless instance
        <serverless-caveats>`.
 
    * - | ``database_name``
        | String
+     
      - The name of a database in the synced cluster where {+service-short+} stores data in
        :ref:`Development Mode <enable-development-mode>`. {+service-short+} automatically
        generates a schema for each synced type and maps each object type to a
@@ -212,29 +221,83 @@ Sync configuration:
 
    * - | ``state``
        | String
-     - The current state of the :doc:`Sync </sync>` protocol for the application.
+     
+     - The current state of the sync protocol for the application.
        
        Valid Options:
 
        - ``"enabled"``
        - ``"disabled"``
 
-   * - | ``permissions.rules.<Type Name>``
-       | Array<Role>
+   * - | ``permissions.rules``
+       | Object
      
-     - You can define a set of roles that apply to a specific object
-       type. These roles apply in order from the beginning of the array,
-       so define the most specific rules first.
+     - An object that maps object type names to :ref:`Type-Specific
+       Roles <appconfig-sync-type-specific-roles>`.
 
-   * - | ``rules.<Type Name>.[].name``
+       .. code-block:: json
+          
+          {
+            "<Type Name>": [ <Role>, ... ]
+          }
+
+   * - | ``permissions.defaultRoles``
+       | Array<Object>
+     
+     - An array of :ref:`Default Roles <appconfig-sync-default-roles>`.
+
+       .. code-block:: json
+          
+          [ <Role>, ... ]
+
+   * - | ``queryable_fields_names``
+       | Array<String>
+     
+     - The :ref:`names of the fields <queryable-fields>` that your client 
+       application can query to determine which data to synchronize.
+
+   * - | ``last_disabled``
+       | Number
+     
+     - The date and time that sync was last paused or disabled, represented by
+       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
+       UTC).
+
+   * - | ``client_max_offline_days``
+       | Number
+     
+     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
+       process waits before aggressively pruning metadata that some clients
+       require to synchronize from an old version of a {+realm+}.
+
+.. _appconfig-sync-type-specific-roles:
+
+Type-Specific Roles
+~~~~~~~~~~~~~~~~~~~
+
+The ``permissions.rules`` field maps object type names to sets of roles
+that apply specifically to each object type.
+
+For more information, see :ref:`Type-Specific Roles
+<type-specific-roles>`.
+
+.. include:: /includes/tip-role-order-config-files.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - | ``name``
        | String
+       | *Required*
 
      - The name of the role. You might use a descriptive name, such as
        ``"adminReadWrite"`` or ``"employeeReadOnly"``, to make it easier
        to understand the rules.
 
-   * - | ``rules.<Type Name>.[].applyWhen``
+   * - | ``applyWhen``
        | Expression
+       | *Required*
      
      - An :ref:`expression <expressions>` that evaluates to ``true``
        when the role applies to the user. 
@@ -251,8 +314,9 @@ Sync configuration:
                "%%user.custom_data.isGlobalAdmin": true
              }
 
-   * - | ``rules.<Type Name>.[].read``
+   * - | ``read``
        | Expression
+       | *Optional*
      
      - An :ref:`expression <expressions>` that determines whether or not
        the user can read data. If the expression evaluates to ``true``,
@@ -260,8 +324,9 @@ Sync configuration:
        ``false``, the user cannot read an object or any of its
        properties.
 
-   * - | ``rules.<Type Name>.[].write``
+   * - | ``write``
        | Expression
+       | *Optional*
      
      - An :ref:`expression <expressions>` that determines whether or not
        the user can write data. If the expression evaluates to ``true``,
@@ -271,15 +336,23 @@ Sync configuration:
        
        Write permission requires read permission. A user cannot write to
        a document that they cannot read.
+   
+   * - | ``fields``
+       | Object
+       | *Optional*
+     
+     - todo
 
-   * - | ``rules.<Type Name>.[].fields.<Field Name>.read``
+   * - | ``fields.<Field Name>.read``
        | Boolean
+       | *Required*
      
      - If ``true``, the role has permission to read this field. If
        ``false``, the user cannot read the field.
 
-   * - | ``rules.<Type Name>.[].fields.<Field Name>.write``
+   * - | ``fields.<Field Name>.write``
        | Boolean
+       | *Required*
      
      - If ``true``, the role has permission to write this field. If
        ``false``, the user cannot write the field.
@@ -287,8 +360,9 @@ Sync configuration:
        Write permission requires read permission. A user cannot write to
        a field that they cannot read.
 
-   * - | ``rules.<Type Name>.[].fields.<Field Name>.fields``
+   * - | ``fields.<Field Name>.fields``
        | Object
+       | *Optional*
      
      - Nested field-level permissions for an embedded object.
        
@@ -312,15 +386,23 @@ Sync configuration:
                }
              }
    
-   * - | ``rules.<Type Name>.[].additional_fields.read``
+   * - | ``additional_fields``
+       | Object
+       | *Optional*
+     
+     - todo
+   
+   * - | ``additional_fields.read``
        | Boolean
+       | *Required*
      
      - If ``true``, the role has permission to read any field that
        isn't defined in ``fields``. If ``false``, the user can only
        read a field with specific permissions.
 
-   * - | ``rules.<Type Name>.[].additional_fields.write``
+   * - | ``additional_fields.write``
        | Boolean
+       | *Required*
      
      - If ``true``, the role has permission to write any field that
        isn't defined in ``fields``. If ``false``, the user can only
@@ -329,22 +411,37 @@ Sync configuration:
        Write permission requires read permission. A user cannot write to
        a field that they cannot read.
 
-   * - | ``permissions.defaultRoles``
-       | Array<Object>
-     
-     - Any array of generic roles that apply to all object types.
-       Type-specific roles defined in the ``rules`` property always take
-       precedence over default roles. A user may be assigned a default
-       role when type-specific roles do not apply or are not defined.
+.. _appconfig-sync-default-roles:
 
-   * - | ``defaultRoles.[].name``
+Default Roles
+~~~~~~~~~~~~~
+
+The ``permissions.defaultRoles`` field contains an array of generic
+roles that apply to all object types. Type-specific roles defined in the
+``rules`` property always take precedence over default roles. A user may
+be assigned a default role when type-specific roles do not apply or are
+not defined.
+       
+For more information, see :ref:`Default Roles <default-roles>`.
+
+.. include:: /includes/tip-role-order-config-files.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - | ``name``
        | String
-     - The name of the specific role in the defaultRoles array. You might 
+       | *Required*
+
+     - The name of the role in the ``defaultRoles`` array. You might 
        use a descriptive name to make it easier to parse the roles, such as 
        "adminReadWrite" or "employeeReadOnly".
 
-   * - | ``defaultRoles.[].applyWhen``
+   * - | ``applyWhen``
        | Expression
+       | *Required*
+
      - An :ref:`expression <expressions>` that evaluates to ``true`` when 
        the role should be applied. An example might be 
        ``{"%%user.custom_data.isGlobalAdmin": true}``. This reads the 
@@ -352,16 +449,18 @@ Sync configuration:
        <custom-user-data>`, and applies the role when the value of this 
        bool is ``true``.
 
-   * - | ``defaultRoles.[].read``
+   * - | ``read``
        | Expression
+       | *Optional*
      
      - An :ref:`expression <expressions>` that determines whether or not
        the user can read data. If the expression evaluates to ``true``,
        the user has permission to read objects. If ``false``, the user
        cannot read an object or any of its properties.
 
-   * - | ``defaultRoles.[].write``
+   * - | ``write``
        | Expression
+       | *Optional*
      
      - An :ref:`expression <expressions>` that determines whether or not
        the user can write data. If the expression evaluates to ``true``,
@@ -369,21 +468,4 @@ Sync configuration:
        cannot write an object or any of its properties.
        
        Write permission requires read permission. A user cannot write to
-       a document that they cannot read. 
-
-   * - | ``queryable_fields_names``
-       | Array<String>
-     - The :ref:`names of the fields <queryable-fields>` that your client 
-       application can query to determine which data to synchronize.
-
-   * - | ``last_disabled``
-       | Number
-     - The date and time that sync was last paused or disabled, represented by
-       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
-       UTC).
-
-   * - | ``client_max_offline_days``
-       | Number
-     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
-       process waits before aggressively pruning metadata that some clients
-       require to synchronize from an old version of a {+realm+}.
+       a document that they cannot read.
