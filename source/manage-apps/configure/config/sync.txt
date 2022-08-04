@@ -155,9 +155,11 @@ Sync configuration:
              "read": <Expression>,
              "write": <Expression>,
              "fields": {
-               "read": <Boolean>,
-               "write": <Boolean>,
-               "fields": <Embedded Fields>,
+               "<Field Name>": {
+                 "read": <Boolean>,
+                 "write": <Boolean>,
+                 "fields": <Embedded Object Fields>
+               }
              }
              "additional_fields": {
                "read": <Boolean>,
@@ -341,7 +343,19 @@ For more information, see :ref:`Type-Specific Roles
        | Object
        | *Optional*
      
-     - todo
+     - An object that defines read and write permissions for specific
+       fields. A field-level permission definition has the following
+       form:
+
+       .. code-block:: json
+          
+          "fields": {
+            "<Field Name>": {
+              "read": <Boolean>,
+              "write": <Boolean>,
+              "fields": <Embedded Object Fields>
+            }
+          }
 
    * - | ``fields.<Field Name>.read``
        | Boolean
@@ -390,7 +404,17 @@ For more information, see :ref:`Type-Specific Roles
        | Object
        | *Optional*
      
-     - todo
+     - An object that defines read and write permissions for all fields
+       that do not have any permissions defined in ``fields``. A
+       field-level permission definition for generic fields has the
+       following form:
+
+       .. code-block:: json
+          
+          "additional_fields": {
+            "read": <Boolean>,
+            "write": <Boolean>
+          }
    
    * - | ``additional_fields.read``
        | Boolean
