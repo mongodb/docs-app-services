@@ -41,8 +41,8 @@ app uses this Sync configuration:
        "key": "<Partition Key Field Name>",
        "type": "<Partition Key Type>",
        "permissions": {
-         "read": { <JSON Expression> },
-         "write": { <JSON Expression> }
+         "read": { <Expression> },
+         "write": { <Expression> }
        }
      },
      "last_disabled": <Number>,
@@ -51,7 +51,7 @@ app uses this Sync configuration:
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 30
+   :widths: 10 40
 
    * - Field
      - Description
@@ -103,14 +103,14 @@ app uses this Sync configuration:
        - ``"long"``
 
    * - | ``partition.permissions.read``
-       | JSON Expression
+       | Expression
      - An :ref:`expression <expressions>` that evaluates to ``true`` when a user
        has permission to read objects in a partition. If the expression
        evaluates to ``false``, {+service-short+} does not allow the user to read
        an object or its properties.
 
    * - | ``partition.permissions.write``
-       | JSON Expression
+       | Expression
      - An :ref:`expression <expressions>` that evaluates to ``true`` when a user
        has permission to write objects in a partition. If the expression
        evaluates to ``false``, {+service-short+} does not allow the user to
@@ -148,21 +148,32 @@ Sync configuration:
      "state": <"enabled" | "disabled">,
      "permissions": {
        "rules": {
-         "<Collection Name>": [
+         "<Type Name>": [
            {
              "name": <String>,
-             "applyWhen": { <JSON Expression> },
-             "read": { <JSON Expression> },
-             "write": { <JSON Expression> }
+             "applyWhen": { <Expression> },
+             "read": <Expression>,
+             "write": <Expression>,
+             "fields": {
+               "<Field Name>": {
+                 "read": <Boolean>,
+                 "write": <Boolean>,
+                 "fields": <Embedded Object Fields>
+               }
+             }
+             "additional_fields": {
+               "read": <Boolean>,
+               "write": <Boolean>
+             }
            }
          ]
        },
        "defaultRoles": [
          {
            "name": <String>,
-           "applyWhen": { <JSON Expression> },
-           "read": <JSON Expression>,
-           "write": <JSON Expression>
+           "applyWhen": { <Expression> },
+           "read": <Expression>,
+           "write": <Expression>
          }
        ]       
      },
@@ -173,13 +184,14 @@ Sync configuration:
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 30
+   :widths: 10 40
 
    * - Field
      - Description
 
    * - | ``type``
        | String
+     
      - The :ref:`Sync Mode <sync-modes>` for the application.
        
        Valid Options:
@@ -188,6 +200,7 @@ Sync configuration:
 
    * - | ``development_mode_enabled``
        | Boolean
+     
      - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
        for the application. While enabled, {+service-short+} automatically stores synced
        objects in a specific database (specified in ``database_name``) and
@@ -195,12 +208,14 @@ Sync configuration:
 
    * - | ``service_name``
        | String
+     
      - The name of the Atlas cluster :ref:`data source <appconfig-data_sources>`
        to sync. You cannot use sync with a :ref:`serverless instance
        <serverless-caveats>`.
 
    * - | ``database_name``
        | String
+     
      - The name of a database in the synced cluster where {+service-short+} stores data in
        :ref:`Development Mode <enable-development-mode>`. {+service-short+} automatically
        generates a schema for each synced type and maps each object type to a
@@ -208,72 +223,249 @@ Sync configuration:
 
    * - | ``state``
        | String
-     - The current state of the :doc:`Sync </sync>` protocol for the application.
+     
+     - The current state of the sync protocol for the application.
        
        Valid Options:
 
        - ``"enabled"``
        - ``"disabled"``
 
-   * - | ``permissions.rules.<Coll>``
-       | String
-     - You can define rules that apply to a single collection by specifying
-       the collection name. App Services apps apply rules in order from the beginning
-       of the array, so start with the most specific rules first.
+   * - | ``permissions.rules``
+       | Object
+     
+     - An object that maps object type names to :ref:`Type-Specific
+       Roles <appconfig-sync-type-specific-roles>`.
 
-   * - | ``rules.<Coll>.name``
-       | String
-     - The name of the specific rule in the rules array. You might use a 
-       descriptive name to make it easier to parse the rules, such as 
-       "adminReadWrite" or "employeeReadOnly".
-
-   * - | ``rules.<Coll>.applyWhen``
-       | JSON Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when 
-       the rule should be applied. An example might be 
-       ``{"%%user.custom_data.isGlobalAdmin": true}``. This reads the 
-       value of the ``isGlobalAdmin`` bool from the :ref:`user's custom data 
-       <custom-user-data>`, and applies the rule when the value of this 
-       bool is ``true``.
-
-   * - | ``rules.<Coll>.read``
-       | JSON Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when a 
-       user has permission to read objects in the collection. If the 
-       expression evaluates to ``false``, {+service-short+} does not allow 
-       the user to read an object or its properties.
-
-   * - | ``rules.<Coll>.write``
-       | JSON Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when a 
-       user has permission to write objects in the collection. If the 
-       expression evaluates to ``false``, {+service-short+} does not allow 
-       the user to modify an object or its properties. Write permission
-       requires read permission. A user cannot write to a document that
-       they cannot read.
+       .. code-block:: json
+          
+          {
+            "<Type Name>": [ <Role>, ... ]
+          }
 
    * - | ``permissions.defaultRoles``
-       | String
-     - Your {+app+} evaluates ``defaultRoles`` after ``rules``. If no 
-       collection-specific rule applies to a user's attempt to access 
-       data through an {+app+}, {+service-short+} proceeds to evaluate ``defaultRoles`` 
-       until it finds a set of permissions that apply to the user. This 
-       may occur when a collection does not have a specific set of rules 
-       defined, or when none of the rules defined for a collection apply
-       to a user. 
-       
-       You can have more than one ``defaultRole``, and they apply
-       across all the collections that your {+app+} can access, even 
-       when you have more specific collection rules defined.
+       | Array<Object>
+     
+     - An array of :ref:`Default Roles <appconfig-sync-default-roles>`.
 
-   * - | ``defaultRoles.name``
+       .. code-block:: json
+          
+          [ <Role>, ... ]
+
+   * - | ``queryable_fields_names``
+       | Array<String>
+     
+     - The :ref:`names of the fields <queryable-fields>` that your client 
+       application can query to determine which data to synchronize.
+
+   * - | ``last_disabled``
+       | Number
+     
+     - The date and time that sync was last paused or disabled, represented by
+       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
+       UTC).
+
+   * - | ``client_max_offline_days``
+       | Number
+     
+     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
+       process waits before aggressively pruning metadata that some clients
+       require to synchronize from an old version of a {+realm+}.
+
+.. _appconfig-sync-type-specific-roles:
+
+Type-Specific Roles
+~~~~~~~~~~~~~~~~~~~
+
+The ``permissions.rules`` field maps object type names to sets of roles
+that apply specifically to each object type.
+
+For more information, see :ref:`Type-Specific Roles
+<type-specific-roles>`.
+
+.. include:: /includes/tip-role-order-config-files.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - | ``name``
        | String
-     - The name of the specific role in the defaultRoles array. You might 
+       | *Required*
+
+     - The name of the role. You might use a descriptive name, such as
+       ``"adminReadWrite"`` or ``"employeeReadOnly"``, to make it easier
+       to understand the rules.
+
+   * - | ``applyWhen``
+       | Expression
+       | *Required*
+     
+     - An :ref:`expression <expressions>` that evaluates to ``true``
+       when the role applies to the user. 
+       
+       .. example::
+          
+          The following expression defines a role that applies when a
+          :ref:`user's custom data <custom-user-data>` contains a field
+          named ``isGlobalAdmin`` with the value set to ``true``:
+
+          .. code-block:: json
+             
+             {
+               "%%user.custom_data.isGlobalAdmin": true
+             }
+
+   * - | ``read``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can read data. If the expression evaluates to ``true``,
+       the user has permission to read objects of this type. If
+       ``false``, the user cannot read an object or any of its
+       properties.
+
+   * - | ``write``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can write data. If the expression evaluates to ``true``,
+       the user has permission to write objects of this type. If
+       ``false``, the user cannot write an object or any of its
+       properties.
+       
+       Write permission requires read permission. A user cannot write to
+       a document that they cannot read.
+   
+   * - | ``fields``
+       | Object
+       | *Optional*
+     
+     - An object that defines read and write permissions for specific
+       fields. A field-level permission definition has the following
+       form:
+
+       .. code-block:: json
+          
+          "fields": {
+            "<Field Name>": {
+              "read": <Boolean>,
+              "write": <Boolean>,
+              "fields": <Embedded Object Fields>
+            }
+          }
+
+   * - | ``fields.<Field Name>.read``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to read this field. If
+       ``false``, the user cannot read the field.
+
+   * - | ``fields.<Field Name>.write``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to write this field. If
+       ``false``, the user cannot write the field.
+       
+       Write permission requires read permission. A user cannot write to
+       a field that they cannot read.
+
+   * - | ``fields.<Field Name>.fields``
+       | Object
+       | *Optional*
+     
+     - Nested field-level permissions for an embedded object.
+       
+       .. example::
+          
+          The following role defines read and write permissions for the
+          embedded field ``address.street``:
+
+          .. code-block:: json
+             
+             {
+               "fields": {
+                 "address": {
+                   "fields": {
+                     "street": {
+                       "read": true,
+                       "write": true
+                     }
+                   }
+                 }
+               }
+             }
+   
+   * - | ``additional_fields``
+       | Object
+       | *Optional*
+     
+     - An object that defines read and write permissions for all fields
+       that do not have any permissions defined in ``fields``. A
+       field-level permission definition for generic fields has the
+       following form:
+
+       .. code-block:: json
+          
+          "additional_fields": {
+            "read": <Boolean>,
+            "write": <Boolean>
+          }
+   
+   * - | ``additional_fields.read``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to read any field that
+       isn't defined in ``fields``. If ``false``, the user can only
+       read a field with specific permissions.
+
+   * - | ``additional_fields.write``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to write any field that
+       isn't defined in ``fields``. If ``false``, the user can only
+       write a field with specific permissions.
+       
+       Write permission requires read permission. A user cannot write to
+       a field that they cannot read.
+
+.. _appconfig-sync-default-roles:
+
+Default Roles
+~~~~~~~~~~~~~
+
+The ``permissions.defaultRoles`` field contains an array of generic
+roles that apply to all object types. Type-specific roles defined in the
+``rules`` property always take precedence over default roles. A user may
+be assigned a default role when type-specific roles do not apply or are
+not defined.
+       
+For more information, see :ref:`Default Roles <default-roles>`.
+
+.. include:: /includes/tip-role-order-config-files.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - | ``name``
+       | String
+       | *Required*
+
+     - The name of the role in the ``defaultRoles`` array. You might 
        use a descriptive name to make it easier to parse the roles, such as 
        "adminReadWrite" or "employeeReadOnly".
 
-   * - | ``defaultRoles.applyWhen``
-       | JSON Expression
+   * - | ``applyWhen``
+       | Expression
+       | *Required*
+
      - An :ref:`expression <expressions>` that evaluates to ``true`` when 
        the role should be applied. An example might be 
        ``{"%%user.custom_data.isGlobalAdmin": true}``. This reads the 
@@ -281,33 +473,23 @@ Sync configuration:
        <custom-user-data>`, and applies the role when the value of this 
        bool is ``true``.
 
-   * - | ``defaultRoles.read``
-       | JSON Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when a 
-       user has permission to read objects in the collection. If the 
-       expression evaluates to ``false``, {+service-short+} does not allow 
-       the user to read an object or its properties.
+   * - | ``read``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can read data. If the expression evaluates to ``true``,
+       the user has permission to read objects. If ``false``, the user
+       cannot read an object or any of its properties.
 
-   * - | ``defaultRoles.write``
-       | JSON Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when a 
-       user has permission to write objects in the collection. If the 
-       expression evaluates to ``false``, {+service-short+} does not allow 
-       the user to modify an object or its properties. 
-
-   * - | ``queryable_fields_names``
-       | Array of Strings
-     - The :ref:`names of the fields <queryable-fields>` that your client 
-       application can query to determine which data to synchronize.
-
-   * - | ``last_disabled``
-       | Number
-     - The date and time that sync was last paused or disabled, represented by
-       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
-       UTC).
-
-   * - | ``client_max_offline_days``
-       | Number
-     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
-       process waits before aggressively pruning metadata that some clients
-       require to synchronize from an old version of a {+realm+}.
+   * - | ``write``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can write data. If the expression evaluates to ``true``,
+       the user has permission to write objects. If ``false``, the user
+       cannot write an object or any of its properties.
+       
+       Write permission requires read permission. A user cannot write to
+       a document that they cannot read.
