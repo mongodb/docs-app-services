@@ -1,3 +1,20 @@
+# August 5, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Atlas Device Sync: Update Flexible Sync config for type-specific and field-level permissions
+
+## Device Sync
+- Define Data Access Patterns/Sync Rules & Permissions: Update Flexible Sync role information for type-specific and field-level permissions
+
+## GraphQL API
+- Landing Page: Update limitations to clarify the GraphQL API does not currently support relationships for fields inside arrays of embedded objects
+
+## Functions
+- Query MongoDB Atlas/Write: Add missing underscore to field name
+
+## Schemas
+- Relationships: Add "Important" callout about the GraphQL API not supporting embedded object relationships
+
 # July 29, 2022
 
 ## Device Sync
