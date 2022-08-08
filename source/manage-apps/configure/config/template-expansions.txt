@@ -86,21 +86,41 @@ Define a Template
             }
 
 
+   .. step:: Specify an Environment
+
+      Choose which environment to deploy your app to and then update the
+      app configuration with the environment name:
+
+      .. code-block::
+         :caption: realm_config.json
+         :emphasize-lines: 3
+
+         {
+           "name": "MyApp",
+           "environment": "development",
+           "deployment_model": "LOCAL",
+           "location": "aws-us-east-1"
+         }
+      
+      .. tip::
+
+         If you do not specify an environment, ``%%environment``
+         expansions resolve to values in
+         ``environments/no-environment.json``.
+
    .. step:: Create a New Templated App
 
-      Once you have defined your templated configuration files, you can use them to
-      create a new app for a given environment. If you do not specify an
-      environment, ``%%environment`` expansions resolve to values in
-      ``environments/no-environment.json``.
+      You can now use your templated configuration files to create a new
+      app in your chosen environment.
 
       .. example::
 
-         {+service-short+} uses the template configuration to generate new, resolved
-         configuration files on import:
+         {+service-short+} uses the template configuration to generate
+         new, resolved configuration files on import:
 
          .. code-block:: shell
 
-            realm-cli push --environment="development"
+            realm-cli push
 
          .. code-block:: json
             :caption: data_sources/mongodb-atlas/config.json
@@ -115,7 +135,6 @@ Define a Template
                 "wireProtocolEnabled": true
               }
             }
-
 
 Development Workflow
 --------------------
