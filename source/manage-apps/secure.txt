@@ -201,16 +201,6 @@ The TLS certificate is pre-defined and cannot be customized or disabled.
 Firewall Configuration
 ~~~~~~~~~~~~~~~~~~~~~~
 
-DNS Filtering
-^^^^^^^^^^^^^
-
-If your application firewall supports DNS filtering, you can access 
-``*.realm.mongodb.com`` via HTTPS or port 443. This 
-bypasses the need to allowlist specific IPs for outbound requests.
-
-IP Address Filtering
-^^^^^^^^^^^^^^^^^^^^
-
 {+service+} only sends requests from the following IP addresses. You can
 copy this list to an allowlist on your firewall:
 
@@ -246,18 +236,22 @@ CSV
 
 .. 
    Note to docs writer: the hosted csv and json files are managed in the
-   docs-realm-sdks repo: https://github.com/10gen/docs-realm-sdks
+   docs-realm-sdks repo: https://github.com/10gen/docs-realm-sdks   
 
-.. note::
+Device Sync
+^^^^^^^^^^^
 
-   The above IP list only applies to outgoing requests from {+service-short+} functions,
-   including triggers and HTTPS endpoints that make outgoing requests.
+The above IP list only applies to outgoing requests from {+service-short+} functions,
+including triggers and HTTPS endpoints that make outgoing requests.
 
-   For requests that originate from the Sync server, we recommend allowlisting
-   the entire subnet of the app's Deployment Region and cloud provider. You can
-   find the Deployment Region in the {+ui+} under :guilabel:`App Settings >
-   General > Deployment Region`.
-   
+For requests that originate from the Sync server, we recommend allowlisting
+the entire subnet of the app's Deployment Region and cloud provider. You can
+find the Deployment Region in the {+ui+} under :guilabel:`App Settings >
+General > Deployment Region`.
+
+If your application firewall supports DNS filtering, you can access 
+``*.realm.mongodb.com`` via HTTPS or port 443. This 
+bypasses the need to allowlist specific IPs for outbound requests.
 
 .. _security-allowed-request-origins:
 
