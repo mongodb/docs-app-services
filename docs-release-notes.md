@@ -1,3 +1,11 @@
+# August 12, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Create Template Configurations with Expansions: Document how to specify an environment
+
+## Other
+- Admin API: Document the new `GET` endpoint to list all available Atlas App cloud regions
+
 # August 5, 2022
 
 ## Manage & Deploy Apps
