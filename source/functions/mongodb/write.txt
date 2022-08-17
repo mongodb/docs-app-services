@@ -134,7 +134,7 @@ Field Update Operators
 Field operators let you modify the fields and values of a document.
 
 Set the Value of a Field
-^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````
 
 You can use the :manual:`$set </reference/operator/update/set/>`
 operator to set the value of a single field without affecting other
@@ -145,7 +145,7 @@ fields in a document.
    { "$set": { "<Field Name>": <Value>, ... } }
 
 Rename a Field
-^^^^^^^^^^^^^^
+``````````````
 
 You can use the :manual:`$rename </reference/operator/update/rename/>`
 operator to change the name of a single field in a document.
@@ -155,7 +155,7 @@ operator to change the name of a single field in a document.
    { "$rename": { "<Current Field Name>": <New Field Name>, ... } }
 
 Increment a Value
-^^^^^^^^^^^^^^^^^
+`````````````````
 
 You can use the :manual:`$inc </reference/operator/update/inc/>`
 operator to add a specified number to the current value of a field. The
@@ -166,7 +166,7 @@ number can be positive or negative.
    { "$inc": { "<Field Name>": <Increment Number>, ... } }
 
 Multiply a Value
-^^^^^^^^^^^^^^^^
+````````````````
 
 You can use the :manual:`$mul </reference/operator/update/mul/>`
 operator to multiply a specified number with the current value of a
@@ -184,7 +184,7 @@ Array Update Operators
 Array operators let you work with values inside of arrays.
 
 Push an Element Into an Array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`````````````````````````````
 
 You can use the :manual:`$push </reference/operator/update/push>`
 operator to add a value to the end of an array field.
@@ -194,7 +194,7 @@ operator to add a value to the end of an array field.
    { "$push": { "<Array Field Name>": <New Array Element>, ... } }
 
 Pop the Last Element out of an Array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````````````````
 
 You can use the :manual:`$pop </reference/operator/update/pop>` operator
 to remove either the first or last element of an array field. Specify
@@ -205,7 +205,7 @@ to remove either the first or last element of an array field. Specify
    { "$pop": { "<Array Field Name>": <-1 | 1>, ... } }
 
 Add a Unique Element to an Array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````````````
 
 You can use the :manual:`$addToSet
 </reference/operator/update/addToSet>` operator to add a value to an
@@ -217,7 +217,7 @@ value is already present, ``$addToSet`` does nothing.
    { "$addToSet": { "<Array Field Name>": <Potentially Unique Value>, ... } }
 
 Remove Elements from an Array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`````````````````````````````
 
 You can use the :manual:`$pull </reference/operator/update/pull>`
 operator to remove all instances of any values that match a specified
@@ -228,7 +228,7 @@ condition from an array field.
    { "$pull": { "<Array Field Name>": <Value | Expression>, ... } }
 
 Update All Elements in an Array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```````````````````````````````
 
 You can use the :manual:`$[] (All Positional Update)
 </reference/operator/update/positional-all>` operator to update all elements in
@@ -266,7 +266,7 @@ an array field:
       { "_id" : 3, "grades" : [ 15, 110, 100 ] }
 
 Update Specific Elements in an Array
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````````````````
 
 You can use the :manual:`$[element] (Filtered Positional Update)
 </reference/operator/update/positional-filtered>` operator to update specific
