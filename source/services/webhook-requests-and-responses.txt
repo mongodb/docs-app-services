@@ -17,7 +17,7 @@ Overview
 
 Depending on the service, :ref:`incoming webhooks <incoming-webhooks>`
 offer several ways to validate requests and customize the response that
-{+service+} sends back to the external service.
+Atlas App Services sends back to the external service.
 
 .. _webhook-request-validation:
 
@@ -62,7 +62,7 @@ generated from the request body and ``secret`` string in the
       const body = { "message":"MESSAGE" }
       const secret = 12345
 
-   The following :doc:`{+service-short+} Function </functions>` generates the hash
+   The following :doc:`Atlas Function </functions>` generates the hash
    for this ``body`` and ``secret``:
 
    .. code-block:: javascript
@@ -127,7 +127,7 @@ appended to the end of the URL.
 Webhook Response Object
 -----------------------
 
-{+service-short+} automatically passes a ``response`` object that represents the
+App Services automatically passes a ``response`` object that represents the
 webhook's HTTP response as the second argument to webhook Function.
 The following table lists the available methods for modifying the
 ``response`` object:

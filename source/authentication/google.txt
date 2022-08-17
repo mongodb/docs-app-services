@@ -18,9 +18,9 @@ Overview
 The Google authentication provider allows users to log in with their
 existing Google account through `Google Sign-In
 <https://developers.google.com/identity/>`_. When a user logs in, Google
-provides {+service+} with an `OAuth 2.0 access token
+provides Atlas App Services with an `OAuth 2.0 access token
 <https://www.oauth.com/oauth2-servers/access-tokens/>`_ for the user.
-{+service-short+} uses the token to identify the user and access approved data from
+App Services uses the token to identify the user and access approved data from
 Google APIs on their behalf.
 
 .. _auth-gcp-project-setup:
@@ -29,7 +29,7 @@ Set Up a Project in the Google API Console
 ------------------------------------------
 
 You must set up a project in the Google API Console before you :ref:`configure 
-Google Authentication in {+service+}<auth-google-configuration>`. Follow the 
+Google Authentication in App Services auth-google-configuration>`. Follow the
 SDK-specific steps to set up Google Authentication in the Google API Console.
 
 
@@ -77,12 +77,12 @@ credentials, and configuring the provider to connect with the project.
 
                For iOS client applications, you need to create both a Web
                OAuth Client ID and an iOS OAuth Client ID. The former is
-               used by {+service-short+}, while the latter will be used by the app
+               used by App Services, while the latter will be used by the app
                itself.
 
                Refer to the :guilabel:`Web` tab of this section for
                instructions on creating the web application Client ID for
-               {+service-short+}.
+               App Services.
 
       Follow Google's support guide on `Setting up OAuth 2.0
       <https://support.google.com/cloud/answer/6158849?hl=en>`_ for your
@@ -95,7 +95,7 @@ credentials, and configuring the provider to connect with the project.
             :tabid: javascript
 
             You will need to create a web application :guilabel:`Client ID`
-            and provide several {+service-short+}-related values.
+            and provide several App Services-related values.
 
             For :guilabel:`Authorized JavaScript Origins`, enter the
             following URL:
@@ -104,7 +104,7 @@ credentials, and configuring the provider to connect with the project.
 
                https://realm.mongodb.com
 
-            For :guilabel:`Authorized Redirect URIs`, enter the {+service-short+}
+            For :guilabel:`Authorized Redirect URIs`, enter the App Services
             authentication callback URL that corresponds to the
             :doc:`deployment region </manage-apps/deploy/deployment-models-and-regions>`
             of your application. The following table lists the callback URL
@@ -154,7 +154,7 @@ credentials, and configuring the provider to connect with the project.
 
    .. step:: Configure the Google Authentication Provider
 
-      To connect your GCP project to {+service-short+} add the OAuth 2.0
+      To connect your GCP project to App Services add the OAuth 2.0
       :guilabel:`Client ID` and :guilabel:`Client Secret` you generated in
       the previous step to your authentication provider :ref:`configuration
       <auth-google-configuration>`.
@@ -183,7 +183,7 @@ credentials, and configuring the provider to connect with the project.
 .. _auth-google-configuration:
 .. _config-oauth2-google:
 
-Configure in {+service-short+}
+Configure in App Services
 -------------------------
 
 .. tabs-realm-admin-interfaces::
@@ -283,10 +283,10 @@ options:
        A list of allowed redirect :abbr:`URIs (Uniform Resource
        Identifiers)`.
 
-       Once a user completes the authentication process on Google, {+service-short+}
+       Once a user completes the authentication process on Google, App Services
        redirects them back to either a specified redirect URI or, if no
        redirect URI is specified, the URL that they initiated the
-       authentication request from. {+service-short+} will only redirect a user to a
+       authentication request from. App Services will only redirect a user to a
        URI that exactly matches an entry in this list, including the
        protocol and any trailing slashes.
 
@@ -330,7 +330,7 @@ options:
           
           Google supports OpenID as part of their OAuth 2.0 implementation but does
           not provide access to restricted scopes for OpenID authentication. This
-          means that {+service-short+} cannot access metadata fields for users authenticated
+          means that App Services cannot access metadata fields for users authenticated
           with OpenID Connect.
 
 .. _google-authentication-examples:

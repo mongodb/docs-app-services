@@ -36,7 +36,7 @@ Atlas App Services logs all incoming requests and application events such as use
 authentication, trigger execution, and service interactions. You
 can access your application's logs from the :guilabel:`Logs` page in the
 {+ui+} or request them programmatically through the
-:doc:`App Services Admin API </logs/api>`. {+service+} saves logs for 
+:doc:`App Services Admin API </logs/api>`. App Services saves logs for
 {+log-retention-time+}.
 
 Concepts
@@ -46,9 +46,9 @@ Log Entry
 ~~~~~~~~~
 
 A log entry describes a single event within App Services.
-Different events in {+backend+} execute in different ways, requiring
+Different events in App Services execute in different ways, requiring
 various permissions, underlying components and services.
-{+backend+} groups log entries based on the type of event or request that
+App Services groups log entries based on the type of event or request that
 they record. Each type of log contains fields that describe that
 particular event or request. As a result, your application
 logs may include entries of the following types:
@@ -56,7 +56,7 @@ logs may include entries of the following types:
 - :doc:`Authentication Requests </logs/authentication>`, including user
   creation, login, and deletion.
 
-- :doc:`Functions </logs/function>`, including both {+service-short+} Functions
+- :doc:`Functions </logs/function>`, including both Atlas Functions
   as well as individual queries to linked {+atlas+} data sources made using the
   MongoDB service of the a Realm SDK.
 
@@ -86,7 +86,7 @@ Parts of a Log Entry
      - Description
 
    * - Metadata
-     - {+backend+} logs contain details like the status, timestamp,
+     - App Services logs contain details like the status, timestamp,
        elapsed time, unique id, user, name, and type of a given log
        entry.
 
@@ -94,28 +94,28 @@ Parts of a Log Entry
      - Log entries can contain several types of request details,
        including event arguments, service name, function call location,
        compute resources used, remote IP address, SDK, platform version,
-       and performance metrics. Requesting log entries via the {+service-short+}
+       and performance metrics. Requesting log entries via the App Services
        Admin API will expose these as top-level fields in log entry
        objects. On the {+ui+}, clicking on a log entry will expose
        this information.
 
    * - Arguments
-     - {+backend+} logs the arguments passed to Functions,
+     - App Services logs the arguments passed to Functions,
        including requests made via the MongoDB service. Other log
        entries do not preserve a record of arguments.
 
    * - Error Info
-     - When an  {+backend+} event exits unsuccessfully, it generates an Error
+     - When an App Services event exits unsuccessfully, it generates an Error
        log entry containing debugging information that can help diagnose
        what caused the issue.
 
 Log Filters
 ~~~~~~~~~~~
 
-Because {+backend+} creates log entries for most common kinds of user
+Because App Services creates log entries for most common kinds of user
 interaction, it can become difficult to find a specific group of logs
 due to the sheer volume of logs an application generates.
-For performance reasons, {+backend+} limits individual queries to a maximum
+For performance reasons, App Services limits individual queries to a maximum
 of 100 log entries per page. You can filter entries by type, status,
 timestamp, user, and request ID to return only logs that are relevant to
 your query.
@@ -123,15 +123,15 @@ your query.
 Error Logs
 ~~~~~~~~~~
 
-All {+service+} log entries have one of two possible statuses:
-``OK`` and ``Error``. If an event exits successfully, {+backend+}
+All App Services log entries have one of two possible statuses:
+``OK`` and ``Error``. If an event exits successfully, App Services
 generates an ``OK`` log entry based on the event. If an
-event does not exit successfully for any reason, {+backend+}
-creates a log entry with a status of the {+backend+} error that
+event does not exit successfully for any reason, App Services
+creates a log entry with a status of the App Services error that
 caused the problem. You may encounter errors if you:
 
 - Attempt to access data from `{+atlas+} <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ for which there is no applicable rule
-- Fail to catch an exception or promise rejection in an {+service-short+} Function
+- Fail to catch an exception or promise rejection in an Atlas Function
 - Call ``context.services.get()`` for a service which does not exist
 - Call a {+atlas+} service action with invalid or missing
   parameters
@@ -143,21 +143,21 @@ Log Lines
 ~~~~~~~~~
 
 Functions can log information using JavaScript's ``console.log()``
-method. {+backend+} stringifies each console log and stores each string
-as a single line. {+backend+} truncates lines to 512 bytes in length.
+method. App Services stringifies each console log and stores each string
+as a single line. App Services truncates lines to 512 bytes in length.
 For ASCII character sets, this translates to 512 characters; depending
 on the character set you use, you may see truncation at lower character
 counts.
 
-{+backend+} saves only the first 25 log lines for a given log entry.
+App Services saves only the first 25 log lines for a given log entry.
 
-{+backend+} stores each output as a single string in the log entry's
+App Services stores each output as a single string in the log entry's
 ``Logs`` field.
 
 Log Retention
 ~~~~~~~~~~~~~
 
-{+service+} retains logs for {+log-retention-time+}, after which they
+App Services retains logs for {+log-retention-time+}, after which they
 are deleted.
 
 If you require logs older than {+log-retention-time+}, you can set up a

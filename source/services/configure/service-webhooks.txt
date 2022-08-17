@@ -46,7 +46,7 @@ Procedure
 
             3. Select the :guilabel:`Incoming Webhooks` tab for the service.
 
-            4. Click :guilabel:`Add Incoming Webhook`. {+service-short+} will redirect you to
+            4. Click :guilabel:`Add Incoming Webhook`. App Services will redirect you to
                the :guilabel:`Settings` screen for the new webhook.
 
 
@@ -59,11 +59,11 @@ Procedure
 
          .. step:: Configure User Authentication
 
-            Functions in {+service-short+}, including webhooks, always execute in
+            Atlas Functions, including webhooks, always execute in
             the context of a specific application user or as the
             :ref:`system user <system-user>`, which bypasses rules. To
             configure the webhook's execution user, specify the type
-            of authentication that {+service-short+} should use for the webhook.
+            of authentication that App Services should use for the webhook.
 
             .. list-table::
                :widths: 20 80
@@ -115,7 +115,7 @@ Procedure
                    .. important:: Do Not Use Both Headers and Body Fields
 
                       If a request includes credentials in both the request
-                      headers and the request body, then {+service-short+} throws an error
+                      headers and the request body, then App Services throws an error
                       and does not execute the function.
 
                    .. note:: Application Users
@@ -124,12 +124,12 @@ Procedure
                       perform additional user-related work for each request:
 
                       - If you enable :guilabel:`Fetch Custom User Data`,
-                        {+service-short+} queries the requesting user's :ref:`custom user
+                        App Services queries the requesting user's :ref:`custom user
                         data <custom-user-data>` and, if it exists, exposes the data as an
                         object on the ``context.user.custom_data`` property.
 
                       - If you enable :guilabel:`Create User Upon Authentication`,
-                        {+service-short+} automatically creates a new user based on the
+                        App Services automatically creates a new user based on the
                         provided user credentials if they don't match an already existing
                         user. The authentication provider that corresponds to the
                         credentials must be enabled at the time of the request to create a
@@ -182,7 +182,7 @@ Procedure
             <Web/HTTP/Status/200>` response that includes the webhook function
             return value as its ``body`` field. You can configure a custom HTTP
             response from within the webhook function using the ``response``
-            object that {+service-short+} automatically passes as the second argument.
+            object that App Services automatically passes as the second argument.
 
             .. figure:: /images/webhook-respond-with-result-realm-ui.png
                :alt: The respond with result toggle in the UI
@@ -192,9 +192,9 @@ Procedure
          .. step:: Specify an Authorization Expression
 
             You can dynamically authorize requests based on the contents of each request
-            by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`. {+service-short+}
+            by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`. App Services
             evaluates the expression for every incoming request that the webhook receives.
-            If you do not specify an expression then {+service-short+} automatically authorizes all
+            If you do not specify an expression then App Services automatically authorizes all
             authenticated incoming requests.
 
             The expression can expand standard :ref:`expression variables <expressions>`,
@@ -228,7 +228,7 @@ Procedure
          .. step:: Write the Webhook Function
 
             Once you've configured the webhook, all that's left is to write the
-            function that executes when someone calls the webhook. {+service-short+}
+            function that executes when someone calls the webhook. App Services
             automatically passes two objects as the webhook function's arguments:
 
             .. list-table::
@@ -247,7 +247,7 @@ Procedure
 
                * - ``response``
                  - An :ref:`HTTP response object <webhook-response-object>` that
-                   configures {+service-short+}'s response to the client that called the
+                   configures the response to the client that called the
                    webhook. The object has methods that allow you to set the
                    response's headers, body, and status code. Calling any of these
                    methods overrides the default response behavior.
@@ -327,7 +327,7 @@ Procedure
                  "name": "<Webhook Name>",
                  "can_evaluate": { <JSON Expression> },
                  "run_as_authed_user": <Boolean>,
-                 "run_as_user_id": "<{+service-short+} User ID>",
+                 "run_as_user_id": "<App Services User ID>",
                  "run_as_user_id_script_source": "<Function Source Code>",
                  "respond_result": <Boolean>,
                  "fetch_custom_user_data": <Boolean>,
@@ -355,8 +355,8 @@ Procedure
 
          .. step:: Configure User Authentication
 
-            Specify the type of authentication that {+service-short+} should use for the
-            webhook. {+service-short+} supports the following webhook authentication methods:
+            Specify the type of authentication that App Services should use for the
+            webhook. App Services supports the following webhook authentication methods:
 
             .. list-table::
                :widths: 20 80
@@ -422,7 +422,7 @@ Procedure
                       .. important:: Do Not Use Both Headers and Body Fields
 
                          If a request includes credentials in both the request
-                         headers and the request body, then {+service-short+} throws an error
+                         headers and the request body, then App Services throws an error
                          and does not execute the function.
 
                * - System
@@ -453,7 +453,7 @@ Procedure
 
                       {
                         "run_as_authed_user": false,
-                        "run_as_user_id": "<{+service-short+} User ID>",
+                        "run_as_user_id": "<App Services User ID>",
                         "run_as_user_id_script_source": "",
                       }
 
@@ -512,20 +512,20 @@ Procedure
             <Web/HTTP/Status/200>` response that includes the webhook function
             return value as its ``body`` field. You can configure a custom HTTP
             response from within the webhook function using the ``response``
-            object that {+service-short+} automatically passes as the second argument.
+            object that App Services automatically passes as the second argument.
 
 
          .. step:: Specify an Authorization Expression
 
             You can dynamically authorize requests based on the contents of each request
-            by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`. {+service-short+}
+            by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`. App Services
             evaluates the expression for every incoming request that the webhook receives.
             The expression can expand standard :ref:`expression variables <expressions>`,
             including the :json-expansion:`%%request` expansion.
 
             To define an authorization expression, set the value of the
             ``can_evaluate`` field to the expression. If you do not specify an
-            expression then {+service-short+} automatically authorizes all authenticated
+            expression then App Services automatically authorizes all authenticated
             incoming requests.
 
             .. example::
@@ -555,7 +555,7 @@ Procedure
             require request validation.
 
             You can configure a webhook's request authorization method in the
-            ``options`` document of the webhook configuration. {+service-short+} supports the
+            ``options`` document of the webhook configuration. App Services supports the
             following :ref:`request validation methods
             <webhook-request-validation>`:
 
@@ -609,7 +609,7 @@ Procedure
             should contain a valid function that will execute when the webhook is
             called.
 
-            {+service-short+} automatically passes two objects as the webhook function's
+            App Services automatically passes two objects as the webhook function's
             arguments:
 
             .. list-table::
@@ -628,7 +628,7 @@ Procedure
 
                * - ``response``
                  - An :ref:`HTTP response object <webhook-response-object>` that
-                   configures {+service-short+}'s response to the client that called the
+                   configures the response to the client that called the
                    webhook. The object has methods that allow you to set the
                    response's headers, body, and status code. Calling any of these
                    methods overrides the default response behavior.

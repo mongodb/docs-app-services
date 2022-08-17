@@ -47,10 +47,10 @@ as documents that resemble the following:
 
 To generate the daily report, the store creates a scheduled Trigger
 that fires every day at ``7:00 AM UTC``. When the
-Trigger fires, it calls its linked {+service-short+} Function,
+Trigger fires, it calls its linked Atlas Function,
 ``generateDailyReport``, which runs an aggregation
 query on the ``store.orders`` collection to generate the report. The
-{+service-short+} Function then stores the result of the aggregation in the
+Function then stores the result of the aggregation in the
 ``store.reports`` collection.
 
 .. tabs-realm-admin-interfaces::
@@ -178,7 +178,7 @@ Scheduled Triggers have the following configuration options:
    * - | :guilabel:`Linked Function`
        | ``function_name: <string>``
 
-     - Required. The name of the {+service-short+} Function that the Trigger
+     - Required. The name of the Function that the Trigger
        executes whenever it fires.
 
        .. note::
@@ -190,7 +190,7 @@ Scheduled Triggers have the following configuration options:
        | ``config.schedule: <string>``
 
      - Required. The :ref:`CRON expression <CRON-expressions>`
-       that {+backend+} uses to determine when to fire the Trigger.
+       that Atlas App Services uses to determine when to fire the Trigger.
 
 .. _CRON-expressions:
 
@@ -200,9 +200,9 @@ CRON Expressions
 CRON expressions are user-defined strings that use standard
 :wikipedia:`cron <Cron>` job syntax to define when a :doc:`scheduled
 trigger </triggers/scheduled-triggers>` should execute. 
-{+service-short+} executes Trigger CRON expressions based on :wikipedia:`UTC time <Coordinated_Universal_Time>`. 
+Atlas App Services executes Trigger CRON expressions based on :wikipedia:`UTC time <Coordinated_Universal_Time>`. 
 Whenever all of the fields in a CRON expression match the current date and time,
-{+backend+} fires the trigger associated with the expression.
+App Services fires the trigger associated with the expression.
 
 Expression Syntax
 -----------------
@@ -397,8 +397,8 @@ Performance Optimization
 ------------------------
 
 Use the Query API with a a :manual:`$match</reference/operator/aggregation/match/>`
-expression to reduce the number of documents your {+service-short+} Function looks at.
+expression to reduce the number of documents your Function looks at.
 This helps your Function improve performance and not reach
-:ref:`{+service-short+} Function memory limits <function-constraints>`. 
+:ref:`Function memory limits <function-constraints>`. 
 
 :ref:`Refer the Example section for a Scheduled Trigger using a $match expression. <scheduled-trigger-example>`

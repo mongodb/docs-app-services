@@ -318,7 +318,7 @@ Configuration
      "name": "<Webhook Name>",
      "can_evaluate": { <JSON Expression> },
      "run_as_authed_user": <Boolean>,
-     "run_as_user_id": "<{+service-short+} User ID>",
+     "run_as_user_id": "<App Services User ID>",
      "run_as_user_id_script_source": "<Function Source Code>",
      "fetch_custom_user_data": <Boolean>,
      "create_user_on_auth": <Boolean>,
@@ -346,12 +346,12 @@ Configuration
    * - | ``can_evaluate``
        | JSON Expression (default: ``true``)
      - A :ref:`JSON expression <expressions>` that evaluates to ``true`` if the
-       webhook is allowed to execute. {+service-short+} evaluates this
+       webhook is allowed to execute. Atlas App Services evaluates this
        expression for every incoming request.
    
    * - | ``disable_arg_logs``
        | Boolean
-     - If ``true``, {+service-short+} omits the arguments provided to the webhook
+     - If ``true``, App Services omits the arguments provided to the webhook
        from the :doc:`function execution log entry </logs/function>`.
    
    * - | ``run_as_authed_user``
@@ -368,26 +368,26 @@ Configuration
    
    * - | ``run_as_user_id``
        | String
-     - The unique ID of a :doc:`{+service-short+} User </authentication>` that
+     - The unique ID of a :doc:`App Services User </authentication>` that
        the function always executes as. Cannot be used with
        ``run_as_user_id_script_source`` or ``run_as_authed_user``.
    
    * - | ``run_as_user_id_script_source``
        | String
      - A stringified :doc:`function </functions>` that runs whenever the
-       webhook is called and returns the unique ID of a :doc:`{+service-short+}
+       webhook is called and returns the unique ID of a :doc:`App Services
        User </authentication>` that the function executes as. Cannot be used with
        ``run_as_user_id`` or ``run_as_authed_user``.
    
    * - | ``respond_result``
        | Boolean
-     - If ``true``, {+service-short+} includes the webhook function return value as
+     - If ``true``, App Services includes the webhook function return value as
        the body of the HTTP response it sends to the client that initiated the
        webhook request.
    
    * - | ``fetch_custom_user_data``
        | Boolean
-     - If ``true``, {+service-short+} queries the requesting user's :ref:`custom
+     - If ``true``, App Services queries the requesting user's :ref:`custom
        user data <custom-user-data>` and, if it exists, exposes the data as an
        object on the ``context.user.custom_data`` property.
        
@@ -396,7 +396,7 @@ Configuration
    
    * - | ``create_user_on_auth``
        | Boolean
-     - If ``true``, {+service-short+} automatically creates a new user based
+     - If ``true``, App Services automatically creates a new user based
        on the provided user credentials if they don't match an already existing
        user (e.g. no other user has the specified email address). The
        authentication provider that corresponds to the credentials must be

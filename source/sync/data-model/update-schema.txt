@@ -17,7 +17,7 @@ Update Your Schema
 Overview
 --------
 
-When developing an application using {+sync+}, you may need to make changes to
+When developing an application using Atlas Device Sync, you may need to make changes to
 your schema at some point, such as when you need to: 
 
 - Add a new property to an already-synced object
@@ -28,7 +28,7 @@ your schema at some point, such as when you need to:
 To make it easier to understand how schema changes affect your app, we
 characterize them as "breaking" versus "non-breaking" changes.
 
-{+service-short+} provides for non-breaking schema changes to synced 
+Atlas App Services provides for non-breaking schema changes to synced 
 realms, allowing old clients to sync with newer ones.
 
 Breaking schema changes, however, take some planning and work, and should
@@ -42,7 +42,7 @@ work with the new schema changes.
 .. note:: Make breaking changes via the {+ui+}
 
    Because breaking or destructive schema changes require special handling, 
-   {+service-short+} does not support making these changes via {+cli+} or automated 
+   App Services does not support making these changes via {+cli+} or automated 
    deploy with GitHub. Instead, you should make breaking changes in 
    the {+ui+}.
 
@@ -57,7 +57,7 @@ sync to client-side applications.
 
 A non-breaking change is a change that you can make in your server-side
 schema or your object model without requiring additional handling in your
-app. {+service-short+} refers to these types of non-breaking changes as additive changes.
+app. App Services refers to these types of non-breaking changes as additive changes.
 They apply automatically to synced {+realms+}; you can make these 
 non-breaking schema changes with no additional client-side configuration 
 changes.
@@ -138,7 +138,7 @@ How to Add an Object Type
 
 If you want to add an object type to both the server-side schema and the 
 client object model, you can add the object type to the object model, and 
-use :ref:`Development Mode <enable-development-mode>` to let {+service-short+} infer the 
+use :ref:`Development Mode <enable-development-mode>` to let App Services infer the 
 server-side schema updates. Or you can manually add the object type to both 
 the model and the schema.
 
@@ -152,7 +152,7 @@ information, see your preferred SDK's migration page.
 .. note:: These changes may trigger a resync
 
    When you add a new object type, we retreive the documents for the 
-   collection and re-insert them into {+service-short+} to get the new values. This
+   collection and re-insert them into App Services to get the new values. This
    is expected behavior, but it does cause a temporary halt to propogating 
    changes while this process is underway.
    
@@ -183,13 +183,13 @@ How to Add a Required Property
 If you want to add a required property to both the server-side schema and 
 the client object model, you can add the required property to the object 
 model, and use :ref:`Development Mode <enable-development-mode>` to let 
-{+service-short+} infer the server-side schema updates. Or you can manually add the 
+App Services infer the server-side schema updates. Or you can manually add the 
 required property to both the model and the schema.
 
 .. important:: Even non-breaking changes can require terminating sync
 
    When there are more than 100,000 documents in the 
-   ``__realm_sync.unsynced_documents`` collection, {+service-short+} requires that you
+   ``__realm_sync.unsynced_documents`` collection, App Services requires that you
    :ref:`terminate and re-enable sync <terminating-realm-sync>`. When you 
    add a required property, the re-sync process can push your collection
    over this limit. In this case, you must terminate and re-enable sync, 
@@ -221,7 +221,7 @@ information, see your preferred SDK's migration page.
 .. note:: These changes may trigger a resync
 
    When you add a new required property, we retreive the documents for 
-   the collection and re-insert them into {+service-short+} to get the new values. This
+   the collection and re-insert them into App Services to get the new values. This
    is expected behavior, but it does cause a temporary halt to propogating 
    changes while this process is underway.
 
@@ -239,7 +239,7 @@ How to Add an Optional Property
 If you want to add an optional property to both the server-side schema and 
 the client object model, you can add the optional property to the object 
 model, and use :ref:`Development Mode <enable-development-mode>` to let 
-{+service-short+} infer the server-side schema updates. Or you can manually add the 
+App Services infer the server-side schema updates. Or you can manually add the 
 optional property to both the model and the schema.
 
 Handle Client {+client-database+} Files
@@ -252,7 +252,7 @@ information, see your preferred SDK's migration page.
 .. note:: These changes may trigger a resync
 
    When you add a new optional property, we retreive the documents for 
-   the collection and re-insert them into {+service-short+} to get the new values. This
+   the collection and re-insert them into App Services to get the new values. This
    is expected behavior, but it does cause a temporary halt to propogating 
    changes while this process is underway.
 
@@ -307,8 +307,8 @@ leave it in place on the server-side schema.
 
 To maintain backward compatibility, removing a property from a client-side 
 object model does not delete the property from the database. Instead, 
-new objects retain the removed property, but {+service-short+} automatically sets the 
-property's value to ``null``. {+service-short+} sets properties that are non-nullable to an
+new objects retain the removed property, but App Services automatically sets the
+property's value to ``null``. App Services sets properties that are non-nullable to an
 appropriate empty value, such as a 0 for integer values or an empty string
 for string values. This is considered a non-breaking or additive change
 to the object model.
@@ -343,8 +343,8 @@ leave it in place on the server-side schema.
 
 To maintain backward compatibility, removing a property from a client-side 
 object model does not delete the property from the database. Instead, 
-new objects retain the removed property, but {+service-short+} automatically sets the 
-property's value to ``null``. {+service-short+} sets properties that are non-nullable to an
+new objects retain the removed property, but App Services automatically sets the 
+property's value to ``null``. App Services sets properties that are non-nullable to an
 appropriate empty value, such as a 0 for integer values or an empty string
 for string values. This is considered a non-breaking or additive change
 to the object model.

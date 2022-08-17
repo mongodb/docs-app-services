@@ -17,8 +17,8 @@ Service Limitations
 Overview
 --------
 
-{+service+} has several guidelines to keep in mind when architecting how
-your tools and clients interact with MongoDB through {+service-short+}.
+Atlas App Services has several guidelines to keep in mind when architecting how
+your tools and clients interact with MongoDB through App Services.
 Keep this guidance in mind when deciding how to structure queries,
 selecting which CRUD and aggregation operations to use, and determining
 how to handle concurrent workloads.
@@ -30,7 +30,7 @@ how to handle concurrent workloads.
 Aggregation
 -----------
 
-{+service-short+} supports all :manual:`aggregation pipeline
+App Services supports all :manual:`aggregation pipeline
 stages </reference/operator/aggregation-pipeline/>` in
 :ref:`system functions <system-functions>` except for ``$currentOp``
 and ``$indexStats``.
@@ -50,7 +50,7 @@ Batch Loading
 ~~~~~~~~~~~~~
 
 When data is bulk/batch loaded into {+atlas+}, you may see a delay in
-data appearing on devices while {+service+} processes changes.
+data appearing on devices while App Services processes changes.
 
 {+adf-instance+}s
 ~~~~~~~~~~~~~~~~~
@@ -65,7 +65,7 @@ Serverless Instances
 Sharded Clusters
 ~~~~~~~~~~~~~~~~
 
-{+sync+} does not currently support sharded {+atlas+} clusters. However,
+Atlas Device Sync does not currently support sharded {+atlas+} clusters. However,
 you can add a sharded cluster as a data source and access it from a
 :ref:`function <functions>`.
 
@@ -88,7 +88,7 @@ App Services does not currently support :atlas:`private endpoints </security-pri
 Change Streams
 --------------
 
-{+service-short+} limits the total number of change streams open against a given
+App Services limits the total number of change streams open against a given
 cluster across all {+app+}s based on the cluster's size. It also limits the
 number of client applications that can concurrently listen for changes using
 ``watch()`` and :ref:`Sync <sync>`. The
@@ -128,7 +128,7 @@ following table lists the limitations for each cluster size:
 
 .. note::
 
-   {+service-short+} opens a single change stream on each collection that is
+   App Services opens a single change stream on each collection that is
    associated with a :ref:`Database Trigger <database-trigger>`, :ref:`Collection Sync
    <sync>`, or ``watch()`` operation.
 
@@ -149,7 +149,7 @@ following table lists the limitations for each cluster size:
 Database Commands
 -----------------
 
-{+service-short+} does not support any :manual:`database commands
+App Services does not support any :manual:`database commands
 </reference/command>` in the Client SDKs or :doc:`Functions
 </functions>`. You can, however, call a limited subset of database
 commands when when connected to a MongoDB cluster over the :ref:`wire
@@ -163,14 +163,14 @@ MongoDB Version Requirements
 ----------------------------
 
 You can access most of the CRUD and Aggregation functionality of MongoDB
-version 3.6 with the :doc:`MongoDB service </mongodb>`; however, {+service+}
+version 3.6 with the :doc:`MongoDB service </mongodb>`; however, App Services
 does not support all operations and features available in standard tools
 and clients. For a list of specific MongoDB operations that
-are available when you connect to MongoDB through {+service-short+}, see
+are available when you connect to MongoDB through App Services, see
 :ref:`the CRUD & Aggregation API reference
 <mongodb-crud-and-aggregation-apis>`.
 
-{+sync+} requires {+atlas+} clusters to run
+Device Sync requires {+atlas+} clusters to run
 MongoDB 4.4.0 or greater. 
 
 .. _mongodb-service-limitations-query-options:
@@ -178,11 +178,11 @@ MongoDB 4.4.0 or greater.
 Query Options
 -------------
 
-{+service-short+} supports all query options in :ref:`system functions
-<system-functions>`. {+service-short+} does not support certain options for
+App Services supports all query options in :ref:`system functions
+<system-functions>`. App Services does not support certain options for
 CRUD operations run from :ref:`user functions <user-functions>`. For a
 list of specific options that are available when you connect to MongoDB through
-{+service-short+}, see :ref:`Query Options
+App Services, see :ref:`Query Options
 <mongodb-crud-and-aggregation-apis-query-options>`.
 
 .. _mongodb-service-limitations-query-results:
@@ -190,7 +190,7 @@ list of specific options that are available when you connect to MongoDB through
 Query Results
 -------------
 
-MongoDB queries executed through {+service-short+} can return a maximum of 50,000
+MongoDB queries executed through App Services can return a maximum of 50,000
 documents. If you need to return more documents, consider paginating
 your query.
 
@@ -199,7 +199,7 @@ your query.
 Request Traffic
 ---------------
 
-{+service+} limits request traffic to 5,000 concurrent requests. Any 
+App Services limits request traffic to 5,000 concurrent requests. Any
 requests made beyond this limit return an HTTP response status code of 
 `429 - Too Many Requests <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429>`_.
 You can request a higher limit by `filing a support ticket
@@ -210,8 +210,8 @@ You can request a higher limit by `filing a support ticket
 Rules 
 ------
 
-{+sync+} supports :ref:`{+sync-short+} rules<sync-rules>`.
-{+sync+} does not support :ref:`roles/field-level
+Device Sync supports :ref:`Sync rules <sync-rules>`.
+Device Sync does not support :ref:`roles/field-level
 rules<define-roles-and-permissions>` at this time.
 
 .. _mongodb-service-limitations-static-hosting:
@@ -219,7 +219,7 @@ rules<define-roles-and-permissions>` at this time.
 Static Hosting
 --------------
 
-{+service-short+} enforces a 25MB maximum file size constraint on
+App Services enforces a 25MB maximum file size constraint on
 :doc:`static hosting </hosting/>`.
 
 .. _mongodb-service-limitations-concurrent-workloads:
@@ -228,7 +228,7 @@ Sync - Concurrent Workloads
 ---------------------------
 
 Writing:
-  {+service+} supports up to 30 users concurrently writing data to an
+  App Services supports up to 30 users concurrently writing data to an
   underlying MongoDB document. With more than 30 concurrent writers, you
   may see delays in syncing or conflict resolution.
 

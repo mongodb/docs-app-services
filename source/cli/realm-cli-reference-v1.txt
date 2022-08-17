@@ -18,7 +18,7 @@ Overview
 .. program:: realm-cli
 .. binary:: realm-cli-v1
 
-The {+service+} Command Line Interface ({+cli-bin+})
+The Atlas App Services Command Line Interface ({+cli-bin+})
 allows you to programmatically manage your {+app+}s.
 With {+cli-bin+}, you can create or update
 {+app+}s from a local directory as well as export
@@ -191,7 +191,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
      --include-hosting \
      --include-dependencies
 
-.. option:: --app-id <{+service+} Application ID>
+.. option:: --app-id <App Services Application ID>
    
    | **Optional.**
    
@@ -204,7 +204,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    
    .. note:: New Application App IDs
       
-      If you create a new application with {+cli-bin+}, {+service+}
+      If you create a new application with {+cli-bin+}, App Services
       generates a new App ID and ignores any value that you specify for
       the ``--app-id`` flag.
 
@@ -277,7 +277,7 @@ a local application directory.
      --include-hosting \
      --as-template
 
-.. option:: --app-id <{+service+} Application ID>
+.. option:: --app-id <App Services Application ID>
    
    | **Optional.**
    
@@ -287,7 +287,7 @@ a local application directory.
    
    | **Optional.**
    
-   The path of the directory where {+service-short+} will export your application.
+   The path of the directory where App Services will export your application.
    
    If specified, {+cli-bin+} creates a directory at the given path and exports
    the application configuration into the new directory. If a file or directory
@@ -526,7 +526,7 @@ imported application directory.
 
 If an imported entity's ``id`` value matches the ``id`` of an existing
 entity, the existing entity will be updated to match the imported
-entity. {+service-short+} assigns system-generated ``id`` values to
+entity. App Services assigns system-generated ``id`` values to
 entities without ``id`` values before importing them as new entities.
 
 If an entity is imported with an ``id`` that does not match an
@@ -586,14 +586,14 @@ Replace
    realm-cli import --strategy=replace
 
 Under the ``replace`` strategy, if an imported entity's ``id`` value
-matches the ``id`` of an existing entity, {+service-short+} replaces the
+matches the ``id`` of an existing entity, App Services replaces the
 existing entity with the imported entity. If an imported entity's ``id``
 value does not match an existing entity, the import fails.
 If an existing entity's ``id`` does not match
-the ``id`` of any imported entity, {+service-short+} deletes that
+the ``id`` of any imported entity, App Services deletes that
 existing entity.
 
-{+service-short+} generates ``id`` values for entities that lack ``id``
+App Services generates ``id`` values for entities that lack ``id``
 values before importing them as new entities. Importing an entity with
 a non-ObjectID ``id`` value does not throw an error.
 
@@ -647,11 +647,11 @@ Replace by Name
 
 Under the ``replace-by-name`` strategy, if an imported
 entity's ``name`` value matches the ``name`` of an existing
-entity, {+service-short+} replaces the existing entity with the imported
+entity, App Services replaces the existing entity with the imported
 entity. If an imported entity's ``name`` value does not
 match an existing entity, the entity becomes a new entity.
 If an existing entity's ``name`` does not match the ``name``
-of any imported entity, {+service-short+} deletes that existing entity.
+of any imported entity, App Services deletes that existing entity.
 
 If an imported entity has no ``name`` value, {+cli-bin+} will throw
 an error.

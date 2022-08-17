@@ -18,9 +18,9 @@ Optimize Sync Atlas Usage
 Overview
 --------
 
-{+sync+} uses space in your app's synced Atlas cluster to store utility
+Atlas Device Sync uses space in your app's synced Atlas cluster to store utility
 data for sync. This includes a history of changes to each realm.
-{+service+} minimizes that space usage via backend
+Atlas App Services minimizes that space usage via backend
 compaction, which runs automatically. You can optimize further by
 specifying a client maximum offline time, which enables advanced backend
 compaction.
@@ -30,11 +30,11 @@ compaction.
 History
 -------
 
-The {+service-short+} backend keeps a history of :ref:`changes to
+The App Services backend keeps a history of :ref:`changes to
 underlying data <changesets>` for each realm, similar to the
-:manual:`MongoDB oplog </core/replica-set-oplog/>`. {+service-short+}
+:manual:`MongoDB oplog </core/replica-set-oplog/>`. App Services
 uses this history to synchronize data between the backend and clients.
-{+service-short+} stores history in your synced Atlas cluster.
+App Services stores history in your synced Atlas cluster.
 
 .. _backend-compaction:
 
@@ -81,7 +81,7 @@ Backend compaction:
   on the same result with fewer instructions.
 
 Backend compaction runs regularly on all synced clusters as part of
-{+sync+}.
+Device Sync.
 
 .. _advanced-backend-compaction:
 
@@ -360,7 +360,7 @@ for Sync, and select fewer fields that support those broad queries.
 Summary
 -------
 
-- {+sync+} uses space in your synced Atlas cluster to store change history.
+- Device Sync uses space in your synced Atlas cluster to store change history.
 - Backend compaction reduces the space usage of this history.
 - Advanced backend compaction reduces the space usage of this history even more, but can cause client resets for clients who have not connected to the backend in more than the client maximum offline time (in days).
 - Apps that do not specify a client maximum offline time do not apply advanced backend compaction, so clients of any age can sync without experiencing a client reset.

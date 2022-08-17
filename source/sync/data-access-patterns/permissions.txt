@@ -16,7 +16,7 @@ Sync Rules and Permissions
 Rules
 -----
 
-{+service+} enforces data access rules for all requests to a synced cluster.
+Atlas App Services enforces data access rules for all requests to a synced cluster.
 Sync rules are dynamic :ref:`JSON expressions <expressions>` that specify a
 given user's ability to view and modify synced data.
 
@@ -38,7 +38,7 @@ The way Sync rules work depends on whether you are using
 Partition-Based Rules and Permissions
 -------------------------------------
 
-Whenever a user opens a synced realm from a client app, {+service-short+} evaluates your
+Whenever a user opens a synced realm from a client app, App Services evaluates your
 app's rules and determines if the user has read and write permissions for the
 :ref:`partition <sync-partitions>`. Users must have read permission to sync 
 and read data in a realm and must have write permission to create, modify, 
@@ -71,10 +71,10 @@ don't accidentally leak sensitive information.
 Partition-Based Sync Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} enforces dynamic, user-specific read and write permissions to secure the
+App Services enforces dynamic, user-specific read and write permissions to secure the
 data in each :ref:`partition <sync-partitions>`. You define permissions with
 :ref:`JSON rule expressions <expressions>` that control whether or not a given
-user has read or write access to the data in a given partition. {+service-short+} evaluates
+user has read or write access to the data in a given partition. App Services evaluates
 a user's permissions every time they open a synced realm.
 
 .. tip::
@@ -470,7 +470,7 @@ flexible sync roles:
      - Yes with an :ref:`important caveat <flex-sync-expansions-caveat>`
    
    * - :json-expansion:`%%this`, :json-expansion:`%%prev`, :json-expansion:`%%root`,  :json-expansion:`%%prevRoot`
-     - No. These expansions refer to the document. {+service-short+} evaluates "apply when" expressions at session start, so there's no document to evaluate.
+     - No. These expansions refer to the document. App Services evaluates "apply when" expressions at session start, so there's no document to evaluate.
      - No. These expansions might access non-queryable fields of the document, which is not possible.
    
    * - :json-expansion:`%%partition`
@@ -483,7 +483,7 @@ flexible sync roles:
    
    * - :json-operator:`%function`
      - Yes
-     - No. {+service-short+} expands the expansions at the start of the session, so the function would not operate on a per-document basis.
+     - No. App Services expands the expansions at the start of the session, so the function would not operate on a per-document basis.
    
    * - :json-operator:`$exists`
      - Yes
@@ -501,18 +501,18 @@ flexible sync roles:
 
 .. important::
 
-   {+service-short+} triggers a :ref:`client reset <client-resets>` if anything about the
+   App Services causes a :ref:`client reset <client-resets>` if anything about the
    session role changed since the previous session.
 
-   At the start of a session, {+service-short+} expands all expansions
+   At the start of a session, App Services expands all expansions
    in the "apply when", read, and write expressions and stores the
    result. This has the following implications:
 
-   - If the value changes during a session, {+service-short+} continues
+   - If the value changes during a session, App Services continues
      to use the value as it was at the time of session start.
 
    - On the next session, if the value is different from what it was at
-     the start of this session, {+service-short+} triggers a client
+     the start of this session, App Services causes a client
      reset.
    
    - You cannot use the :json-operator:`%function` operator in read and
@@ -525,7 +525,7 @@ Role Configuration Files
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 You use JSON configuration files to define session roles. For more
-information, see :ref:`{+sync+} Configuration Files <appconfig-sync>`.
+information, see :ref:`appconfig-sync`.
 
 .. example::
 

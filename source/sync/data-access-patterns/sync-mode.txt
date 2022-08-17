@@ -15,10 +15,10 @@ Choose Your Sync Mode
 Overview
 --------
 
-When you enable {+sync+}, you must specify a {+sync-short+} mode for your 
-{+app+}. The {+sync-short+} mode determines how users can access data 
-from the {+service+} SDK in the client app. {+service-short+} offers two 
-{+sync-short+} modes:
+When you enable Atlas Device Sync, you must specify a Sync mode for your
+{+app+}. The Sync mode determines how users can access data
+from the Atlas App Services SDK (Realm SDK) in the client app. App Services offers two
+Sync modes:
 
 - Partition-Based Sync
 - Flexible Sync
@@ -37,8 +37,8 @@ Those documents form a **partition**.
 
 In Partition-Based Sync, you define a :ref:`partition key <partition-key>` 
 whose value determines whether the user can read or write a document. 
-{+service+} :ref:`evaluates a set of rules <partition-based-rules-and-permissions>` 
-to determine whether users can read or write to a given partition. {+service-short+} 
+App Services :ref:`evaluates a set of rules <partition-based-rules-and-permissions>` 
+to determine whether users can read or write to a given partition. App Services 
 directly maps a partition to individual synced ``.realm`` files. Each 
 object in a synced realm has a corresponding document in the partition.
 
@@ -66,7 +66,7 @@ Choose Partition-Based Sync when:
    Customers, meanwhile, could have read-only access to store inventory.
 
 In the client, you pass a value for the partition key when opening a synced 
-realm. {+service-short+} then syncs objects whose partition key value matches the 
+realm. App Services then syncs objects whose partition key value matches the 
 value passed in from the client application.
 
 .. example::
@@ -92,7 +92,7 @@ value passed in from the client application.
         },
       };
       try {
-        const realm = await {+service-short+}.open(config);
+        const realm = await Realm.open(config);
         realm.close();
       } catch (err) {
         console.error("failed to open realm", err.message);
@@ -107,16 +107,16 @@ Flexible Sync
 
 :ref:`Flexible Sync <flexible-sync>` works best for applications that need to
 define a query in the client application, and Sync only the documents that match
-the query. {+service-short+} translates those documents to objects in the client
+the query. App Services translates those documents to objects in the client
 application, making it easy to work with objects in your app. You can apply
 permissions on both a per-document and per-field basis.
 
 In Flexible Sync, you define a set of :ref:`queryable fields 
 <queryable-fields>` that you can query from the client application. 
 You can then subscribe to queries on those fields from the client 
-application. When a client starts a Sync session, {+service-short+} 
+application. When a client starts a Sync session, App Services 
 evaluates :ref:`rules <flexible-sync-rules-and-permissions>` to determine 
-which documents in the query the user can access. {+service-short+} maps the documents 
+which documents in the query the user can access. App Services maps the documents 
 that a user can access to a synced ``.realm`` file. Each object in a synced 
 realm gets translated to a corresponding document in {+atlas+}.
 
@@ -197,7 +197,7 @@ Choose Flexible Sync when:
    such as 30 days.
 
 In the client, you subscribe to a set of queries to determine the data 
-to sync. {+service-short+} then syncs objects that match the query, where the 
+to sync. App Services then syncs objects that match the query, where the 
 logged-in user has permission to read or read and write the data.
 
 .. example::

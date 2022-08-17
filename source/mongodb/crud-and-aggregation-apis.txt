@@ -49,7 +49,7 @@ CRUD Operations
 Query Operators
 ~~~~~~~~~~~~~~~
 
-{+service+} supports most :manual:`query operators
+Atlas App Services supports most :manual:`query operators
 </reference/operator/query>` for queries that run in a
 :ref:`user function <user-functions>`. However, some evaluation
 operators and all geospatial and bitwise operators are only available
@@ -261,7 +261,7 @@ Bitwise Operator Availability
 Update Operators
 ~~~~~~~~~~~~~~~~
 
-{+service+} supports most :manual:`update operators
+App Services supports most :manual:`update operators
 </reference/operator/update>` for queries that run in a
 :ref:`user function <user-functions>`. However, some array update
 operators are only available in :ref:`system functions
@@ -404,12 +404,12 @@ Bitwise Update Operator Availability
 Bulk Write Operations
 ~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} supports bulk write operations using the same API as the
+App Services supports bulk write operations using the same API as the
 :node-docs:`MongoDB Node.js driver <>`.
 
 .. tip::
 
-   {+service-short+} also provides the :method:`collection.bulkWrite()`
+   App Services also provides the :method:`collection.bulkWrite()`
    method for performing bulk write operations.
 
 Ordered Bulk Write Operation Availability
@@ -421,7 +421,7 @@ You define ordered bulk operations by calling
 :node-driver:`OrderedBulkOperation <OrderedBulkOperation.html>` object that it
 returns.
 
-{+service-short+} supports the following ``OrderedBulkOperation`` methods:
+App Services supports the following ``OrderedBulkOperation`` methods:
 
 .. list-table::
    :header-rows: 1
@@ -452,7 +452,7 @@ You define unordered bulk operations by calling
 :node-driver:`OrderedBulkOperation <UnorderedBulkOperation.html>` object that it
 returns.
 
-{+service-short+} supports the following ``UnorderedBulkOperation`` methods:
+App Services supports the following ``UnorderedBulkOperation`` methods:
 
 .. list-table::
    :header-rows: 1
@@ -479,7 +479,7 @@ returns.
 Query Options
 ~~~~~~~~~~~~~
 
-{+service+} does not support configuring the following options for any
+App Services does not support configuring the following options for any
 CRUD operation in :ref:`user functions <user-functions>`. All query
 options are available in :ref:`system functions <system-functions>`.
 
@@ -514,7 +514,7 @@ Aggregation
 Aggregation Methods
 ~~~~~~~~~~~~~~~~~~~
 
-{+service+} supports aggregation on the both the database and collection level
+App Services supports aggregation on the both the database and collection level
 using the following commands:
 
 - :manual:`db.aggregate() </reference/method/db.aggregate>`
@@ -523,7 +523,7 @@ using the following commands:
 Aggregation Pipeline Stage Availability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} does not support the following :manual:`aggregation pipeline stages
+App Services does not support the following :manual:`aggregation pipeline stages
 </reference/operator/aggregation-pipeline/>` when you :ref:`run an aggregation
 pipeline <mongodb-aggregate>` in the context of an
 :ref:`application user <user-accounts>`. All aggregation pipeline stages are
@@ -593,10 +593,10 @@ available to the system user except for ``$indexStats``.
 Aggregation Pipeline Operator Availability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} supports all :manual:`aggregation pipeline operators
+App Services supports all :manual:`aggregation pipeline operators
 </reference/operator/aggregation/>` when you :ref:`run an aggregation pipeline
 <mongodb-aggregate>` in the :ref:`system user
-<system-functions>` context. {+service-short+} supports all pipeline operators
+<system-functions>` context. App Services supports all pipeline operators
 in an :ref:`application user <user-accounts>` context with the following
 exceptions:
 
@@ -617,10 +617,10 @@ exceptions:
 Database Commands
 -----------------
 
-{+service+} does not support any :manual:`database commands
+App Services does not support any :manual:`database commands
 </reference/command>` in the Client SDKs or :doc:`Functions
 </functions>`. You can, however, call a limited subset of database
-commands when connected to a MongoDB cluster over the :ref:`{+service+}
+commands when connected to a MongoDB cluster over the :ref:`App Services
 wire protocol <wire-protocol>`.
 
 The following :manual:`database commands </reference/command>` are
@@ -629,7 +629,7 @@ command are listed below.
 
 .. note::
    
-   {+service-short+} apps cannot run commands on the ``admin`` database.
+   App Services apps cannot run commands on the ``admin`` database.
 
 Database Command Availability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -640,7 +640,7 @@ Database Command Availability
 
    * - Command
      - Unsupported Options
-     - {+service-short+}-Specific Options
+     - App Services-Specific Options
 
    * - :manual:`find </reference/command/find>`
      - - ``hint``

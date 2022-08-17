@@ -31,7 +31,7 @@ data. You can use Atlas App Services' BSON schemas, which extend the `JSON Schem
 <https://json-schema.org/>`_ standard, to define your application's data model
 and validate documents whenever they're created, changed, or deleted.
 
-Schemas represent *types* of data rather than specific values. {+service-short+} supports
+Schemas represent *types* of data rather than specific values. Atlas App Services supports
 many built-in :ref:`schema types <schema-types>`. These include primitives, like
 strings and numbers, as well as structural types, like objects and arrays, which
 you can combine to create schemas that represent custom *object types*.
@@ -88,13 +88,13 @@ Why Define a Schema?
 ~~~~~~~~~~~~~~~~~~~~
 
 Schemas are the specification for your application's data model. Once you've
-defined a schema, {+service-short+} provides you with additional tools and services to work
+defined a schema, App Services provides you with additional tools and services to work
 with data that conforms to the schema.
 
-{+service-short+} uses schemas in many application services:
+App Services uses schemas in many application services:
 
 - :ref:`Atlas Device Sync <sync>` uses schemas to sync data between realms and MongoDB
-  Atlas. {+service-short+} can also generate idiomatic SDK object models for you based on
+  Atlas. App Services can also generate idiomatic SDK object models for you based on
   your schemas.
 
 - The :ref:`GraphQL API <graphql-api>` uses schemas to automatically generate a
@@ -103,7 +103,7 @@ with data that conforms to the schema.
   schemas.
 
 - :ref:`Data Access Rules <rules>` validate that data conforms to your schema
-  before and after every request. If any document fails validation, {+service-short+}
+  before and after every request. If any document fails validation, App Services
   prevents or rolls back the entire request.
 
 .. _define-a-schema:
@@ -148,7 +148,7 @@ configure the object's properties:
 
 .. _schema-enforcement:
 
-How {+service-short+} Enforces Schemas
+How App Services Enforces Schemas
 ---------------------------------
 
 App Services validates all write operations (inserts, updates, and deletes) on a
@@ -156,9 +156,9 @@ MongoDB collection against its collection schema. It checks every document
 before and after every request to ensure that all properties conform to the
 schema and that no invalid changes occured.
 
-{+service-short+} evaluates the result of all document writes and compares them against the
+App Services evaluates the result of all document writes and compares them against the
 schema before committing the writes to your cluster. If the result of any write
-operation in a request does not match the schema, {+backend+} returns an error
+operation in a request does not match the schema, App Services returns an error
 to the user without applying any changes in the request.
 
 .. example::
@@ -188,7 +188,7 @@ to the user without applying any changes in the request.
       )
 
    The query attempts to set the value of ``name`` to the number ``42``,
-   but the schema requires the value to be a ``string``. {+backend+} will
+   but the schema requires the value to be a ``string``. App Services will
    reject this write operation even though the user had permission to
    update the document because the write result does not conform to the
    schema.

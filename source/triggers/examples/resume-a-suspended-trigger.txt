@@ -14,7 +14,7 @@ change events and will not fire.
 
 .. note:: 
 
-   In the event of a suspended or failed trigger, {+service-short+} sends the 
+   In the event of a suspended or failed trigger, Atlas App Services sends the 
    project owner an email alerting them of the issue. 
 
 You can attempt to restart a suspended Trigger from the {+ui+} or by
@@ -31,7 +31,7 @@ importing an application directory with {+cli-bin+}.
 
             On the :guilabel:`Database Triggers` tab of the :guilabel:`Triggers`
             page, find the trigger that you want to resume in the list of
-            triggers. {+service+} marks suspended triggers with a :guilabel:`Status` of
+            triggers. App Services marks suspended triggers with a :guilabel:`Status` of
             :guilabel:`Suspended`.
 
             .. figure:: /images/suspended-db-trigger.png
@@ -49,7 +49,7 @@ importing an application directory with {+cli-bin+}.
             .. note:: Resume Tokens
 
                If you use a :manual:`resume token
-               </changeStreams/#resume-a-change-stream>`, {+service-short+}
+               </changeStreams/#resume-a-change-stream>`, App Services
                attempts to resume the trigger's underlying change
                stream at the event immediately following the last
                change event it processed. If successful, the trigger
@@ -87,7 +87,7 @@ importing an application directory with {+cli-bin+}.
          .. step:: Redeploy the Trigger
 
             After you have verified that the trigger configuration file exists, push the
-            configuration back to your app. {+service+} automatically attempts to resume
+            configuration back to your app. App Services automatically attempts to resume
             any suspended triggers included in the deployment.
 
             .. code-block:: shell

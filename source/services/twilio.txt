@@ -13,8 +13,8 @@ Twilio Service [Deprecated]
    :class: singlecol
 
 .. meta::
-   :description: {+service+}, {+service+} Documentation Manual, MongoDB Backend as a Service, Integrate {+service+} with Twilio, Twilio Integration with {+service+}
-   :keywords: {+service+}, MongoDB, {+service-short+}, MongoDB Backend as a Service, Integrate, Twilio
+   :description: Atlas App Services, Atlas App Services Documentation Manual, MongoDB Backend as a Service, Integrate Atlas App Services with Twilio, Twilio Integration with Atlas App Services
+   :keywords: Atlas App Services, MongoDB, App Services, MongoDB Backend as a Service, Integrate, Twilio
 
 .. include:: /includes/note-third-party-services-deprecation.rst
 
@@ -22,7 +22,7 @@ Overview
 --------
 
 Twilio provides messaging, voice, and chat services for web and mobile
-apps. The {+service+} Twilio service supports integrating Twilio's
+apps. The Atlas App Services Twilio service supports integrating Twilio's
 *Programmable SMS* service into your application.
 
 - To send an outbound text message, use the :doc:`send()
@@ -37,7 +37,7 @@ apps. The {+service+} Twilio service supports integrating Twilio's
 
 .. note::
 
-   To use Twilio with {+service-short+}, you must have a :guilabel:`Twilio Phone
+   To use Twilio with App Services, you must have a :guilabel:`Twilio Phone
    Number` registered to a messaging service associated with your Twilio
    account. You can create a new number from the :guilabel:`Numbers`
    page of the Twilio dashboard, or by following Twilio's
@@ -105,7 +105,7 @@ You will need to provide values for the following parameters when you
 Service Actions
 ---------------
 
-The Twilio service in {+service-short+} provides the following actions which are
+The Twilio service in App Services provides the following actions which are
 available in :doc:`functions </functions>` and in the SDKs:
 
 For instructions on using a service action, see :doc:`Call a Service
@@ -183,7 +183,7 @@ Configuration
    * - | :guilabel:`Respond With Result`
        | *respond_result*
      
-     - Required. If ``true``, {+service-short+} sends the return value of the
+     - Required. If ``true``, App Services sends the return value of the
        webhook function to Twilio in the response body.
        
        .. note::
@@ -196,7 +196,7 @@ Configuration
        | *run_as_user_id*
        | *run_as_user_id_script_source*
    
-     - Optional. The id of the :doc:`{+service-short+} user </authentication>` that
+     - Optional. The id of the :doc:`App Services user </authentication>` that
        executes the webhook function when the webhook is called.
 
        .. tabs-realm-admin-interfaces::
@@ -211,11 +211,11 @@ Configuration
              :tabid: cli
 
              You can specify the user id directly in ``run_as_user_id`` or
-             provide a stringified :doc:`{+service-short+} Function
+             provide a stringified :doc:`Atlas Function
              </functions>` that accepts the webhook payload and returns the user
              id in ``run_as_user_id_script_source``. If you do not specify a
              specific user id or a function that resolves to a user id,
-             {+service-short+} executes the webhook function as the :ref:`system
+             App Services executes the webhook function as the :ref:`system
              user <system-user>` that has full access to MongoDB CRUD and
              Aggregation APIs and bypasses all rules and schema validation.
 
@@ -224,7 +224,7 @@ Configuration
 Request Payload
 ~~~~~~~~~~~~~~~
 
-{+service-short+} automatically passes a ``payload`` document as the first argument
+App Services automatically passes a ``payload`` document as the first argument
 to incoming webhook functions. In a Twilio Service incoming webhook the
 ``payload`` object represents an incoming SMS message and has the
 following form:

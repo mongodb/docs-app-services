@@ -248,14 +248,14 @@ Configure Apple ID Authentication
 
          The ``generate_client_secret.rb`` script saves the JWT string to a
          file called ``client_secret.txt``. You will need the JWT to
-         configure the Apple ID provider in {+service-short+}.
+         configure the Apple ID provider in App Services.
 
 
-   .. step:: Configure the Provider in {+service-short+}
+   .. step:: Configure the Provider in App Services
 
       At this point you have configured an Apple application and generated
       the required OAuth 2.0 credentials. You can now configure the Apple
-      ID authentication provider with the credentials to allow {+service-short+}
+      ID authentication provider with the credentials to allow App Services
       client application users to log in.
 
       .. tabs-realm-admin-interfaces::
@@ -268,7 +268,7 @@ Configure Apple ID Authentication
 
             #. Turn on the :guilabel:`Provider Enabled` toggle.
 
-            #. For the {+service-short+} :guilabel:`Client ID`, enter the
+            #. For the App Services :guilabel:`Client ID`, enter the
                Apple :guilabel:`Services ID` you got when you created a
                :guilabel:`Services ID` in step 2 above.
 
@@ -279,7 +279,7 @@ Configure Apple ID Authentication
                secret that contains the JWT.
 
             #. For :guilabel:`Redirect URIs`, click :guilabel:`Add Redirect
-               URI` and enter the URL that {+service-short+} should redirect to once
+               URI` and enter the URL that App Services should redirect to once
                the OAuth process is complete. Provide a URL for a domain
                that you control and then use a `universal link
                <https://developer.apple.com/library/content/documentation/General/Conceptual/AppSearch/UniversalLinks.html>`_
@@ -347,9 +347,9 @@ Configure Apple ID Authentication
                    Identifiers)`.
 
                    Once a user completes the authentication process,
-                   {+service-short+} redirects them back to either a specified redirect URI or,
+                   App Services redirects them back to either a specified redirect URI or,
                    if no redirect URI is specified, the URL that they initiated the
-                   authentication request from. {+service-short+} will only redirect a user to
+                   authentication request from. App Services will only redirect a user to
                    a URI that exactly matches an entry in this list, including the
                    protocol and any trailing slashes.
 

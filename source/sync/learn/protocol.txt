@@ -1,7 +1,7 @@
 .. _sync-protocol:
 
 ==========================
-{+sync+} Protocol
+Atlas Device Sync Protocol
 ==========================
 
 .. default-domain:: mongodb
@@ -15,18 +15,18 @@
 Overview
 --------
 
-{+sync+} uses a protocol to correctly and efficiently sync data changes in
+Atlas Device Sync uses a protocol to correctly and efficiently sync data changes in
 real time across multiple clients that each maintain their own local
-{+sync-short+} files. The protocol defines a set of pre-defined :ref:`request
+Realm files. The protocol defines a set of pre-defined :ref:`request
 types <sync-request-types>` as well as a :ref:`process <sync-session-process>`
 by which a client, like a Realm SDK, can connect to an
-{+service-short+} application server and sync data.
+Atlas App Services application server and sync data.
 
 .. note::
    
    The a Realm SDKs internally implement and manage the sync protocol,
    so for most applications you don't need to understand the sync protocol to
-   use {+sync-short+}. This page covers the protocol at a high level and is
+   use Device Sync. This page covers the protocol at a high level and is
    not an implementation spec.
 
 Key Concepts
@@ -40,11 +40,11 @@ Changeset
 A **changeset** is a list of instructions that describe granular modifications
 made to a known object state or version by one or more write operations.
 Changesets are the base unit of the sync protocol. Synced {+realm+} clients send
-changesets to the {+service-short+} server whenever they perform a write
+changesets to the Device Sync server whenever they perform a write
 operation. The server sends each connected client the changesets for write
 operations executed by other clients.
 
-The {+service-short+} sync server accepts changesets from any connected sync
+The Device Sync server accepts changesets from any connected sync
 client (including changes in a synced MongoDB cluster) at any time and uses an
 operational transformation algorithm to serialize changes into a linear order
 and resolve conflicting changesets before sending them to connected clients.
@@ -53,8 +53,8 @@ and resolve conflicting changesets before sending them to connected clients.
 
 .. note:: Delta Sync
 
-   When you make a change to a synced object, {+service-short+} does not
-   re-upload the entire object. Instead, {+service-short+} sends only
+   When you make a change to a synced object, App Services does not
+   re-upload the entire object. Instead, App Services sends only
    the difference ("delta") between before and after. The service
    compresses the deltas with :wikipedia:`zlib <Zlib>` compression. This
    reduces network load, which is especially useful in mobile network
@@ -67,7 +67,7 @@ Operational Transformation
 
 An **operational transformation** is a function that, given two changesets,
 produces a third changeset that represents logically applying one of the given
-changesets after the other. {+sync-short+} uses operational transformation to
+changesets after the other. Device Sync uses operational transformation to
 resolve conflicts between changesets from different sync clients that apply to
 the same base state.
 
@@ -115,7 +115,7 @@ HTTPS using `TLS 1.3 <https://datatracker.ietf.org/doc/html/rfc8446>`__.
 Sync Session Process
 --------------------
 
-To initiate, execute, and terminate an {+service-short+} Database sync session, a
+To initiate, execute, and terminate a Device Sync session, a
 Realm SDK and application server send and receive a set of
 protocol-specific requests.
 
@@ -154,7 +154,7 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 
       - a protocol version
       - a WebSocket key
-      - a valid access token for an authenticated {+service-short+} application user
+      - a valid access token for an authenticated App Services application user
 
       The server sends an :mdn:`HTTP 101 Switching Protocols <Web/HTTP/Status/101>`
       response that specifies a WebSocket connection for the SDK. The rest of the
@@ -164,20 +164,20 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
    .. step:: Client Initiates a Sync Session
 
       To begin a sync session, a {+client-sdk+} sends a :sync-client-message:`BIND`
-      request to an {+service+} application server. The request identifies a
+      request to a Device Sync server. The request identifies a
       specific local {+client-database+} file to sync and includes a WebSocket connection key that
       the server will use to open a bidirectional connection to the SDK.
 
       If the SDK is attempting to sync a particular {+client-database+} file for the first time,
       it does not yet possess a server-generated client identifier for the file. In
       this case, the :sync-client-message:`BIND` request also indicates that the
-      {+service-short+} server should allocate one.
+      Device Sync server should allocate one.
 
 
    .. step:: App Services Allocates a New Client File Identifier
 
       If a :sync-client-message:`BIND` request indicates that the SDK needs a client
-      file identifier, the {+service-short+} server generates a unique value for the specified
+      file identifier, the Device Sync server generates a unique value for the specified
       {+client-database+} file and sends it to the SDK in an :sync-server-message:`IDENT`
       response. When the SDK receives the :sync-client-message:`IDENT`, it stores
       the new client identifier persistently in the local {+client-database+} file.
@@ -224,11 +224,11 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 
    .. step:: Client Terminates the Sync Session
 
-      Once a sync session is established, {+service-short+} servers will continue to accept
+      Once a sync session is established, Device Sync servers will continue to accept
       :sync-client-message:`UPLOAD` messages and send
       :sync-server-message:`DOWNLOAD` messages until the SDK terminates the session.
       To terminate a sync session, an SDK sends an :sync-client-message:`UNBIND`
-      request to the {+service-short+} server.
+      request to the Device Sync server.
 
 
 .. _sync-request-types:
@@ -241,8 +241,8 @@ Request Types
 Client -> Server Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following table describes the request types that a sync client can send to an
-{+service-short+} server:
+The following table describes the request types that a sync client can send to a
+Device Sync server:
 
 .. list-table::
    :header-rows: 1
@@ -322,7 +322,7 @@ The following table describes the request types that a sync client can send to a
 Server -> Client Messages
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following table describes the request types that the {+service-short+}
+The following table describes the request types that the Device Sync
 server can send to a sync client:
 
 .. list-table::
@@ -344,7 +344,7 @@ server can send to a sync client:
        
        The changesets in a DOWNLOAD may not be the exact changesets uploaded by
        other clients. Instead, they may be equivalent changesets output by
-       {+sync-short+}'s :ref:`operational transformation
+       Device Sync's :ref:`operational transformation
        <operational-transformations>` algorithm.
    
    * - .. sync-server-message:: UNBOUND

@@ -36,7 +36,7 @@ manual.
 
 .. important:: Change Stream Limitations
    
-   {+backend+} opens a single change stream for each collection with at least
+   Atlas App Services opens a single change stream for each collection with at least
    one enabled Trigger and limits the total number of open change
    streams on each linked cluster across all {+app+}s based on the
    cluster's size. See :ref:`change stream limitations
@@ -165,7 +165,7 @@ Database Triggers have the following configuration options:
 
    * - :guilabel:`Linked Function`
 
-     - Required. The name of the {+service-short+} Function that the Trigger
+     - Required. The name of the Atlas Function that the Trigger
        executes whenever it fires. The Trigger passes the
        :ref:`database event object <database-events>` that
        caused it to fire as the only argument to this Function.
@@ -478,7 +478,7 @@ limit the number of fields that the Trigger processes by using a
         "updateDescription.updatedFields.status": 1
       }
    
-   The change event object that {+service-short+} passes to the trigger function
+   The change event object that App Services passes to the trigger function
    only includes the fields specifed in the projection, as in the following
    example:
    

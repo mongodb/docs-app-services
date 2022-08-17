@@ -17,45 +17,45 @@ Overview
 
 You can create a schema for your {+app+} in one of two ways:
 
-- :ref:`Create a {+frontend-schema+} from an {+service-short+} Schema <create-rom-from-schema>`: 
+- :ref:`Create a {+frontend-schema+} from an App Services Schema <create-rom-from-schema>`: 
   If you have data in your 
   `{+atlas+} <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ 
-  cluster already, MongoDB generates an {+service-short+} Schema by sampling your data. 
-  {+service+} can then translate that {+service-short+} Schema into a {+frontend-schema+} 
-  to use in your mobile application. 
+  cluster already, MongoDB generates a schema by sampling your data.
+  App Services can then translate that schema into a {+frontend-schema+}
+  to use in your mobile application with the Realm SDK.
 
-- :ref:`Create an {+service-short+} Schema from a {+frontend-schema+} <create-schema-from-rom>`: 
+- :ref:`Create a schema from a {+frontend-schema+} <create-schema-from-rom>`:
   Alternatively, if you are developing mobile-first and do not already have 
   data in your {+atlas-short+} cluster, you can translate your {+frontend-schema+} into 
-  an {+service-short+} Schema for use with {+atlas-short+}. Regardless of the approach that you take, 
+  a schema for use with {+atlas-short+}. Regardless of the approach that you take,
   when you configure both your {+atlas-short+} cluster and Mobile application to use 
   the respective data model, changes to the data model between the server 
   and client are auto-updated.
 
 .. _create-rom-from-schema:
 
-Create a {+frontend-schema+} from an {+service-short+} Schema
+Create a {+frontend-schema+} from an App Services Schema
 -------------------------------------------------------
 
 .. note:: Link a {+atlas+} Data Source
    
    Your app must have at least one :ref:`linked data source
-   <data-sources>` in order to define an {+service-short+} data model.
+   <data-sources>` in order to define an App Services data model.
    
    You cannot use sync with a :ref:`serverless instance
    <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
 
 .. procedure::
 
-   .. step:: Define an {+service-short+} Schema
+   .. step:: Define an App Services Schema
 
-      To get started, ensure you have an {+service-short+} Schema defined. {+service+}
-      will translate this {+service-short+} Schema into a {+frontend-schema+} to be
+      To get started, ensure you have an App Services Schema defined. Atlas App Services
+      will translate this App Services Schema into a {+frontend-schema+} to be
       configured and utilized in your mobile application.
 
       .. important:: Primary Key _id Required
 
-         To work with {+sync+}, your data model **must** have a primary key field
+         To work with Atlas Device Sync, your data model **must** have a primary key field
          called ``_id``. ``_id`` can be of type ``string``, ``int``, ``uuid``, ``ObjectId``, or
          ``objectId``.
 
@@ -70,7 +70,7 @@ Create a {+frontend-schema+} from an {+service-short+} Schema
 
       The {+frontend-schema+} defines and validates your data in your mobile
       client application. To view your {+frontend-schema+}, navigate to the
-      :guilabel:`SDKs` page, where you can view your {+service-short+} Schema as a
+      :guilabel:`SDKs` page, where you can view your App Services Schema as a
       generated {+frontend-schema+} in your language of choice.
 
       .. figure:: /images/translate-jsonschema-into-realm-data-model.png
@@ -82,14 +82,14 @@ Create a {+frontend-schema+} from an {+service-short+} Schema
    .. step:: View and Fix Schema Errors
 
 
-      {+service-short+} may fail to generate some or all of your {+frontend-schema+} based on your
-      {+service-short+} Schema. You can view a list of the errors in your {+service-short+} Schema that
-      prevented {+service-short+} from generating the {+frontend-schema+} on the :guilabel:`SDKs`
+      App Services may fail to generate some or all of your {+frontend-schema+} based on your
+      App Services Schema. You can view a list of the errors in your App Services Schema that
+      prevented App Services from generating the {+frontend-schema+} on the :guilabel:`SDKs`
       page of the {+ui+}.
 
       Common errors include mismatched types, and differences in the way
       relationships are represented in the two respective models. For each
-      error or warning, modify your {+service-short+} Schema to fix the specified issue.
+      error or warning, modify your App Services Schema to fix the specified issue.
 
       .. figure:: /images/schema-translation-errors-warnings.png
          :alt: A detailed list in the UI of warnings and errors that occurred during model
@@ -97,11 +97,11 @@ Create a {+frontend-schema+} from an {+service-short+} Schema
          :lightbox:
 
 
-   .. step:: Open an {+service-short+} with the {+frontend-schema+}
+   .. step:: Open a Realm with the {+frontend-schema+}
 
       You can immediately use the generated {+frontend-schema+} in your
       client application. In order to begin enforcing data validation with
-      your data model, you can open an {+service-short+} with the {+frontend-schema+}.
+      your data model, you can open a realm with the {+frontend-schema+}.
       This will prevent improper data from entering your database from your
       mobile client. Click :guilabel:`Copy` on the right-hand side of the
       {+frontend-schema+} for the Object Model you want to integrate into
@@ -126,8 +126,8 @@ Create a {+frontend-schema+} from an {+service-short+} Schema
                 },
                 primaryKey: '_id'
               };
-              // Initialize an {+service-short+} with your {+frontend-schema+}
-              {+service-short+}.open({schema: UserSchema, sync: { /* ... */ }})
+              // Initialize a realm with your {+frontend-schema+}
+              Realm.open({schema: UserSchema, sync: { /* ... */ }})
                 .then(realm => {
                   // ... use the realm instance to read and modify data
                 })
@@ -141,15 +141,15 @@ Create a {+frontend-schema+} from an {+service-short+} Schema
 
 .. _create-schema-from-rom:
 
-Create an {+service-short+} Schema from a {+frontend-schema+}
+Create an App Services Schema from a {+frontend-schema+}
 -------------------------------------------------------
 
 .. note:: Link a {+atlas+} Data Source
    
    Your {+app+} must have at least one :ref:`linked data source
-   <data-sources>` in order to define an {+service-short+} Data Model.
+   <data-sources>` in order to create a schema.
    
-   You cannot use sync with a :ref:`serverless instance
+   You cannot use Device Sync with a :ref:`serverless instance
    <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
 
 .. procedure::
@@ -160,8 +160,8 @@ Create an {+service-short+} Schema from a {+frontend-schema+}
 
       You can alter or define a {+frontend-schema+} through your mobile client SDK.
       Changes to your {+frontend-schema+} are only allowed when
-      :guilabel:`Development Mode` is on in the {+service+} UI. {+service+} will
-      reflect these changes to your {+frontend-schema+} in your {+service-short+} Schema used for
+      :guilabel:`Development Mode` is on in the Atlas App Services UI. App Services will
+      reflect these changes to your {+frontend-schema+} in your App Services Schema used for
       Atlas.
 
 
@@ -171,13 +171,13 @@ Create an {+service-short+} Schema from a {+frontend-schema+}
       your data model with it to enforce different data validation rules
       based on those changes. While :guilabel:`Development Mode` is on, you
       can edit your {+frontend-schema+} in your client code. Data Validation
-      occurs when :guilabel:`Development Mode` is off, so {+service+} does
+      occurs when :guilabel:`Development Mode` is off, so App Services does
       not accept changes to your {+frontend-schema+} while
       :guilabel:`Development Mode` is not on.
 
       .. important:: Primary Key _id Required
 
-         To work with {+sync+}, your data model **must** have a primary key field
+         To work with Atlas Device Sync, your data model **must** have a primary key field
          called ``_id``. ``_id`` can be of type ``string``, ``int``, or
          ``objectId``.
 
@@ -189,7 +189,7 @@ Create an {+service-short+} Schema from a {+frontend-schema+}
          over the amount of user data that is stored, management creates a
          new requirement to make the user's birthday field an optional
          field. Application developers turn on :guilabel:`Development Mode`
-         in the {+service+} UI and then edit their user model within
+         in the App Services UI and then edit their user model within
          their client code.
 
          .. code-block:: javascript
@@ -205,7 +205,7 @@ Create an {+service-short+} Schema from a {+frontend-schema+}
              primaryKey: '_id'
            };
 
-           {+service-short+}.open({schema: realmObjectModel, sync: {/*...*/}})
+           Realm.open({schema: realmObjectModel, sync: {/*...*/}})
              .then(realm => {
                // ... use the realm instance to read and modify data
              })
@@ -218,21 +218,21 @@ Create an {+service-short+} Schema from a {+frontend-schema+}
          - :ref:`Sync Data on React Native <react-native-sync-changes-between-devices>`
 
 
-   .. step:: Update Your {+service-short+} Schema with the {+frontend-schema+} Changes
+   .. step:: Update Your App Services Schema with the {+frontend-schema+} Changes
 
 
-      While :guilabel:`Development Mode` is on, {+service+} doesn't validate
+      While :guilabel:`Development Mode` is on, Atlas App Services doesn't validate
       writes against your data model, allowing you to freely update your Realm
       Object Model. When you turn off :guilabel:`Development Mode`, MongoDB
-      {+service-short+} automatically updates your {+service-short+} Schema and starts to enforce data
+      App Services automatically updates your App Services Schema and starts to enforce data
       validation for your Atlas cluster based on it.
 
       Click the "Turn Dev Mode Off" button on the top banner or in the
       :guilabel:`Sync` screen to turn off :guilabel:`Development Mode`. Once you
       turn off :guilabel:`Development Mode`, the "Development Mode is OFF" modal
-      will appear. The modal indicates that {+service+} has stopped accepting new
-      data model changes from clients. Click the "View my {+service-short+} Schema" button on
-      the modal to view your updated {+service-short+} Schema.
+      will appear. The modal indicates that App Services has stopped accepting new
+      data model changes from clients. Click the "View My Schema" button on
+      the modal to view your updated App Services Schema.
 
       .. note::
 

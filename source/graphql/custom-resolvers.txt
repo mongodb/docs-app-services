@@ -43,7 +43,7 @@ Procedure
 
    .. step:: Define the Resolver Field Name
 
-      Specify a descriptive name for the resolver in the :guilabel:`GraphQL Field
+      Specify Atlas App Servicese name for the resolver in the :guilabel:`GraphQL Field
       Name` input. App Services exposes the custom resolver in its parent type using this
       name, so the name should describe what the resolver does in a way that is
       useful to developers who work with the GraphQL API.
@@ -54,7 +54,7 @@ Procedure
 
    .. step:: Define the Parent Type
 
-      {+service-short+} exposes every custom resolver as a field on a parent type. The parent
+      App Services exposes every custom resolver as a field on a parent type. The parent
       type can be a root-level :ref:`query <graphql-query-resolvers>`,
       :ref:`mutation <graphql-mutation-resolvers>`, or a :ref:`generated document
       type <graphql-document-types>`.
@@ -124,7 +124,7 @@ Procedure
       <graphql-input-types>` or define a new custom input type specifically for the
       resolver.
 
-      If you specify an input type, {+service-short+} exposes the ``input`` parameter in the
+      If you specify an input type, App Services exposes the ``input`` parameter in the
       custom resolver's generated GraphQL schema definition as an optional parameter
       that accepts the specified input type. If you don't specify an input type, the
       custom resolver does not accept any arguments.
@@ -203,7 +203,7 @@ Procedure
                    }
 
          * - :guilabel:`Custom Type`
-           - {+service-short+} generates a new input type specifically for the resolver based on
+           - App Services generates a new input type specifically for the resolver based on
              a :ref:`schema <schemas>` that you define. The schema must be an
              ``object`` that contains at least one property and a ``title`` field
              that defines a unique name for the generated input type.
@@ -233,7 +233,7 @@ Procedure
       All GraphQL resolvers must return a payload that conforms to a specific type
       in the schema. For a custom resolver, you can use an existing :ref:`generated
       document type <graphql-document-types>`, define a new custom payload type
-      specifically for the resolver, or use a default payload. {+service-short+} includes the
+      specifically for the resolver, or use a default payload. App Services includes the
       specified payload type in the custom resolver's generated GraphQL schema
       definition.
 
@@ -329,7 +329,7 @@ Procedure
                    }
 
          * - :guilabel:`Custom Type`
-           - {+service-short+} generates a new payload type specifically for the resolver based
+           - App Services generates a new payload type specifically for the resolver based
              on a :ref:`schema <schemas>` that you define. The schema must be an
              ``object`` that contains at least one property and a ``title`` field
              that defines a unique name for the generated input type.
@@ -360,8 +360,8 @@ Procedure
       function and returns the result, which must conform to the resolver's
       :guilabel:`Payload Type`.
 
-      {+service-short+} passes the function any input data from the operation, if applicable. If
-      the resolver is a computed property on a document type, {+backend-short+}
+      App Services passes the function any input data from the operation, if applicable. If
+      the resolver is a computed property on a document type, App Services
       passes the function the specific document that the resolver was called on.
 
       A custom resolver function has one of two possible signatures, depending on
@@ -478,7 +478,7 @@ Custom Query Resolver
 The sales team's hypothetical dashboard uses a custom query resolver that
 returns aggregated sales data for a specific month.
 
-{+service-short+} generates schema definitions for the resolver's custom input and payload
+App Services generates schema definitions for the resolver's custom input and payload
 types and adds the resolver to its parent type, the root-level ``Query``:
 
 .. code-block:: graphql
@@ -646,7 +646,7 @@ Custom Mutation
 The sales team's hypothetical dashboard uses a custom mutation resolver that
 adds a string note to a specific ``Sale`` document, identified by its ``_id``.
 
-{+service-short+} generates schema definitions for the resolver's custom input type and adds
+App Services generates schema definitions for the resolver's custom input type and adds
 the resolver to its parent type, the root-level ``Mutation``:
 
 .. code-block:: graphql
@@ -808,7 +808,7 @@ computed property to each ``Sale`` document. When an operation requests the
 computed field for a given ``Sale``, the resolver queries an external system and
 returns support cases filed by the associated customer.
 
-{+service-short+} generates schema definitions for the resolver's custom payload type and
+App Services generates schema definitions for the resolver's custom payload type and
 adds the resolver to its parent type, ``Sale``:
 
 .. code-block:: graphql
