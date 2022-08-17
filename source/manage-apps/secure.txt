@@ -238,20 +238,24 @@ CSV
    Note to docs writer: the hosted csv and json files are managed in the
    docs-realm-sdks repo: https://github.com/10gen/docs-realm-sdks   
 
-Device Sync
-^^^^^^^^^^^
+.. note::
 
-The above IP list only applies to outgoing requests from {+service-short+} functions,
-including triggers and HTTPS endpoints that make outgoing requests.
+   The above IP list only applies to outgoing requests from {+service-short+} functions,
+   including triggers and HTTPS endpoints that make outgoing requests.
 
-For requests that originate from the Sync server, we recommend allowlisting
-the entire subnet of the App's Deployment Region and cloud provider. You can
-find the Deployment Region in the {+ui+} under :guilabel:`App Settings >
-General > Deployment Region`.
+   For requests that originate from the Sync server, we recommend allowlisting
+   the entire subnet of the App's Deployment Region and cloud provider. You can
+   find the Deployment Region in the {+ui+} under :guilabel:`App Settings >
+   General > Deployment Region`.
 
-If your application firewall supports DNS filtering, you can access 
-``*.realm.mongodb.com`` via HTTPS or port 443. This 
-bypasses the need to allowlist specific IPs for outbound requests.
+.. _security-dns-filtering-sync-client-to-sync-server:
+
+Communicate from the Client to the Sync Server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you use Device Sync, you can use DNS filtering to allow connections
+from the Sync client to the Sync server. Using DNS filtering, you can access 
+``*.realm.mongodb.com`` via HTTPS or port 443.
 
 .. _security-allowed-request-origins:
 
