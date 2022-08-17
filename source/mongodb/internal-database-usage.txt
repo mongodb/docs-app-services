@@ -4,9 +4,9 @@
 Internal Database Usage
 =======================
 
-{+service+} uses your linked MongoDB Atlas cluster to manage some
+Atlas App Services uses your linked MongoDB Atlas cluster to manage some
 internal operations. In general, you do not need to know about these
-operations to use {+service-short+}.
+operations to use App Services.
 
 System-Generated Cluster Users
 ------------------------------
@@ -30,7 +30,7 @@ using another tool such as the :binary:`~bin.mongo` shell or
 {+compass+}. There are no special considerations when reading
 data from a linked cluster with another tool.
 
-While running update operations, {+backend+} temporarily adds a
+While running update operations, App Services temporarily adds a
 reserved field, ``_id__baas_transaction``, to documents.
 Once a document is successfully updated, {+backend+} removes this
 field. If you want to use another tool to modify data in a
@@ -124,7 +124,7 @@ Consider the following scenario:
 
 **Summary**
   If your data is used by Sync clients but can also be created or
-  modified outside of {+sync+}, you must ensure those creations and
+  modified outside of Atlas Device Sync, you must ensure those creations and
   modifications match the defined object schema on the collection. For
   documents that have failed, you can replace, update, or delete &
   re-add each document.
