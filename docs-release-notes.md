@@ -1,3 +1,11 @@
+# August 19, 2022
+
+## Manage & Deploy Apps
+- Secure: Add info about DNS Filtering when communicating from a Sync client to the Sync Server
+
+## Device Sync
+- Define Data Access Patterns/Sync Rules and Permissions: Restore collection-specific rule example and info
+
 # August 12, 2022
 
 ## Manage & Deploy Apps
