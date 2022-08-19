@@ -345,21 +345,15 @@ objects regardless of their type. You use :ref:`expressions
 <expressions>` to determine when a role applies and to define dynamic
 field-level permissions for a specific role.
 
-.. _flexible-sync-collection-level-rules:
-
-Collection-Level Rules
-~~~~~~~~~~~~~~~~~~~~~~
-
-You can create rules that apply to an entire collection, and combine
-them with default roles. This example shows applying a custom rule to the 
-``Employees`` collection. This app also links to a ``Store`` collection 
-that is not listed in the configuration, and has no custom collection rule, 
-so it evaluates to the default role.
+You can use type-specific roles alongside default roles. This example shows 
+applying a custom rule to the ``Employees`` collection. This app also 
+links to a ``Store`` collection that is not listed in the configuration, 
+and has no custom type-specific rule, so it evaluates to the default role.
 
 Sync attempts to find a matching session role by traversing the session
 roles in descending order. List the most specific custom session roles
 first, getting gradually more general, so the user "falls through" to
-the correct session role. If no collection-specific role applies, and you 
+the correct session role. If no type-specific role applies, and you 
 have defined a default role that does apply, the user gets the default role 
 permissions.
 
