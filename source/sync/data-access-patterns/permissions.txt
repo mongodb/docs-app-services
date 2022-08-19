@@ -345,6 +345,73 @@ objects regardless of their type. You use :ref:`expressions
 <expressions>` to determine when a role applies and to define dynamic
 field-level permissions for a specific role.
 
+.. _flexible-sync-collection-level-rules:
+
+Collection-Level Rules
+^^^^^^^^^^^^^^^^^^^^^^
+
+You can create rules that apply to an entire collection, and combine
+them with default roles. This example shows applying a custom rule to the 
+``Employees`` collection. This app also links to a ``Store`` collection 
+that is not listed in the configuration, and has no custom collection rule, 
+so it evaluates to the default role.
+
+Sync attempts to find a matching session role by traversing the session
+roles in descending order. List the most specific custom session roles
+first, getting gradually more general, so the user "falls through" to
+the correct session role. If no role applies, and you have defined a
+default role, the user gets the default role permissions.
+
+.. code-block:: json
+
+   {
+    "rules": {
+      "Employees": [
+        {
+          "name": "employeeWriteSelf",
+          "applyWhen": {},
+          "read": {},
+          "write": {
+            "employee_id": "%%user.id"
+          }
+        }
+      ]
+    },
+    "defaultRoles": [
+      {
+        "name": "admin",
+        "applyWhen": {
+          "%%user.custom_data.isGlobalAdmin": true
+        },
+        "read": {},
+        "write": {}
+      },
+      {
+        "name": "owner",
+        "applyWhen": {
+          "%%true": {
+            "%function": {
+              "name": "isOwner",
+              "arguments": [
+                "%%user.id"
+              ]
+            }
+          }
+        },
+        "read": {},
+        "write": {
+          "owner_id": "%%user.custom_data.ownerId"
+        }
+      },
+      {
+        "name": "shoppers",
+        "applyWhen": {},
+        "read": {},
+        "write": false
+      }
+    ]
+  }
+
 Document-Level Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -542,69 +609,3 @@ information, see :ref:`{+sync+} Configuration Files <appconfig-sync>`.
 
         - May not read or write any other fields despite having document-level
           access to the document.
-
-.. _flexible-sync-custom-and-default-roles:
-
-Custom Rules Per Collection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can combine custom rules per collection with default roles. This example 
-shows applying a custom rule to the ``Employees`` collection. This app also 
-links to a ``Store`` collection that is not listed in the configuration, 
-and has no custom collection rule, so it evaluates to the default role.
-
-Sync attempts to find a matching session role by traversing the session
-roles in descending order. List the most specific custom session roles
-first, getting gradually more general, so the user "falls through" to
-the correct session role. If no role applies, and you have defined a
-default role, the user gets the default role permissions.
-
-.. code-block:: json
-
-   {
-    "rules": {
-      "Employees": [
-        {
-          "name": "employeeWriteSelf",
-          "applyWhen": {},
-          "read": {},
-          "write": {
-            "employee_id": "%%user.id"
-          }
-        }
-      ]
-    },
-    "defaultRoles": [
-      {
-        "name": "admin",
-        "applyWhen": {
-          "%%user.custom_data.isGlobalAdmin": true
-        },
-        "read": {},
-        "write": {}
-      },
-      {
-        "name": "owner",
-        "applyWhen": {
-          "%%true": {
-            "%function": {
-              "name": "isOwner",
-              "arguments": [
-                "%%user.id"
-              ]
-            }
-          }
-        },
-        "read": {},
-        "write": {
-          "owner_id": "%%user.custom_data.ownerId"
-        }
-      },
-      {
-        "name": "shoppers",
-        "applyWhen": {},
-        "read": {},
-        "write": false
-      }
-    ]
-  }
