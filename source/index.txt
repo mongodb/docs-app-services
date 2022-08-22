@@ -4,9 +4,9 @@
 
 .. _realm-cloud:
 
-==========================
-Atlas Application Services
-==========================
+========================================
+What are the Atlas Application Services?
+========================================
 
 .. default-domain:: mongodb
 
@@ -40,37 +40,29 @@ Atlas Application Services
 
 .. introduction::
    
-   MongoDB Atlas includes a suite of fully-managed services that power
-   user-facing applications and automated systems. You can use the
-   services to augment or replace a traditional application server.
-
-   Services let you write the code and configuration that matters for
-   your app without worrying about how to provision and manage the
-   infrastructure it runs on.
+   Atlas Application Services are fully-managed backend services and APIs that help you build apps and services with MongoDB Atlas faster. You can use the services to build apps, integrate Atlas to other services, and connect to your Atlas data without managing servers.
    
    .. button:: Start Building
       :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
    
-   .. note:: Usage-Based Pricing & Free Tier
+   .. note:: Generous Monthly Free Tier
       
-      Application services have usage-based billing and include a generous monthly
-      free tier for small development and production apps, so you can get started
-      at no cost. For more details, see :doc:`Billing </billing>`.
+      The monthly free tier is perfect for learning and exploring Atlas’s cloud services or for smaller production apps. For more details, see :doc:`Billing </billing>`.
 
 .. image:: /images/plp/logic-tech.png
    :alt: Atlas App Services Illustration
 
-.. kicker:: Access Your Data
+.. kicker:: What You Can Do
 
-Read And Write Data From Any App With Powerful APIs
----------------------------------------------------
+Power Data-Driven Apps And Services
+-----------------------------------
 
-Services have native access to data in your Atlas clusters and let you
-expose secure APIs to work with that data.
+Services like Device Sync, APIs, and Triggers make it easy to build and
+run virtually any app or backend service on top of Atlas.
 
 .. tabs::
 
-   .. tab:: Device Sync
+   .. tab:: Sync Atlas and Devices
       :tabid: device-sync
 
       .. procedure::
@@ -137,7 +129,42 @@ expose secure APIs to work with that data.
       .. image:: /images/plp/real-time-collaborations.png
          :alt: Real-Time Collaboration
 
-   .. tab:: GraphQL
+   .. tab:: Access Atlas Data With a REST-like API
+      :tabid: data-api
+
+      .. procedure::
+
+         .. step:: Generate CRUD & Aggregation Endpoints
+
+            The Data API includes built-in HTTPS endpoints that handle
+            generic read, write, and aggregation operations. To generate
+            them, just enable the Data API for your app.
+         
+         .. step:: Define Custom Endpoints
+
+            To tailor your API for your application's specific use
+            cases, you can define your own HTTPS endpoints that handle
+            incoming requests and return responses.
+
+         .. step:: Access Data Securely from Anywhere
+
+            The Data API uses your app's built-in user authentication
+            and rules to make sure your data is safe. You can call
+            endpoints from anywhere that supports HTTPS, including CI/CD
+            workflows, external service webhooks, and more.
+
+            .. code-block:: bash
+               
+               curl -X POST \
+                    https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello \
+                    -H 'api-key: <API Key>' \
+                    -H 'Content-Type: application/json' \
+                    -d '{ "message": "Hello, world!" }'
+
+      .. image:: /images/plp/power-applications.png
+         :alt: Build a Secure HTTPS API
+
+   .. tab:: Access Atlas Data With A GraphQL API
       :tabid: graphql
 
       .. procedure::
@@ -230,42 +257,7 @@ expose secure APIs to work with that data.
       .. image:: /images/plp/apis-tech.png
          :alt: Build a Secure GraphQL API
 
-   .. tab:: Data API
-      :tabid: data-api
-
-      .. procedure::
-
-         .. step:: Generate CRUD & Aggregation Endpoints
-
-            The Data API includes built-in HTTPS endpoints that handle
-            generic read, write, and aggregation operations. To generate
-            them, just enable the Data API for your app.
-         
-         .. step:: Define Custom Endpoints
-
-            To tailor your API for your application's specific use
-            cases, you can define your own HTTPS endpoints that handle
-            incoming requests and return responses.
-
-         .. step:: Access Data Securely from Anywhere
-
-            The Data API uses your app's built-in user authentication
-            and rules to make sure your data is safe. You can call
-            endpoints from anywhere that supports HTTPS, including CI/CD
-            workflows, external service webhooks, and more.
-
-            .. code-block:: bash
-               
-               curl -X POST \
-                    https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello \
-                    -H 'api-key: <API Key>' \
-                    -H 'Content-Type: application/json' \
-                    -d '{ "message": "Hello, world!" }'
-
-      .. image:: /images/plp/power-applications.png
-         :alt: Build a Secure HTTPS API
-
-   .. tab:: Triggers
+   .. tab:: Build Event-Driven Services On Atlas
       :tabid: triggers
       
       .. procedure::
