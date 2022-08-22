@@ -242,7 +242,7 @@ UI or by importing the function configuration and source code with
             Functions in App Services always execute in the context of a specific
             application user or as a :ref:`system user <system-user>` that
             bypasses rules. To configure the function's execution user, specify
-            the type of authentication that {+service-short+} should use.
+            the type of authentication that App Services should use.
 
             .. list-table::
                :widths: 20 80
@@ -282,9 +282,9 @@ UI or by importing the function configuration and source code with
 
          .. step:: Configure Function Execution Logs
 
-            By default, {+service-short+} includes the arguments that a function received in
+            By default, App Services includes the arguments that a function received in
             the :doc:`log entry </logs/function>` for each execution of the
-            function. If you want to prevent {+service-short+} from logging the arguments,
+            function. If you want to prevent App Services from logging the arguments,
             disable :guilabel:`Log Function Arguments`.
 
             .. figure:: /images/log-function-arguments-realm-ui.png
@@ -297,8 +297,8 @@ UI or by importing the function configuration and source code with
 
             You can dynamically authorize requests based on the contents of each request
             by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`.
-            {+service-short+} evaluates the expression whenever the function is called. If
-            you do not specify an expression then {+service-short+} automatically
+            App Services evaluates the expression whenever the function is called. If
+            you do not specify an expression then App Services automatically
             authorizes all authenticated incoming requests.
 
             The expression can expand standard :ref:`expression variables <expressions>`,
@@ -373,7 +373,7 @@ UI or by importing the function configuration and source code with
 
          .. step:: Write the Function Source Code
 
-            {+service-short+} functions run standard ES6+ JavaScript functions that you export from
+            Atlas Functions run standard ES6+ JavaScript functions that you export from
             individual files. Create a ``.js`` file with the same name as the function in
             the ``functions`` directory or one of its subdirectories.
 
@@ -407,7 +407,7 @@ UI or by importing the function configuration and source code with
             .. note::
 
                You can use most modern (ES6+) JavaScript features in functions, including
-               async/await, destructuring, and template literals. To see if {+service-short+} supports
+               async/await, destructuring, and template literals. To see if App Services supports
                a specific feature, see :ref:`JavaScript Support <js-support>`.
 
 
@@ -425,7 +425,7 @@ UI or by importing the function configuration and source code with
                  "can_evaluate": { <JSON Expression> },
                  "disable_arg_logs": <Boolean>,
                  "run_as_system": <Boolean>,
-                 "run_as_user_id": "<{+service-short+} User ID>",
+                 "run_as_user_id": "<App Services User ID>",
                  "run_as_user_id_script_source": "<Function Source Code>"
                }
 
@@ -433,10 +433,10 @@ UI or by importing the function configuration and source code with
 
                .. step:: Set User Authentication
 
-                  Functions in {+service+} always execute in the context of a specific
+                  Functions in App Services always execute in the context of a specific
                   application user or as a :ref:`system user <system-user>` (which
                   bypasses rules). To configure the function's execution user, specify
-                  the type of authentication that {+service-short+} should use:
+                  the type of authentication that App Services should use:
 
                   - **System**
 
@@ -458,7 +458,7 @@ UI or by importing the function configuration and source code with
 
                        {
                          "run_as_system": false,
-                         "run_as_user_id": "<{+service-short+} User Id>",
+                         "run_as_user_id": "<App Services User Id>",
                          "run_as_user_id_script_source": ""
                        }
 
@@ -487,7 +487,7 @@ UI or by importing the function configuration and source code with
                   You can dynamically authorize requests based on the contents of each request
                   by defining a :guilabel:`Can Evaluate` :ref:`expression <expressions>`.
                   App Services evaluates the expression whenever the function is called. If you
-                  do not specify an expression then {+backend+} automatically authorizes all
+                  do not specify an expression then App Services automatically authorizes all
                   authenticated incoming requests.
 
                   The expression can expand standard :ref:`expression variables <expressions>`,

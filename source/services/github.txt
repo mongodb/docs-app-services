@@ -18,7 +18,7 @@ Overview
 GitHub is a web-based development platform for hosting and reviewing
 Git repositories.
 
-The {+service+} GitHub service allows your application to react to events in
+The Atlas App Services GitHub service allows your application to react to events in
 a GitHub repository, such as new pull requests or issues.
 
 .. _github-service-configuration:
@@ -132,14 +132,14 @@ Configuration
    * - | :guilabel:`Respond With Result`
        | *respond_result*
 
-     - Required. If ``true``, {+service-short+} sends the return value of the
+     - Required. If ``true``, App Services sends the return value of the
        webhook function to GitHub in the response body.
 
    * - | :guilabel:`Run Webhook As`
        | *run_as_user_id*
        | *run_as_user_id_script_source*
 
-     - Optional. The id of the :doc:`{+service-short+} user </authentication>` that
+     - Optional. The id of the :doc:`App Services user </authentication>` that
        executes the webhook function when the webhook is called.
 
        .. tabs-realm-admin-interfaces::
@@ -154,11 +154,11 @@ Configuration
              :tabid: cli
 
              You can specify the user id directly in ``run_as_user_id`` or
-             provide a stringified :doc:`{+service-short+} Function
+             provide a stringified :doc:`Atlas Function
              </functions>` that accepts the webhook payload and returns the user
              id in ``run_as_user_id_script_source``. If you do not specify a
              specific user id or a function that resolves to a user id,
-             {+service-short+} executes the webhook function as the :ref:`system
+             App Services executes the webhook function as the :ref:`system
              user <system-user>` that has full access to MongoDB CRUD and
              Aggregation APIs and bypasses all rules and schema validation.
 
@@ -175,7 +175,7 @@ Configuration
 Request Payload
 ~~~~~~~~~~~~~~~
 
-{+service-short+} automatically passes a ``payload`` document as the first argument
+App Services automatically passes a ``payload`` document as the first argument
 to incoming webhook functions. In a GitHub Service incoming webhook the
 ``payload`` object represents the GitHub event that caused GitHub to
 call the webhook.

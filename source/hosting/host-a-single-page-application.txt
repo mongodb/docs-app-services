@@ -18,17 +18,17 @@ Overview
 Many web applications built with modern frameworks, like React, Vue, and
 Angular, are single-page applications (SPAs) that dynamically handle
 routing and rendering client-side instead of fetching each rendered page
-from the server. You can use {+service+} to host your SPA and serve it to
+from the server. You can use Atlas App Services to host your SPA and serve it to
 clients.
 
-To host your app, you need to specify that it's a SPA in {+service-short+}. By
-default, {+service-short+} handles requests for a given resource by returning the
+To host your app, you need to specify that it's a SPA in App Services. By
+default, App Services handles requests for a given resource by returning the
 file hosted at the specified resource path or a 404 if no file matches
 the path. However, SPAs render in a single, specific HTML file so all
 requests should return that file regardless of the requested resource
 path.
 
-This guide covers how you can configure {+service-short+} Hosting to redirect all
+This guide covers how you can configure App Services Hosting to redirect all
 resource requests to a single file to support the SPA pattern.
 
 .. include:: /hosting/spa-404-note.rst
@@ -43,7 +43,7 @@ Procedure
       
       .. procedure::
 
-         .. step:: Upload Your Built Application to {+service-short+}
+         .. step:: Upload Your Built Application to App Services
 
             Single-page applications render in a single, specific HTML file,
             typically ``/index.html``. The file should include the necessary
@@ -54,10 +54,10 @@ Procedure
 
             When you are ready to host your SPA, run your application's build
             script and then :doc:`upload the build folder
-            </hosting/upload-content-to-app-services>` to {+service+}.
+            </hosting/upload-content-to-app-services>` to App Services.
 
 
-         .. step:: Configure {+service-short+} to Serve Your Application
+         .. step:: Configure App Services to Serve Your Application
 
             Once you've started hosting your application files, you can
             immediately access your SPA by requesting the root HTML file directly.
@@ -65,7 +65,7 @@ Procedure
             404. This can break the expected behavior of a SPA that uses a
             client-side router or otherwise relies on the URL path.
 
-            To configure {+service-short+} to serve the SPA's root page for all requests:
+            To configure App Services to serve the SPA's root page for all requests:
 
             1. Navigate to the :guilabel:`Hosting` page in the {+ui+} and then
                click the :guilabel:`Settings` tab.
@@ -122,7 +122,7 @@ Procedure
             ``/hosting/files`` directory of your application directory.
 
 
-         .. step:: Configure {+service-short+} to Serve Your Application
+         .. step:: Configure App Services to Serve Your Application
 
             In ``hosting/config.json``, set ``default_response_code`` to ``200`` and set
             ``default_error_path`` to the :ref:`resource path <hosting-resource-path>` of
