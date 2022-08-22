@@ -67,67 +67,30 @@ run virtually any app or backend service on top of Atlas.
 
       .. procedure::
 
-         .. step:: Create Your Data Model
+         .. step:: Install the Realm SDK
 
-            Device Sync uses the native language objects to define a
-            data model and work with data.
+            Device Sync uses Realm's native language objects to define a
+            data model and work with data. To install an SDK, see
+            :realm:`Realm SDKs </>`.
 
-            .. tabs-realm-languages::
-
-               .. tab::
-                  :tabid: swift
-
-                  .. code-block:: swift
-                     
-                     class CoffeeDrink: Object {
-                         @Persisted var name = ""
-                         @Persisted var hotOrCold: String?
-                         @Persisted var rating = 0
-                     }
-
-               .. tab::
-                  :tabid: javascript
-
-                  .. code-block:: javascript
-                     
-                     const Cat = {
-                       name: "Cat",
-                       properties: {
-                         _id: "objectId",
-                         name: "string",
-                         age: "int",
-                         type: "string",
-                       },
-                     };
-
-               .. tab::
-                  :tabid: kotlin
-
-                  .. code-block:: swift
-                     
-                     class Frog : RealmObject {
-                         var name: String = ""
-                         var age: Int = 0
-                         var species: String? = null
-                         var owner: String? = null
-                     }
-
-         .. step:: Set Up Sync
+         .. step:: Enable Sync
 
             In your Atlas App, specify which fields users can query and
-            define read and write permissions. Once Sync is turned on,
-            you can start syncing from any app with the Realm SDKs.
+            define read and write permissions in Dev Mode. Once Sync is
+            turned on, you can start syncing from any app with the Realm
+            SDKs.
 
-         .. step:: Subscribe to Data
+            To enable Sync, see :ref:`Enable Atlas Device Sync <enable-sync>`.
+
+         .. step:: Subscribe to Data Changes
             
             In your client app, define subscriptions that use regular
             Realm queries to sync a subset of all syncable data. Data
             that you subscribe to is automatically kept up-to-date and
             any changes you make get sent to all other Sync clients.
             
-
-      .. image:: /images/plp/real-time-collaborations.png
-         :alt: Real-Time Collaboration
+      .. image:: /images/plp/realm-sync.png
+         :alt: Realm Sync Illustration
 
    .. tab:: Access Atlas Data With a REST-like API
       :tabid: data-api
