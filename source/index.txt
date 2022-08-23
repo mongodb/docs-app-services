@@ -58,7 +58,7 @@ run virtually any app or backend service on top of Atlas.
 
 .. tabs::
 
-   .. tab:: Sync Atlas and Devices
+   .. tab:: Sync Data Across Devices
       :tabid: device-sync
 
       .. procedure::
@@ -88,51 +88,65 @@ run virtually any app or backend service on top of Atlas.
       .. image:: /images/plp/realm-sync.png
          :alt: Realm Sync Illustration
 
-   .. tab:: Access Atlas Data With a REST-like API
+   .. tab:: Access Data with a REST API
       :tabid: data-api
 
       .. procedure::
 
-         .. step:: Generate CRUD & Aggregation Endpoints
+         .. step:: Enable the Data API CRUD & Aggregation Endpoints
 
-            The Data API includes built-in HTTPS endpoints that handle
-            generic read, write, and aggregation operations. To generate
-            them, just enable the Data API for your app.
+            The MongoDB Atlas Data API lets you read and write data in
+            Atlas with standard HTTPS requests. Once enabled, you can
+            use a built-in endpoint to work with data.
+
+            See :ref:`Data API Endpoints <data-api-endpoints>`.
          
          .. step:: Define Custom Endpoints
 
-            To tailor your API for your application's specific use
-            cases, you can define your own HTTPS endpoints that handle
-            incoming requests and return responses.
+            You can tailor your API with custom endpoints for your
+            application. Each endpoint handles incoming HTTPS requests
+            for a specific route and returns fully configurable
+            responses.
 
-         .. step:: Access Data Securely from Anywhere
+            See :ref:`Custom Endpoints <custom-endpoints>`.
+         
+         .. step:: Secure Your Data With An API Key
 
-            The Data API uses your app's built-in user authentication
-            and rules to make sure your data is safe. You can call
-            endpoints from anywhere that supports HTTPS, including CI/CD
-            workflows, external service webhooks, and more.
+            Create an API key from the API Key Authentication Provider.
 
+         .. step:: Send a Data API Request
+
+            Send requests from any server-side environment that supports
+            HTTPS.
+            
             .. code-block:: bash
                
                curl -X POST \
-                    https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello \
-                    -H 'api-key: <API Key>' \
+                    https://data.mongodb-api.com/app/<YOUR APP ID>/endpoint/data/v1/action/insertOne \
+                    -H 'api-key: <YOUR API KEY>' \
                     -H 'Content-Type: application/json' \
-                    -d '{ "message": "Hello, world!" }'
+                    -d '{
+                      "dataSource": "mongodb-atlas",
+                      "database": "learn-data-api",
+                      "collection": "hello",
+                      "document": {
+                        "text": "Hello from the Data API!",
+                      }
+                    }'
 
       .. image:: /images/plp/connection.png
          :alt: Build a Secure HTTPS API
 
-   .. tab:: Access Atlas Data With A GraphQL API
+   .. tab:: Access Data with GraphQL
       :tabid: graphql
 
       .. procedure::
 
-         .. step:: Define Your Types
+         .. step:: Define A JSON Schema For Your Data
 
-            The GraphQL API automatically generates a schema for you
-            with queries and mutations based on object types that you
-            define.
+            The GraphQL API automatically generates a hosted endpoint
+            with GraphQL queries and mutations based on JSON schemas
+            for the documents in your database.
 
             .. tabs::
 
@@ -164,86 +178,60 @@ run virtually any app or backend service on top of Atlas.
                        location: String!
                      }
 
-         .. step:: Define Custom Queries & Mutations
+         .. step:: Secure Your API
 
-            You can extend your GraphQL API with custom resolvers to
-            handle even your app's most complex queries and mutations.
-
-            .. code-block:: graphql
-
-               query {
-                 hello(input: { name: "World" }) {
-                   greeting
-                 }
-               }
-
-         .. step:: Access Data Securely from Anywhere
-
-            The GraphQL API uses your app's built-in user authentication
-            and rules to make sure your data is safe.
-
-            .. io-code-block::
+            Require requests to include an API key or authentication
+            credentials for your app. 
             
-               .. input::
-                  :language: graphql
+            See :ref:`Authentication Providers </authentication>`.
 
-                  query GetUpcomingMeetings($Now: DateTime!) {
-                    meetings(query: { start_gt: $Now }) {
-                      _id
-                      start
-                      end
-                      location
-                    }
-                  }
+         .. step:: Send Your First Request
+
+            Send your first GraphQL request from any server-side or
+            frontend environment that supports HTTPS. You can also use a
+            specialized GraphQL request tool or library.
             
-               .. output::
-                  :language: json
-                  :visible: false
-
-                  {
-                    "data": {
-                      "meetings": [
-                        {
-                          "_id": "62ebf7d17e964cfb6b2e6025",
-                          "start": "2022-08-01T12:15:00.000Z",
-                          "end": "2022-08-01T12:45:00.000Z",
-                          "location": "NYC-3738"
-                        }
-                      ]
-                    }
-                  }
+            Learn how to :realm:`Send GraphQL Requests with Apollo
+            Client </web/graphql-apollo-react/>`.
 
       .. image:: /images/plp/connection.png
          :alt: Build a Secure GraphQL API
 
-   .. tab:: Build Event-Driven Services On Atlas
+   .. tab:: Build Event-Driven Services
       :tabid: triggers
       
       .. procedure::
 
-         .. step:: Choose a Trigger Type
+         .. step:: Create and configure your Trigger
 
-            You can respond to database events and application user
-            activity or run on a schedule.
+            You can respond to database CRUD events and application user
+            activity as the occur or run triggers on a schedule. You can
+            also set additional conditions for when your trigger can
+            run. For example, you can set a database trigger to run only
+            for events where a document's date property was updated.
 
-         .. step:: Specify how the trigger runs
+         .. step:: Write the Trigger's Handler Logic
 
-            Triggers only run when specific conditions that you define
-            are met. For example, a database trigger can run only for
-            events where a document's ``name`` property was updated.
+            Define what happens when the trigger runs in response to an
+            event. The trigger can pass data about each event to AWS
+            Eventbridge or a serverless JavaScript function that you
+            write. You can import dependencies from npm and write custom
+            code to do anything you want to.
+            
+            See :doc:`Trigger Function Examples </triggers/examples>`
 
-         .. step:: Write the Handler Function
+         .. step:: Automatically Respond to Events
 
-            When a trigger runs, it gets data about the event as the
-            arguments to a function. You can do anything you want in the
-            function!
+            Once deployed, the trigger automatically listens for events
+            in your app and runs whenever an event matches the trigger’s
+            configuration.
 
       .. image:: /images/plp/triggers.png
          :alt: Respond to Events with Triggers
 
 .. kicker:: Power Your App
 
-Manage and Secure Your App with Rich Platform Services
+Manage And Secure Your App With Rich Platform Services
 ------------------------------------------------------
 
 .. card-group::
@@ -296,17 +284,17 @@ Manage and Secure Your App with Rich Platform Services
       app's functions and configuration files.
 
    .. card::
-      :cta: Static File Hosting
-      :url: https://www.mongodb.com/docs/atlas/app-services/hosting/
-      :icon: /images/icons/static-hosting.png
-      :icon-alt: Static Hosting Icon
+      :cta: App Deployment Models
+      :url: https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/
+      :icon: /images/icons/global.png
+      :icon-alt: Deployment Models Icon
 
-      Host your website and static files like images and videos on a
-      global CDN.
+      Deploy your app in any of the three major cloud providers with
+      regions around the globe.
 
 .. kicker:: Additional Resources
 
-Join the Community and Learn From Experts
+Join The Community And Learn From Experts
 -----------------------------------------
 
 .. card-group::
