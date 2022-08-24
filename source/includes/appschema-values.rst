@@ -31,7 +31,7 @@ Configuration
    
    * - | ``id``
        | String
-     - A string that uniquely identifies the value. {+service-short+} automatically
+     - A string that uniquely identifies the value. Atlas App Services automatically
        generates a unique ID for a value when you create it.
    
    * - | ``name``
@@ -46,7 +46,7 @@ Configuration
    
    * - | ``value``
        | String, Array, or Object
-     - The stored data that {+service-short+} exposes when the value is referenced.
+     - The stored data that App Services exposes when the value is referenced.
        
        If ``from_secret`` is ``false``, ``value`` can be a standard
        JSON string, array, or object.

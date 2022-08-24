@@ -30,7 +30,7 @@
 
           * - "server"
             - The user is a server process logged in with any type of
-              :doc:`{+service-short+} API Key </authentication/api-key>`.
+              :doc:`App Services API Key </authentication/api-key>`.
 
           * - "system"
             - The user is the :ref:`system user <system-user>` that
@@ -58,9 +58,9 @@
        data collection </users/enable-custom-user-data>` that
        specifies the user's ID. You can use the custom user data
        collection to store arbitrary data about your application's
-       users. If you set the ``name`` field, {+service-short+} populates the 
+       users. If you set the ``name`` field, App Services populates the 
        ``username`` metadata field with the return value of ``name``. 
-       {+service-short+} automatically fetches a new copy of the data
+       App Services automatically fetches a new copy of the data
        whenever a user refreshes their access token, such as when they
        log in. The underlying data is a regular MongoDB document, so you
        can use standard CRUD operations through the :doc:`MongoDB Atlas
@@ -81,10 +81,10 @@
    * - ``identities``
      - array
      - A list of authentication provider identities associated with the
-       user. When a user first logs in with a specific provider, {+service-short+}
+       user. When a user first logs in with a specific provider, App Services
        associates the user with an identity object that contains a
        unique identifier and additional metadata about the user from the
-       provider. For subsequent logins, {+service-short+} refreshes the existing
+       provider. For subsequent logins, App Services refreshes the existing
        identity data but does not create a new identity. Identity
        objects have the following form:
 
