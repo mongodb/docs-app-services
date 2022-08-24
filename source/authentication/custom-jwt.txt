@@ -44,7 +44,7 @@ Configuration
    .. tab::
       :tabid: ui
 
-      You can enable the JWT authentication provider from the {+ui+}
+      You can enable the JWT authentication provider from the App Services UI
       by selecting :guilabel:`Custom JWT Authentication` from the
       :guilabel:`Authentication` page.
 
@@ -101,7 +101,7 @@ Audience
 
 The :guilabel:`Audience` of a JWT specifies its intended recipient. JWTs
 describe their audience in the ``aud`` claim. By default, App Services expects
-``aud`` to contain the App ID of the {+app+} for which the provider
+``aud`` to contain the App ID of the App for which the provider
 is configured.
 
 If the external authentication system JWT specifies a different ``aud``
@@ -582,7 +582,7 @@ document of the following form:
 
      - Required. The audience of the token.
        By default, App Services expects this value to be the App ID of your
-       {+app+}. If your external authentication service
+       App. If your external authentication service
        returns a different ``aud`` value, you should specify that value
        instead.
 
@@ -852,7 +852,7 @@ Summary
 
 - Custom JWT authentication allows you to identify your application's
   users via a JSON Web Token issued outside of App Services.
-- App Services expects JWT audience values to be the App ID of the {+app+}
+- App Services expects JWT audience values to be the App ID of the App
   unless otherwise configured in the application.
 - App Services can verify JWTs using either
   :ref:`manually specified keys and signing algorithms

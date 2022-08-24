@@ -38,7 +38,7 @@ Application Users
 
 You can secure App Services applications with :ref:`built-in user management
 <users-and-authentication>`. With the built-in user management of App Services,
-only authorized users can access your {+app+}. You can
+only authorized users can access your App. You can
 :ref:`delete <delete-user>` or :ref:`disable <disable-user>` users, and 
 :ref:`revoke user sessions <revoke-user-sessions>`. Users can log in with:
 
@@ -62,8 +62,8 @@ Data Access Permissions
 -----------------------
 
 Use App Services data access rules to grant read and write access to data.
-{+app+}s that use Atlas Device Sync define data access permissions during the process
-of enabling Device Sync. {+app+}s that do not use Device Sync can 
+Apps that use Atlas Device Sync define data access permissions during the process
+of enabling Device Sync. Apps that do not use Device Sync can 
 link an {+atlas+} data source, and define permissions to perform CRUD 
 operations on that data source.
 
@@ -76,7 +76,7 @@ cannot view or modify data.
 App Services Applications with Sync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you enable Atlas Device Sync for your {+app+}, you define data access rules
+When you enable Atlas Device Sync for your App, you define data access rules
 that determine which data users can read and write. The :ref:`Sync Mode 
 <sync-modes>` you select determines which types of permissions apply 
 for your application.
@@ -89,7 +89,7 @@ specify the :ref:`partition key <sync-partitions>` that gives users
 access to data. You can define :ref:`JSON expressions <expressions>` to 
 give users read and write permissions for the partition.
 
-When you access a synced {+app+} from a client, you specify the partition
+When you access a synced App from a client, you specify the partition
 value that the logged-in user can access. The user only has access to the 
 partition key and value you define in your app. The user cannot read or 
 write data whose partition key value does not match the conditions you specify
@@ -132,7 +132,7 @@ search or read data.
 
 .. note::
 
-   When you access {+atlas+} through an {+app+} with Atlas Device Sync enabled, the
+   When you access {+atlas+} through an App with Atlas Device Sync enabled, the
    permissions you define for Device Sync apply, instead of the 
    :ref:`role-based permissions <define-roles-and-permissions>` you define 
    when you link an {+atlas+} data source.
@@ -159,10 +159,10 @@ project role:
      - Access Permissions
 
    * - Project Owner
-     - Full read-write access for all {+app+}s associated with the project.
+     - Full read-write access for all Apps associated with the project.
 
    * - All Other Roles
-     - Read-only access for all {+app+}s associated with the project.
+     - Read-only access for all Apps associated with the project.
 
 .. note::
 
@@ -245,7 +245,7 @@ CSV
 
    For requests that originate from the Sync server, we recommend allowlisting
    the entire subnet of the App's Deployment Region and cloud provider. You can
-   find the Deployment Region in the {+ui+} under :guilabel:`App Settings >
+   find the Deployment Region in the App Services UI under :guilabel:`App Settings >
    General > Deployment Region`.
 
 .. _security-dns-filtering-sync-client-to-sync-server:
@@ -282,9 +282,9 @@ an IP that is not on the access list.
 
 .. important::
 
-   By default, any newly-created {+app+} allows access from any client IP
+   By default, any newly-created App allows access from any client IP
    by adding an access list entry for 0.0.0.0/0. If you delete this entry, 
-   no client can access your {+app+} from any IP address. 
+   no client can access your App from any IP address. 
 
 .. _security-api-access-list:
 
@@ -316,7 +316,7 @@ Summary
 -------
 
 - Built-in user management handles authentication and ensures only logged-in
-  users can access your {+app+}. 
+  users can access your App. 
 - Data access permissions enable you to specify read and write permissions for 
   Atlas Device Sync, linked {+atlas+} data sources, and developers building your apps.
 - Network security features enable you to guard against unauthorized access 

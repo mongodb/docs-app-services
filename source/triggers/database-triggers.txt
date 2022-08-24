@@ -38,7 +38,7 @@ manual.
    
    Atlas App Services opens a single change stream for each collection with at least
    one enabled Trigger and limits the total number of open change
-   streams on each linked cluster across all {+app+}s based on the
+   streams on each linked cluster across all Apps based on the
    cluster's size. See :ref:`change stream limitations
    <mongodb-service-limitations-change-streams>` for more information.
 
@@ -332,7 +332,7 @@ can suspend a Trigger include:
   cluster :manual:`oplog </core/replica-set-oplog/>`. The App logs
   refer to this as a ``ChangeStreamHistoryLost`` error.
 
-- importing an {+app+} with the ``replace`` strategy instead of the
+- importing an App with the ``replace`` strategy instead of the
   ``merge`` strategy and consequently removing the database user that
   created the Trigger's change stream
 
@@ -358,7 +358,7 @@ Last Cluster Time Processed
 ---------------------------
 
 All Triggers keep track of the last time the Trigger executed, known as
-the **latest execution** in the {+ui+}. Database Triggers also keep track
+the **latest execution** in the App Services UI. Database Triggers also keep track
 of the **last cluster time processed**: the last time the change stream
 backing that Trigger emitted an event. You can access these timestamps
 in the list of Triggers that displays when you first navigate to the
