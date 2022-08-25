@@ -17,7 +17,7 @@ can't or don't want to implement yourself. For example, you might use an
 official library for an external service or a custom implementation of
 a data structure or algorithm.
 
-{+service-short+} automatically transpiles dependencies and also
+Atlas App Services automatically transpiles dependencies and also
 supports most built-in Node.js modules.
 
 .. note:: Create Your Own Modules
@@ -90,7 +90,7 @@ name. You can either add a specific version or use the latest version.
 
               * - Package Version
                 - Optional. Specific version of the dependency to use.
-                  By default, {+service-short+} uses the latest version available.
+                  By default, App Services uses the latest version available.
 
             Click the :guilabel:`Add` button to start adding the package.
 
@@ -105,7 +105,7 @@ name. You can either add a specific version or use the latest version.
 
          .. step:: Check Operation Success
 
-            If {+backend+} successfully adds the dependency, you'll see it on the
+            If App Services successfully adds the dependency, you'll see it on the
             list of dependencies in the :guilabel:`Dependencies` tab.
 
    .. tab:: CLI
@@ -113,9 +113,9 @@ name. You can either add a specific version or use the latest version.
 
       .. procedure::
 
-         .. step:: Pull your {+app+}
+         .. step:: Pull your App
 
-            Pull your {+app+} to your device with the command:
+            Pull your App to your device with the command:
 
             .. code-block::
 
@@ -125,14 +125,14 @@ name. You can either add a specific version or use the latest version.
          .. step:: Create a package.json File with Dependencies
 
             #. Create a ``package.json`` in the ``/functions`` directory of
-               your {+app+}. You can do this by copying in an existing ``package.json`` file
+               your App. You can do this by copying in an existing ``package.json`` file
                or running ``npm init`` and following the prompts.
             #. Add dependencies by running ``npm install <dependency-name>``.
 
 
-         .. step:: Push the Dependencies to {+service+}
+         .. step:: Push the Dependencies to App Services
 
-            #. Go to the root directory of your {+app+}:
+            #. Go to the root directory of your App:
 
                .. code-block::
 
@@ -145,7 +145,7 @@ name. You can either add a specific version or use the latest version.
                   realm-cli push --include-package-json
 
             #. Follow the CLI prompts to confirm that you want to include the dependencies in your operation.
-               The CLI will start adding the dependencies to your {+app+}.
+               The CLI will start adding the dependencies to your App.
 
 
          .. step:: Check Operation Success
@@ -164,12 +164,12 @@ name. You can either add a specific version or use the latest version.
          .. step:: Enable Github Automatic Deployment
 
             :ref:`Enable Github Automatic Deployments <deploy-github>` so you can redeploy
-            your {+app+} whenever you push configuration updates to a specified branch on Github.
+            your App whenever you push configuration updates to a specified branch on Github.
 
 
-         .. step:: Pull your {+app+}
+         .. step:: Pull your App
 
-            Pull your {+app+} to your device with the command:
+            Pull your App to your device with the command:
 
             .. code-block::
 
@@ -179,7 +179,7 @@ name. You can either add a specific version or use the latest version.
          .. step:: Create a package.json File with Dependencies
 
             #. Create a ``package.json`` in the ``/functions`` directory of
-               your {+app+}. You can do this by copying in an existing ``package.json`` file
+               your App. You can do this by copying in an existing ``package.json`` file
                or running ``npm init`` and following the prompts.
             #. Add dependencies by running ``npm install <dependency-name>``.
 
@@ -196,10 +196,10 @@ name. You can either add a specific version or use the latest version.
 
          .. step:: Check Operation Success
 
-            The {+service-short+} GitHub app automatically deploys your updated
+            The App Services GitHub app automatically deploys your updated
             app configuration after you push the commit. You can check the status
             of the deployment and confirm that all packages were successfully
-            added from the :guilabel:`Deployment` screen of the {+ui+}.
+            added from the :guilabel:`Deployment` screen of the App Services UI.
 
             If anything fails during deployment, none of the dependencies are
             installed. Remove the failing dependencies from the ``package.json``
@@ -243,7 +243,7 @@ app. Zipped dependency directories may not exceed 15MB.
    .. step:: Create a Dependency Archive
 
       Now that you've downloaded all of your npm modules, you need to
-      package them up in an archive so you can upload them to {+service-short+}.
+      package them up in an archive so you can upload them to App Services.
       Create an archive containing the ``node_modules`` folder:
 
       .. code-block:: shell
@@ -252,14 +252,14 @@ app. Zipped dependency directories may not exceed 15MB.
 
       .. note:: Supported Archive Formats
 
-         {+service-short+} supports ``.tar``, ``.tar.gz``, ``.tgz``, and ``.zip`` archive
+         App Services supports ``.tar``, ``.tar.gz``, ``.tgz``, and ``.zip`` archive
          formats.
 
 
    .. step:: Upload the Dependency Archive
 
       Once you've created an archive containing your dependencies, you can upload your
-      dependency archive using the {+ui+} or {+cli-bin+}:
+      dependency archive using the App Services UI or {+cli-bin+}:
 
       .. tabs-realm-admin-interfaces::
 
@@ -272,12 +272,12 @@ app. Zipped dependency directories may not exceed 15MB.
             #. Click the :guilabel:`Upload` button.
 
             #. In the file picker, select the ``node_modules.tar.gz`` archive you
-               just created and click Open. {+service-short+} automatically uploads the
+               just created and click Open. App Services automatically uploads the
                archive file, which may take several minutes depending on the
                speed of your internet connection and the size of your dependency
                archive.
 
-            #. Whether the operation succeeded or failed, {+service-short+} displays a banner
+            #. Whether the operation succeeded or failed, App Services displays a banner
                indicating the success or failure of the operation. If successful,
                the :guilabel:`Dependencies` tab displays a list of the
                dependencies that you included in your dependency archive. If
@@ -316,8 +316,8 @@ call ``require()`` with the package name from within the function body.
 .. important:: Where Do I Import Modules?
    
    Node.js projects commonly place ``require()`` calls in the global
-   scope of each file, but {+service-short+} does not support this
-   pattern. You *must* place {+service-short+} ``require()`` calls
+   scope of each file, but App Services does not support this
+   pattern. You *must* place App Services ``require()`` calls
    within a function scope.
 
 Import a Full Module

@@ -102,17 +102,17 @@ corruption or leaks.
 Automatically Sync Data
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-{+sync+} applications store data and sync data changes to a linked
+Atlas Device Sync applications store data and sync data changes to a linked
 cluster, called the *synced cluster*. The sync protocol ensures that
 your data is eventually consistent across all sync clients and the
 synced cluster.
 
-To learn more about {+sync+} and how it interacts with your app's data
-sources, see :ref:`{+sync+} <sync-overview>`.
+To learn more about Atlas Device Sync and how it interacts with your app's data
+sources, see :ref:`Atlas Device Sync <sync-overview>`.
 
 .. note:: Version 4.4 Required for Sync
    
-   In order to use {+sync+}, your cluster must run MongoDB version
+   In order to use Atlas Device Sync, your cluster must run MongoDB version
    4.4 or newer.
 
 React to Changing Data
@@ -144,7 +144,7 @@ instance in {+atlas-short+}. You can link multiple instances to your app
 and even create multilpe data sources that link to the same underyling
 instance.
 
-You can configure a new linked data source in the {+ui+} or by defining
+You can configure a new linked data source in the App Services UI or by defining
 and pushing a configuration file with {+cli+} or GitHub deployment:
 
 .. tabs-realm-admin-interfaces::
@@ -156,7 +156,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
 
          .. step:: Navigate to the Data Source Management Screen
 
-            In the {+ui+}, click :guilabel:`Linked Data Sources` under :guilabel:`Manage`
+            In the App Services UI, click :guilabel:`Linked Data Sources` under :guilabel:`Manage`
             in the {+leftnav+}.
 
 
@@ -173,16 +173,16 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
                 - Description
               * - :guilabel:`Data Source`
                 - A MongoDB Atlas cluster or {+adf-instance+} associated with the same project as
-                  your {+app+}.
-              * - :guilabel:`{+service-short+} Service Name`
-                - A name for the {+service-short+} service that connects to the data source.
+                  your App.
+              * - :guilabel:`App Services Service Name`
+                - A name for the App Services service that connects to the data source.
                   You will use this name when referring to the data source in other
                   parts of your application, such as when you instantiate a
                   MongoDB service client.
 
                   .. example::
 
-                     Consider a MongoDB cluster data source with the :guilabel:`{+service-short+}
+                     Consider a MongoDB cluster data source with the :guilabel:`App Services
                      Service Name` ``myAtlasCluster``. To create a service client in a
                      :doc:`function </functions>` you would use the following code:
 
@@ -193,7 +193,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
               * - | :guilabel:`MongoDB Connection String`
                   | *config.wireProtocolEnabled*
                 - Required for Atlas clusters. Not enabled for {+adf-instance+}s.
-                  A boolean indicating whether {+service-short+} should allow
+                  A boolean indicating whether App Services should allow
                   clients to :ref:`connect to this cluster with a connection string over
                   the wire protocol <wire-protocol>`.
 
@@ -206,7 +206,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
          .. step:: Save the Linked Data Source
 
             Once you've selected and configured a MongoDB cluster or {+adf-instance+},
-            click :guilabel:`Save`. {+service-short+} immediately begins the
+            click :guilabel:`Save`. App Services immediately begins the
             process of linking to the data source, which could take up to five
             minutes.
 
@@ -230,7 +230,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
             .. tip::
 
                You can also download a copy of your application's configuration files from
-               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+               the :guilabel:`Deploy > Export App` screen in the App Services UI.
 
 
          .. step:: Create a Data Source Configuration Directory
@@ -297,7 +297,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
          .. step:: Deploy the Data Source Configuration
 
             Once you've defined and saved a ``config.json`` file for the data
-            source, you can push the config to your remote app. {+service-short+}
+            source, you can push the config to your remote app. App Services
             immediately begins the process of linking to the data source, which
             could take up to five minutes.
 
@@ -320,7 +320,7 @@ instance type.
 .. _data-federation-caveats:
 
 {+adf+}
-~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /mongodb/adf-limitations.rst
 

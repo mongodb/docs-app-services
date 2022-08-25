@@ -15,15 +15,15 @@ Filter Incoming Queries
 Overview
 --------
 
-You can define filters on incoming queries that {+service+} evaluates and
+You can define filters on incoming queries that Atlas App Services evaluates and
 applies before its initial query to your MongoDB cluster. Adding a
 filter to a collection allows you to control the shape of queried
 documents using projection filters and can improve query performance by
-reducing the number of documents for which {+service-short+} needs to evaluate a
+reducing the number of documents for which App Services needs to evaluate a
 role.
 
 Every filter consists of an Apply When :ref:`expression
-<expressions>` and a :guilabel:`Filter Query` document. When {+service-short+}
+<expressions>` and a :guilabel:`Filter Query` document. When App Services
 receives an incoming MongoDB query, it evaluates the Apply When
 expression of all filters on the collection and merges the :guilabel:`Filter
 Query` document into the incoming query.
@@ -48,7 +48,7 @@ Procedure
          .. step:: Navigate to the MongoDB Rules Screen
 
             You can create and manage filters from the MongoDB rules screen in the
-            {+ui+}. To get to the rules screen, click :guilabel:`Rules` beneath
+            App Services UI. To get to the rules screen, click :guilabel:`Rules` beneath
             :guilabel:`Data Access` in the {+leftnav+}.
 
 
@@ -64,7 +64,7 @@ Procedure
 
             In the :guilabel:`Apply When` input box, enter a :ref:`rule expression
             <expressions>` that defines when the filter applies to a query. If the
-            expression evaluates to ``true`` for an incoming query, {+service-short+} adds
+            expression evaluates to ``true`` for an incoming query, App Services adds
             the :guilabel:`Filter Query` parameters to the incoming query.
 
             .. figure:: /images/filters-apply-when.png
@@ -114,7 +114,7 @@ Procedure
 
             After you have configured the :guilabel:`Filter Query` and the
             :guilabel:`Apply When` expression, click :guilabel:`Save`. After
-            saving, {+backend+} immediately begins evaluating and applying filters to
+            saving, App Services immediately begins evaluating and applying filters to
             incoming queries on the collection.
 
    
@@ -137,7 +137,7 @@ Procedure
             .. tip::
 
                You can also download a copy of your application's configuration files from
-               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+               the :guilabel:`Deploy > Export App` screen in the App Services UI.
 
 
          .. step:: Add a Rule Configuration File

@@ -16,40 +16,40 @@ Pause or Terminate Sync
 Overview
 --------
 
-If you want to disable {+sync+} for your app, you can temporarily pause or 
-permanently terminate it. You can also re-enable {+sync-short+} after 
+If you want to disable Atlas Device Sync for your app, you can temporarily pause or 
+permanently terminate it. You can also re-enable Device Sync after 
 disabling it.
 
-You can temporarily :ref:`pause <pause-sync>` {+sync-short+} if 
+You can temporarily :ref:`pause <pause-sync>` Device Sync if 
 you need to pause your cluster. With a temporary pause, you can 
-:ref:`resume <resume-sync>` without resetting your :ref:`{+sync-short+} 
-configuration <appconfig-sync>` or losing {+sync-short+} metadata.
+:ref:`resume <resume-sync>` without resetting your :ref:`Device Sync 
+configuration <appconfig-sync>` or losing Device Sync metadata.
 
 You can permanently :ref:`terminate <terminating-realm-sync>` and 
-:ref:`re-enable <re-enable-realm-sync>` {+sync-short+} for troubleshooting or
-if you want to change your :ref:`{+sync-short+} configuration <appconfig-sync>`.
+:ref:`re-enable <re-enable-realm-sync>` Device Sync for troubleshooting or
+if you want to change your :ref:`Device Sync configuration <appconfig-sync>`.
 
 .. _pause-sync:
 
 Pause Sync
 ----------
 
-You can pause {+sync+} for a period of time without disabling
-it entirely. When you pause {+sync-short+}, you stop syncing changes between 
+You can pause Device Sync for a period of time without disabling
+it entirely. When you pause Device Sync, you stop syncing changes between 
 Atlas and your application. 
 
 .. important::
 
-   If you need to pause your cluster, pause {+sync+} first. Otherwise, you
+   If you need to pause your cluster, pause Device Sync first. Otherwise, you
    must :ref:`terminate <terminating-realm-sync>` and :ref:`re-enable 
-   <re-enable-realm-sync>` {+sync-short+} and perform a client reset.
+   <re-enable-realm-sync>` Device Sync and perform a client reset.
 
-Pausing {+sync-short+} rejects any incoming client connections. This
-means that pausing {+sync+} for your {+app+} stops syncing changes for
+Pausing Device Sync rejects any incoming client connections. This
+means that pausing Device Sync for your App stops syncing changes for
 all clients.
 
-To pause {+sync-short+} from the client side, using logic
-that situationally pauses {+sync-short+} during a session, see your
+To pause Device Sync from the client side, using logic
+that situationally pauses Device Sync during a session, see your
 preferred SDK:
 
 .. tabs-realm-sdks::
@@ -57,37 +57,37 @@ preferred SDK:
    .. tab::
       :tabid: android
 
-      Learn how to :ref:`pause or resume a {+sync-short+} session using the 
+      Learn how to :ref:`pause or resume a Device Sync session using the 
       Java SDK <java-pause-or-resume-a-sync-session>`.
 
    .. tab::
       :tabid: ios
 
-      Learn how to :ref:`pause or resume a {+sync-short+} session using the 
+      Learn how to :ref:`pause or resume a Device Sync session using the 
       Swift SDK <ios-suspend-or-resume-a-sync-session>`.
 
    .. tab::
       :tabid: react-native
       
-      Learn how to :ref:`pause or resume a {+sync-short+} session using the 
+      Learn how to :ref:`pause or resume a Device Sync session using the 
       React Native SDK <react-native-pause-or-resume-a-sync-session>`.
 
    .. tab::
       :tabid: node
       
-      Learn how to :ref:`pause or resume a {+sync-short+} session using the 
+      Learn how to :ref:`pause or resume a Device Sync session using the 
       Node SDK <node-pause-or-resume-a-sync-session>`.
 
    .. tab::
       :tabid: dotnet
 
-      Learn how to :ref:`pause or resume a {+sync-short+} session using the 
+      Learn how to :ref:`pause or resume a Device Sync session using the 
       .Net SDK <dotnet-pause-or-resume-a-sync-session>`.
 
-After pausing {+sync-short+}, you can :ref:`re-enable it <resume-sync>`. 
-Pausing {+sync-short+} maintains the configuration settings and all of the 
-{+sync-short+} metadata, which contains the sync history. When you re-enable 
-paused {+sync-short+}, your clients can reconnect normally.
+After pausing Device Sync, you can :ref:`re-enable it <resume-sync>`. 
+Pausing Device Sync maintains the configuration settings and all of the 
+Device Sync metadata, which contains the sync history. When you re-enable 
+paused Device Sync, your clients can reconnect normally.
 
 .. include:: /includes/warn-cannot-renable-paused-sync.rst
 
@@ -98,7 +98,7 @@ Procedure
 
    .. step:: Press the Pause Sync Button
 
-      In the :guilabel:`Sync` tab of the {+service+} UI, press the
+      In the :guilabel:`Device Sync` tab of the App Services UI, press the
       :guilabel:`Pause Sync` button.
 
       .. figure:: /images/press-pause-sync-button.png
@@ -116,7 +116,7 @@ Procedure
    .. step:: Review Your Changes
 
       Press the :guilabel:`Review & Deploy` button in the blue notification bar
-      telling you that changes have been made to your {+backend+} app.
+      telling you that changes have been made to your App Services app.
 
       .. figure:: /images/pause-sync-review-and-deploy.png
        :alt: "Review & Deploy" notification
@@ -130,7 +130,7 @@ Procedure
       .. figure:: /images/pause-sync-deploy-button.png
          :alt: Review Changes Model
 
-      You have now paused {+sync+} and should get a green notification bar on the
+      You have now paused Device Sync and should get a green notification bar on the
       top of the :guilabel:`Sync` page that states that your deployment was
       successful.
 
@@ -142,7 +142,7 @@ Procedure
 Resume Sync
 -----------
 
-After you have paused {+sync+}, you can resume it to begin syncing again for
+After you have paused Device Sync, you can resume it to begin syncing again for
 all clients. 
 
 .. include:: /includes/warn-cannot-renable-paused-sync.rst
@@ -150,12 +150,11 @@ all clients.
 Procedure
 ~~~~~~~~~
 
-The process to resume {+sync-short+} is the same as the process to re-enable 
-{+sync-short+}. However, when you pause {+sync-short+}, {+service+} preserves 
-your configuration settings and {+sync-short+} metadata.  
+The process to resume Device Sync is the same as the process to re-enable 
+Device Sync. However, when you pause Device Sync, App Services preserves 
+your configuration settings and Device Sync metadata.  
 
-To re-enable {+sync+}, follow the steps in the :ref:`Enable {+sync+}
-<enable-sync>` guide. You can skip the **Configure Sync** 
+To re-enable Device Sync, follow the steps in the :ref:`enable-sync` guide. You can skip the **Configure Sync**
 step. 
 
 Clients do not need to perform a client reset when reconnecting after a pause.
@@ -165,16 +164,16 @@ Clients do not need to perform a client reset when reconnecting after a pause.
 Terminate Sync
 --------------
 
-If you have :ref:`enabled {+sync+} <enable-sync>`, you may have to 
-terminate and re-enable {+sync+} under a few different circumstances:
+If you have :ref:`enabled Device Sync <enable-sync>`, you may have to
+terminate and re-enable Device Sync under a few different circumstances:
 
-- Altering a Partition-Based {+sync-short+} configuration
-- Switching between {+sync-short+} modes. For instance, if you are switching from Partition-Based {+sync-short+} to Flexible {+sync-short+}
+- Altering a Partition-Based Device Sync configuration
+- Switching between Sync modes. For instance, if you are switching from Partition-Based Sync to Flexible Sync
 - An upgrade from a Shared Tier {+atlas-short+} Cluster to a Shared or Dedicated instance
 - A move to an {+atlas-short+} cluster that is distributed across regions/cloud providers
 - An upgrade to NVMe Atlas clusters
 - An :manual:`oplog </core/replica-set-oplog/>` rollover
-- A paused {+sync+} session on a shared tier cluster due to infrequent usage 
+- A paused Device Sync session on a shared tier cluster due to infrequent usage
 - Troubleshooting, at the request of MongoDB Support
 
 .. include:: /includes/warn-terminate-sync-client-reset.rst
@@ -182,14 +181,14 @@ terminate and re-enable {+sync+} under a few different circumstances:
 Procedure
 ~~~~~~~~~
 
-Terminate {+sync+} in your {+app+} to stop syncing data across
+Terminate Device Sync in your App to stop syncing data across
 devices. 
 
 .. procedure::
 
    .. step:: Press the Terminate Sync Button
 
-      In the :guilabel:`Sync` tab of the {+service+} UI, click the red
+      In the :guilabel:`Sync` tab of the App Services UI, click the red
       :guilabel:`Terminate Sync` button.
 
       .. figure:: /images/click-terminate-sync-button.png
@@ -209,7 +208,7 @@ devices.
    .. step:: Review Your Changes
 
       Click the :guilabel:`Review & Deploy` button in the blue notification bar
-      telling you that changes have been made to your {+backend+} app.
+      telling you that changes have been made to your App Services app.
 
       .. figure:: /images/terminating-sync-review-and-deploy.png
        :alt: "Review & Deploy" notification
@@ -223,7 +222,7 @@ devices.
       .. figure:: /images/terminating-sync-deploy-button.png
          :alt: Review Changes Model
 
-      You have now terminated {+sync+} and should get a green notification bar on the
+      You have now terminated Device Sync and should get a green notification bar on the
       top of the :guilabel:`Sync` page that states that your deployment was
       successful.
 
@@ -236,26 +235,25 @@ devices.
 Re-Enable Sync
 --------------
 
-After you have terminated {+sync+}, you can re-enable it. Re-enabling 
-{+sync-short+} enables your {+app+} to begin syncing changes to Atlas again. 
-After you re-enable {+sync-short+}, your {+app+} begins accepting incoming
+After you have terminated Device Sync, you can re-enable it. Re-enabling
+Device Sync enables your App to begin syncing changes to Atlas again. 
+After you re-enable Device Sync, your App begins accepting incoming
 client connections again. However, if a client had previously connected to
-your {+app+} before you terminated {+sync+}, you must perform a manual client 
-reset for that client to enable it to connect to {+service+} again.
+your App before you terminated Device Sync, you must perform a manual client
+reset for that client to enable it to connect to App Services again.
 
 Procedure
 ~~~~~~~~~
 
-When you pause {+sync-short+}, {+service+} preserves your configuration 
+When you pause Device Sync, App Services preserves your configuration
 settings, and you can skip the **Configure Sync** step. 
-When you terminate {+sync-short+}, or when the :manual:`oplog 
-</core/replica-set-oplog/>` rolls past the time that you paused {+sync-short+}, 
+When you terminate Device Sync, or when the :manual:`oplog 
+</core/replica-set-oplog/>` rolls past the time that you paused Device Sync, 
 you must specify the configuration settings again.
 
-To re-enable {+sync+}, follow the steps in the :ref:`Enable {+sync+}
-<enable-sync>` guide. 
+To re-enable Device Sync, follow the steps in the :ref:`enable-sync` guide.
 
-If you are re-enabling {+sync+} after you have terminated it, you must 
+If you are re-enabling Device Sync after you have terminated it, you must 
 perform a manual client reset in your client applications:
 
 .. tabs-realm-sdks::

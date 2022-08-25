@@ -18,14 +18,14 @@ which device or browser they connect from. Data modeling ensures the
 accuracy of application data by performing type and format checks on
 fields. 
 
-{+service+} allows you to define, synchronize, and enforce your data
+Atlas App Services allows you to define, synchronize, and enforce your data
 model in two formats: 
 
 - A server-side :ref:`BSON schema <schemas>`, which defines your
   data as MongoDB documents to enforce validation and synchronization
   in the cloud.
 
-- {+service-short+} data model, which defines your data as native objects in your mobile application.
+- A Realm data model, which defines your data as native objects in your mobile application.
 
 Having these two forms of data models allows your data to be consistent
 and :doc:`synced </sync>` regardless of which clients
@@ -38,7 +38,7 @@ Object Schema
 
 An **object schema** defines the properties and relationships of an
 Realm object. Object schemas are defined using JSON schema
-in the :guilabel:`Schema` sidebar entry of the {+ui+}:
+in the :guilabel:`Schema` sidebar entry of the App Services UI:
 
 .. code-block:: json
 
@@ -167,16 +167,16 @@ You can configure the following constraints for a given property:
 
 Summary
 -------
-- {+service+} uses two different data models: a {+frontend-schema+} for 
-  mobile and an {+service-short+} Schema for Atlas. Changes to one data model match 
+- App Services uses two different data models: a {+frontend-schema+} for 
+  mobile and an App Services Schema for Atlas. Changes to one data model match
   the other data model. 
-- If you already have data in Atlas, {+service+} creates an {+service-short+} Schema 
-  by sampling that data. That {+service-short+} Schema can be translated into a Realm 
-  Object Model to be used in your {+service-short+} mobile application code. 
+- If you already have data in Atlas, App Services creates an App Services Schema 
+  by sampling that data. That App Services Schema can be translated into a Realm 
+  Object Model to be used in your App Services mobile application code. 
 - If you do not have data in Atlas or are developing with a mobile-first 
   approach, you can turn on :guilabel:`Development Mode` to allow for data 
-  model changes from an {+service-short+} mobile client. When you finish developing your 
+  model changes from an App Services mobile client. When you finish developing your 
   {+frontend-schema+}, you can turn off :guilabel:`Development Mode`, and 
-  your {+service-short+} Schema will be auto-updated with your updated data model 
+  your App Services Schema will be auto-updated with your updated data model 
   configuration. Atlas will begin using this updated data model configuration 
   for data validation on your cluster immediately.

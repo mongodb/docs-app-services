@@ -21,7 +21,7 @@ operations, even if the documents are in separate databases or
 collections.
 
 You define a relationship for a "source" MongoDB collection and link to
-documents in a "foreign" collection. {+service-short+} automatically resolves
+documents in a "foreign" collection. Atlas App Services automatically resolves
 relationships in synced SDK data models and GraphQL operations by
 replacing the values in a source field with the foreign documents that
 they reference.
@@ -30,7 +30,7 @@ they reference.
 
 Relationships are unidirectional and don't enforce uniqueness or other
 foreign key constraints. If you reference a non-existent foreign value in
-a source field, {+service-short+} automatically omits the reference from resolved
+a source field, App Services automatically omits the reference from resolved
 relationships.
 
 .. example::
@@ -94,7 +94,7 @@ relationships.
         }
       }
    
-   With this relationship defined, {+service-short+} can return a customer and all
+   With this relationship defined, App Services can return a customer and all
    of their accounts in the same GraphQL query. Without a relationship,
    the query would return a list of just ``account_id`` values instead
    of the full ``Account`` objects.
@@ -115,7 +115,7 @@ Cardinality
 -----------
 
 A relationship's cardinality determines the number of foreign documents
-that it can reference. {+service-short+} supports two relationship cardinalities:
+that it can reference. App Services supports two relationship cardinalities:
 "to-one" and "to-many".
 
 .. _relationships-to-one:
@@ -141,7 +141,7 @@ To indicate that a relationship has "to-one" cardinality, set
      }
    }
 
-{+service-short+} automatically replaces source values with the referenced objects
+App Services automatically replaces source values with the referenced objects
 or a null value in resolved GraphQL types and SDK models:
 
 .. tabs::
@@ -202,7 +202,7 @@ To indicate that a relationship has "to-many" cardinality, set
      }
    }
 
-{+service-short+} automatically replaces source values with the referenced objects
+App Services automatically replaces source values with the referenced objects
 or a null value in resolved GraphQL types and SDK models:
 
 .. tabs::
@@ -295,7 +295,7 @@ with a foreign collection.
 
    The GraphQL API does not currently support embedded object relationships.
 
-   You can resolve embedded object relationships with {+sync-short+} and
+   You can resolve embedded object relationships with Atlas Device Sync and
    in the Realm SDKs.
 
 .. code-block:: json

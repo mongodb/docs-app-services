@@ -1,7 +1,7 @@
 .. _appconfig-sync:
 
 =====================================
-{+sync+} Configuration Files
+Atlas Device Sync Configuration Files
 =====================================
 
 .. default-domain:: mongodb
@@ -12,7 +12,7 @@
    :depth: 2
    :class: singlecol
 
-You can configure :ref:`{+sync+} <sync>` for your application in the ``sync``
+You can configure :ref:`Atlas Device Sync <sync>` for your application in the ``sync``
 directory:
 
 .. code-block:: none
@@ -26,7 +26,7 @@ directory:
 Partition-Based Sync Configuration
 ----------------------------------
 
-When you use :ref:`Partition-Based Sync <partition-based-sync>`, your {+service-short+} 
+When you use :ref:`Partition-Based Sync <partition-based-sync>`, your Atlas App Services
 app uses this Sync configuration:
 
 .. code-block:: json
@@ -74,14 +74,14 @@ app uses this Sync configuration:
    * - | ``development_mode_enabled``
        | Boolean
      - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
-       for the application. While enabled, {+service-short+} automatically stores synced
+       for the application. While enabled, App Services automatically stores synced
        objects in a specific database (specified in ``database_name``) and
        mirrors objects types in that database's collection schemas.
 
    * - | ``database_name``
        | String
-     - The name of a database in the synced cluster where {+service-short+} stores data in
-       :ref:`Development Mode <enable-development-mode>`. {+service-short+} automatically
+     - The name of a database in the synced cluster where App Services stores data in
+       :ref:`Development Mode <enable-development-mode>`. App Services automatically
        generates a schema for each synced type and maps each object type to a
        collection within the database.
 
@@ -106,14 +106,14 @@ app uses this Sync configuration:
        | Expression
      - An :ref:`expression <expressions>` that evaluates to ``true`` when a user
        has permission to read objects in a partition. If the expression
-       evaluates to ``false``, {+service-short+} does not allow the user to read
+       evaluates to ``false``, App Services does not allow the user to read
        an object or its properties.
 
    * - | ``partition.permissions.write``
        | Expression
      - An :ref:`expression <expressions>` that evaluates to ``true`` when a user
        has permission to write objects in a partition. If the expression
-       evaluates to ``false``, {+service-short+} does not allow the user to
+       evaluates to ``false``, App Services does not allow the user to
        modify an object or its properties. Write permission requires read 
        permission. A user cannot write to a document that they cannot read.
 
@@ -202,7 +202,7 @@ Sync configuration:
        | Boolean
      
      - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
-       for the application. While enabled, {+service-short+} automatically stores synced
+       for the application. While enabled, App Services automatically stores synced
        objects in a specific database (specified in ``database_name``) and
        mirrors objects types in that database's collection schemas.
 
@@ -216,8 +216,8 @@ Sync configuration:
    * - | ``database_name``
        | String
      
-     - The name of a database in the synced cluster where {+service-short+} stores data in
-       :ref:`Development Mode <enable-development-mode>`. {+service-short+} automatically
+     - The name of a database in the synced cluster where App Services stores data in
+       :ref:`Development Mode <enable-development-mode>`. App Services automatically
        generates a schema for each synced type and maps each object type to a
        collection within the database.
 

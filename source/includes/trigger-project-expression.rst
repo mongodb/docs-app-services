@@ -1,5 +1,5 @@
 A :manual:`$project </reference/operator/aggregation/project>` expression
-document that {+service-short+} uses to filter the fields that appear in change
+document that App Services uses to filter the fields that appear in change
 event objects.
 
 .. tip:: Performance Optimization

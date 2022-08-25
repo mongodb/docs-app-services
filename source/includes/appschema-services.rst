@@ -53,7 +53,7 @@ Service Configuration
    
    * - | ``id``
        | String
-     - A string that uniquely identifies the service. {+service-short+}
+     - A string that uniquely identifies the service. Atlas App Services
        automatically generates a unique ID for a service when you create
        it.
    
@@ -119,7 +119,7 @@ Each rule maps to its own JSON file with the same name as the rule.
    
    * - | ``id``
        | String
-     - A string that uniquely identifies the rule. {+service-short+} automatically
+     - A string that uniquely identifies the rule. App Services automatically
        generates a unique ID for a rule when you create it.
    
    * - | ``name``
@@ -160,7 +160,7 @@ Configuration
      "can_evaluate": <Rule Expression>,
      "disable_arg_logs": <Boolean>,
      "run_as_system": <Boolean>,
-     "run_as_user_id": "<{+service-short+} User ID>",
+     "run_as_user_id": "<App Services User ID>",
      "run_as_user_id_script_source": "<Function Source Code>",
      "respond_result": <Boolean>,
      "options": {
@@ -179,7 +179,7 @@ Configuration
    
    * - | ``id``
        | String
-     - A value that uniquely identifies the function. {+service-short+}
+     - A value that uniquely identifies the function. App Services
        automatically generates a unique ID for a function when you
        create it.
    
@@ -200,7 +200,7 @@ Configuration
    
    * - | ``disable_arg_logs``
        | Boolean
-     - If ``true``, {+service-short+} omits the arguments provided to a function
+     - If ``true``, App Services omits the arguments provided to a function
        from the :doc:`function execution log entry </logs/function>`.
    
    * - | ``run_as_system``
@@ -211,20 +211,20 @@ Configuration
    
    * - | ``run_as_user_id``
        | String
-     - The unique ID of a :doc:`{+service-short+} User </authentication>` that the
+     - The unique ID of a :doc:`App Services User </authentication>` that the
        function always executes as. Cannot be used with
        ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id_script_source``
        | String
      - A stringified :doc:`function </functions>` that runs whenever the
-       webhook is called and returns the unique ID of a :doc:`{+service-short+}
+       webhook is called and returns the unique ID of a :doc:`App Services
        User </authentication>` that the function executes as. Cannot be used with
        ``run_as_user_id``.
    
    * - | ``respond_result``
        | Boolean
-     - If ``true``, {+service-short+} includes the webhook function return value as
+     - If ``true``, App Services includes the webhook function return value as
        the body of the HTTP response it sends to the client that
        initiated the webhook request.
    

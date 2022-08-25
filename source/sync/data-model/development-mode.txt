@@ -19,14 +19,14 @@ document schema based on your SDK models. :ref:`{+client-sdks+} <realm-sdks>`
 give you language-specific tools to define and work with these objects.
 
 You can infer schemas from your client object models by enabling development 
-mode. Development mode is a {+sync+} configuration setting for your {+app+}.
+mode. Development mode is an Atlas Device Sync configuration setting for your {+app+}.
 When you enable Development Mode, your {+app+} can create or update your 
 schema by reading your synced {+realm+} files.
 
 Why Use Development Mode?
 -------------------------
 
-{+sync+} Development Mode enables developers to develop faster, and design
+Device Sync Development Mode enables developers to develop faster, and design
 :ref:`schemas <configure-your-data-model>` directly in client application 
 code.
 
@@ -41,8 +41,7 @@ works with Development Mode:
 3. The objects in the files become the definitions for your schema.
 
 After you have synced {+realm+} files to define your schema, you can view the 
-schema, and you can also export your data model for any or all of the {+service+}
-SDKs.
+schema, and you can also export your data model for any or all of the Realm SDKs.
 
 Update Schemas
 ~~~~~~~~~~~~~~
@@ -51,15 +50,15 @@ Schemas change as applications evolve. Development mode isn't just for
 creating schemas. You can also make non-breaking changes to schemas in the 
 same way. 
 
-When you sync a {+realm+} file, {+backend+} maps every synced object type 
-to its own collection. {+backend-short+} then updates the collection schema 
+When you sync a {+realm+} file, Atlas App Services maps every synced object type 
+to its own collection. App Services then updates the collection schema 
 to match the synced type. 
 
-When you later sync an updated object, {+backend-short+} automatically 
+When you later sync an updated object, App Services automatically 
 updates the collection schema. 
 
 This lets you update objects in your client code as you develop your app, 
-while {+backend+} updates the schema to match.
+while App Services updates the schema to match.
 
 .. seealso:: Modifying synced object schemas
  
@@ -75,7 +74,7 @@ Development Database
 ~~~~~~~~~~~~~~~~~~~~
 
 When you enable Development Mode, you specify a database to store synced 
-objects. {+service-short+} creates new collections in this Development Mode 
+objects. App Services creates new collections in this Development Mode 
 database for every type of synced object.
 
 .. warning:: Specify Data Access Rules with Development Mode Enabled
@@ -94,9 +93,9 @@ database for every type of synced object.
    ``Person`` object. Development Mode creates a server-side schema associated 
    with the model. The object syncs to the ``myapp.Person`` collection. 
 
-   {+service-short+} continues creating new server-side schemas and collections 
+   App Services continues creating new server-side schemas and collections 
    for each new object type. If you later add a ``Dog`` object, that object 
-   will sync to a new ``myapp.Dog`` collection that {+service-short+} will 
+   will sync to a new ``myapp.Dog`` collection that App Services will
    create.
 
 .. _enable-development-mode:
@@ -137,7 +136,7 @@ Enable Development Mode
 
          .. step:: Choose a Target Database
 
-            While Development Mode is enabled, {+service-short+} maps every synced object type to its
+            While Development Mode is enabled, App Services maps every synced object type to its
             own collection in the linked cluster. The collections use the pluralized name
             of the object type and are located in a specific database.
 
@@ -181,7 +180,7 @@ Enable Development Mode
             Draft & Deploy` button in the banner at the top of the UI. You'll see
             a summary of your changes. Click the :guilabel:`Deploy` button.
 
-            {+service-short+} immediately deploys a new version of your application
+            App Services immediately deploys a new version of your application
             where Development Mode is enabled. Client applications will automatically
             use the newest version and can immediately start to sync their object models.
 
@@ -234,7 +233,7 @@ Enable Development Mode
 
          .. step:: Choose a Target Database
 
-            While Development Mode is enabled, {+service-short+} maps every synced object type to its
+            While Development Mode is enabled, App Services maps every synced object type to its
             own collection in the linked cluster. The collections use the pluralized name
             of the object type and are located in a specific database.
 
@@ -357,7 +356,7 @@ Disable Development Mode
             Draft & Deploy` button in the banner at the top of the UI. You'll see
             a summary of your changes. Click the :guilabel:`Deploy` button.
 
-            {+service-short+} immediately deploys a new version of your application
+            App Services immediately deploys a new version of your application
             where Development Mode is disabled. Client applications will automatically
             use the newest version.
 

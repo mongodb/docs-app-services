@@ -68,7 +68,7 @@ The following fields are available for all BSON schemas regardless of type:
        
        .. important::
           
-          {+service-short+} supports the ``type`` field to maintain compatibility with the JSON
+          Atlas App Services supports the ``type`` field to maintain compatibility with the JSON
           schema standard. However, we recommend that you use the ``bsonType``
           field instead. BSON types include all JSON schema types and support even
           more data types.
@@ -191,7 +191,7 @@ Mixed
 A ``mixed`` field may contain any schema type except for :ref:`arrays
 <schema-type-array>`, :ref:`embedded objects <schema-type-object>`,
 :ref:`sets <schema-type-set>`, and :ref:`dictionaries
-<schema-type-dictionary>`. {+service-short+} does not enforce a consistent type across
+<schema-type-dictionary>`. App Services does not enforce a consistent type across
 documents, so two different documents may have values of different types.
 
 Mixed fields can represent relationships. Sync translates these relationships
@@ -295,7 +295,7 @@ well as the documents they map to in MongoDB.
      - An array of field names that must be included in the document.
 
    * - ``title``
-     - A type name for the object. {+service-short+} uses this value to name
+     - A type name for the object. App Services uses this value to name
        the document's type in the :doc:`GraphQL API </graphql>`.
 
    * - ``properties``
@@ -444,7 +444,7 @@ and the value of ``additionalProperties`` is a schema for the dictionary value's
 type.
 
 Dictionary of a BSON Type
-^^^^^^^^^^^^^^^^^^^^^^^^^
+`````````````````````````
 
 To store a dictionary with values of a BSON type, set ``additionalProperties``
 to the type's schema.
@@ -460,7 +460,7 @@ to the type's schema.
    }
 
 Dictionary of Mixed BSON Types
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````````````
 
 To store a dictionary with :ref:`mixed <schema-type-mixed>` values, set
 ``additionalProperties`` to ``true``:
@@ -486,7 +486,7 @@ Alternatively, you can define a full ``mixed`` schema:
    }
 
 Dictionary of Embedded Objects
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````````````
 
 To store a dictionary with embedded object values, define an ``object`` schema
 with the ``title`` field set to the embedded object's type name:

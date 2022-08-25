@@ -57,7 +57,7 @@ Introduction
 
 Modern applications often use multiple external services to handle complex use 
 cases, such as messaging, analytics, and data management. You can connect to 
-these services through {+service+} by creating and configuring service 
+these services through Atlas App Services by creating and configuring service 
 interfaces.
 
 Service interfaces specify the connection details for a specific
@@ -72,7 +72,7 @@ over HTTP.
 
 .. note:: Built-In Service Clients
    
-   {+service+} includes clients for certain external services, such
+   App Services includes clients for certain external services, such
    as :doc:`Twilio </services/twilio>` and :doc:`AWS </services/aws>`.
    You can also use the :doc:`HTTP service </services/http>` to create a
    custom interface for any external service that offers a REST API.
@@ -109,13 +109,13 @@ authentication and HTTP methods behind semantic methods that
 are specific to each service.
 
 When you :doc:`call a service action </services/call-a-service-action>`,
-{+backend+} evaluates each :ref:`service rule <service-rules>` that
+App Services evaluates each :ref:`service rule <service-rules>` that
 applies to the action and prevents execution unless one of the rules
 evaluates to ``true``.
 
 .. important::
 
-  **{+service+} blocks all service actions by default.** You must
+  **App Services blocks all service actions by default.** You must
   :doc:`configure a service rule
   </services/configure/service-rules>` that enables a
   particular action before you can call it.
@@ -125,7 +125,7 @@ evaluates to ``true``.
 Service Rules [Deprecated]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A service rule is an :ref:`expression <expressions>` that {+backend+} evaluates
+A service rule is an :ref:`expression <expressions>` that App Services evaluates
 to determine whether or not a user can execute one or more :ref:`actions
 <service-actions>` in a service.
 
@@ -189,7 +189,7 @@ the webhook Function.
           external service.
 
    * - :guilabel:`Webhook Function`
-     - A webhook function is a :doc:`{+service-short+} Function </functions>` that
+     - A webhook function is an :doc:`Atlas Function </functions>` that
        accepts an incoming HTTP request with data from the external
        service as its argument and optionally returns an HTTP response.
 

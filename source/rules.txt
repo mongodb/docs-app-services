@@ -24,7 +24,7 @@ applications and handles database queries on their behalf. To prevent malicious,
 improper, or incorrect read and write operations, clients don't query the
 database directly.
 
-{+service+} provides a configurable and dynamic rules engine that enables you to
+Atlas App Services provides a configurable and dynamic rules engine that enables you to
 run a MongoDB query from client applications while transparently preventing
 unauthorized reads and writes. Rules are defined for entire collections in a
 linked MongoDB Atlas cluster and apply to individual documents in the collection
@@ -41,12 +41,12 @@ process:
 
    .. step:: Find All Relevant Documents
 
-      {+backend+} evaluates the queried collection's **Filters** in the context
+      App Services evaluates the queried collection's **Filters** in the context
       of the incoming request. Filters dynamically add additional query
       predicates and projections to incoming queries based on an expression
       that you define.
 
-      After evaluating, {+backend+} applies all relevant filters to the incoming
+      After evaluating, App Services applies all relevant filters to the incoming
       query and then finds all documents that match the filtered query.
 
       .. note:: Filters
@@ -57,7 +57,7 @@ process:
 
    .. step:: Evaluate A Role For Each Document
 
-      {+backend+} evaluates a **Role** with specific read and write
+      App Services evaluates a **Role** with specific read and write
       permissions for each document that matches the filtered query. You
       define the roles for each collection, including the permissions they
       have and the conditions under which they apply.
@@ -70,24 +70,24 @@ process:
 
          To learn more about roles, explore the :ref:`roles <roles>` reference page.
          There you'll find more information, including configuration parameters,
-         use-case examples, and details on how {+backend+} assigns roles to
+         use-case examples, and details on how App Services assigns roles to
          documents.
 
 
    .. step:: Run The Query With The Assigned Roles
 
-      Once {+backend+} has evaluated a role for each document, it runs the
+      Once App Services has evaluated a role for each document, it runs the
       filtered query and prevents reads and writes on each document unless
       the document's role allows them. If no role applies to a specific
-      document, {+backend+} withholds that document entirely and prevents the
+      document, App Services withholds that document entirely and prevents the
       query from reading or writing any fields.
 
 
    .. step:: Validate The Document Schema
 
-      If the query was a write operation, {+backend+} checks each affected
+      If the query was a write operation, App Services checks each affected
       document to ensure that they conform to the collection's **Document
-      Schema**. If any document does not match the schema, {+backend+} rolls back
+      Schema**. If any document does not match the schema, App Services rolls back
       the operation and rejects the query.
 
       .. seealso::

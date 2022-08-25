@@ -1,5 +1,5 @@
 A :manual:`$match </reference/operator/aggregation/match>` expression document
-that {+service-short+} uses to filter which change events cause the Trigger to
+that App Services uses to filter which change events cause the Trigger to
 fire. The Trigger evaluates all change event objects that it receives against
 this match expression and only executes if the expression evaluates to ``true``
 for a given change event.

@@ -1,4 +1,4 @@
-{+service-short+} Functions are defined in a sub-directory of your application's
+Atlas Functions are defined in a sub-directory of your application's
 ``/functions`` directory. Each function maps to its own subdirectory
 with the same name as the function.
 
@@ -27,7 +27,7 @@ Configuration
      "can_evaluate": <Rule Expression>,
      "disable_arg_logs": <Boolean>,
      "run_as_system": <Boolean>,
-     "run_as_user_id": "<{+service-short+} User ID>",
+     "run_as_user_id": "<App Services User ID>",
      "run_as_user_id_script_source": "<Function Source Code>"
    }
 
@@ -40,7 +40,7 @@ Configuration
    
    * - | ``id``
        | String
-     - A value that uniquely identifies the function. {+service-short+}
+     - A value that uniquely identifies the function. App Services
        automatically generates a unique ID for a function when you
        create it.
    
@@ -61,7 +61,7 @@ Configuration
    
    * - | ``disable_arg_logs``
        | Boolean
-     - If ``true``, {+service-short+} omits the arguments provided to a function
+     - If ``true``, App Services omits the arguments provided to a function
        from the :doc:`function execution log entry </logs/function>`.
    
    * - | ``run_as_system``
@@ -72,14 +72,14 @@ Configuration
    
    * - | ``run_as_user_id``
        | String
-     - The unique ID of a :doc:`{+service-short+} User </authentication>` that the
+     - The unique ID of a :doc:`App Services User </authentication>` that the
        function always executes as. Cannot be used with
        ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id_script_source``
        | String
      - A stringified :doc:`function </functions>` that runs whenever the
-       function is called and returns the unique ID of a :doc:`{+service-short+}
+       function is called and returns the unique ID of a :doc:`App Services
        User </authentication>` that the function executes as. Cannot be used with
        ``run_as_user_id``.
 

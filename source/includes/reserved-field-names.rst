@@ -1,7 +1,7 @@
-{+service-short+} reserves some keywords for the {+rql+} and other purposes.
+App Services reserves some keywords for the {+rql+} and other purposes.
 You cannot use reserved keywords as field names.
 
-{+service-short+} reserves the following keywords with any capitalization:
+App Services reserves the following keywords with any capitalization:
 
 .. hlist::
    :columns: 3
@@ -34,7 +34,7 @@ You cannot use reserved keywords as field names.
    You cannot use ``descending``, ``Descending``, ``DESCENDING``, or
    ``DeScEnDiNG`` as a field name.
 
-{+service-short+} also reserves the following keywords with the given exact capitalization:
+App Services also reserves the following keywords with the given exact capitalization:
 
 .. hlist::
    :columns: 3

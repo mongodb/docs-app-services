@@ -77,7 +77,7 @@ Configuration
               | Array<String>
             - An array of URLs that incoming requests may originate
               from. If you define any allowed request origins, then
-              {+service-short+} blocks any incoming request from an origin that is
+              Atlas App Services blocks any incoming request from an origin that is
               not listed.
               
               Request origins are URLs with the following form:
@@ -122,7 +122,7 @@ Configuration
           * - | ``app_default_domain``
               | String
             - The default domain for your application's hosted files.
-              {+service-short+} automatically sets this value and you cannot change
+              App Services automatically sets this value and you cannot change
               it.
    
    * - | ``config_version``
@@ -158,7 +158,7 @@ Configuration
           * - | ``enabled``
               | Boolean
             
-            - If ``true``, {+service-short+} associates each user with a document
+            - If ``true``, App Services associates each user with a document
               that contains their data stored in the specified
               collection.
 

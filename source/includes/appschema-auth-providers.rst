@@ -46,7 +46,7 @@ Configuration
    * - | ``id``
        | String
      - A value that uniquely identifies the authentication
-       provider. {+service-short+} automatically generates a unique ID for a
+       provider. Atlas App Services automatically generates a unique ID for a
        provider when you create it.
    
    * - | ``name``

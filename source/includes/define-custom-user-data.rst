@@ -1,4 +1,4 @@
-To enable Custom User Data in the {+ui+}, follow these steps:
+To enable Custom User Data in the App Services UI, follow these steps:
 
 1. Click :guilabel:`App Users` in the left hand panel.
 
@@ -28,7 +28,7 @@ To enable Custom User Data in the {+ui+}, follow these steps:
     .. note::
         
        If two documents in this collection contain the same user ID value, 
-       {+service-short+} uses the first document that matches, which 
+       App Services uses the first document that matches, which 
        leads to unexpected results.
      
 #. Save and deploy the changes.

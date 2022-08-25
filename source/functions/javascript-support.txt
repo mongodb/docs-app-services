@@ -12,7 +12,7 @@ JavaScript Support
    :depth: 2
    :class: singlecol
 
-{+service+} :ref:`functions <functions>` fully support JavaScript ES5
+:ref:`Atlas Functions <functions>` fully support JavaScript ES5
 syntax as well as most modern JavaScript features included in EcmaScript
 2015 (ES6) and more recent releases. They can also access most Node.js
 built-in modules.
@@ -162,8 +162,8 @@ Built-In Modules
 ----------------
 
 You can :ref:`import and use <import-external-dependencies>` standard
-Node built-in modules in :ref:`functions <functions>`. {+service+}
-supports most built-ins with either full or partial support. Some
+Node built-in modules in :ref:`functions <functions>`. Atlas Functions
+support most built-ins with either full or partial support. Some
 built-ins that are not suited for serverless workloads are not
 supported.
 
@@ -179,7 +179,7 @@ supported.
 Fully Supported Modules
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} fully supports the following built-in modules:
+Atlas App Services fully supports the following built-in modules:
 
 - :nodejs:`assert <docs/v10.18.1/api/assert.html>`
 - :nodejs:`buffer <docs/v10.18.1/api/buffer.html>`
@@ -192,8 +192,8 @@ Fully Supported Modules
   .. note::
   
     The :nodejs:`built-in punycode module is deprecated
-    <docs/v10.18.1/api/punycode.html>`. However, {+service-short+}
-    provides the :npm:`punycode <package/punycode>` module from ``npm``
+    <docs/v10.18.1/api/punycode.html>`. However, App Services
+    provide the :npm:`punycode <package/punycode>` module from ``npm``
     automatically. You can import the module with:
     
     .. code-block:: javascript
@@ -214,14 +214,14 @@ Fully Supported Modules
 Partially Supported Modules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} supports a subset of the functionality of the following modules.
+App Services supports a subset of the functionality of the following modules.
 
 .. _partially-supported-module-dgram:
 
-``dgram``
-^^^^^^^^^
+dgram``
+```````
 
-{+service-short+} supports the following ``dgram`` APIs:
+App Services supports the following ``dgram`` APIs:
 
 - :nodejs:`socket.addMembership <api/dgram.html#dgram_socket_addmembership_multicastaddress_multicastinterface>`
 - :nodejs:`socket.address <api/dgram.html#dgram_socket_address>`
@@ -234,7 +234,7 @@ Partially Supported Modules
 - :nodejs:`socket.setMulticastLoopback <api/dgram.html#dgram_socket_setmulticastloopback_flag>`
 - :nodejs:`socket.setMulticastTTL <api/dgram.html#dgram_socket_setmulticastttl_ttl>`
 
-{+service-short+} does **not** support the following ``dgram`` APIs:
+App Services does **not** support the following ``dgram`` APIs:
 
 - :nodejs:`socket.ref <api/dgram.html#dgram_socket_ref>`
 - :nodejs:`socket.setTTL <api/dgram.html#dgram_socket_setttl_ttl>`
@@ -242,21 +242,21 @@ Partially Supported Modules
 
 .. _partially-supported-module-dns:
 
-``dns``
-^^^^^^^
+dns``
+`````
 
-{+service-short+} supports the :nodejs:`dns
+App Services supports the :nodejs:`dns
 <docs/v10.18.1/api/dns.html>` module with the following **exceptions**:
 
-- {+service-short+} does **not** support the :nodejs:`dns Promises API <docs/v10.18.1/api/dns.html#dns_dns_promises_api>`
-- {+service-short+} does **not** support :nodejs:`resolver.cancel() <docs/v10.18.1/api/dns.html#dns_resolver_cancel>`
+- App Services does **not** support the :nodejs:`dns Promises API <docs/v10.18.1/api/dns.html#dns_dns_promises_api>`
+- App Services does **not** support :nodejs:`resolver.cancel() <docs/v10.18.1/api/dns.html#dns_resolver_cancel>`
 
 .. _partially-supported-module-fs:
 
-``fs``
-^^^^^^
+fs``
+````
 
-{+service-short+} supports the following ``fs`` APIs:
+App Services supports the following ``fs`` APIs:
 
 - :nodejs:`accessSync <docs/v10.18.1/api/fs.html#fs_fs_accesssync_path_mode>`
 - :nodejs:`constants <docs/v10.18.1/api/fs.html#fs_fs_constants>`
@@ -266,23 +266,23 @@ Partially Supported Modules
 
 .. _partially-supported-module-http:
 
-``http``, ``http/2`` and ``https``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+http``, ``http/2`` and ``https``
+````````````````````````````````
 
-{+service-short+} supports all of the :nodejs:`http <docs/v10.18.1/api/http.html>` 
+App Services supports all of the :nodejs:`http <docs/v10.18.1/api/http.html>` 
 and :nodejs:`https <docs/v10.18.1/api/https.html>` APIs **except** 
 for the :nodejs:`Server <docs/v10.18.1/api/http.html#http_class_http_server>` 
 class functionality.
 
-Similarly, {+service-short+} supports only the client-side APIs of
+Similarly, App Services supports only the client-side APIs of
 :nodejs:`http/2 <docs/v10.18.1/api/http2.html>`.
 
 .. _partially-supported-module-process:
 
-``process``
-^^^^^^^^^^^
+process``
+`````````
 
-{+service-short+} supports the following ``process`` APIs:
+App Services supports the following ``process`` APIs:
 
 - :nodejs:`hrTime <docs/v10.18.1/api/process.html#process_process_hrtime_time>`
 - :nodejs:`nextTick <docs/v10.18.1/api/process.html#process_process_nexttick_callback_args>`
@@ -291,31 +291,31 @@ Similarly, {+service-short+} supports only the client-side APIs of
 
 .. _partially-supported-module-util:
 
-``util``
-^^^^^^^^
+util``
+``````
 
-{+service-short+} supports the :nodejs:`util <docs/v10.18.1/api/util.html>` module with the following **exceptions**:
+App Services supports the :nodejs:`util <docs/v10.18.1/api/util.html>` module with the following **exceptions**:
 
-- {+service-short+} does **not** support :nodejs:`util.TextEncoder <docs/v10.18.1/api/util.html#util_class_util_textencoder>` 
-- {+service-short+} does **not** support :nodejs:`util.TextDecoder <docs/v10.18.1/api/util.html#util_class_util_textdecoder>` 
+- App Services does **not** support :nodejs:`util.TextEncoder <docs/v10.18.1/api/util.html#util_class_util_textencoder>` 
+- App Services does **not** support :nodejs:`util.TextDecoder <docs/v10.18.1/api/util.html#util_class_util_textdecoder>` 
 
 
-``crypto``
-^^^^^^^^^^
+crypto``
+````````
 
-{+service-short+} supports the :nodejs:`crypto <api/crypto.html>` module with
+App Services supports the :nodejs:`crypto <api/crypto.html>` module with
 the following **exceptions**:
 
-- {+service-short+} does **not** support :nodejs:`crypto.createDiffieHellman() <api/crypto.html#crypto_crypto_creatediffiehellman_prime_primeencoding_generator_generatorencoding>`
-- {+service-short+} does **not** support :nodejs:`crypto.createDiffieHellmanGroup() <api/crypto.html#crypto_crypto_creatediffiehellmangroup_name>`
-- {+service-short+} does **not** support :nodejs:`crypto.createECDH() <api/crypto.html#crypto_crypto_createecdh_curvename>`
+- App Services does **not** support :nodejs:`crypto.createDiffieHellman() <api/crypto.html#crypto_crypto_creatediffiehellman_prime_primeencoding_generator_generatorencoding>`
+- App Services does **not** support :nodejs:`crypto.createDiffieHellmanGroup() <api/crypto.html#crypto_crypto_creatediffiehellmangroup_name>`
+- App Services does **not** support :nodejs:`crypto.createECDH() <api/crypto.html#crypto_crypto_createecdh_curvename>`
 
 .. _unsupported-modules:
 
 Unsupported Modules
 ~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} functions **do not** support the following built-in
+Atlas Functions **do not** support the following built-in
 modules:
 
 - ``child_process``

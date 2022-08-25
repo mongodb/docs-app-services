@@ -22,7 +22,7 @@ following form:
    <Your App ID>.mongodbstitch.com
 
 You can configure a custom domain name for your application's hosted
-content from the {+ui+} or by :doc:`importing
+content from the App Services UI or by :doc:`importing
 </manage-apps/deploy/manual/deploy-cli>` an application configuration
 directory that specifies the domain in its ``config.json`` configuration
 file. Select the tab below that corresponds to the method you want to
@@ -45,9 +45,9 @@ Procedure
             will need to purchase it from a domain name registrar.
 
 
-         .. step:: Specify the Custom Domain in {+service-short+}
+         .. step:: Specify the Custom Domain in Atlas App Services
 
-            You need to provide your custom domain name to {+service+} before it will
+            You need to provide your custom domain name to App Services before it will
             serve content from the domain. To specify the domain:
 
             1. Click :guilabel:`Hosting` in the {+leftnav+}.
@@ -67,7 +67,7 @@ Procedure
             .. note::
 
               If an error is encountered during custom domain name validation,
-              {+service-short+} sends the project owner an email alerting them of the
+              App Services sends the project owner an email alerting them of the
               issue.
 
 
@@ -79,32 +79,32 @@ Procedure
             lists the host name and target value to use in the record.
 
             Once you have added the validation record it may take some time for the
-            DNS record to propagate. {+service-short+} will periodically check the domain's
+            DNS record to propagate. App Services will periodically check the domain's
             DNS records for the validation ``CNAME`` and will mark the domain as
             verified if it finds the record.
 
             .. tip:: Troubleshooting
 
-               - In the :guilabel:`Name` field of the {+ui+}, {+service-short+} provides
+               - In the :guilabel:`Name` field of the App Services UI, App Services provides
                  the full address for the CNAME record, ``<Subdomain>.<Your Base Domain>``.
                  However, many hosting providers just request the ``<Subdomain>`` part
                  to put in their UI. If you run into issues, check your hosting provider's
                  documentation on how to add CNAME records.
 
-               - {+service-short+} may not be able to find the validation record if your DNS
-                 provider proxies requests for the domain. If {+service-short+} cannot validate
+               - App Services may not be able to find the validation record if your DNS
+                 provider proxies requests for the domain. If App Services cannot validate
                  your domain, ensure that you have disabled any HTTP proxies for the
                  validation CNAME record on your DNS provider.
 
                - If an error is encountered during custom domain name validation,
-                 {+service-short+} sends the project owner an email alerting them of the
+                 App Services sends the project owner an email alerting them of the
                  issue.
 
 
          .. step:: Add a Redirect CNAME Record
 
-            Once {+service-short+} has verified your domain, all that's left is to add a
-            ``CNAME`` DNS record for your domain that points to the default {+service-short+}
+            Once App Services has verified your domain, all that's left is to add a
+            ``CNAME`` DNS record for your domain that points to the default App Services
             domain. Use the following host name and target value:
 
             .. list-table::
@@ -119,7 +119,7 @@ Procedure
 
                * - Target
                  - The default domain for your application. This value is listed
-                   as the :guilabel:`{+service-short+} Domain` in the :guilabel:`Settings` tab
+                   as the :guilabel:`App Services Domain` in the :guilabel:`Settings` tab
                    of the :guilabel:`Hosting` page. The default domain has the
                    following form:
 
@@ -154,7 +154,7 @@ Procedure
             .. tip::
 
                You can also download a copy of your application's configuration files from
-               the :guilabel:`Deploy > Import/Export App` screen in the {+ui+}.
+               the :guilabel:`Deploy > Import/Export App` screen in the App Services UI.
 
 
          .. step:: Specify the Custom Domain
@@ -194,7 +194,7 @@ Procedure
 
             Once you've updated and saved ``hosting/config.json`` you can push the updated
             config to your remote app. {+cli+} immediately deploys the configuration on
-            push and {+service-short+} immediately starts trying to verify your domain name.
+            push and App Services immediately starts trying to verify your domain name.
 
             .. code-block:: bash
 
@@ -207,36 +207,36 @@ Procedure
             record <CNAME_record>` in your domain's DNS configuration. You can
             find the host name and target value to use in the record
             :guilabel:`Custom Domain` section of the :guilabel:`Hosting >
-            Settings` tab in the {+ui+}.
+            Settings` tab in the App Services UI.
 
             Once you have added the validation record it may take some time for the
-            DNS record to propagate. {+backend+} will periodically check the domain's
+            DNS record to propagate. App Services will periodically check the domain's
             DNS records for the validation ``CNAME`` and will mark the domain as
             verified if it finds the record.
 
             .. tip:: Troubleshooting
 
-               - In the :guilabel:`Name` field of the {+ui+}, {+service-short+} provides
+               - In the :guilabel:`Name` field of the App Services UI, App Services provides
                  the full address for the CNAME record, ``<Subdomain>.<Your Base Domain>``.
                  However, many hosting providers just request the ``<Subdomain>`` part
                  to put in their UI. If you run into issues, check your hosting provider's
                  documentation on how to add CNAME records.
 
-               - {+service-short+} may not be able to find the validation record if your DNS
-                 provider proxies requests for the domain. If {+service-short+} cannot validate
+               - App Services may not be able to find the validation record if your DNS
+                 provider proxies requests for the domain. If App Services cannot validate
                  your domain, ensure that you have disabled any HTTP proxies for the
                  validation CNAME record on your DNS provider.
 
                - If an error is encountered during custom domain name validation,
-                 {+service-short+} sends the project owner an email alerting them of the
+                 App Services sends the project owner an email alerting them of the
                  issue.
 
 
          .. step:: Add a Redirect CNAME Record
 
-            Once {+service-short+} has verified your domain, all that's left to do is to add one or
+            Once App Services has verified your domain, all that's left to do is to add one or
             more ``CNAME`` DNS records for your domain that point to the default
-            {+service-short+} domain. Use the following host name and target value:
+            App Services domain. Use the following host name and target value:
 
             .. list-table::
                :header-rows: 1
@@ -250,7 +250,7 @@ Procedure
 
                * - Target
                  - The default domain for your application. This value is listed
-                   as the :guilabel:`{+service-short+} Domain` in the :guilabel:`Settings` tab
+                   as the :guilabel:`App Services Domain` in the :guilabel:`Settings` tab
                    of the :guilabel:`Hosting` page. The default domain has the
                    following form:
 
@@ -259,7 +259,7 @@ Procedure
                       <Your App ID>.mongodbstitch.com
 
 
-.. note:: Add {+service-short+}'s AWS CAAs to Verify Your Domain
+.. note:: Add App Services's AWS CAAs to Verify Your Domain
 
    If you have trouble verifying your domain:
    

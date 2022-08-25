@@ -97,7 +97,7 @@ Endpoints in a locally deployed app use a base URL specific to the app's
 Set Up the Data API
 -------------------
 
-You can configure the Data API for your app from the {+ui+} or by
+You can configure the Data API for your app from the App Services UI or by
 deploying configuration files with Realm CLI:
 
 .. tabs-realm-admin-interfaces::
@@ -539,14 +539,14 @@ Find a Single Document
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/findOne
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -564,7 +564,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -603,7 +603,7 @@ Request Body
      - ``{}``
 
 Response
-^^^^^^^^
+````````
 
 The ``findOne`` action returns the matched document in the ``document``
 field:
@@ -625,14 +625,14 @@ Find Multiple Documents
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/find
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -652,7 +652,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -723,7 +723,7 @@ Request Body
 
 
 Response
-^^^^^^^^
+````````
 
 The ``find`` action returns an array of matched document in the
 ``documents`` field:
@@ -750,14 +750,14 @@ Insert a Single Document
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/insertOne
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -776,7 +776,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -801,7 +801,7 @@ Request Body
      - 
 
 Response
-^^^^^^^^
+````````
 
 The ``insertOne`` action returns the ``_id`` value of the inserted
 document as a string in the ``insertedId`` field:
@@ -828,14 +828,14 @@ Insert Multiple Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/insertMany
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -854,7 +854,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -879,7 +879,7 @@ Request Body
      - 
 
 Response
-^^^^^^^^
+````````
 
 The ``insertMany`` action returns the ``_id`` values of all inserted
 documents as an array of strings in the ``insertedIds`` field:
@@ -894,14 +894,14 @@ Update a Single Document
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/updateOne
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -923,7 +923,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -967,7 +967,7 @@ Request Body
      - false
 
 Response
-^^^^^^^^
+````````
 
 The ``updateOne`` action returns:
 
@@ -992,14 +992,14 @@ Update Multiple Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/updateMany
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -1021,7 +1021,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -1065,7 +1065,7 @@ Request Body
      - false
 
 Response
-^^^^^^^^
+````````
 
 The ``updateMany`` action returns:
 
@@ -1090,14 +1090,14 @@ Replace a Single Document
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/replaceOne
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -1117,7 +1117,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -1160,7 +1160,7 @@ Request Body
      - false
 
 Response
-^^^^^^^^
+````````
 
 The ``replaceOne`` action returns:
 
@@ -1185,14 +1185,14 @@ Delete a Single Document
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/deleteOne
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -1208,7 +1208,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -1234,7 +1234,7 @@ Request Body
      - 
 
 Response
-^^^^^^^^
+````````
 
 The ``deleteOne`` action returns the number of deleted documents in the
 ``deletedCount`` field:
@@ -1249,14 +1249,14 @@ Delete Multiple Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/deleteMany
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -1272,7 +1272,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -1298,7 +1298,7 @@ Request Body
      - 
 
 Response
-^^^^^^^^
+````````
 
 The ``deleteMany`` action returns the number of deleted documents in the
 ``deletedCount`` field:
@@ -1313,14 +1313,14 @@ Run an Aggregation Pipeline
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Endpoint
-^^^^^^^^
+````````
 
 .. code-block:: text
    
    POST /action/aggregate
 
 Example
-^^^^^^^
+```````
 
 .. code-block:: sh
    
@@ -1345,7 +1345,7 @@ Example
      }'
 
 Request Body
-^^^^^^^^^^^^
+````````````
 
 .. code-block:: json
    
@@ -1369,7 +1369,7 @@ Request Body
      - 
 
 Response
-^^^^^^^^
+````````
 
 The ``aggregate`` action returns the result set of the final stage of
 the pipeline as an array of documents in the ``documents`` field:

@@ -17,9 +17,9 @@ Overview
 
 Conflicts arise when two or more users make changes to the same piece of
 data independently. This can happen due to latency between device and
-server or loss of connectivity. In this event, {+service-short+} automatically 
+server or loss of connectivity. In this event, Atlas Device Sync automatically
 uses conflict resolution strategies to merge the changes. Specifically,
-{+service-short+} handles conflict resolution using `operational transformation 
+Device Sync handles conflict resolution using `operational transformation
 <https://www.mongodb.com/docs/realm/sync/protocol/#operational-transformation>`__,
 a set of rules that guarantee strong eventual consistency, meaning all clients' versions
 will eventually converge to identical states. This will be true even if changes were
@@ -43,7 +43,7 @@ Deletes always win.
   other side has made changes to it later on.
 
 Last update wins.
-  If two sides update the same property, {+service-short+} will keep the value from
+  If two sides update the same property, Device Sync will keep the value from
   the most recent update.
 
 Inserts in lists are ordered by time.
@@ -64,7 +64,7 @@ Primary keys designate object identity.
    data on her local, offline version, as she does not know about Matt's deletion of Doug's data. 
 
    Once Sarah regains internet connection, her change will be sent to the server. The server will
-   send her Matt's deletion operation. As deletes always win according to {+service-short+}'s
+   send her Matt's deletion operation. As deletes always win according to Device Sync's
    conflict resolution rules, Matt's deletion is kept rather than Sarah's edit.
    The server will not send Sarah's edits to Matt's device. The data is again in agreement across
    Matt and Sarah's devices.
@@ -94,9 +94,9 @@ allowing you to get more precise control of the conflict resolution.
 Strings
 ~~~~~~~
 
-{+service-short+} interprets the value of a string as a whole and does not merge
+Device Sync interprets the value of a string as a whole and does not merge
 conflicts on a per-character basis. For example, this means that if a character 
-or substring is inserted or deleted within a string, {+service-short+} will treat 
+or substring is inserted or deleted within a string, Device Sync will treat
 this as a replacement of the entire value of the string.
 
 .. _custom-conflict-resolution:
@@ -104,7 +104,7 @@ this as a replacement of the entire value of the string.
 Custom Conflict Resolution
 --------------------------
 
-Generally speaking, the conflict resolution of {+service-short+} should
+Generally speaking, the conflict resolution of Device Sync should
 work for most purposes, and you should not need to customize it. That
 said, the typical way to do custom conflict resolution is to change a
 property type from string to list. Each side can then add its updates to
@@ -116,6 +116,6 @@ think of.
 Summary
 -------
 
-- {+service+} Sync implements a conflict resolution system to allow multiple offline writers to write simultaneously and still eventually converge on the same result.
+- Device Sync implements a conflict resolution system to allow multiple offline writers to write simultaneously and still eventually converge on the same result.
 - The conflict resolution system follows four rules: deletes always win, the last update wins, inserts in lists are ordered by time, and primary keys designate object identity.
 - Counters and strings are special cases to be aware of in your client code.

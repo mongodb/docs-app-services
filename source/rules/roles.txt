@@ -26,8 +26,8 @@ applies.
 What are Permissions?
 ~~~~~~~~~~~~~~~~~~~~~
 
-A **permission** is a status that {+service-short+} assigns to individual users to control what
-they can and cannot do in your app. {+service-short+} uses both document-level and
+A **permission** is a status that Atlas App Services assigns to individual users to control what
+they can and cannot do in your app. App Services uses both document-level and
 field-level permissions:
 
 - Document-level permissions control whether a user can insert, delete, modify,
@@ -47,15 +47,15 @@ MongoDB collection. Each role represents a possible relationship between a user
 and an individual document. A user may play at most one role per document in
 a request.
 
-You define the roles a user can play for the documents in a collection. {+service-short+}
+You define the roles a user can play for the documents in a collection. App Services
 automatically assigns roles to the user at request time. Each role includes an
-Apply When :ref:`expression <expressions>` that determines when {+service-short+} should
+Apply When :ref:`expression <expressions>` that determines when App Services should
 assign the role to a user as well as a set of document-level and field-level
 permissions that apply to the role.
 
-{+service-short+} only commits operations that a user is authorized to do based on their
+App Services only commits operations that a user is authorized to do based on their
 assigned roles. If a role does not have permission to read a document or some of
-its fields, {+service-short+} omits the document or fields from the results.
+its fields, App Services omits the document or fields from the results.
 
 .. example::
 
@@ -182,10 +182,10 @@ data from the perspective of your app's users and what it might mean to them.
         }
       }
 
-How {+service-short+} Assigns Roles
+How App Services Assigns Roles
 ------------------------------
 
-{+service-short+} dynamically assigns roles for every request. The user
+App Services dynamically assigns roles for every request. The user
 is assigned a separate role, or no role, for each document that matches
 the incoming query.
 
@@ -194,7 +194,7 @@ runs the query.
 
 .. example::
    
-   This request would cause {+service-short+} to evaluate a role for every document in the
+   This request would cause App Services to evaluate a role for every document in the
    ``restaurants`` collection where the ``city`` field is set to ``"Chicago"``:
    
    .. code-block:: javascript
@@ -252,7 +252,7 @@ data source's default roles.
 Define Roles & Permissions
 --------------------------
 
-You can configure your app's data access rules from the {+ui+} or by
+You can configure your app's data access rules from the App Services UI or by
 deploying configuration files with {+cli+}:
 
 .. tabs-realm-admin-interfaces::

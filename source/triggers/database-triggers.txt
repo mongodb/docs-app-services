@@ -36,9 +36,9 @@ manual.
 
 .. important:: Change Stream Limitations
    
-   {+backend+} opens a single change stream for each collection with at least
+   Atlas App Services opens a single change stream for each collection with at least
    one enabled Trigger and limits the total number of open change
-   streams on each linked cluster across all {+app+}s based on the
+   streams on each linked cluster across all Apps based on the
    cluster's size. See :ref:`change stream limitations
    <mongodb-service-limitations-change-streams>` for more information.
 
@@ -165,7 +165,7 @@ Database Triggers have the following configuration options:
 
    * - :guilabel:`Linked Function`
 
-     - Required. The name of the {+service-short+} Function that the Trigger
+     - Required. The name of the Atlas Function that the Trigger
        executes whenever it fires. The Trigger passes the
        :ref:`database event object <database-events>` that
        caused it to fire as the only argument to this Function.
@@ -332,7 +332,7 @@ can suspend a Trigger include:
   cluster :manual:`oplog </core/replica-set-oplog/>`. The App logs
   refer to this as a ``ChangeStreamHistoryLost`` error.
 
-- importing an {+app+} with the ``replace`` strategy instead of the
+- importing an App with the ``replace`` strategy instead of the
   ``merge`` strategy and consequently removing the database user that
   created the Trigger's change stream
 
@@ -358,7 +358,7 @@ Last Cluster Time Processed
 ---------------------------
 
 All Triggers keep track of the last time the Trigger executed, known as
-the **latest execution** in the {+ui+}. Database Triggers also keep track
+the **latest execution** in the App Services UI. Database Triggers also keep track
 of the **last cluster time processed**: the last time the change stream
 backing that Trigger emitted an event. You can access these timestamps
 in the list of Triggers that displays when you first navigate to the
@@ -478,7 +478,7 @@ limit the number of fields that the Trigger processes by using a
         "updateDescription.updatedFields.status": 1
       }
    
-   The change event object that {+service-short+} passes to the trigger function
+   The change event object that App Services passes to the trigger function
    only includes the fields specifed in the projection, as in the following
    example:
    

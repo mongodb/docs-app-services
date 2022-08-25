@@ -16,20 +16,20 @@ Enable Atlas Device Sync
 Overview
 --------
 
-You can enable {+sync+} via the {+app+} UI, {+cli+}, or the 
-{+service-short+} Admin API. If it is your first time enabling {+sync-short+}, 
+You can enable Atlas Device Sync via the {+app+} UI, {+cli+}, or the 
+Atlas App Services Admin API. If it is your first time enabling Device Sync, 
 the UI is a great choice because it walks you through the required steps.
 
 If you're re-enabling it after pausing or terminating it, see: 
 :ref:`Resume <resume-sync>` or :ref:`Re-Enable <re-enable-realm-sync>` 
-{+sync-short+}.
+Device Sync.
 
 Prerequisites
 -------------
 
-While you are configuring {+sync+}, you must define the data access patterns
+While you are configuring Device Sync, you must define the data access patterns
 and rules for your {+app+}. If you haven't already decided how you want to 
-configure your data model and access {+sync-short+}, see:
+configure your data model and access Device Sync, see:
 
 - :ref:`Configure Your Data Model <sync-schema-overview>`
 - :ref:`Choose Your Sync Mode <sync-modes>`
@@ -61,21 +61,21 @@ Enable Partition-Based Sync
 
          .. step:: Navigate to the Sync Configuration Screen
 
-            To define {+sync-short+} rules and enable {+sync-short+} for your application, navigate to the
+            To define Device Sync rules and enable Device Sync for your application, navigate to the
             :guilabel:`Sync` configuration screen through the {+leftnav+}.
 
             .. note:: Sync Rules Cannot Change
 
-               You define {+sync-short+} rules at the same time as you enable {+sync-short+}. Once {+sync-short+} is
-               enabled, you can't change your app's {+sync-short+} rules unless you terminate {+sync-short+}
+               You define Device Sync rules at the same time as you enable Device Sync. Once Device Sync is
+               enabled, you can't change your app's Device Sync rules unless you terminate Device Sync
                and re-enable it with new rules.
 
 
          .. step:: Select Development Details
 
-            You can enable {+sync-short+} for a single linked cluster in your application.
+            You can enable Device Sync for a single linked cluster in your application.
             Determine which cluster you want to use and then select it from the
-            :guilabel:`Select Cluster To {+sync-short+}` dropdown menu.
+            :guilabel:`Select Cluster To Device Sync` dropdown menu.
 
             .. figure:: /images/define-sync-rules-select-cluster.png
                :width: 750px
@@ -84,8 +84,8 @@ Enable Partition-Based Sync
 
          .. step:: Choose a Partition Key
 
-            The {+sync-short+} partition key is a field in every synced document that maps
-            each document to a client-side realm. {+sync-short+} rules apply at the partition
+            The Device Sync partition key is a field in every synced document that maps
+            each document to a client-side realm. Device Sync rules apply at the partition
             level, so it's particularly important to consider your data model and access
             patterns. For more information on partition keys and how to choose one, see
             :ref:`Partitions <sync-partitions>`.
@@ -95,9 +95,9 @@ Enable Partition-Based Sync
               The partition key can either be required or optional. If the partition key
               field is optional, then all MongoDB documents that either exclude the
               partition key or have a null value for the partition key will be sent to the
-              null partition. If the partition key field is required, {+sync+}
+              null partition. If the partition key field is required, Device Sync
               ignores any MongoDB documents that lack a valid value for the partition
-              key. We recommend a required partition key unless you want to {+sync-short+}
+              key. We recommend a required partition key unless you want to Device Sync
               pre-existing data with invalid or missing partition values from a
               MongoDB collection.
 
@@ -105,14 +105,14 @@ Enable Partition-Based Sync
          .. step:: Define Read & Write Permissions
 
             The :guilabel:`Define Permissions` section allows you to define :ref:`JSON
-            expressions <expressions>` that {+service-short+} dynamically evaluates to determine a
+            expressions <expressions>` that App Services dynamically evaluates to determine a
             user's read and write permissions for the data in a given partition.
 
-            {+sync-short+} rule expressions have access to :json-expansion:`%%user`, which resolves
+            Device Sync rule expressions have access to :json-expansion:`%%user`, which resolves
             to the user that opened the realm, and :json-expansion:`%%partition`, which
             resolves to the partition key value for the realm. You can also use operators,
             including :json-operator:`%function`, to handle more complex cases. For
-            examples, see :ref:`{+sync-short+} Permissions <sync-permissions>`.
+            examples, see :ref:`sync-permissions`.
 
             Once you've determined how to decide a user's read and write permissions for a
             given partition, define the corresponding JSON expressions in the
@@ -126,7 +126,7 @@ Enable Partition-Based Sync
          .. step:: Turn On Sync
 
             Now that you've configured rules for your synced cluster, all that's left to
-            do is turn on {+sync-short+} for client applications. Click :guilabel:`Enable Sync`,
+            do is turn on Device Sync for client applications. Click :guilabel:`Enable Sync`,
             take note of any recommendations that appear, and then confirm your choice.
 
      
@@ -190,7 +190,7 @@ Enable Partition-Based Sync
               The partition key can either be required or optional. If the partition key
               field is optional, then all MongoDB documents that either exclude the
               partition key or have a null value for the partition key will be sent to the
-              null partition. If the partition key field is required, {+sync+}
+              null partition. If the partition key field is required, Device Sync
               ignores any MongoDB documents that lack a valid value for the partition
               key. We recommend a required partition key unless you want to sync
               pre-existing data with invalid or missing partition values from a
@@ -224,7 +224,7 @@ Enable Partition-Based Sync
 
          .. step:: Define Read & Write Permissions
 
-            {+service-short+} allows you to define :ref:`JSON expressions <expressions>` that it
+            App Services allows you to define :ref:`JSON expressions <expressions>` that it
             dynamically evaluates whenever a user opens a realm to determine if the user
             has read or write permissions for data in the partition.
 
@@ -351,7 +351,7 @@ Enable Partition-Based Sync
               The partition key can either be required or optional. If the partition key
               field is optional, then all MongoDB documents that either exclude the
               partition key or have a null value for the partition key will be sent to the
-              null partition. If the partition key field is required, {+sync+}
+              null partition. If the partition key field is required, Device Sync
               ignores any MongoDB documents that lack a valid value for the partition
               key. We recommend a required partition key unless you want to sync
               pre-existing data with invalid or missing partition values from a
@@ -389,7 +389,7 @@ Enable Partition-Based Sync
 
          .. step:: Define Read & Write Permissions
 
-            {+service-short+} allows you to define :ref:`JSON expressions <expressions>` that it
+            App Services allows you to define :ref:`JSON expressions <expressions>` that it
             dynamically evaluates whenever a user opens a realm to determine if the user
             has read or write permissions for data in the partition.
 
@@ -467,20 +467,20 @@ Enable Flexible Sync
       
       .. procedure::
 
-         .. step:: Navigate to the {+sync-short+} Configuration Screen
+         .. step:: Navigate to the Device Sync Configuration Screen
 
-            To define {+sync-short+} rules and enable {+sync-short+} for your application, navigate to the
-            :guilabel:`{+sync-short+}` configuration screen through the {+leftnav+}.
+            To define Device Sync rules and enable Device Sync for your application, navigate to the
+            :guilabel:`Device Sync` configuration screen through the {+leftnav+}.
 
 
          .. step:: Select Development Details
 
             Under the :guilabel:`Select Development Details` heading, you can configure
-            various development details, such as {+sync-short+} types, Development Mode,
-            and a cluster to {+sync-short+}.
+            various development details, such as Device Sync types, Development Mode,
+            and a cluster to Device Sync.
 
-            Below the :guilabel:`{+sync-short+} types` subheading, select the :guilabel:`Flexible`
-            option to enable Flexible {+sync-short+}.
+            Below the :guilabel:`Device Sync types` subheading, select the :guilabel:`Flexible`
+            option to enable Flexible Sync.
 
             Next, under the :guilabel:`Development Mode` subheading, you can choose to
             toggle :ref:`Development Mode <enable-disable-development-mode>` on/off.
@@ -488,9 +488,9 @@ Enable Flexible Sync
             client application code and is suitable if you are in development and do not
             have application data in Atlas yet.
 
-            Finally, you can enable {+sync-short+} for a single linked cluster in your
+            Finally, you can enable Device Sync for a single linked cluster in your
             application. Determine which cluster you want to use and select it from
-            the :guilabel:`Select Cluster To {+sync-short+}` dropdown menu.
+            the :guilabel:`Select Cluster To Sync` dropdown menu.
 
             .. important:: Ineligible Clusters
 
@@ -504,8 +504,8 @@ Enable Flexible Sync
 
          .. step:: Select Queryable Fields
 
-            When configuring Flexible {+sync-short+}, specify one or more :ref:`queryable
-            fields <queryable-fields>` from your {+sync-short+} Schema.
+            When configuring Flexible Sync, specify one or more :ref:`queryable
+            fields <queryable-fields>` from your Sync Schema.
 
             To configure queryable fields for your application, navigate to the
             :guilabel:`Select Queryable Fields` heading. Select up to 10 existing fields
@@ -542,13 +542,13 @@ Enable Flexible Sync
 
             #. If you have Dev Mode enabled, you can also create a new collection. When you
                select the dropdown, you can type in the name of the new collection, and
-               {+backend-short+} creates the collection automatically.
+               App Services creates the collection automatically.
 
 
          .. step:: Turn On Sync
 
             Now that you've configured rules for your synced cluster, all that's left to
-            do is turn on {+sync-short+} for client applications. Click :guilabel:`Enable {+sync-short+}`,
+            do is turn on Device Sync for client applications. Click :guilabel:`Enable Device Sync`,
             take note of any recommendations that appear and then confirm your choice.
 
      
@@ -570,7 +570,7 @@ Enable Flexible Sync
 
          .. step:: Select a Cluster to Sync
 
-            You can enable {+sync-short+} for a single linked cluster in your application.
+            You can enable Device Sync for a single linked cluster in your application.
             If you have not yet linked the cluster to your application, follow the
             :ref:`link-a-data-source` guide to link it before
             you continue.
@@ -653,7 +653,7 @@ Enable Flexible Sync
             In the following example, there is a user-defined role in the ``Employees``
             collection. This role takes precedent, and the default role is not applied for
             the ``Employees`` collection. However, since the ``Items`` collection does not
-            specify a value, {+backend+} will apply the default role to the ``Items`` collection.
+            specify a value, App Services will apply the default role to the ``Items`` collection.
 
             .. code-block:: json
 
@@ -692,9 +692,9 @@ Enable Flexible Sync
 
          .. step:: Deploy the Sync Configuration
 
-            Now that you've defined the {+sync-short+} configuration, including read and write
+            Now that you've defined the Device Sync configuration, including read and write
             permissions, you can deploy your changes to start syncing data and enforcing
-            {+sync-short+} rules.
+            Device Sync rules.
 
             To deploy your changes, import your app configuration:
 
@@ -709,17 +709,17 @@ Enable Flexible Sync
 
          .. step:: Select a Cluster to Sync
 
-            You can enable {+sync-short+} for a single linked cluster in your application.
+            You can enable Device Sync for a single linked cluster in your application.
             If you have not yet linked the cluster to your application, follow the
             :ref:`link-a-data-source` guide to link it before
             you continue.
 
-            You'll need the cluster's service configuration file to configure {+sync-short+}. You
+            You'll need the cluster's service configuration file to configure Device Sync. You
             can find the configuration file by listing all services through the Admin API:
 
             .. note:: Authenticating Your Request with an Access Token
 
-              To authenticate your request to the {+service-short+} Admin API, you need a valid and
+              To authenticate your request to the App Services Admin API, you need a valid and
               current authorization token from the MongoDB Cloud API. Read the
               :admin-api-endpoint:`API Authentication <section/Get-Authentication-Tokens>`
               documentation to learn how to acquire a valid access token.
@@ -815,7 +815,7 @@ Enable Flexible Sync
             In the following example, there is a user-defined role in the ``Employees``
             collection. This role takes precedent, and the default role is not applied for
             the ``Employees`` collection. However, since the ``Items`` collection does not
-            specify a value, {+backend+} will apply the default role to the ``Items`` collection.
+            specify a value, App Services will apply the default role to the ``Items`` collection.
 
             .. code-block:: json
 
@@ -854,16 +854,16 @@ Enable Flexible Sync
 
          .. step:: Deploy the Sync Configuration
 
-            Now that you've defined the {+sync-short+} configuration, including read and write
+            Now that you've defined the Device Sync configuration, including read and write
             permissions, you can deploy your changes to start syncing data and enforcing
-            {+sync-short+} rules.
+            Device Sync rules.
 
             To deploy your changes, send an Admin API request that updates the cluster
-            configuration with your {+sync-short+} configuration.
+            configuration with your Device Sync configuration.
 
             .. note:: Authenticating Your Request with an Access Token
 
-              To authenticate your request to the {+service-short+} Admin API, you need a valid and
+              To authenticate your request to the App Services Admin API, you need a valid and
               current authorization token from the MongoDB Cloud API. Read the
               :admin-api-endpoint:`API Authentication <section/Get-Authentication-Tokens>`
               documentation to learn how to acquire a valid access token.

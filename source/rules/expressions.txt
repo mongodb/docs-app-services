@@ -23,7 +23,7 @@ under which a user can take some action. For example, you can write an
 expression to control whether a user can read or write data in a MongoDB
 document or a synced realm.
 
-When {+service-short+} evaluates a rule, it resolves each expression
+When Atlas App Services evaluates a rule, it resolves each expression
 associated with the rule to a boolean value, either ``true`` or
 ``false``.
 
@@ -75,7 +75,7 @@ Embedded Expressions
 ~~~~~~~~~~~~~~~~~~~~
 
 You can embed multiple expression documents in the fields of another expression
-document to handle complex evaluation logic. {+service+} evaluates expressions
+document to handle complex evaluation logic. App Services evaluates expressions
 *depth-first, post-order*, i.e. it starts at the bottom of the expression tree
 and works back to the root-level fields by evaluating each expression after all
 of its embedded expressions.
@@ -101,7 +101,7 @@ Multi-Field Expressions
 
 When you have more than one field in an expression, that expression evaluates to
 ``true`` if and only if every field in the expression evaluates to true. In
-other words, {+service-short+} treats multiple fields in a single expression as an "AND"
+other words, App Services treats multiple fields in a single expression as an "AND"
 operation.
 
 .. example::
@@ -120,7 +120,7 @@ operation.
 Expression Evaluation
 ---------------------
 
-{+service+} evaluates expressions by first replacing expansions with
+App Services evaluates expressions by first replacing expansions with
 their runtime values and then evaluating each field of the expanded
 expression document to a boolean expression. If all fields in an
 expression evaluate to ``true``, the expression also evaluates to
@@ -518,7 +518,7 @@ and JSON representations:
 Call a Function
 ~~~~~~~~~~~~~~~
 
-The following operators allow you to call functions in your {+service-short+}
+The following operators allow you to call functions in your App Services
 application:
 
 .. json-operator:: %function

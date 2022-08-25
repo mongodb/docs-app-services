@@ -15,40 +15,40 @@ Billing
 Overview
 --------
 
-{+service+} applications are billed according to how much they're used on a
+Atlas App Services applications are billed according to how much they're used on a
 monthly basis. There are four independently-measured usage types that determine
 how much you pay each month:
 
-- :ref:`{+service-short+} Requests <billing-requests>`, which measures the number of
-  requests that {+service+} sends and receives from client
+- :ref:`App Services Requests <billing-requests>`, which measures the number of
+  requests that App Services sends and receives from client
   applications and external services. Requests include function calls,
   trigger executions, and sync updates, but exclude user authentication
   and blocked or invalid requests.
 
-- :ref:`{+service-short+} Compute <billing-compute>`, which measures the runtime and memory
+- :ref:`App Services Compute <billing-compute>`, which measures the runtime and memory
   usage of all requests excluding sync and authentication.
 
-- :ref:`{+sync+} <billing-sync>`, which measures the total amount of time in
+- :ref:`Atlas Device Sync <billing-sync>`, which measures the total amount of time in
   which a client application is actively syncing.
 
 - :ref:`Data Transfer <billing-data-transfer>`, which measures the amount of
-  data that {+service+} sends to external services and client applications.
+  data that App Services sends to external services and client applications.
 
 .. note:: Track Your Usage
    
    You can track an application's usage for the current month from the
-   application dashboard in the {+ui+}.
+   application dashboard in the App Services UI.
 
 Monthly Free Tier
 ~~~~~~~~~~~~~~~~~
 
-All {+service+} apps in a MongoDB Atlas project share a single monthly free
+All App Services apps in a MongoDB Atlas project share a single monthly free
 tier. All usage below the free tier thresholds in a given month is not billed.
 Once the sum of all application usage in a project exceeds a free tier
-usage threshold, {+service-short+} immediately begins to bill for any additional
+usage threshold, App Services immediately begins to bill for any additional
 usage.
 
-{+service+} is free to use below the following monthly free tier thresholds:
+App Services is free to use below the following monthly free tier thresholds:
 
 - 1,000,000 :ref:`requests <billing-requests>` **or** 500 hours of
   :ref:`compute <billing-compute>` **or** 10,000 hours of :ref:`sync
@@ -59,11 +59,11 @@ usage.
 Invoicing and Payment
 ~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} is billed as part of MongoDB Atlas. All payment methods that
-work with Atlas can be used to pay for {+service-short+}, including
+App Services is billed as part of MongoDB Atlas. All payment methods that
+work with Atlas can be used to pay for App Services, including
 prepaid Atlas Credits. Any costs associated with a linked Atlas data
 source, such as database operations and backup, are billed separately
-from {+service-short+}.
+from App Services.
 
 See :ref:`MongoDB Atlas Billing <atlas-billing>` for more information.
 
@@ -72,10 +72,10 @@ Usage Types
 
 .. _billing-requests:
 
-{+service-short+} Requests
+App Services Requests
 ~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} counts the number of requests that an application
+App Services counts the number of requests that an application
 receives and handles. Requests are billed at a set rate for each
 request.
 
@@ -83,7 +83,7 @@ There are several types of requests:
 
 - **Function Executions**, such as when a user calls a function from a client
   app or when a function calls an external service. If an executing function
-  calls another function, {+service-short+} considers both executions as part of
+  calls another function, App Services considers both executions as part of
   the same request.
 
 - **Trigger Executions**, such as when a database trigger matches a change
@@ -99,11 +99,11 @@ There are several types of requests:
   event or interaction payload to an incoming webhook or HTTPS endpoint.
 
 - **Sync Operations**, such as when a sync client uploads a :ref:`changeset
-  <changesets>`, when {+service-short+} :ref:`resolves a conflict
+  <changesets>`, when App Services :ref:`resolves a conflict
   <operational-transformations>` in an uploaded changeset, or when
-  {+service-short+} sends changesets to a connected sync client.
+  App Services sends changesets to a connected sync client.
   
-  For more information on sync operations, see :ref:`{+sync+} Protocol
+  For more information on sync operations, see :ref:`Atlas Device Sync Protocol
   <sync-protocol>`.
 
 All incoming requests count toward your monthly usage except for the
@@ -136,7 +136,7 @@ hours of :ref:`compute <billing-compute>` **or** 10,000 hours of :ref:`sync
    - How many monthly active users does your app have?
    - How many sessions does an average user open each month?
    
-   **{+sync+} Requests**
+   **Atlas Device Sync Requests**
    
    - How many write operations do users issue each session?
    - How many updates do users receive each session?
@@ -144,10 +144,10 @@ hours of :ref:`compute <billing-compute>` **or** 10,000 hours of :ref:`sync
 
 .. _billing-compute:
 
-{+service-short+} Compute
+App Services Compute
 ~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} counts the total amount of time and memory that each non-sync
+App Services counts the total amount of time and memory that each non-sync
 application request takes to process. Compute is billed at a set rate for each
 millisecond of runtime. For large requests, this rate is multiplied by a factor
 that reflects the amount of memory the request used.
@@ -184,10 +184,10 @@ hours of :ref:`compute <billing-compute>` **or** 10,000 hours of :ref:`sync
 
 .. _billing-sync:
 
-{+sync+}
+Atlas Device Sync
 ~~~~~~~~~~~~~~~~~
 
-{+service-short+} counts the total amount of time in which a client application
+App Services counts the total amount of time in which a client application
 user has an active connection to the sync server even if they are not 
 transferring data at the time. Sync is billed at a set rate for each 
 millisecond of sync runtime per user.
@@ -215,7 +215,7 @@ hours of :ref:`compute <billing-compute>` **or** 10,000 hours of :ref:`sync
 Data Transfer
 ~~~~~~~~~~~~~
 
-{+service-short+} measures the total amount of data that your application sends
+App Services measures the total amount of data that your application sends
 out to client applications and external services. Data transfer is billed at a
 set rate for each gigabyte of data egress.
 
@@ -227,7 +227,7 @@ set rate for each gigabyte of data egress.
 
 .. note:: {+atlas+} Data Transfer
 
-  Data transfer from a linked {+atlas+} data source to {+service+} is billed as
+  Data transfer from a linked {+atlas+} data source to App Services is billed as
   an {+atlas-short+} Data Egress charge. To learn more about {+atlas-short+}
   egress rates, read the :atlas:`Data Transfer </billing/data-transfer-costs/>`
   billing documentation.
@@ -250,7 +250,7 @@ Examples
 Mobile Application
 ~~~~~~~~~~~~~~~~~~
 
-A group messaging application uses {+service+} to manage permissions and sync
+A group messaging application uses App Services to manage permissions and sync
 messages between users in the same group. The app has the following usage:
 
 - There are around 2,000 active group chats in any given month.
@@ -272,7 +272,7 @@ one month:
    * - Usage Type
      - Calculation
    
-   * - :ref:`{+service-short+} Requests <billing-requests>`
+   * - :ref:`App Services Requests <billing-requests>`
      - - (2000 chats) * (4 users / chat) * (900 messages / user) = 7,200,000 messages
        
        - (7,200,000 messages) * ((1 write + 3 reads) / message) = 28,800,000 requests
@@ -281,7 +281,7 @@ one month:
 
        - (27,800,000 requests) * ($0.000002 / request) = **$55.60**
    
-   * - :ref:`{+sync+} <billing-sync>`
+   * - :ref:`Atlas Device Sync <billing-sync>`
      - - (2000 chats) * (4 users / chat) * (9 hrs / user) = 72,000 active hrs
        
        - (72,000 active hrs) - (2,500 free tier hours) = 69,500 active hrs
@@ -313,15 +313,15 @@ one month:
    
    The free tier would cover the following usage in each area:
    
-   - **{+service-short+} Requests:** 1,000,000 requests
-   - **{+sync+}:** 2,500 hours
+   - **App Services Requests:** 1,000,000 requests
+   - **Atlas Device Sync:** 2,500 hours
    - **Data Transfer:** 10 GB
 
 Web Application
 ~~~~~~~~~~~~~~~
 
 A hardware store uses a web application that allows customers to browse and
-order items online. The app uses {+service-short+} Functions and the GraphQL API to fetch
+order items online. The app uses Atlas Functions and the GraphQL API to fetch
 items based on a user's search, get detailed information for specific items, and
 submit orders. The app has the following usage:
 
@@ -342,7 +342,7 @@ one month:
    * - Usage Type
      - Calculation
 
-   * - :ref:`{+service-short+} Requests <billing-requests>`
+   * - :ref:`App Services Requests <billing-requests>`
      - - (2 searches + 10 items + 0.20 orders) / visitor = 12.2 requests / visitor
        
        - (12.2 requests / visitor) * (100,000 visitors) = 1,220,000 requests
@@ -351,7 +351,7 @@ one month:
        
        - (220,000 requests) * ($0.000002 / request) = **$0.44**
 
-   * - :ref:`{+service-short+} Compute <billing-compute>`
+   * - :ref:`App Services Compute <billing-compute>`
      - - (100,000 visitors) * ((2 searches + 10 items + 0.20 orders) / visitor) = 1,220,000 requests
        
        - (1,220,000 requests) * (100 ms / request) * 1 = 122,000,000 ms
@@ -386,14 +386,14 @@ one month:
    
    The free tier would cover the following usage in each area:
    
-   - **{+service-short+} Requests:** 1,000,000 requests
-   - **{+service-short+} Compute:** 7.82 hours
+   - **App Services Requests:** 1,000,000 requests
+   - **App Services Compute:** 7.82 hours
    - **Data Transfer:** 10 GB
 
 Backend Application
 ~~~~~~~~~~~~~~~~~~~
 
-A regional pizza chain uses {+service+} to handle orders for all of its
+A regional pizza chain uses App Services to handle orders for all of its
 restaurants. The app has the following usage:
 
 - The chain has 25 stores and each store gets about 12,000 orders each month
@@ -416,7 +416,7 @@ restaurants. The app has the following usage:
    * - Usage Type
      - Calculation
 
-   * - :ref:`{+service-short+} Requests <billing-requests>`
+   * - :ref:`App Services Requests <billing-requests>`
      - - (25 stores) * (12,000 orders / store) = 300,000 orders
        
        - (300,000 orders) * ((1 email + 3.10 texts) / order) = 1,230,000 requests
@@ -427,7 +427,7 @@ restaurants. The app has the following usage:
 
        - (238,640 requests) * ($0.000002 / request) = **$0.48**
 
-   * - :ref:`{+service-short+} Compute <billing-compute>`
+   * - :ref:`App Services Compute <billing-compute>`
      - - (1,230,000 requests) * (300 ms / request) * 1 = 369,000,000 ms
          
          - *300 ms is a runtime estimate for the trigger function. To get a
@@ -462,6 +462,6 @@ restaurants. The app has the following usage:
    
    The free tier would cover the following usage in each area:
    
-   - **{+service-short+} Requests:** 1,000,000 requests
-   - **{+service-short+} Compute:** 83.41 hours
+   - **App Services Requests:** 1,000,000 requests
+   - **App Services Compute:** 83.41 hours
    - **Data Transfer:** 4.92 GB
