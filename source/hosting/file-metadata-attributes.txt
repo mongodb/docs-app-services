@@ -14,8 +14,8 @@ Overview
 --------
 
 You can define metadata attributes for each file that you host with
-{+service+}. Metadata attributes map to standard :mdn:`HTTP headers
-<Web/HTTP/Headers>` and allow you to optionally configure how {+service-short+}
+Atlas App Services. Metadata attributes map to standard :mdn:`HTTP headers
+<Web/HTTP/Headers>` and allow you to optionally configure how App Services
 serves your files as well as how clients that request resources should
 handle them. This page provides examples and describes the purpose of
 each available attribute.
@@ -30,18 +30,18 @@ indicates the :wikipedia:`media type <Media_type>` of the file.
 
 .. note::
 
-   If you do not specify a ``Content-Type`` attribute for a file, {+service-short+}
+   If you do not specify a ``Content-Type`` attribute for a file, App Services
    will attempt to automatically add a ``Content-Type`` attribute to it
    based on the file extension.
 
-   For example, {+service-short+} would automatically add the attribute
+   For example, App Services would automatically add the attribute
    ``Content-Type: application/html`` to the file ``myPage.html``.
 
 Examples
 ~~~~~~~~
 
 Indicate that a File Contains HTML
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````````````````
 
 .. code-block:: none
 
@@ -61,21 +61,21 @@ Examples
 ~~~~~~~~
 
 Display the File Inline
-^^^^^^^^^^^^^^^^^^^^^^^
+```````````````````````
 
 .. code-block:: none
 
    Content-Disposition: inline
 
 Download the File
-^^^^^^^^^^^^^^^^^
+`````````````````
 
 .. code-block:: none
 
    Content-Disposition: attachment
 
 Download the File with a Custom Filename
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````````````````````
 
 .. code-block:: none
 
@@ -95,21 +95,21 @@ Examples
 ~~~~~~~~
 
 Indicate No Encoding
-^^^^^^^^^^^^^^^^^^^^
+````````````````````
 
 .. code-block:: none
 
    Content-Encoding: identity
 
 Indicate GZIP Encoding
-^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````
 
 .. code-block:: none
 
    Content-Encoding: gzip
 
 Indicate Multiple Encodings in Application Order
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````````````````````````````
 
 .. code-block:: none
 
@@ -129,14 +129,14 @@ Examples
 ~~~~~~~~
 
 Specify a Single Language
-^^^^^^^^^^^^^^^^^^^^^^^^^
+`````````````````````````
 
 .. code-block:: none
 
    Content-Language: en-US
 
 Specify Multiple Languages
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````````
 
 .. code-block:: none
 
@@ -155,14 +155,14 @@ Examples
 ~~~~~~~~
 
 Refresh a Cached File Every Five Minutes
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+````````````````````````````````````````
 
 .. code-block:: none
 
    Cache-Control: max-age=300
 
 Never Cache a File
-^^^^^^^^^^^^^^^^^^
+``````````````````
 
 .. code-block:: none
 

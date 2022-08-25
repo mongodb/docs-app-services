@@ -17,16 +17,16 @@ Overview
 
 You can configure a log forwarder to automatically store your
 application's server-side logs in a MongoDB collection or send them to
-an external service. {+service-short+} can forward logs individually as they're
+an external service. Atlas App Services can forward logs individually as they're
 created or batch logs together to reduce overhead.
 
 A log forwarder consists of the following components:
 
-- An **action** that controls how and where {+service-short+} forwards logs.
+- An **action** that controls how and where App Services forwards logs.
 
-- A **filter** that controls which logs {+service-short+} forwards.
+- A **filter** that controls which logs App Services forwards.
 
-- A **policy** that controls whether {+service-short+} batches logs or forwards them individually.
+- A **policy** that controls whether App Services batches logs or forwards them individually.
 
 Why Should I Configure Log Forwarding?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -34,7 +34,7 @@ Why Should I Configure Log Forwarding?
 Consider setting up a log forwarder if you need to do any of the
 following:
 
-- Store logs for longer than {+service-short+}'s retention period of {+log-retention-time+}.
+- Store logs for longer than App Services's retention period of {+log-retention-time+}.
 
 - Integrate logs into an external logging service
 
@@ -44,7 +44,7 @@ How is Log Forwarding Billed?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each log forward action invocation (on either an individual log or a
-batch) is billed as one :ref:`{+service-short+} request <billing-requests>`.
+batch) is billed as one :ref:`App Services request <billing-requests>`.
 
 .. _set-up-log-forwarder:
 
@@ -82,7 +82,7 @@ Set Up a Log Forwarder
 2. Choose Which Logs to Forward
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} can forward all of your app's logs or send only a subset to the
+App Services can forward all of your app's logs or send only a subset to the
 target collection or service. You control this subset for each log
 forwarder by defining filters for the log type (e.g. functions, sync,
 etc.) and status (i.e. success or error) that invoke the forwarder's
@@ -121,17 +121,17 @@ action.
            "log_statuses": [ "<status>", ... ]
          }
       
-      {+service-short+} supports forwarding the following log types:
+      App Services supports forwarding the following log types:
       
       .. include:: /includes/log-forwarder-types.rst
       
-      {+service-short+} supports forwarding the following log statuses:
+      App Services supports forwarding the following log statuses:
       
       .. include:: /includes/log-forwarder-statuses.rst
 
 .. important::
    
-   {+service-short+} only forwards a given log if both its type *and* status are
+   App Services only forwards a given log if both its type *and* status are
    specified in the filter.
 
    For example, consider a forwarder that filters for ``sync`` logs with
@@ -153,18 +153,18 @@ action.
 3. Configure Log Batching
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} can combine multiple logs in to a single batched request to reduce
-overhead. The way that {+service-short+} groups logs into batches is controlled by a
+App Services can combine multiple logs in to a single batched request to reduce
+overhead. The way that App Services groups logs into batches is controlled by a
 batching policy.
 
-{+service-short+} supports the following batching policies:
+App Services supports the following batching policies:
 
-- **No Batching:** {+service-short+} forwards logs individually as their
+- **No Batching:** App Services forwards logs individually as their
   corresponding requests occur.
 
 - **Batching:** The forwarder groups documents into a batch as they
   happen. Each batch may include up to 100 log entries. When a batch is
-  full, {+service-short+} forwards the entire batch in a single request. {+service-short+}
+  full, App Services forwards the entire batch in a single request. App Services
   forwards logs at least once a minute regardless of the number of logs
   in the current batch.
 
@@ -204,7 +204,7 @@ collection or call a custom function that sends the logs to an external
 service.
 
 Store Logs in a MongoDB Collection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``````````````````````````````````
 
 .. tabs-realm-admin-interfaces::
    
@@ -243,7 +243,7 @@ Store Logs in a MongoDB Collection
          }
 
 Forward Logs with a Custom Function
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```````````````````````````````````
 
 To forward logs to an external service, :ref:`write a function
 <define-a-function>` that accepts an array of log objects and calls the
@@ -251,7 +251,7 @@ service through an API, SDK, or library.
 
 .. note::
    
-   Depending on your batching policy and log frequency, {+service-short+} may call a
+   Depending on your batching policy and log frequency, App Services may call a
    log forwarding function with an array of up to 100 log objects.
 
 The function should have the same signature as the following example:
@@ -334,9 +334,9 @@ underlying cluster that stores the logs. Once suspended, a forwarder
 cannot be invoked and does not forward any logs.
 
 You can restart a suspended log forwarder from the :guilabel:`Logs >
-Forwarding` screen of the {+ui+}.
+Forwarding` screen of the App Services UI.
 
 .. note::
 
-   If a log forwarder is suspended, {+service-short+} sends the project
+   If a log forwarder is suspended, App Services sends the project
    owner an email alerting them of the issue.

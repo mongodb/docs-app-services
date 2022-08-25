@@ -1,7 +1,7 @@
 .. _copy-realm-app:
 
 =====================
-Make a Copy of an {+app+}
+Make a Copy of an App
 =====================
 
 .. contents:: On this page
@@ -13,12 +13,12 @@ Make a Copy of an {+app+}
 Overview
 --------
 
-You can make a copy of an existing {+app+}. You might want to copy an
+You can make a copy of an existing App. You might want to copy an
 application when:
 
 - You use feature branches for development. Use a unique copy of the 
-  {+app+} for each feature branch to avoid conflicts.
-- You use a fresh copy of the {+app+} when running tests to ensure start state.
+  App for each feature branch to avoid conflicts.
+- You use a fresh copy of the App when running tests to ensure start state.
 - You deploy the same app to clusters across regions using a :ref:`local 
   deployment model <local-deployment>`.
 
@@ -38,7 +38,7 @@ You can copy your application's configuration in two ways:
       .. warning::
 
          If you're using :ref:`Automated GitHub Deploy <deploy-github>`, do not 
-         update :ref:`your {+app+} configuration with the {+cli+} 
+         update :ref:`your App configuration with the {+cli+} 
          <deploy-github-make-changes-cli>`. Instead, push your changes to the 
          linked GitHub repository.
 
@@ -57,7 +57,7 @@ You can copy your application's configuration in two ways:
 
          .. step:: Pull the Latest Version of Your App
 
-            You need a local copy of the configuration files for the {+app+} you're copying.
+            You need a local copy of the configuration files for the App you're copying.
             Pull a local copy of the latest version of your app:
 
             .. code-block:: bash
@@ -67,12 +67,12 @@ You can copy your application's configuration in two ways:
             .. tip::
 
                You can also download a copy of your application's configuration files from
-               the :guilabel:`Deployment > Export App` screen in the {+ui+}.
+               the :guilabel:`Deployment > Export App` screen in the App Services UI.
 
 
          .. step:: Create New App
 
-            Create a new {+app+}. This is where you add the configuration files from
+            Create a new App. This is where you add the configuration files from
             the exported app in later steps. To create the app, run:
 
             .. code-block:: bash
@@ -112,31 +112,31 @@ You can copy your application's configuration in two ways:
 
          .. step:: Migrate Secrets to New App
 
-            When you :ref:`export your {+app+} <export-realm-app>`, the export does not include the app's
+            When you :ref:`export your App <export-realm-app>`, the export does not include the app's
             :ref:`secrets <app-secret>`. As secrets cannot be read once they're defined,
-            you must also have access to the secrets outside of {+service-short+} to import
-            them into an {+app+}. If your app doesn't have any secrets, you can skip this step.
+            you must also have access to the secrets outside of App Services to import
+            them into an App. If your app doesn't have any secrets, you can skip this step.
 
-            To add the secrets from another {+app+}:
+            To add the secrets from another App:
 
             #. Get the names of all the secrets from the exported app by following the
                :ref:`view secrets documentation <list-secrets>`.
             #. Save the names of all the secrets to a secure location. You don't have access
                to the actual secrets, but it's useful to have a list of the secret names
                to add to your imported app.
-            #. Gather the secrets. This cannot be done from within {+service-short+}.
+            #. Gather the secrets. This cannot be done from within App Services.
             #. Add all the secrets to the imported app by following the :ref:`define a secret documentation <define-secret>`.
                Secrets must be added one at a time.
 
             .. note:: Add secrets before pushing app
 
-               You should add all secrets before pushing up the copy of the {+app+} because
-               {+service-short+} can require that the secrets exist to push the configuration.
+               You should add all secrets before pushing up the copy of the App because
+               App Services can require that the secrets exist to push the configuration.
                If the secrets don't exist, the {+cli+} throws an error when you push the
                app in the next step.
 
 
-         .. step:: Push New App to {+service-short+}
+         .. step:: Push New App to App Services
 
             Now that the app configuration and secrets are updated, push the configuration to your
             remote app. {+cli+} immediately deploys the updated configurations on push.
@@ -159,22 +159,22 @@ You can copy your application's configuration in two ways:
 
          .. step:: Export the Latest Version of Your App
 
-            Get a local copy of your {+app+} by following the
+            Get a local copy of your App by following the
             :ref:`documentation to export your <export-realm-app>`.
 
 
          .. step:: Create New App
 
-            Create a new {+app+}. This is where you add the configuration files from
+            Create a new App. This is where you add the configuration files from
             the exported app in later steps. Follow the :ref:`UI <create-a-realm-app>`,
             :ref:`CLI <create-app-cli>` or :ref:`API <create-app-api>` documentation
-            to create the {+app+}.
+            to create the App.
 
 
          .. step:: Set up Github Automatic Deployment
 
             Follow the :ref:`documentation to set up Github Automatic Deployment <deploy-github>`
-            for your {+app+}.
+            for your App.
 
 
          .. step:: Copy App Configuration to New App
@@ -206,19 +206,19 @@ You can copy your application's configuration in two ways:
 
          .. step:: Migrate Secrets to New App
 
-            When you :ref:`export your {+app+} <export-realm-app>`, the export does not include the app's
+            When you :ref:`export your App <export-realm-app>`, the export does not include the app's
             :ref:`secrets <app-secret>`. As secrets cannot be read once they're defined,
-            you must also have access to the secrets outside of {+service-short+} to import
-            them into an {+app+}. If your app doesn't have any secrets, you can skip this step.
+            you must also have access to the secrets outside of App Services to import
+            them into an App. If your app doesn't have any secrets, you can skip this step.
 
-            To add the secrets from another {+app+}:
+            To add the secrets from another App:
 
             #. Get the names of all the secrets from the exported app by following the
                :ref:`view secrets documentation <list-secrets>`.
             #. Save the names of all the secrets to a secure location. You don't have access to
                the actual secrets, but it's useful to have a list of the secret names
                to add to your imported app.
-            #. Gather the secrets. This cannot be done from within {+service-short+}.
+            #. Gather the secrets. This cannot be done from within App Services.
             #. Add all the secrets to the imported app by following the :ref:`define a secret documentation <define-secret>`.
                Secrets must be added one at a time.
 
@@ -234,7 +234,7 @@ You can copy your application's configuration in two ways:
                git commit -m "<commit message>"
                git push origin <branch name>
 
-            Once you successfully push your changes to GitHub, {+service-short+}
+            Once you successfully push your changes to GitHub, App Services
             immediately deploys a new version of your application that matches the state
             of the latest commit. Client applications automatically use the newest
             version, so make sure that you also update your client code to use the new

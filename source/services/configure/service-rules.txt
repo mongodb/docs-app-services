@@ -17,7 +17,7 @@ Overview
 
 In order to call a service action, you must first define a :ref:`service
 rule <service-rules>` that enables and configures the capabilities of
-the action. You can define service rules from the {+ui+} or by
+the action. You can define service rules from the Atlas App Services UI or by
 :doc:`importing </manage-apps/deploy/manual/deploy-cli>` a service
 configuration directory that contains a rule configuration file. Select
 the tab below that corresponds to the method you want to use.
@@ -35,7 +35,7 @@ Procedure
          .. step:: Create a New Rule
 
             You can create and configure a service rule from its associated
-            :doc:`service </reference/services>` page in the {+ui+}.
+            :doc:`service </reference/services>` page in the App Services UI.
 
             To define a new service rule:
 
@@ -69,7 +69,7 @@ Procedure
                .. note::
 
                   If you specify ``{}``, the expression will always evaluate to
-                  ``true`` and {+service+} will always allow the associated actions to
+                  ``true`` and App Services will always allow the associated actions to
                   be called.
 
             .. figure:: /images/define-service-rule.png
@@ -155,7 +155,7 @@ Procedure
                    | *when*
 
                  - Required. A :ref:`rule expression <expressions>` that determines if a
-                   service action should actually execute after being called. {+backend+}
+                   service action should actually execute after being called. App Services
                    will only execute the action if the expression resolves to ``true``. If
                    you do not specify an expression, :guilabel:`Can Evaluate` defaults to
                    ``true``.
@@ -164,7 +164,7 @@ Procedure
          .. step:: Deploy the Rule
 
             Push the rule configuration to deploy it to your app. Once you have deployed,
-            {+service-short+} immediately begins to enforce the rule.
+            App Services immediately begins to enforce the rule.
 
             .. code-block:: shell
 

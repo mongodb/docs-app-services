@@ -37,7 +37,7 @@ Configuration
 
    * - | ``id``
        | String
-     - A string that uniquely identifies the Trigger. {+service-short+}
+     - A string that uniquely identifies the Trigger. Atlas App Services
        automatically generates a unique ID for a trigger when you create
        it.
 
@@ -60,7 +60,7 @@ Configuration
 
    * - | ``function_name``
        | String
-     - The name of the {+service-short+} Function that the Trigger
+     - The name of the Atlas Function that the Trigger
        executes whenever it fires. The Trigger automatically passes
        arguments to the function depending on the Trigger ``type``.
 

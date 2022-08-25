@@ -18,9 +18,9 @@ Overview
 The Facebook authentication provider allows users to log in
 with their existing Facebook account through a companion
 Facebook application. When a user logs in, Facebook provides
-{+service+} with an `OAuth 2.0 access token
+Atlas App Services with an `OAuth 2.0 access token
 <https://www.oauth.com/oauth2-servers/access-tokens/>`_ for
-the user. {+service-short+} uses the token to identify the user and
+the user. App Services uses the token to identify the user and
 access approved data from the Facebook API on their behalf.
 For more information on Facebook Login, see `Facebook Login
 for Apps
@@ -38,7 +38,7 @@ Configuration
       :tabid: ui
          
       You can enable and configure the Facebook authentication provider from the
-      {+ui+} by selecting :guilabel:`Facebook` from the
+      App Services UI by selecting :guilabel:`Facebook` from the
       :guilabel:`Authentication` page.
 
    .. tab::
@@ -129,10 +129,10 @@ options:
        Identifiers)`.
 
        Once a user completes the authentication process on
-       Facebook, {+service-short+} redirects them back to either a
+       Facebook, App Services redirects them back to either a
        specified redirect URI or, if no redirect URI is
        specified, the URL that they initiated the
-       authentication request from. {+service-short+} will only redirect
+       authentication request from. App Services will only redirect
        a user to a URI that exactly matches an entry in this
        list, including the protocol and any trailing
        slashes.
@@ -190,20 +190,20 @@ and configuring the provider to connect with the app.
 
       .. note::
 
-         {+service-short+} web applications do not require you to install the Facebook
+         App Services web applications do not require you to install the Facebook
          SDK to use the Facebook authentication provider. If you are
          incorporating Facebook Login into a web application you can skip
          any steps in the quickstart related to setting up the Facebook SDK
          for JavaScript.
 
 
-   .. step:: Add {+service-short+} as a Valid OAuth Redirect URI
+   .. step:: Add App Services as a Valid OAuth Redirect URI
 
       When a user completes the login flow for your Facebook app they need
-      to be redirected back to {+service-short+}. Facebook Login will only allow users
+      to be redirected back to App Services. Facebook Login will only allow users
       to redirect to a pre-approved list of URIs.
 
-      From the :guilabel:`Facebook Login > Settings` page, add an {+service-short+}
+      From the :guilabel:`Facebook Login > Settings` page, add an App Services
       authentication callback URL that corresponds to the :doc:`deployment
       region </manage-apps/deploy/deployment-models-and-regions>` of your application to
       the list of :guilabel:`Valid OAuth Redirect URIs`.
@@ -215,7 +215,7 @@ and configuring the provider to connect with the app.
    .. step:: Configure the Facebook Authentication Provider
 
 
-      To connect your Facebook app to {+service-short+}, find your Facebook app's
+      To connect your Facebook app to App Services, find your Facebook app's
       :guilabel:`App ID` and :guilabel:`App Secret` values on the
       :guilabel:`Settings > Basic` page and add them to your authentication
       provider :ref:`configuration <auth-facebook-configuration>`.

@@ -16,8 +16,8 @@ Define Roles And Permissions
 Overview
 --------
 
-{+service-short+} uses a strict rules system that prevents all
-operations unless they are specifically allowed. {+service+} determines
+Atlas App Services uses a strict rules system that prevents all
+operations unless they are specifically allowed. App Services determines
 if each operation is allowed dynamically when it receives the request
 from the client based on roles that you define.
 
@@ -32,7 +32,7 @@ guide walks through configuring one or more roles for a collection.
 
 .. important:: Sync Rules
    
-   This page describes data access rules for clusters where :ref:`{+sync+}
+   This page describes data access rules for clusters where :ref:`Atlas Device Sync
    <sync>` is not enabled. Synced clusters use a different rules model, which
    takes precedence over non-sync rules. If sync is enabled for a cluster, any
    non-sync rules defined for the cluster do not apply.
@@ -59,7 +59,7 @@ Procedure
          .. step:: Navigate to the MongoDB Rules Screen
 
             You can create and manage roles and permissions from the MongoDB rules
-            screen in the {+ui+}. To get to the rules screen, click
+            screen in the App Services UI. To get to the rules screen, click
             :guilabel:`Rules` beneath :guilabel:`Data Access` in the
             {+leftnav+}.
 
@@ -68,7 +68,7 @@ Procedure
 
             Data access roles and permissions are scoped to individual collections
             in a linked MongoDB cluster. To define roles and permissions for a
-            collection, you need to create the collection namespace in the {+ui+}.
+            collection, you need to create the collection namespace in the App Services UI.
 
             Find the linked cluster that you want to define access permissions for
             in the rules sidebar and click its :guilabel:`context menu
@@ -208,8 +208,8 @@ Procedure
 
             .. note::
 
-               {+service-short+} evaluates roles in order from left-to-right. A user can only
-               have one role per document, so once {+service-short+} finds a role that
+               App Services evaluates roles in order from left-to-right. A user can only
+               have one role per document, so once App Services finds a role that
                applies to the current document it skips evaluating any remaining
                roles and immediately begins evaluating a role for the next
                document in the query.
@@ -218,7 +218,7 @@ Procedure
          .. step:: Save the Updated Collection Rules
 
             Once you have finished defining roles for the collection, click
-            :guilabel:`Save`. {+service-short+} will immediately begin using the roles you
+            :guilabel:`Save`. App Services will immediately begin using the roles you
             defined for all incoming queries on the collection.
 
    
@@ -241,7 +241,7 @@ Procedure
             .. tip::
 
                You can also download a copy of your application's configuration files from
-               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+               the :guilabel:`Deploy > Export App` screen in the App Services UI.
 
 
          .. step:: Add a Rule Configuration File

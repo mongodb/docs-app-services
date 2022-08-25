@@ -85,16 +85,16 @@ the cluster.
    * - | ``sync.development_mode_enabled``
        | Boolean
      - If ``true``, Development Mode is enabled for the cluster. While
-       enabled, {+service-short+} stores synced objects in a specific database within 
+       enabled, Atlas App Services stores synced objects in a specific database within 
        the cluster, and mirrors object types in that database's collection 
        schemas.
 
    * - | ``sync.database_name``
        | String
-     - The name of the database in the synced cluster where {+service-short+} should store
+     - The name of the database in the synced cluster where App Services should store
        synced objects.
        
-       When Development Mode is enabled, {+service-short+} stores synced objects in
+       When Development Mode is enabled, App Services stores synced objects in
        this database. Each object type maps to its own collection in the
        database with a schema that matches the synced objects.
    
@@ -111,7 +111,7 @@ the cluster.
        | Document
      - A document that defines the ``read`` and ``write`` permissions for the
        synced cluster. Permissions are defined with :ref:`rule expressions
-       <expressions>` that {+service-short+} evaluates per-user, per-partition. The
+       <expressions>` that App Services evaluates per-user, per-partition. The
        expressions have access to the :json-expansion:`%%user` and
        :json-expansion:`%%partition` expansions.
 
@@ -120,7 +120,7 @@ the cluster.
 MongoDB Collection Rules (Non-Sync)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For non-synced clusters, you can define collection-level rules that {+service-short+}
+For non-synced clusters, you can define collection-level rules that App Services
 evaluates dynamically for each request. Each collection's rules are stored in
 the ``/rules`` sub-directory in a JSON file with the same name as the collection
 namespace.
@@ -148,7 +148,7 @@ namespace.
 
    * - | ``id``
        | String
-     - A string that uniquely identifies the trigger. {+service-short+}
+     - A string that uniquely identifies the trigger. App Services
        automatically generates a unique ID for a trigger when you create
        it.
 

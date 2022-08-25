@@ -15,7 +15,7 @@ Convert Webhooks to HTTPS Endpoints
 Overview
 --------
 
-{+service+}'s third-party service webhooks are deprecated in favor of
+The Atlas App Services third-party service webhooks are deprecated in favor of
 custom HTTPS endpoints. HTTPS endpoints are functionally almost
 identical to webhooks but are now a first-class service.
 
@@ -28,7 +28,7 @@ URLs, you should define an HTTPS endpoint.
 Automatically Convert Existing HTTP Webhooks
 --------------------------------------------
 
-{+service-short+} can automatically convert any existing HTTP service
+App Services can automatically convert any existing HTTP service
 webhooks in your app into HTTPS endpoints. This conversion is one-way
 which means that you cannot convert HTTPS endpoints back into webhooks.
 The conversion process does not delete the original webhooks so incoming
@@ -37,7 +37,7 @@ webhook requests will continue to execute after the conversion.
 To run the webhook to HTTPS endpoint conversion process for all webhooks
 in your application:
 
-1. Click :guilabel:`HTTPS Endpoints` in the {+leftnav+} of the {+ui+}.
+1. Click :guilabel:`HTTPS Endpoints` in the {+leftnav+} of the App Services UI.
 
 #. Click the :guilabel:`Convert` button.
 
@@ -56,7 +56,7 @@ in your application:
 Manually Convert GitHub and Twilio Webhooks
 -------------------------------------------
 
-{+service-short+} cannot automatically convert GitHub and Twilio
+App Services cannot automatically convert GitHub and Twilio
 webhooks to HTTPS endpoints because they use deprecated client
 libraries. However, you can manually migrate webhooks from these
 services to new HTTPS endpoints.
@@ -173,7 +173,7 @@ To migrate to the converted HTTPS endpoint URLs:
 
 .. example::
 
-   To migrate a service's integration from an {+service-short+} webhook to the
+   To migrate a service's integration from an App Services webhook to the
    converted HTTPS endpoint, modify the service's external configuration
    for outgoing webhook requests to point to the converted endpoint URL.
    

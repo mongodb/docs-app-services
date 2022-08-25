@@ -12,16 +12,16 @@ Create Template Configurations with Expansions
    :depth: 2
    :class: singlecol
 
-{+service-short+} supports a replacement operator (``%()``) that dynamically resolves JSON
+Atlas App Services supports a replacement operator (``%()``) that dynamically resolves JSON
 expansions like :json-expansion:`%%environment` in your :ref:`configuration
 files <app-configuration>`. When you create a new app with configuration files
 that include expansions (either with :ref:`{+cli+} <deploy-cli>` or through
-:ref:`GitHub <deploy-github>`), {+service-short+} automatically resolves the expansions and
+:ref:`GitHub <deploy-github>`), App Services automatically resolves the expansions and
 uses the resolved configuration files to create the app.
 
 .. important::
    
-   Configuration files that use the replacement operator are *templates*. {+service-short+}
+   Configuration files that use the replacement operator are *templates*. App Services
    does not resolve the expansions after it creates the app. Instead, it uses a
    copy of the configuration files that reflect the resolved values at the time
    the app was created.
@@ -115,7 +115,7 @@ Define a Template
 
       .. example::
 
-         {+service-short+} uses the template configuration to generate
+         App Services uses the template configuration to generate
          new, resolved configuration files on import:
 
          .. code-block:: shell

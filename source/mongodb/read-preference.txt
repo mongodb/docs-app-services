@@ -17,14 +17,14 @@ Overview
 
 You can configure the :manual:`read preference </core/read-preference>`
 for a :doc:`linked MongoDB Atlas cluster </mongodb>` to control the type
-of :manual:`replica set member </core/replica-set-members>` that {+service+}
+of :manual:`replica set member </core/replica-set-members>` that Atlas App Services
 routes database read requests to. You can also specify a :manual:`tag
 set </core/read-preference/#replica-set-read-preference-tag-sets>` to
 target specific members of the replica set.
 
 You cannot set the read preference on a :ref:`{+adf-datasource+} <data-federation-caveats>`.
 
-By default, {+service-short+} uses a read preference of ``primary``, which routes
+By default, App Services uses a read preference of ``primary``, which routes
 all read requests through the :manual:`primary node
 </core/replica-set-primary>` of a replica set.
 
@@ -59,7 +59,7 @@ Procedure
          .. step:: Navigate to the Cluster Configuration Screen
 
             You can configure the read preference for a linked cluster from the cluster's
-            configuration screen in the {+ui+}. To get to the configuration screen, click
+            configuration screen in the App Services UI. To get to the configuration screen, click
             :guilabel:`Linked Data Sources` beneath :guilabel:`Manage` in the left-hand
             navigation and then select the cluster for which you want to configure read
             preference.
@@ -107,7 +107,7 @@ Procedure
 
             Once you have specified a :guilabel:`Read Preference` and any
             :guilabel:`Read Preference Tags`, click :guilabel:`Save`. Once saved,
-            {+backend+} routes all incoming database read requests for the cluster
+            App Services routes all incoming database read requests for the cluster
             according to your preference.
 
    
@@ -130,7 +130,7 @@ Procedure
             .. tip::
 
                You can also download a copy of your application's configuration files from
-               the :guilabel:`Deploy > Export App` screen in the {+ui+}.
+               the :guilabel:`Deploy > Export App` screen in the App Services UI.
 
 
          .. step:: Specify a Cluster Read Preference

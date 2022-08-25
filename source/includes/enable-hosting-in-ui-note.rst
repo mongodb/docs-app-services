@@ -2,5 +2,5 @@
 
 .. note:: Enable hosting in the UI
   
-  Before you start using the {+cli+} with {+service-short+} Static Hosting, you must 
-  :ref:`enable hosting in the {+ui+} <enable-hosting>`.    
+  Before you start using the {+cli+} with Static Hosting, you must 
+  :ref:`enable hosting in the App Services UI <enable-hosting>`.    

@@ -1,7 +1,7 @@
 .. _intro-backend-and-web:
 
 =================================================================
-Introduction to {+service+} for Backend and Web Developers
+Introduction to Atlas App Services for Backend and Web Developers
 =================================================================
 
 .. default-domain:: mongodb
@@ -12,10 +12,10 @@ Introduction to {+service+} for Backend and Web Developers
    :depth: 2
    :class: singlecol
 
-As a backend developer, you can use {+service+} to rapidly develop cloud-based
-applications. {+service-short+} apps can react to changes in your `{+atlas+}
+As a backend developer, you can use Atlas App Services to rapidly develop cloud-based
+applications. App Services apps can react to changes in your `{+atlas+}
 <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ data,
-connect that data to other systems, and scale to meet demand. {+service-short+}
+connect that data to other systems, and scale to meet demand. App Services
 does this without the need to manage database and server infrastructure.
 
 As a web developer, you have to deal with lots of overhead when sending 
@@ -27,50 +27,50 @@ Selecting the best ones for your project requires deep understanding of the trad
 As a mobile app developer, syncing data across devices poses challenges. 
 You might write a lot of custom conflict resolution code yourself,
 or you might use a platform-specific backend like CloudKit that's not designed 
-for developing cross-platform applications. {+sync+} provides an 
+for developing cross-platform applications. Atlas Device Sync provides an 
 offline-first, cross-platform solution for syncing data between a backend and
-mobile devices. When you combine this with {+service-short+}'s authentication and data 
+mobile devices. When you combine this with App Services's authentication and data 
 validation, you solve a host of common mobile app development issues.
 
-{+backend+} is a serverless application backend that streamlines solving these 
-common challenges. {+backend-short+} provides configurable functions, integrated data access, and security rules.
-With {+backend-short+}, you can focus on building unique features instead of boilerplate backend code.
+App Services is a serverless application backend that streamlines solving these 
+common challenges. App Services provides configurable functions, integrated data access, and security rules.
+With App Services, you can focus on building unique features instead of boilerplate backend code.
 
-What Problem Does {+service+} Solve?
--------------------------------------------
+What Problem Does App Services Solve?
+-------------------------------------
 
 It takes time, resources, and expertise to build, administer, and maintain
 backend infrastructure. However, a lot of these features are similar across applications.
-{+service+} manages the backend infrastructure and user management for you.
+App Services manages the backend infrastructure and user management for you.
 This frees you to focus on the features that makes your app special, not boilerplate code.
 
-{+service+} is:
+App Services is:
 
 Serverless:
   - Deploy server-side applications without having to set up and manage server infrastructure. 
-    {+service-short+} includes provisioning, deployment, operating systems, web servers, logging, backups, and redundancy.
-  - Run cloud-based {+service-short+} Functions that can crunch data or interact with Node.js modules.
-  - Skip writing an authentication API on top of your {+service+} service.
+    App Services includes provisioning, deployment, operating systems, web servers, logging, backups, and redundancy.
+  - Run cloud-based Atlas Functions that can crunch data or interact with Node.js modules.
+  - Skip writing an authentication API on top of your App Services instance.
     Authenticated clients can interact with parts of the database based on their permissions.
 
 Dynamic and responsive:
   - React to data changes in {+atlas+}, process data from HTTPS endpoints,
-    or run {+service-short+} Functions on a schedule with 
-    {+service-short+} Triggers.
+    or run Atlas Functions on a schedule with 
+    Atlas Triggers.
   - Get up and running quickly for free, then scale according to the demands of your application.
   - Pay for and receive only the exact amount of compute you need at any given time
     with usage-based pricing. Usage under a certain amount per month is always free.
 
 Simply secure:
-  - Let users log in with familiar authentication providers that are built into {+service+}.
+  - Let users log in with familiar authentication providers that are built into App Services.
   - Control which users may read and write data on a per-field basis with
     :ref:`role-based permissions <roles>` that you can define declaratively or
     with a function.
   - Enforce data integrity by defining :ref:`validation logic
-    <schemas>` with {+backend-schema+}.
+    <schemas>`.
 
 Synchronized:
-  - Seamlessly sync data across devices with {+sync+} .
+  - Seamlessly sync data across devices with Atlas Device Sync .
   - Avoid writing complex synchronization logic with the :ref:`Database SDKs <realm-sdks>`.
 
 .. _intro-web-users:
@@ -84,13 +84,13 @@ users with traditional email/password combinations. Others use API keys or third
 authentication providers like Facebook and Google. These methods often require a lot of 
 complex boilerplate code.
 
-{+backend+} provides built-in user management and authentication methods. These
+App Services provides built-in user management and authentication methods. These
 features encapsulate complexity and make it easy to integrate third-party
 authentication providers. You can enable authentication providers in your
 server-side configuration then immediately log in from any client application
 using a Realm SDK.
 
-To learn more about authentication in {+backend+}, see :ref:`users-and-authentication`.
+To learn more about authentication in App Services, see :ref:`users-and-authentication`.
 
 .. _intro-web-schema:
 
@@ -103,12 +103,12 @@ It's also important to make sure that any given piece of data is only accessible
 to an authorized user.  For example, you might grant a user access
 to only their own data.
 
-{+backend+} validates data with an  {+backend-short+} schema you define in the `JSON schema <https://json-schema.org/>`__ standard.
-A {+backend-short+} schema serves as the source of truth for defining data types in your application.
-{+backend-short+} also uses the schema to map data between your application and a 
+App Services validates data with a schema you define in the `JSON schema <https://json-schema.org/>`__ standard.
+A schema serves as the source of truth for defining data types in your application.
+App Services also uses the schema to map data between your application and a 
 `{+atlas+} <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ collection.
 
-You can also configure {+backend-short+} to secure data with role-based data access rules.
+You can also configure App Services to secure data with role-based data access rules.
 These rules determine each user's access to every document for every request.
 A user can only insert, read, or modify data if both they and the document
 meet pre-defined conditions.
@@ -126,11 +126,11 @@ Many applications require that some business logic runs on a server. Usually thi
 logic deals with sensitive user data or interacting with external services. Apps might
 also need to respond in real time when something happens in the app or in an external service.
 
-{+backend+} lets you define serverless JavaScript functions called {+backend-short+} Functions.
-You can use {+service-short+} Functions for the following common backend use cases:
+App Services lets you define serverless JavaScript functions called Atlas Functions.
+You can use Atlas Functions for the following common backend use cases:
 
 - Call from client applications with the {+realm-web+} SDK.
-- Execute {+service-short+} Functions in response to trigger events, like an update to a document in MongoDB or at a scheduled time.
+- Execute Atlas Functions in response to trigger events, like an update to a document in MongoDB or at a scheduled time.
 - HTTPS endpoints that execute a function in response to external applications.
 
 To learn more about defining and using serverless functions, see
@@ -147,9 +147,9 @@ If the data is on a server, you need an API to access the data and prevent unaut
 The {+client-database+} SDKs provide a secure MongoDB client to interact with data
 in your :ref:`MongoDB data sources <data-sources>`.
 
-{+backend-short+}'s server-side rules ensures that users only read and modify permitted documents. 
+App Services's server-side rules ensures that users only read and modify permitted documents. 
 Rules consist of one or more user roles for each collection. A role determines if
-a given user has permission to access and edit a document. {+backend-short+} determines a role
+a given user has permission to access and edit a document. App Services determines a role
 for each document in every request. It then enforces the role's permissions before responding.
 
 .. tabs-realm-sdks::
@@ -187,7 +187,7 @@ for each document in every request. It then enforces the role's permissions befo
 .. _intro-web-graphql:
 
 GraphQL for MongoDB
-^^^^^^^^^^^^^^^^^^^
+```````````````````
 
 :graphql:`GraphQL <>` is a standard, open-source API architecture that is an
 alternative to REST and other HTTP APIs. It features a query language that lets you 
@@ -203,24 +203,24 @@ GraphQL has a couple of primary benefits for web developers:
   You can group your GraphQL queries into a single request to one endpoint instead of
   sending requests to multiple endpoints.
 
-{+backend+} generates a GraphQL API for your application based on your :ref:`data model <intro-web-schema>`. 
+App Services generates a GraphQL API for your application based on your :ref:`data model <intro-web-schema>`.
 The API includes a set of CRUD operations that you can access with a GraphQL client
 or in a HTTP request. You can also create custom resolvers backed by :ref:`functions <intro-web-functions>`.
 
-To learn more about the {+service-short+} GraphQL API, see :ref:`graphql-api`.
+To learn more about the Atlas GraphQL API, see :ref:`graphql-api`.
 
 .. _intro-web-mql:
 
 Client-Side MongoDB Queries
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```````````````````````````
 
 Traditionally developers query the database on the server and access the server
 from the client through a HTTP API. This requires more developer resources and lacks
 the flexibility of directly querying a database.
 
-{+backend+} includes the :manual:`Query API </tutorial/query-documents>`,
+App Services includes the :manual:`Query API </tutorial/query-documents>`,
 a powerful API that lets you access {+atlas+} data from the client.
-You can query {+atlas-short+} like you're using a database driver and {+service-short+} enforces 
+You can query {+atlas-short+} like you're using a database driver and App Services enforces 
 :ref:`data access rules <intro-web-schema>` rules for all requests.
 
 To learn more about the built-in MongoDB service, see :ref:`data-sources`.
@@ -230,32 +230,30 @@ To learn more about the built-in MongoDB service, see :ref:`data-sources`.
 Synchronize Data Across Devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Synchronizing data is a hard problem for mobile app developers. {+sync+}
+Synchronizing data is a hard problem for mobile app developers. Device Sync
 provides offline-first sync capabilities for your mobile application. 
 Client applications use :ref:`{+client-database+} <intro-realm-database>` to 
 persist data to the local device. When the device has a network connection, 
-Sync seamlessly sends the data to the {+app+}. The app stores the data 
+Sync seamlessly sends the data to the App. The app stores the data 
 to a linked :ref:`MongoDB Atlas data source <data-sources>`, and updates 
 the data on other client devices.
 
-{+sync+} provides :ref:`conflict resolution <conflict-resolution>` to 
+Device Sync provides :ref:`conflict resolution <conflict-resolution>` to
 handle multiple users updating the same data. When combined with :ref:`user 
 authentication and management <intro-user-authentication>` and :ref:`schema 
-validation and data access <intro-web-schema>`, {+sync+} provides a secure
+validation and data access <intro-web-schema>`, Device Sync provides a secure
 way for your mobile clients to sync data across devices and with the cloud.
 
-Get Started with {+service+}
------------------------------------
-
-You can ship your first app built with {+service+} in minutes.
+Get Started with App Services
+-----------------------------
 
 Tutorials
 ~~~~~~~~~
 
 Check out our :doc:`tutorials </tutorials>` to learn more about how to build 
-{+service-short+} applications. Tutorials start with git repositories you can clone
+App Services applications. Tutorials start with git repositories you can clone
 and run, and walk you through code excerpts that are specific to working
-with {+service-short+}.
+with App Services.
 
 To get started with your first web app, follow the :ref:`Task Tracker 
 application tutorial <tutorial-task-tracker-web>`. You can also refer to the 
@@ -268,7 +266,7 @@ Prebuilt Applications
 ~~~~~~~~~~~~~~~~~~~~~
 
 To explore a prebuilt app that you can customize, create a :ref:`template 
-app <template-apps>`. Template applications are working apps that use {+service-short+} 
+app <template-apps>`. Template applications are working apps that use App Services 
 services to do things like:
 
 - Use Sync to synchronize data between mobile clients and the linked 
@@ -279,21 +277,21 @@ services to do things like:
   to update views in a separate collection
 
 Template apps are working apps you can run and change to experiment with 
-{+service-short+}. These apps are a good choice for developers who prefer to learn by 
+App Services. These apps are a good choice for developers who prefer to learn by 
 experimentation, versus the more description-heavy tutorials above.
 
 Summary
 -------
 
-- {+backend+} is a serverless application platform that makes it easy to deploy
+- App Services is a serverless application platform that makes it easy to deploy
   and scale.
-- You can build an {+app+} with custom logic via functions and triggers, 
+- You can build an app with custom logic via functions and triggers,
   custom permissions via rules, and authentication via third-party SSO.
-- {+service+}'s built-in :ref:`authentication system <users-and-authentication>` 
+- App Services's built-in :ref:`authentication system <users-and-authentication>`
   simplifies user data access.
   You can add users to your app and define :ref:`permissions
   <permissions>` that control who can read and write data.
-- Backend use cases for {+service+} include:
+- Backend use cases for App Services include:
 
   - Crunching data
   - Reacting to data changes in MongoDB Atlas

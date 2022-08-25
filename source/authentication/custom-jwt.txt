@@ -18,11 +18,11 @@ Overview
 --------
 
 The Custom JWT authentication provider allows users to authenticate with
-an authentication system that is independent from {+service+}. The external
+an authentication system that is independent from Atlas App Services. The external
 system must return a signed :jwt-io:`JSON Web Token <introduction>` that
 contains a unique ID value for the authenticated user.
 
-{+service-short+} uses the :abbr:`JWT (JSON Web Token)` to identify your
+App Services uses the :abbr:`JWT (JSON Web Token)` to identify your
 application's users and authenticate their requests but does not impose
 any restrictions on the external authentication system's requirements or
 authentication methods. For example, the system could require the user
@@ -44,7 +44,7 @@ Configuration
    .. tab::
       :tabid: ui
 
-      You can enable the JWT authentication provider from the {+ui+}
+      You can enable the JWT authentication provider from the App Services UI
       by selecting :guilabel:`Custom JWT Authentication` from the
       :guilabel:`Authentication` page.
 
@@ -100,8 +100,8 @@ Audience
 ~~~~~~~~
 
 The :guilabel:`Audience` of a JWT specifies its intended recipient. JWTs
-describe their audience in the ``aud`` claim. By default, {+service-short+} expects
-``aud`` to contain the App ID of the {+app+} for which the provider
+describe their audience in the ``aud`` claim. By default, App Services expects
+``aud`` to contain the App ID of the App for which the provider
 is configured.
 
 If the external authentication system JWT specifies a different ``aud``
@@ -182,7 +182,7 @@ or :ref:`specify a JSON Web Key URI
 .. _custom-jwt-authentication-configuration-manually-signing-keys:
 
 Manually Specify Signing Keys
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+`````````````````````````````
 
 You can manually configure the signing algorithm and specify one or more
 signing keys that the external authentication system may use to sign
@@ -251,7 +251,7 @@ JWTs.
 .. _custom-jwt-authentication-configuration-jwk-uri:
 
 Use a JWK URI
-^^^^^^^^^^^^^
+`````````````
 
 Some external authentication systems provide a `JSON Web Key Set
 <https://tools.ietf.org/html/rfc7517>`_ that describes the signing
@@ -285,7 +285,7 @@ signing algorithm and keys. When enabled, each token must include a
    * - | :guilabel:`Use JWK URI`
        | *config.useJWKURI*
 
-     - If ``true``, configures {+service-short+} to use a signing algorithm and
+     - If ``true``, configures App Services to use a signing algorithm and
        signing keys defined in a :abbr:`JWK (JSON Web Key)` or
        :abbr:`JWKS (JSON Web Key Set)`. The JWKS must be accessible at a
        URL that you specify.
@@ -306,18 +306,18 @@ Metadata Fields
 ~~~~~~~~~~~~~~~
 
 :guilabel:`Metadata Fields` are additional data that describe each user.
-{+service-short+} determines the value of each metadata field from the value of
+App Services determines the value of each metadata field from the value of
 some field included in the JWT from the external authentication system. 
-If you set the ``name`` field of a user, then {+service-short+} will use that 
-field as the user's display name. {+service-short+} refreshes a user's metadata 
+If you set the ``name`` field of a user, then App Services will use that
+field as the user's display name. App Services refreshes a user's metadata
 whenever they log in and exposes the fields in the ``data`` object of the 
 :doc:`user object </authentication>`.
 
 .. important:: 2048 Character Limit
 
    The length of a JWT token increases with the number of metadata fields in the 
-   token and the size of each field. **{+service-short+} limits the length of a 
-   JWT token to 2048 characters.** If you exceed this limit, {+service-short+} 
+   token and the size of each field. **App Services limits the length of a 
+   JWT token to 2048 characters.** If you exceed this limit, App Services 
    logs an error and the ticket is not processed.
 
 .. tabs-realm-admin-interfaces::
@@ -526,7 +526,7 @@ document of the following form:
 
      - Required. A string representing the hashing algorithm being used.
 
-       {+service-short+} supports JWTs encoded with the following algorithms:
+       App Services supports JWTs encoded with the following algorithms:
 
        .. list-table::
           :header-rows: 1
@@ -543,7 +543,7 @@ document of the following form:
 
    * - .. data:: typ
 
-     - Required. The type of the token. {+service-short+} expects a JSON web token
+     - Required. The type of the token. App Services expects a JSON web token
        so the value should be ``"JWT"``.
 
    * - .. data:: kid
@@ -581,8 +581,8 @@ document of the following form:
    * - .. data:: aud
 
      - Required. The audience of the token.
-       By default, {+service-short+} expects this value to be the App ID of your
-       {+app+}. If your external authentication service
+       By default, App Services expects this value to be the App ID of your
+       App. If your external authentication service
        returns a different ``aud`` value, you should specify that value
        instead.
 
@@ -599,7 +599,7 @@ document of the following form:
 
        .. note::
 
-          {+service-short+} will not accept expired authentication tokens.
+          App Services will not accept expired authentication tokens.
 
    * - .. data:: iat
 
@@ -617,7 +617,7 @@ document of the following form:
 
 .. note::
 
-   {+service-short+} maps certain values from the JWT the :ref:`user
+   App Services maps certain values from the JWT the :ref:`user
    object <user-objects>` so that you can access them in your
    application:
 
@@ -654,10 +654,10 @@ Firebase JWT Authentication
 
 You can use the `Firebase Authentication
 <https://firebase.google.com/docs/auth>`__ service to authenticate users into
-App Services apps as well as Firebase apps. Use {+service-short+} Custom JWT
-authentication to access {+service-short+} with Firebase credentials. 
+App Services apps as well as Firebase apps. Use App Services Custom JWT
+authentication to access App Services with Firebase credentials. 
 
-To set up Firebase Authentication as your Custom JWT provider in {+service-short+}: 
+To set up Firebase Authentication as your Custom JWT provider in App Services: 
 
 .. procedure:: 
 
@@ -666,7 +666,7 @@ To set up Firebase Authentication as your Custom JWT provider in {+service-short
       Follow `the official docs <https://firebase.google.com/docs/auth>`__ to set up
       Firebase Authentication for your project.
 
-   .. step::  Configure {+service-short+} JWT Authentication
+   .. step::  Configure App Services JWT Authentication
 
       .. tabs-realm-admin-interfaces::
 
@@ -683,9 +683,9 @@ To set up Firebase Authentication as your Custom JWT provider in {+service-short
             
             #. While you don't *need* to add any data for :guilabel:`Metadata Fields`, 
                it is useful for getting basic user information from the Firebase JWT 
-               into your :ref:`{+service-short+} User object <user-objects>`. 
+               into your :ref:`App Services User object <user-objects>`. 
 
-               The following is a basic mapping from the Firebase JWT to an {+service-short+} user.
+               The following is a basic mapping from the Firebase JWT to an App Services user.
                You can add these to the table in the UI. Modify as you wish following
                the :ref:`Metadata Fields documentation <custom-jwt-authentication-configuration-metadata-fields>`.
 
@@ -770,7 +770,7 @@ To set up Firebase Authentication as your Custom JWT provider in {+service-short
                             "name": "user_id",
                             "field_name": "userId"
                         }
-                        ...any other fields you want to map into {+service-short+}
+                        ...any other fields you want to map into App Services
                     ]
                   },
                   ...rest of config
@@ -779,10 +779,10 @@ To set up Firebase Authentication as your Custom JWT provider in {+service-short
       For more details, refer to the :ref:`JWT authentication configuration documentation 
       <config-custom-jwt>`.
 
-   .. step::  Log In to {+service-short+} Using Firebase JWT with Client SDK
+   .. step::  Log In to App Services Using Firebase JWT with Client SDK
 
-      Now that you've configured {+service-short+} to work with Firebase JWTs, you can
-      log users in using Firebase and {+service-short+} client SDKs in languages supported by both. 
+      Now that you've configured App Services to work with Firebase JWTs, you can
+      log users in using Firebase and Realm SDKs in languages supported by both.
 
       #. Log the user into Firebase. See the relevant `Firebase SDK documentation 
          <https://firebase.google.com/docs/auth>`__. 
@@ -851,14 +851,14 @@ Summary
 -------
 
 - Custom JWT authentication allows you to identify your application's
-  users via a JSON Web Token issued outside of {+service-short+}.
-- {+service-short+} expects JWT audience values to be the App ID of the {+app+}
+  users via a JSON Web Token issued outside of App Services.
+- App Services expects JWT audience values to be the App ID of the App
   unless otherwise configured in the application.
-- {+service-short+} can verify JWTs using either
+- App Services can verify JWTs using either
   :ref:`manually specified keys and signing algorithms
   <custom-jwt-authentication-configuration-manually-signing-keys>` or a
   :ref:`JSON Web Key URI
   <custom-jwt-authentication-configuration-jwk-uri>`.
 - You can pass custom :ref:`user data
   <custom-jwt-authentication-configuration-metadata-fields>` in your JWT
-  that {+service-short+} refreshes whenever the user refreshes their token.
+  that App Services refreshes whenever the user refreshes their token.
