@@ -63,7 +63,7 @@ run virtually any app or backend service on top of Atlas.
 
       .. procedure::
 
-         .. step:: Install the Realm SDK
+         .. step:: Install a Realm SDK
 
             Device Sync uses Realm's native language objects to define a
             data model and work with data.
@@ -80,12 +80,12 @@ run virtually any app or backend service on top of Atlas.
 
             To enable Sync, see :ref:`Enable Atlas Device Sync <enable-sync>`.
 
-         .. step:: Subscribe to Data Changes
+         .. step:: Sync Device Data to Atlas
             
-            In your client app, define subscriptions that use regular
-            Realm queries to sync a subset of all syncable data. Data
-            that you subscribe to is automatically kept up-to-date and
-            any changes you make get sent to all other Sync clients.
+            Data that you subscribe to in a client app is automatically
+            kept up-to-date. Any changes that the client app makes are
+            automatically synced across all clients whenever a network
+            connection is available.
             
       .. image:: /images/plp/realm-sync.png
          :alt: Realm Sync Illustration
@@ -200,6 +200,37 @@ run virtually any app or backend service on top of Atlas.
             
             Learn how to :realm:`Send GraphQL Requests with Apollo
             Client </web/graphql-apollo-react/>`.
+
+            .. tabs::
+
+               .. tab:: GraphQL
+                  :tabid: graphql
+
+                  .. code-block:: graphql
+
+                     query GetMeetingsInDateRange($start: DateTime!, $end: DateTime!) {
+                       meetings(query: {
+                         start_gte: $start,
+                         end_lte: $end
+                       }) {
+                         _id
+                         start
+                         end
+                         location
+                       }
+                     }
+
+               .. tab:: cURL
+                  :tabid: curl
+
+                  .. code-block:: bash
+
+                     curl -X POST https://realm.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
+                       -H 'apiKey: <YOUR API KEY>' \
+                       -d {
+                         "query": "query GetMeetingsInDateRange($start: DateTime!, $end: DateTime!) { meetings(query: { start_gte: $start, end_lte: $end }) { _id start end location } }"
+                         "variables": { "start": "2022-01-01T00:00:00.000Z", "end": "2022-03-31T23:59:59.999Z" }
+                       }
 
       .. image:: /images/plp/connection.png
          :alt: Build a Secure GraphQL API
