@@ -1,3 +1,15 @@
+# August 26, 2022
+
+## Manage & Deploy Apps
+- Deploy/Deployment Models & Regions: Add GCP regions
+
+## Device Sync
+- Overview: Clarify the Web SDK does not support Device Sync, but you can query via MongoDB Data Access or GraphQL
+
+## Other
+- Template Apps page: Update React Native description to include @realm/react library
+- Product naming updates across many pages to improve first/subsequent naming compliance and other naming issues
+
 # August 19, 2022
 
 ## Manage & Deploy Apps
