@@ -148,19 +148,36 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
        The client attempts to reconnect until this process is complete. Then,
        this error resolves and Sync begins working normally.
     
-   * - ErrorWriteNotAllowed
-     - This error occurs when a client attempts a write that is disallowed 
-       by permissions, or if the write modifies an object outside of the 
-       subscription query. 
-       
-       Consider an example where the client application opens a subscription 
-       on a ``Places`` object type with the query ``name = "NY"``. If the 
-       client then tries to insert a ``Places`` object with a field 
-       ``name: "CT"``, the write triggers an ``ErrorWriteNotAllowed`` because 
-       the object is not within the subscription query.
+   * - ErrorCompensatingWrite
+     - This non-fatal error occurs when a client attempts an "illegal" write.
+       The following are considered illegal writes:
 
-       This error triggers a client reset. To recover from this error, 
-       perform a :ref:`client reset <client-resets>`.
+       - Creating an object before opening a subscription
+       - Creating an object that would be outside of the client's query view
+       - Modifying an object that is outside of the client's query view
+       - Creating, deleting, or modifying an object or field that the client
+         does not have write permissions to.
+       - Modifying an object in such a way that client would no longer have
+         write permissions on that object or field after the write.
+         
+       Because the local realm has no concept of "illegal" writes, the write
+       will always succeed locally. Upon sync, the server will notice the
+       illegal write. The server then undoes the change. The undo operation
+       ("compensating write") syncs back to the client so the client's realm no
+       longer has the illegal write. The server also sends this error to let the
+       client know what has happened.
+
+       Note: Any local writes between the illegal write and the compensating write
+       will be lost.
+
+       The "illegal" write appears in the applog as a non-fatal error. Illegal
+       writes might indicate that your application code is doing something you
+       didn't intend.
+
+       When using older SDK versions that are linked to a realm-core version
+       before realm-core 12.1.0, you might see ``ErrorWriteNotAllowed`` instead.
+       The server will not undo the illegal write, and you will need to perform
+       a :ref:`client reset <client-resets>`.
 
 .. _mongodb-translator-errors:
 
