@@ -216,7 +216,7 @@ To match all documents in a collection, use an empty query object:
          "dataSource": "<cluster name>",
          "database": "<database name>",
          "collection": "<collection name>",
-         "query": {}
+         "filter": {}
      }'
 
 Find By Document ID
@@ -238,7 +238,7 @@ ObjectID field, including a document using an EJSON ``$oid`` object:
          "dataSource": "<cluster name>",
          "database": "<database name>",
          "collection": "<collection name>",
-         "query": {
+         "filter": {
            "_id": { "$oid": "630e51b3f4cd7d9e606caab6" }
          }
      }'
@@ -261,7 +261,7 @@ You can match documents on a specific date by matching an EJSON
          "dataSource": "<cluster name>",
          "database": "<database name>",
          "collection": "<collection name>",
-         "query": {
+         "filter": {
            "createdAt": { "$date": { "$numberLong": "1661881925033" } }
          }
      }'
@@ -281,7 +281,7 @@ You can query a range of dates with ``$gt``, ``$gte``, ``$lt``, and
          "dataSource": "<cluster name>",
          "database": "<database name>",
          "collection": "<collection name>",
-         "query": {
+         "filter": {
            "createdAt": {
              "$gte": { "$date": { "$numberLong": "1640995200000" } },
              "$lt": { "$date": { "$numberLong": "1672531200000" } }
