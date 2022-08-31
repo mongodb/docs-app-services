@@ -1,6 +1,6 @@
-=====================
-{+data-api+} Examples
-=====================
+=================
+Data API Examples
+=================
 
 .. contents:: On this page
    :local:
@@ -9,12 +9,12 @@
    :class: singlecol
 
 The following examples demonstrate how to send requests to the Atlas
-{+data-api+}.
+Data API.
 
 Specify BSON Types in Requests
 ------------------------------
 
-{+data-api+} requests can specify BSON types that don't exist in JSON by
+Data API requests can specify BSON types that don't exist in JSON by
 instead using the EJSON :ref:`data format <data-api-data-formats>` in
 the request body. You can use EJSON to match BSON types in query filters
 or write BSON types in insert and update operations.
@@ -37,9 +37,9 @@ a two-character hexadecimal string:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -65,9 +65,9 @@ milliseconds <https://currentmillis.com/>`_ as a 64-bit integer:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -88,9 +88,9 @@ value as a string:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -111,9 +111,9 @@ a "double"), use ``$numberDouble`` with the integer value as a string:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -134,9 +134,9 @@ integer value as a string:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -157,9 +157,9 @@ integer value as a string:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -179,9 +179,9 @@ To specify an ObjectId value, use ``$oid`` with the ID as a byte string:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/insertOne' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -209,9 +209,9 @@ To match all documents in a collection, use an empty query object:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/find' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -231,9 +231,9 @@ ObjectID field, including a document using an EJSON ``$oid`` object:
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/find' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -254,9 +254,9 @@ You can match documents on a specific date by matching an EJSON
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/find' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
@@ -274,9 +274,9 @@ You can query a range of dates with ``$gt``, ``$gte``, ``$lt``, and
    :copyable: false
    
    curl --request POST \
-     'https://data.mongodb-api.com/app/<{+data-api+} App ID>/endpoint/data/v1/action/find' \
+     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
      --header 'Content-Type: application/ejson' \
-     --header 'api-key: <{+data-api+} Key>' \
+     --header 'api-key: <API Key>' \
      --data-raw '{
          "dataSource": "<cluster name>",
          "database": "<database name>",
