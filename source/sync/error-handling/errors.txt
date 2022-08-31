@@ -153,7 +153,9 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
        The following are considered illegal writes:
 
        - Creating an object before opening a subscription
-       - Creating an object that would be outside of the client's query view
+       - Creating an object that would be outside of the client's query view.
+         "Query view" includes both the client's subscriptions and the client's
+         read permissions.
        - Modifying an object that is outside of the client's query view
        - Creating, deleting, or modifying an object or field that the client
          does not have write permissions to.
@@ -162,13 +164,35 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
          
        Because the local realm has no concept of "illegal" writes, the write
        will always succeed locally. Upon sync, the server will notice the
-       illegal write. The server then undoes the change. The undo operation
-       ("compensating write") syncs back to the client so the client's realm no
-       longer has the illegal write. The server also sends this error to let the
-       client know what has happened.
+       illegal write. The server then undoes the change. The undo operation,
+       called a "compensating write", syncs back to the client so the client's
+       realm no longer has the illegal write. The server also sends this error
+       to let the client know what has happened.
 
-       Note: Any local writes between the illegal write and the compensating write
-       will be lost.
+       Any local writes to a given object between an illegal write to that
+       object and the corresponding compensating write will be lost. 
+
+       .. example:: 
+       
+          Consider the following pseudo-code example:
+        
+          .. code-block:: javascript
+
+             obj1.fieldA = 10 // illegal due to field-level permissions
+             obj1.fieldB = 5 // legal
+             DELETE obj1 // legal
+             DELETE obj2 // legal
+
+          Here, the user does not have permission to write to
+          ``fieldA`` but attempts to write to it anyway -- an *illegal* write.
+          The user then performs two *legal* writes to the same object and
+          another legal write to a different object. Upon receiving the
+          compensating write for the illegal write to ``obj1.fieldA``, the
+          subsequent two legal writes to that object are lost. The end result is
+          that obj1 still exists and its two field values are whatever they were
+          before the attempted modifications. Meanwhile, the deletion of obj2 is
+          unrelated to the illegal write that caused the compensating write, so
+          it stands and obj2 stays deleted.
 
        The "illegal" write appears in the applog as a non-fatal error. Illegal
        writes might indicate that your application code is doing something you
