@@ -194,14 +194,21 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
           unrelated to the illegal write that caused the compensating write, so
           it stands and obj2 stays deleted.
 
-       The "illegal" write appears in the applog as a non-fatal error. Illegal
+       The illegal write appears in the applog as a non-fatal error. Illegal
        writes might indicate that your application code is doing something you
        didn't intend.
 
-       When using older SDK versions that are linked to a realm-core version
-       before realm-core 12.1.0, you might see ``ErrorWriteNotAllowed`` instead.
-       The server will not undo the illegal write, and you will need to perform
-       a :ref:`client reset <client-resets>`.
+       In the following cases, you'll see ``ErrorWriteNotAllowed`` instead of
+       ``ErrorCompensatingWrite`` after an "illegal" write:
+
+       - When using older SDK versions that are linked to a realm-core version
+         before realm-core 12.1.0. In this case, the server will not undo the
+         illegal write, and you will need to perform a :ref:`client reset
+         <client-resets>`.
+       - When modifying an object in a collection with :ref:`asymmetric sync
+         <optimize-asymmetric-sync>` enabled. In this case, the error is
+         non-fatal and does not trigger a client reset.
+
 
 .. _mongodb-translator-errors:
 
