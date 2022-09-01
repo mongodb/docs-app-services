@@ -148,19 +148,67 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
        The client attempts to reconnect until this process is complete. Then,
        this error resolves and Sync begins working normally.
     
-   * - ErrorWriteNotAllowed
-     - This error occurs when a client attempts a write that is disallowed 
-       by permissions, or if the write modifies an object outside of the 
-       subscription query. 
-       
-       Consider an example where the client application opens a subscription 
-       on a ``Places`` object type with the query ``name = "NY"``. If the 
-       client then tries to insert a ``Places`` object with a field 
-       ``name: "CT"``, the write triggers an ``ErrorWriteNotAllowed`` because 
-       the object is not within the subscription query.
+   * - ErrorCompensatingWrite
+     - This non-fatal error occurs when a client attempts an "illegal" write.
+       The following are considered illegal writes:
 
-       This error triggers a client reset. To recover from this error, 
-       perform a :ref:`client reset <client-resets>`.
+       - Creating an object before opening a subscription
+       - Creating an object that would be outside of the client's query view.
+         "Query view" includes both the client's subscriptions and the client's
+         read permissions.
+       - Modifying an object that is outside of the client's query view
+       - Creating, deleting, or modifying an object or field that the client
+         does not have write permissions to.
+       - Modifying an object in such a way that client would no longer have
+         write permissions on that object or field after the write.
+         
+       Because the local realm has no concept of "illegal" writes, the write
+       will always succeed locally. Upon sync, the server will notice the
+       illegal write. The server then undoes the change. The undo operation,
+       called a "compensating write", syncs back to the client so the client's
+       realm no longer has the illegal write. The server also sends this error
+       to let the client know what has happened.
+
+       Any local writes to a given object between an illegal write to that
+       object and the corresponding compensating write will be lost. 
+
+       .. example:: 
+       
+          Consider the following pseudo-code example:
+        
+          .. code-block:: javascript
+
+             obj1.fieldA = 10 // illegal due to field-level permissions
+             obj1.fieldB = 5 // legal
+             DELETE obj1 // legal
+             DELETE obj2 // legal
+
+          Here, the user does not have permission to write to
+          ``fieldA`` but attempts to write to it anyway -- an *illegal* write.
+          The user then performs two *legal* writes to the same object and
+          another legal write to a different object. Upon receiving the
+          compensating write for the illegal write to ``obj1.fieldA``, the
+          subsequent two legal writes to that object are lost. The end result is
+          that obj1 still exists and its two field values are whatever they were
+          before the attempted modifications. Meanwhile, the deletion of obj2 is
+          unrelated to the illegal write that caused the compensating write, so
+          it stands and obj2 stays deleted.
+
+       The illegal write appears in the applog as a non-fatal error. Illegal
+       writes might indicate that your application code is doing something you
+       didn't intend.
+
+       In the following cases, you'll see ``ErrorWriteNotAllowed`` instead of
+       ``ErrorCompensatingWrite`` after an "illegal" write:
+
+       - When using older SDK versions that are linked to a realm-core version
+         before realm-core 12.1.0. In this case, the server will not undo the
+         illegal write, and you will need to perform a :ref:`client reset
+         <client-resets>`.
+       - When modifying an object in a collection with :ref:`asymmetric sync
+         <optimize-asymmetric-sync>` enabled. In this case, the error is
+         non-fatal and does not trigger a client reset. The server skips over
+         the illegal change and does not apply it to the synced MongoDB cluster.
 
 .. _mongodb-translator-errors:
 
