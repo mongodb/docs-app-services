@@ -23,10 +23,11 @@ including updating information in one document when a related document
 changes or interacting with a :doc:`service </reference/services>` upon 
 the insertion of a new document.
 
-Database Triggers use MongoDB :manual:`change streams </changeStreams>`
-to listen for changes to documents in a collection and pass
-:ref:`database events <database-events>` to their associated Trigger
-function.
+Database Triggers use MongoDB :manual:`change streams </changeStreams>` to
+listen for changes to documents in a collection and pass :ref:`database events
+<database-events>` to their associated Trigger function. Unlike SQL data
+triggers, which run on the database server, Atlas Triggers run on a serverless
+compute layer that scales independently of the database server.
 
 You can use a :manual:`$match </reference/operator/aggregation/match>`
 expression document to filter change events based on
