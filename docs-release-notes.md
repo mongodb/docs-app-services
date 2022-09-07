@@ -1,3 +1,14 @@
+# September 1, 2022
+
+## Device Sync
+- Handle Errors/Sync Errors: New section with details about the Compensating Write error
+
+## Data API
+- Data API Examples: New page with examples demonstrating how to send requests to the Data API
+
+## Other
+- Admin API: Correct the success message for the `adminGetService` endpoint
+
 # August 26, 2022
 
 ## Manage & Deploy Apps
