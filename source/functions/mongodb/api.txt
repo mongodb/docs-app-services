@@ -12,6 +12,39 @@ MongoDB API Reference
    :depth: 1
    :class: singlecol
 
+.. _mongodb-admin:
+
+mongodb.admin()
+---------------
+
+.. class:: hidden
+   
+   .. method:: mongodb.admin()
+
+Gets a handle for the ``admin`` database in a linked MongoDB data
+source. You can use this to run MongoDB admin commands like 
+:method:`admin.getDBNames()`.
+
+.. code-block:: javascript
+   :emphasize-lines: 2
+
+   const mongodb = context.services.get("mongodb-atlas");
+   const admin = mongodb.admin();
+
+Parameters
+~~~~~~~~~~
+
+.. code-block:: typescript
+   
+   admin(): AdminDatabase
+
+Return Value
+~~~~~~~~~~~~
+
+The ``mongodb.admin()`` method returns an ``AdminDatabase`` object. The
+object contains helper methods that wrap a subset of MongoDB database
+commands. See :method:`admin.getDBNames()`.
+
 .. _mongodb-db:
 
 mongodb.db()
@@ -55,6 +88,39 @@ The ``mongodb.db()`` method returns a ``Database`` object that allows
 you to access collections in the specified database.
 
 See :method:`database.collection()`
+
+.. _mongodb-admin-getdbnames:
+
+admin.getDBNames()
+------------------
+
+.. class:: hidden
+   
+   .. method:: admin.getDBNames()
+
+Returns a list of database names in a MongoDB data source.
+
+.. include:: /includes/note-method-system-function-only.rst
+
+.. code-block:: javascript
+   :emphasize-lines: 2
+
+   const mongodb = context.services.get("mongodb-atlas");
+   const admin = mongodb.admin();
+   const dbNames = admin.getDBNames();
+
+Parameters
+~~~~~~~~~~
+
+.. code-block:: typescript
+   
+   getDBNames(): string[]
+
+Return Value
+~~~~~~~~~~~~
+
+The ``admin.getDBNames()`` method returns an array of strings where each
+element is the name of a database in the data source.
 
 .. _mongodb-db-collection:
 
