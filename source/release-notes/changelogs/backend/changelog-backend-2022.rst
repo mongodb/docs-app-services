@@ -1,3 +1,15 @@
+.. _backend_20220910:
+
+10 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support App Services deployments in the following :ref:`GCP regions<realm-regions>`:
+  - Ohio (``us-central1``)
+  - Virginia (``us-east4``)
+  - Oregon (``us-west1``)
+  - Belgium (``europe-west1``)
+  - Mumbai (``asia-south1``)
+
 .. _backend_20220629:
 
 29 June 2022 Release
