@@ -1,6 +1,6 @@
-.. _backend_20220910:
+.. _backend_20220909:
 
-10 September 2022 Release
+9 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Support App Services deployments in the following :ref:`GCP regions<realm-regions>`:
