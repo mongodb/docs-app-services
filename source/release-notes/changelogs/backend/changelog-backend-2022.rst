@@ -1,3 +1,11 @@
+.. _backend_20220907:
+
+07 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for :method:`database.getCollectionNames()` in Atlas
+  Functions.
+
 .. _backend_20220629:
 
 29 June 2022 Release
