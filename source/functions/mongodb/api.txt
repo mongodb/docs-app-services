@@ -122,6 +122,39 @@ Return Value
 The ``admin.getDBNames()`` method returns an array of strings where each
 element is the name of a database in the data source.
 
+.. _mongodb-db-getcollectionnames:
+
+database.getCollectionNames()
+-----------------------------
+
+.. class:: hidden
+   
+   .. method:: database.getCollectionNames()
+
+Returns a list of collection names in the database.
+
+.. include:: /includes/note-method-system-function-only.rst
+
+.. code-block:: javascript
+   :emphasize-lines: 2
+
+   const mongodb = context.services.get("mongodb-atlas");
+   const db = mongodb.db("myDB");
+   const collectionNames = db.getCollectionNames();
+
+Parameters
+~~~~~~~~~~
+
+.. code-block:: typescript
+   
+   getCollectionNames(): string[]
+
+Return Value
+~~~~~~~~~~~~
+
+The ``database.getCollectionNames()`` method returns an array of strings
+where each element is the name of a collection in the database.
+
 .. _mongodb-db-collection:
 
 database.collection()
