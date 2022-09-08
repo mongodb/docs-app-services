@@ -1,3 +1,11 @@
+.. _backend_20220921:
+
+21 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added :method:`mongodb.admin()` and :method:`admin.getDBNames()` in
+  Atlas Functions.
+
 .. _backend_20220907:
 
 07 September 2022 Release
