@@ -14,8 +14,8 @@ MongoDB API Reference
 
 .. _mongodb-db:
 
-mongodb.db()``
---------------
+mongodb.db()
+------------
 
 .. class:: hidden
    
@@ -56,10 +56,43 @@ you to access collections in the specified database.
 
 See :method:`database.collection()`
 
+.. _mongodb-db-getcollectionnames:
+
+database.getCollectionNames()
+-----------------------------
+
+.. class:: hidden
+   
+   .. method:: database.getCollectionNames()
+
+Returns a list of collection names in the database.
+
+.. include:: /includes/note-method-system-function-only.rst
+
+.. code-block:: javascript
+   :emphasize-lines: 2
+
+   const mongodb = context.services.get("mongodb-atlas");
+   const db = mongodb.db("myDB");
+   const collectionNames = db.getCollectionNames();
+
+Parameters
+~~~~~~~~~~
+
+.. code-block:: typescript
+   
+   getCollectionNames(): string[]
+
+Return Value
+~~~~~~~~~~~~
+
+The ``database.getCollectionNames()`` method returns an array of strings
+where each element is the name of a collection in the database.
+
 .. _mongodb-db-collection:
 
-database.collection()``
------------------------
+database.collection()
+---------------------
 
 .. class:: hidden
    
@@ -102,8 +135,8 @@ allows you to query the specified collection.
 
 .. _mongodb-collection-find:
 
-collection.find()``
--------------------
+collection.find()
+-----------------
 
 .. class:: hidden
    
@@ -250,8 +283,8 @@ methods:
 
 .. _mongodb-collection-findOne:
 
-collection.findOne()``
-----------------------
+collection.findOne()
+--------------------
 
 .. class:: hidden
    
@@ -316,8 +349,8 @@ match the specified query, the promise resolves to ``null``.
 
 .. _mongodb-collection-findOneAndUpdate:
 
-collection.findOneAndUpdate()``
--------------------------------
+collection.findOneAndUpdate()
+-----------------------------
 
 .. class:: hidden
    
@@ -397,8 +430,8 @@ specified query, the promise resolves to ``null``.
 
 .. _mongodb-collection-findOneAndReplace:
 
-collection.findOneAndReplace()``
---------------------------------
+collection.findOneAndReplace()
+------------------------------
 
 .. class:: hidden
    
@@ -478,8 +511,8 @@ specified query, the promise resolves to ``null``.
 
 .. _mongodb-collection-findOneAndDelete:
 
-collection.findOneAndDelete()``
--------------------------------
+collection.findOneAndDelete()
+-----------------------------
 
 .. class:: hidden
    
@@ -544,8 +577,8 @@ specified query, the promise resolves to ``null``.
 
 .. _mongodb-collection-insertOne:
 
-collection.insertOne()``
-------------------------
+collection.insertOne()
+----------------------
 
 .. class:: hidden
    
@@ -601,8 +634,8 @@ resolves to a document that describes the insert operation.
 
 .. _mongodb-collection-insertMany:
 
-collection.insertMany()``
--------------------------
+collection.insertMany()
+-----------------------
 
 .. class:: hidden
    
@@ -670,8 +703,8 @@ resolves to a document that describes the insert operation.
 
 .. _mongodb-collection-updateOne:
 
-collection.updateOne()``
-------------------------
+collection.updateOne()
+----------------------
 
 .. class:: hidden
    
@@ -758,8 +791,8 @@ resolves to a document that describes the update operation.
 
 .. _mongodb-collection-updateMany:
 
-collection.updateMany()``
--------------------------
+collection.updateMany()
+-----------------------
 
 .. class:: hidden
    
@@ -846,8 +879,8 @@ resolves to a document that describes the update operation.
 
 .. _mongodb-collection-deleteOne:
 
-collection.deleteOne()``
-------------------------
+collection.deleteOne()
+----------------------
 
 .. class:: hidden
    
@@ -913,8 +946,8 @@ resolves to a document that describes the delete operation.
 
 .. _mongodb-collection-deleteMany:
 
-collection.deleteMany()``
--------------------------
+collection.deleteMany()
+-----------------------
 
 .. class:: hidden
    
@@ -980,8 +1013,8 @@ resolves to a document that describes the delete operation.
 
 .. _mongodb-collection-aggregate:
 
-collection.aggregate()``
-------------------------
+collection.aggregate()
+----------------------
 
 .. class:: hidden
    
@@ -1083,8 +1116,8 @@ in the aggregation result set with the following methods:
 
 .. _mongodb-collection-count:
 
-collection.count()``
---------------------
+collection.count()
+------------------
 
 .. class:: hidden
    
@@ -1157,8 +1190,8 @@ that match the query.
 
 .. _mongodb-collection-distinct:
 
-collection.distinct()``
------------------------
+collection.distinct()
+---------------------
 
 .. class:: hidden
    
@@ -1230,8 +1263,8 @@ array of distinct values.
 
 .. _mongodb-collection-bulkWrite:
 
-collection.bulkWrite()``
-------------------------
+collection.bulkWrite()
+----------------------
 
 .. class:: hidden
    
