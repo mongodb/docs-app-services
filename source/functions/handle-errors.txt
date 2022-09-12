@@ -1,0 +1,321 @@
+.. _functions-handle-errors:
+
+==========================
+Handle Errors in Functions
+==========================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This page explains how to work with errors in Atlas Functions.
+
+.. _functions-basic-error-handling:
+
+Basic Error Handling
+--------------------
+
+You can handle Function errors using standard JavaScript error handling techniques
+like :mdn:`try...catch statements <Web/JavaScript/Reference/Statements/try...catch>`.
+
+.. code-block:: js
+
+   function willThrowAndHandleError(){
+     try {
+       throw new Error("This will always happen");
+     } catch(err){
+       console.error("An error occurred. Error message:" + error.message);
+     }
+   }
+
+   exports = willThrowAndHandleError;
+
+.. _functions-view-logs:
+
+View Logs
+---------
+
+You can view records of all Function executions including which an error prevented
+successful execution in :ref:`App Service Logs <logs>`.
+
+Depending on how a Function is invoked, it shows up differently in the logs.
+For example, Triggers logs have a different format from
+logs for Functions called directly from a Realm client SDK.
+For more information, refer to the :ref:`Log entry type documentation <log-entry>`.
+
+.. _functions-retry:
+
+Retry Functions
+---------------
+
+Atlas Functions do not have built-in retry behavior.
+You can add custom retry behavior. For example, you might want to add
+retry behavior if the third-party service that your Function calls has
+intermittent connectivity, and you want the Function to re-execute
+even if the third-party service is temporarily down.
+
+This section describes the following that you can add retry behavior to your Functions:
+
+- :ref:`Recursively Call Functions in Error Handling Blocks <functions-recursive-call>`
+- :ref:`Use Database Triggers to Retry Functions <functions-database-trigger-retry>`
+
+.. _functions-recursive-call:
+
+Recursively Call Function in Error Handling Blocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+One way you can retry functions is to handle operations that might fail by
+calling a Function :wikipedia:`recursively <Recursion_(computer_science)>`.
+
+On a high-level, this process includes the following components:
+
+- Execute operations that you want to retry in a ``try`` statement
+  and have the Function call itself in a ``catch`` statement.
+- So that the execution doesn't happen indefinitely, set a maximum number of retries.
+  Every time that the Function fails and enters the ``catch`` statement,
+  increment a count of the current number of retries.
+  Stop the recursive execution when the Function's current number of retries
+  reaches the max number of retries.
+- You may also want to `throttle <https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling>`__
+  retries to reduce the total number of executions.
+
+The following table describes some advantages and disadvantages
+of handling Function retries with recursive call strategy.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Advantages
+     - Disadvantages
+
+   * - - All retry logic occurs within one function.
+       - TODO: more
+     - - All retries must occur within a single Function's max execution time.
+       - TODO: more
+
+The following code example demonstrates an implementation of retrying a Function 
+by using recursion in error handling blocks.
+
+.. code-block:: js
+
+    // Utility function to suspend execution of current process
+    async function sleep(milliseconds) {
+    await new Promise((resolve) => setTimeout(resolve, milliseconds));
+    }
+
+    // Set global variables to be used by all calls to `mightFail`
+    const MAX_RETRIES = 5;
+    let currentRetries = 0;
+    let errorMessage = "";
+
+    async function mightFail(...inputVars) {
+    if (currentRetries === MAX_RETRIES) {
+      console.error(`Reached maximum number of retries (${MAX_RETRIES}) without successful execution.`);
+      console.error(errorMessage);
+      return;
+    }
+    try {
+      // operation that might fail
+      await callFlakyExternalService(...inputVars);
+    } catch (err) {
+      errorMessage = err.message;
+      // throttle retries to be at most every 5000 milliseconds
+      await sleep(5000);
+      currentRetries++;
+      mightFail(...inputVars);
+    }
+    }
+
+    exports = mightFail;
+
+.. _functions-database-trigger-retry:
+
+Use Database Triggers to Retry
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can also retry Functions by using a handler Function that manages retry attempts
+with a :ref:`Database Trigger <database-trigger>` to execute retries
+and a MongoDB collection to track previously failed executions.
+
+On a high-level, this process includes the following components:
+
+- **Main Function** that execute the logic you want to retry,
+  wrapped in the handler function (see below bullet point).
+- **Failed execution tracker collection**, a MongoDB collection
+  that tracks failed executions of the main Function.
+- **Handler Function** that invokes the main Function and logs when the function fails
+  to the failed execution tracker collection.
+- **Database Trigger Function** that reruns the handler function whenever
+  the handler function adds an error to the failed execution tracker collection.
+
+You can support multiple main functions with one set of a handler Function,
+execution tracker collection and Database Trigger Function.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Advantages
+     - Disadvantages
+
+   * - - Each retry is its own Function execution, with own max execution time
+         and resources.
+       - TODO: more
+     - - Each Function call requires two Function invocations, one for the Function
+         itself and one for the retry handler.
+       - More complex logic, which can be more difficult to write, debug, and monitor.
+
+.. procedure::
+
+   .. step:: Create an execution retry handler Function
+
+      First, create a handler Function ``handleRetry`` that invokes the main Function.
+
+      ``handleRetry`` accepts the following arguments:
+
+      - ``functionToRetry``: the JavaScript function to retry.
+      - ``functionName``:  String. Name of the function you want to retry.
+      - ``operationId``: ObjectId. Unique identifier for the main function's
+        execution, including retries.
+      - ``previousAttemptNumber``: Number. How many times the main function
+        has previously been tried.
+      - ``...args``: Arguments passed to the main function.
+
+      ``handleRetry`` performs the following operations:
+
+      #. TODO: resume here walking through what this function does
+
+
+      The main function is passed as the argument ``functionToRetry``.
+      ``handleRetry`` attempts to execute the main Function.
+      If the execution fails, this function attempts to retry the main function
+
+
+
+      .. code-block:: js
+         :caption: handleRetry.js
+
+          async function handleRetry(
+            functionToRetry,
+            functionName,
+            operationId,
+            previousAttemptNumber,
+            ...args
+          ) {
+          try {
+            return functionToRetry(...args);
+          } catch (err) {
+            const maxRetries = context.values.get("MAX_FUNC_RETRIES");
+            if (previousAttemptNumber === maxRetries - 1) {
+              throw new Error(`Maximum number of attempts reached (${maxRetries}) for function '${functionName}': ${err.message}`)
+            }
+
+            const logEntry = {
+              operationId,
+              errorMessage: err.message,
+              timestamp: Date.now(),
+              attemptNumber: previousAttemptNumber + 1,
+              args,
+              functionName,
+            };
+
+            const executionLog = await context.services
+              .get("mongodb-atlas")
+              .db("experimental")
+              .collection("failed_execution_logs");
+            executionLog.insertOne(logEntry);
+          }
+          }
+
+
+   .. step:: Create retry database trigger
+
+      Write trigger function code.
+      TODO: explain what's going on here
+
+      .. code-block:: js
+         :caption: retryOperationDatabaseTriggerFunction.js
+
+         async function retryOperation({ fullDocument: logEntry }) {
+           const { args, attemptNumber, functionName, operationId } = logEntry;
+           context.functions.execute( functionName, ...args, operationId, attemptNumber);
+         }
+
+         exports = retryOperation;
+
+      Configure the database trigger.
+
+      .. code-block:: json
+
+         {
+            "id": "62c721737e6a26c53de8deff",
+            "name": "retry",
+            "type": "DATABASE",
+            "config": {
+                "operation_types": [
+                    "INSERT"
+                ],
+                "database": "myDatabase",
+                "collection": "failed_execution_logs",
+                "service_name": "mongodb-atlas",
+                "project": {},
+                "full_document": true,
+                "full_document_before_change": false,
+                "unordered": false,
+                "skip_catchup_events": false
+            },
+            "disabled": false,
+            "event_processors": {
+                "FUNCTION": {
+                    "config": {
+                        "function_name": "retryOp"
+                    }
+                }
+            }
+
+   .. step:: Write function to retry
+
+      .. code-block:: js
+
+          // randomly generates 1, 2, or 3
+          function getRandomOneTwoThree() {
+          return Math.floor(Math.random() * 3) + 1;
+          }
+
+          function additionOrFailure(param1, param2) {
+            // Throw error if getRandomOneTwoThree returns 1
+            const rand = getRandomOneTwoThree();
+            if (rand === 1) throw new Error("Uh oh!!");
+            const sum = param1 + param2;
+            console.log(`Successful addition of ${param1} + ${param2}. Result: ${sum}`)
+
+            // Otherwise return the sum
+            return sum;
+          }
+
+          async function additionWithRetry(
+          inputVar1,
+          inputVar2,
+          // create a new `operation_id` if one not provided
+          operationId = BSON.ObjectId(),
+          // count number of attempts
+          attemptNumber = 0
+          ) {
+          context.functions.execute(
+            "handleRetry",
+            additionOrFailure,
+            "additionWithRetry", // MUST BE NAME OF FUNCTION
+            operationId,
+            attemptNumber,
+            inputVar1,
+            inputVar2
+          );
+          }
+
+          exports = additionWithRetry;
+
+
+
