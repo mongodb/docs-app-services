@@ -1,4 +1,16 @@
-.. _backend_20220907:
+
+9 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support App Services deployments in the following :ref:`GCP regions<realm-regions>`:
+
+  - Ohio (``us-central1``)
+  - Virginia (``us-east4``)
+  - Oregon (``us-west1``)
+  - Belgium (``europe-west1``)
+  - Mumbai (``asia-south1``)
+
+- Introduced ability to :ref:`list all available databases and collections <mongodb-admin-getdbnames>` in Functions.
 
 07 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
