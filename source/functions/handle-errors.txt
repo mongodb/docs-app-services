@@ -146,6 +146,9 @@ On a high-level, this process includes the following components:
   wrapped in the handler function (see below bullet point).
 - **Failed execution tracker collection**, a MongoDB collection
   that tracks failed executions of the main Function.
+- **Max retries value**: :ref:`App Services Value <app-value>` containing
+  the maximum number of times that the handler function should try to execute
+  the the main function.
 - **Handler Function** that invokes the main Function and logs when the function fails
   to the failed execution tracker collection.
 - **Database Trigger Function** that reruns the handler function whenever
@@ -180,20 +183,49 @@ execution tracker collection and Database Trigger Function.
       - ``functionName``:  String. Name of the function you want to retry.
       - ``operationId``: ObjectId. Unique identifier for the main function's
         execution, including retries.
-      - ``previousAttemptNumber``: Number. How many times the main function
+      - ``previousRetries``: Number. How many times the main function
         has previously been tried.
       - ``...args``: Arguments passed to the main function.
 
       ``handleRetry`` performs the following operations:
 
-      #. TODO: resume here walking through what this function does
+      #. Attempts to execute ``functionToRetry`` in a ``try`` statement.
+         If the execution is successful, ``handleRetry`` returns the value
+         returned by ``functionToRetry``.
+      #. If the execution of ``functionToRetry`` in the previous step throws an error,
+         the ``catch`` statement handles the error as follows:
 
+         a. Checks if the number of previous retries equals the max retries values.
+            If the two numbers are the same, then the function throws an error
+            because the max retries has been reached. The function no longer attempts
+            to retry.
+         #. Build a function execution log entry object to insert into the database.
+         #. Get a reference to the failed execution tracker collection.
+         #. Insert the function log exection log entry into
+            the failed execution tracker collection. This insertion operation
+            causes the Database Trigger Function, which you will make in the next step,
+            to fire.
 
       The main function is passed as the argument ``functionToRetry``.
       ``handleRetry`` attempts to execute the main Function.
       If the execution fails, this function attempts to retry the main function
 
+      .. tabs-realm-admin-interfaces::
 
+         .. tab::
+            :tabid: ui
+
+            Navigate to :guilabel:`Functions`. Click the button :guilabel:`Create New Function`.
+
+            In the field :guilabel:`Name`, add ``handleRetry``.
+
+            In the :guilabel:`Function Editor` add the following code,
+            then save the Function:
+
+         .. tab::
+            :tabid: cli
+
+            TODO: add function meta data configuration
 
       .. code-block:: js
          :caption: handleRetry.js
@@ -202,81 +234,166 @@ execution tracker collection and Database Trigger Function.
             functionToRetry,
             functionName,
             operationId,
-            previousAttemptNumber,
+            previousRetries,
             ...args
           ) {
           try {
-            return functionToRetry(...args);
+            // Try to execute the main function
+            const response = await functionToRetry(...args);
+            return response;
           } catch (err) {
+            // Evaluates if should retry function again.
+            // If no retry, throws error and stops retrying.
             const maxRetries = context.values.get("MAX_FUNC_RETRIES");
-            if (previousAttemptNumber === maxRetries - 1) {
+            if (previousRetries === maxRetries) {
               throw new Error(`Maximum number of attempts reached (${maxRetries}) for function '${functionName}': ${err.message}`)
             }
 
+            // Build function execution log entry for insertion into database.
             const logEntry = {
               operationId,
               errorMessage: err.message,
               timestamp: Date.now(),
-              attemptNumber: previousAttemptNumber + 1,
+              retries: previousRetries + 1,
               args,
               functionName,
             };
 
+            // Get reference to database collection
             const executionLog = await context.services
               .get("mongodb-atlas")
               .db("experimental")
               .collection("failed_execution_logs");
+
+            // Add execution log entry to database
             executionLog.insertOne(logEntry);
           }
           }
 
-
    .. step:: Create retry database trigger
 
-      Write trigger function code.
-      TODO: explain what's going on here
+      .. tabs-realm-admin-interfaces::
 
-      .. code-block:: js
-         :caption: retryOperationDatabaseTriggerFunction.js
+         .. tab::
+            :tabid: ui
 
-         async function retryOperation({ fullDocument: logEntry }) {
-           const { args, attemptNumber, functionName, operationId } = logEntry;
-           context.functions.execute( functionName, ...args, operationId, attemptNumber);
-         }
+            #. Navigate to the :guilabel:`Triggers` in the UI of your App.
+            #. Click the :guilabel:`Add a Trigger` button.
+            #. Create the Trigger with the following configuration:
 
-         exports = retryOperation;
+               * - Field
+                 - Value
 
-      Configure the database trigger.
+               * - Name
+                 - Name of your choosing (ex: ``retryOperation``)
 
-      .. code-block:: json
+               * - Enabled
+                 - Yes
 
-         {
-            "id": "62c721737e6a26c53de8deff",
-            "name": "retry",
-            "type": "DATABASE",
-            "config": {
-                "operation_types": [
-                    "INSERT"
-                ],
-                "database": "myDatabase",
-                "collection": "failed_execution_logs",
-                "service_name": "mongodb-atlas",
-                "project": {},
-                "full_document": true,
-                "full_document_before_change": false,
-                "unordered": false,
-                "skip_catchup_events": false
-            },
-            "disabled": false,
-            "event_processors": {
-                "FUNCTION": {
-                    "config": {
-                        "function_name": "retryOp"
-                    }
-                }
-            }
+               * - Skip Events on Re-Enable
+                 - Yes
+
+               * - Event Ordering
+                 - Yes
+
+               * - Cluster Name
+                 - Name of your choosing (ex: ``Cluster0``)
+
+               * - Database Name
+                 - Name of your choosing (ex: ``logs``)
+
+               * - Collection Name
+                 - Name of your choosing (ex: ``failed_execution_logs``)
+
+               * - Operation Type
+                 - Insert
+
+               * - Full Document
+                 - Yes
+
+               * - Document Preimage
+                 - No
+
+               * - Select An Event Type
+                 - Function
+
+               * - Function
+                 - Click :guilabel:`+ New Function`. Refer to the following information
+                   about the contents of the function.
+
+               * - Advanced Configuration
+                 - No advanced configuration necessary.
+
+         .. tab::
+            :tabid: cli
+
+            TODO: explain more
+
+            .. code-block:: json
+
+              {
+                  "id": "62c721737e6a26c53de8deff",
+                  "name": "retry",
+                  "type": "DATABASE",
+                  "config": {
+                      "operation_types": [
+                          "INSERT"
+                      ],
+                      "database": "myDatabase",
+                      "collection": "failed_execution_logs",
+                      "service_name": "mongodb-atlas",
+                      "project": {},
+                      "full_document": true,
+                      "full_document_before_change": false,
+                      "unordered": false,
+                      "skip_catchup_events": false
+                  },
+                  "disabled": false,
+                  "event_processors": {
+                      "FUNCTION": {
+                          "config": {
+                              "function_name": "retryOperation"
+                          }
+                      }
+                  }
+
+      Now add the code for the Function that the Trigger invokes.
+
+      The function ``retryOperation`` takes as a parameter ``logEntry``, the document that the
+      retry handler posted to the failed execution tracker collection.
+      Then ``retryOperation`` use :ref:`context.functions.execute() <context-functions>`
+      to invoke the main function with information from ``logEntry``.
+
+      .. tabs-realm-admin-interfaces::
+         :hidden: true
+
+         .. tab::
+            :tabid: ui
+
+            In the field :guilabel:`Function Name`, add ``retryOperationDbTrigger``.
+
+            For the field :guilabel:`Function`, add the following code:
+
+            .. code-block:: js
+              :caption: retryOperationDatabaseTriggerFunction.js
+
+              async function retryOperation({ fullDocument: logEntry }) {
+                // parse values from log entry posted to database
+                const { args, retries, functionName, operationId } = logEntry;
+                // Re-execute the main function
+                await context.functions.execute( functionName, ...args, operationId, retries);
+              }
+
+              exports = retryOperation;
+
+         .. tab::
+            :tabid: cli
+
+            TODO: more info about adding the trigger
 
    .. step:: Write function to retry
+
+      TODO: contextualize 
 
       .. code-block:: js
 
@@ -302,14 +419,14 @@ execution tracker collection and Database Trigger Function.
           // create a new `operation_id` if one not provided
           operationId = BSON.ObjectId(),
           // count number of attempts
-          attemptNumber = 0
+          retries = 0
           ) {
           context.functions.execute(
             "handleRetry",
             additionOrFailure,
             "additionWithRetry", // MUST BE NAME OF FUNCTION
             operationId,
-            attemptNumber,
+            retries,
             inputVar1,
             inputVar2
           );
