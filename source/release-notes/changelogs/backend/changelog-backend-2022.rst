@@ -1,4 +1,3 @@
-.. _backend_20220909:
 
 9 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -12,6 +11,12 @@
   - Mumbai (``asia-south1``)
 
 - Introduced ability to :ref:`list all available databases and collections <mongodb-admin-getdbnames>` in Functions.
+
+07 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for :method:`database.getCollectionNames()` in Atlas
+  Functions.
 
 .. _backend_20220629:
 

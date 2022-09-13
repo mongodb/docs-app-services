@@ -1,3 +1,21 @@
+# September 9, 2022
+
+## Tutorials
+- Set up JWT Authentication: Replace mention of the now-deprecated backend tutorial with links to Template Apps and docs on how to create an App Services App
+
+## Functions
+- Query MongoDB Atlas/MongoDB API Reference: Add new `database.getCollectionNames()` section showing how to get a list of all collection names in the database
+
+## Triggers
+- Atlas Triggers Overview && Database Triggers: Add line about how Atlas Triggers run on a serverless compute layer
+
+## Users & Authentication
+- Authentication Providers/Email/Password Authentication: Add details about available email confirmation customization options
+
+## Other
+- Introduction: Update description of tutorials to match new tutorial structure
+- Fix broken links across various pages
+
 # September 1, 2022
 
 ## Device Sync
