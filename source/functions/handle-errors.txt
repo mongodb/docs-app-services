@@ -92,9 +92,9 @@ of handling Function retries with recursive call strategy.
      - Disadvantages
 
    * - - All retry logic occurs within one function.
-       - TODO: more
+       - Minimal additional code.
      - - All retries must occur within a single Function's max execution time.
-       - TODO: more
+       - TODO: more cons?
 
 The following code example demonstrates an implementation of retrying a Function 
 by using recursion in error handling blocks.
@@ -166,7 +166,7 @@ execution tracker collection and Database Trigger Function.
 
    * - - Each retry is its own Function execution, with own max execution time
          and resources.
-       - TODO: more
+       - TODO: more pros?
      - - Each Function call requires two Function invocations, one for the Function
          itself and one for the retry handler.
        - More complex logic, which can be more difficult to write, debug, and monitor.
@@ -177,7 +177,7 @@ execution tracker collection and Database Trigger Function.
 
       First, create a handler Function ``handleRetry`` that invokes the main Function.
 
-      ``handleRetry`` accepts the following arguments:
+      ``handleRetry`` accepts the following parameters:
 
       - ``functionToRetry``: the JavaScript function to retry.
       - ``functionName``:  String. Name of the function you want to retry.
@@ -208,7 +208,7 @@ execution tracker collection and Database Trigger Function.
 
       The main function is passed as the argument ``functionToRetry``.
       ``handleRetry`` attempts to execute the main Function.
-      If the execution fails, this function attempts to retry the main function
+      If the execution fails, this function attempts to retry the main function.
 
       .. tabs-realm-admin-interfaces::
 
@@ -225,50 +225,63 @@ execution tracker collection and Database Trigger Function.
          .. tab::
             :tabid: cli
 
-            TODO: add function meta data configuration
+            Add the following to :file:`functions/config.json`:
 
-      .. code-block:: js
-         :caption: handleRetry.js
+            .. code-block:: js
+               :caption: functions/config.json
 
-          async function handleRetry(
-            functionToRetry,
-            functionName,
-            operationId,
-            previousRetries,
-            ...args
-          ) {
-          try {
-            // Try to execute the main function
-            const response = await functionToRetry(...args);
-            return response;
-          } catch (err) {
-            // Evaluates if should retry function again.
-            // If no retry, throws error and stops retrying.
-            const maxRetries = context.values.get("MAX_FUNC_RETRIES");
-            if (previousRetries === maxRetries) {
-              throw new Error(`Maximum number of attempts reached (${maxRetries}) for function '${functionName}': ${err.message}`)
-            }
+               [
+                 {
+                   "name": "handleRetry",
+                   "private": true
+                 }
+                 // ...other configuration
+               ]
 
-            // Build function execution log entry for insertion into database.
-            const logEntry = {
-              operationId,
-              errorMessage: err.message,
-              timestamp: Date.now(),
-              retries: previousRetries + 1,
-              args,
-              functionName,
-            };
+            Create the file for the Function :file:`functions/handleRetry.js`:
 
-            // Get reference to database collection
-            const executionLog = await context.services
-              .get("mongodb-atlas")
-              .db("experimental")
-              .collection("failed_execution_logs");
+            .. code-block:: js
+              :caption: functions/handleRetry.js
 
-            // Add execution log entry to database
-            executionLog.insertOne(logEntry);
-          }
-          }
+                async function handleRetry(
+                  functionToRetry,
+                  functionName,
+                  operationId,
+                  previousRetries,
+                  ...args
+                ) {
+                try {
+                  // Try to execute the main function
+                  const response = await functionToRetry(...args);
+                  return response;
+                } catch (err) {
+                  // Evaluates if should retry function again.
+                  // If no retry, throws error and stops retrying.
+                  const maxRetries = context.values.get("MAX_FUNC_RETRIES");
+                  if (previousRetries === maxRetries) {
+                    throw new Error(`Maximum number of attempts reached (${maxRetries}) for function '${functionName}': ${err.message}`)
+                  }
+
+                  // Build function execution log entry for insertion into database.
+                  const logEntry = {
+                    operationId,
+                    errorMessage: err.message,
+                    timestamp: Date.now(),
+                    retries: previousRetries + 1,
+                    args,
+                    functionName,
+                  };
+
+                  // Get reference to database collection
+                  const executionLog = await context.services
+                    .get("mongodb-atlas")
+                    .db("experimental")
+                    .collection("failed_execution_logs");
+
+                  // Add execution log entry to database
+                  executionLog.insertOne(logEntry);
+                }
+                }
 
    .. step:: Create retry database trigger
 
@@ -281,58 +294,63 @@ execution tracker collection and Database Trigger Function.
             #. Click the :guilabel:`Add a Trigger` button.
             #. Create the Trigger with the following configuration:
 
-               * - Field
-                 - Value
+               .. list-table::
+                  :header-rows: 1
+                  :widths: 50 50
 
-               * - Name
-                 - Name of your choosing (ex: ``retryOperation``)
+                  * - Field
+                    - Value
 
-               * - Enabled
-                 - Yes
+                  * - Name
+                    - Name of your choosing (ex: ``retryOperation``)
 
-               * - Skip Events on Re-Enable
-                 - Yes
+                  * - Enabled
+                    - Yes
 
-               * - Event Ordering
-                 - Yes
+                  * - Skip Events on Re-Enable
+                    - Yes
 
-               * - Cluster Name
-                 - Name of your choosing (ex: ``Cluster0``)
+                  * - Event Ordering
+                    - Yes
 
-               * - Database Name
-                 - Name of your choosing (ex: ``logs``)
+                  * - Cluster Name
+                    - Name of your choosing (ex: ``mongodb-atlas``)
 
-               * - Collection Name
-                 - Name of your choosing (ex: ``failed_execution_logs``)
+                  * - Database Name
+                    - Name of your choosing (ex: ``logs``)
 
-               * - Operation Type
-                 - Insert
+                  * - Collection Name
+                    - Name of your choosing (ex: ``failed_execution_logs``)
 
-               * - Full Document
-                 - Yes
+                  * - Operation Type
+                    - Insert
 
-               * - Document Preimage
-                 - No
+                  * - Full Document
+                    - Yes
 
-               * - Select An Event Type
-                 - Function
+                  * - Document Preimage
+                    - No
 
-               * - Function
-                 - Click :guilabel:`+ New Function`. Refer to the following information
-                   about the contents of the function.
+                  * - Select An Event Type
+                    - Function
 
-               * - Advanced Configuration
-                 - No advanced configuration necessary.
+                  * - Function
+                    - Click :guilabel:`+ New Function`. Refer to the following information
+                      about the contents of the function.
+
+                  * - Advanced Configuration
+                    - No advanced configuration necessary.
 
          .. tab::
             :tabid: cli
 
-            TODO: explain more
+            Add configuration for the Database Trigger. For more information,
+            refer to the :ref:`Trigger configuration reference <appconfig-triggers>`.
 
             .. code-block:: json
+               :caption: triggers/retryOperation.json
 
               {
-                  "id": "62c721737e6a26c53de8deff",
                   "name": "retry",
                   "type": "DATABASE",
                   "config": {
@@ -375,7 +393,7 @@ execution tracker collection and Database Trigger Function.
             For the field :guilabel:`Function`, add the following code:
 
             .. code-block:: js
-              :caption: retryOperationDatabaseTriggerFunction.js
+              :caption: functions/retryOperationDbTrigger.js
 
               async function retryOperation({ fullDocument: logEntry }) {
                 // parse values from log entry posted to database
@@ -389,11 +407,100 @@ execution tracker collection and Database Trigger Function.
          .. tab::
             :tabid: cli
 
-            TODO: more info about adding the trigger
+            Add the Function metadata to :file:`functions/config.json`:
+
+            .. code-block:: js
+               :caption: functions/config.json
+
+               [
+                  // ...other configuration
+                  {
+                    "name": "retryOperationDbTrigger",
+                    "private": true
+                  }
+               ]
+
+            Add the following code to the file :file:`functions/retryOperationDbTrigger.js`:
+
+            .. code-block:: js
+               :caption: functions/retryOperationDbTrigger.js
+
+               async function retryOperation({ fullDocument: logEntry }) {
+                 // parse values from log entry posted to database
+                 const { args, retries, functionName, operationId } = logEntry;
+                 // Re-execute the main function
+                 await context.functions.execute( functionName, ...args, operationId, retries);
+               }
+
+               exports = retryOperation;
 
    .. step:: Write function to retry
 
-      TODO: contextualize 
+      Now that you have the function handler and the retry Database Trigger Function,
+      you can write the main function.
+
+      In this example, the Function randomly throws an error when performing addition.
+      The JavaScript functions that execute this logic are the following:
+
+      - ``getRandomOneTwoThree()``: Helper function for generating errors
+        for the example.
+      - ``additionOrFailure()``: Function with the main logic.
+
+      The invocation of ``additionOrFailure()`` wrapped by the retry handler
+      occurs in the exported function ``additionWithRetryHandler()``.
+      **All** functions that use the retry handler function should resemble this function.
+
+      You must include the correct parameters to make this function work
+      with the rest of the retry logic. These parameters are:
+
+      .. list-table::
+         :header-rows: 1
+         :widths: 50 50
+
+         * - Parameter
+           - Description
+
+         * - ``...args``
+           - Zero or more parameters to pass to the function with main logic.
+             In the case of this example, the two numbers added
+             in ``additionOrFailure()``, ``num1`` and ``num2``.
+
+         * - ``operationId``
+           - :ref:`BSON.Object.Id<bson-objectid>`. Unique identifier for the Function
+             call and retries. Set default value to a ``new BSON.ObjectId()``.
+
+         * - ``retries``
+           - Number. Set default value to 0.
+
+      The body of ``additionWithRetryHandler`` is the retry handler ``handleRetry``
+      invoked by ``context.functions.execute()``,
+      which in turn invokes ``additionOrFailure``. The arguments you pass to
+      context.functions.execute() are the following:
+
+      .. list-table::
+         :header-rows: 1
+         :widths: 50 50
+
+         * - Argument
+           - Description
+
+         * - ``"handleRetry"``
+           - String. Name of the Function you defined to invoke the main function
+             and post to the retry logs if the main function doesn't properly execute.
+
+         * - ``additionOrFailure``
+           - JavaScript function. The main function that ``handleRetry()`` invokes.
+
+         * - ``operationId``
+           - BSON.ObjectId. Passed in as argument from the parameter ``operationId`` of ``additionWithRetryHandler()``.
+
+         * - ``retries``
+           - Number. Passed in as argument from the parameter ``retries`` of ``additionWithRetryHandler()``.
+
+         * - ``...args``
+           - Zero or more arguments to pass to the function with main logic.
+             Passed in as argument from the parameter ``...args`` of ``additionWithRetryHandler()``
+
 
       .. code-block:: js
 
@@ -402,37 +509,38 @@ execution tracker collection and Database Trigger Function.
           return Math.floor(Math.random() * 3) + 1;
           }
 
-          function additionOrFailure(param1, param2) {
+          function additionOrFailure(num1, num2) {
             // Throw error if getRandomOneTwoThree returns 1
             const rand = getRandomOneTwoThree();
             if (rand === 1) throw new Error("Uh oh!!");
-            const sum = param1 + param2;
-            console.log(`Successful addition of ${param1} + ${param2}. Result: ${sum}`)
+            const sum = num1 + num2;
+            console.log(`Successful addition of ${num1} + ${num2}. Result: ${sum}`)
 
             // Otherwise return the sum
             return sum;
           }
 
-          async function additionWithRetry(
+          async function additionWithRetryHandler(
           inputVar1,
           inputVar2,
           // create a new `operation_id` if one not provided
-          operationId = BSON.ObjectId(),
+          operationId = new BSON.ObjectId(),
           // count number of attempts
           retries = 0
           ) {
-          context.functions.execute(
-            "handleRetry",
-            additionOrFailure,
-            "additionWithRetry", // MUST BE NAME OF FUNCTION
-            operationId,
-            retries,
-            inputVar1,
-            inputVar2
-          );
+            const res = await context.functions.execute(
+              "handleRetry",
+              additionOrFailure,
+              "additionWithRetry", // MUST BE NAME OF FUNCTION
+              operationId,
+              retries,
+              inputVar1,
+              inputVar2
+            );
+            return res;
           }
 
-          exports = additionWithRetry;
+          exports = additionWithRetryHandler;
 
 
 
