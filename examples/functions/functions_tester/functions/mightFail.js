@@ -32,7 +32,7 @@ async function mightFail(...inputVars) {
   } catch (err) {
     errorMessage = err.message;
     // throttle retries to be at most every 5000 milliseconds
-    await sleep(5000);
+    await sleep(100);
     currentRetries++;
     mightFail(...inputVars);
   }
@@ -42,5 +42,5 @@ exports = mightFail;
 // :snippet-end:
 
 if (typeof module !== "undefined") {
-  module.exports = { mightFail };
+  module.exports = mightFail;
 }
