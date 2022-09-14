@@ -20,17 +20,8 @@ Basic Error Handling
 You can handle Function errors using standard JavaScript error handling techniques
 like :mdn:`try...catch statements <Web/JavaScript/Reference/Statements/try...catch>`.
 
-.. code-block:: js
-
-   function willThrowAndHandleError(){
-     try {
-       throw new Error("This will always happen");
-     } catch(err){
-       console.error("An error occurred. Error message:" + error.message);
-     }
-   }
-
-   exports = willThrowAndHandleError;
+.. literalinclude:: /examples/generated/functions/willThrowAndHandleError.snippet.handle-error-try-catch.js
+   :language: js
 
 .. _functions-view-logs:
 
@@ -94,42 +85,12 @@ of handling Function retries with recursive call strategy.
    * - - All retry logic occurs within one function.
        - Minimal additional code.
      - - All retries must occur within a single Function's max execution time.
-       - TODO: more cons?
 
-The following code example demonstrates an implementation of retrying a Function 
+The following code example demonstrates an implementation of retrying a Function
 by using recursion in error handling blocks.
 
-.. code-block:: js
-
-    // Utility function to suspend execution of current process
-    async function sleep(milliseconds) {
-    await new Promise((resolve) => setTimeout(resolve, milliseconds));
-    }
-
-    // Set global variables to be used by all calls to `mightFail`
-    const MAX_RETRIES = 5;
-    let currentRetries = 0;
-    let errorMessage = "";
-
-    async function mightFail(...inputVars) {
-    if (currentRetries === MAX_RETRIES) {
-      console.error(`Reached maximum number of retries (${MAX_RETRIES}) without successful execution.`);
-      console.error(errorMessage);
-      return;
-    }
-    try {
-      // operation that might fail
-      await callFlakyExternalService(...inputVars);
-    } catch (err) {
-      errorMessage = err.message;
-      // throttle retries to be at most every 5000 milliseconds
-      await sleep(5000);
-      currentRetries++;
-      mightFail(...inputVars);
-    }
-    }
-
-    exports = mightFail;
+.. literalinclude:: /examples/generated/functions/mightFail.snippet.recursive-error-handling.js
+   :language: js
 
 .. _functions-database-trigger-retry:
 
@@ -166,7 +127,6 @@ execution tracker collection and Database Trigger Function.
 
    * - - Each retry is its own Function execution, with own max execution time
          and resources.
-       - TODO: more pros?
      - - Each Function call requires two Function invocations, one for the Function
          itself and one for the retry handler.
        - More complex logic, which can be more difficult to write, debug, and monitor.
@@ -240,48 +200,9 @@ execution tracker collection and Database Trigger Function.
 
             Create the file for the Function :file:`functions/handleRetry.js`:
 
-            .. code-block:: js
-              :caption: functions/handleRetry.js
-
-                async function handleRetry(
-                  functionToRetry,
-                  functionName,
-                  operationId,
-                  previousRetries,
-                  ...args
-                ) {
-                try {
-                  // Try to execute the main function
-                  const response = await functionToRetry(...args);
-                  return response;
-                } catch (err) {
-                  // Evaluates if should retry function again.
-                  // If no retry, throws error and stops retrying.
-                  const maxRetries = context.values.get("MAX_FUNC_RETRIES");
-                  if (previousRetries === maxRetries) {
-                    throw new Error(`Maximum number of attempts reached (${maxRetries}) for function '${functionName}': ${err.message}`)
-                  }
-
-                  // Build function execution log entry for insertion into database.
-                  const logEntry = {
-                    operationId,
-                    errorMessage: err.message,
-                    timestamp: Date.now(),
-                    retries: previousRetries + 1,
-                    args,
-                    functionName,
-                  };
-
-                  // Get reference to database collection
-                  const executionLog = await context.services
-                    .get("mongodb-atlas")
-                    .db("experimental")
-                    .collection("failed_execution_logs");
-
-                  // Add execution log entry to database
-                  executionLog.insertOne(logEntry);
-                }
-                }
+            .. literalinclude:: /examples/generated/functions/handleRetry.snippet.handle-retry.js
+               :language: js
+               :caption: functions/handleRetry.js
 
    .. step:: Create retry database trigger
 
@@ -347,33 +268,9 @@ execution tracker collection and Database Trigger Function.
             Add configuration for the Database Trigger. For more information,
             refer to the :ref:`Trigger configuration reference <appconfig-triggers>`.
 
-            .. code-block:: json
+            .. literalinclude:: /examples/generated/functions/retryOperation.json
+               :language: json
                :caption: triggers/retryOperation.json
-
-              {
-                  "name": "retry",
-                  "type": "DATABASE",
-                  "config": {
-                      "operation_types": [
-                          "INSERT"
-                      ],
-                      "database": "myDatabase",
-                      "collection": "failed_execution_logs",
-                      "service_name": "mongodb-atlas",
-                      "project": {},
-                      "full_document": true,
-                      "full_document_before_change": false,
-                      "unordered": false,
-                      "skip_catchup_events": false
-                  },
-                  "disabled": false,
-                  "event_processors": {
-                      "FUNCTION": {
-                          "config": {
-                              "function_name": "retryOperation"
-                          }
-                      }
-                  }
 
       Now add the code for the Function that the Trigger invokes.
 
@@ -392,17 +289,9 @@ execution tracker collection and Database Trigger Function.
 
             For the field :guilabel:`Function`, add the following code:
 
-            .. code-block:: js
-              :caption: functions/retryOperationDbTrigger.js
-
-              async function retryOperation({ fullDocument: logEntry }) {
-                // parse values from log entry posted to database
-                const { args, retries, functionName, operationId } = logEntry;
-                // Re-execute the main function
-                await context.functions.execute( functionName, ...args, operationId, retries);
-              }
-
-              exports = retryOperation;
+            .. literalinclude:: /examples/generated/functions/retryOperationDbTrigger.snippet.retry-operation-db-trigger-function.js
+               :language: js
+               :caption: functions/retryOperationDbTrigger.js
 
          .. tab::
             :tabid: cli
@@ -422,19 +311,11 @@ execution tracker collection and Database Trigger Function.
 
             Add the following code to the file :file:`functions/retryOperationDbTrigger.js`:
 
-            .. code-block:: js
-               :caption: functions/retryOperationDbTrigger.js
+            .. literalinclude:: /examples/generated/functions/retryOperationDbTrigger.snippet.retry-operation-db-trigger-function.js
+               :language: js
+               :caption: retryOperationDbTrigger.js
 
-               async function retryOperation({ fullDocument: logEntry }) {
-                 // parse values from log entry posted to database
-                 const { args, retries, functionName, operationId } = logEntry;
-                 // Re-execute the main function
-                 await context.functions.execute( functionName, ...args, operationId, retries);
-               }
-
-               exports = retryOperation;
-
-   .. step:: Write function to retry
+   .. step:: Write Function to retry
 
       Now that you have the function handler and the retry Database Trigger Function,
       you can write the main function.
@@ -501,46 +382,37 @@ execution tracker collection and Database Trigger Function.
            - Zero or more arguments to pass to the function with main logic.
              Passed in as argument from the parameter ``...args`` of ``additionWithRetryHandler()``
 
+      .. tabs-realm-admin-interfaces::
 
-      .. code-block:: js
+         .. tab::
+            :tabid: cli
 
-          // randomly generates 1, 2, or 3
-          function getRandomOneTwoThree() {
-          return Math.floor(Math.random() * 3) + 1;
-          }
+            Add the Function metadata to :file:`functions/config.json`:
 
-          function additionOrFailure(num1, num2) {
-            // Throw error if getRandomOneTwoThree returns 1
-            const rand = getRandomOneTwoThree();
-            if (rand === 1) throw new Error("Uh oh!!");
-            const sum = num1 + num2;
-            console.log(`Successful addition of ${num1} + ${num2}. Result: ${sum}`)
+            .. code-block:: js
+               :caption: functions/config.json
 
-            // Otherwise return the sum
-            return sum;
-          }
+               [
+                  // ...other configuration
+                  {
+                    "name": "additionWithRetryHandler",
+                    "private": true
+                  }
+               ]
 
-          async function additionWithRetryHandler(
-          inputVar1,
-          inputVar2,
-          // create a new `operation_id` if one not provided
-          operationId = new BSON.ObjectId(),
-          // count number of attempts
-          retries = 0
-          ) {
-            const res = await context.functions.execute(
-              "handleRetry",
-              additionOrFailure,
-              "additionWithRetry", // MUST BE NAME OF FUNCTION
-              operationId,
-              retries,
-              inputVar1,
-              inputVar2
-            );
-            return res;
-          }
+            Add the following code to the file :file:`functions/additionWithRetryHandler.js`:
 
-          exports = additionWithRetryHandler;
+            .. literalinclude:: /examples/generated/functions/additionWithRetryHandler.snippet.addition-with-retry-handler.js
+              :language: js
+              :caption: functions/additionWithRetryHandler.js
 
+         .. tab::
+            :tabid: ui
 
+            In the field :guilabel:`Function Name`, add ``additionWithRetryHandler``.
 
+            For the field :guilabel:`Function`, add the following code:
+
+            .. literalinclude:: /examples/generated/functions/additionWithRetryHandler.snippet.addition-with-retry-handler.js
+              :language: js
+              :caption: additionWithRetryHandler.js
