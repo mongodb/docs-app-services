@@ -1,12 +1,3 @@
-async function callFlakyExternalService(val) {
-  await sleep(10);
-  if (val === 3) {
-    return true;
-  } else {
-    val++;
-    throw new Error("broken!");
-  }
-}
 // :snippet-start: recursive-error-handling
 // Utility function to suspend execution of current process
 async function sleep(milliseconds) {
@@ -18,24 +9,37 @@ const MAX_RETRIES = 5;
 let currentRetries = 0;
 let errorMessage = "";
 
+// :remove-start:
+async function callFlakyExternalService(retries) {
+  await sleep(10);
+  if (currentRetries === retries) {
+    return true;
+  } else {
+    throw new Error("flaky external service is broken!");
+  }
+}
+// :remove-end:
+
 async function mightFail(...inputVars) {
   if (currentRetries === MAX_RETRIES) {
     console.error(
       `Reached maximum number of retries (${MAX_RETRIES}) without successful execution.`
     );
-    console.error(errorMessage);
+    console.error("Error Message:", errorMessage);
     return;
   }
+  let res;
   try {
     // operation that might fail
-    await callFlakyExternalService(...inputVars);
+    res = await callFlakyExternalService(...inputVars);
   } catch (err) {
     errorMessage = err.message;
     // throttle retries to be at most every 5000 milliseconds
     await sleep(100);
     currentRetries++;
-    mightFail(...inputVars);
+    res = await mightFail(...inputVars);
   }
+  return res;
 }
 
 exports = mightFail;

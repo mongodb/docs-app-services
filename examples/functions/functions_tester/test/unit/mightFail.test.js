@@ -1,11 +1,13 @@
 const mightFail = require("../../functions/mightFail");
 
-test("No error", async () => {
-  let initVal = 0;
-  try {
-    const res = await mightFail(initVal);
-    console.log(res);
-  } catch (err) {
-    console.error(err);
-  }
+describe("Recursive retry unit tests", () => {
+  test("should not throw error", async () => {
+    const successRes = await mightFail(3);
+    expect(successRes).toBe(true);
+  });
+
+  test("should throw error", async () => {
+    const failRes = await mightFail(6);
+    expect(failRes).toBe(undefined);
+  });
 });

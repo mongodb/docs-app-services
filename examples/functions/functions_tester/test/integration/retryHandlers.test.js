@@ -3,10 +3,13 @@ const Realm = require("realm");
 
 const app = new Realm.App(app_id);
 
+beforeAll(async () => {
+  await app.logIn(Realm.Credentials.anonymous());
+});
+afterAll(async () => {
+  await app.currentUser.logOut();
+});
 describe("Recursive retry integration tests", () => {
-  beforeEach(async () => {
-    await app.logIn(Realm.Credentials.anonymous());
-  });
   test("should not fail", async () => {
     let passVal = 0;
     const res = await app.currentUser.callFunction("mightFail", [passVal]);
