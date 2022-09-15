@@ -1,3 +1,7 @@
+
+// Tip: You could also put this in an App Services Value
+const MAX_FUNC_RETRIES = 5;
+
 async function handleRetry(
   functionToRetry,
   functionName,
@@ -12,10 +16,9 @@ async function handleRetry(
   } catch (err) {
     // Evaluates if should retry function again.
     // If no retry, throws error and stops retrying.
-    const maxRetries = context.values.get("MAX_FUNC_RETRIES");
-    if (previousRetries === maxRetries) {
+    if (previousRetries === MAX_FUNC_RETRIES) {
       throw new Error(
-        `Maximum number of attempts reached (${maxRetries}) for function '${functionName}': ${err.message}`
+        `Maximum number of attempts reached (${MAX_FUNC_RETRIES}) for function '${functionName}': ${err.message}`
       );
     }
 
@@ -23,20 +26,21 @@ async function handleRetry(
     const logEntry = {
       operationId,
       errorMessage: err.message,
-      timestamp: Date.now(),
+      timestamp: new Date(),
       retries: previousRetries + 1,
       args,
       functionName,
     };
 
     // Get reference to database collection
-    const executionLog = await context.services
+    const executionLog = context.services
       .get("mongodb-atlas")
-      .db("experimental")
+      .db("logs")
       .collection("failed_execution_logs");
 
     // Add execution log entry to database
-    executionLog.insertOne(logEntry);
+    await executionLog.insertOne(logEntry);
+    return;
   }
 }
 

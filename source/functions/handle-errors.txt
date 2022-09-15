@@ -107,9 +107,6 @@ On a high-level, this process includes the following components:
   wrapped in the handler function (see below bullet point).
 - **Failed execution tracker collection**, a MongoDB collection
   that tracks failed executions of the main Function.
-- **Max retries value**: :ref:`App Services Value <app-value>` containing
-  the maximum number of times that the handler function should try to execute
-  the the main function.
 - **Handler Function** that invokes the main Function and logs when the function fails
   to the failed execution tracker collection.
 - **Database Trigger Function** that reruns the handler function whenever
@@ -155,7 +152,8 @@ execution tracker collection and Database Trigger Function.
       #. If the execution of ``functionToRetry`` in the previous step throws an error,
          the ``catch`` statement handles the error as follows:
 
-         a. Checks if the number of previous retries equals the max retries values.
+         a. Checks if the number of previous retries equals the
+            maximum permitted number of retries.
             If the two numbers are the same, then the function throws an error
             because the max retries has been reached. The function no longer attempts
             to retry.
@@ -193,7 +191,8 @@ execution tracker collection and Database Trigger Function.
                [
                  {
                    "name": "handleRetry",
-                   "private": true
+                   "private": true,
+                   "run_as_system": true
                  }
                  // ...other configuration
                ]
@@ -396,7 +395,7 @@ execution tracker collection and Database Trigger Function.
                   // ...other configuration
                   {
                     "name": "additionWithRetryHandler",
-                    "private": true
+                    "private": false
                   }
                ]
 

@@ -26,7 +26,7 @@ async function additionWithRetryHandler(
   const res = await context.functions.execute(
     "handleRetry",
     additionOrFailure,
-    "additionWithRetry", // MUST BE NAME OF FUNCTION
+    "additionWithRetryHandler", // MUST BE NAME OF FUNCTION
     operationId,
     retries,
     inputVar1,

@@ -8,24 +8,27 @@ const MAX_RETRIES = 5;
 let currentRetries = 0;
 let errorMessage = "";
 
+
 async function mightFail(...inputVars) {
   if (currentRetries === MAX_RETRIES) {
     console.error(
       `Reached maximum number of retries (${MAX_RETRIES}) without successful execution.`
     );
-    console.error(errorMessage);
+    console.error("Error Message:", errorMessage);
     return;
   }
+  let res;
   try {
     // operation that might fail
-    await callFlakyExternalService(...inputVars);
+    res = await callFlakyExternalService(...inputVars);
   } catch (err) {
     errorMessage = err.message;
     // throttle retries to be at most every 5000 milliseconds
-    await sleep(5000);
+    await sleep(100);
     currentRetries++;
-    mightFail(...inputVars);
+    res = await mightFail(...inputVars);
   }
+  return res;
 }
 
 exports = mightFail;
