@@ -4,7 +4,7 @@ async function sleep(milliseconds) {
   await new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-// Set global variables to be used by all calls to `mightFail`
+// Set variables to be used by all calls to `mightFail`
 const MAX_RETRIES = 5;
 let currentRetries = 0;
 let errorMessage = "";

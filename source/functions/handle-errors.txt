@@ -70,7 +70,7 @@ On a high-level, this process includes the following components:
   Stop the recursive execution when the Function's current number of retries
   reaches the max number of retries.
 - You may also want to `throttle <https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling>`__
-  retries to reduce the total number of executions.
+  retries to reduce the total number of executions in a time frame.
 
 The following table describes some advantages and disadvantages
 of handling Function retries with recursive call strategy.
@@ -83,6 +83,7 @@ of handling Function retries with recursive call strategy.
      - Disadvantages
 
    * - - All retry logic occurs within one function.
+       - Function can return a value after retry.
        - Minimal additional code.
      - - All retries must occur within a single Function's max execution time.
 
@@ -124,7 +125,8 @@ execution tracker collection and Database Trigger Function.
 
    * - - Each retry is its own Function execution, with own max execution time
          and resources.
-     - - Each Function call requires two Function invocations, one for the Function
+     - - If the Function is retried, it cannot return a value.
+       - Each Function call requires two Function invocations, one for the Function
          itself and one for the retry handler.
        - More complex logic, which can be more difficult to write, debug, and monitor.
 
@@ -415,3 +417,6 @@ execution tracker collection and Database Trigger Function.
             .. literalinclude:: /examples/generated/functions/additionWithRetryHandler.snippet.addition-with-retry-handler.js
               :language: js
               :caption: additionWithRetryHandler.js
+
+      Now when you invoke ``additionWithRetryHandler``,
+      the Function will retry if it fails.
