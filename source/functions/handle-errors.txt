@@ -47,7 +47,7 @@ retry behavior if the third-party service that your Function calls has
 intermittent connectivity, and you want the Function to re-execute
 even if the third-party service is temporarily down.
 
-This section describes the following that you can add retry behavior to your Functions:
+This section describes the following strategies to add retry behavior to your Functions:
 
 - :ref:`Recursively Call Functions in Error Handling Blocks <functions-recursive-call>`
 - :ref:`Use Database Triggers to Retry Functions <functions-database-trigger-retry>`
@@ -65,7 +65,7 @@ On a high-level, this process includes the following components:
 - Execute operations that you want to retry in a ``try`` statement
   and have the Function call itself in a ``catch`` statement.
 - So that the execution doesn't happen indefinitely, set a maximum number of retries.
-  Every time that the Function fails and enters the ``catch`` statement,
+  Every time the Function fails and enters the ``catch`` statement,
   increment a count of the current number of retries.
   Stop the recursive execution when the Function's current number of retries
   reaches the max number of retries.
@@ -73,7 +73,7 @@ On a high-level, this process includes the following components:
   retries to reduce the total number of executions in a time frame.
 
 The following table describes some advantages and disadvantages
-of handling Function retries with recursive call strategy.
+of handling Function retries with the recursive call strategy.
 
 .. list-table::
    :header-rows: 1
@@ -88,7 +88,7 @@ of handling Function retries with recursive call strategy.
      - - All retries must occur within a single Function's max execution time.
 
 The following code example demonstrates an implementation of retrying a Function
-by using recursion in error handling blocks.
+by using recursion in error-handling blocks.
 
 .. literalinclude:: /examples/generated/functions/mightFail.snippet.recursive-error-handling.js
    :language: js
@@ -98,13 +98,11 @@ by using recursion in error handling blocks.
 Use Database Triggers to Retry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also retry Functions by using a handler Function that manages retry attempts
-with a :ref:`Database Trigger <database-trigger>` to execute retries
-and a MongoDB collection to track previously failed executions.
+You can also retry Functions by using a :ref:`Database Trigger <database-trigger>` to execute retries and a MongoDB collection to track previously-failed executions.
 
 On a high-level, this process includes the following components:
 
-- **Main Function** that execute the logic you want to retry,
+- **Main Function** that executes the logic you want to retry,
   wrapped in the handler function (see below bullet point).
 - **Failed execution tracker collection**, a MongoDB collection
   that tracks failed executions of the main Function.
@@ -114,7 +112,7 @@ On a high-level, this process includes the following components:
   the handler function adds an error to the failed execution tracker collection.
 
 You can support multiple main functions with one set of a handler Function,
-execution tracker collection and Database Trigger Function.
+execution tracker collection, and Database Trigger Function.
 
 .. list-table::
    :header-rows: 1
@@ -134,7 +132,7 @@ execution tracker collection and Database Trigger Function.
 
    .. step:: Create a Function to handle execution retry
 
-      First, create a handler Function ``handleRetry`` that invokes the main Function.
+      First, create the handler Function ``handleRetry`` that invokes the main Function.
 
       ``handleRetry`` accepts the following parameters:
 
@@ -277,7 +275,7 @@ execution tracker collection and Database Trigger Function.
 
       The function ``retryOperation`` takes as a parameter ``logEntry``, the document that the
       retry handler posted to the failed execution tracker collection.
-      Then ``retryOperation`` use :ref:`context.functions.execute() <context-functions>`
+      Then, ``retryOperation`` uses :ref:`context.functions.execute() <context-functions>`
       to invoke the main function with information from ``logEntry``.
 
       .. tabs-realm-admin-interfaces::
@@ -321,7 +319,7 @@ execution tracker collection and Database Trigger Function.
       Now that you have the function handler and the retry Database Trigger Function,
       you can write the main function.
 
-      In this example, the Function randomly throws an error when performing addition.
+      In the following example, the Function randomly throws an error when performing addition.
       The JavaScript functions that execute this logic are the following:
 
       - ``getRandomOneTwoThree()``: Helper function for generating errors
