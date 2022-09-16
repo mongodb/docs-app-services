@@ -32,8 +32,9 @@ You can view records of all Function executions including which an error prevent
 successful execution in :ref:`App Service Logs <logs>`.
 
 Depending on how a Function is invoked, it shows up differently in the logs.
-For example, logs for Functions called by Atlas Triggers have a different format
-from logs for Functions called directly from a Realm client SDK.
+For example, :ref:`logs for Functions called by Atlas Triggers <logs-trigger>`
+show up in the logs as "Triggers" while :ref:`logs for Functions called from a Realm client SDK <logs-function>`
+show up in the logs as "Functions".
 For more information, refer to the :ref:`Log entry type documentation <log-entry>`.
 
 .. _functions-retry:
@@ -57,20 +58,19 @@ This section describes the following strategies to add retry behavior to your Fu
 Recursively Call Function in Error Handling Blocks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-One way you can retry functions is to handle operations that might fail by
-calling a Function :wikipedia:`recursively <Recursion_(computer_science)>`.
+You can handle operations that might fail by calling a Function recursively.
 
 On a high-level, this process includes the following components:
 
 - Execute operations that you want to retry in a ``try`` statement
   and have the Function call itself in a ``catch`` statement.
-- So that the execution doesn't happen indefinitely, set a maximum number of retries.
+- To prevent indefinite execution, set a maximum number of retries.
   Every time the Function fails and enters the ``catch`` statement,
   increment a count of the current number of retries.
   Stop the recursive execution when the Function's current number of retries
   reaches the max number of retries.
-- You may also want to `throttle <https://docs.microsoft.com/en-us/azure/architecture/patterns/throttling>`__
-  retries to reduce the total number of executions in a time frame.
+- You may also want to throttle retries to reduce the total number of executions
+  in a time frame.
 
 The following table describes some advantages and disadvantages
 of handling Function retries with the recursive call strategy.
@@ -104,7 +104,7 @@ On a high-level, this process includes the following components:
 
 - **Main Function** that executes the logic you want to retry,
   wrapped in the handler function (see below bullet point).
-- **Failed execution tracker collection**, a MongoDB collection
+- **Failed execution tracker MongoDB collection**
   that tracks failed executions of the main Function.
 - **Handler Function** that invokes the main Function and logs when the function fails
   to the failed execution tracker collection.
@@ -136,13 +136,29 @@ execution tracker collection, and Database Trigger Function.
 
       ``handleRetry`` accepts the following parameters:
 
-      - ``functionToRetry``: the JavaScript function to retry.
-      - ``functionName``:  String. Name of the function you want to retry.
-      - ``operationId``: ObjectId. Unique identifier for the main function's
-        execution, including retries.
-      - ``previousRetries``: Number. How many times the main function
-        has previously been tried.
-      - ``...args``: Arguments passed to the main function.
+      .. list-table::
+        :header-rows: 1
+        :widths: 25 25 50
+
+        * - Parameter
+          - Type
+          - Description
+
+        * - ``functionToRetry``
+          - JavaScript Function
+          - Function to retry.
+        * - ``functionName``
+          - String
+          - Name of the function you want to retry.
+        * - ``operationId``
+          - ObjectId
+          - Unique identifier for the main function's execution, including retries.
+        * - ``previousRetries``
+          - Number
+          - How many times the main function has previously been tried.
+        * - ``...args``
+          - Rest parameters
+          - Indefinite number of arguments passed to the main function.
 
       ``handleRetry`` performs the following operations:
 
@@ -180,8 +196,17 @@ execution tracker collection, and Database Trigger Function.
             In the :guilabel:`Function Editor` add the following code,
             then save the Function:
 
+            .. literalinclude:: /examples/generated/functions/handleRetry.snippet.handle-retry.js
+               :language: js
+               :caption: handleRetry.js
+
          .. tab::
             :tabid: cli
+
+            .. tip:: Install and Set up Realm CLI
+
+               If you're using the Realm CLI to update your App Services App,
+               you must first :ref:`install and set up the Realm CLI <realm-cli>`.
 
             Add the following to :file:`functions/config.json`:
 
@@ -202,6 +227,12 @@ execution tracker collection, and Database Trigger Function.
             .. literalinclude:: /examples/generated/functions/handleRetry.snippet.handle-retry.js
                :language: js
                :caption: functions/handleRetry.js
+
+            Push your changes to App Services:
+
+            .. code-block: bash
+
+               realm-cli push
 
    .. step:: Create retry database trigger
 
@@ -286,7 +317,8 @@ execution tracker collection, and Database Trigger Function.
 
             In the field :guilabel:`Function Name`, add ``retryOperationDbTrigger``.
 
-            For the field :guilabel:`Function`, add the following code:
+            For the field :guilabel:`Function`, add the following code,
+            and then save the Trigger:
 
             .. literalinclude:: /examples/generated/functions/retryOperationDbTrigger.snippet.retry-operation-db-trigger-function.js
                :language: js
@@ -314,6 +346,12 @@ execution tracker collection, and Database Trigger Function.
                :language: js
                :caption: retryOperationDbTrigger.js
 
+            Push your changes to App Services:
+
+            .. code-block: bash
+
+               realm-cli push
+
    .. step:: Write Function to retry
 
       Now that you have the function handler and the retry Database Trigger Function,
@@ -335,22 +373,26 @@ execution tracker collection, and Database Trigger Function.
 
       .. list-table::
          :header-rows: 1
-         :widths: 50 50
+         :widths: 25 25 50
 
          * - Parameter
+           - Type
            - Description
 
          * - ``...args``
+           - Rest parameters
            - Zero or more parameters to pass to the function with main logic.
              In the case of this example, the two numbers added
              in ``additionOrFailure()``, ``num1`` and ``num2``.
 
          * - ``operationId``
-           - :ref:`BSON.Object.Id<bson-objectid>`. Unique identifier for the Function
+           - :ref:`BSON.Object.Id<bson-objectid>`
+           - Unique identifier for the Function
              call and retries. Set default value to a ``new BSON.ObjectId()``.
 
          * - ``retries``
-           - Number. Set default value to 0.
+           - Number
+           - Set default value to 0.
 
       The body of ``additionWithRetryHandler`` is the retry handler ``handleRetry``
       invoked by ``context.functions.execute()``,
@@ -359,29 +401,47 @@ execution tracker collection, and Database Trigger Function.
 
       .. list-table::
          :header-rows: 1
-         :widths: 50 50
+         :widths: 25 25 50
 
          * - Argument
+           - Type
            - Description
 
          * - ``"handleRetry"``
-           - String. Name of the Function you defined to invoke the main function
+           - String
+           - Name of the Function you defined to invoke the main function
              and post to the retry logs if the main function doesn't properly execute.
 
          * - ``additionOrFailure``
-           - JavaScript function. The main function that ``handleRetry()`` invokes.
+           - JavaScript function
+           - The main function that ``handleRetry()`` invokes.
 
          * - ``operationId``
-           - BSON.ObjectId. Passed in as argument from the parameter ``operationId`` of ``additionWithRetryHandler()``.
+           - BSON.ObjectId
+           - Passed in as argument from the parameter ``operationId`` of ``additionWithRetryHandler()``.
 
          * - ``retries``
-           - Number. Passed in as argument from the parameter ``retries`` of ``additionWithRetryHandler()``.
+           - Number
+           - Passed in as argument from the parameter ``retries`` of ``additionWithRetryHandler()``.
 
          * - ``...args``
+           - Spread arguments
            - Zero or more arguments to pass to the function with main logic.
              Passed in as argument from the parameter ``...args`` of ``additionWithRetryHandler()``
 
       .. tabs-realm-admin-interfaces::
+
+         .. tab::
+            :tabid: ui
+
+            In the field :guilabel:`Function Name`, add ``additionWithRetryHandler``.
+
+            For the field :guilabel:`Function`, add the following code
+            and save the Function:
+
+            .. literalinclude:: /examples/generated/functions/additionWithRetryHandler.snippet.addition-with-retry-handler.js
+              :language: js
+              :caption: additionWithRetryHandler.js
 
          .. tab::
             :tabid: cli
@@ -405,16 +465,11 @@ execution tracker collection, and Database Trigger Function.
               :language: js
               :caption: functions/additionWithRetryHandler.js
 
-         .. tab::
-            :tabid: ui
+            Push your changes to App Services:
 
-            In the field :guilabel:`Function Name`, add ``additionWithRetryHandler``.
+            .. code-block: bash
 
-            For the field :guilabel:`Function`, add the following code:
-
-            .. literalinclude:: /examples/generated/functions/additionWithRetryHandler.snippet.addition-with-retry-handler.js
-              :language: js
-              :caption: additionWithRetryHandler.js
+               realm-cli push
 
       Now when you invoke ``additionWithRetryHandler``,
       the Function will retry if it fails.
