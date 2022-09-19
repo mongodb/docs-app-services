@@ -1,3 +1,3 @@
 #! /bin/bash
 
-realm-cli push --include-package-json --profile=bushicorp --yes
+realm-cli push --include-package-json --yes
