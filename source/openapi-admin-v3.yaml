@@ -557,10 +557,10 @@ paths:
       tags:
         - services
       operationId: adminListServices
-      summary: List all services within an application.
+      summary: List all data sources and third-party services
       description: |-
-        List all [services](https://www.mongodb.com/docs/realm/services#std-label-services) within an
-        application.
+        List all [data sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) and [third-party
+        services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
       responses:
         "200":
           description: Successfully listed services.
@@ -568,20 +568,37 @@ paths:
             application/json:
               schema:
                 items:
-                  "$ref": "#/components/schemas/Service"
+                  anyOf:
+                    - $ref: "#/components/schemas/AtlasCluster"
+                    - $ref: "#/components/schemas/AtlasFederatedInstance"
+                    - $ref: "#/components/schemas/ThirdPartyService"
     post:
       tags:
         - services
       operationId: adminCreateService
-      summary: Create a service
-      description: Create a [service](https://www.mongodb.com/docs/realm/services#std-label-services).
+      summary: Create a data source or third-party service
+      description: |-
+        Create a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or [third-party
+        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+      requestBody: 
+        content: 
+          application/json: 
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/AtlasCluster"
+                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/ThirdPartyService"
+        
       responses:
         "201":
-          description: Successfully created the service.
+          description: Successfully created.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/NewService"
+                oneOf:
+                  - $ref: "#/components/schemas/AtlasCluster"
+                  - $ref: "#/components/schemas/AtlasFederatedInstance"
+                  - $ref: "#/components/schemas/ThirdPartyService"
         "409":
           description: There is already a service with the given `name`.
     parameters:
@@ -592,24 +609,31 @@ paths:
       tags:
         - services
       operationId: adminGetService
-      summary: Retrieve a service
-      description: Retrieve a [service](https://www.mongodb.com/docs/realm/services#std-label-services).
+      summary: Get a data source or third-party service
+      description: |-
+        Get a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/)
+        or [third-party service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
       responses:
         "200":
-          description: Successfully retrieved service.
+          description: Successfully retrieved.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Service"
+                oneOf:
+                  - $ref: "#/components/schemas/AtlasCluster"
+                  - $ref: "#/components/schemas/AtlasFederatedInstance"
+                  - $ref: "#/components/schemas/ThirdPartyService"
     delete:
       tags:
         - services
       operationId: adminDeleteService
-      summary: Delete a service.
-      description: Delete a [service](https://www.mongodb.com/docs/realm/services#std-label-services).
+      summary: Delete a data source or third-party service
+      description: |-
+        Delete a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/)
+        or [third-party service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
       responses:
         "204":
-          description: The service was successfully deleted.
+          description: Successfully deleted.
     patch:
       tags:
         - services
@@ -4138,41 +4162,103 @@ components:
           "$ref": "#/components/schemas/DataSource"
       required:
         - name
-    DataSource:
+    AtlasCluster:
       type: object
       properties:
         name:
           type: string
-          description: Should be "mongodb-atlas".
           example: mongodb-atlas
           enum:
             - mongodb-atlas
         type:
           type: string
-          description: Should be "mongodb-atlas".
           example: mongodb-atlas
           enum:
             - mongodb-atlas
         config:
           type: object
+          required:
+            - clusterName
           properties:
             clusterName:
               type: string
-              description: Name of Atlas cluster associated with the Atlas App Services app.
+              description: |-
+                The service name used to refer to the data source within
+                this Atlas app. The name may be at most 64 characters
+                long and must only contain ASCII letters, numbers,
+                underscores, and hyphens.
+            readPreference:
+              type: string
+              enum:
+                - primary
+                - primaryPreferred
+                - secondary
+                - secondaryPreferred
+                - nearest
+              description: |-
+                The [read
+                preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/#std-label-read-preference)
+                mode for read requests to the data source.
+            wireProtocolEnabled:
+              type: boolean
+              description: |-
+                If true, clients may [connect to the app over the
+                MongoDB Wire
+                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+    AtlasFederatedInstance:
+      type: object
+      properties:
+        name:
+          type: string
+          example: mongodb-datalake
+          enum:
+            - mongodb-datalake
+        type:
+          type: string
+          example: mongodb-atlas
+          enum:
+            - mongodb-datalake
+        config:
+          type: object
           required:
-            - clusterName
+            - dataLakeName
+          properties:
+            dataLakeName:
+              type: string
+              description: |-
+                The service name used to refer to the Federated database
+                instance within this Atlas app. The name may be at most
+                64 characters long and must only contain ASCII letters,
+                numbers, underscores, and hyphens.
+    DataSource:
       required:
         - name
         - type
         - config
-    Service:
+      oneOf:
+        - $ref: "#/components/schemas/AtlasCluster"
+        - $ref: "#/components/schemas/AtlasFederatedInstance"
+    ThirdPartyService:
+      type: object
+      description: |-
+        **THIRD-PARTY SERVICES ARE DEPRECATED**
+
+        See [Third-Party Services](https://www.mongodb.com/docs/atlas/app-services/reference/services/) for more information.
       properties:
         _id:
           type: string
+          description: A unique ID for the third-party service.
         name:
           type: string
+          description: The third-party service name.
         type:
           type: string
+          description: The type of third party service.
+          enum:
+            - aws
+            - twilio
+            - github
+            - gcm
         version:
           type: integer
     CreateLogForwarderRequest:
@@ -4237,17 +4323,6 @@ components:
           type: string
         collection:
           type: string
-    NewService:
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-        config:
-          type: object
-      required:
-        - name
-        - type
     Expression:
       description: A [rule expression](https://mongodb.com/docs/atlas/app-services/rules/expressions/).
       oneOf:
@@ -5394,8 +5469,8 @@ tags:
     x-displayName: Security
     description: Configure your application's [security](https://www.mongodb.com/docs/realm/manage-apps/secure/).
   - name: services
-    x-displayName: Services
-    description: View and manage your application's [services](https://www.mongodb.com/docs/realm/services/).
+    x-displayName: Data Sources & Services
+    description: View and manage your application's [data sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/)
   - name: sync
     x-displayName: Sync
     description: Get information about [sync](https://www.mongodb.com/docs/realm/sync/) for your application.
