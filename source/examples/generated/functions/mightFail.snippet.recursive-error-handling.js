@@ -24,7 +24,7 @@ async function mightFail(...inputVars) {
   } catch (err) {
     errorMessage = err.message;
     // throttle retries to be at most every 5000 milliseconds
-    await sleep(100);
+    await sleep(5000);
     currentRetries++;
     res = await mightFail(...inputVars);
   }
