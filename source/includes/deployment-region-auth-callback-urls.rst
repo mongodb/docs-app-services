@@ -8,7 +8,7 @@
    * - | **Global**
      - .. code-block:: text
 
-          https://stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://realm.mongodb.com/api/client/v2.0/auth/callback 
 
    * - | **Virginia**
        | (``us-east-1``)
