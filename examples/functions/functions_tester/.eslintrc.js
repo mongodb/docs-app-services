@@ -5,6 +5,10 @@ module.exports = {
     es2021: true,
     jest: true,
   },
+  globals: {
+    context: "writable",
+    BSON: "writable",
+  },
   extends: "eslint:recommended",
   overrides: [],
   parserOptions: {
