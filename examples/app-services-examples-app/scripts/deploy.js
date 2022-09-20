@@ -24,4 +24,4 @@ async function run() {
   console.log(stdout);
 }
 
-run();
+module.exports = run();

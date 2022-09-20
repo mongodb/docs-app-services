@@ -95,4 +95,4 @@ async function run() {
   await Promise.all(secretsPromises);
 }
 
-run();
+module.exports = run();
