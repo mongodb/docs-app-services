@@ -1,5 +1,4 @@
 async function sendOrderConfirmationText({ fullDocument }) {
-  // TODO: create correct API for this
   const accountSid = context.values.get("TWILIO_ACCOUNT_SID");
   const authToken = context.values.get("TWILIO_AUTH_TOKEN");
   const fromNumber = context.values.get("TWILIO_FROM_NUMBER");

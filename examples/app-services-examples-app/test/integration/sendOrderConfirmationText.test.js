@@ -1,12 +1,10 @@
-const { MongoClient } = require("mongodb");
-
-const { DB_USER, DB_PASSWORD } = process.env;
-console.log({ DB_USER, DB_PASSWORD });
-const mongoDbConnectionUri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.bcup9.mongodb.net/?retryWrites=true&w=majority`;
-
-const client = new MongoClient(mongoDbConnectionUri);
+const { connectToMongoDbClient } = require("./utils");
 
 describe("Order confirmation text", () => {
+  let client;
+  beforeAll(async () => {
+    client = connectToMongoDbClient();
+  });
   afterAll(async () => {
     await client.close();
   });
