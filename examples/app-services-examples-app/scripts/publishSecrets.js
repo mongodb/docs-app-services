@@ -55,13 +55,13 @@ async function run() {
   const {
     PUBLIC_API_KEY,
     PRIVATE_API_KEY,
-    APP_SERVICES_GROUP_ID,
-    APP_SERVICES_APP_ID,
+    ADMIN_API_GROUP_ID,
+    ADMIN_API_APP_ID,
   } = process.env;
   const { access_token } = await getAuthTokens(PUBLIC_API_KEY, PRIVATE_API_KEY);
   const currentSecrets = await listSecrets(
-    APP_SERVICES_GROUP_ID,
-    APP_SERVICES_APP_ID,
+    ADMIN_API_GROUP_ID,
+    ADMIN_API_APP_ID,
     access_token
   );
   const secretNames = Object.keys(process.env).filter((key) =>
@@ -72,8 +72,8 @@ async function run() {
     const found = currentSecrets.find(({ name, _id }) => {
       if (name === secretName) {
         return updateSecret(
-          APP_SERVICES_GROUP_ID,
-          APP_SERVICES_APP_ID,
+          ADMIN_API_GROUP_ID,
+          ADMIN_API_APP_ID,
           access_token,
           _id,
           secretName,
@@ -84,8 +84,8 @@ async function run() {
     return (
       found ||
       createSecret(
-        APP_SERVICES_GROUP_ID,
-        APP_SERVICES_APP_ID,
+        ADMIN_API_GROUP_ID,
+        ADMIN_API_APP_ID,
         access_token,
         secretName,
         process.env[secretName]
