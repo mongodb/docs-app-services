@@ -14,7 +14,7 @@ async function getAuthTokens(publicApiKey, privateApiKey) {
     apiKey: privateApiKey,
   };
 
-  const res = await axios.post(endpoint, data, { headers });
+  const { data: res } = await axios.post(endpoint, data, { headers });
   const { access_token, refresh_token } = res;
   return { access_token, refresh_token };
 }
