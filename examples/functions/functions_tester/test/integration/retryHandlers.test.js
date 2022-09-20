@@ -27,16 +27,16 @@ jest.setTimeout(20000);
 // for this one, i wasn't sure how to properly test. but looked at the logs
 // to verify behavior
 test("Database Trigger retry test", async () => {
-  let failed = false;
+  let success = true;
   let res;
-  while (!failed) {
+  while (success) {
     sleep(100);
     res = await app.currentUser.callFunction(
       "additionWithRetryHandler",
       [1, 2]
     );
     if (res === null) {
-      failed = true;
+      success = false;
     }
   }
 });

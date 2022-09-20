@@ -14,9 +14,8 @@ async function callFlakyExternalService(retries) {
   await sleep(10);
   if (currentRetries === retries) {
     return true;
-  } else {
-    throw new Error("flaky external service is broken!");
   }
+  throw new Error("flaky external service is broken!");
 }
 // :remove-end:
 
@@ -25,7 +24,7 @@ async function mightFail(...inputVars) {
     console.error(
       `Reached maximum number of retries (${MAX_RETRIES}) without successful execution.`
     );
-    console.error("Error Message:", errorMessage);
+    console.error("Error:", errorMessage);
     return;
   }
   let res;

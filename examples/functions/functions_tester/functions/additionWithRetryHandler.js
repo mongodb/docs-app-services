@@ -5,7 +5,7 @@ function getRandomOneTwoThree() {
 }
 
 function additionOrFailure(num1, num2) {
-  // Throw error if getRandomOneTwoThree returns 1
+  // Throw an error if getRandomOneTwoThree returns 1
   const rand = getRandomOneTwoThree();
   if (rand === 1) throw new Error("Uh oh!!");
   const sum = num1 + num2;
@@ -18,7 +18,7 @@ function additionOrFailure(num1, num2) {
 async function additionWithRetryHandler(
   inputVar1,
   inputVar2,
-  // create a new `operation_id` if one not provided
+  // create a new `operation_id` if one is not provided
   operationId = new BSON.ObjectId(),
   // count number of attempts
   retries = 0

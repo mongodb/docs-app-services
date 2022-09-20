@@ -15,8 +15,8 @@ async function handleRetry(
     const response = await functionToRetry(...args);
     return response;
   } catch (err) {
-    // Evaluates if should retry function again.
-    // If no retry, throws error and stops retrying.
+    // Evaluates if it should retry the function again.
+    // If not, it throws an error and stops retrying.
     if (previousRetries === MAX_FUNC_RETRIES) {
       throw new Error(
         `Maximum number of attempts reached (${MAX_FUNC_RETRIES}) for function '${functionName}': ${err.message}`
