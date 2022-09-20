@@ -3586,6 +3586,38 @@ paths:
       responses:
         "204":
           description: Updated
+  /groups/{groupId}/apps/{appId}/validation_settings/null_type_schema_validation:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - schemas
+      operationId: adminGetNullTypeSchemaValidationSetting
+      summary: Get Null Type Schema Validation Setting
+      description: Check if [null type schema validation](https://www.mongodb.com/docs/atlas/app-services/schemas/enforce-a-schema/#validate-null-types) is enabled.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/NullTypeSchemaValidationSetting"
+    put:
+      tags:
+        - schemas
+      operationId: adminSetNullTypeSchemaValidationSetting
+      summary: Set Null Type Schema Validation Setting
+      description: Enable or disable [null type schema validation](https://www.mongodb.com/docs/atlas/app-services/schemas/enforce-a-schema/#validate-null-types).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NullTypeSchemaValidationSetting"
+      responses:
+        "204":
+          description: Updated
 
 components:
   parameters:
@@ -5100,6 +5132,11 @@ components:
           $ref: "#/components/schemas/GraphQLValidationAction"
         write_validation_level:
           $ref: "#/components/schemas/GraphQLValidationLevel"
+    NullTypeSchemaValidationSetting:
+      type: object
+      properties:
+        enabled:
+          type: boolean
     ValidationError:
       description: An EJSON schema validation error.
       oneOf:
