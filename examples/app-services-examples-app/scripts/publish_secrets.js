@@ -49,6 +49,8 @@ async function updateSecret(
   return res;
 }
 
+// TODO: add logic to delete secrets that are no longer in the .env file
+
 async function run() {
   const {
     PUBLIC_API_KEY,

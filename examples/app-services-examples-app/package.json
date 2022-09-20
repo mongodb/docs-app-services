@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "jest",
-    "deploy": "./scripts/deploy.sh",
+    "deploy": "node ./scripts/deploy.js",
     "deploy:watch": "nodemon --exec 'bash ./scripts/deploy.sh'",
     "deploy:secrets": "node ./scripts/publish_secrets.js"
   },
@@ -13,10 +13,11 @@
   "license": "ISC",
   "devDependencies": {
     "axios": "^0.27.2",
+    "dotenv": "^16.0.2",
     "eslint": "^8.23.1",
     "eslint-plugin-jest": "^27.0.4",
     "jest": "^29.0.3",
-    "nodemon": "^2.0.20",
-    "dotenv": "^16.0.2"
+    "mongodb-realm-cli": "^2.6.0",
+    "nodemon": "^2.0.20"
   }
 }

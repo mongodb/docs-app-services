@@ -2,6 +2,15 @@ const util = require("util");
 const axios = require("axios");
 const exec = util.promisify(require("child_process").exec);
 
+async function execWithHandler(command) {
+  const { stdout, stderr } = await exec(command);
+  if (stderr) {
+    throw new Error(stderr);
+  }
+  console.log(stdout);
+  return stdout;
+}
+
 async function getAuthTokens(publicApiKey, privateApiKey) {
   const endpoint =
     "https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login";
@@ -19,4 +28,4 @@ async function getAuthTokens(publicApiKey, privateApiKey) {
   return { access_token, refresh_token };
 }
 
-module.exports = { exec, getAuthTokens };
+module.exports = { execWithHandler, getAuthTokens };
