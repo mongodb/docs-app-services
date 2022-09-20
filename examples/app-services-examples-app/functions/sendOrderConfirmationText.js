@@ -4,14 +4,13 @@ async function sendOrderConfirmationText({ fullDocument }) {
   const authToken = context.values.get("TWILIO_AUTH_TOKEN");
   const fromNumber = context.values.get("TWILIO_FROM_NUMBER");
 
-  const { confirmationNumber, orderId, orderItemName } = fullDocument;
+  const { confirmationNumber, _id, orderItemName } = fullDocument;
 
   const twilioClient = require("twilio")(accountSid, authToken);
-  const twilioRes = await twilioClient.messages.create({
+  await twilioClient.messages.create({
     from: fromNumber,
     to: confirmationNumber,
-    body: `Thank you for purchasing ${orderItemName}!\n\nYour order ID is: ${orderId}`,
+    body: `Thank you for purchasing ${orderItemName}!\n\nYour order ID is: ${_id}`,
   });
-  console.log(twilioRes);
 }
 exports = sendOrderConfirmationText;

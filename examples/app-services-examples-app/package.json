@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "jest",
+    "test": "jest --forceExit",
+    "deploy": "node ./scripts/deployWithSecrets.js",
     "deploy:app": "node ./scripts/deploy.js",
     "deploy:watch": "nodemon ./scripts/deployWithSecrets.js",
     "deploy:secrets": "node ./scripts/publishSecrets.js"
@@ -13,10 +14,12 @@
   "license": "ISC",
   "devDependencies": {
     "axios": "^0.27.2",
+    "bson": "^4.7.0",
     "dotenv": "^16.0.2",
     "eslint": "^8.23.1",
     "eslint-plugin-jest": "^27.0.4",
     "jest": "^29.0.3",
+    "mongodb": "^4.10.0",
     "mongodb-realm-cli": "^2.6.0",
     "nodemon": "^2.0.20"
   }

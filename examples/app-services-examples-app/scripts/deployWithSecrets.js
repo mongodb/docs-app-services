@@ -1,1 +1,1 @@
-require("./publish_secrets").then(() => require("./deploy"));
+require("./publishSecrets").then(() => require("./deploy"));
