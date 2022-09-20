@@ -10,7 +10,8 @@
   - Belgium (``europe-west1``)
   - Mumbai (``asia-south1``)
 
-- Introduced ability to :ref:`list all available databases and collections <mongodb-admin-getdbnames>` in Functions.
+- You can now :ref:`list the name of all collections
+  <mongodb-db-getcollectionnames>` in a database from a function.
 
 07 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
