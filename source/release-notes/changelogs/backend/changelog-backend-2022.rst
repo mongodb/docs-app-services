@@ -10,8 +10,8 @@
   - Belgium (``europe-west1``)
   - Mumbai (``asia-south1``)
 
-- You can now :method:`list the name of all collections
-  <database.getCollectionNames()>` in a database from a function.
+- You can now :ref:`list the name of all collections
+  <mongodb-db-getcollectionnames>` in a database from a function.
 
 07 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
