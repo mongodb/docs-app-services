@@ -1,15 +1,23 @@
-.. _backend_20220921:
+.. _backend_20220923:
 
-21 September 2022 Release
+23 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Added :method:`mongodb.admin()` and :method:`admin.getDBNames()` in
   Atlas Functions.
 
-.. _backend_20220907:
+.. _backend_20220909:
 
-07 September 2022 Release
+9 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support App Services deployments in the following :ref:`GCP regions<realm-regions>`:
+
+  - Ohio (``us-central1``)
+  - Virginia (``us-east4``)
+  - Oregon (``us-west1``)
+  - Belgium (``europe-west1``)
+  - Mumbai (``asia-south1``)
 
 - Added support for :method:`database.getCollectionNames()` in Atlas
   Functions.

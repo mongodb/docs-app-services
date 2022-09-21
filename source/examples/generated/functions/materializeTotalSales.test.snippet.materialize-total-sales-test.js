@@ -11,7 +11,6 @@ const saladId = BSON.ObjectId();
 async function sleep(ms) {
   await new Promise((resolve) => setTimeout(resolve, ms));
 }
-
 // Set up. Creates and logs in a user, which you need to query MongoDB Atlas
 // with the Realm Node.js SDK
 beforeEach(async () => {
@@ -39,7 +38,7 @@ test("Trigger creates a new materialization", async () => {
     timestamp: Date.now(),
   });
 
-  // give time for Trigger to execute on Atlas
+  // give time for the Trigger to execute on Atlas
   await sleep(1000);
 
   const totalSalesMaterialized = user

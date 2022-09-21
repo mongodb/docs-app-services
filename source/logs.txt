@@ -22,12 +22,12 @@ Application Logs
    Forward Logs to a Service </logs/forward-logs>
    Authentication Logs </logs/authentication>
    Change Stream Logs </logs/changestream>
+   Endpoint Logs </logs/endpoint>
    Function Logs </logs/function>
    Service Logs </logs/service>
    Trigger Logs </logs/trigger>
    Schema Logs </logs/schema>
    Sync Logs </logs/sync>
-   Endpoint Logs </logs/endpoint>
 
 Introduction
 ------------
@@ -42,6 +42,8 @@ App Services UI or request them programmatically through the
 Concepts
 --------
 
+.. _log-entry:
+
 Log Entry
 ~~~~~~~~~
 
@@ -53,26 +55,29 @@ they record. Each type of log contains fields that describe that
 particular event or request. As a result, your application
 logs may include entries of the following types:
 
-- :doc:`Authentication Requests </logs/authentication>`, including user
+- :ref:`Authentication Requests <logs-authentication>`, including user
   creation, login, and deletion.
 
-- :doc:`Functions </logs/function>`, including both Atlas Functions
+- :ref:`Change Stream <logs-change-stream>`, including any time a user
+  opens or closes a stream of change events.
+
+- :ref:`Endpoint requests <logs-endpoint>`, including any time a request is made
+  to a Data API endpoint.
+
+- :ref:`Functions <logs-function>`, including both Atlas Functions
   as well as individual queries to linked {+atlas+} data sources made using the
   MongoDB service of the a Realm SDK.
 
-- :doc:`Triggers </logs/trigger>`, including Database Triggers,
+- :ref:`Triggers <logs-trigger>`, including Database Triggers,
   Authentication Triggers, and Scheduled Triggers.
 
-- :doc:`Service Requests </logs/service>`, including HTTPS endpoints and
+- :ref:`Service Requests <logs-service>`, including HTTPS endpoints and
   service action calls issued from the a Realm SDK.
 
-- :doc:`Change Stream </logs/changestream>`, including any time a user
-  opens or closes a stream of change events.
-
-- :doc:`Schema changes </logs/schema>`, including any events related to
+- :ref:`Schema changes <logs-schema>`, including any events related to
   changes to an application's schema.
 
-- :doc:`Sync events </logs/sync>`, including all events related to
+- :ref:`Sync events <logs-sync>`, including all events related to
   data synchronization between client devices and MongoDB Atlas.
 
 Parts of a Log Entry
