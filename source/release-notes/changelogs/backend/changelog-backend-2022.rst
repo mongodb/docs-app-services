@@ -1,3 +1,12 @@
+.. _backend_20220923:
+
+23 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added :method:`mongodb.admin()` and :method:`admin.getDBNames()` in
+  Atlas Functions.
+
+.. _backend_20220909:
 
 9 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -9,12 +18,6 @@
   - Oregon (``us-west1``)
   - Belgium (``europe-west1``)
   - Mumbai (``asia-south1``)
-
-- You can now :ref:`list the name of all collections
-  <mongodb-db-getcollectionnames>` in a database from a function.
-
-07 September 2022 Release
-~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Added support for :method:`database.getCollectionNames()` in Atlas
   Functions.
