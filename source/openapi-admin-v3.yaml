@@ -214,7 +214,7 @@ paths:
       tags:
         - deploy
       operationId: adminListAppRegions
-      summary: List all available Atlas App cloud regions.
+      summary: List all available Atlas App cloud regions
       description: |-
         Return a list of all supported cloud regions in which you can
         deploy an Atlas App.
@@ -328,7 +328,7 @@ paths:
       tags:
         - triggers
       operationId: adminListTriggers
-      summary: Get all triggers.
+      summary: Get all triggers
       description: Get a list of all [triggers](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
       responses:
         "200":
@@ -344,7 +344,7 @@ paths:
       tags:
         - triggers
       operationId: adminCreateTrigger
-      summary: Create a trigger.
+      summary: Create a trigger
       description: Create a new [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
       requestBody:
         description: A configuration for a database, scheduled, or authentication trigger.
@@ -365,11 +365,24 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/TriggerId"
+    get:
+      tags:
+        - triggers
+      operationId: adminGetTrigger
+      summary: Get a trigger
+      description: Get the configuration for an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
+      responses:
+        "200":
+          description: Successfully retrieved trigger.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Trigger"
     put:
       tags:
         - triggers
       operationId: adminUpdateTrigger
-      summary: Update a trigger.
+      summary: Update a trigger
       description: Modify an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
       requestBody:
         description: The updated trigger configuration.
@@ -387,24 +400,11 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
-    get:
-      tags:
-        - triggers
-      operationId: adminGetTrigger
-      summary: Get a trigger.
-      description: Get the configuration for an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) in your application.
-      responses:
-        "200":
-          description: Successfully retrieved trigger.
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Trigger"
     delete:
       tags:
         - triggers
       operationId: adminDeleteTrigger
-      summary: Delete a trigger.
+      summary: Delete a trigger
       description: Remove an existing [trigger](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/) from your application.
       responses:
         "200":
@@ -474,7 +474,7 @@ paths:
       tags:
         - values
       operationId: adminCreateValue
-      summary: Define a Value in an application.
+      summary: Define a Value in an application
       description: |-
         Define a [Value](https://www.mongodb.com/docs/realm/values-and-secrets) in
         an application.
@@ -530,7 +530,7 @@ paths:
       tags:
         - values
       operationId: adminUpdateValue
-      summary: Update a value definition in an application.
+      summary: Update a value definition in an application
       description: |-
         Update a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
         definition in an application.
@@ -768,7 +768,7 @@ paths:
       tags:
         - services
       operationId: adminGetServiceConfig
-      summary: Retrieve a service's configuration.
+      summary: Retrieve a service's configuration
       description: |-
         Retrieve a [service's](https://www.mongodb.com/docs/realm/services#std-label-services)
         configuration.
@@ -1121,7 +1121,7 @@ paths:
       tags:
         - sync
       operationId: adminGetSync
-      summary: Get sync information for a specific linked MongoDB cluster.
+      summary: Get sync information for a specific linked MongoDB cluster
       description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/sync/data-access-patterns/partitions/).
       responses:
         "200":
@@ -1418,7 +1418,7 @@ paths:
       tags:
         - users
       operationId: adminListDevices
-      summary: List a user's devices.
+      summary: List a user's devices
       responses:
         "200":
           description: Successfully listed.
@@ -1608,7 +1608,7 @@ paths:
       tags:
         - functions
       operationId: adminExecuteFunctionSource
-      summary: Execute a function's source code for testing.
+      summary: Execute a function's source code for testing
       description: |-
         Execute a [function](https://www.mongodb.com/docs/realm/functions#std-label-functions)'s source code
         for testing.
@@ -1669,7 +1669,7 @@ paths:
       tags:
         - authproviders
       operationId: adminListAuthProviders
-      summary: List authentication providers in a Atlas App Services app.
+      summary: List authentication providers in a Atlas App Services app
       description: |-
         List [authentication
         providers](https://www.mongodb.com/docs/realm/authentication/providers)
@@ -4738,12 +4738,6 @@ components:
         - $ref: "#/components/schemas/DatabaseTrigger"
         - $ref: "#/components/schemas/AuthenticationTrigger"
         - $ref: "#/components/schemas/ScheduledTrigger"
-      discriminator:
-        propertyName: type
-        mapping:
-          DATABASE: "#/components/schemas/DatabaseTrigger"
-          AUTHENTICATION: "#/components/schemas/AuthenticationTrigger"
-          SCHEDULED: "#/components/schemas/ScheduledTrigger"
     BaseTrigger:
       type: object
       required:
@@ -4827,7 +4821,10 @@ components:
               properties:
                 service_id:
                   type: string
-                  description: The _id value of a linked MongoDB data source.
+                  description: |
+                    The _id value of a linked MongoDB data source.
+
+                    See [Get a Data Source](#/operation/adminGetService).
                 database:
                   type: string
                   description: The name of a database in the linked data source.
