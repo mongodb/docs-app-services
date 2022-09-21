@@ -337,7 +337,7 @@ paths:
             application/json:
               schema:
                 type: array
-                description: A list of all database, authentication, and scheduled trigger defined for the app.
+                description: A list of all database, authentication, and scheduled triggers defined for the app.
                 items:
                   "$ref": "#/components/schemas/AnyTrigger"
     post:
@@ -4903,7 +4903,7 @@ components:
         - properties:
             type:
               type: string
-              description: The trigger type. For database triggers, this value is always `"AUTHENTICATION"`.
+              description: The trigger type. For authentication triggers, this value is always `"AUTHENTICATION"`.
               enum: ["AUTHENTICATION"]
             config:
               required:
@@ -4941,7 +4941,7 @@ components:
         - properties:
             type:
               type: string
-              description: The trigger type. For database triggers, this value is always `"SCHEDULED"`.
+              description: The trigger type. For scheduled triggers, this value is always `"SCHEDULED"`.
               enum: ["SCHEDULED"]
             config:
               required:
