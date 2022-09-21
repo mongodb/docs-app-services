@@ -4,7 +4,10 @@ async function sleep(milliseconds) {
 }
 
 // Set variables to be used by all calls to `mightFail`
+// Tip: You could also store `MAX_RETRIES` and `THROTTLE_TIME_MS`
+// in App Services Values
 const MAX_RETRIES = 5;
+const THROTTLE_TIME_MS = 5000;
 let currentRetries = 0;
 let errorMessage = "";
 
@@ -23,8 +26,8 @@ async function mightFail(...inputVars) {
     res = await callFlakyExternalService(...inputVars);
   } catch (err) {
     errorMessage = err.message;
-    // throttle retries to be at most every 5000 milliseconds
-    await sleep(5000);
+    // throttle retries
+    await sleep(THROTTLE_TIME_MS);
     currentRetries++;
     res = await mightFail(...inputVars);
   }
