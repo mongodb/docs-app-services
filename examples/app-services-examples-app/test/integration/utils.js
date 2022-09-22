@@ -7,5 +7,8 @@ function connectToMongoDbClient() {
   const client = new MongoClient(mongoDbConnectionUri);
   return client;
 }
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-module.exports = { connectToMongoDbClient };
+module.exports = { connectToMongoDbClient, sleep };

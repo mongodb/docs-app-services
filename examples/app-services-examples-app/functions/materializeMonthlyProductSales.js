@@ -6,6 +6,11 @@ async function materializeMonthlyProductSales({ fullDocument }) {
   const query = { year, month, productId };
   // increment the monthly total sales uses the $inc operator
   const update = {
+    $set: {
+      year,
+      month,
+      productId,
+    },
     $inc: {
       totalSalesUsd: amountUsd,
     },
