@@ -9,21 +9,9 @@ describe("Materialize monthly product sales", () => {
     await client.close();
   });
   afterEach(async () => {
-    // const list = ["sales", "monthlyProductSales"];
     const storeDb = client.db("store");
     await storeDb.collection("sales").deleteMany({});
     await storeDb.collection("monthlyProductSales").deleteMany({});
-    // const collections = (await storeDb.listCollections().toArray()).map(
-    //   (collection) => collection.name
-    // );
-
-    // for (let i = 0; i < list.length; i++) {
-    //   if (collections.indexOf(list[i]) !== -1) {
-    //     await storeDb.dropCollection(list[i]);
-    //   }
-    // }
-    // await client.db("store").collection("sales").drop();
-    // await client.db("store").collection("monthlyProductSales").drop();
   });
   test("Should materialize sales", async () => {
     const sales = client.db("store").collection("sales");
