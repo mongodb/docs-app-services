@@ -52,7 +52,7 @@ required, depending on whether you are linking a cluster or a
      - The name of the service. The name may be at most 64 characters
        long and can only contain ASCII letters, numbers, underscores,
        and hyphens. For clusters, the default name is ``mongodb-atlas``.
-       For {+adf-datasource+}s, it is ``mongodb-datalake``.
+       For {+adf-datasource+}s, it is ``mongodb-datafederation``.
    
    * - | ``type``
        | String

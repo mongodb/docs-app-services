@@ -27,7 +27,7 @@ define collection-level rules in the ``/rules`` sub-directory.
    source when you link it to your application. For linked clusters, the
    default MongoDB service name is ``mongodb-atlas``. For
    {+adf-datasource+}s, the default service name is
-   ``mongodb-datalake``.
+   ``mongodb-datafederation``.
 
 .. _mongodb-service-configuration-file:
 
