@@ -25,7 +25,7 @@ describe("Materialize monthly product sales", () => {
     await sales.insertMany([pizzaSale1, pizzaSale2]);
 
     // Give triggers time to execute
-    await sleep(3000);
+    await sleep(2000);
     const monthlySalesMaterialized = client
       .db("store")
       .collection("monthlyProductSales");
