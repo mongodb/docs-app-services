@@ -76,6 +76,83 @@ number of items each customer purchases at a time,
 
 .. include:: /functions/mongodb/api/snippets/aggregate.rst
 
+Find Data with Atlas Search
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can run :ref:`Atlas Search <fts-top-ref>` queries on a collection
+with :method:`collection.aggregate()` and the ``$search`` aggregation
+stage.
+
+.. include:: /includes/note-atlas-search-rules.rst
+
+.. io-code-block::
+   
+   .. input::
+      :language: javascript
+
+      exports = async function searchMoviesAboutBaseball() {
+        // 1. Get a reference to the collection you want to search.
+        const movies = context.services
+          .get("mongodb-atlas")
+          .db("sample_mflix")
+          .collection("movies");
+        // 2. Run an aggregation with $search as the first stage.
+        const baseballMovies = await movies
+          .aggregate([
+            {
+              $search: {
+                text: {
+                  query: "baseball",
+                  path: "plot",
+                },
+              },
+            },
+            {
+              $limit: 5,
+            },
+            {
+              $project: {
+                _id: 0,
+                title: 1,
+                plot: 1,
+              },
+            },
+          ])
+          .toArray();
+        return baseballMovies;
+      };
+   
+   .. output::
+      :language: json
+
+      {
+        "plot" : "A trio of guys try and make up for missed
+        opportunities in childhood by forming a three-player
+        baseball team to compete against standard children
+        baseball squads.",
+        "title" : "The Benchwarmers"
+      }
+      {
+        "plot" : "A young boy is bequeathed the ownership of a
+        professional baseball team.",
+        "title" : "Little Big League"
+      }
+      {
+        "plot" : "A trained chimpanzee plays third base for a
+        minor-league baseball team.",
+        "title" : "Ed"
+      }
+      {
+        "plot" : "The story of the life and career of the famed
+        baseball player, Lou Gehrig.",
+        "title" : "The Pride of the Yankees"
+      }
+      {
+        "plot" : "Babe Ruth becomes a baseball legend but is
+        unheroic to those who know him.",
+        "title" : "The Babe"
+      }
+
 .. _mongodb-aggregation-stages:
 
 Aggregation Stages
