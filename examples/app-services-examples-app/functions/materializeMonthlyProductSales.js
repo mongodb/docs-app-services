@@ -4,7 +4,7 @@ async function materializeMonthlyProductSales({ fullDocument }) {
   const month = timeOfSale.getUTCMonth();
   // Match document with same month, year, and productId
   const query = { year, month, productId };
-  // increment the monthly total sales uses the $inc operator
+  // Increment the monthly total sales uses the $inc operator
   const update = {
     $set: {
       year,
@@ -18,7 +18,7 @@ async function materializeMonthlyProductSales({ fullDocument }) {
   // Create the document if it doesn't already exist
   const options = { upsert: true };
 
-  // access MongoDB collection
+  // Access MongoDB collection
   const monthlyProductSales = context.services
     .get("mongodb-atlas")
     .db("store")
