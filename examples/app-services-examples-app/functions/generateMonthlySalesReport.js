@@ -1,26 +1,38 @@
-// function generateCsvReport(documents) {
-//   const { parse } = require("json2csv");
-//   const fields = Object.keys(documents[0]);
-//   const opts = { fields };
-//   const csvString = parse(documents, opts);
-//   return csvString;
-// }
+function generateCsvReport(documents) {
+  const { parse } = require("json2csv");
+  const fields = Object.keys(documents[0]);
+  // Note: You must explicitly set the end of line delimiter `eol` to use
+  // the json2csv module with the Atlas Functions JavaScript runtime.
+  const opts = { fields, eol: "\n" };
+  const csvString = parse(documents, opts);
+  return csvString;
+}
 
-// async function putReportInS3(reportBody) {
-//   const S3 = require("@aws-sdk/client-s3");
-//   const s3 = new S3({
-//     accessKeyId: context.values.get("awsAccessKeyId"),
-//     secretAccessKey: context.values.get("awsSecretAccessKey"),
-//     region: "us-east-1",
-//   });
-//   await s3
-//     .putObject({
-//       Bucket: "bucketName",
-//       Key: "keyName",
-//       Body: reportBody,
-//     })
-//     .promise();
-// }
+async function putReportInS3(reportName, reportBody) {
+  const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+  const accessKeyId = context.values.get("AWS_S3_ACCESS_KEY_ID");
+  const secretAccessKey = context.values.get("AWS_S3_ACCESS_KEY_SECRET");
+  const s3Bucket = context.values.get("AWS_S3_BUCKET_NAME");
+  const region = context.values.get("AWS_S3_BUCKET_REGION");
+
+  console.log("report body::\n\n" + reportBody);
+
+  // Add CSV report to S3 bucket
+  const s3 = new S3Client({
+    credentials: { accessKeyId, secretAccessKey },
+    region,
+  });
+  const commandInput = {
+    Bucket: s3Bucket,
+    Key: reportName,
+    Body: reportBody,
+    ContentType: "text/csv",
+  };
+  const command = new PutObjectCommand(commandInput);
+  const s3Response = await s3.send(command);
+
+  return s3Response;
+}
 
 async function generateMonthlySalesReport(monthZeroEleven, year) {
   let monthToReport, yearToReport;
@@ -41,29 +53,19 @@ async function generateMonthlySalesReport(monthZeroEleven, year) {
     yearToReport = year;
   }
 
-  console.log(
-    "month::",
-    typeof monthToReport,
-    "// year::",
-    typeof yearToReport
-  );
   const monthlySalesMaterializations = context.services
     .get("mongodb-atlas")
     .db("store")
     .collection("monthlyProductSales");
-  const lastMonthsMaterializedSales = await monthlySalesMaterializations
-    .find()
-    .toArray();
-  console.log(Object.keys(lastMonthsMaterializedSales));
-  // .count();
-  // {month: monthToReport,
-  // year: yearToReport}
-  // .toArray();
-  console.log("results::", lastMonthsMaterializedSales);
-  return lastMonthsMaterializedSales;
 
-  // const csvReport = generateCsvReport(lastMonthsMaterializedSales);
-  // await putReportInS3(csvReport);
+  const lastMonthsMaterializedSales = await monthlySalesMaterializations
+    .find({ month: monthToReport, year: yearToReport })
+    .toArray();
+
+  const csvReport = generateCsvReport(lastMonthsMaterializedSales);
+  const reportName = `${yearToReport}-${monthToReport}-sales-report.csv`;
+  const s3Response = await putReportInS3(reportName, csvReport);
+  return s3Response;
 }
 
 exports = generateMonthlySalesReport;
