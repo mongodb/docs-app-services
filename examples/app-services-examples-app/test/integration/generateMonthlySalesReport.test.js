@@ -44,9 +44,8 @@ afterAll(async () => {
     .collection("monthlyProductSales")
     .deleteMany({ month: april, year: twenty22 });
   await client.close();
-  // TODO: waiting on getting Delete permissions added to IAM role
-  // await s3Client.send(new DeleteObjectCommand(april2022ReportParams));
-  // await s3Client.send(new DeleteObjectCommand(lastMonthParams));
+  await s3Client.send(new DeleteObjectCommand(april2022ReportParams));
+  await s3Client.send(new DeleteObjectCommand(lastMonthParams));
 });
 
 test("Generate monthly sales report, specifying month", async () => {
