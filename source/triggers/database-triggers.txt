@@ -19,7 +19,8 @@ Database Triggers allow you to execute server-side logic whenever a
 document is added, updated, or removed in a linked {+atlas+} cluster.
 Unlike SQL data triggers, which run on the database server, triggers run
 on a serverless compute layer that scales independently of the database
-server.
+server. Triggers automatically call :ref:`Atlas Functions <functions>`
+and can forward events to external handlers through AWS EventBridge.
 
 Use database triggers to implement event-driven data interactions. For
 example, you can automatically update information in one document when a
