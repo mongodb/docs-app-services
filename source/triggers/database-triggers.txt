@@ -16,41 +16,46 @@ Overview
 --------
 
 Database Triggers allow you to execute server-side logic whenever a
-document is added, updated, or removed in a
-linked {+atlas+} cluster.
-You can use database Triggers to implement complex data interactions,
-including updating information in one document when a related document
-changes or interacting with a :doc:`service </reference/services>` upon 
-the insertion of a new document.
+document is added, updated, or removed in a linked {+atlas+} cluster.
+Unlike SQL data triggers, which run on the database server, triggers run
+on a serverless compute layer that scales independently of the database
+server.
 
-Database Triggers use MongoDB :manual:`change streams </changeStreams>` to
-listen for changes to documents in a collection and pass :ref:`database events
-<database-events>` to their associated Trigger function. Unlike SQL data
-triggers, which run on the database server, Atlas Triggers run on a serverless
-compute layer that scales independently of the database server.
+Use database triggers to implement event-driven data interactions. For
+example, you can automatically update information in one document when a
+related document changes or send a request to an external service
+whenever a new document is inserted.
 
-You can use a :manual:`$match </reference/operator/aggregation/match>`
-expression document to filter change events based on
-field values. For more information, see :manual:`Query on Embedded
-Documents </tutorial/query-embedded-documents>` in the MongoDB server
-manual.
+Database triggers use MongoDB :manual:`change streams </changeStreams>`
+to watch for real-time changes in a collection. A change stream is a
+series of :ref:`database events <database-events>` that each
+describe an operation on a document in the collection. Your app opens a
+single change stream for each collection with at least one enabled
+trigger. If multiple triggers are enabled for a collection they all
+share the same change stream.
+
+You control which operations cause a trigger to fire as well as what
+happens when it does. For example, you can run a function whenever a
+specific field of a document is updated. The function can access the
+entire change event, so you always know what changed. You can also pass
+the change event to AWS EventBridge to handle the event outside of
+Atlas.
+
+Triggers support :manual:`$match
+</reference/operator/aggregation/match>` expressions to filter change
+events and :manual:`$project </reference/operator/aggregation/project>`
+expressions to limit the data included in each event.
 
 .. important:: Change Stream Limitations
    
-   Atlas App Services opens a single change stream for each collection with at least
-   one enabled Trigger and limits the total number of open change
-   streams on each linked cluster across all Apps based on the
-   cluster's size. See :ref:`change stream limitations
-   <mongodb-service-limitations-change-streams>` for more information.
+   There are limits on the total number of change streams you can open
+   on a cluster, depending on the cluster's size. See :ref:`change
+   stream limitations <mongodb-service-limitations-change-streams>` for
+   more information.
 
-.. note::
-
-   Database Triggers are only available for `{+atlas+}
-   <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ 
-   clusters running MongoDB version 3.6 or newer.
-   
    You cannot define a database trigger on a :ref:`serverless instance
-   <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
+   <serverless-caveats>` or :ref:`{+adf-instance+}
+   <data-federation-caveats>` because they do not support change streams.
 
 Example
 -------
