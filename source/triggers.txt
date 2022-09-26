@@ -1,8 +1,9 @@
-========
-Triggers
-========
+.. _triggers:
+.. _triggers-overview:
 
-.. default-domain:: mongodb
+==============
+Atlas Triggers
+==============
 
 .. toctree::
    :titlesonly:
@@ -13,10 +14,92 @@ Triggers
    Database Triggers </triggers/database-triggers>
    Authentication Triggers </triggers/authentication-triggers>
    Scheduled Triggers </triggers/scheduled-triggers>
+   Resume a Suspended Trigger </triggers/resume-a-suspended-trigger>
+   Disable a Trigger </triggers/disable>
    Usage Examples </triggers/examples>
 
-- :doc:`About Triggers </triggers/overview>`
-- :doc:`Database Triggers </triggers/database-triggers>`
-- :doc:`Authentication Triggers </triggers/authentication-triggers>`
-- :doc:`Scheduled Triggers </triggers/scheduled-triggers>`
-- :doc:`Usage Examples </triggers/examples>`
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Atlas Triggers execute application and database logic. Triggers
+can respond to events or use pre-defined schedules.
+
+Triggers listen for events of a configured type. Each Trigger links to a
+specific :doc:`Atlas Function </functions>`.
+When a Trigger observes an event that matches your
+configuration, it *"fires."* The Trigger passes this event object as the
+argument to its linked Function.
+
+A Trigger might fire on:
+
+- A specific *operation type* in a given Collection.
+- An authentication event, such as user creation or deletion.
+- A scheduled time.
+
+App Services keeps track of the latest execution time for each
+Trigger.
+
+.. _trigger-types:
+
+Trigger Types
+-------------
+
+App Services supports three types of triggers:
+
+- :doc:`Database triggers </triggers/database-triggers>`
+  respond to document insert, changes, or deletion. You can configure 
+  Database Triggers for each linked MongoDB collection.
+
+- :doc:`Authentication triggers </triggers/authentication-triggers>`
+  respond to user creation, login, or deletion.
+
+- :doc:`Scheduled triggers </triggers/scheduled-triggers>`
+  execute functions according to a pre-defined schedule.
+
+.. _trigger-limitations:
+
+Limitations
+-----------
+
+Atlas Function Constraints Apply
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Triggers invoke Atlas Functions. This means they have the same
+constraints as all Atlas Functions.
+
+:ref:`Learn more about Atlas Function constraints.<function-constraints>`
+
+Maximum Executions Per Second
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+App Services limits the execution of Trigger
+Functions. A Trigger can execute up to 2500 times per second. When a
+Trigger calls a Function, this call goes into a queue. When capacity
+becomes available, App Services executes the Function call.
+
+.. note::
+
+   Your application's execution rate may be lower than 2500 per second. This
+   varies depending on your Atlas instance size.
+
+Database Triggers with *event ordering* work differently. Each ordered
+Trigger processes events in sequence. App Services waits for each event
+execution in the sequence to complete. Then, it handles the next event. Only
+one sequence for a given ordered Trigger executes at a time.
+
+Number of Triggers Cannot Exceed Available Change Streams
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+App Services limits the total number of Database Triggers. The size of your
+Atlas cluster drives this limit.
+
+Each Atlas cluster tier has a maximum number of supported change
+streams. A Database Trigger requires its own change stream. Other App Services
+also use change streams, such as Atlas Device Sync. Database Triggers
+may not exceed the number of available change streams.
+
+:ref:`Learn more about the number of supported change streams for Atlas
+tiers. <mongodb-service-limitations-change-streams>`
