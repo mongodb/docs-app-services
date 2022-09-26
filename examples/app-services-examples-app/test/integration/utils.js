@@ -28,13 +28,23 @@ const streamToString = (stream) =>
     stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf8")));
   });
 
+function getLastMonthAndYear() {
+  const now = new Date();
+  const thisMonth = now.getUTCMonth();
+  const thisYear = now.getUTCFullYear();
+  const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+  const lastMonthYear = now.getUTCMonth() === 0 ? thisYear - 1 : thisYear;
+  return { lastMonth, lastMonthYear };
+}
+
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 module.exports = {
   connectToMongoDbClient,
-  sleep,
   initS3Client,
   streamToString,
+  getLastMonthAndYear,
+  sleep,
 };
