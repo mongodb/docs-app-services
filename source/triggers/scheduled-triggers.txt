@@ -92,134 +92,6 @@ Create a Scheduled Trigger
       
             realm-cli push
 
-.. _scheduled-trigger-example:
-
-Example
--------
-
-An online store wants to generate a daily report of all sales from the
-previous day. They record all orders in the ``store.orders`` collection
-as documents that resemble the following:
-
-.. code-block:: json
-
-   {
-     _id: ObjectId("59cf1860a95168b8f685e378"),
-     customerId: ObjectId("59cf17e1a95168b8f685e377"),
-     orderDate: ISODate("2018-06-26T16:20:42.313Z"),
-     shipDate: ISODate("2018-06-27T08:20:23.311Z"),
-     orderContents: [
-       { qty: 1, name: "Earl Grey Tea Bags - 100ct", price: Decimal128("10.99") }
-     ],
-     shippingLocation: [
-       { location: "Memphis", time: ISODate("2018-06-27T18:22:33.243Z") },
-     ]
-   }
-
-To generate the daily report, the store creates a scheduled Trigger
-that fires every day at ``7:00 AM UTC``. When the
-Trigger fires, it calls its linked Atlas Function,
-``generateDailyReport``, which runs an aggregation
-query on the ``store.orders`` collection to generate the report. The
-Function then stores the result of the aggregation in the
-``store.reports`` collection.
-
-.. tabs-realm-admin-interfaces::
-   
-   .. tab::
-      :tabid: ui
-      
-      .. figure:: /images/scheduled-trigger-example-config.png
-         :alt: Example UI that configures the trigger
-      
-   .. tab::
-      :tabid: cli
-      
-      .. code-block:: json
-         :caption: Trigger Configuration
-         
-         {
-           "type": "SCHEDULED",
-           "name": "reportDailyOrders",
-           "function_name": "generateDailyReport",
-           "config": {
-             "schedule": "0 7 * * *"
-           },
-           "disabled": false
-         }
-
-.. code-block:: javascript
-   :caption: generateDailyReport
-
-   exports = function() {
-     // Instantiate MongoDB collection handles
-     const mongodb = context.services.get("mongodb-atlas");
-     const orders = mongodb.db("store").collection("orders");
-     const reports = mongodb.db("store").collection("reports");
-
-     // Generate the daily report
-     return orders.aggregate([
-       // Only report on orders placed since yesterday morning
-       { $match: {
-           orderDate: {
-             $gte: makeYesterdayMorningDate(),
-             $lt: makeThisMorningDate()
-           }
-       } },
-       // Add a boolean field that indicates if the order has already shipped
-       { $addFields: {
-           orderHasShipped: {
-             $cond: {
-               if: "$shipDate", // if shipDate field exists
-               then: 1,
-               else: 0
-             }
-           }
-       } },
-       // Unwind individual items within each order
-       { $unwind: {
-           path: "$orderContents"
-       } },
-       // Calculate summary metrics for yesterday's orders
-       { $group: {
-           _id: "$orderDate",
-           orderIds: { $addToSet: "$_id" },
-           numSKUsOrdered: { $sum: 1 },
-           numItemsOrdered: { $sum: "$orderContents.qty" },
-           totalSales: { $sum: "$orderContents.price" },
-           averageOrderSales: { $avg: "$orderContents.price" },
-           numItemsShipped: { $sum: "$orderHasShipped" },
-       } },
-       // Add the total number of orders placed
-       { $addFields: {
-           numOrders: { $size: "$orderIds" }
-       } }
-     ]).next()
-       .then(dailyReport => {
-         reports.insertOne(dailyReport);
-       })
-       .catch(err => console.error("Failed to generate report:", err));
-   };
-
-   function makeThisMorningDate() {
-     return setTimeToMorning(new Date());
-   }
-
-   function makeYesterdayMorningDate() {
-     const thisMorning = makeThisMorningDate();
-     const yesterdayMorning = new Date(thisMorning);
-     yesterdayMorning.setDate(thisMorning.getDate() - 1);
-     return yesterdayMorning;
-   }
-
-   function setTimeToMorning(date) {
-     date.setHours(7);
-     date.setMinutes(0);
-     date.setSeconds(0);
-     date.setMilliseconds(0);
-     return date;
-   }
-
 .. _scheduled-triggers-configuration:
 
 Configuration
@@ -463,6 +335,135 @@ describes valid field values and expressions:
           .. code-block:: text
 
              */25 * * * *
+
+.. _scheduled-trigger-example:
+
+Example
+-------
+
+An online store wants to generate a daily report of all sales from the
+previous day. They record all orders in the ``store.orders`` collection
+as documents that resemble the following:
+
+.. code-block:: json
+
+   {
+     _id: ObjectId("59cf1860a95168b8f685e378"),
+     customerId: ObjectId("59cf17e1a95168b8f685e377"),
+     orderDate: ISODate("2018-06-26T16:20:42.313Z"),
+     shipDate: ISODate("2018-06-27T08:20:23.311Z"),
+     orderContents: [
+       { qty: 1, name: "Earl Grey Tea Bags - 100ct", price: Decimal128("10.99") }
+     ],
+     shippingLocation: [
+       { location: "Memphis", time: ISODate("2018-06-27T18:22:33.243Z") },
+     ]
+   }
+
+To generate the daily report, the store creates a scheduled Trigger
+that fires every day at ``7:00 AM UTC``. When the
+Trigger fires, it calls its linked Atlas Function,
+``generateDailyReport``, which runs an aggregation
+query on the ``store.orders`` collection to generate the report. The
+Function then stores the result of the aggregation in the
+``store.reports`` collection.
+
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
+      
+      .. figure:: /images/scheduled-trigger-example-config.png
+         :alt: Example UI that configures the trigger
+      
+   .. tab::
+      :tabid: cli
+      
+      .. code-block:: json
+         :caption: Trigger Configuration
+         
+         {
+           "type": "SCHEDULED",
+           "name": "reportDailyOrders",
+           "function_name": "generateDailyReport",
+           "config": {
+             "schedule": "0 7 * * *"
+           },
+           "disabled": false
+         }
+
+.. code-block:: javascript
+   :caption: generateDailyReport
+
+   exports = function() {
+     // Instantiate MongoDB collection handles
+     const mongodb = context.services.get("mongodb-atlas");
+     const orders = mongodb.db("store").collection("orders");
+     const reports = mongodb.db("store").collection("reports");
+
+     // Generate the daily report
+     return orders.aggregate([
+       // Only report on orders placed since yesterday morning
+       { $match: {
+           orderDate: {
+             $gte: makeYesterdayMorningDate(),
+             $lt: makeThisMorningDate()
+           }
+       } },
+       // Add a boolean field that indicates if the order has already shipped
+       { $addFields: {
+           orderHasShipped: {
+             $cond: {
+               if: "$shipDate", // if shipDate field exists
+               then: 1,
+               else: 0
+             }
+           }
+       } },
+       // Unwind individual items within each order
+       { $unwind: {
+           path: "$orderContents"
+       } },
+       // Calculate summary metrics for yesterday's orders
+       { $group: {
+           _id: "$orderDate",
+           orderIds: { $addToSet: "$_id" },
+           numSKUsOrdered: { $sum: 1 },
+           numItemsOrdered: { $sum: "$orderContents.qty" },
+           totalSales: { $sum: "$orderContents.price" },
+           averageOrderSales: { $avg: "$orderContents.price" },
+           numItemsShipped: { $sum: "$orderHasShipped" },
+       } },
+       // Add the total number of orders placed
+       { $addFields: {
+           numOrders: { $size: "$orderIds" }
+       } }
+     ]).next()
+       .then(dailyReport => {
+         reports.insertOne(dailyReport);
+       })
+       .catch(err => console.error("Failed to generate report:", err));
+   };
+
+   function makeThisMorningDate() {
+     return setTimeToMorning(new Date());
+   }
+
+   function makeYesterdayMorningDate() {
+     const thisMorning = makeThisMorningDate();
+     const yesterdayMorning = new Date(thisMorning);
+     yesterdayMorning.setDate(thisMorning.getDate() - 1);
+     return yesterdayMorning;
+   }
+
+   function setTimeToMorning(date) {
+     date.setHours(7);
+     date.setMinutes(0);
+     date.setSeconds(0);
+     date.setMilliseconds(0);
+     return date;
+   }
+
 
 Performance Optimization
 ------------------------
