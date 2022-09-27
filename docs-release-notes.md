@@ -1,3 +1,31 @@
+# September 23, 2022
+
+## Manage & Deploy Apps
+- Secure: Add Data API & GraphQL to bullet list of App Services secured by TLS 1.3
+
+## Data API
+- Data API Examples: New "Data Access Permissions" section with information about custom rules, with examples
+
+## Functions
+- Query MongoDB Atlas
+  - Aggregate: New "Find Data with Atlas Search" section with information and example
+  - MongoDB API Reference: New sections for `mongodb.admin()` and `mongodb.getDBNames()` methods to list the database names for a data source
+- Handle Errors: New page with information and examples for how to handle errors in Functions
+
+## Logs
+- Landing Page: Update links in Log Entry bullet list, add bullets for Change Stream & Endpoint Requests
+
+## Reference
+- Third-Party Services/Replace Services with npm Modules: Fix AWS SDK code example
+
+## Other
+- Admin API
+  - Data Sources & Services: Add service config definitions
+  - Schemas: Add endpoints to get and set null schema type validation settings
+  - Triggers: Add endpoint to get a list of all Triggers, update Trigger definitions and examples for each Trigger type
+- Fix broken link in release notes
+- Update references to "data lake" to use "data federation" across several pages
+
 # September 9, 2022
 
 ## Tutorials
