@@ -3867,9 +3867,10 @@ components:
             The name of the application. Must begin with a letter and
             may only contain ASCII letters, numbers, underscores, and
             hyphens.
+          example: "MyApp"
         provider_region:
           description: The application's cloud deployment region.
-          $ref: "#/components/schemas/DeploymentRegion"
+          $ref: "#/components/schemas/CloudProviderRegionId"
         location:
           type: string
           description: |-
@@ -3945,6 +3946,7 @@ components:
     AppEnvironment:
       type: string
       description: The application's environment. An empty string indicates that the app does not have a specified environment.
+      example: "production"
       enum:
         - ""
         - "development"
@@ -3957,7 +3959,7 @@ components:
       enum:
         - "GLOBAL"
         - "LOCAL"
-    DeploymentRegion:
+    CloudProviderRegionId:
       oneOf:
         - $ref: "#/components/schemas/AwsDeploymentRegion"
         - $ref: "#/components/schemas/AzureDeploymentRegion"
@@ -3995,7 +3997,7 @@ components:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/DeploymentRegion"
+          $ref: "#/components/schemas/CloudProviderRegionId"
           description: The short identifier for the region.
           example: "aws-us-east-1"
         name:
@@ -4292,6 +4294,7 @@ components:
           properties:
             clusterName:
               type: string
+              example: Cluster0
               description: |-
                 The service name used to refer to the data source within
                 this Atlas app. The name may be at most 64 characters
