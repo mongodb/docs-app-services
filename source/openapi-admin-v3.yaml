@@ -226,8 +226,10 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/AppProviderRegion"
+                  "$ref": "#/components/schemas/CloudProviderRegion"
   "/groups/{groupId}/apps":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
     get:
       tags:
         - apps
@@ -239,66 +241,95 @@ paths:
       parameters:
         - name: product
           in: query
-          description: |-
-            Specify `product=atlas` to include [Atlas
-            trigger](https://docs.atlas.mongodb.com/triggers) apps.
           required: false
           schema:
             type: string
+            enum:
+              - atlas
+              - data-api
+          description: |-
+            Include apps with the specified product type. For most apps
+            you won't need to specify a `product`.
+
+            The `atlas` and `data-api` product types represent special,
+            singleton apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
+            and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
+            can access through the Atlas UI.
       responses:
         "200":
           description: Successfully listed.
           content:
             application/json:
               schema:
+                type: array
                 items:
-                  "$ref": "#/components/schemas/Application"
+                  $ref: "#/components/schemas/AppInstance"
     post:
       tags:
         - apps
       operationId: adminCreateApplication
-      summary: Create a new Atlas App Services app
+      summary: Create a new app
       parameters:
         - name: defaults
           in: query
-          description: Whether or not to create a default application.
           required: false
           schema:
             type: boolean
+          description: Whether or not to create a default application.
+        - name: product
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - standard
+              - atlas
+              - data-api
+          description: |-
+            The application's product type. For most cases you should either
+            not specify a product or specify the default product,
+            `standard`. The `atlas` and `data-api` product types represent special,
+            singleton apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
+            and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
+            can access through the Atlas UI.
       requestBody:
         description: The application to create.
         required: true
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/NewApplication"
+              $ref: "#/components/schemas/AppConstructor"
       responses:
         "201":
           description: The application was successfully created.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ApplicationSummary"
-    parameters:
-      - "$ref": "#/components/parameters/GroupId"
+                "$ref": "#/components/schemas/AppInstance"
+        "400":
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/groups/{groupId}/apps/{appId}":
     get:
       tags:
         - apps
       operationId: adminGetApplication
-      summary: Retrieve an application definition
+      summary: Get an app
       responses:
         "200":
           description: The application was successfully retrieved.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Application"
+                "$ref": "#/components/schemas/AppInstance"
     delete:
       tags:
         - apps
       operationId: adminDeleteApplication
-      summary: Delete an application
+      summary: Delete an app
       responses:
         "204":
           description: The application was successfully deleted.
@@ -310,7 +341,7 @@ paths:
       tags:
         - apps
       operationId: adminExportApplication
-      summary: Export an application as a zip file
+      summary: Export an app as a zip file
       description: |-
         [Export](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/export-app#std-label-export-realm-app)
         an application as a zip file.
@@ -2631,7 +2662,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Application"
+                "$ref": "#/components/schemas/Deployment"
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
@@ -3827,72 +3858,144 @@ components:
           type: string
         disabled:
           type: string
-    Application:
+    App:
       type: object
       properties:
-        _id:
-          type: string
-          description: The application's unique internal ID.
-        client_app_id:
-          type: string
-          description: The application's public App ID.
         name:
-          type: string
-          description: The name of the application.
-        location:
-          type: string
-          description: The application's deployment region.
-        deployment_model:
-          type: string
-          description: The application's deployment model.
-        domain_id:
-          type: string
-        group_id:
           type: string
           description: |-
-            An Atlas [Project/Group
-            ID](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
-    ApplicationSummary:
-      type: object
-      properties:
-        _id:
-          type: string
-          description: The application's unique internal ID.
-        client_app_id:
-          type: string
-          description: The application's public App ID.
-        name:
-          type: string
-          description: The name of the application.
+            The name of the application. Must begin with a letter and
+            may only contain ASCII letters, numbers, underscores, and
+            hyphens.
+        provider_region:
+          description: The application's cloud deployment region.
+          $ref: "#/components/schemas/DeploymentRegion"
         location:
           type: string
-          description: The application's deployment region.
+          description: |-
+            The application's generic deployment location. This should
+            agree with the more specific `provider_region` value. For
+            example, an App with a `provider_region` of `aws-us-west-2`
+            maps to a `location` of `US-OR`.
+          enum:
+            - US-VA
+            - US-OR
+            - DE-FF
+            - IE
+            - AU
+            - IN-MB
+            - SG
+            - BR-SP
         deployment_model:
-          type: string
-          description: The application's deployment model.
-        domain_id:
-          type: string
-          description: The application's associated domain ID.
-        group_id:
-          type: string
-          description: The application's current owner ID.
-        last_used:
-          type: integer
-          description: The time this app was last used.
-        last_modified:
-          type: integer
-          description: The time this app was last modified.
-        product:
-          type: string
-          description: The product this app is for.
+          $ref: "#/components/schemas/DeploymentModel"
         environment:
-          type: string
-          description: The environment the app is in.
-    AppProviderRegion:
+          $ref: "#/components/schemas/AppEnvironment"
+    AppConstructor:
+      description: An object that describes a new app to create
+      allOf:
+        - $ref: "#/components/schemas/App"
+        - type: object
+          properties:
+            template_id:
+              type: string
+              description: |-
+                The id of an [App Services template
+                app](https://www.mongodb.com/docs/realm/manage-apps/create/template-apps#std-label-template-apps)
+                to use as a base for the new app.
+            data_source:
+              "$ref": "#/components/schemas/DataSource"
+    AppInstance:
+      description: A specific, existing application.
+      allOf: 
+        - $ref: "#/components/schemas/App"
+        - type: object
+          properties:
+            _id:
+              type: string
+              description: The application's unique internal ID.
+              example: "633209ffd3bd3478005d1bac"
+            client_app_id:
+              type: string
+              description: The application's public App ID.
+              example: "myapp-abcde"
+            domain_id:
+              type: string
+              description: The application's associated domain ID.
+              example: "63320a2b5f9de9a6e0a213e8"
+            group_id:
+              type: string
+              description: |-
+                The application's [Atlas Project/Group ID](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
+              example: "5b2ec991973129243223a114"
+            last_used:
+              type: integer
+              description: The time this app was last used in [UNIX time](https://en.wikipedia.org/wiki/Unix_time) (i.e. the number of seconds since Jan 1, 1970).
+              example: 1664224746
+            last_modified:
+              type: integer
+              description: The time this app was last modified in [UNIX time](https://en.wikipedia.org/wiki/Unix_time) (i.e. the number of seconds since Jan 1, 1970).
+              example: 1656440824
+            product:
+              type: string
+              description: The product this app is for.
+              enum:
+                - standard
+                - atlas
+                - data-api
+    AppEnvironment:
+      type: string
+      description: The application's environment. An empty string indicates that the app does not have a specified environment.
+      enum:
+        - ""
+        - "development"
+        - "testing"
+        - "qa"
+        - "production"
+    DeploymentModel:
+      type: string
+      description: An application [deployment model](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models).
+      enum:
+        - "GLOBAL"
+        - "LOCAL"
+    DeploymentRegion:
+      oneOf:
+        - $ref: "#/components/schemas/AwsDeploymentRegion"
+        - $ref: "#/components/schemas/AzureDeploymentRegion"
+        - $ref: "#/components/schemas/GcpDeploymentRegion"
+    AwsDeploymentRegion:
+      type: string
+      enum:
+        - "aws-us-east-1"
+        - "aws-us-west-2"
+        - "aws-us-east-2"
+        - "aws-eu-central-1"
+        - "aws-eu-west-1"
+        - "aws-eu-west-2"
+        - "aws-ap-southeast-1"
+        - "aws-ap-southeast-2"
+        - "aws-ap-south-1"
+        - "aws-sa-east-1"
+    AzureDeploymentRegion:
+      type: string
+      enum:
+        - "azure-eastus2"
+        - "azure-westus"
+        - "azure-westeurope"
+        - "azure-eastasia"
+        - "azure-southeastasia"
+    GcpDeploymentRegion:
+      type: string
+      enum:
+        - "gcp-us-central1"
+        - "gcp-us-east4"
+        - "gcp-us-west1"
+        - "gcp-europe-west1"
+        - "gcp-asia-south1"
+    CloudProviderRegion:
       type: object
       properties:
         id:
-          type: string
+          $ref: "#/components/schemas/DeploymentRegion"
           description: The short identifier for the region.
           example: "aws-us-east-1"
         name:
@@ -3914,11 +4017,7 @@ components:
             models](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models)
             that this region supports.
           items:
-            type: string
-            description: todo
-            enum:
-              - "GLOBAL"
-              - "LOCAL"
+            $ref: "#/components/schemas/DeploymentModel"
           example: ["GLOBAL", "LOCAL"]
     BasicError:
       type: object
@@ -4013,7 +4112,7 @@ components:
             The unique `_id` value of the MongoDB Cloud user that created
             the draft.
         app:
-          "$ref": "#/components/schemas/Application"
+          "$ref": "#/components/schemas/AppInstance"
     Deployment:
       type: object
       properties:
@@ -4173,21 +4272,6 @@ components:
         error_code:
           type: string
           description: The error type.
-    NewApplication:
-      properties:
-        name:
-          type: string
-          description: Can only contain ASCII letters, numbers, underscores, and hyphens.
-        template_id:
-          type: string
-          description: |-
-            Name of [supported template
-            app](https://www.mongodb.com/docs/realm/manage-apps/create/template-apps#std-label-template-apps) to
-            serve as base template.
-        data_source:
-          "$ref": "#/components/schemas/DataSource"
-      required:
-        - name
     AtlasCluster:
       type: object
       properties:
