@@ -47,6 +47,50 @@ manual.
    You cannot define a database trigger on a :ref:`serverless instance
    <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
 
+.. _create-a-database-trigger:
+
+Create a Database Trigger
+-------------------------
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+      
+      To open the database trigger configuration screen in the App Services UI, click
+      :guilabel:`Triggers` in the {+leftnav+}, select the
+      :guilabel:`Database Triggers` tab, and then click :guilabel:`Add a
+      Trigger`.
+         
+      Configure the trigger and then click :guilabel:`Save` at the bottom of
+      the page to add it to your current deployment draft.
+
+      .. figure:: /images/db-trigger-example-config.png
+         :alt: Example UI that configures the trigger
+   
+   .. tab::
+      :tabid: cli
+      
+      To create a database trigger with :doc:`realm-cli
+      </cli>`:
+      
+      1. Add a database trigger :ref:`configuration file
+         <config-database-trigger>` to the ``triggers`` subdirectory of a
+         local application directory.
+      
+      2. :doc:`Deploy </manage-apps/deploy/manual/deploy-cli>` the trigger:
+      
+         .. code-block:: shell
+      
+            realm-cli push
+      
+      .. note::
+      
+         Atlas App Services does not enforce specific filenames for Trigger
+         configuration files. However, once imported, Atlas App Services will rename
+         each configuration file to match the name of the Trigger it defines,
+         e.g. ``mytrigger.json``.
+
 Example
 -------
 
