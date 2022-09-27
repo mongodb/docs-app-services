@@ -102,17 +102,20 @@ During an automatic client reset, the client:
    any inserts, updates, and deletes from the backend that haven't yet 
    synced to the client.
 
-   If there are non-breaking schema changes, the SDK can discard local changes
-   that have not yet synced to the backend. Then it can apply any inserts, 
-   updates, and deletes from the backend that haven't yet synced to the client.
+   If there are non-breaking schema changes, or if Recovery Mode cannot 
+   recover unsynced changes, the SDK can discard local changes that have 
+   not yet synced to the backend. Then it can apply any inserts, updates, 
+   and deletes from the backend that haven't yet synced to the client.
+   To fall back to discard local changes, choose your preferred SDK's 
+   version of the ``recoverOrDiscard`` client reset mode.
 
 #. Discards the fresh copy. The app continues to use
    the original copy of the realm with the diff applied.
 
-In a breaking schema change, the client reset falls back to a :ref:`manual 
-client reset handler <manual-client-reset>` that your app must define. The 
-Realm SDKs cannot automatically perform a client reset when you make a 
-breaking schema change.
+In a breaking schema change, or if automatic client reset fails, the client 
+reset falls back to a :ref:`manual client reset handler <manual-client-reset>` 
+that your app must define. The Realm SDKs cannot automatically perform a 
+client reset when you make a breaking schema change.
 
 .. _recover-unsynced-changes:
 
@@ -134,7 +137,8 @@ when determining how to integrate unsynced data from the device.
 If your app has a :ref:`non-breaking schema change <breaking-change-quick-reference>`, 
 you can choose to fall back to :ref:`discard-unsynced-changes`. You cannot 
 recover unsynced changes, but the client can automatically perform 
-the client reset.
+the client reset. To fall back to discard local changes, choose your 
+preferred SDK's version of the ``recoverOrDiscard`` client reset mode.
 
 .. _client-reset-recovery-rules:
 
