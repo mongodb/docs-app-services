@@ -46,6 +46,8 @@ work with the new schema changes.
    deploy with GitHub. Instead, you should make breaking changes in 
    the App Services UI.
 
+.. _breaking-change-quick-reference:
+
 Breaking vs. Non-Breaking Change Quick Reference
 ------------------------------------------------
 
@@ -270,9 +272,9 @@ How to Remove an Object Type
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
-<enable-sync>` sync. This triggers a :ref:`client reset <client-resets>`, 
-which can result in client-side data loss. As a result, we do not recommend
-making breaking server-side schema changes.
+<enable-sync>` sync. Breaking schema changes prevent applications from 
+automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
+As a result, we do not recommend making breaking server-side schema changes.
 
 Instead, you can remove the object type from the client-side object model and 
 leave it in place on the server-side schema. 
@@ -369,9 +371,9 @@ How to Change an Object Type Name
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
-<enable-sync>` sync. This triggers a :ref:`client reset <client-resets>`, 
-which can result in client-side data loss. As a result, we do not recommend
-making breaking server-side schema changes.
+<enable-sync>` sync. Breaking schema changes prevent applications from 
+automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
+As a result, we do not recommend making breaking server-side schema changes.
 
 Instead, you can let the existing collection remain in place with the 
 existing schema, and create a partner collection with the new schema. 
@@ -400,7 +402,7 @@ preferred SDK's migration page.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, your client 
-application must perform a :ref:`client reset <client-resets>`.
+application must perform a :ref:`manual client reset <manual-client-reset>`.
 
 .. _schema-update-change-property-name:
 
@@ -436,9 +438,9 @@ How to Change a Property Name
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
-<enable-sync>` sync. This triggers a :ref:`client reset <client-resets>`, 
-which can result in client-side data loss. As a result, we do not recommend
-making breaking server-side schema changes.
+<enable-sync>` sync. Breaking schema changes prevent applications from 
+automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
+As a result, we do not recommend making breaking server-side schema changes.
 
 Instead, you can let the existing collection remain in place with the 
 existing schema, and create a partner collection with the new schema. 
@@ -486,7 +488,7 @@ preferred SDK's migration page.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, your client 
-application must perform a :ref:`client reset <client-resets>`.
+application must perform a :ref:`manual client reset <manual-client-reset>`.
 
 .. _schema-update-change-property-type-but-keep-name:
 
@@ -509,9 +511,9 @@ How to Change a Property Type but Keep the Name
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
-<enable-sync>` sync. This triggers a :ref:`client reset <client-resets>`, 
-which can result in client-side data loss. As a result, we do not recommend
-making breaking server-side schema changes.
+<enable-sync>` sync. Breaking schema changes prevent applications from 
+automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
+As a result, we do not recommend making breaking server-side schema changes.
 
 Instead, you can let the existing collection remain in place with the 
 existing schema, and create a partner collection with the new schema. 
@@ -559,7 +561,7 @@ preferred SDK's migration page.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, your client 
-application must perform a :ref:`client reset <client-resets>`.
+application must perform a :ref:`manual client reset <manual-client-reset>`.
 
 .. _schema-update-change-property-from-optional-to-required:
 
@@ -575,9 +577,9 @@ How to Change a Property from Optional to Required
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
-<enable-sync>` sync. This triggers a :ref:`client reset <client-resets>`, 
-which can result in client-side data loss. As a result, we do not recommend
-making breaking server-side schema changes.
+<enable-sync>` sync. Breaking schema changes prevent applications from 
+automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
+As a result, we do not recommend making breaking server-side schema changes.
 
 Instead, you can let the existing collection remain in place with the 
 existing schema, and create a partner collection with the new schema. 
@@ -606,7 +608,7 @@ preferred SDK's migration page.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, your client 
-application must perform a :ref:`client reset <client-resets>`.
+application must perform a :ref:`manual client reset <manual-client-reset>`.
 
 .. _schema-update-change-property-from-required-to-optional:
 
@@ -622,9 +624,9 @@ How to Change a Property from Required to Optional
 
 A breaking server-side schema change requires you to :ref:`terminate sync 
 <terminating-realm-sync>` in the backend, and then :ref:`re-enable 
-<enable-sync>` sync. This triggers a :ref:`client reset <client-resets>`, 
-which can result in client-side data loss. As a result, we do not recommend
-making breaking server-side schema changes.
+<enable-sync>` sync. Breaking schema changes prevent applications from 
+automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
+As a result, we do not recommend making breaking server-side schema changes.
 
 Instead, you can let the existing collection remain in place with the 
 existing schema, and create a partner collection with the new schema. 
@@ -653,7 +655,7 @@ preferred SDK's migration page.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, your client 
-application must perform a :ref:`client reset <client-resets>`.
+application must perform a :ref:`manual client reset <manual-client-reset>`.
 
 Summary
 -------
@@ -663,4 +665,4 @@ Summary
 - Breaking changes are modifications to existing properties of a schema.
 - To perform breaking schema changes to a synced {+realm+}, create a partner collection with the necessary schema changes and manually copy the data from the first collection to the second collection.
 - To keep partner collections up-to-date with each other, set up database triggers to copy changed data from one collection to its partner.
-- You can implement a breaking change by terminating and re-enabling sync and performing a client reset, but it is not recommended.
+- You can implement a breaking change by terminating and re-enabling sync and performing a manual client reset, but it is not recommended.
