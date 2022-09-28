@@ -3858,6 +3858,21 @@ components:
           type: string
         disabled:
           type: string
+    DeploymentLocation:
+      type: string
+      description: |-
+        An identifier of the location where an app server is physically
+        deployed to, regardless of the cloud provider that hosts the
+        app.
+      enum:
+        - US-VA
+        - US-OR
+        - DE-FF
+        - IE
+        - AU
+        - IN-MB
+        - SG
+        - BR-SP
     App:
       type: object
       properties:
@@ -3872,21 +3887,12 @@ components:
           description: The application's cloud deployment region.
           $ref: "#/components/schemas/CloudProviderRegionId"
         location:
-          type: string
+          $ref: "#/components/schemas/DeploymentLocation"
           description: |-
-            The application's generic deployment location. This should
+            The application's physical deployment location. This should
             agree with the more specific `provider_region` value. For
             example, an App with a `provider_region` of `aws-us-west-2`
             maps to a `location` of `US-OR`.
-          enum:
-            - US-VA
-            - US-OR
-            - DE-FF
-            - IE
-            - AU
-            - IN-MB
-            - SG
-            - BR-SP
         deployment_model:
           $ref: "#/components/schemas/DeploymentModel"
         environment:
@@ -4121,6 +4127,11 @@ components:
         _id:
           type: string
           description: The unique ID of the deployment.
+        name:
+          type: string
+          description: |-
+            The name of the deployment. By default, this is the same
+            value as ``_id``.
         app_id:
           type: string
           description: The unique `_id` value of the Atlas App Services app.
@@ -4147,7 +4158,7 @@ components:
           description: The commit hash of the deployment (Automatic GitHub Deployment)
         status:
           type: string
-          description:
+          description: |-
             A message that indicates whether or not the deployment was
             successful.
         status_error_message:
@@ -4158,8 +4169,9 @@ components:
         diff_url:
           type: string
           description: |-
-            A link to the diff of changes in the deployment (Automatic GitHub
-            Deployment)
+            A link to the diff of changes in the deployment
+        remote_location:
+          $ref: "#/components/schemas/DeploymentLocation"
     Diff:
       type: object
       properties:
