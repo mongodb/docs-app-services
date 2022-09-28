@@ -32,65 +32,175 @@ Deployment Models
 Global Deployment
 ~~~~~~~~~~~~~~~~~
 
-Globally deployed App Services Apps are hosted in every :ref:`cloud
-region <realm-regions>` that App Services supports. The a Realm SDKs
-automatically execute application requests, such as reading user
-information or calling a function in the cloud region that's closest to
-the user that issued the request.
+A globally deployed app is available in multiple regions across the
+world. Any global region can receive and process incoming requests for a
+global app.
 
-Write operations to a linked MongoDB cluster are handled within a single
-region that you specify when you :ref:`create your application
-<create-a-realm-app>`. By default, App Services handles writes in
-the region closest to your application's original linked MongoDB
-cluster.
+All write operations to a linked data source are handled within a single
+region that you specify when you create the app. You can choose any
+global region to handle writes, but should generally choose the region
+closest to your MongoDB cluster.
+
+Global apps are currently deployed to the following regions:
+
+- Ireland (IE) - ``aws-eu-west-1``
+- Oregon (US-OR) - ``aws-us-west-2``
+- Sydney (AU) - ``aws-ap-southeast-2``
+- Virginia (US-VA) - ``aws-us-east-1``
+
+.. note::
+   
+   Realm SDKs automatically execute application requests, such as
+   reading user information or calling a function, in the global
+   deployment region that's closest to the user that issued the request.
 
 .. _local-deployment:
 
 Local Deployment
 ~~~~~~~~~~~~~~~~
 
-Locally deployed Apps are hosted in a specific :ref:`cloud region
-<realm-regions>` that you specify when you first :ref:`create your
-application <create-a-realm-app>`. Application requests and
-MongoDB write operations will all be handled exclusively in the
-specified region. By default, local applications are deployed in the
-region that is closest to your application's initial linked `{+atlas+}
-<https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ data source or
-``us-east-1`` if there is no linked data source.
+A locally deployed app is available in a single cloud provider region.
+All requests and MongoDB write operations are handled exclusively in the
+region, which you specify when you create the app.
+
+You can deploy to any region, but should generally choose the region
+closest to your application's users.
 
 .. _realm-regions:
 
 Cloud Deployment Regions
 ------------------------
 
-App Services supports deployment and writes in the following **AWS** regions:
+You can deploy your app to cloud regions hosted around the world by the
+major cloud providers. The following regions are currently supported:
 
-- Ireland (``eu-west-1``)
-- Oregon (``us-west-2``)
-- Sydney (``ap-southeast-2``)
-- Virginia (``us-east-1``)
-
-The following **Azure** regions support :ref:`local deployment
-<local-deployment>` only:
-
-- Virginia (``eastus2``)
-- California (``westus``)
-- Netherlands (``westeurope``)
-- Singapore (``southeastasia``)
-- Hong Kong (``eastasia``)
-
-The following AWS regions support :ref:`local deployment
-<local-deployment>` only:
-
-- Frankfurt (``eu-central-1``)
-- Mumbai (``ap-south-1``)
-- Singapore (``ap-southeast-1``)
-
-The following **GCP** regions support :ref:`local deployment
-<local-deployment>` only:
-
-- Ohio (``us-central1``)
-- Virginia (``us-east4``)
-- Oregon (``us-west1``)
-- Belgium (``europe-west1``)
-- Mumbai (``asia-south1``)
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
+   :widths: 10 35 35 10 10
+   
+   * - Cloud
+     - Location
+     - Region ID
+     - Local
+     - Global
+   
+   * - AWS
+     - Ireland (IE)
+     - ``aws-eu-west-1``
+     - ✓
+     - ✓
+   
+   * - AWS
+     - Oregon (US-OR)
+     - ``aws-us-west-2``
+     - ✓
+     - ✓
+   
+   * - AWS
+     - Sydney (AU)
+     - ``aws-ap-southeast-2``
+     - ✓
+     - ✓
+   
+   * - AWS
+     - Virginia (US-VA)
+     - ``aws-us-east-1``
+     - ✓
+     - ✓
+   
+   * - AWS
+     - Ohio (US-VA)
+     - ``aws-us-east-2``
+     - ✓
+     - 
+   
+   * - AWS
+     - London (IE)
+     - ``aws-eu-west-2``
+     - ✓
+     - 
+   
+   * - AWS
+     - Frankfurt (DE-FF)
+     - ``aws-eu-central-1``
+     - ✓
+     - 
+   
+   * - AWS
+     - Mumbai (IN-MB)
+     - ``aws-ap-south-1``
+     - ✓
+     - 
+   
+   * - AWS
+     - Singapore (SG)
+     - ``aws-ap-southeast-1``
+     - ✓
+     - 
+   
+   * - AWS
+     - São Paulo (BR-SP)
+     - ``aws-sa-east-1``
+     - ✓
+     - 
+   
+   * - Azure
+     - Virginia (US-VA)
+     - ``azure-eastus2``
+     - ✓
+     - 
+   
+   * - Azure
+     - California (US-OR)
+     - ``azure-westus``
+     - ✓
+     - 
+   
+   * - Azure
+     - Netherlands (DE-FF)
+     - ``azure-westeurope``
+     - ✓
+     - 
+   
+   * - Azure
+     - Singapore (SG)
+     - ``azure-southeastasia``
+     - ✓
+     - 
+   
+   * - Azure
+     - Hong Kong (IN-MB)
+     - ``azure-eastasia``
+     - ✓
+     - 
+   
+   * - GCP
+     - Ohio (US-VA)
+     - ``gcp-us-central1``
+     - ✓
+     - 
+   
+   * - GCP
+     - Virginia (US-VA)
+     - ``gcp-us-east4``
+     - ✓
+     - 
+   
+   * - GCP
+     - Oregon (US-OR)
+     - ``gcp-us-west1``
+     - ✓
+     - 
+   
+   * - GCP
+     - Belgium (DE-FF)
+     - ``gcp-europe-west1``
+     - ✓
+     - 
+   
+   * - GCP
+     - Mumbai (IN-MB)
+     - ``gcp-asia-south1``
+     - ✓
+     - 
