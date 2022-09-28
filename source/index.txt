@@ -40,12 +40,11 @@ What are the Atlas Application Services?
 
 .. introduction::
    
-   Atlas Application Services are fully-managed backend services and
-   APIs that help you build apps and services with MongoDB Atlas faster.
-   You can use the services to build apps, integrate Atlas to other
-   services, and connect to your Atlas data without managing servers.
+   Atlas Application Services are fully-managed backend services and APIs
+   that help you build apps, integrate services, and connect to your Atlas
+   data faster.
    
-   Get started with your first app on our :doc:`free tier </billing>`.
+   Get started now by building on our :doc:`free tier </billing>`.
    
    .. button:: Start Building
       :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
@@ -71,31 +70,36 @@ run virtually any app or backend service on top of Atlas.
          .. step:: Install a Realm SDK
 
             Device Sync uses Realm's native language objects to define a
-            data model and work with data.
+            data model and work with data. Everything you need to add
+            sync to your app is included in the Realm SDK.
             
             To install an SDK, see the :realm:`Realm SDK documentation
             </>` for your language and platform.
 
-         .. step:: Enable Sync
+         .. step:: Enable and Configure Sync
 
-            In your Atlas App, specify which fields users can query and
-            define read and write permissions in Dev Mode. Once Sync is
-            turned on, you can start syncing from any app with the Realm
-            SDKs.
+            In your Atlas App, enable Device Sync and define read and
+            write permissions to control the data that users can sync.
+            Once Sync is turned on, you can start syncing from any app
+            with the Realm SDKs.
 
             To enable Sync, see :ref:`Enable Atlas Device Sync <enable-sync>`.
 
-         .. step:: Sync Device Data to Atlas
+         .. step:: Read and Write Synced Data
             
-            Data that you subscribe to in a client app is automatically
-            kept up-to-date. Any changes that the client app makes are
-            automatically synced across all clients whenever a network
-            connection is available.
+            Data that you subscribe to with a Realm SDK is automatically
+            kept in sync with your Atlas cluster and other clients.
+            Apps keep working offline and deterministically sync changes
+            whenever a network connection is available.
+
+            To learn how to read, write, and subscribe to data, see the 
+            :realm:`Realm SDK documentation </>` for your language and
+            platform.
             
       .. image:: /images/plp/realm-sync.png
          :alt: Realm Sync Illustration
 
-   .. tab:: Access Data with a REST API
+   .. tab:: Access Data With a REST API
       :tabid: data-api
 
       .. procedure::
@@ -103,8 +107,8 @@ run virtually any app or backend service on top of Atlas.
          .. step:: Enable the Data API CRUD & Aggregation Endpoints
 
             The MongoDB Atlas Data API lets you read and write data in
-            Atlas with standard HTTPS requests. Once enabled, you can
-            use a built-in endpoint to work with data.
+            Atlas using HTTPS requests. Once enabled, you can use a
+            built-in endpoint to work with data.
 
             See :ref:`Data API Endpoints <data-api-endpoints>`.
          
@@ -240,30 +244,37 @@ run virtually any app or backend service on top of Atlas.
       .. image:: /images/plp/connection.png
          :alt: Build a Secure GraphQL API
 
-   .. tab:: Build Event-Driven Services
+   .. tab:: Respond to Events Automatically
       :tabid: triggers
       
       .. procedure::
 
-         .. step:: Create and configure your Trigger
+         .. step:: Create and Configure Your Trigger
 
-            You can respond to database CRUD events and application user
-            activity as the occur or run triggers on a schedule. You can
-            also set additional conditions for when your trigger should
-            fire.
+            Set up a trigger to respond to events like database
+            operations or user logins as they occur. Or, configure a
+            trigger to run on a periodic schedule. For each trigger type
+            you can define custom conditions to control exactly when the
+            trigger should fire.
+
+            To learn more, see :ref:`Triggers <triggers>`.
 
          .. step:: Write the Trigger's Handler Logic
 
-            Define a serverless JavaScript function that runs when the
-            trigger fires. Or, send an event to AWS EventBridge.
+            When a trigger fires, it passes the event data to a handler
+            that can perform any action you want. You can run a
+            serverless JavaScript function or pass the event to AWS
+            EventBridge.
             
-            See :doc:`Trigger Function Examples </triggers/examples>`.
+            For examples and inspiration, see :doc:`Trigger Function
+            Examples </triggers/examples>`.
 
-         .. step:: Automatically Respond to Events
+         .. step:: Fire the Trigger Automatically
 
-            Once deployed, the trigger automatically listens for events
-            in your app and runs whenever an event matches the trigger’s
-            configuration.
+            Once deployed, the trigger constantly listens for events
+            that it is configured to fire on. When an event causes the
+            trigger to fire, it automatically runs the handler logic you
+            defined.
 
       .. image:: /images/plp/triggers.png
          :alt: Respond to Events with Triggers
