@@ -10,10 +10,10 @@ function generateCsvReport(documents) {
 
 async function putReportInS3(reportName, reportBody) {
   const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-  const accessKeyId = context.values.get("AWS_S3_ACCESS_KEY_ID");
+  const accessKeyId = context.environment.values["AWS_S3_ACCESS_KEY_ID"];
   const secretAccessKey = context.values.get("AWS_S3_ACCESS_KEY_SECRET");
-  const s3Bucket = context.values.get("AWS_S3_BUCKET_NAME");
-  const region = context.values.get("AWS_S3_BUCKET_REGION");
+  const s3Bucket = context.environment.values["AWS_S3_BUCKET_NAME"];
+  const region = context.environment.values["AWS_S3_BUCKET_REGION"];
 
   console.log("report body::\n\n" + reportBody);
 
