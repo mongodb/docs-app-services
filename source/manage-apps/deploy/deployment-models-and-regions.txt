@@ -32,36 +32,40 @@ Deployment Models
 Global Deployment
 ~~~~~~~~~~~~~~~~~
 
-A globally deployed app is available in multiple regions across the
-world. Any global region can receive and process incoming requests for a
-global app.
-
-All write operations to a linked data source are handled within a single
-region that you specify when you create the app. You can choose any
-global region to handle writes, but should generally choose the region
-closest to your MongoDB cluster.
-
-Global apps are currently deployed to the following regions:
+A globally deployed App is hosted across the world in all of the
+following AWS regions:
 
 - Ireland (IE) - ``aws-eu-west-1``
 - Oregon (US-OR) - ``aws-us-west-2``
 - Sydney (AU) - ``aws-ap-southeast-2``
 - Virginia (US-VA) - ``aws-us-east-1``
 
-.. note::
-   
-   Realm SDKs automatically execute application requests, such as
-   reading user information or calling a function, in the global
-   deployment region that's closest to the user that issued the request.
+An App can handle most types of requests from any region. For example,
+any region can run serverless functions, evaluate rules, validate object
+schemas, or authenticate users.
+
+All write operations to a linked MongoDB data source are handled within
+a single region that you specify when you create the App. You can choose
+any global region to handle writes, but should generally choose the
+region closest to your MongoDB cluster. If a server in another region
+needs to handle a write request, it forwards the request to the
+configured write region, which adds latency to the write operation.
+
+Realm SDKs automatically execute application requests, such as reading
+user information or calling a function, in the global deployment region
+that's closest to the user that issued the request. Requests sent to a
+global URL (e.g. with the Data API or GraphQL) are forwarded to the
+closest server at the DNS level. Requests sent to a region-specific URL
+execute in that region regardless of the user's location.
 
 .. _local-deployment:
 
 Local Deployment
 ~~~~~~~~~~~~~~~~
 
-A locally deployed app is available in a single cloud provider region.
+A locally deployed App is available in a single cloud provider region.
 All requests and MongoDB write operations are handled exclusively in the
-region, which you specify when you create the app.
+region, which you specify when you create the App.
 
 You can deploy to any region, but should generally choose the region
 closest to your application's users.
@@ -71,7 +75,7 @@ closest to your application's users.
 Cloud Deployment Regions
 ------------------------
 
-You can deploy your app to cloud regions hosted around the world by the
+You can deploy your App to cloud regions hosted around the world by the
 major cloud providers. The following regions are currently supported:
 
 .. list-table::
