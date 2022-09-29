@@ -1,10 +1,10 @@
 const Realm = require("realm");
 const { faker } = require("@faker-js/faker");
-const { sleep, connectToMongoDbClient } = require("./utils");
+const { sleep, connectToMongoDbClient, getRealmApp } = require("./utils");
 
 require("dotenv").config();
 
-const app = new Realm.App(process.env.APP_ID);
+const app = getRealmApp();
 let user;
 const email = faker.internet.email();
 const password = faker.internet.password();

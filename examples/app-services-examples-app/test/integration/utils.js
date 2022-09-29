@@ -1,4 +1,11 @@
 const { MongoClient } = require("mongodb");
+const Realm = require("realm");
+require("dotenv").config();
+
+function getRealmApp() {
+  const app = new Realm.App(process.env.APP_ID);
+  return app;
+}
 
 function connectToMongoDbClient() {
   const { DB_USER, DB_PASSWORD } = process.env;
@@ -42,6 +49,7 @@ function sleep(ms) {
 }
 
 module.exports = {
+  getRealmApp,
   connectToMongoDbClient,
   initS3Client,
   streamToString,

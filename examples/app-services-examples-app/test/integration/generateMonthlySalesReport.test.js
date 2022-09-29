@@ -1,6 +1,7 @@
 const Realm = require("realm");
 const { GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const {
+  getRealmApp,
   connectToMongoDbClient,
   sleep,
   initS3Client,
@@ -12,7 +13,7 @@ const {
 // Set Jest to not timeout until after 30 seconds.
 jest.setTimeout(30000);
 
-const app = new Realm.App(process.env.APP_ID);
+const app = getRealmApp();
 const s3Client = initS3Client();
 const s3BucketName = "app-services-integration-testing";
 const generateReportName = (year, month) => `${year}-${month}-sales-report.csv`;

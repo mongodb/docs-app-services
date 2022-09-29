@@ -6,12 +6,13 @@ This repository contains example use cases for [MongoDB Atlas App Services](http
 
 This repository contains the following example [Atlas Triggers](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/).
 
-| Name                                                                   | Trigger Type   | Description                                                                                                                                                                         |
-| :--------------------------------------------------------------------- | :------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`sendOrderConfirmationText`](sendOrderConfirmationText)               | Database       | Sends an SMS message with the Twilio SMS API when a document is added to a collection.                                                                                              |
-| [`materializeMonthlyProductSales`](materializeMonthlyProductSales)     | Database       | Update a materialized view document when a document is added to a collection.                                                                                                       |
-| [`createCustomUserDataOnSignUp`](createCustomUserDataOnSignUp)         | Authentication | Create a [Custom User Data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/) Object when a user creates an account with App Services Authentication. |
-| [`generatePreviousMonthSalesReport`](generatePreviousMonthSalesReport) | Scheduled      | Post a CSV report of previous month's sales totals to an AWS S3 bucket.                                                                                                             |
+| Name                                                                                                                        | Trigger Type   | Description                                                                                                                                                                         |
+| :-------------------------------------------------------------------------------------------------------------------------- | :------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`sendOrderConfirmationText`](#sendorderconfirmationtext)                                                                   | Database       | Sends an SMS message with the Twilio SMS API when a document is added to a collection.                                                                                              |
+| [`materializeMonthlyProductSales`](#materializemonthlyproductsales)                                                         | Database       | Update a materialized view document when a document is added to a collection.                                                                                                       |
+| [`createCustomUserDataOnSignUp`](#createcustomuserdataonsignup)                                                             | Authentication | Create a [Custom User Data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/) Object when a user creates an account with App Services Authentication. |
+| [`generatePreviousMonthSalesReport`](#generatepreviousmonthsalesreport)                                                     | Scheduled      | Post a CSV report of previous month's sales totals to an AWS S3 bucket.                                                                                                             |
+| [`scaleDownClusterDuringNight` and `scaleUpClusterDuringDay`](#scaledownclusterduringnight-and-scaleupclusterduringday) and | Scheduled      | Post a CSV report of previous month's sales totals to an AWS S3 bucket.                                                                                                             |
 
 ### sendOrderConfirmationText
 
@@ -25,10 +26,6 @@ Relevant files:
 - [`functions/sendOrderConfirmationText.js`](./functions/sendOrderConfirmationText.js):
   Function invoked by Trigger
 - [`functions/config.json`](./functions/config.json): Function configuration
-- The following Values and Secrets are used to call the Twilio API:
-  - [`values/TWILIO_ACCOUNT_SID.json`](./values/TWILIO_ACCOUNT_SID.json)
-  - [`values/TWILIO_AUTH_TOKEN.json`](./values/TWILIO_AUTH_TOKEN.json)
-  - [`values/TWILIO_FROM_NUMBER.json`](./values/TWILIO_FROM_NUMBER.json)
 
 ### materializeMonthlyProductSales
 
@@ -68,11 +65,29 @@ Relevant files:
 - [`functions/generateMonthlySalesReport.js`](./functions/generateMonthlySalesReport.js):
   Function invoked by Trigger
 - [`functions/config.json`](./functions/config.json): Function configuration
-- The following Values and Secrets are used to call the AWS S3 API:
-  - [`values/AWS_S3_ACCESS_KEY_ID.json`](./values/AWS_S3_ACCESS_KEY_ID.json)
-  - [`values/AWS_S3_ACCESS_KEY_SECRET.json`](./values/AWS_S3_ACCESS_KEY_SECRET.json)
-  - [`values/AWS_S3_BUCKET_NAME.json`](./values/AWS_S3_BUCKET_NAME.json)
-  - [`values/AWS_S3_BUCKET_REGION.json`](./values/AWS_S3_BUCKET_REGION.json)
+
+### scaleDownClusterDuringNight and scaleUpClusterDuringDay
+
+Scheduled Triggers that scale up and down an Atlas cluster.
+`scaleDownClusterDuringNight` reduces the cluster size every weekday night and
+`scaleUpClusterDuringDay` increases the cluster size every weekday morning.
+
+Relevant files:
+
+- [`triggers/scaleDownClusterDuringNight.json`](./triggers/scaleDownClusterDuringNight.json):
+  Trigger configuration file
+- [`triggers/scaleUpClusterDuringNight.json`](./triggers/scaleUpClusterDuringNight.json):
+  Trigger configuration file
+- [`functions/getClusterScalingInfo.js`](./functions/getClusterScalingInfo.js):
+  Helper Function that gets cluster scaling configuration information
+- [`functions/scaleCluster.js`](./functions/scaleCluster.js):
+  Helper Function that calls the Atlas Admin API to scale cluster
+- [`functions/scaleDownClusterDuringNight.js`](./functions/scaleDownClusterDuringNight.js):
+  Function called by Scheduled Trigger that handles scaling down of cluster
+- [`functions/scaleUpClusterDuringNight.js`](./functions/scaleUpClusterDuringNight.js):
+  Function called by Scheduled Trigger that handles scaling up of cluster
+- [`functions/config.json`](./functions/config.json): Configuration for all
+  relevant Functions
 
 ## Integration Tests
 
