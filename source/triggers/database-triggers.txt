@@ -283,7 +283,15 @@ can suspend a Trigger include:
   cluster :manual:`oplog </core/replica-set-oplog/>`. The App logs
   refer to this as a ``ChangeStreamHistoryLost`` error.
 
-When :ref:`resuming the suspended Trigger <resume-a-suspended-trigger>`,
+In the event of a suspended or failed trigger, Atlas App Services sends the
+project owner an email alerting them of the issue.
+
+.. _resume-a-suspended-trigger:
+
+Resume a Suspended Trigger
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you :ref:`resume a suspended Trigger <resume-a-suspended-trigger>`,
 your App attempts to resume the Trigger at the next change
 stream event after the change stream stopped. If the resume
 token is no longer in the cluster oplog, the Trigger must be started
@@ -291,13 +299,89 @@ without a resume token. This means the Trigger begins listening to
 new events but does not process any missed past events.
 
 You can adjust the oplog size to keep the resume token for more time after a suspension
-by :atlas:`scaling your Atlas cluster </scale-cluster/>`. 
+by :atlas:`scaling your Atlas cluster </scale-cluster/>`.
 Maintain an oplog size a few times greater than
-your cluster's peak oplog throughput (GB/hour) to reduce the risk of a 
-suspended trigger's resume token dropping off the oplog 
-before the trigger executes. 
-View your cluster's oplog throughput in the **Oplog GB/Hour** graph in the 
+your cluster's peak oplog throughput (GB/hour) to reduce the risk of a
+suspended trigger's resume token dropping off the oplog
+before the trigger executes.
+View your cluster's oplog throughput in the **Oplog GB/Hour** graph in the
 :atlas:`Atlas cluster metrics </monitor-cluster-metrics/>`.
+
+You can attempt to restart a suspended Trigger from the App Services UI or by
+importing an application directory with {+cli-bin+}.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. procedure::
+
+         .. step:: Find the Suspended Trigger
+
+            On the :guilabel:`Database Triggers` tab of the :guilabel:`Triggers`
+            page, find the trigger that you want to resume in the list of
+            triggers. App Services marks suspended triggers with a :guilabel:`Status` of
+            :guilabel:`Suspended`.
+
+            .. figure:: /images/suspended-db-trigger.png
+               :alt: A database trigger that is marked Suspended in the UI
+
+
+         .. step:: Restart the Trigger
+
+            Click :guilabel:`Restart` in the trigger's :guilabel:`Actions` column.
+            You can choose to restart the trigger with a change stream
+            :manual:`resume token </changeStreams/#resume-a-change-stream>` or
+            open a new change stream. Indicate whether or not to use a resume
+            token and then click :guilabel:`Resume Database Trigger`.
+
+            .. note:: Resume Tokens
+
+               If you use a :manual:`resume token
+               </changeStreams/#resume-a-change-stream>`, App Services
+               attempts to resume the trigger's underlying change
+               stream at the event immediately following the last
+               change event it processed. If successful, the trigger
+               processes any events that occurred while it was
+               suspended. If you do not use a resume token, the
+               trigger begins listening for new events but will not
+               fire for any events that occurred while it was
+               suspended.
+
+            .. figure:: /images/resume-database-trigger-modal.png
+               :alt: The resume database trigger modal in the UI
+
+   .. tab::
+      :tabid: cli
+      
+      .. procedure::
+
+         .. step:: Pull Your App's Latest Configuration Files
+
+            .. code-block:: shell
+
+               realm-cli pull --remote=<App ID>
+
+
+         .. step:: Verify that the Trigger Configuration File Exists
+
+            If you exported a new copy of your application, it should already include an
+            up-to-date configuration file for the suspended trigger. You can confirm that
+            the configuration file exists by looking in the ``/triggers`` directory for a
+            :ref:`trigger configuration file <config-database-trigger>` with the same name
+            as the trigger.
+
+
+         .. step:: Redeploy the Trigger
+
+            After you have verified that the trigger configuration file exists, push the
+            configuration back to your app. App Services automatically attempts to resume
+            any suspended triggers included in the deployment.
+
+            .. code-block:: shell
+
+               realm-cli push
 
 .. _last-cluster-time-processed:
 
