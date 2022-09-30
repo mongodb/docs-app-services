@@ -7,7 +7,7 @@
       "delete": { Expression },
       "read": { Expression },
       "write": { Expression },
-      "search": { Expression },
+      "search": <Boolean>,
       "fields": {
          "<Field Name>": {
             "read": { Expression },
@@ -98,7 +98,7 @@
        role has permission to delete a document from the collection.
 
    * - | ``search``
-       | Expression
+       | Boolean
        | *Default:* ``true``
      - An :ref:`expression <expressions>` that evaluates to ``true`` if the
        role has permission to search the collection using :atlas:`Atlas Search
