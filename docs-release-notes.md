@@ -1,3 +1,31 @@
+# September 30, 2022
+
+## Manage & Deploy Apps
+- Create/Realm CLI: Remove deployment regions and link to new reference table
+- Deploy
+  - Deployment Models & Regions: Update Cloud Deployment Regions to be a comprehensive reference table
+  - Automate Deployment/Deploy Automatically with GitHub: Remove outdated note that refers to v1 app structure/CLI
+- App Configuration Reference/App Services App: Remove deployment regions and link to new reference table
+
+## Device Sync
+- What is Atlas Device Sync/Atlas Device Sync Protocol: Fix typo
+
+## Triggers
+- Triggers Landing Page: Move info from "Overview" page to create a Triggers landing page
+- Database Triggers
+  - Update Project Expression docs for inclusive/exclusive project expressions
+  - Remove outdated version-specific note
+  - Update details about supported functionality and use cases
+  - Move usage example details onto page from "Usage Examples" section
+- Authentication Triggers: Move usage example details onto page from "Usage Examples" section
+- Scheduled Triggers: Move usage example details onto page from "Usage Examples" section
+- Disable a Trigger: Move page from "Usage Examples" section to Triggers top-level navigation
+- Send Trigger Events to AWS EventBridge: Move page from "Usage Examples" section to Triggers top-level navigation
+
+## Other
+- App Services Landing Page: Redesign landing page with new styling, task-focused content, and key features
+- Admin API: Update Applications endpoints with details for current state of configuration object and provider regions
+
 # September 23, 2022
 
 ## Manage & Deploy Apps
