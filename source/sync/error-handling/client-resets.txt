@@ -91,9 +91,9 @@ event of a breaking schema change.
 During an automatic client reset, the client:
 
 1. Downloads a fresh copy of the realm from the backend.
-#. Performs a diff to figure out the set of steps required to
-   bring the original (local) copy of the realm to the same state as
-   the fresh copy of the backend.
+#. Performs a diff to figure out the steps required to bring the original 
+   (local) copy of the realm to the same state as the fresh copy of the 
+   backend.
 #. Applies that set of steps to transform the local realm into a state
    where it can sync with the backend. 
    
@@ -147,7 +147,7 @@ Client Reset Recovery Rules
 
 In a client reset that does not involve a schema change, the Realm SDKs 
 attempt to recover unsynced changes. The SDK integrates objects created 
-locally that have did not sync before the client reset. These rules 
+locally that did not sync before the client reset. These rules 
 determine how conflicts are resolved when both the backend and the client 
 make changes to the same object:
 
