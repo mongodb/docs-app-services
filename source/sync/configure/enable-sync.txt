@@ -552,7 +552,7 @@ Enable Partition-Based Sync
                curl https://realm.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X PATCH \
                  -h 'Authorization: Bearer <Valid Access Token>' \
-                 -d '"sync": {"type": "partition", "state": "enabled", "development_mode_enabled": <Boolean>, "database_name": "<Database Name>", "partition": { "key": "owner_id", "type": "string", "permissions": { "read": { "$or": [{ "%%user.id": "%%partition" }, { "%%user.custom_data.shared": "%%partition" }]}, "write": { "%%user.id": "%%partition"}}}, "client_max_offline_days": <Number>, "is_recovery_mode_disabled": <Boolean>}'
+                 -d @/sync/config.json
 
 .. _enable-flexible-sync:
 
@@ -1086,4 +1086,4 @@ Enable Flexible Sync
                  -X PATCH \
                  -h 'Authorization: Bearer <Valid Access Token>' \
                  -h "Content-Type: application/json"
-                 -d @/some-directory/config.json
+                 -d @/sync/config.json
