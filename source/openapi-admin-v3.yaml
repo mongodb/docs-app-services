@@ -2627,21 +2627,22 @@ paths:
         - deploy
       operationId: adminRedeployDeployment
       summary: Redeploy a deployment
-      description: Redeploy a previously deployed deployment.
+      description: Redeploy a previously-deployed version of an App.
       responses:
         "204":
           description: Successfully redeployed
         "404":
-          description: Encountered an error while updating the trigger.
+          description: Deployment not found
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Error"
-                properties:
-                  error:
-                    const: "deployment not found"
-                  error_code:
-                    const: "DeploymentNotFound"
+                allOf:
+                  - "$ref": "#/components/schemas/Error"
+                  - properties:
+                      error:
+                        const: "deployment not found"
+                      error_code:
+                        const: "DeploymentNotFound"
   
 
   "/groups/{groupId}/apps/{appId}/drafts":
