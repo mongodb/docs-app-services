@@ -42,8 +42,8 @@ configure your data model and access Device Sync, see:
    unless you are using :ref:`Development Mode <enable-development-mode>`.
    
    At a minimum, the schema must define ``_id`` and the field that you intend to
-   use as your partition key. A partition key field may be a ``string``,
-   ``integer``, or ``objectId``.
+   use as your :ref:`partition key <partition-key>` or :ref:`queryable field 
+   <queryable-fields>`.
    
    For more details on how to define a schema, see :ref:`enforce-a-schema`.
 
@@ -75,7 +75,7 @@ Enable Partition-Based Sync
 
             You can enable Device Sync for a single linked cluster in your application.
             Determine which cluster you want to use and then select it from the
-            :guilabel:`Select Cluster To Device Sync` dropdown menu.
+            :guilabel:`Select a Cluster To Sync` dropdown menu.
 
             .. figure:: /images/define-sync-rules-select-cluster.png
                :width: 750px
@@ -122,6 +122,19 @@ Enable Partition-Based Sync
                :width: 750px
                :alt: The partition read and write expression inputs
 
+         .. step:: Check Default Advanced Configuration Behaviors
+
+            Expand the :guilabel:`Advanced Configuration` section.
+
+            App Services Apps provide advanced optimization features 
+            that are enabled by default:
+
+            - :ref:`Client Max Offline Time <client-maximum-offline-time>`
+            - :ref:`Client Recovery <recover-unsynced-changes>`
+
+            If you want to change the length of time that a client can be 
+            offline, or disable either of these features, you can do so 
+            in the :guilabel:`Advanced Configuration` section.
 
          .. step:: Turn On Sync
 
@@ -132,6 +145,13 @@ Enable Partition-Based Sync
      
    .. tab::
       :tabid: cli
+
+      This procedure assumes you have :ref:`created an App Services App 
+      <create-app-cli>` and have linked a data source.
+
+      If you have not yet linked the cluster to your application, follow the
+      :ref:`link-a-data-source` guide to link it before
+      you continue.
       
       .. procedure::
 
@@ -146,36 +166,38 @@ Enable Partition-Based Sync
                realm-cli pull --remote="<Your App ID>"
 
 
-         .. step:: Select a Cluster to Sync
+         .. step:: Add a Sync Configuration
 
             You can enable sync for a single linked cluster in your application.
             If you have not yet linked the cluster to your application, follow the
             :ref:`link-a-data-source` guide to link it before
             you continue.
 
-            Determine which cluster you want to use and then open its configuration file.
-            Add the ``config.sync`` field with the following value:
+            The App Services App has a ``sync`` directory where you can find 
+            the :ref:`sync configuration file <appconfig-sync>`. If you have not 
+            yet enabled Sync, this directory is empty.
+
+            Add a ``config.json`` similar to:
 
             .. code-block:: json
 
                {
-                 "config": {
-                   "sync": {
-                     "state": "enabled",
-                     "partition": {
-                       "key": "<Partition Key Field>",
-                       "type": "<Partition Key Type>",
-                       "permissions": {
-                         "read": {},
-                         "write": {}
-                       }
-                     }
-                   },
-                   ...
+                 "type": "partition",
+                 "state": <"enabled" | "disabled">,
+                 "development_mode_enabled": <Boolean>,
+                 "service_name": "<Data Source Name>",
+                 "database_name": "<Database Name>",
+                 "partition": {
+                   "key": "<Partition Key Field Name>",
+                   "type": "<Partition Key Type>",
+                   "permissions": {
+                     "read": { <Expression> },
+                     "write": { <Expression> }
+                   }
                  },
-                 ...
+                 "client_max_offline_days": <Number>,
+                 "is_recovery_mode_disabled": <Boolean>
                }
-
 
          .. step:: Choose a Partition Key
 
@@ -196,31 +218,25 @@ Enable Partition-Based Sync
               pre-existing data with invalid or missing partition values from a
               MongoDB collection.
 
-            Once you have decided which field to use, update ``config.sync.partition``
+            Once you have decided which field to use, update ``sync.partition``
             with the partition key field name in the ``key`` field and the partition key
-            type in the ``type`` field.
+            type in the ``type`` field, similar to:
 
             .. code-block:: json
-               :emphasize-lines: 6, 7
+               :emphasize-lines: 4, 5
 
                {
-                 "config": {
-                   "sync": {
-                     "state": "enabled",
-                     "partition": {
-                       "key": "owner_id",
-                       "type": "string",
-                       "permissions": {
-                         "read": {},
-                         "write": {}
-                       }
-                     }
-                   },
-                   ...
-                 },
+                 ...
+                 "partition": {
+                   "key": "owner_id",
+                   "type": "string",
+                   "permissions": {
+                     "read": {},
+                     "write": {}
+                   }
+                 }
                  ...
                }
-
 
          .. step:: Define Read & Write Permissions
 
@@ -236,36 +252,70 @@ Enable Partition-Based Sync
 
             Once you've determined how to decide a user's read and write permissions for a
             given partition, define the corresponding JSON expressions in the
-            ``read`` and ``write`` fields of ``config.sync.partition.permissions``.
+            ``read`` and ``write`` fields of ``partition.permissions``, similar to:
 
             .. code-block:: json
-               :emphasize-lines: 9-14, 15-17
+               :emphasize-lines: 7-15
 
                {
-                 "config": {
-                   "sync": {
-                     "state": "enabled",
-                     "partition": {
-                       "key": "owner_id",
-                       "type": "string",
-                       "permissions": {
-                         "read": {
-                           "$or": [
-                             { "%%user.id": "%%partition" },
-                             { "%%user.custom_data.shared": "%%partition" }
-                           ]
-                         },
-                         "write": {
-                           "%%user.id": "%%partition"
-                         }
-                       }
+                 ...
+                 "partition": {
+                   "key": "owner_id",
+                   "type": "string",
+                   "permissions": {
+                     "read": {
+                       "$or": [
+                         { "%%user.id": "%%partition" },
+                         { "%%user.custom_data.shared": "%%partition" }
+                       ]
+                     },
+                     "write": {
+                       "%%user.id": "%%partition"
                      }
-                   },
-                   ...
-                 },
+                   }
+                 }
                  ...
                }
 
+         .. step:: Specify Values for Sync Optimization
+
+            Sync provides features that enable you to optimize Sync 
+            performance and improve the data recovery process on the client. 
+            These features are represented by additional settings:
+
+            - ``client_max_offline_days``
+            - ``is_recovery_mode_disabled``
+
+            You can set a numerical value for ``client_max_offline_days``.
+            When you enable Sync via the App Services UI, the default 
+            value is ``30``, which represents 30 days. 
+            
+            For more information, see: :ref:`client-maximum-offline-time`.
+
+            Recovery Mode enables Sync to attempt to recover data that 
+            has not yet been synced when a client reset occurs. When you 
+            enable Sync via the App Services UI, Recovery Mode is enabled 
+            by default. We recommend enabling Recovery Mode for automatic 
+            client reset handling. If you have disabled recovery mode and 
+            want to re-enable it, set ``is_recovery_mode_disabled`` to ``false``.
+            
+            For more information, see: :ref:`recover-unsynced-changes`.
+
+            .. code-block:: json
+               :emphasize-lines: 10-11
+
+               {
+                 "type": "partition",
+                 "state": "enabled",
+                 "development_mode_enabled": true,
+                 "service_name": "mongodb-atlas",
+                 "database_name": "my-test-database",
+                 "partition": {
+                   ...
+                 },
+                 "client_max_offline_days": 30,
+                 "is_recovery_mode_disabled": false
+               }
 
          .. step:: Deploy the Sync Configuration
 
@@ -273,12 +323,11 @@ Enable Partition-Based Sync
             permissions, you can deploy your changes to start syncing data and enforcing
             sync rules.
 
-            To deploy your changes, import your app configuration:
+            To deploy your changes, import your app configuration to your App Services App:
 
             .. code-block:: shell
 
                realm-cli push --remote="<Your App ID>"
-
      
    .. tab::
       :tabid: api
@@ -287,13 +336,14 @@ Enable Partition-Based Sync
 
          .. step:: Select a Cluster to Sync
 
-            You can enable sync for a single linked cluster in your application.
+            You can enable Sync for a single linked cluster in your application.
             If you have not yet linked the cluster to your application, follow the
             :ref:`link-a-data-source` guide to link it before
             you continue.
 
             You'll need the cluster's service configuration file to configure sync. You
-            can find the configuration file by listing all services through the Admin API:
+            can find the configuration file by :admin-api-endpoint:`listing all services 
+            through the Admin API <operation/adminListServices>`:
 
             .. code-block:: shell
 
@@ -301,33 +351,45 @@ Enable Partition-Based Sync
                  -X GET \
                  -h 'Authorization: Bearer <Valid Access Token>'
 
-            Once you have the configuration, add the ``config.sync`` field with the
+            Identify the service whose configuration you need to update to enable
+            Sync. If you have accepted the default names when configuring 
+            your App, this should be a service whose ``name`` is ``mongodb-atlas``
+            and ``type`` is ``mongodb-atlas``. You need this service's ``_id``.
+
+            Now you can :admin-api-endpoint:`get the configuration file for 
+            this service <operation/adminGetServiceConfig>`:
+
+            .. code-block:: shell
+
+               curl https://realm.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
+                 -X GET \
+                 -h 'Authorization: Bearer <Valid Access Token>'
+
+            Once you have the configuration, add the ``sync`` object with the
             following template configuration:
 
             .. code-block:: json
 
                {
-                 "config": {
-                   "sync": {
-                     "state": "enabled",
-                     "partition": {
-                       "key": "<Partition Key Field>",
-                       "type": "<Partition Key Type>",
-                       "permissions": {
-                         "read": {},
-                         "write": {}
-                       }
+                 ...
+                 "sync": {
+                   "type": "partition",
+                   "state": "enabled",
+                   "development_mode_enabled": <Boolean>,
+                   "database_name": "<Database Name>",
+                   "partition": {
+                     "key": "<Partition Key Field Name>",
+                     "type": "<Partition Key Type>",
+                     "permissions": {
+                       "read": { <Expression> },
+                       "write": { <Expression> }
                      }
                    },
-                   ...
-                 },
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>
+                 }
                  ...
                }
-
-            .. seealso::
-
-               :admin-api-endpoint:`Admin API: List All Services <operation/adminListServices>`
-
 
          .. step:: Choose a Partition Key
 
@@ -337,7 +399,8 @@ Enable Partition-Based Sync
             patterns. For more information on partition keys and how to choose one, see
             :ref:`Partitions <sync-partitions>`.
 
-            You can get a list of all valid partition keys and their corresponding types
+            You can :admin-api-endpoint:`get a list of all valid partition 
+            keys <operation/adminGetSync>` and their corresponding types 
             through the Admin API:
 
             .. code-block:: shell
@@ -357,35 +420,33 @@ Enable Partition-Based Sync
               pre-existing data with invalid or missing partition values from a
               MongoDB collection.
 
-            Once you have decided which field to use, update ``config.sync.partition``
+            Once you have decided which field to use, update ``sync.partition``
             with the partition key field name in the ``key`` field and the partition key
             type in the ``type`` field.
 
             .. code-block:: json
-               :emphasize-lines: 6, 7
+               :emphasize-lines: 9-10
 
                {
-                 "config": {
-                   "sync": {
-                     "state": "enabled",
-                     "partition": {
-                       "key": "owner_id",
-                       "type": "string",
-                       "permissions": {
-                         "read": {},
-                         "write": {}
-                       }
+                 ...
+                 "sync": {
+                   "type": "partition",
+                   "state": "enabled",
+                   "development_mode_enabled": <Boolean>,
+                   "database_name": "<Database Name>",
+                   "partition": {
+                     "key": "owner_id",
+                     "type": "string",
+                     "permissions": {
+                       "read": { <Expression> },
+                       "write": { <Expression> }
                      }
                    },
-                   ...
-                 },
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>
+                 }
                  ...
                }
-
-            .. seealso::
-
-               :admin-api-endpoint:`Admin API: List Valid Partition Keys <operation/adminGetSync>`
-
 
          .. step:: Define Read & Write Permissions
 
@@ -401,36 +462,81 @@ Enable Partition-Based Sync
 
             Once you've determined how to decide a user's read and write permissions for a
             given partition, define the corresponding JSON expressions in the
-            ``read`` and ``write`` fields of ``config.sync.partition.permissions``.
+            ``read`` and ``write`` fields of ``sync.partition.permissions``.
 
             .. code-block:: json
-               :emphasize-lines: 9-14, 15-17
+               :emphasize-lines: 12-20
 
                {
-                 "config": {
-                   "sync": {
-                     "state": "enabled",
-                     "partition": {
-                       "key": "owner_id",
-                       "type": "string",
-                       "permissions": {
-                         "read": {
-                           "$or": [
-                             { "%%user.id": "%%partition" },
-                             { "%%user.custom_data.shared": "%%partition" }
-                           ]
-                         },
-                         "write": {
-                           "%%user.id": "%%partition"
-                         }
+                 ...
+                 "sync": {
+                   "type": "partition",
+                   "state": "enabled",
+                   "development_mode_enabled": <Boolean>,
+                   "database_name": "<Database Name>",
+                   "partition": {
+                     "key": "owner_id",
+                     "type": "string",
+                     "permissions": {
+                       "read": {
+                         "$or": [
+                           { "%%user.id": "%%partition" },
+                           { "%%user.custom_data.shared": "%%partition" }
+                         ]
+                       },
+                       "write": {
+                         "%%user.id": "%%partition"
                        }
                      }
                    },
-                   ...
-                 },
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>
+                 }
                  ...
                }
 
+         .. step:: Specify Values for Sync Optimization
+
+            Sync provides features that enable you to optimize Sync 
+            performance and improve the client data recovery process. These 
+            features are represented by additional settings:
+
+            - ``client_max_offline_days``
+            - ``is_recovery_mode_disabled``
+
+            You can set a numerical value for ``client_max_offline_days``.
+            When you enable Sync via the App Services UI, the default 
+            value is ``30``, which represents 30 days. 
+            
+            For more information, see: :ref:`client-maximum-offline-time`.
+
+            Recovery Mode enables Sync to attempt to recover unsynced data 
+            when a client reset occurs. When you enable Sync via the App 
+            Services UI, Recovery Mode is enabled by default. We recommend
+            enabling Recovery Mode for automatic client reset handling.
+            To enable Recovery Mode, set ``is_recovery_mode_disabled`` to 
+            ``false``.
+            
+            For more information, see: :ref:`recover-unsynced-changes`.
+
+            .. code-block:: json
+               :emphasize-lines: 11-12
+
+               {
+                 ...
+                 "sync": {
+                   "type": "partition",
+                   "state": "enabled",
+                   "development_mode_enabled": true,
+                   "database_name": "my-test-database",
+                   "partition": {
+                     ...
+                   },
+                   "client_max_offline_days": 30,
+                   "is_recovery_mode_disabled": false
+                 }
+                 ...
+               }
 
          .. step:: Deploy the Sync Configuration
 
@@ -438,20 +544,15 @@ Enable Partition-Based Sync
             permissions, you can deploy your changes to start syncing data and enforcing
             sync rules.
 
-            To deploy your changes, send an Admin API request that updates the cluster
-            configuration with your sync configuration:
+            To deploy your changes, send an :admin-api-endpoint:`Admin API request that updates the cluster
+            configuration with your sync configuration <operation/adminGetServiceConfig>`:
 
             .. code-block:: shell
 
                curl https://realm.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X PATCH \
                  -h 'Authorization: Bearer <Valid Access Token>' \
-                 -d '{"sync":{"state":"enabled","database_name":"","partition":{"key":"_partition","type":"string","permissions":{"read":{"$or":[{"%%user.id":"%%partition"},{"%%user.custom_data.shared":"%%partition"}]},"write": {"%%user.id": "%%partition"}}}}'
-
-            .. seealso::
-
-               :admin-api-endpoint:`Admin API: Update a Service Configuration <operation/adminGetServiceConfig>`
-
+                 -d @/sync/config.json
 
 .. _enable-flexible-sync:
 
@@ -567,81 +668,92 @@ Enable Flexible Sync
 
                realm-cli pull --remote="<Your App ID>"
 
+         .. step:: Add a Sync Configuration
 
-         .. step:: Select a Cluster to Sync
-
-            You can enable Device Sync for a single linked cluster in your application.
+            You can enable sync for a single linked cluster in your application.
             If you have not yet linked the cluster to your application, follow the
             :ref:`link-a-data-source` guide to link it before
             you continue.
 
-            Determine which cluster you want to use and then open its configuration file.
-            Add the ``config.flexible_sync`` field with the following template:
+            The App Services App has a ``sync`` directory where you can find 
+            the :ref:`sync configuration file <appconfig-sync>`. If you have not 
+            yet enabled Sync, this directory is empty.
+
+            Add a ``config.json`` similar to:
 
             .. code-block:: json
 
                {
-                   "config": {
-                       "flexible_sync": {
-                           "state": "enabled",
-                           "database_name": "",
-                           "permissions": {
-                               "defaultRoles": [
-                                   {
-                                       "applyWhen": {},
-                                       "name": "all",
-                                       "read": true,
-                                       "write": true
-                                   }
-                               ],
-                               "rules": {}
-                           },
-                           "queryable_fields_names": []
+                 "type": "flexible",
+                 "development_mode_enabled": <Boolean>,
+                 "service_name": "<Data Source Name>",
+                 "database_name": "<Development Mode Database Name>",
+                 "state": <"enabled" | "disabled">,
+                 "client_max_offline_days": <Number>,
+                 "is_recovery_mode_disabled": <Boolean>,
+                 "permissions": {
+                   "rules": {
+                     "<Type Name>": [
+                       {
+                         "name": <String>,
+                         "applyWhen": { <Expression> },
+                         "read": <Expression>,
+                         "write": <Expression>,
+                         "fields": {
+                           "<Field Name>": {
+                             "read": <Boolean>,
+                             "write": <Boolean>,
+                             "fields": <Embedded Object Fields>
+                           }
+                         }
+                         "additional_fields": {
+                           "read": <Boolean>,
+                           "write": <Boolean>
+                         }
                        }
-                   }
+                     ]
+                   },
+                   "defaultRoles": [
+                     {
+                       "name": <String>,
+                       "applyWhen": { <Expression> },
+                       "read": <Expression>,
+                       "write": <Expression>
+                     }
+                   ]       
+                 },
+                 "queryable_fields_names": [
+                   <Array of String Field Names>
+                 ]
                }
-
-            Replace the ``database_name`` field's value with the name of your database.
-
-            .. note::
-
-              The default role applies to any collection where you do not define custom roles.
-              Since there is no custom roles defined in the above example, the default role
-              applies to all collections.
-
 
          .. step:: Choose Queryable Fields
 
             The ``queryable_fields_names`` property allows you to define a set of
-            queryable fields for the device should query on. A queryable field can be any
-            top-level primitive field with a scalar type, this excludes embedded objects or arrays.
+            queryable fields for the device should query on.
 
-            To learn more about queryable fields, read the :ref:`queryable fields
-            <queryable-fields>` documentation.
+            To learn more about queryable fields, such as eligible field types, 
+            reserved field names, and performance implications, see the 
+            :ref:`queryable fields <queryable-fields>` documentation.
 
             .. code-block:: json
+               :emphasize-lines: 12-14
 
                {
-                   "config": {
-                       "flexible_sync": {
-                           "state": "enabled",
-                           "database_name": "",
-                           "permissions": {
-                               "defaultRoles": [
-                                   {
-                                       "applyWhen": {},
-                                       "name": "all",
-                                       "read": true,
-                                       "write": true
-                                   }
-                               ],
-                               "rules": {}
-                           },
-                           "queryable_fields_names": ["age", "name"]
-                       }
-                   }
+                 "type": "flexible",
+                 "development_mode_enabled": <Boolean>,
+                 "service_name": "<Data Source Name>",
+                 "database_name": "<Development Mode Database Name>",
+                 "state": <"enabled" | "disabled">,
+                 "client_max_offline_days": <Number>,
+                 "is_recovery_mode_disabled": <Boolean>,
+                 "permissions": {
+                   ... 
+                 },
+                 "queryable_fields_names": [
+                   ["age", "name"]
+                 ]
                }
-
 
          .. step:: Define Read & Write Permissions
 
@@ -656,44 +768,82 @@ Enable Flexible Sync
             specify a value, App Services will apply the default role to the ``Items`` collection.
 
             .. code-block:: json
+               :emphasize-lines: 5-24
 
                {
-                 "config": {
-                   "flexible_sync": {
-                     "state": "enabled",
-                     "database_name": "test-database",
-                     "permissions": {
-                       "Employees": {
-                         "roles": [
-                           {
-                             "name": "everyone",
-                             "applyWhen": {},
-                             "read": { "owner_id": "%%user.id" },
-                             "write": false
-                           }
-                         ]
-                       },
-                       "Items": {},
-                       "defaultRoles": [
-                         {
-                           "applyWhen": {},
-                           "name": "all",
-                           "read": true,
-                           "write": true
+                 "type": "flexible",
+                 ...
+                 "permissions": {
+                   "Employees": {
+                     "roles": [
+                       {
+                         "name": "everyone",
+                         "applyWhen": {},
+                         "read": { "owner_id": "%%user.id" },
+                           "write": false
                          }
-                       ],
-                       "rules": {}
-                     },
-                     "queryable_fields_names": ["age", "name"]
-                   }
-                 }
+                     ]
+                   },
+                   "Items": {},
+                   "defaultRoles": [
+                     {
+                       "applyWhen": {},
+                       "name": "all",
+                       "read": true,
+                       "write": true
+                     }
+                    ],
+                   "rules": {}
+                 },
+                 "queryable_fields_names": ["age", "name"]
                }
 
+         .. step:: Specify Values for Sync Optimization
+
+            Sync provides features that enable you to optimize Sync 
+            performance and improve the client data recovery process. These 
+            features are represented by additional settings:
+
+            - ``client_max_offline_days``
+            - ``is_recovery_mode_disabled``
+
+            You can set a numerical value for ``client_max_offline_days``.
+            When you enable Sync via the App Services UI, the default 
+            value is ``30``, which represents 30 days. 
+            
+            For more information, see: :ref:`client-maximum-offline-time`.
+
+            Recovery Mode enables Sync to attempt to recover unsynced data 
+            when a client reset occurs. When you enable Sync via the App 
+            Services UI, Recovery Mode is enabled by default. We recommend
+            enabling Recovery Mode for automatic client reset handling.
+            To enable Recovery Mode, set ``is_recovery_mode_disabled`` to 
+            ``false``.
+            
+            For more information, see: :ref:`recover-unsynced-changes`.
+
+            Specify the values for these settings:
+
+            .. code-block:: json
+               :emphasize-lines: 4-5
+
+               {
+                 "type": "flexible",
+                 ...
+                 "client_max_offline_days": 30,
+                 "is_recovery_mode_disabled": false,
+                 "permissions": {
+                   ... 
+                 },
+                 "queryable_fields_names": [
+                   ["age", "name"]
+                 ]
+               }
 
          .. step:: Deploy the Sync Configuration
 
-            Now that you've defined the Device Sync configuration, including read and write
-            permissions, you can deploy your changes to start syncing data and enforcing
+            Now that you've defined the Device Sync configuration, you can 
+            deploy your changes to start syncing data and enforcing
             Device Sync rules.
 
             To deploy your changes, import your app configuration:
@@ -714,9 +864,6 @@ Enable Flexible Sync
             :ref:`link-a-data-source` guide to link it before
             you continue.
 
-            You'll need the cluster's service configuration file to configure Device Sync. You
-            can find the configuration file by listing all services through the Admin API:
-
             .. note:: Authenticating Your Request with an Access Token
 
               To authenticate your request to the App Services Admin API, you need a valid and
@@ -724,36 +871,56 @@ Enable Flexible Sync
               :admin-api-endpoint:`API Authentication <section/Get-Authentication-Tokens>`
               documentation to learn how to acquire a valid access token.
 
+            You'll need the cluster's service configuration file to configure sync. You
+            can find the configuration file by :admin-api-endpoint:`listing all services 
+            through the Admin API <operation/adminListServices>`:
+
             .. code-block:: shell
 
                curl https://realm.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services \
                  -X GET \
                  -h 'Authorization: Bearer <Valid Access Token>'
 
-            Once you have the configuration, add the ``config.flexible_sync`` field with the
+            Identify the service whose configuration you need to update to enable
+            Sync. If you have accepted the default names when configuring 
+            your App, this should be a service whose ``name`` is ``mongodb-atlas``
+            and ``type`` is ``mongodb-atlas``. You need this service's ``_id``.
+
+            Now you can :admin-api-endpoint:`get the configuration file for 
+            this service <operation/adminGetServiceConfig>`:
+
+            .. code-block:: shell
+
+               curl https://realm.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
+                 -X GET \
+                 -h 'Authorization: Bearer <Valid Access Token>'
+
+            Once you have the configuration, add the ``flexible_sync`` object with the
             following template configuration:
 
             .. code-block:: json
 
                {
-                   "config": {
-                       "flexible_sync": {
-                           "state": "enabled",
-                           "database_name": "",
-                           "permissions": {
-                               "defaultRoles": [
-                                   {
-                                       "applyWhen": {},
-                                       "name": "all",
-                                       "read": true,
-                                       "write": true
-                                   }
-                               ],
-                               "rules": {}
-                           },
-                           "queryable_fields_names": []
+                 ...
+                 "flexible_sync": {
+                   "state": "enabled",
+                   "database_name": "",
+                   "permissions": {
+                     "defaultRoles": [
+                       {
+                         "applyWhen": {},
+                         "name": "all",
+                         "read": true,
+                         "write": true
                        }
-                   }
+                     ],
+                     "rules": {}
+                   },
+                   "queryable_fields_names": [],
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>
+                 }
+                 ...
                }
 
             Replace the ``database_name`` field's value with the name of your database.
@@ -762,48 +929,46 @@ Enable Flexible Sync
 
               The default role applies to any collection where you do not define custom roles.
               Since no custom roles are defined in the above example, the default role
-              applies to all collections.
-
-            .. seealso::
-
-              :ref:`Default Roles <default-roles>`
-
+              applies to all collections. For more information, see: 
+              :ref:`Default Roles <default-roles>`.
 
          .. step:: Choose Queryable Fields
 
-            The ``queryable_fields_names`` property defines a set of queryable fields that
-            the device may query on. A queryable field can be any top-level primitive
-            field with a scalar type. A queryable field cannot be an embedded object or
-            array.
+            The ``queryable_fields_names`` property defines a set of queryable 
+            fields that the device may query on. 
+            
+            To learn more about queryable fields, such as eligible field types, 
+            reserved field names, and performance implications, see the 
+            :ref:`queryable fields <queryable-fields>` documentation.
 
-            To learn more about queryable fields, read the :ref:`queryable fields
-            <queryable-fields>` documentation.
-
-            Add the fields you would like your application to query on to the ``config.flexible_sync.queryable_fields_names``:
+            Add the fields you would like your application to query on to 
+            the ``flexible_sync.queryable_fields_names``:
 
             .. code-block:: json
+               :emphasize-lines: 17
 
                {
-                   "config": {
-                       "flexible_sync": {
-                           "state": "enabled",
-                           "database_name": "",
-                           "permissions": {
-                               "defaultRoles": [
-                                   {
-                                       "applyWhen": {},
-                                       "name": "all",
-                                       "read": true,
-                                       "write": true
-                                   }
-                               ],
-                               "rules": {}
-                           },
-                           "queryable_fields_names": ["age", "name"]
+                ...
+                 "flexible_sync": {
+                   "state": "enabled",
+                   "database_name": "",
+                   "permissions": {
+                     "defaultRoles": [
+                       {
+                         "applyWhen": {},
+                         "name": "all",
+                         "read": true,
+                         "write": true
                        }
-                   }
+                     ],
+                     "rules": {}
+                   },
+                   "queryable_fields_names": ["age", "name"],
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>
+                 }
+                 ...
                }
-
 
          .. step:: Define Read & Write Permissions
 
@@ -818,39 +983,85 @@ Enable Flexible Sync
             specify a value, App Services will apply the default role to the ``Items`` collection.
 
             .. code-block:: json
+               :emphasize-lines: 7-26
 
                {
-                 "config": {
-                   "flexible_sync": {
-                     "state": "enabled",
-                     "database_name": "test-database",
-                     "permissions": {
-                       "Employees": {
-                         "roles": [
-                           {
-                             "name": "everyone",
-                             "applyWhen": {},
-                             "read": { "owner_id": "%%user.id" },
-                             "write": false
-                           }
-                         ]
-                       },
-                       "Items": {},
-                       "defaultRoles": [
+                 ...
+                 "flexible_sync": {
+                   "state": "enabled",
+                   "database_name": "test-database",
+                   "permissions": {
+                     "Employees": {
+                       "roles": [
                          {
+                           "name": "everyone",
                            "applyWhen": {},
-                           "name": "all",
-                           "read": true,
-                           "write": true
+                           "read": { "owner_id": "%%user.id" },
+                           "write": false
                          }
-                       ],
-                       "rules": {}
+                       ]
                      },
-                     "queryable_fields_names": ["age", "name"]
-                   }
+                     "Items": {},
+                     "defaultRoles": [
+                       {
+                         "applyWhen": {},
+                         "name": "all",
+                         "read": true,
+                         "write": true
+                       }
+                     ],
+                     "rules": {}
+                   },
+                   "queryable_fields_names": ["age", "name"],
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>
                  }
+                 ...
                }
 
+         .. step:: Specify Values for Sync Optimization
+
+            Sync provides features that enable you to optimize Sync 
+            performance and improve the client data recovery process. These 
+            features are represented by additional settings:
+
+            - ``client_max_offline_days``
+            - ``is_recovery_mode_disabled``
+
+            You can set a numerical value for ``client_max_offline_days``.
+            When you enable Sync via the App Services UI, the default 
+            value is ``30``, which represents 30 days. 
+            
+            For more information, see: :ref:`client-maximum-offline-time`.
+
+            Recovery Mode enables Sync to attempt to recover unsynced data 
+            when a client reset occurs. When you enable Sync via the App 
+            Services UI, Recovery Mode is enabled by default. We recommend
+            enabling Recovery Mode for automatic client reset handling.
+            To enable Recovery Mode, set ``is_recovery_mode_disabled`` to 
+            ``false``.
+            
+            For more information, see: :ref:`recover-unsynced-changes`.
+
+            Specify the values for these settings:
+
+            .. code-block:: json
+               :emphasize-lines: 10-11
+
+               {
+                 ...
+                 "flexible_sync": {
+                   "state": "enabled",
+                   "database_name": "test-database",
+                   "permissions": {
+                     ...
+                   },
+                   "queryable_fields_names": ["age", "name"],
+                   "client_max_offline_days": 30,
+                   "is_recovery_mode_disabled": false
+                 }
+                 ...
+               }
 
          .. step:: Deploy the Sync Configuration
 
@@ -858,8 +1069,9 @@ Enable Flexible Sync
             permissions, you can deploy your changes to start syncing data and enforcing
             Device Sync rules.
 
-            To deploy your changes, send an Admin API request that updates the cluster
-            configuration with your Device Sync configuration.
+            To deploy your changes, send an :admin-api-endpoint:`Admin API 
+            request <operation/adminGetServiceConfig>` that updates the 
+            cluster configuration with your sync configuration:
 
             .. note:: Authenticating Your Request with an Access Token
 
@@ -874,4 +1086,4 @@ Enable Flexible Sync
                  -X PATCH \
                  -h 'Authorization: Bearer <Valid Access Token>' \
                  -h "Content-Type: application/json"
-                 -d @/some-directory/config.json
+                 -d @/sync/config.json
