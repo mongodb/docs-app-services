@@ -1,3 +1,39 @@
+# October 7, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Atlas Device Sync: Update configuration details for Recovery Mode
+
+## Device Sync
+- What is Atlas Device Sync?/Atlas Device Sync Overview: Add link to Realm SDKs on first reference
+- Configure and Update Your Data Model
+  - Update a Schema: Specify that breaking changes prevent automatic client recovery and require client applications to implement a manual error handler
+- Configure Sync
+  - Enable Atlas Device Sync: Update procedure details with info about Client Max Offline Days and Recovery Mode
+  - Pause or Terminate Sync: Remove "manual" from client reset mentions, add link to React Native SDK client reset docs
+- Handle Errors
+  - Client Reset: Update docs for client recovery, including:
+    - Add information about automatic client recovery
+    - Add a new procedure for how to enable or disable Recovery Mode
+    - Provide details about the different client reset modes & client reset recovery rules
+    - Update details about discard local - now discard unsynced changes
+    - Cover how to handle breaking schema changes
+  - Sync Errors: Clarify that `ErrorWriteNotAllowed` in older Realm SDK versions requires a manual client reset
+
+## Static Hosting
+- Landing page
+  - Add note about static hosting requiring a paid tier
+  - Remove reference docs links from landing page to reduce duplication & maintenance issues
+- Enable Hosting: Add note about static hosting requiring a paid tier
+
+## Values & Secrets
+- Landing page: Remove reference docs links from landing page to reduce duplication & maintenance issues
+
+## Logs
+- Landing page: Remove reference docs links from landing page to reduce duplication & maintenance issues
+
+## Other
+- Admin API: Add endpoints for getting a single deploy and redeploying an app
+
 # September 30, 2022
 
 ## Manage & Deploy Apps
