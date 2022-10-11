@@ -1,4 +1,4 @@
-.. note::
+.. note:: $$SEARCH_META Variable Availability
    
    The :atlas:`$$SEARCH_META </atlas-search/query-syntax/#aggregation-variable>`
    aggregation variable is only available for functions that run as system or if
