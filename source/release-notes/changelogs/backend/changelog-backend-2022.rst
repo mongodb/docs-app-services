@@ -1,3 +1,10 @@
+.. _backend_20221005:
+
+10 October 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Increased :ref:`request timeout <function-constraints>` from 120 seconds to 150 seconds.
+
 .. _backend_20220923:
 
 23 September 2022 Release
