@@ -1992,6 +1992,40 @@ paths:
       responses:
         "404":
           description: No IP addresses or CIDR blocks to delete
+  "/groups/{groupId}/apps/{appId}/metrics":
+    get:
+      tags:
+        - metrics
+      operationId: adminGetMetrics
+      summary: Retrieve App Services metrics
+      parameters:
+        - "$ref": "#/components/parameters/GroupId"
+        - "$ref": "#/components/parameters/AppId"
+        - name: start
+          in: query
+          description: |-
+            The ISO 8601 date and time of the start of the query period.
+          schema:
+            type: string
+          required: true
+        - name: end
+          in: query
+          description: |-
+            The ISO 8601 date and time of the end of the query period.
+          schema:
+            type: string
+          required: true
+        - name: granularity
+          in: query
+          description: |-
+            Specifies the granularity of the query period. Examples include "P31D" (31 day),
+            "PT1H" (1 hour), and "PT5M" (5 minutes).
+          schema:
+            type: string
+          required: true
+      responses:
+        "200":
+          description: Successfully retrieved.
   "/groups/{groupId}/apps/{appId}/logs":
     get:
       tags:
