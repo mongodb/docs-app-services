@@ -18,14 +18,16 @@ Overview
 A **client reset error** is a scenario where a client realm cannot sync
 data with the application backend. Clients in this state may continue to
 run and save data locally but cannot send or receive sync changesets
-until they perform a client reset.
+until they perform a client reset. The Realm SDKs provide methods to 
+automatically handle client resets under most scenarios.
 
 .. warning::
    
-   The client reset process loses any unsynced changes even if they were
-   successfully saved locally. To avoid data loss, you must manually back up and
-   restore any unsynced changes when you :ref:`handle a client reset
-   <handle-a-client-reset>`.
+   By default, the client reset process attempts to recover unsynced changes
+   that were successfully saved locally. When your client application 
+   has breaking schema changes, or if :ref:`Recovery Mode <recover-unsynced-changes>` 
+   is disabled on the server, the client reset process cannot recover unsynced
+   data that may be persisted locally on the device.
 
 Client reset scenarios occur when the server's history is incompatible
 with the client's history. The most common causes of client resets are:
@@ -55,10 +57,10 @@ with the client's history. The most common causes of client resets are:
 - **Breaking schema changes**: A :ref:`breaking or destructive change
   <destructive-changes-synced-schema>`, like changing a property type or a
   primary key, requires you to terminate and re-enable Sync. This creates a new
-  synced realm file with a version unrelated to the client's file. Because
-  this scenario requires a new realm file, you can only handle client resets
-  caused by breaking changes using the :ref:`manually recover unsynced changes
-  <manually-recover-unsynced-changes>` strategy.
+  synced realm file with a version unrelated to the client's file. In this
+  scenario, the client reset process cannot complete automatically, and your 
+  app must provide a :ref:`manual client reset handler 
+  <manually-recover-unsynced-changes>`. 
 
 - **Upgrading from a Shared to Dedicated cluster**: When you :ref:`upgrade from 
   a shared to a dedicated cluster <upgrade-shared-cluster>`, you must 
@@ -82,112 +84,128 @@ with the client's history. The most common causes of client resets are:
 Handle a Client Reset
 ---------------------
 
-The SDKs automatically detect the need for client resets. You
-can handle client resets in your application using one of the available
-**client reset strategies**:
+The SDKs automatically detect the need for client resets. They can 
+automatically perform a client reset in most cases, except in the 
+event of a breaking schema change.
 
-.. note:: Breaking Changes Require Manual Recovery
+During an automatic client reset, the client:
 
-   You can only handle a client reset triggered by breaking changes
-   using the :ref:`manually recover unsynced changes
-   <manually-recover-unsynced-changes>` strategy.
+1. Downloads a fresh copy of the realm from the backend.
+#. Performs a diff to figure out the steps required to bring the original 
+   (local) copy of the realm to the same state as the fresh copy of the 
+   backend.
+#. Applies that set of steps to transform the local realm into a state
+   where it can sync with the backend. 
+   
+   If there are no schema changes, or only non-breaking schema changes, 
+   the SDK attempts to recover all local changes that have not yet synced 
+   to the backend. It also applies any inserts, updates, and deletes 
+   from the backend that haven't yet synced to the client.
+
+   If you have chosen to discard unsynced changes in the SDK, or if Recovery 
+   Mode cannot recover unsynced changes, the SDK can discard local changes 
+   that have not yet synced to the backend. Then it can apply any inserts, 
+   updates, and deletes from the backend that haven't yet synced to the 
+   client. To fall back to discard local changes, choose your preferred SDK's 
+   version of the ``recoverOrDiscard`` client reset mode.
+
+#. Discards the fresh copy. The app continues to use
+   the original copy of the realm with the diff applied.
+
+In a breaking schema change, or if automatic client reset fails, the client 
+reset falls back to a :ref:`manual client reset handler <manual-client-reset>` 
+that your app must define. The Realm SDKs cannot automatically perform a 
+client reset when you make a breaking schema change.
+
+Automatic client reset mode has several advantages compared to manual recovery:
+
+- Your application can perform a client reset without writing any custom
+  logic, other than specifying the mode. You don't have to manually
+  initiate the client reset or interact with the error object at all.
+- Your application can perform a client reset without closing any
+  realms, disconnecting from the backend app, or manual restarts. This
+  means you don't have to write any logic to handle these situations.
+- Application users receive notifications for changes as the local realm
+  updates to match the state of the backend realm.
+
+.. _recover-unsynced-changes:
+
+Recover Unsynced Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+When **Client Recovery** is enabled in your Device Sync configuration - as it 
+is by default - client applications can automatically recover unsynced 
+changes. In most scenarios, the client application can detect that a 
+client reset error has occurred and start an automated process to handle 
+the client reset.
+
+After the client reset, the app can open and operate as usual. 
+
+Client Recovery can recover unsynced data in client resets except where 
+there has been a breaking schema change. Client Recovery applies 
+:ref:`client-reset-recovery-rules` when determining how to integrate 
+unsynced data from the device.
+
+You can choose to fall back to :ref:`discard-unsynced-changes` in the
+event that the client cannot recover unsynced data. In this case, local
+data is discarded, but the client can automatically perform 
+the client reset. To fall back to discard local changes, choose your 
+preferred SDK's version of the ``recoverOrDiscard`` client reset mode.
+
+.. _client-reset-recovery-rules:
+
+Client Reset Recovery Rules
+```````````````````````````
+
+In a client reset that does not involve a breaking schema change, the 
+Realm SDKs attempt to recover unsynced changes. The SDK integrates objects 
+created locally that did not sync before the client reset. These rules 
+determine how conflicts are resolved when both the backend and the client 
+make changes to the same object:
+
+- If an object is deleted on the server, but is modified on the recovering 
+  client, the delete takes precedence and the client discards the update.
+- If an object is deleted on the recovering client, but not the server, 
+  then the client applies the delete instruction.
+- In the case of conflicting updates to the same field, the client update 
+  is applied.
 
 .. _discard-unsynced-changes:
 
 Discard Unsynced Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. warning:: This Strategy Deletes Unsynced Local Changes Permanently
+.. warning:: Deletes Unsynced Local Changes Permanently
 
-   This client reset strategy permanently deletes any changes made
+   This client reset mode permanently deletes any changes made
    locally that have not yet synchronized to the backend.
-   Do not use this client reset strategy if your
+   Do not use this client reset mode if your
    application needs to preserve unsynced changes.
 
-The **discard unsynced changes** strategy automatically handles client
-reset events without the need for app-specific logic. During a client
-reset that uses this strategy, the client:
+The **discard unsynced changes** client reset mode automatically handles 
+client resets without attempting to recover data from the client device. 
+You might choose this mode if the :ref:`client-reset-recovery-rules` do
+not work for your app, or if you don't need to save unsynced data. When 
+this mode uses a diff to bring the local realm to the same state as the 
+backend, unsynced changes are permanently deleted.
 
-1. Downloads a fresh copy of the realm from the backend.
-#. Performs a diff to figure out the set of steps required to
-   bring the original (local) copy of the realm to the same state as
-   the fresh copy of the backend.
-#. Applies that set of steps to transform the local realm into a state
-   where it can sync with the backend. This includes:
+Discard Unsynced Changes mode cannot perform an automated client reset in 
+the event of a breaking schema change.
 
-   - deleting all local changes that haven't yet synced to the backend
-   - any inserts, updates, and deletes that haven't yet synced to the client
-
-#. Discards the fresh copy. The app continues to use
-   the original copy of the realm with the diff applied.
-
-The "discard unsynced changes" strategy has several advantages compared
-to manual recovery:
-
-- Your application can perform a client reset without writing any custom
-  logic, other than specifying this strategy. You don't have to manually
-  initiate the client reset or interact with the error object at all.
-- Your application can perform this client reset without closing any
-  realms, disconnecting from the backend app, or manual restarts. This
-  means you don't have to write any logic to handle these situations.
-- Application users receive notifications for changes as the local realm
-  updates to match the state of the backend realm.
-
-There is one major disadvantage to this strategy, however:
-
-- There is no way to recover changes that have not yet synced to the
-  backend at the time of the client reset. When this strategy uses a
-  diff to bring the local realm to the same state as the backend, unsynced
-  changes are permanently deleted and cannot ever be recovered.
-
-You can use this strategy to resolve a client reset caused by anything
-*except* a breaking schema change.
-
+.. _manual-client-reset:
 .. _manually-recover-unsynced-changes:
 
-Manually Recover Unsynced Changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Manual Client Reset
+~~~~~~~~~~~~~~~~~~~
 
-.. note:: Manual Recovery Replaces Client Reset Handlers
+In the event of :ref:`a breaking schema change <breaking-change-quick-reference>`,
+Realm SDKs cannot automatically handle a client reset. You must define 
+a manual client reset handler if you make breaking schema changes.
 
-   This strategy works just like the deprecated
-   "Client Reset Handler" method of performing client resets.
-   Applications that use deprecated client reset handling can switch
-   directly to the "manually recover unsynced changes" strategy with
-   no logic changes.
-
-The **manually recover unsynced changes** client reset strategy gives
-the app developer complete control over recovery from client reset errors.
-During a client reset that uses this strategy, the client:
-
-1. Makes a backup of the original (local) copy of the realm. Before making
-   the backup, you must close all instances of the realm. If your application
-   architecture makes this difficult, you can restart the app and handle
-   the client reset on reconnect.
-#. Downloads a fresh copy of the realm from the backend. This fresh copy
-   replaces the original local realm.
-#. Provides a reference to the local realm backup and the fresh copy of
-   the realm.
-
-With the local realm backup and the fresh copy in hand, you can triage
-and save local data by copying it from the local realm backup to the
-fresh copy of the realm. Recovering unsynced changes is highly dependent
-on your schema and application logic, so you may need to supplement
-your schema with "last modified" timestamps for best results.
-
-Manual recovery has one major advantage compared
-to discarding unsynced changes:
-
-- You can recover local changes that haven't yet synced to the backend.
-
-There are several disadvantage to this strategy, however:
-
-- You must write custom logic to initiate the client reset.
-- You must close all realms before performing the client reset.
-- Application users never receive notifications for new changes that synced
-  from the backend during the client reset.
-- You must either restart the application or write custom logic to re-initialize
-  the backend app connection after performing the client reset.
+In this scenario, a manual client reset handler should do something like 
+tell the user to update the app. In Realm SDK versions that automatically 
+handle client resets, a manual client reset only occurs in error scenarios
+where no meaningful recovery can occur.
 
 Examples
 ~~~~~~~~
@@ -195,8 +213,88 @@ Examples
 For more information on performing a client reset, check out the client
 reset examples for your SDK:
 
-- :ref:`Android <java-client-resets>`
-- :ref:`iOS, macOS, tvOS, and watchOS <ios-client-resets>`
-- :ref:`.NET <dotnet-client-resets>`
-- :ref:`React Native <react-native-client-resets>`
-- :ref:`Node.js <node-client-resets>`
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Reset a Client Realm - Java SDK <java-client-resets>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Handle Sync Errors - Client Reset - Swift SDK <ios-client-resets>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Reset a Client Realm - Node.js SDK <node-client-resets>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Reset a Client Realm - React Native SDK <react-native-client-resets>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`Client Resets - .NET SDK <dotnet-client-resets>`
+
+.. _enable-or-disable-recovery-mode:
+
+Enable or Disable Recovery Mode
+-------------------------------
+
+Recovery Mode is enabled by default in every Device Sync configuration.
+You can disable Recovery Mode, or re-enable it if you have previously
+disabled it.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+      
+      1. Select the :guilabel:`Device Sync` menu in the sidebar.
+
+      2. Click the :guilabel:`Advanced Configuration` pane to display 
+         additional configuration options.
+
+      3. Click the :guilabel:`Enable Client Recovery` toggle.
+
+      4. Press the :guilabel:`Save` button to confirm your
+         changes.
+
+         If your app uses deployment drafts, you must deploy your application
+         after making changes.
+   
+   .. tab::
+      :tabid: cli
+      
+      1. Pull a local copy of the latest version of your app with the
+         following :ref:`pull command <realm-cli-pull>`:
+
+         .. code-block:: bash
+            :caption: Pull
+
+            realm-cli pull --remote="<Your App ID>"
+
+      2. You can configure the number of days for your application's
+         client maximum offline time with the ``is_recovery_mode_disabled``
+         property in your app's ``sync/config.json`` file:
+
+         .. code-block:: json
+            :caption: ``sync/config.json``
+           
+            {
+              ...
+              "is_recovery_mode_disabled": false,
+              ...
+            }
+
+      3. Deploy the updated app configuration with the following
+         :ref:`push command <realm-cli-push>`:
+
+         .. code-block:: bash
+            :caption: Push
+
+            realm-cli push --remote="<Your App ID>"

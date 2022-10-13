@@ -2581,6 +2581,9 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
   "/groups/{groupId}/apps/{appId}/deployments":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
     get:
       tags:
         - deploy
@@ -2596,9 +2599,52 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Deployment"
+  "/groups/{groupId}/apps/{appId}/deployments/{deploymentId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/DeploymentId"
+    get:
+      tags:
+        - deploy
+      operationId: adminGetDeployment
+      summary: Get a deployment
+      description: Get information about a recent deployment of the application.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Deployment"
+  "/groups/{groupId}/apps/{appId}/deployments/{deploymentId}/redeploy":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/DeploymentId"
+    get:
+      tags:
+        - deploy
+      operationId: adminRedeployDeployment
+      summary: Redeploy a deployment
+      description: Redeploy a previously-deployed version of an App.
+      responses:
+        "204":
+          description: Successfully redeployed
+        "404":
+          description: Deployment not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/schemas/Error"
+                  - properties:
+                      error:
+                        const: "deployment not found"
+                      error_code:
+                        const: "DeploymentNotFound"
+  
+
   "/groups/{groupId}/apps/{appId}/drafts":
     get:
       tags:
@@ -2672,7 +2718,7 @@ paths:
       tags:
         - deploy
       operationId: adminDeployDraftDiff
-      summary: Return a diff between currently deployed application and deployment draft
+      summary: Diff a draft with the current deployment
       description: |-
         Return a diff between the currently deployed application and the
         specified draft.
@@ -3681,6 +3727,14 @@ components:
       required: true
       schema:
         type: string
+    DeploymentId:
+      name: deploymentId
+      description: |-
+        The `_id` value of an application deployment.
+      in: path
+      required: true
+      schema:
+        type: string
     ForwarderId:
       name: "forwarderId"
       description: The _id ObjectID of a log forwarder.
@@ -3980,14 +4034,12 @@ components:
       enum:
         - "aws-us-east-1"
         - "aws-us-west-2"
-        - "aws-us-east-2"
         - "aws-eu-central-1"
         - "aws-eu-west-1"
         - "aws-eu-west-2"
         - "aws-ap-southeast-1"
         - "aws-ap-southeast-2"
         - "aws-ap-south-1"
-        - "aws-sa-east-1"
     AzureDeploymentRegion:
       type: string
       enum:
