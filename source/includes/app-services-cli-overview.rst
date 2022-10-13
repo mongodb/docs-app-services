@@ -3,10 +3,10 @@
 Overview
 --------
 
-The Atlas App Services Command Line Interface ({+cli-bin+}) allows you
+The Atlas App Services Command Line Interface ({+cli-bin-mono+}) allows you
 to programmatically manage your {+app+}s.
 
-With {+cli-bin+}, you can create or update Apps from a local directory
+With {+cli-bin-mono+}, you can create or update Apps from a local directory
 as well as export existing applications to a local directory.
 
 .. _install-app-services-cli:
@@ -21,7 +21,7 @@ Installation
 Authentication
 --------------
 
-To use the {+cli+}, you must authenticate. To authenticate, you must
+To use {+cli-bin-mono+}, you must authenticate. To authenticate, you must
 generate an API Key.
 
 Generate an API Key
@@ -44,7 +44,7 @@ Generate an API Key
 
    .. step:: Create an API Key
 
-      Project Users can log in using the {+cli+} tool with a Project API
+      Project Users can log in to {+cli-bin-mono+} with a Project API
       Key. Create a project API Key by clicking the grey :guilabel:`Create
       API Key` button on the right-hand side of the Project Access Manager.
 
@@ -97,7 +97,7 @@ Authenticate with an API Key
 
       .. code-block:: shell
 
-         app-services-cli login --api-key="<my api key>" --private-api-key="<my private api key>"
+         {+cli-bin+} login --api-key="<my api key>" --private-api-key="<my private api key>"
 
       You should see the following result:
 

@@ -12,20 +12,14 @@ Export an {+app+} with {+cli+}
    :depth: 2
    :class: singlecol
 
-You can use the :ref:`{+service+} CLI <realm-cli-quickstart>` to export 
-your {+app+}'s configuration.
+You can use the {+cli-bin-ref+} to export your {+app+}'s configuration.
 
 .. include:: /includes/note-secrets-not-exported.rst
-
-.. note::
-
-   ``Export`` is the :ref:`v1 {+cli+} <realm-cli-v1>` command, and is an
-   alias for ``pull`` in the :ref:`v2 {+cli+} <realm-cli-quickstart>`.  
 
 Prerequisites
 -------------
 
-- A :ref:`properly installed <install-realm-cli>` copy of {+cli-bin+} that has
+- A :ref:`properly installed <install-app-services-cli>` copy of {+cli-bin-mono+} that has
   been added to your system ``PATH``.
 
 - A `{+atlas+}
@@ -45,7 +39,7 @@ Procedure
 
       .. code-block:: shell
 
-         realm-cli login --api-key="<my api key>" --private-api-key="<my private api key>"
+         {+cli-bin+} login --api-key="<my api key>" --private-api-key="<my private api key>"
 
 
    .. step:: Run the App Export Command
@@ -56,14 +50,14 @@ Procedure
 
       .. code-block:: shell
 
-         realm-cli pull --remote=<App ID> --local=<Output Directory Path> [options]
+         {+cli-bin+} pull --remote=<App ID> --local=<Output Directory Path> [options]
 
       .. warning::
 
          The directory specified by ``--local`` must not already exist, otherwise
-         {+cli-bin+} throws an error and does not pull the configuration files.
+         {+cli-bin-mono+} throws an error and does not pull the configuration files.
 
-      The command also supports :ref:`additional flags <realm-cli-pull>` that you
+      The command also supports :ref:`additional flags <app-services-cli-pull>` that you
       can optionally include to customize your app. The following table lists
       common flags you might use:
 

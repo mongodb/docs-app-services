@@ -1,7 +1,7 @@
 .. _realm-cli-v1:
 
 ============
-{+cli+} v1
+realm-cli v1
 ============
 
 .. default-domain:: mongodb
@@ -18,9 +18,9 @@ Overview
 .. program:: realm-cli
 .. binary:: realm-cli-v1
 
-The Atlas App Services Command Line Interface ({+cli-bin+})
+The Atlas App Services Command Line Interface (``realm-cli``)
 allows you to programmatically manage your {+app+}s.
-With {+cli-bin+}, you can create or update
+With ``realm-cli``, you can create or update
 {+app+}s from a local directory as well as export
 existing applications to a local directory.
 
@@ -39,11 +39,11 @@ General Options
 .. important:: Check your CLI version
    
    This page documents commands, arguments, and flags for version 1 of
-   {+cli-bin+}. If you have a newer version of {+cli+}, run {+cli-bin+}
+   ``realm-cli``. If you have a newer version of ``realm-cli``, run ``realm-cli``
    ``--help`` for a list of updated commands and usage examples. To check 
    your CLI version, use: ``realm-cli --version``.
 
-The following options are available for all {+cli-bin+} commands:
+The following options are available for all ``realm-cli`` commands:
 
 .. option:: --config-path <File System Path>
    
@@ -69,7 +69,7 @@ The following options are available for all {+cli-bin+} commands:
    
    | **Optional.**
    
-   If specified, suppress all text color in {+cli-bin+} output.
+   If specified, suppress all text color in ``realm-cli`` output.
    
    By default, some output such as errors and import diffs are colorized. Use
    this flag if you wish to prevent this behavior.
@@ -79,7 +79,7 @@ The following options are available for all {+cli-bin+} commands:
    | **Optional.**
    
    If specified, automatically respond affirmatively to any yes/no prompts from
-   {+cli-bin+}.
+   ``realm-cli``.
 
 Authentication
 --------------
@@ -154,7 +154,7 @@ on the next line in the following format:
 
    <username> [API Key: ********-****-****-****-<last 12 digits of API key>]
 
-If no user is logged in, {+cli-bin+} will return the following
+If no user is logged in, ``realm-cli`` will return the following
 message:
 
 .. code-block:: shell
@@ -174,7 +174,7 @@ Import an Application
 
 Use ``realm-cli import`` to import a local application directory into a
 hosted {+app+}. If you import a directory into an application
-that doesn't exist, {+cli-bin+} can :ref:`create the application
+that doesn't exist, ``realm-cli`` can :ref:`create the application
 <create-app-cli>` for you.
 
 .. tip::
@@ -197,14 +197,14 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    
    The Application ID of your {+app+}.
    
-   If not specified, {+cli-bin+} will attempt to use the value of
+   If not specified, ``realm-cli`` will attempt to use the value of
    ``app_id`` defined in :ref:`config.json <legacy-appschema-realm-config>`. If
-   ``config.json`` does not have an ``app_id`` value, {+cli-bin+}
+   ``config.json`` does not have an ``app_id`` value, ``realm-cli``
    prompts you to create a new application.
    
    .. note:: New Application App IDs
       
-      If you create a new application with {+cli-bin+}, App Services
+      If you create a new application with ``realm-cli``, App Services
       generates a new App ID and ignores any value that you specify for
       the ``--app-id`` flag.
 
@@ -216,7 +216,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    The directory must contain, at minimum, a valid :ref:`config.json
    <legacy-appschema-realm-config>` file.
    
-   If the ``path`` argument is omitted, {+cli-bin+} will search for a
+   If the ``path`` argument is omitted, ``realm-cli`` will search for a
    ``config.json`` file in the current application directory.
 
 .. option:: --strategy ['merge|replace|replace-by-name']
@@ -225,7 +225,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    | **Default:** Merge
    
    The :ref:`import strategy <realm-import-strategies-v1>` that
-   {+cli-bin+} should use when reconciling imported entities.
+   ``realm-cli`` should use when reconciling imported entities.
 
 .. option:: --project-id <MongoDB Cloud Project ID>
    
@@ -233,12 +233,12 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    
    The :guilabel:`Project ID` of the :ref:`Atlas project <projects>` on
    which you want to host a newly created {+app+}. If
-   specified, {+cli-bin+} will not prompt you to select a project when
+   specified, ``realm-cli`` will not prompt you to select a project when
    creating a new app.
    
    .. note::
    
-      {+cli-bin+} ignores the value of ``--project-id``
+      ``realm-cli`` ignores the value of ``--project-id``
       unless you are :ref:`importing a new application
       <create-app-cli>`.
 
@@ -289,13 +289,13 @@ a local application directory.
    
    The path of the directory where App Services will export your application.
    
-   If specified, {+cli-bin+} creates a directory at the given path and exports
+   If specified, ``realm-cli`` creates a directory at the given path and exports
    the application configuration into the new directory. If a file or directory
    already exists at the specified path, the export will fail.
    
    .. note::
    
-      If the ``output`` argument is omitted, {+cli-bin+} will export the
+      If the ``output`` argument is omitted, ``realm-cli`` will export the
       application configuration to a new directory within the current working
       directory.
 
@@ -310,7 +310,7 @@ a local application directory.
 
    | **Optional.**
    
-   If enabled, {+cli-bin+} exports the application configuration without any
+   If enabled, ``realm-cli`` exports the application configuration without any
    fields that conflict with deployment via GitHub source control, including
    fields like ``name``, ``app_id``, ``location``, and ``deployment_model`` in
    the ``config.json`` file as well as the ``config.clusterName`` field in the
@@ -320,7 +320,7 @@ a local application directory.
    
    | **Optional.**
    
-   If enabled, {+cli-bin+} exports the application configuration without any
+   If enabled, ``realm-cli`` exports the application configuration without any
    service ID values, including the App ID. This simplifies the creation of new
    applications from an exported configuration.
 
@@ -653,7 +653,7 @@ match an existing entity, the entity becomes a new entity.
 If an existing entity's ``name`` does not match the ``name``
 of any imported entity, App Services deletes that existing entity.
 
-If an imported entity has no ``name`` value, {+cli-bin+} will throw
+If an imported entity has no ``name`` value, ``realm-cli`` will throw
 an error.
 
 .. example::

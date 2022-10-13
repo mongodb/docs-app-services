@@ -15,7 +15,7 @@ Deploy Changes with {+cli+}
 Overview
 --------
 
-You can deploy changes to your {+app+} with :ref:`{+cli+} <realm-cli-quickstart>` by
+You can deploy changes to your {+app+} with {+cli-bin-ref+} by
 importing an :ref:`application directory <app-directory>` with configuration
 files that define the updated app.
 
@@ -24,8 +24,8 @@ Prerequisites
 
 - A :atlas:`MongoDB Atlas programmatic API Key </configure-api-access/#programmatic-api-keys>`.
 
-- A :ref:`properly installed <install-realm-cli>` copy of
-  {+cli-bin+} that has been added to your system ``PATH``.
+- A :ref:`properly installed <install-app-services-cli>` copy of
+  {+cli-bin-mono+} that has been added to your system ``PATH``.
 
 Procedure
 ---------
@@ -41,13 +41,13 @@ Procedure
 
    .. step:: Log In to MongoDB Cloud
 
-      To configure your app with {+cli-bin+}, you must log in to MongoDB Cloud using
+      To configure your app with {+cli-bin-ref+}, you must log in to MongoDB Cloud using
       an :atlas:`API key </configure-api-access/#programmatic-api-keys>` scoped to the organization or
       project that contains the app.
 
       .. code-block:: bash
 
-         realm-cli login --api-key="<MongoDB Cloud Public API Key>" --private-api-key="<MongoDB Cloud Private API Key>"
+         {+cli-bin+} login --api-key="<MongoDB Cloud Public API Key>" --private-api-key="<MongoDB Cloud Private API Key>"
 
 
    .. step:: Pull the Latest Version of Your App
@@ -57,7 +57,7 @@ Procedure
 
       .. code-block:: bash
 
-         realm-cli pull --remote="<Your App ID>"
+         {+cli-bin+} pull --remote="<Your App ID>"
 
       .. tip::
 
@@ -78,7 +78,7 @@ Procedure
 
       .. code-block:: bash
 
-         realm-cli push --remote="<Your App ID>"
+         {+cli-bin+} push --remote="<Your App ID>"
 
       .. tip::
 
@@ -86,4 +86,3 @@ Procedure
          enabled, you'll be prompted to review and confirm your changes in the
          terminal. When you approve, {+cli+} immediately deploys the updated
          configurations.
-
