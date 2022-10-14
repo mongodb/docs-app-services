@@ -1,3 +1,25 @@
+# October 14, 2022
+
+## Functions
+- JavaScript Support: Added BigInt to list of supported JS objects and alphabetized list of objects
+- Query MongoDB Atlas, Aggregate Data
+  - Find Data with Atlas Search: Made note about limitations to the $$SEARCH_META aggregation variable and under what conditions the variable is available for use
+- Functions, Constraints: Raised request timeout from 120s to 150s
+
+
+## MongoDB Data Scources
+- CRUD & Aggregation APIs: Made note about limitations to the $$SEARCH_META aggregation variable and under what conditions the variable is available for use
+
+## Manage & Deploy Apps
+- Deployment Models & Regions: Removed Ohio and Sao Paulo from local regions list
+- Secure, Firewall Configuration: Added AWS, Azure, and GCP IP addresses to firewall configuration
+
+## Admin API
+- Applications: Removed Ohio and Sao Paulo from local regions list
+
+
+
+
 # October 7, 2022
 
 ## Manage & Deploy Apps
