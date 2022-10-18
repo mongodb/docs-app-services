@@ -18,7 +18,7 @@
 9 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Support App Services deployments in the following :ref:`GCP regions<realm-regions>`:
+- Support App Services deployments in the following :ref:`GCP regions<deployment-regions>`:
 
   - Ohio (``us-central1``)
   - Virginia (``us-east4``)
@@ -53,7 +53,7 @@
 - Released :ref:`Data API <data-api>` as GA.
 - Introduced Data API for all Apps.
 - Introduced field-level permissions for Flexible Sync.
-- Introduced :ref:`local regions for Azure data sources <realm-regions>`.
+- Introduced :ref:`local regions for Azure data sources <deployment-regions>`.
 
 .. _backend_20220519:
 
