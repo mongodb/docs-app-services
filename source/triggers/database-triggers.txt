@@ -279,6 +279,7 @@ Database change event objects have the following general form:
    }
 
 .. _suspended_triggers:
+.. _resume-a-suspended-trigger:
 
 Suspended Triggers
 ------------------
@@ -305,8 +306,8 @@ Automatically Resume a Suspended Trigger
 
 You can configure a Trigger to automatically resume if the Trigger was suspended
 because the resume token is no longer in the oplog.
-The Trigger does not process any missed events between when the resume token
-is lost and when the resume process completes.
+The Trigger does not process any missed change stream events between
+when the resume token is lost and when the resume process completes.
 
 .. tabs-realm-admin-interfaces::
 
@@ -317,8 +318,7 @@ is lost and when the resume process completes.
       in the App Services UI, navigate to the configuration page of the Trigger
       you want to automatically resume if suspended.
 
-      In the :guilabel:`Advanced (Optional)` section, select the
-      :guilabel:`Auto-Resume Triggers` box.
+      In the :guilabel:`Advanced (Optional)` section, select :guilabel:`Auto-Resume Triggers`.
 
       Save and deploy the changes.
 
@@ -352,7 +352,6 @@ is lost and when the resume process completes.
 
           realm-cli push --remote=<App ID>
 
-.. _resume-a-suspended-trigger:
 .. _manually-resume-a-suspended-trigger:
 
 Manually Resume a Suspended Trigger

@@ -1,4 +1,5 @@
-If enabled, when this Trigger falls off the oplog
-or the resume token cannot be found, the Trigger automatically resumes
-processing events. All events from when the resume token
-is lost until the Trigger resumes do not have the Trigger fire for them.
+If enabled, when this Trigger's resume token
+cannot be found in the cluster's oplog, the Trigger automatically resumes
+processing events at the next relevant change stream event.
+All change stream events from when the resume token is lost until the Trigger
+resumes execution do not have the Trigger fire for them.
