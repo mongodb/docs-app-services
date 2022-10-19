@@ -1,3 +1,11 @@
+.. _backend_20221019:
+
+19 October 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added option to :ref:`auto-resume Database Triggers <automatically-resume-a-suspended-trigger>`
+  that were suspended because resume token was lost.
+
 .. _backend_20221005:
 
 10 October 2022 Release
