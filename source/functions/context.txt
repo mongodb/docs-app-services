@@ -17,7 +17,8 @@ Overview
 
 :ref:`Atlas Functions <functions>` have access to a global ``context``
 object that contains metadata for the incoming requests and provides
-access to components and services that you've configured in your app.
+access to components and services that you've configured in your App
+Services App.
 
 The ``context`` object exposes the following interfaces:
 
@@ -60,19 +61,19 @@ The ``context`` object exposes the following interfaces:
 Get App Metadata (``context.app``)
 ----------------------------------
 
-The ``context.app`` object contains metadata about the Atlas App that
-contains the function.
+The ``context.app`` object contains metadata about the App that
+contains the Function.
 
 .. code-block:: typescript
    
    {
-     "projectId": string,
      "id": string,
-     "name": string,
      "clientAppId": string,
+     "name": string,
+     "projectId": string,
      "deployment": {
-       "providerRegion": string,
        "model": string,
+       "providerRegion": string,
      },
      "lastDeployed": string,
      "hostingUri": string,
@@ -80,7 +81,7 @@ contains the function.
 
 .. method:: context.app.id
    
-   The ID of the Atlas App the contains the function.
+   The unique internal ID of the App that contains the Function.
 
    .. example::
       
@@ -88,29 +89,9 @@ contains the function.
          
          "60c8e59866b0c33d14ee634a"
 
-.. method:: context.app.projectId
-
-   The :ref:`ID of the Atlas Project/Group <find-your-project-or-app-id>` that contains the App.
-
-   .. example::
-      
-      .. code-block:: json
-         
-         "5e1ec444970199272441a214"
-
-.. method:: context.app.name
-
-   The name of the Atlas App that contains the function.
-
-   .. example::
-      
-      .. code-block:: json
-         
-         "myapp"
-
 .. method:: context.app.clientAppId
    
-   The unique App ID for the Atlas App that contains the function.
+   The unique Client App ID for the App that contains the Function.
    
    .. example::
       
@@ -118,22 +99,45 @@ contains the function.
          
          "myapp-abcde"
 
+.. method:: context.app.name
+
+   The name of the App that contains the Function.
+
+   .. example::
+      
+      .. code-block:: json
+         
+         "myapp"
+
+.. method:: context.app.projectId
+
+   The :ref:`ID of the Atlas Project/Group <find-your-project-or-app-id>`
+   that contains the App.
+
+   .. example::
+      
+      .. code-block:: json
+         
+         "5e1ec444970199272441a214"
+
 .. method:: context.app.deployment
    
-   An object that describes the App's :ref:`deployment model and region <deployment-model>`.
+   An object that describes the App's :ref:`deployment model and region
+   <deployment-model>`.
    
    .. example::
       
       .. code-block:: json
          
          {
-           "providerRegion": "aws-us-east-1",
-           "model": "GLOBAL"
+           "model": "LOCAL",
+           "providerRegion": "aws-us-east-1"
          }
 
 .. method:: context.app.lastDeployed
    
-   The date and time that the Atlas App was last deployed formatted as an ISODate string.
+   The date and time that the Atlas App was last deployed, formatted as
+   an ISODate string.
    
    .. example::
       
@@ -143,7 +147,8 @@ contains the function.
 
 .. method:: context.app.hostingUri
    
-   The base URL of :ref:`static hosting <static-hosting>` assets, if enabled.
+   If :ref:`static hosting <static-hosting>` is enabled, this value is
+   the base URL for hosted assets.
    
    .. example::
       
