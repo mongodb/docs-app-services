@@ -1,5 +1,9 @@
+:template: product-landing
+:hidefeedback: header
+:noprevnext:
+
 ==========================
-{+sync+} Overview
+{+sync+}
 ==========================
 
 .. default-domain:: mongodb
@@ -8,21 +12,128 @@
    :titlesonly:
    :hidden:
    
-   What is {+sync+}? </sync/learn>
    Configure and Update Your Data Model </sync/configure-your-data-model>
    Define Data Access Patterns </sync/data-access-patterns>
    Configure Sync </sync/configure-device-sync>
    Handle Errors </sync/error-handling>
    Add Sync to a Local-Only App </sync/local-to-sync>
+   Production Checklist </sync/production-checklist>
    Sync Production Load Testing </sync/production-load-testing>
    Event Library </sync/event-library>
+   Technical Details </sync/details>
 
-Want to learn more about {+sync+}? See: :ref:`{+sync+} Overview <sync-overview>`.
+.. introduction::
 
-- :doc:`What is {+sync+}? </sync/learn>`
-- :doc:`Configure and Update Your Data Model </sync/configure-your-data-model>`
-- :doc:`Define Data Access Patterns </sync/data-access-patterns>`
-- :doc:`Configure Sync </sync/configure-device-sync>`
-- :doc:`Handle Errors </sync/error-handling>`
-- :doc:`Add Sync to a Local-Only App </sync/local-to-sync>`
-- :doc:`Sync Production Load Testing </sync/production-load-testing>`
+   You're developing a mobile app. Your users want their data saved on the cloud
+   and accessible from their other devices. Network access on a mobile device
+   can be hit or miss, so you write data locally on the device first. A
+   background process then synchronizes the data to the cloud and resolves any
+   conflicting writes.
+ 
+   {+sync+} does all that... and more!
+
+   .. button:: Start Building with a Template Starter App
+      :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
+
+.. image:: /images/plp/Spot_AzureBlue_Sync_Tech_RealmSync.png
+   :alt: Atlas Device Sync Illustration
+
+.. kicker:: What It Is
+
+Key Features
+------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: Realm in the Front, MongoDB in the Back
+      :icon: /images/icons/General_FEATURES_IntelligentEdge3x.png
+      :icon-alt: An icon depicting a mobile phone connecting with the cloud
+
+      {+sync+} is a bridge between client apps using the :realm:`Realm SDKs </>`
+      and a MongoDB instance running in Atlas. Realm is a lightweight database
+      optimized for mobile development.
+      
+   .. card::
+      :headline: Offline First
+      :icon: /images/icons/Technical_REALM_Offline3x.png
+      :icon-alt: An icon depicting network loss
+
+      Realm Database and {+sync-short+} seamlessly handle intermittent
+      connectivity so users can continue using your app regardless of their
+      current network status.
+
+   .. card::
+      :headline: Conflict Resolution
+      :icon: /images/icons/Technical_REALM_ConflictResolution3x.png
+      :icon-alt: An icon depicting conflict resolution
+
+      {+sync-short+} handles conflicts for you, so you don't have to write
+      complex custom code to resolve conflicting writes from multiple clients.
+      Read more: :ref:`conflict-resolution`
+
+
+.. kicker:: Where to Begin
+
+Get Started
+-----------
+
+.. card-group::
+   :columns: 2
+   :style: compact
+
+   .. card::
+      :headline: Launch a Template Starter App
+      :cta: Register for a free Atlas account
+      :url: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
+      :icon: /images/icons/Technical_REALM_iOSAndriodCrossPlatform3x.png
+      :icon-alt: An icon depicting two mobile devices synchronizing data between each other
+
+      The best way to start using {+sync-short+} is with a template starter app.
+      In the {+ui+}, under the :guilabel:`App Services` tab, you can select a
+      template. Atlas will configure a backend instance and give you the
+      frontend code for a selection of platforms. You can build your app on top
+      of this.
+
+   .. card::
+      :headline: Follow a {+sync-short+} Tutorial
+      :cta: Visit the Tutorials Page
+      :url: https://www.mongodb.com/docs/atlas/app-services/get-started/#tutorials
+      :icon: /images/icons/General_CONTENT_Tutorial3x.png
+      :icon-alt: A tutorial icon
+
+      The mobile app tutorials guide you through the process of building a
+      feature on top of a template starter app with {+sync+}.
+
+.. kicker:: Next Steps
+
+Explore the {+sync-short+} Documentation
+-------------------------------------
+
+.. procedure::
+
+   .. step:: Maintain Data Integrity with Sync Schemas
+
+      Define your application data model with standard schemas that you can use
+      to validate data and generate language-specific classes. Read the
+      :ref:`sync-schema-overview` to get oriented.
+
+   .. step:: Protect User Data with Permissions
+
+      {+sync-short+} provides a user-based permissions system that lets you
+      control who can access which data. The
+      :ref:`flexible-sync-permissions-guide` guides you through permissions set
+      up for a variety of real use cases.
+
+   .. step:: Handle Errors
+
+      Develop a robust app that can handle schema changes and data recovery
+      scenarios with the :ref:`client-resets` documentation. Troubleshoot other
+      errors and edge cases with the :ref:`sync-errors` reference. 
+
+   .. step:: Go to Production
+
+      Get your app ready to ship with the :ref:`sync-production-checklist`.
+
