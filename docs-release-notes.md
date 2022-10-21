@@ -1,3 +1,25 @@
+# October 21, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Triggers: Add the `tolerate_resume_errors` bool to the config documentation
+
+## Device Sync
+- What is Atlas Device Sync/Atlas Device Sync Overview: Update prerequisites to add details about MongoDB version required for Flexible Sync
+- Configure Sync/Enable Atlas Device Sync: Remove unnecessary screenshots, remove steps from Asymmetric Sync details
+
+## Functions
+- Context: Add `context.app` to Function context, new "Get App Metadata" section with details
+
+## Triggers
+- Database Triggers: Add details about automatically resuming a suspended trigger
+
+## MongoDB Data Sources
+- Wire Protocol: Update Wire Protocol URLs to match new pattern
+
+## Other
+- Admin API: Add `tolerate_resume_errors` to trigger properties
+- Release Notes: Add release notes for October 20, 2022 release
+
 # October 14, 2022
 
 ## Functions
@@ -6,8 +28,7 @@
   - Find Data with Atlas Search: Made note about limitations to the $$SEARCH_META aggregation variable and under what conditions the variable is available for use
 - Functions, Constraints: Raised request timeout from 120s to 150s
 
-
-## MongoDB Data Scources
+## MongoDB Data Sources
 - CRUD & Aggregation APIs: Made note about limitations to the $$SEARCH_META aggregation variable and under what conditions the variable is available for use
 
 ## Manage & Deploy Apps
@@ -16,9 +37,6 @@
 
 ## Admin API
 - Applications: Removed Ohio and Sao Paulo from local regions list
-
-
-
 
 # October 7, 2022
 
