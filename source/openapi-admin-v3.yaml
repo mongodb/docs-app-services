@@ -605,15 +605,15 @@ paths:
       description: |-
         Create a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or [third-party
         service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
-      requestBody: 
-        content: 
-          application/json: 
+      requestBody:
+        content:
+          application/json:
             schema:
               oneOf:
                 - $ref: "#/components/schemas/AtlasCluster"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyService"
-        
+
       responses:
         "201":
           description: Successfully created.
@@ -738,8 +738,8 @@ paths:
                           "$ref": "#/components/schemas/ValidationError"
                           description: The type of the schema validation error.
                         error_count:
-                         type: number
-                         description: The number of sampled documents that failed this validation.
+                          type: number
+                          description: The number of sampled documents that failed this validation.
                         field:
                           type: string
                           description: The path of the field that failed this validation.
@@ -2643,7 +2643,6 @@ paths:
                         const: "deployment not found"
                       error_code:
                         const: "DeploymentNotFound"
-  
 
   "/groups/{groupId}/apps/{appId}/drafts":
     get:
@@ -3386,7 +3385,7 @@ paths:
             application/json:
               schema:
                 properties: {}
-  
+
   "/groups/{groupId}/apps/{appId}/data_api/config":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3440,7 +3439,7 @@ paths:
       responses:
         "204":
           description: No content
-  
+
   "/groups/{groupId}/apps/{appId}/data_api/versions":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3967,7 +3966,7 @@ components:
               "$ref": "#/components/schemas/DataSource"
     AppInstance:
       description: A specific, existing application.
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/App"
         - type: object
           properties:
@@ -5063,15 +5062,25 @@ components:
                   type: boolean
                   default: false
                   description: |-
-                    If `true`, enabling the trigger after it was disabled
-                    will not invoke events that occurred while the trigger
+                    If `true`, enabling the Trigger after it was disabled
+                    will not invoke events that occurred while the Trigger
                     was disabled.
+                tolerate_resume_errors:
+                  type: boolean
+                  default: false
+                  description: |-
+                    If `true`, when this Trigger's resume token
+                    cannot be found in the cluster's oplog, the Trigger automatically resumes
+                    processing events at the next relevant change stream event.
+                    All change stream events from when the Trigger was suspended until the Trigger
+                    resumes execution do not have the Trigger fire for them.
+
                 unordered:
                   type: boolean
                   description: |-
-                    If `true`, event ordering is disabled and this trigger
+                    If `true`, event ordering is disabled and this Trigger
                     can process events in parallel. If `false`, event
-                    ordering is enabled and the trigger executes events
+                    ordering is enabled and the Trigger executes events
                     serially.
     AuthenticationTrigger:
       example:

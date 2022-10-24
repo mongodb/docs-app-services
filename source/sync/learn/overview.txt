@@ -160,8 +160,10 @@ Before You Start
 - If you don't already have one, `sign up for a free MongoDB Atlas account
   <https://www.mongodb.com/cloud/atlas/register?tck=docs_realm>`__.
 
-- Ensure that you have a MongoDB Atlas cluster that runs MongoDB version 4.4 or
-  later. You can use a free shared M0 cluster to explore and develop your app.
+- For :ref:`Partition-Based Sync <partition-based-sync>`, ensure that you have a 
+  MongoDB Atlas cluster that runs MongoDB version 4.4 or later. 
+  :ref:`Flexible Sync <flexible-sync>` requires MongoDB version 5.0 or later. 
+  You can use a free shared M0 cluster to explore and develop your app.
   We recommend that you use a dedicated tier cluster (M10 and above) for
   production applications. You cannot use sync with a :ref:`serverless
   instance <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
@@ -224,9 +226,8 @@ type:
   
   .. tip:: Partition-Based Sync
      
-     When you use :ref:`Partition-Based Sync <partition-based-sync>` with 
-     Development mode, you must specify a partition key and database to
-     hold synced data.
+     When you use Partition-Based Sync with Development mode, you must specify a 
+     partition key and database to hold synced data.
      
      You may not know exactly what you want either of these to be long term, but
      that's okay. You can always use a placeholder value like ``_partition`` or
@@ -258,7 +259,7 @@ pattern and access rules for your app's data.
 Choose a Sync Mode
 ~~~~~~~~~~~~~~~~~~
 
-When you use :ref:`Partition-Based Sync <partition-based-sync>`, you must:
+When you use Partition-Based Sync, you must:
 
 - Identify a partition strategy
 - Define a partition key 
@@ -267,7 +268,7 @@ When you use :ref:`Partition-Based Sync <partition-based-sync>`, you must:
 Partition key values and data access rules determine which users can read or
 write which data in your database.
 
-When you use :ref:`Flexible Sync <flexible-sync>`, you must:
+When you use Flexible Sync, you must:
 
 - Specify queryable fields
 - Configure data access rules and default roles
@@ -275,6 +276,8 @@ When you use :ref:`Flexible Sync <flexible-sync>`, you must:
 Client applications can query the queryable fields you configure to determine
 which objects to sync. Then, App Services applies rules and default roles to 
 determine whether users can read or write the objects that match the query.
+
+For more information, check out the :ref:`Choose Your Sync Mode <sync-modes>` page.
 
 Define Data Access Rules
 ~~~~~~~~~~~~~~~~~~~~~~~~
