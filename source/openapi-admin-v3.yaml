@@ -4952,10 +4952,24 @@ components:
           description: An object that defines configuration values for the trigger.
         function_id:
           type: string
-          description: The ID of the function that the trigger calls when it fires. This value is the same as and interchangeable with `event_processors.FUNCTION.function_id`.
+          description: |-
+            The ID of the function that the trigger calls when it fires.
+            
+            This value is the same as `event_processors.FUNCTION.function_id`.
+            You can either define the value here or in `event_processors.FUNCTION.function_id`.
+            The App Services backend duplicates the value to the configuration location where you did not define it.
+            
+            For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_id`.
         function_name:
           type: string
-          description: The name of the function that the trigger calls when it fires. This value is the same as and interchangeable with `event_processors.FUNCTION.function_name`.
+          description: |-
+            The name of the function that the trigger calls when it fires.
+            
+            This value is the same as `event_processors.FUNCTION.function_name`.
+            You can either define the value here or in `event_processors.FUNCTION.function_name`.
+            The App Services backend duplicates the value to the configuration location where you did not define it.
+            
+            For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_name`.
         event_processors:
           type: object
           description: |-
@@ -4973,10 +4987,24 @@ components:
                   properties:
                     function_id:
                       type: string
-                      description: The ID of the function that the trigger calls when it fires. This value is the same as and interchangeable with the root-level field `function_id`.
+                      description: |-
+                        The ID of the function that the trigger calls when it fires.
+                        
+                        This value is the same as the root-level `function_id`.
+                        You can either define the value here or in `function_id`.
+                        The App Services backend duplicates the value to the configuration location where you did not define it.
+                        
+                        For example, if you define `event_processors.FUNCTION.function_id`, the backend duplicates it to `function_id`.
                     function_name:
                       type: string
-                      description: The name of the function that the trigger calls when it fires. This value is the same as and interchangeable with the root-level field `function_name`.
+                      description: |-
+                        The name of the function that the trigger calls when it fires.
+                        
+                        This value is the same as the root-level `function_name`.
+                        You can either define the value here or in `function_name`.
+                        The App Services backend duplicates the value to the configuration location where you did not define it.
+                        
+                        For example, if you define `event_processors.FUNCTION.function_name`, the backend duplicates it to `function_name`.
             AWS_EVENTBRIDGE:
               type: object
               properties:
