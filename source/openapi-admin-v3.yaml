@@ -383,7 +383,10 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Trigger"
+              allOf:
+                - "$ref": "#/components/schemas/Trigger"
+                - required:
+                    - function_id
       responses:
         "201":
           description: Successfully created.
@@ -4947,9 +4950,26 @@ components:
         config:
           type: object
           description: An object that defines configuration values for the trigger.
+        function_id:
+          type: string
+          description: |-
+            The ID of the function that the trigger calls when it fires.
+            
+            This value is the same as `event_processors.FUNCTION.function_id`.
+            You can either define the value here or in `event_processors.FUNCTION.function_id`.
+            The App Services backend duplicates the value to the configuration location where you did not define it.
+            
+            For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_id`.
         function_name:
           type: string
-          description: The name of the function that the trigger calls when it fires.
+          description: |-
+            The name of the function that the trigger calls when it fires.
+            
+            This value is the same as `event_processors.FUNCTION.function_name`.
+            You can either define the value here or in `event_processors.FUNCTION.function_name`.
+            The App Services backend duplicates the value to the configuration location where you did not define it.
+            
+            For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_name`.
         event_processors:
           type: object
           description: |-
@@ -4959,12 +4979,35 @@ components:
             [Send Trigger Events to AWS
             EventBridge](https://www.mongodb.com/docs/realm/triggers/examples/send-events-aws-eventbridge#std-label-event_processor_example).
           properties:
+            FUNCTION:
+              type: object
+              properties:
+                config:
+                  type: object
+                  properties:
+                    function_id:
+                      type: string
+                      description: |-
+                        The ID of the function that the trigger calls when it fires.
+                        
+                        This value is the same as the root-level `function_id`.
+                        You can either define the value here or in `function_id`.
+                        The App Services backend duplicates the value to the configuration location where you did not define it.
+                        
+                        For example, if you define `event_processors.FUNCTION.function_id`, the backend duplicates it to `function_id`.
+                    function_name:
+                      type: string
+                      description: |-
+                        The name of the function that the trigger calls when it fires.
+                        
+                        This value is the same as the root-level `function_name`.
+                        You can either define the value here or in `function_name`.
+                        The App Services backend duplicates the value to the configuration location where you did not define it.
+                        
+                        For example, if you define `event_processors.FUNCTION.function_name`, the backend duplicates it to `function_name`.
             AWS_EVENTBRIDGE:
               type: object
               properties:
-                type:
-                  type: string
-                  enum: ["AWS_EVENTBRIDGE"]
                 config:
                   type: object
                   properties:
@@ -4974,11 +5017,21 @@ components:
                     region:
                       type: string
                       description: An AWS region.
+                    extended_json_enabled:
+                      type: boolean
+                      description: If `true`, event objects are serialized using EJSON.
     DatabaseTrigger:
       example:
         name: onNewEmployee
         type: DATABASE
+        function_id: 5eea9ca4ca0e356e2c2a148a
         function_name: handleNewEmployeeEvent
+        event_processors: {
+          FUNCTION: {
+            function_id: 5eea9ca4ca0e356e2c2a148a,
+            function_name: handleNewEmployeeEvent
+          }
+        }
         config:
           operation_types:
             - INSERT
