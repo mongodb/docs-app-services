@@ -1,3 +1,37 @@
+# October 28, 2022
+
+## Get Started/Tutorials
+- Change "Tutorials" to "Get Started" in the left navigation
+- Create a "Get Started" landing page with information about template apps and cards for tutorials
+- Move client tutorials from Realm docs to this section
+- Device Sync Tutorial - Flutter: Incorporate feedback from a Google Developer Advocate's review
+
+## Device Sync
+- Landing Page: Create new Device Sync landing page, and apply small tweaks
+- Get Started: Remove unnecessary text from "Overview" page, rename it to "Get Started"
+- Define Data Access Patterns/Sync Rules and Permissions: Add `%stringToOid` to supported expansions
+- Go to Production: New section 
+  - Production Load Testing: Existing page moved from the top-level navigation within the Sync section
+  - Production Checklist: New page containing the "Best Practices" from the old "Overview" page
+- Technical Details: New section containing the Sync Protocol & Conflict Resolution pages moved from "Learn" section
+- Remove the "Learn" section
+
+## Users & Authentication
+- Authentication Providers/Custom JWT Authentication: Move former "JWT Tutorial" to a new "Walkthrough" section on this page
+
+## MongoDB Data Sources
+- CRUD & Aggregation APIs: Remove `arrayFilters` from unsupported options
+
+## Reference
+- Billing
+  - Clarify free tier billing description
+  - Add new "Free tier thresholds" subsection to improve information discoverability
+  - Remove bold text after links to address styling bug
+
+## Other
+- Admin API: Add details for Trigger event processors
+- Various: Update note about third-party service deprecation to reflect new date of **1 Aug 2023**
+
 # October 21, 2022
 
 ## Manage & Deploy Apps
