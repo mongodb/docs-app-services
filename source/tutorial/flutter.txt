@@ -209,24 +209,18 @@ Modify the Application
 
          .. include:: /examples/generated/flutter/tutorial/item_card.snippet.item-card.dart.modified.rst
 
-   .. step:: Delete App from Device
-
-      Delete the Flutter app and all associated data from the device or simulator
-      that you're running it on.
-      You should do this to prevent issues with the schema migration.
-      Because the data is syncing, any Items you made still exist in MongoDB
-      Atlas and will sync when you reopen the app.
-
-      How to delete the app and associated data varies depending on where you're
-      running the app. Refer to your device or simulator's documentation
-      for help deleting app data.
-
    .. step:: Run and Test
 
-      At this point, you can run the application again. Log in using the account
-      you created earlier in this tutorial. You will see the one Item you
-      previously created. Add a new Item, and you will see that you can now
-      set the priority. Choose ``High`` for the priority and save the Item.
+      At this point, you can run the application again.
+
+      First, perform a `hot restart <https://docs.flutter.dev/development/tools/hot-reload#special-cases>`__.
+      This makes sure that the sync session restarts with the new schema and prevents
+      sync errors.
+
+      Then, Log in using the account you created earlier in this tutorial.
+      You will see the one Item you previously created.
+      Add a new Item, and you will see that you can now set the priority.
+      Choose ``High`` for the priority and save the Item.
 
       Now switch back to the Atlas data page in your browser, and refresh the
       ``Item`` collection. You should now see the new Item with the ``priority``
