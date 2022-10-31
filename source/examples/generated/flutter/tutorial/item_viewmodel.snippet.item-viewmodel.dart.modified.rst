@@ -1,5 +1,5 @@
 .. code-block:: dart
-   :caption: lib/realm/item_viewmodel.dart
+   :caption: lib/viewmodels/item_viewmodel.dart
    :emphasize-lines: 8, 13-17, 28, 38-41, 46-51
 
    import 'package:realm/realm.dart';
