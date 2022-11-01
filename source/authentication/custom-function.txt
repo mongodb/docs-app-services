@@ -85,7 +85,7 @@ actual field names and values depend on your implementation.
    using the {+client-sdks+}. The credential includes a ``payload`` object
    that is passed to the authentication function.
 
-   .. tabs-realm-languages::
+   .. tabs-realm-sdks::
    
       .. tab::
          :tabid: javascript
@@ -98,7 +98,7 @@ actual field names and values depend on your implementation.
             });
    
       .. tab::
-         :tabid: java
+         :tabid: android
    
          .. code-block:: java
             
@@ -115,7 +115,7 @@ actual field names and values depend on your implementation.
             )
    
       .. tab::
-         :tabid: c-sharp
+         :tabid: dotnet
    
          .. code-block:: csharp
          
@@ -125,7 +125,7 @@ actual field names and values depend on your implementation.
             })
    
       .. tab::
-         :tabid: swift
+         :tabid: ios
    
          .. code-block:: swift
          
@@ -133,6 +133,20 @@ actual field names and values depend on your implementation.
                "username": "mongolover",
                "pin": "24601"
             ])
+
+      .. tab::
+         :tabid: flutter
+
+         .. code-block:: dart
+
+            Map<String, String> credentials = {
+               "username": "someUsername",
+            };
+            // payload must be a JSON-encoded string
+            String payload = jsonEncode(credentials);
+
+            Credentials customCredentials = Credentials.function(payload);
+            User currentUser = await app.logIn(customCredentials);
 
 Return an Authenticated User ID
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -421,3 +435,4 @@ For examples, refer to the documentation for a specific SDK:
 - :ref:`React Native SDK <react-native-login-custom-function>`
 - :ref:`Node.js SDK <node-login-custom-function>`
 - :ref:`Web SDK <web-login-custom-function>`
+- :ref:`Flutter SDK <flutter-login-custom-function>`
