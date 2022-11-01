@@ -20,7 +20,7 @@ Overview
 In this tutorial, you will use {+service+} to build a serverless
 application that monitors GitHub repositories and tracks contributions.
 
-The app that you build will:
+The app that you build will have several features:
 
 - Keep track of users that have contributed to your project in a MongoDB Atlas collection.
 
@@ -28,7 +28,7 @@ The app that you build will:
 
 - Generate and send a weekly report that summarizes contributions to your repository.
 
-Once you've completed this tutorial, you will know how to:
+After completing this tutorial, you will know how to do the following tasks:
 
 - Write and run serverless :ref:`functions <functions>` that handle your app's logic.
 
@@ -53,14 +53,20 @@ You'll need to have the following before you can begin this tutorial:
   for MongoDB Atlas and create one for free
   <https://account.mongodb.com/account/register?tck=docs_realm>`__.
 
+Also note that this tutorial doesn't use the Deployment Draft workflow. Unless you have disabled 
+Deployment Drafts, you may need to save your changes to a draft and then deploy them manually.
+
 Create a New {+app+}
 ----------------
 
-First, you'll need to create an application in {+service-short+}. To create the app:
+First, you'll need to create an application in {+service-short+}. If you see a prompt about 
+Aplication Guides, select :guilabel:`Close Guides`.
+
+To create the app:
 
 1. Open your Atlas project at `cloud.mongodb.com <https://cloud.mongodb.com?tck=docs_realm>`__.
 
-#. Click :guilabel:`{+service-short+}` in the top navigation.
+#. In the top navigation, click :guilabel:`{+service-short+}`.
 
 #. Click :guilabel:`Create a New App`.
 
@@ -68,7 +74,7 @@ First, you'll need to create an application in {+service-short+}. To create the 
 
 #. Select your cluster to link it to the new app.
 
-#. Click :guilabel:`Create`.
+#. Click :guilabel:`Create App Service`.
 
 .. figure:: /images/github-tutorial-create-app.png
    :alt: The app creation screen with the app name set to "github-tracker-tutorial".
@@ -97,7 +103,7 @@ a unique URL to receive and handle the webhook requests.
 
 To create the endpoint:
 
-1. Click :guilabel:`HTTPS Endpoints` in the {+leftnav+}.
+1. In the {+leftnav+}, click :guilabel:`HTTPS Endpoints`.
 
 #. Click :guilabel:`Add An Endpoint`.
 
@@ -105,12 +111,14 @@ To create the endpoint:
 
 #. Leave the HTTP method set to **POST**.
 
-#. For authorization, choose :guilabel:`Require a Secret` and use
+#. For authorization, choose :guilabel:`Require a Secret`. 
+
+#. Enter a new secret name and click :guilabel:`Create` to create a new secret, then enter
    ``tutorial`` as the secret value. This requires all incoming requests
    to include the query parameter ``secret=tutorial`` in the request
    URL.
 
-#. Create a new function for the endpoint and name it
+#. Create a new :ref:`Atlas Function <functions>` for the endpoint and name it
    ``endpoints/greetNewContributors``.
    
 #. For now, set up a basic handler that only responds to incoming calls
@@ -127,25 +135,39 @@ To create the endpoint:
 
 #. Click :guilabel:`Save` and deploy the endpoint.
 
-.. tip::
+#. Under :guilabel:`Operation Type`, copy the endpoint callback URL. You'll need it 
+to set up the GitHub webhook later.
 
-   Copy the endpoint URL from the configuration page. You'll need it in
-   the next step.
+.. _function-authentication-settings:
+
+Update Your Endpoint Function's Authentication Settings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Now that you've created the endpoint in your app, you need to change the authentication
+settings so that the GitHub webhook is accepted.
+
+1. In the {+leftnav+}, click :guilabel:`Functions`.
+
+#. Find your endpoing function and select it.
+
+#. Click :guilabel:`Settings`.
+
+#. Under :guilabel:`Authentication`, change the authentication method to :guilabel:`System`.
 
 Connect the Endpoint to a GitHub Webhook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Now that you've created the endpoint in your app, you need to set up a
+With , you need to set up a
 webhook in your GitHub repository that sends events to the endpoint.
 
 To create the webhook in your repository:
    
-1. Open the repository's settings and select :guilabel:`Webhook` in the
+1. Open the repository's settings and select :guilabel:`Webhooks` in the
    {+leftnav+}.
 
-#. Add a new webhook and set the :guilabel:`Payload URL` to the URL of
-   the endpoint that you just created. The URL will look like one of the
-   following depending on your app's deployment model:
+#. `Add a new webhook <https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks#setting-up-a-webhook>`__ 
+   and set the :guilabel:`Payload URL` to the URL of the endpoint that you just created. 
+   The URL will look like one of the following depending on your app's :doc:`deployment 
+   model </manage-apps/deploy/deployment-models-and-regions>`:
    
    .. tabs::
       
@@ -172,19 +194,17 @@ To create the webhook in your repository:
    send events for :guilabel:`Issues` and :guilabel:`Pull requests`.
 
 #. Click :guilabel:`Add webhook` to save the new webhook.
-
-.. tip::
    
-   To confirm that the webhook succesfully calls your endpoint, check
-   your :ref:`application logs <logs>` for entries with the type
-   ``Endpoint``. You can also check the `webhook's request logs
-   <https://docs.github.com/en/developers/webhooks-and-events/webhooks/testing-webhooks>`__
-   in GitHub under :guilabel:`Recent Deliveries` on the webhook's
-   settings page. Each successful request has a green checkmark next to
-   it.
+To confirm that the webhook succesfully calls your endpoint, check your :ref:`application logs <logs>` 
+for entries with the type ``Endpoint``. You can also check the `webhook's request logs
+<https://docs.github.com/en/developers/webhooks-and-events/webhooks/testing-webhooks>`__
+in GitHub under :guilabel:`Recent Deliveries` on the webhook's settings page. Each successful 
+request has a green checkmark next to it.
 
-   .. figure:: /images/github-tutorial-successful-webhook-delivery-1.png
-      :alt: A log entry in GitHub that shows the custom endpoint's response to a ping event. The response has a status code of 200 and the response body says "Successfully received a GitHub webhook event".
+.. figure:: /images/github-tutorial-successful-webhook-delivery-1.png
+   :alt: A log entry in GitHub that shows the custom endpoint's response to a ping event. 
+   The response has a status code of 200 and the response body says "Successfully received 
+   a GitHub webhook event".
 
 Get a GitHub Access Token
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -200,7 +220,7 @@ To `create a personal access token
 1. Open your GitHub user settings (not your repository settings) and
    select :guilabel:`Developer settings` in the {+leftnav+}.
 
-#. Select :guilabel:`Personal access tokens` in the {+leftnav+} and then
+#. In the {+leftnav+}, select :guilabel:`Personal access tokens` and then
    click :guilabel:`Generate new token`.
 
 #. Configure the token with a descriptive name and a reasonable
@@ -223,7 +243,7 @@ without hardcoding the token into your functions.
 
 To create the value:
 
-1. Click :guilabel:`Values` in the {+leftnav+}.
+1. In the {+leftnav+}, click :guilabel:`Values`.
 
 #. Click :guilabel:`Create New Value`.
 
@@ -231,7 +251,8 @@ To create the value:
 
 #. Leave the type set to :guilabel:`Value`.
 
-#. Paste the personal access token into the value's content input.
+#. Paste the personal access token into the value's content input. Note that the 
+value must be valid JSON, so ensure you have surrounding quotation marks.
 
 #. Click :guilabel:`Save`.
 
@@ -247,11 +268,11 @@ you'll be able to import the library from any function in your app.
 
 To add the Octokit library to your app:
 
-1. Click :guilabel:`Functions` in the {+leftnav+}.
+1. In the {+leftnav+}, click :guilabel:`Functions`.
 
 #. Select the :guilabel:`Dependencies` tab.
 
-#. Click :guilabel:`Add New Dependency`.
+#. Click :guilabel:`Add Dependency`.
 
 #. Enter the package name: ``@octokit/request``.
 
@@ -274,7 +295,7 @@ events. Specifically, the function should:
 
 To update the function:
 
-1. Click :guilabel:`Functions` in the {+leftnav+}.
+1. In the {+leftnav+}, click :guilabel:`Functions`.
 
 #. Click :guilabel:`endpoints/greetNewContributors` to open the endpoint
    function editor.
@@ -362,7 +383,7 @@ saves the generated reports in your linked cluster.
 
 To create the trigger:
 
-1. Click :guilabel:`Triggers` in the {+leftnav+}.
+1. In the {+leftnav+}, click :guilabel:`Triggers`.
 
 #. Click :guilabel:`Add a Trigger`.
 
@@ -393,6 +414,9 @@ To create the trigger:
 
 #. Click :guilabel:`Save`.
 
+#. Update your new function's :ref:`authentication settings <function-authentication-settings>` 
+to match the new endpoint function from earlier in this tutorial.
+
 Send Report Notifications
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -403,7 +427,7 @@ formatted message that you can send to end users.
 
 To set up the messages:
 
-1. Click :guilabel:`Triggers` in the {+leftnav+}.
+1. In the {+leftnav+}, click :guilabel:`Triggers`.
 
 #. Click :guilabel:`Add a Trigger`.
 
