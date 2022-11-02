@@ -41,7 +41,7 @@ After completing this tutorial, you will know how to do the following tasks:
 Before You Start
 ----------------
 
-You'll need to have the following before you can begin this tutorial:
+You need the following before you can begin this tutorial:
 
 - A GitHub repository. The app you build will track contributions to
   this repository. You can `create a new repository
@@ -53,14 +53,16 @@ You'll need to have the following before you can begin this tutorial:
   for MongoDB Atlas and create one for free
   <https://account.mongodb.com/account/register?tck=docs_realm>`__.
 
-Also note that this tutorial doesn't use the Deployment Draft workflow. Unless you have disabled 
-Deployment Drafts, you may need to save your changes to a draft and then deploy them manually.
+Also note that this tutorial doesn't use the :doc:`Deployment Draft </manage-apps/deploy/deployment-draft/>`
+workflow. A Deployment Draft is a a collection of App changes that you can deploy or
+discard as a single unit. Unless you disabled Deployment Drafts, you may need to
+save your changes to a draft and then deploy them manually.
 
 Create a New {+app+}
 ----------------
 
 First, you need to create an application in {+service-short+}. If you see a prompt about 
-Aplication Guides, select :guilabel:`Close Guides`.
+Application Guides, select :guilabel:`Close Guides`.
 
 To create the app:
 
@@ -161,8 +163,8 @@ To update your function's authentication settings:
 Connect the Endpoint to a GitHub Webhook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With , you need to set up a
-webhook in your GitHub repository that sends events to the endpoint.
+With your endpoint function ready to go, you need to set up a webhook in your 
+GitHub repository that sends events to the endpoint.
 
 To create the webhook in your repository:
    
@@ -201,7 +203,10 @@ To create the webhook in your repository:
 #. Click :guilabel:`Add webhook` to save the new webhook.
    
 To confirm that the webhook succesfully calls your endpoint, check your :ref:`application logs <logs>` 
-for entries with the type ``Endpoint``. You can also check the `webhook's request logs
+in App Services for entries with the type ``Endpoint``. You can get there by clicking :guilabel:`Logs` 
+in the {+leftnav+}.
+
+You can also check the `webhook's request logs
 <https://docs.github.com/en/developers/webhooks-and-events/webhooks/testing-webhooks>`__
 in GitHub under :guilabel:`Recent Deliveries` on the webhook's settings page. Each successful 
 request has a green checkmark next to it.
