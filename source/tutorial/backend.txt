@@ -20,7 +20,7 @@ Overview
 In this tutorial, you will use {+service+} to build a serverless
 application that monitors GitHub repositories and tracks contributions.
 
-The app that you build will have several features:
+The App Services App that you build will have several features:
 
 - Keep track of users that have contributed to your project in a MongoDB Atlas collection.
 
@@ -143,7 +143,7 @@ To create the endpoint:
 Update Your Endpoint Function's Authentication Settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Now that you've created the endpoint in your app, you need to change the authentication
-settings so that the GitHub webhook is accepted.
+settings for the endpoint's function so that the GitHub webhook is accepted.
 
 To update your function's authentication settings:
 
@@ -154,6 +154,8 @@ To update your function's authentication settings:
 #. Click :guilabel:`Settings`.
 
 #. Under :guilabel:`Authentication`, change the authentication method to :guilabel:`System`.
+
+#. Click :guilabel:`Save` and deploy the function.
 
 Connect the Endpoint to a GitHub Webhook
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,8 +253,8 @@ To create the value:
 
 #. Leave the type set to :guilabel:`Value`.
 
-#. Paste the personal access token into the value's content input. Note that the 
-   value must be valid JSON, so ensure you have surrounding quotation marks.
+#. Paste the personal access token into the value's content input. The value must
+   be valid JSON, so make sure you have surrounding quotation marks.
 
 #. Click :guilabel:`Save`.
 
