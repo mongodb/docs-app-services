@@ -6,7 +6,7 @@
 - :ref:`Function context.app.id <context-app>` returns a string (formerly BSON ObjectId).
 - Support :ref:`App Services deployments <deployment-regions>` in the AWS region
   London (aws-eu-west-2).
-- Added Admin API Endpoint for App metrics.
+- Added :ref:`Admin API <admin-api>` endpoint to retrieve App Services metrics.
 
 .. _backend_20221020:
 
