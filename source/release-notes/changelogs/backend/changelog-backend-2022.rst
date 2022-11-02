@@ -1,3 +1,13 @@
+.. _backend_20221102:
+
+2 November 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- :ref:`Function context.app.id <context-app>` returns a string (formerly BSON ObjectId).
+- Support :ref:`App Services deployments <deployment-regions>` in the AWS region
+  London (aws-eu-west-2).
+- Added Admin API Endpoint for App metrics.
+
 .. _backend_20221020:
 
 20 October 2022 Release
