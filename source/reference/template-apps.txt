@@ -17,12 +17,12 @@ Overview
 
 You can get up and running with an Atlas App Services App using one of our premade template apps.
 Template apps bring together many of the building blocks available in Atlas App Services
-and start you off with a prebuilt App that you can customize. You can create 
-an app based on a template by:
+and start you off with a prebuilt app that you can customize. You can create 
+an app based on a template using any of the following interfaces:
 
-- using the :ref:`App Services UI <create-a-realm-app>`,
-- using the :ref:`{+cli+} <create-app-cli>`, or 
-- with the :ref:`Admin API <create-app-api>`.
+- :ref:`App Services UI <create-a-realm-app>`
+- :ref:`{+cli+} <create-app-cli>`
+- :ref:`Admin API <create-app-api>`
 
 .. button:: Check out the Template Apps
    :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_realm_template_apps
@@ -97,27 +97,21 @@ with services and front-end code. You can:
 
 2. Follow on-screen guides to customize your app.
 
-3. Use the {+cli-bin+} to download the code for your app so you can build the frontend
-   (if one is included) and interact with the App through the cli.
+3. Use the {+cli-bin+} to download the code for the template app so you can build the front end
+   (if one is included) and interact with the app through the CLI:
 
-   If you already have {+cli-bin+} set up, you can use the {+cli-bin+}
-   :ref:`pull command <realm-cli-pull>` to download the code. Otherwise,
-   click the :guilabel:`Pull front-end code` button in the welcome
-   section and follow the instructions that pop up.
+   - If you already have {+cli-bin+} set up, you can use the following {+cli-bin+} :ref:`pull command <realm-cli-pull>` to download the code:
 
    .. code-block:: shell
       
       realm-cli pull --remote <App ID> --template <Template App ID>
-
-.. figure:: /images/welcome-template-app.png
-   :alt: Welcome section for template apps
-   :figwidth: 750px
-   :width: 750px
-
-.. tip::
-
-   All the template apps except "Manage Database Views" come with a
-   front-end todo app.
+  
+   - Otherwise, click the :guilabel:`Pull front-end code` button in the :guilabel:`Welcome to Your Application` section and follow the instructions that display in the UI:
+  
+   .. figure:: /images/welcome-template-app.png
+      :alt: Welcome section for template apps
+      :figwidth: 750px
+      :width: 750px
 
 .. _template-apps-list:
 
@@ -134,52 +128,52 @@ Template Apps Available
 
    * - Manage Database Views
      - ``triggers``
-     - Event-driven :ref:`Database Trigger <database-trigger>` template to update a view in a separate collection.
+     - Event-driven :ref:`Database Trigger <database-trigger>` template to update a view in a separate collection. Does *not* include a front-end app.
 
-   * - Flutter + Realm Flutter SDK
+   * - Flutter + Realm Flutter SDK + Atlas Device Sync Starter (Flexible Sync)
      - ``flutter.todo.flex``
-     - Cross-platform application for Android, iOS, Windows and MacOS built with the :ref:`Realm Flutter SDK <flutter-intro>`.
+     - Cross-platform to-do list app for Android, iOS, Windows, MacOS, and Linux written in Dart using the :ref:`Realm Flutter SDK <flutter-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`. 
 
-   * - React.JS + {+realm-web+} Boilerplate
+   * - React.JS + Realm Web SDK Boilerplate
      - ``web.mql.todo``
-     - Hosted Todo web app using the :ref:`{+realm-web+} SDK <web-intro>`.
+     - Hosted to-do list web app using the :ref:`Realm Web SDK <web-intro>`.
    
    * - GraphQL + React App Boilerplate
      - ``web.graphql.todo``
-     - Hosted Todo web app using the :ref:`GraphQL API <graphql-api>`
+     - Hosted to-do list app using the :ref:`GraphQL API <graphql-api>`.
 
-   * - Kotlin SDK + {+sync+} Starter (Flexible Sync)
+   * - Kotlin SDK + Atlas Device Sync Starter (Flexible Sync)
      - ``android.kotlin.todo.flex``
-     - Android app written in Kotlin using the :ref:`Realm Kotlin SDK <kotlin-intro>` to sync data to {+service-short+}'s server. Uses Flexible Sync.
+     - Android to-do list app written in Kotlin using the :ref:`Realm Kotlin SDK <kotlin-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
 
-   * - Java SDK + {+sync+} Starter (Partition-Based Sync)
+   * - Java SDK + Atlas Device Sync Starter (Partition-Based Sync)
      - ``android.kotlin.todo``
-     - Android app written in Kotlin using the :ref:`Realm Java SDK <java-intro>` to sync data to App Services's server. Uses Partition-Based-Sync.
+     - Android to-do list app written in Kotlin using the :ref:`Realm Java SDK <java-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Partition-Based Sync <partition-based-sync>`.
 
    * - SwiftUI + Atlas Device Sync Starter (Flexible Sync)
      - ``swiftui.todo.flex``
-     - iOS app using SwiftUI and the :ref:`Realm Swift SDK <ios-intro>` to sync data to App Services's server. Uses Flexible Sync.
+     - iOS to-do list app using SwiftUI and the :ref:`Realm Swift SDK <ios-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
 
-   * - SwiftUI + Atlas Device Sync Starter (Partition-Based-Sync)
+   * - SwiftUI + Atlas Device Sync Starter (Partition-Based Sync)
      - ``swiftui.todo``
-     - iOS app using SwiftUI and the :ref:`Realm Swift SDK <ios-intro>` to sync data to App Services's server. Uses Partition-Based-Sync.
+     - iOS to-do list app using SwiftUI and the :ref:`Realm Swift SDK <ios-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Partition-Based Sync <partition-based-sync>`.
 
    * - Swift + Atlas Device Sync Starter
      - ``ios.swift.todo``
-     - iOS app using UIKit and the :ref:`Realm Swift SDK <ios-intro>` to sync data to App Services's server.
+     - iOS to-do list app using UIKit and the :ref:`Realm Swift SDK <ios-intro>`. Syncs local data to MongoDB Atlas using Device Sync.
 
    * - React Native + Atlas Device Sync Starter (Flexible Sync)
      - ``react-native.todo.flex``
-     - Cross-platform mobile app using the :ref:`Realm JS SDK <react-native-intro>` and the :npm:`@realm/react <package/@realm/react>` library to sync data to {+service-short+}'s server. Uses Flexible Sync.
+     - Cross-platform to-do list mobile app using the :ref:`Realm JS SDK <react-native-intro>` and the :npm:`@realm/react <package/@realm/react>` library. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
 
-   * - React Native + Atlas Device Sync Starter (Partition-Based-Sync) 
+   * - React Native + Atlas Device Sync Starter (Partition-Based Sync) 
      - ``react-native.todo``
-     - Cross-platform mobile app using the :ref:`Realm JS SDK <react-native-intro>` and the :npm:`@realm/react <package/@realm/react>` library to sync data to {+service-short+}'s server. Uses Partition-Based-Sync.
+     - Cross-platform to-do list mobile app using the :ref:`Realm JS SDK <react-native-intro>` and the :npm:`@realm/react <package/@realm/react>` library. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Partition-Based Sync <partition-based-sync>`.
 
    * - Xamarin + Atlas Device Sync Starter (Flexible Sync)
      - ``xamarin.todo.flex``
-     - Cross-platform mobile app using the :ref:`Realm C# SDK <dotnet-intro>` to sync data to App Services's server. Uses Flexible Sync.
+     - Cross-platform to-do list mobile app using the :ref:`Realm C# SDK <dotnet-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
 
-   * - Xamarin + Atlas Device Sync Starter (Partition-Based-Sync) 
+   * - Xamarin + Atlas Device Sync Starter (Partition-Based Sync) 
      - ``xamarin.todo``
-     - Cross-platform mobile app using the :ref:`Realm C# SDK <dotnet-intro>` to sync data to App Services's server. Uses Partition-Based-Sync.
+     - Cross-platform to-do list mobile app using the :ref:`Realm C# SDK <dotnet-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Partition-Based Sync <partition-based-sync>`.
