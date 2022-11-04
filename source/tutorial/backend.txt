@@ -30,11 +30,11 @@ The App Services App that you build will have several features:
 
 After completing this tutorial, you will know how to do the following tasks:
 
-- Write and run serverless :ref:`functions <functions>` that handle your app's logic.
+- Write and run serverless :ref:`functions <functions>` that handle your App's logic.
 
-- Automate scheduled tasks and respond to changing data with :ref:`triggers <triggers>`.
+- Automate scheduled tasks and respond to changing data with :ref:`Atlas Triggers <triggers>`.
 
-- Store and access static data, like API keys, in :ref:`values <values-and-secrets>`.
+- Store and access static data, like API keys, in :ref:`Values <values-and-secrets>`.
 
 - Connect to an external service through an API
 
@@ -43,7 +43,7 @@ Before You Start
 
 You need the following before you can begin this tutorial:
 
-- A GitHub repository. The app you build will track contributions to
+- A GitHub repository. The App you build will track contributions to
   this repository. You can `create a new repository
   <https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository>`__
   for this tutorial or use an existing repo that you have admin access
@@ -54,7 +54,7 @@ You need the following before you can begin this tutorial:
   <https://account.mongodb.com/account/register?tck=docs_realm>`__.
 
 Also note that this tutorial doesn't use the :doc:`Deployment Draft </manage-apps/deploy/deployment-draft/>`
-workflow. A Deployment Draft is a a collection of App changes that you can deploy or
+workflow. A Deployment Draft is a collection of App changes that you can deploy or
 discard as a single unit. Unless you disabled Deployment Drafts, you may need to
 save your changes to a draft and then deploy them manually.
 
@@ -63,7 +63,7 @@ Create a New {+app+}
 
 First, you need to create an application in {+service-short+}.
 
-To create the app:
+To create the App:
 
 1. Open your Atlas project at `cloud.mongodb.com <https://cloud.mongodb.com?tck=docs_realm>`__.
 
@@ -71,9 +71,9 @@ To create the app:
 
 #. Click :guilabel:`Create a New App`.
 
-#. Name the app ``github-tracker-tutorial``.
+#. Name the App ``github-tracker-tutorial``.
 
-#. Select your cluster to link it to the new app.
+#. Select your cluster to link it to the new App.
 
 #. Click :guilabel:`Create App Service`.
 
@@ -86,7 +86,7 @@ Welcome New GitHub Contributors
 We'll connect the {+app+} to your GitHub repository using a `GitHub
 repository webhook
 <https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks>`__.
-Webhooks let your app know whenever some event, like a new commit or
+Webhooks let your App know whenever some event, like a new commit or
 pull request, happens in your repository. Each event runs a serverless
 function where you can do something in response.
 
@@ -99,7 +99,7 @@ Create an Endpoint
 ~~~~~~~~~~~~~~~~~~
 
 Webhooks work by sending a request about the event to a URL that your
-app controls. In your app, you'll need to expose a custom endpoint with
+App controls. In your App, you'll need to expose a custom endpoint with
 a unique URL to receive and handle the webhook requests.
 
 To create the endpoint:
@@ -123,7 +123,7 @@ To create the endpoint:
    ``endpoints/greetNewContributors``.
    
 #. For now, set up a basic handler that only responds to incoming calls
-   without doing other work. Copy the following code into the function
+   without doing other work. Copy the following code into the Function
    body:
 
    .. code-block:: javascript
@@ -145,7 +145,7 @@ Update Your Endpoint Function's Authentication Settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now that you've created the endpoint in your App, you need to change the authentication
-settings for the endpoint's function so that the GitHub webhook is accepted.
+settings for the endpoint's Function so that the GitHub webhook is accepted.
 
 To update your Function's authentication settings:
 
@@ -244,21 +244,21 @@ To `create a personal access token
 Store the Token as a Value
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Back in your app, add a new value to hold the personal access token you
-just generated. You'll be able to reference the value from your endpoint
-without hardcoding the token into your functions.
+Back in your App, add a new Value to hold the personal access token you
+just generated. You'll be able to reference the Value from your endpoint
+without hardcoding the token into your Functions.
 
-To create the value:
+To create the Value:
 
 1. In the {+leftnav+}, click :guilabel:`Values`.
 
 #. Click :guilabel:`Create New Value`.
 
-#. Name the value ``GitHubAccessToken``.
+#. Name the Value ``GitHubAccessToken``.
 
 #. Leave the type set to :guilabel:`Value`.
 
-#. Paste the personal access token into the Value's input. The value must
+#. Paste the personal access token into the Value's input. The Value must
    be valid JSON, so make sure you have surrounding quotation marks.
 
 #. Click :guilabel:`Save`.
@@ -271,9 +271,9 @@ could write and send HTTP requests directly to the API using the
 built-in ``context.http`` client or an external library. However, in
 this tutorial we use GitHub's official Node.js library called
 :github:`Octokit <octokit/core.js>` that wraps the API. Once installed,
-you'll be able to import the library from any function in your app.
+you'll be able to import the library from any Function in your App.
 
-To add the Octokit library to your app:
+To add the Octokit library to your App:
 
 1. In the {+leftnav+}, click :guilabel:`Functions`.
 
@@ -292,22 +292,22 @@ Write the Endpoint Logic
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Now that you have an access token and have installed Octokit, you can
-update the endpoint function to actually do something when it receives
-events. Specifically, the function should:
+update the endpoint Function to actually do something when it receives
+events. Specifically, the Function should:
 
 - Parse the incoming webhook event
 - Log the contribution in MongoDB
 - Add a comment through the GitHub API
 - Send an informative response back to GitHub
 
-To update the function:
+To update the Function:
 
 1. In the {+leftnav+}, click :guilabel:`Functions`.
 
 #. Click :guilabel:`endpoints/greetNewContributors` to open the endpoint
-   function editor.
+   Function editor.
 
-#. Replace the basic function with the following code:
+#. Replace the basic Function with the following code:
    
    .. literalinclude:: /tutorial/backend-examples/greetNewContributors.js
       :language: javascript
@@ -336,25 +336,25 @@ request log includes a response message from the endpoint.
 .. tip::
    
    If you want to reset the test, delete the document with your GitHub
-   username from ``community.contributions``. This lets the app "forget"
+   username from ``community.contributions``. This lets the App "forget"
    that you've contributed before and it will welcome you on your next
    contribution.
 
 Generate a Weekly Community Report
 ----------------------------------
 
-Your app is connected to GitHub, stores information about contributions,
+Your App is connected to GitHub, stores information about contributions,
 and welcomes new contributors. Now we'll extend it to automatically
 analyze and generate reports for your repository.
 
 Specify Which Repos Should Generate Reports
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Your app needs a way to know which repositories it should generate
+Your App needs a way to know which repositories it should generate
 reports for every week. For this tutorial, we'll hardcode the list in a
-value.
+Value.
 
-Create a new value called ``GitHubProjects`` that contains an array of
+Create a new Value called ``GitHubProjects`` that contains an array of
 objects. Each object specifies the ``owner`` and ``repo`` name of a
 GitHub repository. Make sure to include an entry for your repository.
 
@@ -369,10 +369,10 @@ Create a Function that Generates Reports
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A report is a document that summarizes the contributions to a repository
-for some time period. We'll use a function to create on-demand reports
+for some time period. We'll use a Function to create on-demand reports
 for a repo.
 
-Create a new function named ``generateCommunityReport`` and add the
+Create a new Function named ``generateCommunityReport`` and add the
 following code:
 
 .. literalinclude:: /tutorial/backend-examples/generateCommunityReport.js
@@ -382,21 +382,21 @@ following code:
 Generate And Save Reports Every Week
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The function you just created creates a report for a repository
-on-demand. However, at this point nothing calls the function and the
+The Function you just created creates a report for a repository
+on-demand. However, at this point nothing calls the Function and the
 generated reports are not saved anywhere. To actually use it, we'll
-create a scheduled trigger that calls the function once every week and
+create a scheduled Atla Trigger that calls the Function once every week and
 saves the generated reports in your linked cluster.
 
-To create the trigger:
+To create the Trigger:
 
 1. In the {+leftnav+}, click :guilabel:`Triggers`.
 
 #. Click :guilabel:`Add a Trigger`.
 
-#. Choose :guilabel:`Scheduled` for the trigger type.
+#. Choose :guilabel:`Scheduled` for the Trigger type.
 
-#. Name the trigger ``generateAndSaveCommunityReports``
+#. Name the Trigger ``generateAndSaveCommunityReports``
 
 #. Choose the :guilabel:`Advanced` schedule type
 
@@ -407,13 +407,13 @@ To create the trigger:
 
       0 5 * * 1
 
-#. Create a new function for the trigger and name it
+#. Create a new Function for the Trigger and name it
    ``triggers/generateAndSaveCommunityReports``.
 
 #. Click :guilabel:`Add Dependency` and install ``moment``, which we use
-   to work with dates in the function.
+   to work with dates in the Function.
 
-#. Copy the following code into the function body:
+#. Copy the following code into the Function body:
    
    .. literalinclude:: /tutorial/backend-examples/generateAndSaveCommunityReports.js
       :language: javascript
@@ -427,9 +427,9 @@ To create the trigger:
 Send Report Notifications
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Your app will now automatically generate and save reports every week.
+Your App will now automatically generate and save reports every week.
 However, the reports won't be very useful if nobody sees them. We'll
-create a database trigger that listens for new reports and creates a
+create a database Trigger that listens for new reports and creates a
 formatted message that you can send to end users.
 
 To set up the messages:
@@ -438,44 +438,44 @@ To set up the messages:
 
 #. Click :guilabel:`Add a Trigger`.
 
-#. Leave the trigger type set to :guilabel:`Database`.
+#. Leave the Trigger type set to :guilabel:`Database`.
 
-#. Name the trigger ``sendCommunityReport``.
+#. Name the Trigger ``sendCommunityReport``.
 
-#. Add the trigger to the ``community.reports`` collection and listen
+#. Add the Trigger to the ``community.reports`` collection and listen
    for :guilabel:`Insert` events.
 
 #. Enable :guilabel:`Full Document` to include each new report document
-   in the change event passed to the trigger function.
+   in the change event passed to the Trigger Function.
 
-#. Create a new function for the trigger and name it
+#. Create a new Function for the Trigger and name it
    ``triggers/sendCommunityReport``.
    
-#. Copy the following code into the function body:
+#. Copy the following code into the Function body:
    
    .. literalinclude:: /tutorial/backend-examples/sendCommunityReport.js
       :language: javascript
       :caption: functions/triggers/sendCommunityReport.js
 
-#. Click :guilabel:`Save` and deploy the trigger.
+#. Click :guilabel:`Save` and deploy the Trigger.
 
 Test the Report Triggers
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Your app is set up to automatically generate, save, and send reports
+Your App is set up to automatically generate, save, and send reports
 every week. To make sure that everything works, you can run this report
 flow manually.
 
-Open the function editor for your scheduled trigger,
+Open the Function editor for your scheduled Trigger,
 ``triggers/generateAndSaveCommunityReports``, and then click the
 :guilabel:`Run` button. This should generate and save on-demand reports
-for every repo that you listed in the ``GitHubProjects`` value.
+for every repo that you listed in the ``GitHubProjects`` Value.
 
 To confirm: 
 
 1. Check ``community.reports`` for the new report documents.
 
-2. Check your application's database trigger logs to find the formatted
+2. Check your App's database Trigger logs to find the formatted
    message for each report
 
 What's Next?
@@ -506,7 +506,7 @@ the tracker. For example, you could:
 Explore the Documentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} includes many services that can power your application. Check out
+{+service-short+} includes many services that can power your App. Check out
 the rest of the documentation to learn more about these services and how
 you can use them.
 
