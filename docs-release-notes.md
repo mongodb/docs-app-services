@@ -19,6 +19,7 @@
 
 ## Other
 - Admin API: Add new endpoint to retrieve App Services metrics
+- New [atlas-app-services-examples GitHub repository in the MongoDB org](https://github.com/mongodb/atlas-app-services-examples/tree/main/triggers-examples) containing Triggers & Functions use cases and code examples, including integration tests
 
 # October 28, 2022
 
