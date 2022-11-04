@@ -7,6 +7,10 @@
 ## Device Sync
 - Define Data Access Patterns/Flexible Sync Permissions Guide: Update permissions template names
 
+## Triggers
+- Triggers Code Examples: New link in the Table of Contents going to the Triggers examples GitHub repository
+- Various pages: Link to the Triggers examples GitHub repository where relevant throughout section
+
 ## Users & Authentication
 - Various pages: Add Flutter SDK to SDK tabs on authentication provider pages
 
