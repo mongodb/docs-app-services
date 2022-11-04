@@ -1,3 +1,26 @@
+# November 4, 2022
+
+## Get Started
+- Device Sync Tutorial/Flutter: Remove the step instructing users to delete app data; no longer needed after template app updates
+- Triggers, Functions & Values Tutorial: Update the GitHub Issue Tracker tutorial to fix bugs, clarify wording, add info in places
+
+## Device Sync
+- Define Data Access Patterns/Flexible Sync Permissions Guide: Update permissions template names
+
+## Triggers
+- Triggers Code Examples: New link in the Table of Contents going to the Triggers examples GitHub repository
+- Various pages: Link to the Triggers examples GitHub repository where relevant throughout section
+
+## Users & Authentication
+- Various pages: Add Flutter SDK to SDK tabs on authentication provider pages
+
+## Reference
+- Template Apps: Update template app descriptions in the table of available templates
+
+## Other
+- Admin API: Add new endpoint to retrieve App Services metrics
+- New [atlas-app-services-examples GitHub repository in the MongoDB org](https://github.com/mongodb/atlas-app-services-examples/tree/main/triggers-examples) containing Triggers & Functions use cases and code examples, including integration tests
+
 # October 28, 2022
 
 ## Get Started/Tutorials
