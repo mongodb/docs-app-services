@@ -19,9 +19,9 @@ Overview
 .. binary:: realm-cli-v1
 
 The Atlas App Services Command Line Interface ({+cli-bin+})
-allows you to programmatically manage your {+app+}s.
+allows you to programmatically manage your apps.
 With {+cli-bin+}, you can create or update
-{+app+}s from a local directory as well as export
+apps from a local directory as well as export
 existing applications to a local directory.
 
 .. _install-realm-cli-v1:
@@ -161,7 +161,7 @@ message:
 
    no user info available
 
-{+apps+}
+Apps
 ----
 
 .. _realm-cli-import-v1:
@@ -173,13 +173,13 @@ Import an Application
 .. binary:: realm-cli import
 
 Use ``realm-cli import`` to import a local application directory into a
-hosted {+app+}. If you import a directory into an application
+hosted app. If you import a directory into an application
 that doesn't exist, {+cli-bin+} can :ref:`create the application
 <create-app-cli>` for you.
 
 .. tip::
 
-   You must be a ``Project Owner`` to import an {+app+}. For more info, 
+   You must be a ``Project Owner`` to import an app. For more info, 
    see: :atlas:`Atlas User Roles </reference/user-roles/#project-roles>`.
 
 .. code-block:: shell
@@ -195,7 +195,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    
    | **Optional.**
    
-   The Application ID of your {+app+}.
+   The Application ID of your app.
    
    If not specified, {+cli-bin+} will attempt to use the value of
    ``app_id`` defined in :ref:`config.json <legacy-appschema-realm-config>`. If
@@ -232,7 +232,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    | **Optional.**
    
    The :guilabel:`Project ID` of the :ref:`Atlas project <projects>` on
-   which you want to host a newly created {+app+}. If
+   which you want to host a newly created app. If
    specified, {+cli-bin+} will not prompt you to select a project when
    creating a new app.
    
@@ -247,7 +247,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    | **Optional.**
    
    If specified, uploads and deploys any static assets in the
-   ``/hosting/files`` directory of your {+app+}.
+   ``/hosting/files`` directory of your app.
 
 .. option:: --include-dependencies
    
@@ -255,7 +255,7 @@ that doesn't exist, {+cli-bin+} can :ref:`create the application
    
    If specified, uploads and deploys any external dependencies included
    in a ``node_modules`` archive in the ``/functions`` directory of your
-   {+app+}.
+   app.
 
 
 .. _realm-cli-export-v1:
@@ -266,7 +266,7 @@ Export an Application
 .. program:: realm-cli export
 .. binary:: realm-cli export
 
-Use ``realm-cli export`` to save an {+app+} configuration to
+Use ``realm-cli export`` to save an app configuration to
 a local application directory.
 
 .. code-block:: shell
@@ -281,7 +281,7 @@ a local application directory.
    
    | **Optional.**
    
-   The Application ID of your {+app+}.
+   The Application ID of your app.
 
 .. option:: --output <path>
    
@@ -304,7 +304,7 @@ a local application directory.
    | **Optional.**
    
    If specified, exports all hosted static assets in the ``hosting/files``
-   directory of your {+app+}.
+   directory of your app.
 
 .. option:: --for-source-control
 
@@ -376,7 +376,7 @@ The diff resembles the following:
    | **Optional.**
    
    If specified, the diff includes a list of files in the
-   ``hosting/files`` directory of your {+app+} that are
+   ``hosting/files`` directory of your app that are
    different from your app's deployed files.
 
 Secrets
@@ -491,13 +491,13 @@ Use ``realm-cli secrets remove`` to delete an existing :ref:`Secret
 
 .. option:: --name <Secret Name>
 
-   The name of the Secret to remove from your {+app+}.
+   The name of the Secret to remove from your app.
 
 .. option:: --secret-id <Secret ID>
 
 .. option:: --id <Secret ID>
 
-   The ID value of the Secret to remove from your {+app+}.
+   The ID value of the Secret to remove from your app.
 
 .. _realm-import-strategies-v1:
 

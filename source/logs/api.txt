@@ -58,7 +58,7 @@ You can also get the :admin-api-endpoint:`application ID via curl <section/Get-A
   
   .. code-block:: shell
     
-    https://realm.mongodb.com/groups/<Atlas Organization ID>/apps/<{+app+} ID>/dashboard
+    https://realm.mongodb.com/groups/<Atlas Organization ID>/apps/<app ID>/dashboard
     
   You will use the App Services App ID in the URL to call the logging 
   endpoints.
@@ -78,14 +78,14 @@ Logging endpoint with no additional parameters:
    exports = async function() {
      // Get values that you need for requests
      const projectId = "<Atlas Project ID>";
-     const appId = "<{+app+} ID>";
+     const appId = "<app ID>";
      const publicApiKey = "<Atlas Public API Key>";
      const privateApiKey = "<Atlas Private API Key>";
      
      // Authenticate with the Atlas API Key
      const { access_token } = await authenticate(publicApiKey, privateApiKey);
      
-     // Get logs for your {+app+}
+     // Get logs for your app
      const logsEndpoint = `${ADMIN_API_BASE_URL}/groups/${projectId}/apps/${appId}/logs`;
      const  request = {
        "url": logsEndpoint,
@@ -118,14 +118,14 @@ fields:
    exports = async function() {
      // Get values that you need for requests
      const projectId = "<Atlas Project ID>";
-     const appId = "<{+app+} ID>";
+     const appId = "<app ID>";
      const publicApiKey = "<Atlas Public API Key>";
      const privateApiKey = "<Atlas Private API Key>";
      
      // Authenticate with the Atlas API Key
      const { access_token } = await authenticate(publicApiKey, privateApiKey);
      
-     // Get logs for your {+app+}
+     // Get logs for your app
      const logsEndpoint = `${ADMIN_API_BASE_URL}/groups/${projectId}/apps/${appId}/logs`;
      const  request = {
        "url": logsEndpoint + formatQueryString({
@@ -172,14 +172,14 @@ entries.
    exports = async function() {
      // Get values that you need for requests
      const projectId = "<Atlas Project ID>";
-     const appId = "<{+app+} ID>";
+     const appId = "<app ID>";
      const publicApiKey = "<Atlas Public API Key>";
      const privateApiKey = "<Atlas Private API Key>";
    
      // Authenticate with the Atlas API Key
      const { access_token } = await authenticate(publicApiKey, privateApiKey);
      
-     // Get logs for your {+app+}
+     // Get logs for your app
      const pager = new LogPager(projectId, appId, access_token);
      const firstPage = await pager.getNextPage();
      const secondPage = await pager.getNextPage(firstPage);

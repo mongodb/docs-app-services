@@ -6,7 +6,7 @@
    cluster, and you pause Device Sync for longer than 12 hours, you must
    terminate and re-enable Device Sync.
 
-   Terminating and re-enabling paused Atlas Device Sync for your {+app+} erases 
+   Terminating and re-enabling paused Atlas Device Sync for your app erases 
    Atlas Device Sync metadata and requires you to specify configuration settings again. 
    Clients must perform a client reset when they reconnect after Atlas Device Sync has
    been terminated. For more information, see: :ref:`Terminate Sync <terminating-realm-sync>`.
