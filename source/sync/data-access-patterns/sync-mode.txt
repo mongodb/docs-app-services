@@ -16,88 +16,14 @@ Overview
 --------
 
 When you enable Atlas Device Sync, you must specify a Sync mode for your
-{+app+}. The Sync mode determines how users can access data
-from the Atlas App Services SDK (Realm SDK) in the client app. App Services offers two
-Sync modes:
+{+app+}. The Sync mode determines how users can access data from the Atlas App
+Services SDK (Realm SDK) in the client app. App Services offers two Sync modes:
 
-- Partition-Based Sync
-- Flexible Sync
+- Flexible Sync (recommended)
+- Partition-Based Sync (older)
 
 .. include:: /includes/note-transition-between-sync-modes.rst
 
-.. _sync-modes-partition-based-sync:
-
-Partition-Based Sync
---------------------
-
-:ref:`Partition-Based Sync <partition-based-sync>` works best for 
-applications where a subset of the documents in a synced cluster are 
-related and have the same read/write permissions for a given user. 
-Those documents form a **partition**.
-
-In Partition-Based Sync, you define a :ref:`partition key <partition-key>` 
-whose value determines whether the user can read or write a document. 
-App Services :ref:`evaluates a set of rules <partition-based-rules-and-permissions>` 
-to determine whether users can read or write to a given partition. App Services 
-directly maps a partition to individual synced ``.realm`` files. Each 
-object in a synced realm has a corresponding document in the partition.
-
-Choose Partition-Based Sync when:
-
-- You can define a single field and use an equality query to determine which
-  documents to sync
-- Your data structure supports permissions at a partition level
-
-.. example::
-
-   Partition-Based Sync might be a good fit for an inventory management 
-   application. If you use ``store_number`` as the partition key, each 
-   store can read and write documents pertaining to its inventory.
-   
-   An example of the permissions for this type of app might be:
-
-   .. code-block:: json
-     
-      { "%%partition": "Store 42" }
-
-   Store employees could have read and write access to documents whose store 
-   number is Store 42.
-
-   Customers, meanwhile, could have read-only access to store inventory.
-
-In the client, you pass a value for the partition key when opening a synced 
-realm. App Services then syncs objects whose partition key value matches the 
-value passed in from the client application.
-
-.. example::
-
-   Based on the store inventory example above, the SDK might pass in 
-   ``store42`` as the ``partitionValue`` in the sync configuration.
-   This would sync any InventoryItem whose ``partitionValue`` was 
-   ``store42``.
-
-   You can use :ref:`custom user data <custom-user-data>` to indicate 
-   whether a logged-in user is a store employee or a customer. Store 
-   employees would have read and write permission for the ``store42`` 
-   data set, while customers would have only read permission for the 
-   same data set.
-
-   .. code-block:: javascript
-
-      const config = {
-        schema: [InventoryItem], // predefined schema
-        sync: {
-          user: app.currentUser, // already logged in user
-          partitionValue: "store42",
-        },
-      };
-      try {
-        const realm = await Realm.open(config);
-        realm.close();
-      } catch (err) {
-        console.error("failed to open realm", err.message);
-      }
-      
 .. _sync-modes-flexible-sync:
 
 Flexible Sync
@@ -124,11 +50,7 @@ which documents in the query the user can access. App Services maps the document
 that a user can access to a synced ``.realm`` file. Each object in a synced 
 realm gets translated to a corresponding document in {+atlas+}.
 
-Choose Flexible Sync when:
-
-- You need to create expressive query and result sets using a broad range 
-  of queries on up to 10 fields
-- You need a flexible permissioning system to apply more granular permissions
+We recommend Flexible Sync over Partition-Based Sync for most use cases.
 
 .. example::
 
@@ -232,3 +154,74 @@ logged-in user has permission to read or read and write the data.
           name: "patientAndTimeWindow",
         });
       });
+
+
+.. _sync-modes-partition-based-sync:
+
+Partition-Based Sync
+--------------------
+
+We recommend the newer Flexible Sync over the older Partition-Based Sync, as the
+former can do anything the latter can do and much more.
+
+In :ref:`Partition-Based Sync <partition-based-sync>`, documents in a synced
+cluster form a "partition" by having the same value for a field designated as
+"partition key". All documents in a partition have the same read/write
+permissions for a given user.
+
+In Partition-Based Sync, you define a partition key whose value determines
+whether the user can read or write a document. App Services evaluates a set of
+rules to determine whether users can read or write to a given partition. App
+Services directly maps a partition to individual synced ``.realm`` files. Each
+object in a synced realm has a corresponding document in the partition.
+
+.. example::
+
+   Consider an inventory management application using Partition-Based Sync. If
+   you use ``store_number`` as the partition key, each store can read and write
+   documents pertaining to its inventory.
+   
+   An example of the permissions for this type of app might be:
+
+   .. code-block:: json
+     
+      { "%%partition": "Store 42" }
+
+   Store employees could have read and write access to documents whose store 
+   number is Store 42.
+
+   Customers, meanwhile, could have read-only access to store inventory.
+
+In the client, you pass a value for the partition key when opening a synced 
+realm. App Services then syncs objects whose partition key value matches the 
+value passed in from the client application.
+
+.. example::
+
+   Based on the store inventory example above, the SDK might pass in 
+   ``store42`` as the ``partitionValue`` in the sync configuration.
+   This would sync any InventoryItem whose ``partitionValue`` was 
+   ``store42``.
+
+   You can use :ref:`custom user data <custom-user-data>` to indicate 
+   whether a logged-in user is a store employee or a customer. Store 
+   employees would have read and write permission for the ``store42`` 
+   data set, while customers would have only read permission for the 
+   same data set.
+
+   .. code-block:: javascript
+
+      const config = {
+        schema: [InventoryItem], // predefined schema
+        sync: {
+          user: app.currentUser, // already logged in user
+          partitionValue: "store42",
+        },
+      };
+      try {
+        const realm = await Realm.open(config);
+        realm.close();
+      } catch (err) {
+        console.error("failed to open realm", err.message);
+      }
+      

@@ -32,14 +32,14 @@ Before You Start
 - If you don't already have one, `sign up for a free MongoDB Atlas account
   <https://www.mongodb.com/cloud/atlas/register?tck=docs_realm>`__.
 
-- For :ref:`Partition-Based Sync <partition-based-sync>`, ensure that you have a 
-  MongoDB Atlas cluster that runs MongoDB version 4.4 or later. 
-  :ref:`Flexible Sync <flexible-sync>` requires MongoDB version 5.0 or later. 
-  You can use a free shared M0 cluster to explore and develop your app.
-  We recommend that you use a dedicated tier cluster (M10 and above) for
-  production applications. You cannot use sync with a :ref:`serverless
-  instance <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
-
+- :ref:`Flexible Sync <flexible-sync>` requires MongoDB version 5.0 or later.
+  You can use a free shared M0 cluster to explore and develop your app. We
+  recommend that you use a dedicated tier cluster (M10 and above) for production
+  applications. You cannot use sync with a :ref:`serverless instance
+  <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
+  :ref:`Partition-Based Sync <partition-based-sync>`, requires a MongoDB Atlas
+  cluster that runs MongoDB version 4.4 or later.
+  
 - If you don't already have one, :ref:`create a new {+app+}
   <create-a-realm-app>` linked to your Atlas cluster.
 
@@ -95,16 +95,6 @@ type:
   
   For a walkthrough of how to turn on Development Mode, see :ref:`Enable
   Development Mode <enable-development-mode>`.
-  
-  .. tip:: Partition-Based Sync
-     
-     When you use Partition-Based Sync with Development mode, you must specify a 
-     partition key and database to hold synced data.
-     
-     You may not know exactly what you want either of these to be long term, but
-     that's okay. You can always use a placeholder value like ``_partition`` or
-     ``devModeDatabase`` while you build your data model and then change it
-     later before you push to production.
 
 - **Generate object models from a document schema:** App Services can automatically
   generate language-specific object models that you can use in your client
@@ -131,16 +121,8 @@ pattern and access rules for your app's data.
 Choose a Sync Mode
 ~~~~~~~~~~~~~~~~~~
 
-When you use Partition-Based Sync, you must:
-
-- Identify a partition strategy
-- Define a partition key 
-- Configure data access rules 
-
-Partition key values and data access rules determine which users can read or
-write which data in your database.
-
-When you use Flexible Sync, you must:
+There are two Sync Modes: Flexible Sync and the older Partition-Based Sync. We
+recommend you use Flexible Sync. When you use Flexible Sync, you must:
 
 - Specify queryable fields
 - Configure data access rules and default roles
@@ -158,22 +140,10 @@ Data access rules determine which data to sync, as well as each user's
 ability to read and write data. Rules are closely linked to your app's data 
 model.
 
-Partition-Based Sync Data Access Rules
-``````````````````````````````````````
-
-To design effective rules, :ref:`choose a partition strategy
-<partition-strategies>` and corresponding :ref:`read and write permissions
-<partition-based-sync-permissions>` that match your app's data model and 
-access patterns.
-
-Flexible Sync Data Access Rules
-```````````````````````````````
-
-Flexible Sync does not require you to define a partition strategy.
-Instead, you specify which data to sync through queries for
-matching objects in a client application. App Services then evaluates
-:ref:`session roles and rules <flexible-sync-roles>` to determine which
-of those matching objects a user can read and write.
+With Flexible Sync, you specify which data to sync through queries for matching
+objects in a client application. App Services then evaluates :ref:`session roles
+and rules <flexible-sync-roles>` to determine which of those matching objects a
+user can read and write.
 
 You can define session roles on specific collections. Default roles
 provide read and write permissions when more specific session roles do
