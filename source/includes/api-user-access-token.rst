@@ -122,7 +122,7 @@ Select a deployment model below for more information.
    .. tab:: Global Deployment
       :tabid: global
 
-      .. code-block:: javascript
+      .. code-block:: text
          
          https://realm.mongodb.com/api/client/v2.0/app/<App ID>/auth/providers/<provider-name>/login
       
@@ -132,7 +132,7 @@ Select a deployment model below for more information.
    .. tab:: Local Deployment
       :tabid: local
 
-      .. code-block:: javascript
+      .. code-block:: text
          
          https://<Region>.<Cloud>.realm.mongodb.com/api/client/v2.0/app/<AppID>/auth/providers/<ProviderType>/login
       
@@ -248,14 +248,14 @@ uses the following URL:
    .. tab:: Global Deployment
       :tabid: global
 
-      .. code-block:: javascript
+      .. code-block:: text
          
          https://realm.mongodb.com/api/client/v2.0/auth/session
 
    .. tab:: Local Deployment
       :tabid: local
 
-      .. code-block:: javascript
+      .. code-block:: text
          
          https://<Region>.<Cloud>.realm.mongodb.com/api/client/v2.0/auth/session
       
