@@ -1,8 +1,8 @@
-.. _graphql-authentication:
+.. _data-api-authentication:
 
-=============================
-Authenticate GraphQL Requests
-=============================
+==============================
+Authenticate Data API Requests
+==============================
 
 .. contents:: On this page
    :local:
@@ -13,9 +13,10 @@ Authenticate GraphQL Requests
 Overview
 --------
 
-The GraphQL API requires that incoming requests include authentication
-information for the user making the request. This lets the API enforce
-rules and validate document schemas for each operation.
+Data API endpoints generally require that incoming requests include
+authentication information for the user calling the endpoint. This lets
+the endpoint enforce rules and validate document schemas for each
+request.
 
 Users can authenticate through any of the following authentication
 providers:
@@ -32,15 +33,15 @@ providers:
    <authentication-providers>` before users can authenticate with
    it.
 
-This guide shows you how to include authentication information in
-GraphQL requests.
+This guide shows you how to include authentication information in Data
+API requests.
 
-.. _graphql-credential-headers:
+.. _data-api-credential-headers:
 
 Credential Headers
 ------------------
 
-You can authenticate a GraphQL request by including the user's login
+You can authenticate a Data API request by including the user's login
 credentials in the request headers. The exact headers to include depend
 on the authentication provider.
 
@@ -50,82 +51,102 @@ Credential headers are useful for:
 
 - requests sent from a command-line tool
 
-- manual or test requests sent from a GraphQL client like Postman
+- manual or test requests sent from an HTTPS client like Postman
 
 You cannot use credential headers to authenticate requests sent from a
 web browser due to :wikipedia:`Cross-Origin Resource Sharing
 <Cross-origin_resource_sharing>` restrictions. Instead, use
-:ref:`Bearer Authentication <graphql-bearer-authentication>`.
+:ref:`Bearer Authentication <data-api-bearer-authentication>`.
 
 Email/Password
 ~~~~~~~~~~~~~~
 
-To authenticate a GraphQL request as an :ref:`email/password
+To authenticate a Data API request as an :ref:`email/password
 <email-password-authentication>` user, include the user's credentials in
 the request's ``email`` and ``password`` headers.
 
 .. code-block:: shell
    :emphasize-lines: 2-3
 
-   curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/<AppID>/graphql' \
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
       --header 'email: <EmailAddress>' \
       --header 'password: <Password>' \
       --header 'Content-Type: application/json' \
       --data-raw '{
-        "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
       }'
 
 API Key
 ~~~~~~~
 
-To authenticate a GraphQL request with an :ref:`API Key
+To authenticate a Data API request with an :ref:`API Key
 <api-key-authentication>`, include the API key in the request's
 ``apiKey`` header.
 
 .. code-block:: shell
    :emphasize-lines: 2
 
-   curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/<AppID>/graphql' \
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
       --header 'apiKey: <APIKey>' \
       --header 'Content-Type: application/json' \
       --data-raw '{
-        "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
       }'
 
 Custom JWT
 ~~~~~~~~~~
 
-To authenticate a GraphQL request as a :ref:`Custom JWT
+To authenticate a Data API request as a :ref:`Custom JWT
 <custom-jwt-authentication>` user, include the JWT string in the
 request's ``jwtTokenString`` header.
 
 .. code-block:: shell
    :emphasize-lines: 2
 
-   curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/<AppID>/graphql' \
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
       --header 'jwtTokenString: <JWT>' \
       --header 'Content-Type: application/json' \
       --data-raw '{
-        "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
       }'
 
-.. _graphql-bearer-authentication:
+.. _data-api-bearer-authentication:
 
 Bearer Authentication
 ---------------------
 
-To authenticate a GraphQL request as an arbitrary logged in user from
-any provider, include a valid user access token as a bearer token in the
-request's ``Authorization`` header:
+The Data API supports Bearer Authentication, which lets you authenticate
+a Data API request by including a valid user access token in the
+request's ``Authorization`` header.
 
 .. code-block:: shell
    :emphasize-lines: 2
 
-   curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/<AppID>/graphql' \
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
       --header 'Authorization: Bearer <AccessToken>' \
       --header 'Content-Type: application/json' \
       --data-raw '{
-        "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
       }'
 
 .. include:: /includes/api-user-access-token.rst
