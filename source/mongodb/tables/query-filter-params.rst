@@ -30,7 +30,7 @@
    * - | ``query``
        | Object
        | *Default:* ``{}``
-     - A :manual:`MongoDB query </tutorial/query-documents/>` that {+service-short+} merges
+     - A :manual:`MongoDB query </tutorial/query-documents/>` that App Services merges
        into a filtered operation's existing query.
 
        .. example::
@@ -46,7 +46,7 @@
        | Object
        | *Default:* ``{}``
      - A :manual:`MongoDB projection </tutorial/project-fields-from-query-results/>`
-       that {+service-short+} merges into a filtered operation's existing projection.
+       that App Services merges into a filtered operation's existing projection.
 
        .. important:: Projection Conflicts
           

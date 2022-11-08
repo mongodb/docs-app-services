@@ -25,7 +25,7 @@ MongoDB Data Sources
 Overview
 --------
 
-A **data source** represents a `{+atlas+}
+A **data source** represents a `MongoDB Atlas
 <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_
 instance in the same project as your app. You use data sources to store
 and retreive your application's data.
@@ -59,7 +59,7 @@ following guides:
 - :ref:`Write Data in MongoDB Atlas <mongodb-write>`
 - :ref:`Aggregate Data in MongoDB Atlas <mongodb-aggregate>`
 
-To learn how to work with a data source from a {+client-sdk+}, refer to the
+To learn how to work with a data source from a Realm SDK, refer to the
 docs for the SDK:
 
 - :ref:`Query MongoDB - Swift SDK <ios-mongodb-data-access>`
@@ -131,8 +131,8 @@ To learn more about how triggers work and how to define your own, see
 .. important::
 
    Triggers are only available for data sources that support change
-   streams. You cannot define triggers on a {+adf-instance+} or
-   Serverless Instance.
+   streams. You cannot define triggers on a federated database instance or
+   serverless instance.
 
 .. _link-a-data-source:
 
@@ -140,8 +140,8 @@ Link a Data Source
 ------------------
 
 A configured data source in your app is *linked* to the underlying
-instance in {+atlas-short+}. You can link multiple instances to your app
-and even create multilpe data sources that link to the same underyling
+instance in Atlas. You can link multiple instances to your app
+and even create multiple data sources that link to the same underlying
 instance.
 
 You can configure a new linked data source in the App Services UI or by defining
@@ -172,7 +172,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
               * - Field
                 - Description
               * - :guilabel:`Data Source`
-                - A MongoDB Atlas cluster or {+adf-instance+} associated with the same project as
+                - A MongoDB Atlas cluster or federated database instance associated with the same project as
                   your App.
               * - :guilabel:`App Services Service Name`
                 - A name for the App Services service that connects to the data source.
@@ -192,20 +192,20 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
 
               * - | :guilabel:`MongoDB Connection String`
                   | *config.wireProtocolEnabled*
-                - Required for Atlas clusters. Not enabled for {+adf-instance+}s.
+                - Required for Atlas clusters. Not enabled for federated database instances.
                   A boolean indicating whether App Services should allow
                   clients to :ref:`connect to this cluster with a connection string over
                   the wire protocol <wire-protocol>`.
 
               * - :guilabel:`Read Preference`
-                - Required for Atlas clusters. Not available for {+adf-instance+}s. Specifies the
+                - Required for Atlas clusters. Not available for federated database instances. Specifies the
                   :ref:`read preference <read-preference>` of the cluster. The default
                   read preference (primary) should be sufficient for most use cases.
 
 
          .. step:: Save the Linked Data Source
 
-            Once you've selected and configured a MongoDB cluster or {+adf-instance+},
+            Once you've selected and configured a MongoDB cluster or federated database instance,
             click :guilabel:`Save`. App Services immediately begins the
             process of linking to the data source, which could take up to five
             minutes.
@@ -218,7 +218,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
 
          .. step:: Pull the Latest Version of Your App
 
-            To link a MongoDB Atlas cluster or {+adf-instance+} with {+cli-bin+}, you need a
+            To link a MongoDB Atlas cluster or federated database instance with {+cli-bin+}, you need a
             local copy of your application's configuration files.
 
             To pull a local copy of the latest version of your app, run the following:
@@ -246,7 +246,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
          .. step:: Add a Data Source Configuration File
 
             Add a file named ``config.json`` to the data source subdirectory. The file can
-            configure either a MongoDB Atlas cluster or a {+adf-instance+}.
+            configure either a MongoDB Atlas cluster or a federated database instance.
 
             The configuration file should have the following general form:
 
@@ -275,7 +275,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
                      file, see :ref:`Linked MongoDB Cluster Configuration
                      <config-mongodb-cluster>`.
 
-               .. tab:: {+adf+}
+               .. tab:: Atlas Data Federation
                   :tabid: adf
 
                   .. code-block:: json
@@ -285,13 +285,13 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
                        "name": "<Service Name>",
                        "type": "datalake",
                        "config": {
-                          "dataLakeName": "<{+adf-instance+} name>"
+                          "dataLakeName": "<federated database instance name>"
                         }
                      }
 
                   .. note::
 
-                     For more information, see :ref:`{+adf-instance+} Configuration <config-adf>`.
+                     For more information, see :ref:`Federated Database Instance Configuration <config-adf>`.
 
 
          .. step:: Deploy the Data Source Configuration
@@ -309,7 +309,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
 Data Source Limitations
 -----------------------
 
-A linked data source can represent one of several instance {+atlas+}
+A linked data source can represent one of several instance MongoDB Atlas
 instance types. Depending on the type of the underlying instance, not
 all functionality is supported.
 
@@ -319,7 +319,7 @@ instance type.
 
 .. _data-federation-caveats:
 
-{+adf+}
+Atlas Data Federation
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /mongodb/adf-limitations.rst

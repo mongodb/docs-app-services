@@ -39,7 +39,7 @@ Changeset
 
 A **changeset** is a list of instructions that describe granular modifications
 made to a known object state or version by one or more write operations.
-Changesets are the base unit of the sync protocol. Synced {+realm+} clients send
+Changesets are the base unit of the sync protocol. Synced realm clients send
 changesets to the Device Sync server whenever they perform a write
 operation. The server sends each connected client the changesets for write
 operations executed by other clients.
@@ -130,7 +130,7 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 .. code-block:: text
    :copyable: false
    
-   {+client-sdk+}                      {+app+} Server
+   Realm SDK                      {+app+} Server
        |                                  |
        |  <---- 1. HTTP Handshake ----->  |
        |                                  |
@@ -163,12 +163,12 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 
    .. step:: Client Initiates a Sync Session
 
-      To begin a sync session, a {+client-sdk+} sends a :sync-client-message:`BIND`
+      To begin a sync session, a Realm SDK sends a :sync-client-message:`BIND`
       request to a Device Sync server. The request identifies a
-      specific local {+client-database+} file to sync and includes a WebSocket connection key that
+      specific local Realm Database file to sync and includes a WebSocket connection key that
       the server will use to open a bidirectional connection to the SDK.
 
-      If the SDK is attempting to sync a particular {+client-database+} file for the first time,
+      If the SDK is attempting to sync a particular Realm Database file for the first time,
       it does not yet possess a server-generated client identifier for the file. In
       this case, the :sync-client-message:`BIND` request also indicates that the
       Device Sync server should allocate one.
@@ -178,22 +178,22 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 
       If a :sync-client-message:`BIND` request indicates that the SDK needs a client
       file identifier, the Device Sync server generates a unique value for the specified
-      {+client-database+} file and sends it to the SDK in an :sync-server-message:`IDENT`
+      Realm Database file and sends it to the SDK in an :sync-server-message:`IDENT`
       response. When the SDK receives the :sync-client-message:`IDENT`, it stores
-      the new client identifier persistently in the local {+client-database+} file.
+      the new client identifier persistently in the local Realm Database file.
 
       An SDK only needs to request a client file identifier the first time it syncs
-      each {+client-database+} file. For subsequent sync sessions, the SDK can use the persisted
+      each Realm Database file. For subsequent sync sessions, the SDK can use the persisted
       identifier.
 
 
    .. step:: Client Sends a Client Identifier
 
       Once an SDK has initiated a sync session with a :sync-client-message:`BIND`
-      request, it must identify the local {+client-database+} file that it wants to sync. To do
+      request, it must identify the local Realm Database file that it wants to sync. To do
       this, the SDK sends the application server an :sync-client-message:`IDENT`
       message that contains the client file identifier. If the SDK has previously
-      synced the {+realm+} with the server, it can specify the most recently synced
+      synced the realm with the server, it can specify the most recently synced
       server version to optimize the sync process.
 
       When it receives the :sync-client-message:`IDENT` message, the server
@@ -265,8 +265,8 @@ Device Sync server:
        indicates the following:
        
        - the Realm file to sync
-       - the client {+realm+}'s current version
-       - the client {+realm+}'s most recently synced server version
+       - the client realm's current version
+       - the client realm's most recently synced server version
        
        This request is related to but distinct from the
        :sync-server-message:`IDENT` message sent by the server when a client
@@ -300,7 +300,7 @@ Device Sync server:
      - Requests that the server send one or more :sync-server-message:`STATE`
        messages, which the client uses to download the current server version of
        the Realm file. Clients issue state requests when they
-       asynchronously open a synced {+realm+}.
+       asynchronously open a synced realm.
    
    * - .. sync-client-message:: CLIENT_VERSION_REQUEST
      - Requests that the server send the client version of the latest changeset
@@ -362,7 +362,7 @@ server can send to a sync client:
    
    * - .. sync-server-message:: STATE
      - Contains one or more segments of encoded data that the client can
-       concatenate to construct the latest server version of the {+realm+}. Sent
+       concatenate to construct the latest server version of the realm. Sent
        in response to a :sync-client-message:`STATE_REQUEST`.
    
    * - .. sync-server-message:: CLIENT_VERSION

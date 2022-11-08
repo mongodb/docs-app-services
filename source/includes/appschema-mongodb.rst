@@ -1,4 +1,4 @@
-Every :ref:`{+atlas+} data source <data-sources>`
+Every :ref:`MongoDB Atlas data source <data-sources>`
 linked to your app is configured as a service in the ``/services``
 directory. Each data source maps to its own sub-directory with the same
 name as the service.
@@ -7,7 +7,7 @@ The primary service configuration for a MongoDB Atlas data source is
 ``config.json``, which defines connection parameters and sync rules.
 
 If the data source is not a :doc:`synced cluster </sync>` or
-:ref:`{+adf-instance+} <data-federation-caveats>`, then you can
+:ref:`federated database instance <data-federation-caveats>`, then you can
 define collection-level rules in the ``/rules`` sub-directory.
 
 .. code-block:: none
@@ -26,7 +26,7 @@ define collection-level rules in the ``/rules`` sub-directory.
    data source's name in Atlas. You define the service name for a data
    source when you link it to your application. For linked clusters, the
    default MongoDB service name is ``mongodb-atlas``. For
-   {+adf-datasource+}s, the default service name is
+   federated data sources, the default service name is
    ``mongodb-datafederation``.
 
 .. _mongodb-service-configuration-file:
@@ -78,7 +78,7 @@ the cluster.
    * - | ``sync.state``
        | Boolean
      - If ``true``, :doc:`Sync </sync>` is enabled for the cluster, which means
-       that client applications can sync data in the cluster with {+client-database+}
+       that client applications can sync data in the cluster with Realm Database
        and that :ref:`non-sync collection rules <mongodb-service-rules>` do not
        apply.
    

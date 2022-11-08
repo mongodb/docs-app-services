@@ -194,7 +194,7 @@ field, which corresponds to the user's ID, and 3 additional fields:
 Enable & Configure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service+} stores MongoDB documents that correspond to custom user data
+Atlas App Services stores MongoDB documents that correspond to custom user data
 in a linked MongoDB Atlas cluster. When you configure custom user data for your 
 application, you specify the cluster, database, collection, and finally a 
 User ID field, which maps a custom user data document to an 
@@ -290,7 +290,7 @@ to other creators' content. As with the Admin Privileges scenario, we will
 make use of a Custom User Data collection to define which authors' content 
 a user is subscribed to read.
 
-Flexible {+sync-short+} supports querying arrays, so we will create an array 
+Flexible Device Sync supports querying arrays, so we will create an array 
 within a user data object. This array contains IDs of the authors that this user 
 is authorized to "follow". We then set up a subscription that says, in essence, 
 "Give me all documents where I am the author, or the author's ID is in the array  
@@ -305,7 +305,7 @@ of authors in my custom user data."
 .. note:: Size Limitations
 
    In this example, we are creating an array in the Custom User Data. The 
-   size of this array is not limited by {+realm+}, but because the data is 
+   size of this array is not limited by realm, but because the data is 
    included in each request, we recommend keeping the size under 16KB, which 
    is enough space for 1000 128-bit GUID-style user IDs.
 
@@ -710,7 +710,7 @@ To create the function, follow these steps:
 
 Define Sync Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~
-The following {+sync-short+} permissions specify two roles:
+The following Device Sync permissions specify two roles:
 
 - **teamAdmin** applies only when the user's custom data has 
   ``isTeamAdmin: true``. If so, the user can read and write all documents where 

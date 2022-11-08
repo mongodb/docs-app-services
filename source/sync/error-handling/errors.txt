@@ -15,7 +15,7 @@ Sync Errors
 Overview
 --------
 
-While you develop applications using {+sync+}, you may run into errors. This
+While you develop applications using Atlas Device Sync, you may run into errors. This
 section lists common errors and describes how to and handle them.
 
 .. note::
@@ -28,9 +28,9 @@ section lists common errors and describes how to and handle them.
 Sync Protocol Errors 
 ---------------------
 
-The following table describes :ref:`{+sync-short+} protocol <sync-protocol>`
-errors and how to handle them. {+service+} reports errors in your
-:doc:`{+sync-short+} logs </logs>`.
+The following table describes :ref:`Device Sync protocol <sync-protocol>`
+errors and how to handle them. Atlas App Services reports errors in your
+:doc:`Device Sync logs </logs>`.
 
 .. list-table::
    :header-rows: 1
@@ -40,17 +40,17 @@ errors and how to handle them. {+service+} reports errors in your
      - Description
 
    * - ErrorBadClientFileIdent
-     - This error occurs when the client is using a {+realm+} file that the
+     - This error occurs when the client is using a realm file that the
        server cannot access after :ref:`terminating and re-enabling
-       {+sync-short+} <terminating-and-reenabling-sync>`.
+       Device Sync <terminating-and-reenabling-sync>`.
        
        This error triggers a client reset. To recover from this error, 
        perform a :ref:`client reset <client-resets>`.
 
    * - ErrorClientFileUserMismatch
      - This error indicates that the client attempted to synchronize a
-       {+realm+} file associated with an identity other than the specified user.
-       This may occur if {+sync-short+} is :ref:`terminated and reenabled
+       realm file associated with an identity other than the specified user.
+       This may occur if Device Sync is :ref:`terminated and reenabled
        <terminating-and-reenabling-sync>` while the user is
        offline, which invalidates their previous identity.
        
@@ -59,8 +59,8 @@ errors and how to handle them. {+service+} reports errors in your
 
    * - ErrorDivergingHistories
      - This error indicates that the client attempted to synchronize a 
-       {+realm+} file that has a different sync history than the server
-       {+realm+}. This may occur if {+sync-short+} is :ref:`terminated and
+       realm file that has a different sync history than the server
+       realm. This may occur if Device Sync is :ref:`terminated and
        reenabled <terminating-and-reenabling-sync>` while the
        user is offline, which invalidates their previous sync history.
        
@@ -72,7 +72,7 @@ errors and how to handle them. {+service+} reports errors in your
        sufficient for a given request. This can occur if a user attempts to open
        a realm without read permission or modify data without write permission.
        
-       To troubleshoot this error, review your :ref:`{+sync-short+} rules
+       To troubleshoot this error, review your :ref:`Device Sync rules
        <sync-rules>` to make sure that users have proper data access
        permissions.
    
@@ -97,14 +97,14 @@ The following errors may occur when your {+app+} uses :ref:`Partition-Based Sync
      - Description
 
    * - ErrorIllegalRealmPath
-     - This error indicates that the client attempted to open a {+realm+} with a
+     - This error indicates that the client attempted to open a realm with a
        partition value of the wrong type. For example, you might see the error
        message "attempted to bind on illegal realm partition: expected partition
        to have type objectId but found string".
        
        To recover from this error, ensure that the type of the partition value
        used to open the realm matches the partition key type in your
-       {+sync-short+} configuration.
+       Device Sync configuration.
 
 .. _flexible-sync-errors:
 
@@ -215,7 +215,7 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
 MongoDB Translator Errors
 -------------------------
 
-The following errors may occur in the translation process between {+sync-short+}
+The following errors may occur in the translation process between Device Sync
 and MongoDB Atlas.
 
 .. list-table::
@@ -235,7 +235,7 @@ and MongoDB Atlas.
    
    * - TranslatorCorrectiveErasure
      - This error occurs when a synced MongoDB cluster rejects the write
-       operation for a propagated {+sync-short+} change. This is usually caused by
+       operation for a propagated Device Sync change. This is usually caused by
        a duplicate key exception, which means that two objects use the same
        primary key. To avoid this error, use an ``ObjectId`` or ``UUID`` as the
        primary key value. Alternatively, ensure that every synced object has a
@@ -272,7 +272,7 @@ message contains a code number and a description of the error.
 
 To see the full list of sync errors, refer to the :github:`error code list
 <realm/realm-core/blob/master/doc/protocol.md#error-codes>` in the
-{+client-database+} Core GitHub repository.
+Realm Database Core GitHub repository.
 
 .. _handle-and-log-sync-errors:
 

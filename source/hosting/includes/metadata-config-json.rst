@@ -46,7 +46,7 @@
           * - ``name``
             - The name of the metadata attribute. This should be one of
               the :doc:`file metadata attributes
-              </hosting/file-metadata-attributes>` that {+service-short+}
+              </hosting/file-metadata-attributes>` that App Services
               supports.
 
           * - ``value``

@@ -16,7 +16,7 @@ following form:
      }
    }
 
-The configuration file for an {+adf-datasource+} should has the following form:
+The configuration file for a federated data source should have the following form:
 
 .. code-block:: json
    :caption: config.json
@@ -26,13 +26,13 @@ The configuration file for an {+adf-datasource+} should has the following form:
      "name": "<Service Name>",
      "type": "datalake",
      "config": {
-        "dataLakeName": "<{+adf-instance+} name>"
+        "dataLakeName": "<federated database instance name>"
       }
     }
 
 Exactly one of ``config.dataLakeName`` and ``config.clusterName`` is
 required, depending on whether you are linking a cluster or a
-{+adf-datasource+}.
+federated data source.
 
 .. list-table::
    :header-rows: 1
@@ -52,12 +52,12 @@ required, depending on whether you are linking a cluster or a
      - The name of the service. The name may be at most 64 characters
        long and can only contain ASCII letters, numbers, underscores,
        and hyphens. For clusters, the default name is ``mongodb-atlas``.
-       For {+adf-datasource+}s, it is ``mongodb-datafederation``.
+       For federated data sources, it is ``mongodb-datafederation``.
    
    * - | ``type``
        | String
      - For MongoDB Atlas clusters, this value is always ``"mongodb-atlas"``.
-       For {+adf-datasource+}s, this value is ``"datalake"``.
+       For federated data sources, this value is ``"datalake"``.
    
    * - | ``config.clusterName``
        | String
@@ -65,12 +65,12 @@ required, depending on whether you are linking a cluster or a
    
    * - | ``config.dataLakeName``
        | String   
-     - Required when linking an {+adf-datasource+}s. The name of the instance that you want to link to your application.
+     - Required when linking a federated data sources. The name of the instance that you want to link to your application.
 
    * - | ``config.readPreference``
        | String
      - The :ref:`read preference <read-preference>` mode for queries sent
-       through the service. Not available for {+adf-datasource+}s.
+       through the service. Not available for federated data sources.
        
        .. include:: /mongodb/tables/read-preference-modes.rst
    
@@ -78,7 +78,7 @@ required, depending on whether you are linking a cluster or a
        | Document
      - A configuration document that determines if a cluster is :doc:`synced
        </sync>` and, if it is, defines the rules for sync operations on the
-       cluster. Not available for {+adf-datasource+}s.
+       cluster. Not available for federated data sources.
 
        For detailed information on sync configuration documents, see
        :ref:`Synced Cluster Configuration <mongodb-service-sync-rules>`.
