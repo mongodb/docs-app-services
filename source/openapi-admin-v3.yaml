@@ -4329,6 +4329,13 @@ components:
             - "NO_VALIDATION"
             - "SECRET_AS_QUERY_PARAM"
             - "VERIFY_PAYLOAD"
+        secret_id:
+          type: string
+          description: |-
+            If `validation_method` is set to `"SECRET_AS_QUERY_PARAM"`
+            or `"VERIFY_PAYLOAD"`, this is the `_id` of the
+            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+            that authorizes requests.
         return_type:
           $ref: "#/components/schemas/EndpointDataFormat"
           description: The default [data format](https://mongodb.com/docs/atlas/app-services/data-api/#data-formats) returned by custom HTTPS endpoints.
@@ -4375,6 +4382,19 @@ components:
             application user's account ID. If defined, endpoints execute
             the function on every request and run as the user with the
             ID returned from the function.
+        validation_method:
+          type: string
+          enum:
+            - "NO_VALIDATION"
+            - "SECRET_AS_QUERY_PARAM"
+            - "VERIFY_PAYLOAD"
+        secret_name:
+          type: string
+          description: |-
+            If `validation_method` is set to `"SECRET_AS_QUERY_PARAM"`
+            or `"VERIFY_PAYLOAD"`, this is the `name` of the
+            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+            that authorizes requests.
     Error:
       type: object
       properties:
