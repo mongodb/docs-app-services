@@ -18,42 +18,28 @@ Overview
 --------
 
 The API Key :ref:`authentication provider <authentication-providers>`
-allows users to log in using generated keys. There are two types of API
-keys in Atlas App Services: server keys and user keys.
+allows users to log in using generated keys.
 
-.. _api-key-authentication-server-api-key:
+App Services supports the following two types of API keys:
 
-Server API Keys
-~~~~~~~~~~~~~~~
+- **Server API keys**: API keys created from an admin interface associated
+  with server users.
+- **User API keys**: API keys created from the Realm SDKs associated
+  with application users.
 
-Server API keys are generated in the App Services UI. Creating a server API key
-associates that API key with an automatically created App Services server user.
-Provide a server key to external applications and services to allow them
-to authenticate directly with App Services.
-
-You can associate up to 100 server API keys with an app. 
-
-.. _api-key-authentication-user-api-key:
-
-User API Keys
-~~~~~~~~~~~~~
-
-User API keys are generated for specific application users by the client
-SDKs. You can allow devices or services to communicate with App Services on
-behalf of a user by associating a unique user API key with each device.
-
-User API keys are always associated with a non-anonymous user. Each user can
-associate up to 20 user API keys with their account.
+API keys do not expire automatically.
 
 .. _api-key-authentication-configuration:
 .. _config-api-key:
 
-Configuration
--------------
+Enable API Key Authentication
+-----------------------------
+
+To work with API key users, you must first enable the API key authentication provider.
+The API Key authentication provider does not have any configuration options.
 
 .. tabs-realm-admin-interfaces::
-   
-   
+
    .. tab::
       :tabid: ui
 
@@ -63,16 +49,16 @@ Configuration
 
    .. tab::
       :tabid: cli
-         
+
       To enable and configure the API Key authentication provider with
-      :ref:`realm-cli <realm-cli-quickstart>`, define a :ref:`configuration 
+      :ref:`realm-cli <realm-cli-quickstart>`, define a :ref:`configuration
       object <appconfig-auth>` for it in ``/auth/providers.json``.
 
       API Key provider configurations have the following form:
 
       .. code-block:: none
          :caption: /auth/providers.json
-         
+
          {
            "api-key": {
              "name": "api-key",
@@ -81,55 +67,76 @@ Configuration
            }
          }
 
-.. note::
+.. _api-key-user-objects:
 
-   The API Key authentication provider does not have any
-   provider-specific configuration options.
+API Key User Objects
+--------------------
+
+Every App Services user, has a unique user object with metadata specific to that user.
+API key user objects are the same as application user objects, except that
+
+TODO: fill out this section
+
+.. _api-key-authentication-server-api-key:
+
+Server API Keys
+---------------
+
+Server API keys are generated in a server-side context using one of
+the App Services admin interfaces. When you create a server API key,
+you also create an associated server user.
+
+You can provide a server key to external applications and services
+to allow them to authenticate directly with App Services.
+
+You can associate up to 100 server API keys with an app.
 
 .. _api-key-authentication-usage-create-server-key:
 
 Create a Server API Key
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tabs-realm-admin-interfaces::
-   
+
    .. tab::
       :tabid: ui
-      
+
       #. Select :guilabel:`App Users` from the {+leftnav+}.
-      
+
       #. Select the :guilabel:`Authentication Providers` button and then select
          the :guilabel:`API Keys` provider.
-      
+
       #. If the API Key provider is not currently enabled, enable it and then
          deploy your application.
-      
+
       #. Click :guilabel:`Create API Key`.
-      
+
       #. Enter a unique name for the key and then click :guilabel:`Save`.
-   
+
    .. tab::
       :tabid: cli
-      
+
       .. tip::
-         
+
          You must enable the API key provider before you can create an API key.
-      
+
       To create a new server API key, call ``realm-cli users create`` and
       specify ``--type=api-key``. The CLI will prompt you for your App ID as
       well as a name for the new API key.
-      
+
       .. code-block:: bash
-         
+
          realm-cli users create --type=api-key
-      
+
       You can also specify the arguments when you call the program:
-      
+
       .. code-block:: bash
-         
+
          realm-cli users create --type=api-key \
            --app=<Your App ID> \
            --name=<API Key Name>
+
+TODO: tab for API
 
 .. important::
 
@@ -137,10 +144,28 @@ Create a Server API Key
    Once you leave the provider configuration page or disable the key you
    cannot retrieve the value from the App Services UI.
 
+.. _api-key-authentication-user-api-key:
+
+User API Keys
+-------------
+
+Generate user API keys with the Realm SDKs.
+User API keys are generated for specific application users by the Realm
+SDKs in client applications. You can then use the user API to authenticate as that user.
+
+You can allow devices or services to communicate with App Services on behalf
+of a user by associating a unique user API key with each device.
+
+User API keys are always associated with a non-anonymous user. Each user can
+associate up to 20 user API keys with their account.
+
+To learn how to generate user API keys, refer to the Realm SDK documentation.
+You can find the relevant Realm SDK documentation in the following Realm SDK Examples section.
+
 .. _api-key-authentication-examples:
 
-Examples
---------
+Realm SDK Examples
+------------------
 
 For code examples that demonstrate how to register and log in using
 API Key authentication, see the documentation for the {+client-sdks+}:
@@ -167,7 +192,7 @@ API Key authentication, see the documentation for the {+client-sdks+}:
 
    .. tab::
       :tabid: node
-      
+
       To register or log in an API Key user from the Node Client SDK, see the
       :ref:`Node SDK guide to API Key authentication <node-login-api-key>`.
 
