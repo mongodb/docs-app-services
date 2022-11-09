@@ -126,11 +126,12 @@ Consider the following scenario:
 
 #. The database trigger is restarted.
 
-In this case, the trigger will pick up all of the new file additions and fire a 
-notification for each. It will not resend prior notifications. 
+In this case, the updates are applied on top of the snapshot and the trigger 
+picks up the change events for them. It fires a notification for each and will
+not resend prior notifications. 
 
 .. note::
 
-   If a database trigger is enabled during snapshot restoration, you will see an 
-   error in the Edit Trigger section of the Atlas UI because it cannot connect to 
-   the Atlas cluster during the restore process. 
+   If a previously-enabled database trigger is running during snapshot restoration, 
+   you will see an error in the Edit Trigger section of the Atlas UI because the 
+   trigger cannot connect to the Atlas cluster during the restore process. 
