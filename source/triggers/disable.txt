@@ -103,3 +103,26 @@ importing an application directory with {+cli-bin+}.
 
                realm-cli push
 
+
+Restoring from a Snapshot
+-------------------------
+
+Consider the following scenario:
+
+- A database trigger is disabled or suspended.
+
+- New documents are added while the trigger is disabled.
+
+- The database is restored from a snapshot to a time prior to the new documents 
+  being added.
+
+- The database trigger is restarted.
+
+In this case, the trigger will pick up all of the new file additions and fire a 
+notification for each. It will not resend prior notifications. 
+
+.. note:: Title
+
+   If a database trigger is enabled during snapshot restoration, you will see an 
+   error in the Edit Trigger section of the Atlas UI because it cannot connect to 
+   the Atlas cluster during the restore process. 
