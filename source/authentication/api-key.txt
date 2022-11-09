@@ -72,10 +72,24 @@ The API Key authentication provider does not have any configuration options.
 API Key User Objects
 --------------------
 
-Every App Services user, has a unique user object with metadata specific to that user.
-API key user objects are the same as application user objects, except that
+Every App Services user has a unique metadata object. The object is passed to Functions
+called by the user and rule expressions for requests made by the user.
+In API key user objects, the ``type`` field has the value ``"server"``. For example:
 
-TODO: fill out this section
+.. code-block:: js
+   :emphasize-lines: 3
+
+   {
+     id: "<Unique User ID>",
+     type: "server",
+     data: <user data object>,
+     custom_data: <custom user data object>,
+     identities: <array of user identities>,
+   }
+
+You can use this field to evaluate if requests come from API keys.
+
+For more information on working with user objects, refer to :ref:`User Objects <user-objects>`.
 
 .. _api-key-authentication-server-api-key:
 
@@ -136,7 +150,11 @@ Create a Server API Key
            --app=<Your App ID> \
            --name=<API Key Name>
 
-TODO: tab for API
+   .. tab::
+      :tabid: api
+
+      To create a server API key using the Admin API, make a request to the
+      `Create a new API key <{+base-url+}{+admin-api-page+}tag/apikeys/operation/adminListApiKeys>`__ endpoint.
 
 .. important::
 
