@@ -351,6 +351,104 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+  
+  "/groups/{groupId}/apps/{appId}/event_subscriptions":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - name: type
+        description: |-
+          The type of event subscription to return.
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - DATABASE
+            - AUTHENTICATION
+            - SCHEDULED
+            - SYNCTRANSLATOR
+    get:
+      tags:
+        - event-subscriptions
+      operationId: adminListEventSubscriptions
+      summary: List Event Subscriptions
+      description: Get all event subscriptions.
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: |-
+                  A list of all event subscriptions for the app. To see
+                  Device Sync translator subscriptions, call this
+                  endpoint with the query parameter
+                  `?type=SYNCTRANSLATOR`.
+                items:
+                  $ref: "#/components/schemas/EventSubscription"
+  "/groups/{groupId}/apps/{appId}/event_subscriptions/{eventSubscriptionId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EventSubscriptionId"
+    get:
+      tags:
+        - event-subscriptions
+      operationId: adminGetEventSubscription
+      summary: Get an Event Subscription
+      description: Return information about an event subscription.
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSubscription"
+  
+  "/groups/{groupId}/apps/{appId}/event_subscriptions/{eventSubscriptionId}/execution":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EventSubscriptionId"
+    get:
+      tags:
+        - event-subscriptions
+      operationId: adminGetLatestEventSubscriptionExecution
+      summary: Get the Latest Event Subscription Execution
+      description: Return information about the most recent execution of an event subscription.
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  resource_id:
+                    type: object
+                  completed_at:
+                    type: object
+                    description: |-
+                      The last time a batch was processed from the event stream.
+
+                      The value of `completed_at` should be relatively
+                      close to the current time. If `completed_at` is
+                      not updating over time, it might mean that the
+                      event processor (e.g. Device Sync) is down or
+                      stuck.
+                  cluster_time:
+                    type: object
+                    description: |-
+                      The time of the latest event in the most recently processed batch.
+
+                      If the value of `cluster_time` is significantly
+                      earlier than the `completed_at` time, the event
+                      processor (e.g. Device Sync) is lagging behind the event .
+
   "/groups/{groupId}/apps/{appId}/triggers":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3818,6 +3916,13 @@ components:
       required: true
       schema:
         type: string
+    EventSubscriptionId:
+      name: eventSubscriptionId
+      description: The unique `_id` value of an event subscription.
+      in: path
+      required: true
+      schema:
+        type: string
     ServiceId:
       name: serviceId
       description: The unique `_id` value of a service.
@@ -4566,6 +4671,38 @@ components:
           type: string
         collection:
           type: string
+    EventSubscription:
+      description: |-
+        A subscription to a change event stream.
+      oneOf:
+        - "$ref": "#/components/schemas/AnyTrigger"
+        - title: SyncTranslator
+          type: object
+          properties:
+            _id:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+              const: "SYNCTRANSLATOR"
+            function_id:
+              type: string
+            disabled:
+              type: boolean
+            config:
+              type: "null"
+            last_modified:
+              type: number
+          example: {
+            "_id": "636c189a93daaf89c4900a81",
+            "name": "SyncTranslator",
+            "type": "SYNCTRANSLATOR",
+            "function_id": "000000000000000000000000",
+            "disabled": false,
+            "config": null,
+            "last_modified": 1668028570
+          }
     Expression:
       description: A [rule expression](https://mongodb.com/docs/atlas/app-services/rules/expressions/).
       oneOf:
@@ -5773,6 +5910,9 @@ tags:
   - name: endpoints
     x-displayName: Endpoints
     description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
+  - name: event-subscriptions
+    x-displayName: Event Subscriptions
+    description: View your app's active event subscriptions.
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
