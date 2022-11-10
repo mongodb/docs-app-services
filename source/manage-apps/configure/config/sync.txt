@@ -21,139 +21,14 @@ directory:
    └── sync/
        └── config.json
 
-.. _partition-based-sync-config-object:
-
-Partition-Based Sync Configuration
-----------------------------------
-
-When you use :ref:`Partition-Based Sync <partition-based-sync>`, your Atlas App Services
-app uses this Sync configuration:
-
-.. code-block:: json
-   :caption: sync/config.json
-   
-   {
-     "type": "partition",
-     "state": <"enabled" | "disabled">,
-     "development_mode_enabled": <Boolean>,
-     "service_name": "<Data Source Name>",
-     "database_name": "<Development Mode Database Name>",
-     "partition": {
-       "key": "<Partition Key Field Name>",
-       "type": "<Partition Key Type>",
-       "permissions": {
-         "read": { <Expression> },
-         "write": { <Expression> }
-       }
-     },
-     "last_disabled": <Number>,
-     "client_max_offline_days": <Number>,
-     "is_recovery_mode_disabled": <Boolean>
-   }
-
-.. list-table::
-   :header-rows: 1
-   :widths: 10 40
-
-   * - Field
-     - Description
-
-   * - | ``type``
-       | String
-     - The :ref:`Sync Mode <sync-modes>` that determines how users can access
-       data in client applications.
-
-       Valid Options:
-
-       - ``"partition"``
-
-   * - | ``state``
-       | String
-     - The current state of the sync protocol for the application.
-       
-       Valid Options:
-       
-       - ``"enabled"``
-       - ``"disabled"``
-
-   * - | ``service_name``
-       | String
-     - The name of the :ref:`MongoDB data source <appconfig-data_sources>`
-       to sync. You cannot use sync with a :ref:`serverless instance
-       <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
-
-   * - | ``development_mode_enabled``
-       | Boolean
-     - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
-       for the application. While enabled, App Services automatically stores synced
-       objects in a specific database (specified in ``database_name``) and
-       mirrors objects types in that database's collection schemas.
-
-   * - | ``database_name``
-       | String
-     - The name of a database in the synced cluster where App Services stores data in
-       :ref:`Development Mode <enable-development-mode>`. App Services automatically
-       generates a schema for each synced type and maps each object type to a
-       collection within the database.
-
-   * - | ``partition.key``
-       | String
-     - The field name of your app's :ref:`partition key <partition-key>`. This
-       field must be defined in the schema for object types that you want to
-       sync.
-
-   * - | ``partition.type``
-       | String
-     - The value type of the partition key field. This must match the type
-       defined in the object schema.
-       
-       Valid Options:
-
-       - ``"string"``
-       - ``"objectId"``
-       - ``"long"``
-
-   * - | ``partition.permissions.read``
-       | Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when a user
-       has permission to read objects in a partition. If the expression
-       evaluates to ``false``, App Services does not allow the user to read
-       an object or its properties.
-
-   * - | ``partition.permissions.write``
-       | Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when a user
-       has permission to write objects in a partition. If the expression
-       evaluates to ``false``, App Services does not allow the user to
-       modify an object or its properties. Write permission requires read 
-       permission. A user cannot write to a document that they cannot read.
-
-   * - | ``last_disabled``
-       | Number
-     - The date and time that sync was last paused or disabled, represented by
-       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
-       UTC).
-
-   * - | ``client_max_offline_days``
-       | Number
-     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
-       process waits before aggressively pruning metadata that some clients
-       require to synchronize from an old version of a {+realm+}.
-
-   * - | ``is_recovery_mode_disabled``
-       | Boolean
-     - If ``false``, :ref:`Recovery Mode <recover-unsynced-changes>` is enabled
-       for the application. While enabled, Realm SDKs that support this feature 
-       attempt to recover unsynced changes upon performing a client reset.
-       Recovery mode is enabled by default.
-
 .. _flexible-sync-config-object:
 
-Flexible Sync Configuration
----------------------------
+Sync Configuration
+------------------
 
-When you use :ref:`Flexible Sync <flexible-sync>`, your {+app+} uses this 
-Sync configuration:
+The following Sync configuration applies to apps using :ref:`Flexible Sync
+<flexible-sync>` (recommended). If you are using the older Partition-Based Sync,
+refer to :ref:`partition-based-sync-config-object`.
 
 .. code-block:: json
    :caption: sync/config.json
@@ -212,17 +87,19 @@ Sync configuration:
    * - | ``type``
        | String
      
-     - The :ref:`Sync Mode <sync-modes>` that determines how users can access
-       data in client applications.
+     - The sync mode. There are two Sync modes: :ref:`Flexible Sync
+       <flexible-sync>` and the older Partition-Based Sync. We recommend using
+       Flexible Sync. For more information about Partition-Based Sync, refer to
+       :ref:`partition-based-sync`.
        
-       Valid Options:
+       Valid Options for a Flexible Sync Configuration:
 
        - ``"flexible"``
 
    * - | ``development_mode_enabled``
        | Boolean
      
-     - If ``true``, :ref:`Development Mode <enable-development-mode>` is enabled
+     - If ``true``, :ref:`Development Mode <development-mode>` is enabled
        for the application. While enabled, App Services automatically stores synced
        objects in a specific database (specified in ``database_name``) and
        mirrors objects types in that database's collection schemas.
@@ -238,7 +115,7 @@ Sync configuration:
        | String
      
      - The name of a database in the synced cluster where App Services stores data in
-       :ref:`Development Mode <enable-development-mode>`. App Services automatically
+       :ref:`Development Mode <development-mode>`. App Services automatically
        generates a schema for each synced type and maps each object type to a
        collection within the database.
 

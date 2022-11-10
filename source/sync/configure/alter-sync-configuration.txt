@@ -15,40 +15,19 @@ Alter Your Sync Configuration
 Overview
 --------
 
-You may want to alter your Atlas Device Sync configuration after you have already
-:ref:`enabled Device Sync <enable-realm-sync>`. 
+You might want to alter your Atlas Device Sync configuration after you have
+already :ref:`enabled Device Sync <enable-realm-sync>`. You can alter a Flexible
+Sync Configuration in the App Services UI without needing to terminate and
+re-enable Sync.
 
-If you are using Partition-Based Device Sync, and want to change the ``Partition Key``,
-you can terminate and re-enable Device Sync.
-
-If you are using Flexible Device Sync and want to add or remove queryable
-fields, you can do so immediately, without terminating Device Sync.
-
-.. alter-partition-based-sync-config:
-
-Alter Your Partition-Based Sync Configuration
----------------------------------------------
-
-You must :ref:`Terminate Device Sync <terminating-realm-sync>` and
-:ref:`Re-enable Device Sync <re-enable-realm-sync>` to make changes to your
-Partition-Based Device Sync Configuration. While you are re-enabling
-Atlas Device Sync, you can specify a new Partition Key, or changes to your Read/Write
-Permissions. Making changes to your Device Sync configuration while
-terminating and re-enabling Device Sync will trigger a client reset. To learn
-more about handling client resets, read the :ref:`client reset <client-resets>`
-documentation.
-
-.. alter-flexible-sync-config:
-
-Alter Your Flexible Sync Configuration
---------------------------------------
-To alter your Flexible Sync Configuration, you can add or remove fields in the App Services UI while
-Device Sync is enabled without terminating and re-enabling Device Sync. 
+If you are using the older Partition-Based Sync mode, refer to
+:ref:`alter-partition-based-sync-config`.
 
 .. add-a-queryable-field:
 
 Add a Queryable Field
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
+
 To add a queryable field, navigate to the :guilabel:`Device Sync` configuration screen
 through the {+leftnav+}. Under the :guilabel:`Select Queryable Fields` heading,
 you can create a new field(s) to construct a query on. Finally, make sure to
@@ -67,7 +46,8 @@ Device Sync.
 .. remove-a-queryable-field:
 
 Remove a Queryable Field
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
+
 To remove a queryable field, navigate to the :guilabel:`Sync` configuration
 screen through the {+leftnav+}. Under the :guilabel:`Select Queryable Fields`
 heading, you can click the :guilabel:`x` button next to the field you wish to
@@ -90,7 +70,8 @@ your queryable field and enable Device Sync.
 .. flexible-sync-permission-changes:
 
 Permission Changes
-~~~~~~~~~~~~~~~~~~
+------------------
+
 Making changes to permissions, whether implicitly through user metadata, or
 explicitly through changing configuration filters, will trigger a client reset
 and re-download of all Device Sync data with the new permissions applied. 

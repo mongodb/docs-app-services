@@ -383,10 +383,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - "$ref": "#/components/schemas/Trigger"
-                - required:
-                    - function_id
+              "$ref": "#/components/schemas/Trigger"
       responses:
         "201":
           description: Successfully created.
@@ -1156,7 +1153,7 @@ paths:
         - sync
       operationId: adminGetSync
       summary: Get sync information for a specific linked MongoDB cluster
-      description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/sync/data-access-patterns/partitions/).
+      description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
       responses:
         "200":
           description: Successfully retrieved.
@@ -4308,6 +4305,8 @@ components:
                   draft.
     Endpoint:
       type: object
+      required:
+        -  function_id
       properties:
         route:
           type: string
@@ -4320,6 +4319,8 @@ components:
             - "PATCH"
             - "DELETE"
             - "*"
+        function_id:
+          type: string
         function_name:
           type: string
         validation_method:
@@ -4328,6 +4329,13 @@ components:
             - "NO_VALIDATION"
             - "SECRET_AS_QUERY_PARAM"
             - "VERIFY_PAYLOAD"
+        secret_id:
+          type: string
+          description: |-
+            If `validation_method` is set to `"SECRET_AS_QUERY_PARAM"`
+            or `"VERIFY_PAYLOAD"`, this is the `_id` of the
+            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+            that authorizes requests.
         return_type:
           $ref: "#/components/schemas/EndpointDataFormat"
           description: The default [data format](https://mongodb.com/docs/atlas/app-services/data-api/#data-formats) returned by custom HTTPS endpoints.
@@ -4374,6 +4382,19 @@ components:
             application user's account ID. If defined, endpoints execute
             the function on every request and run as the user with the
             ID returned from the function.
+        validation_method:
+          type: string
+          enum:
+            - "NO_VALIDATION"
+            - "SECRET_AS_QUERY_PARAM"
+            - "VERIFY_PAYLOAD"
+        secret_name:
+          type: string
+          description: |-
+            If `validation_method` is set to `"SECRET_AS_QUERY_PARAM"`
+            or `"VERIFY_PAYLOAD"`, this is the `name` of the
+            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+            that authorizes requests.
     Error:
       type: object
       properties:
@@ -5001,13 +5022,14 @@ components:
         function_name:
           type: string
           description: |-
-            The name of the function that the trigger calls when it fires.
+            The name of the function that the trigger calls when it
+            fires, i.e. the function described by `function_id`.
             
             This value is the same as `event_processors.FUNCTION.function_name`.
             You can either define the value here or in `event_processors.FUNCTION.function_name`.
             The App Services backend duplicates the value to the configuration location where you did not define it.
             
-            For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_name`.
+            For example, if you define `function_name`, the backend duplicates it to `event_processors.FUNCTION.function_name`.
         event_processors:
           type: object
           description: |-
@@ -5036,7 +5058,8 @@ components:
                     function_name:
                       type: string
                       description: |-
-                        The name of the function that the trigger calls when it fires.
+                        The name of the function that the trigger calls when it
+                        fires, i.e. the function described by `function_id`.
                         
                         This value is the same as the root-level `function_name`.
                         You can either define the value here or in `function_name`.
