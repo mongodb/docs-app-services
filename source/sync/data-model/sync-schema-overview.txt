@@ -1,8 +1,8 @@
 .. _sync-schema-overview:
 
-====================
-Sync Schema Overview
-====================
+========================
+Sync Data Model Overview
+========================
 
 .. contents:: On this page
    :local:
@@ -13,32 +13,65 @@ Sync Schema Overview
 Overview
 --------
 
-In modern applications, users expect their data to be accurate no matter
-which device or browser they connect from. Data modeling ensures the
-accuracy of application data by performing type and format checks on
-fields. 
+To use Alas Device Sync you must define your data model in two formats:
 
-Atlas App Services allows you to define, synchronize, and enforce your data
-model in two formats: 
+- **App Services Schema**: A server-side schema which defines your
+  data in BSON. Device Sync uses the App Services Schema to convert your data
+  to MongoDB documents and enforce validation and synchronize data between client
+  devices and Atlas.
 
-- A server-side :ref:`BSON schema <schemas>`, which defines your
-  data as MongoDB documents to enforce validation and synchronization
-  in the cloud.
+- **Realm Object Schema**: Client-side schema of data defined using the Realm SDKs.
+  Each Realm SDK defines the Realm Object Schema in its own language-specific way.
+  The Realm SDKs use this schema to store data in Realm Database
+  and synchronize data with Device Sync.
 
-- A Realm data model, which defines your data as native objects in your mobile application.
+The App Services Schema and Realm Object Schema must be consistent with each other
+to sync data using Device Sync.
 
-Having these two forms of data models allows your data to be consistent
-and :doc:`synced </sync>` regardless of which clients
-write the data.
+You can also sync data between clients using different Realm SDKs,
+each of which implements the same Realm Object Schema. These Realm Object Schemas
+must all be consistent with the App Services Schema as well.
 
-.. _object-schema:
+For example, you have an iOS app and an Android app with their Realm Object Schemas
+defined using the Realm Swift SDK and the Realm Kotlin SDK, respectively.
+Both these mobile applications sync data using with the same App Services App with Device Sync.
+The Swift SDK schema and the Kotlin SDK schema must both be consistent
+with the same App Services Schema.
 
-Object Schema
--------------
+Create a Data Model
+-------------------
 
-An **object schema** defines the properties and relationships of a Realm
-object. Object schemas are defined using JSON schema in the
-:guilabel:`Schema` sidebar entry of the App Services UI:
+You can create your Device Sync data model in a few ways.
+
+If you already have data in Atlas, you can generate an App Services Schema
+by sampling that data. You can then generate a Realm Object Schema for each Realm SDK.
+
+If you prefer to develop your Realm Object Schema using the Realm SDKs first,
+use Development Mode. When you use Development Mode, Device Sync automatically
+generates an App Services Schema when you sync data from a client using a Realm SDK.
+
+For more information on using both these approaches to modeling data,
+refer to :ref:`Create a Data Model <create-sync-schema>`.
+
+Update a Data Model
+-------------------
+
+When developing an application using Atlas Device Sync, you may need to make changes
+to your data model. This means you also need to update your App Services Schema
+and Realm Object Schema.
+
+For more information on how to perform the different types of data model changes,
+refer to :ref:`Update a Data Model <synced-schema-overview>`.
+
+Example
+-------
+
+This example shows how to model a ``Dog`` with Device Sync.
+
+App Services Schema
+~~~~~~~~~~~~~~~~~~~
+
+This App Services Schema creates the ``Dog`` data model used by Device Sync.
 
 .. code-block:: json
 
@@ -69,114 +102,182 @@ object. Object schemas are defined using JSON schema in the
      }
    }
 
-.. _sync-type-name:
+.. _object-schema:
 
-Type Name
-~~~~~~~~~
+Realm Object Schema
+~~~~~~~~~~~~~~~~~~~
 
-The ``title`` field contains the name of the object type represented by
-the schema. This is equivalent to a class or schema name in a Realm SDK.
-The type name should be unique among all schemas in your synced cluster
-but is otherwise arbitrary and does not need to match the collection
-name.
+The following code examples create the ``Dog`` Realm Object Schema in each of the
+Realm SDKs.
 
-A conventional approach is to name each object type with a singular
-noun, like "Dog" or "Person". Schemas generated in development mode or
-by sampling existing documents use this convention.
+.. tabs-realm-sdks::
 
-.. _property-schema:
+   .. tab::
+      :tabid: android
 
-Property Schema
-~~~~~~~~~~~~~~~
+      .. code-block:: java
 
-A **property schema** is a field-level configuration that defines and
-constrains a specific property in an object schema. Every object schema
-must include a property schema for each property in the object. At
-minimum, a property schema defines a property's data type and indicates
-whether the property is required.
+         import io.realm.RealmObject;
+         import org.bson.types.ObjectId;
 
-You can configure the following constraints for a given property:
+         public class Dog extends RealmObject {
+             @PrimaryKey
+             @Required
+             private ObjectId _id;
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 20 60
+             private Integer age;
 
-   * - Parameter
-     - Type
-     - Description
+             private String breed;
 
-   * - Type
-     - String
-     - Every property in a Realm object has a strongly defined data
-       type. A property's type can be a primitive data type or an object
-       type defined in the same {+realm+}. The type also specifies whether
-       the property contains a single value or a list of values.
+             @Required
+             private String name;
 
-       {+client-database+} supports the following property types:
+             // Standard getters & setters
+             public ObjectId getId() { return _id; }
+             public void setId(ObjectId _id) { this._id = _id; }
 
-       - boolean
-       - integer
-       - double
-       - string
-       - date
-       - decimal128
-       - objectId
-       - uuid
-       - mixed
-       - array
-       - object
+             public Integer getAge() { return age; }
+             public void setAge(Integer age) { this.age = age; }
 
-       .. seealso::
+             public String getBreed() { return breed; }
+             public void setBreed(String breed) { this.breed = breed; }
 
-          For more information on supported data types, see the
-          documentation on :ref:`Schema Types <schema-types>`.
+             public String getName() { return name; }
+             public void setName(String name) { this.name = name; }
+         }
 
-   * - Optional
-     - Boolean
-     - Optional properties may contain a null value or be entirely
-       omitted from an object. By default, all properties are optional 
-       unless explicitly marked as required.
+   .. tab::
+      :tabid: ios
 
-   * - Default
-     - Boolean
-     - If a client application creates a new object that does not have a
-       value for a defined property, the object uses the default value
-       instead.
+      .. code-block:: swift
 
-       When you attempt to create an object that is missing a value
-       for a required field, it fails validation and does not persist
-       to the {+realm+}.
+         import Foundation
+         import RealmSwift
 
-   * - Indexed
-     - Boolean
-     - A property index significantly increases the speed of certain
-       read operations at the cost of additional overhead for write
-       operations. Indexes are particularly useful for equality
-       comparison, such as querying for an object based on the value of
-       a property. However, indexes consume additional storage.
+         class Dog: Object {
+             @Persisted(primaryKey: true) var _id: ObjectId
+
+             @Persisted var age: Int?
+
+             @Persisted var breed: String?
+
+             @Persisted var name: String = ""
+         }
+
+   .. tab::
+      :tabid: node
+
+      .. code-block:: js
+
+         export const DogSchema = {
+           name: 'Dog',
+           properties: {
+             _id: 'objectId',
+             age: 'int?',
+             breed: 'string?',
+             name: 'string',
+           },
+           primaryKey: '_id',
+         };
+
+   .. tab::
+      :tabid: react-native
+
+      .. code-block:: js
+
+         export const DogSchema = {
+           name: 'Dog',
+           properties: {
+             _id: 'objectId',
+             age: 'int?',
+             breed: 'string?',
+             name: 'string',
+           },
+           primaryKey: '_id',
+         };
+
+   .. tab::
+      :tabid: dotnet
+
+      .. code-block:: csharp
+
+         using System;
+         using System.Collections.Generic;
+         using Realms;
+         using MongoDB.Bson;
+
+         public class Dog : RealmObject
+         {
+             [MapTo("_id")]
+             [PrimaryKey]
+             public ObjectId Id { get; set; }
+
+             [MapTo("age")]
+             public int? Age { get; set; }
+
+             [MapTo("breed")]
+             public string Breed { get; set; }
+
+             [MapTo("name")]
+             [Required]
+             public string Name { get; set; }
+         }
+
+   .. tab::
+      :tabid: flutter
+
+      .. code-block:: dart
+
+         import 'package:realm/realm.dart';
+         part 'realm_models.g.dart';
+
+         @RealmModel()
+         class _Dog {
+           @PrimaryKey()
+           @MapTo('_id')
+           late ObjectId id;
+
+           int? age;
+
+           String? breed;
+
+           late String name;
+         }
 
 
-.. tip:: Partition field
+   .. tab::
+      :tabid: kotlin
 
-   When using :ref:`Partition-Based Sync <partition-based-sync>`, your
-   object schema should include the :ref:`partition key <partition-key>`
-   as defined in your sync configuration.
-   
-   When using :ref:`Flexible Sync <flexible-sync>`, your schema does not
-   need a partition key.
+      .. code-block:: kotlin
 
-Summary
--------
-- App Services uses two different data models: a {+frontend-schema+} for 
-  mobile and an App Services Schema for Atlas. Changes to one data model match
-  the other data model. 
-- If you already have data in Atlas, App Services creates an App Services Schema 
-  by sampling that data. That App Services Schema can be translated into a Realm 
-  Object Model to be used in your App Services mobile application code. 
-- If you do not have data in Atlas or are developing with a mobile-first 
-  approach, you can turn on :guilabel:`Development Mode` to allow for data 
-  model changes from an App Services mobile client. When you finish developing your 
-  {+frontend-schema+}, you can turn off :guilabel:`Development Mode`, and 
-  your App Services Schema will be auto-updated with your updated data model 
-  configuration. Atlas will begin using this updated data model configuration 
-  for data validation on your cluster immediately.
+         import io.realm.RealmObject;
+         import org.bson.types.ObjectId;
+
+         open class Dog(
+             @PrimaryKey
+             var _id: ObjectId = ObjectId(),
+
+             var age: Int? = null,
+
+             var breed: String? = null,
+
+             var name: String = ""
+         ): RealmObject() {}
+
+
+
+Data in Atlas
+~~~~~~~~~~~~~
+
+An application using Device Sync for the ``Dog`` data model creates MongoDB documents
+in Atlas that looks like the following example.
+
+.. code-block:: js
+
+   {
+     "_id": ObjectId('616f44305a205add93ff1081'),
+     "age": 8,
+     "breed": "Golden Retriever",
+     "name": "Jasper"
+   }
+
