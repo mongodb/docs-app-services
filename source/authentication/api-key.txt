@@ -22,8 +22,8 @@ allows users to log in using generated keys.
 
 App Services supports the following two types of API keys:
 
-- **Server API keys**: API keys created from an admin interface associated
-  with server users.
+- **Server API keys**: API keys associated with server users that is created
+  from the App Services CLI, API or UI.
 - **User API keys**: API keys created from the Realm SDKs associated
   with application users.
 
@@ -97,7 +97,7 @@ Server API Keys
 ---------------
 
 Server API keys are generated in a server-side context using one of
-the App Services admin interfaces. When you create a server API key,
+the App Services App Services CLI, API or UI. When you create a server API key,
 you also create an associated server user.
 
 You can provide a server key to external applications and services
@@ -112,8 +112,10 @@ Create a Server API Key
 
 You must enable the API key provider before you can create an API key.
 
-You must copy the server key's value as soon as you create it.
-Once you create the API key, you can no longer retrieve it using the admin interfaces.
+.. important::
+
+   You must copy the server key's value as soon as you create it.
+   Once you create the API key, you can no longer retrieve it.
 
 .. tabs-realm-admin-interfaces::
 
@@ -173,7 +175,6 @@ User API keys are always associated with a non-anonymous user. Each user can
 associate up to 20 user API keys with their account.
 
 To learn how to generate user API keys, refer to the Realm SDK documentation.
-You can find the relevant documentation in the following Realm SDK Examples section.
 
 .. _api-key-authentication-examples:
 
