@@ -32,7 +32,6 @@ and rules for your {+app+}. If you haven't already decided how you want to
 configure your data model and access Device Sync, see:
 
 - :ref:`Configure Your Data Model <sync-schema-overview>`
-- :ref:`Choose Your Sync Mode <sync-modes>`. We recommend Flexible Sync for all new apps.
 - :ref:`Sync Rules and Permissions <sync-permissions>`
 
 .. important::
@@ -46,14 +45,11 @@ configure your data model and access Device Sync, see:
    
    For more details on how to define a schema, see :ref:`enforce-a-schema`.
 
+.. _sync-modes:
 .. _enable-flexible-sync:
 
-Enable Flexible Sync
---------------------
-
-There are two Sync Modes: Flexible Sync and the older Partition-Based Sync. We
-recommend using Flexible Sync. For more information on enabling Partition-Based
-Sync, refer to :ref:`enable-pbs-sync`.
+Enable Sync
+-----------
 
 .. include:: /includes/note-flexible-sync-prerequisite.rst
 
@@ -69,15 +65,17 @@ Sync, refer to :ref:`enable-pbs-sync`.
             To define Device Sync rules and enable Device Sync for your application, navigate to the
             :guilabel:`Device Sync` configuration screen through the {+leftnav+}.
 
-
          .. step:: Select Development Details
 
             Under the :guilabel:`Select Development Details` heading, you can configure
             various development details, such as Device Sync types, Development Mode,
             and a cluster to Device Sync.
 
-            Below the :guilabel:`Device Sync types` subheading, select the :guilabel:`Flexible`
-            option to enable Flexible Sync.
+            There are two Device Sync modes: Flexible Sync and the older
+            Partition-Based Sync. We recommend using Flexible Sync. Below the
+            :guilabel:`Sync Type` subheading, select the :guilabel:`Flexible`
+            option to enable Flexible Sync. (For more information on the older
+            Partition-Based Sync mode, refer to :ref:`partition-based-sync`.)
 
             Next, under the :guilabel:`Development Mode` subheading, you can
             choose to toggle :ref:`Development Mode <development-mode>` on/off.
@@ -204,6 +202,12 @@ Sync, refer to :ref:`enable-pbs-sync`.
                    <Array of String Field Names>
                  ]
                }
+               
+            There are two Device Sync modes: Flexible Sync and the older
+            Partition-Based Sync. We recommend using Flexible Sync, so we set
+            the ``type`` field of the configuration to ``flexible``. (For more
+            information on the older Partition-Based Sync mode, refer to
+            :ref:`partition-based-sync`.)
 
          .. step:: Choose Queryable Fields
 
