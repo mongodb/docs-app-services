@@ -16,17 +16,18 @@ Compact an Atlas Volume
 Overview
 --------
 
-While Realm data compaction defragments the storage space the realm file uses 
-on a *client*, and also reduces the size of the __realm_sync database on Atlas 
-clusters, it does not reduce the overall size of the Atlas cluster. Compacting 
-the data on an Atlas volume involves several additional steps. 
+While Realm :ref:`data compaction <backend-compaction>` defragments the storage 
+space the realm file uses on a *client*, and also reduces the size of the 
+__realm_sync database on Atlas clusters, it does not reduce the overall size of 
+the Atlas cluster. Compacting the data on an Atlas volume involves several 
+additional steps. 
 
 Steps to Compact and Reclaim Disk Space
 ---------------------------------------
 
 You should use the following guidance for reducing Atlas disk space usage:  
 
-1. Enable Compaction on the Client
+1. Enable Compaction in App Services
 
    Before reclaiming volume space, be sure that you have enabled Compaction 
    on your Atlas App Services app. You set this by setting the Max Offline Time 
@@ -35,7 +36,7 @@ You should use the following guidance for reducing Atlas disk space usage:
 
    .. note:: Wait for Compaction
    
-      If you enabling compaction for the first time, you will need to wait for 
+      If you are enabling compaction for the first time, you will need to wait for 
       the compaction to happen before continuing. You can file a ticket with 
       support if you want to ensure compaction has completed.
 
@@ -44,8 +45,8 @@ You should use the following guidance for reducing Atlas disk space usage:
    Perform a rolling resync of your Atlas cluster, a process explained in 
    :manual:`Resync a Member of a Replica Set <tutorial/resync-replica-set-member/>`.
    
-   The commands do this are not available with Atlas, so you can either file 
-   a ticket with support to have this process done for you, or you can 
+   The commands to do this are not available with Atlas. Instead, you can either 
+   file a ticket with support to have this process done for you, or you can 
    increase your Atlas cluster size by a small amount, which forces a rolling 
    resync. For more information on resizing an Atlas cluster, refer to 
    :atlas:`Customize Cluster Storage </customize-storage/>`.
