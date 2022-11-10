@@ -15,9 +15,12 @@ Flexible Sync
 Overview
 --------
 
-Flexible Sync lets you define a query in the client, and
-sync only the objects that match the query. With client-side subscriptions, 
-client applications can:
+There are two Sync modes: Flexible Sync and the older Partition-Based Sync. We
+recommend using Flexible Sync. For more information about Partition-Based Sync,
+refer to :ref:`partition-based-sync`.
+
+Flexible Sync lets you define a query in the client, and sync only the objects
+that match the query. With client-side subscriptions, client applications can:
 
 - Maintain queries
 - React to changes
@@ -110,7 +113,7 @@ fields <flexible-sync-eligible-field-types>` in your schema become queryable fie
 you can select when you enable Flexible Sync.
 
 If you're not yet ready to create a schema, you can manually define queryable
-fields with :ref:`Development Mode <concept-development-mode>`.
+fields with :ref:`Development Mode <development-mode>`.
 
 .. seealso::
 
@@ -120,7 +123,7 @@ Enable Sync
 ~~~~~~~~~~~
 
 After you have defined a schema, or decided to create your data model on the 
-client side and use :ref:`Development Mode <concept-development-mode>` to 
+client side and use :ref:`Development Mode <development-mode>` to 
 define a schema, you can enable Flexible Sync. 
 
 During the process of enabling Sync, you select queryable fields and 
@@ -137,7 +140,7 @@ When you enable Flexible Sync, you can select queryable fields in two ways:
 
 - If you have defined your schema, you can select queryable fields from 
   :ref:`eligible fields <flexible-sync-eligible-field-types>` in your schema.
-- If you are using :ref:`Development Mode <concept-development-mode>`, you 
+- If you are using :ref:`Development Mode <development-mode>`, you 
   can type a queryable field name that matches an :ref:`eligible field type 
   <flexible-sync-eligible-field-types>` in your client application.
 
@@ -235,11 +238,6 @@ with heavy client-side *insert-only* workloads. You enable it for one or more
 collections. It supports writing to any collection type, including an 
 {+atlas-short+} time-series collection. 
 
-.. note::
-
-   Asymmetric Sync is a feature of Flexible Sync and cannot be enabled on apps 
-   that use Partition-Based Sync.
-
 For example, an IoT app that frequently logs sensor data has a significant 
 write workload and no read workload. The device may also be offline 
 for extended periods of time. Asymmetric Sync bypasses some of the processing 
@@ -258,7 +256,7 @@ Flexible Sync on other collections.
 
    Asymmetric Sync collections are only for writing data. You cannot use 
    Flexible Sync queries against these collections. Instead, use 
-   :ref:`<data-sources>`.
+   :ref:`data-sources`.
 
 You configure and enable Asymmetric Sync in the :guilabel:`Advanced Options` 
 section of the Sync set up page. For more information on setting up Flexible 
