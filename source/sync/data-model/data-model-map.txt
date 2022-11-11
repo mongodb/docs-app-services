@@ -1,0 +1,330 @@
+.. _sync-data-model-mapping:
+
+==================
+Data Model Mapping
+==================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Overview
+--------
+
+This page contains information on how the App Services Schema used by
+Atlas Device Sync maps to the Realm Object Schema used by the Realm SDKs.
+
+To generate Realm SDK Schemas from your App Services Schemas,
+refer to :ref:`Generate SDK Object Models <generate-sdk-object-models>`.
+To generate App Services Schemas from Realm SDK client code,
+refer to :ref:`Development Mode <development-mode>`.
+
+To learn more about how Device Sync uses these two schemas,
+refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
+
+.. _object-schema:
+
+Mappings
+--------
+
+.. _sync-type-name:
+
+Type Name
+~~~~~~~~~
+
+The ``title`` field contains the name of the object type represented by
+the schema. This is equivalent to a class or schema name in a Realm SDK.
+The type name must be unique among all schemas in your synced cluster
+but is otherwise arbitrary and does not need to match the collection
+name.
+
+A conventional approach is to name each object type with a singular
+noun, like "Dog" or "Person". Schemas generated in development mode or
+by sampling existing documents use this convention.
+
+.. _property-schema:
+
+Property Schema
+~~~~~~~~~~~~~~~
+
+A **property schema** is a field-level configuration that defines and
+constrains a specific property in an object schema. Every object schema
+must include a property schema for each property in the object. At
+minimum, a property schema defines a property's data type and indicates
+whether the property is required.
+
+You can configure the following constraints for a given property:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - Type
+     - String
+     - Every property in a Realm object has a strongly defined data
+       type. A property's type can be a primitive data type or an object
+       type defined in the same {+realm+}. The type also specifies whether
+       the property contains a single value or a list of values.
+
+       {+client-database+} supports the following property types:
+
+       - boolean
+       - integer
+       - double
+       - string
+       - date
+       - decimal128
+       - objectId
+       - uuid
+       - mixed
+       - array
+       - object
+
+       .. seealso::
+
+          For more information on supported data types, see the
+          documentation on :ref:`Schema Types <schema-types>`.
+
+   * - Optional
+     - Boolean
+     - Optional properties may contain a null value or be entirely
+       omitted from an object. By default, all properties are optional 
+       unless explicitly marked as required.
+
+   * - Default
+     - Boolean
+     - If a client application creates a new object that does not have a
+       value for a defined property, the object uses the default value
+       instead.
+
+       When you attempt to create an object that is missing a value
+       for a required field, it fails validation and does not persist
+       to the {+realm+}.
+
+   * - Indexed
+     - Boolean
+     - A property index significantly increases the speed of certain
+       read operations at the cost of additional overhead for write
+       operations. Indexes are particularly useful for equality
+       comparison, such as querying for an object based on the value of
+       a property. However, indexes consume additional storage.
+
+Example
+-------
+
+This example shows how to model a ``Dog`` with Device Sync.
+
+App Services Schema
+~~~~~~~~~~~~~~~~~~~
+
+This App Services Schema creates the ``Dog`` data model used by Device Sync.
+
+.. code-block:: json
+
+   {
+     "title": "Dog",
+     "bsonType": "object",
+     "required": [
+       "_id",
+       "_partition",
+       "name"
+     ],
+     "properties": {
+       "_id": {
+         "bsonType": "objectId"
+       },
+       "_partition": {
+         "bsonType": "string"
+       },
+       "name": {
+         "bsonType": "string"
+       },
+       "age": {
+         "bsonType": "int"
+       }
+       "breed": {
+         "bsonType": "string"
+       }
+     }
+   }
+
+Realm Object Schema
+~~~~~~~~~~~~~~~~~~~
+
+The following code examples create the ``Dog`` Realm Object Schema in each of the
+Realm SDKs.
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      .. code-block:: java
+
+         import io.realm.RealmObject;
+         import org.bson.types.ObjectId;
+
+         public class Dog extends RealmObject {
+             @PrimaryKey
+             @Required
+             private ObjectId _id;
+
+             private Integer age;
+
+             private String breed;
+
+             @Required
+             private String name;
+
+             // Standard getters & setters
+             public ObjectId getId() { return _id; }
+             public void setId(ObjectId _id) { this._id = _id; }
+
+             public Integer getAge() { return age; }
+             public void setAge(Integer age) { this.age = age; }
+
+             public String getBreed() { return breed; }
+             public void setBreed(String breed) { this.breed = breed; }
+
+             public String getName() { return name; }
+             public void setName(String name) { this.name = name; }
+         }
+
+   .. tab::
+      :tabid: ios
+
+      .. code-block:: swift
+
+         import Foundation
+         import RealmSwift
+
+         class Dog: Object {
+             @Persisted(primaryKey: true) var _id: ObjectId
+
+             @Persisted var age: Int?
+
+             @Persisted var breed: String?
+
+             @Persisted var name: String = ""
+         }
+
+   .. tab::
+      :tabid: node
+
+      .. code-block:: js
+
+         export const DogSchema = {
+           name: 'Dog',
+           properties: {
+             _id: 'objectId',
+             age: 'int?',
+             breed: 'string?',
+             name: 'string',
+           },
+           primaryKey: '_id',
+         };
+
+   .. tab::
+      :tabid: react-native
+
+      .. code-block:: js
+
+         export const DogSchema = {
+           name: 'Dog',
+           properties: {
+             _id: 'objectId',
+             age: 'int?',
+             breed: 'string?',
+             name: 'string',
+           },
+           primaryKey: '_id',
+         };
+
+   .. tab::
+      :tabid: dotnet
+
+      .. code-block:: csharp
+
+         using System;
+         using System.Collections.Generic;
+         using Realms;
+         using MongoDB.Bson;
+
+         public class Dog : RealmObject
+         {
+             [MapTo("_id")]
+             [PrimaryKey]
+             public ObjectId Id { get; set; }
+
+             [MapTo("age")]
+             public int? Age { get; set; }
+
+             [MapTo("breed")]
+             public string Breed { get; set; }
+
+             [MapTo("name")]
+             [Required]
+             public string Name { get; set; }
+         }
+
+   .. tab::
+      :tabid: flutter
+
+      .. code-block:: dart
+
+         import 'package:realm/realm.dart';
+         part 'realm_models.g.dart';
+
+         @RealmModel()
+         class _Dog {
+           @PrimaryKey()
+           @MapTo('_id')
+           late ObjectId id;
+
+           int? age;
+
+           String? breed;
+
+           late String name;
+         }
+
+
+   .. tab::
+      :tabid: kotlin
+
+      .. code-block:: kotlin
+
+         import io.realm.RealmObject;
+         import org.bson.types.ObjectId;
+
+         open class Dog(
+             @PrimaryKey
+             var _id: ObjectId = ObjectId(),
+
+             var age: Int? = null,
+
+             var breed: String? = null,
+
+             var name: String = ""
+         ): RealmObject() {}
+
+Data in Atlas
+~~~~~~~~~~~~~
+
+An application using Device Sync for the ``Dog`` data model creates MongoDB documents
+in Atlas that looks like the following example.
+
+.. code-block:: js
+
+   {
+     "_id": ObjectId('616f44305a205add93ff1081'),
+     "age": 8,
+     "breed": "Golden Retriever",
+     "name": "Jasper"
+   }
