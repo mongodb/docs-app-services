@@ -368,6 +368,11 @@ paths:
             - AUTHENTICATION
             - SCHEDULED
             - SYNCTRANSLATOR
+          x-enumDescriptions:
+            DATABASE: Return database triggers
+            AUTHENTICATION: Return authentication triggers
+            SCHEDULED: Return scheduled triggers
+            SYNCTRANSLATOR: Return Device Sync translators
     get:
       tags:
         - event-subscriptions
@@ -5912,7 +5917,10 @@ tags:
     description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
   - name: event-subscriptions
     x-displayName: Event Subscriptions
-    description: View your app's active event subscriptions.
+    description: |-
+      View your app's active event subscriptions. These monitor
+      real-time events, e.g. from a MongoDB change stream, to power
+      application services like Triggers and Device Sync.
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
