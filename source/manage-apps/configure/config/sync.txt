@@ -229,7 +229,10 @@ For more information, see :ref:`Type-Specific Roles
        the user can read data. If the expression evaluates to ``true``,
        the user has permission to read objects of this type. If
        ``false``, the user cannot read an object or any of its
-       properties.
+       properties. 
+
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
 
    * - | ``write``
        | Expression
@@ -240,9 +243,6 @@ For more information, see :ref:`Type-Specific Roles
        the user has permission to write objects of this type. If
        ``false``, the user cannot write an object or any of its
        properties.
-       
-       Write permission requires read permission. A user cannot write to
-       a document that they cannot read.
    
    * - | ``fields``
        | Object
@@ -267,7 +267,10 @@ For more information, see :ref:`Type-Specific Roles
        | *Required*
      
      - If ``true``, the role has permission to read this field. If
-       ``false``, the user cannot read the field.
+       ``false``, the user cannot read the field.       
+       
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
 
    * - | ``fields.<Field Name>.write``
        | Boolean
@@ -275,9 +278,6 @@ For more information, see :ref:`Type-Specific Roles
      
      - If ``true``, the role has permission to write this field. If
        ``false``, the user cannot write the field.
-       
-       Write permission requires read permission. A user cannot write to
-       a field that they cannot read.
 
    * - | ``fields.<Field Name>.fields``
        | Object
@@ -329,6 +329,9 @@ For more information, see :ref:`Type-Specific Roles
        isn't defined in ``fields``. If ``false``, the user can only
        read a field with specific permissions.
 
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
+
    * - | ``additional_fields.write``
        | Boolean
        | *Required*
@@ -336,9 +339,6 @@ For more information, see :ref:`Type-Specific Roles
      - If ``true``, the role has permission to write any field that
        isn't defined in ``fields``. If ``false``, the user can only
        write a field with specific permissions.
-       
-       Write permission requires read permission. A user cannot write to
-       a field that they cannot read.
 
 .. _appconfig-sync-default-roles:
 
@@ -387,6 +387,9 @@ For more information, see :ref:`Default Roles <default-roles>`.
        the user has permission to read objects. If ``false``, the user
        cannot read an object or any of its properties.
 
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
+
    * - | ``write``
        | Expression
        | *Optional*
@@ -395,6 +398,3 @@ For more information, see :ref:`Default Roles <default-roles>`.
        the user can write data. If the expression evaluates to ``true``,
        the user has permission to write objects. If ``false``, the user
        cannot write an object or any of its properties.
-       
-       Write permission requires read permission. A user cannot write to
-       a document that they cannot read.
