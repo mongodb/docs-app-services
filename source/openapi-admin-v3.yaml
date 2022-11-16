@@ -2614,6 +2614,40 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+
+  "/groups/{groupId}/apps/{appId}/deploy/config":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - deploy
+      operationId: adminGetDeploymentConfig
+      summary: Get the Deployment Configuration
+      description: See information about how your App deploys changes.
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeploymentConfig"
+    patch:
+      tags:
+        - deploy
+      operationId: adminConfigureDeployment
+      summary: Configure Deployment
+      description: Modify an App's deployment configuration to customize how the App deploys changes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: An updated deployment configuration
+              $ref: "#/components/schemas/DeploymentConfig"
+      responses:
+        "204":
+          description: Success
+
   "/groups/{groupId}/apps/{appId}/deployments":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4401,6 +4435,42 @@ components:
             A link to the diff of changes in the deployment
         remote_location:
           $ref: "#/components/schemas/DeploymentLocation"
+    DeploymentConfig:
+      type: object
+      description: A configuration file that controls your app's deployment behavior.
+      required:
+        - ui_drafts_disabled
+        - automatic_deployment
+      properties:
+        ui_drafts_disabled:
+          type: boolean
+          description: |-
+            If `true`, every change made in the Admin UI deploys
+            automatically on save. If `false`, changes are grouped into
+            a deployment draft that you deploy separately.
+        automatic_deployment:
+          type: object
+          description: Configuration for automatic deployment methods
+          properties:
+            enabled:
+              type: boolean
+              description: If `true`, the app automatically deploys using the method defined for `provider`.
+            provider:
+              type: string
+              description: The type of automatic deployment.
+              enum:
+                - "github"
+            installation_ids:
+              type: array
+              description: |-
+                The unique ID values of automatic deployment provider
+                installations. For example, the ID of a GitHub app
+                installation.
+              items:
+                type: string
+        last_modified:
+          type: number
+          description: The time this configuration was last modified represented by the number of seconds since the UNIX epoch.
     Diff:
       type: object
       properties:
