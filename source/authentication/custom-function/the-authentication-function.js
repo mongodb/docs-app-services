@@ -23,6 +23,6 @@ exports = async function (payload) {
   //    user's ID in the external authentication system or the _id of a
   //    stored MongoDB document that describes them.
   //
-  //    !!! This is NOT the user's internal {+service-short+} account ID. !!!
+  //    !!! This is NOT the user's internal account ID for your app !!!
   return user.id;
 };
