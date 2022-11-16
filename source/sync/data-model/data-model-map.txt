@@ -25,6 +25,7 @@ To learn more about how Device Sync uses these two schemas,
 refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
 
 .. _object-schema:
+.. _property-schema:
 
 Mappings
 --------
@@ -44,16 +45,8 @@ A conventional approach is to name each object type with a singular
 noun, like "Dog" or "Person". Schemas generated in development mode or
 by sampling existing documents use this convention.
 
-.. _property-schema:
-
-Property Schema
-~~~~~~~~~~~~~~~
-
-A **property schema** is a field-level configuration that defines and
-constrains a specific property in an object schema. Every object schema
-must include a property schema for each property in the object. At
-minimum, a property schema defines a property's data type and indicates
-whether the property is required.
+Property Types
+~~~~~~~~~~~~~~
 
 You can configure the following constraints for a given property:
 
@@ -67,9 +60,9 @@ You can configure the following constraints for a given property:
 
    * - Type
      - String
-     - Every property in a Realm object has a strongly defined data
+     - Every property in a Realm Object Schema has a strongly defined data
        type. A property's type can be a primitive data type or an object
-       type defined in the same {+realm+}. The type also specifies whether
+       type defined in the same Realm Object Schema. The type also specifies whether
        the property contains a single value or a list of values.
 
        {+client-database+} supports the following property types:
@@ -86,15 +79,12 @@ You can configure the following constraints for a given property:
        - array
        - object
 
-       .. seealso::
-
-          For more information on supported data types, see the
-          documentation on :ref:`Schema Types <schema-types>`.
+       For more information on supported data types, refer to :ref:`Schema Types <schema-types>`.
 
    * - Optional
      - Boolean
      - Optional properties may contain a null value or be entirely
-       omitted from an object. By default, all properties are optional 
+       omitted from an object. By default, all properties are optional
        unless explicitly marked as required.
 
    * - Default
@@ -114,6 +104,300 @@ You can configure the following constraints for a given property:
        operations. Indexes are particularly useful for equality
        comparison, such as querying for an object based on the value of
        a property. However, indexes consume additional storage.
+
+Realm SDK data type documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`java-data-types`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Supported Property Types - Swift SDK <ios-supported-property-types>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`node-data-types`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`react-native-data-types`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-field-types`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`flutter-data-types`
+
+   .. tab::
+      :tabid: kotlin
+
+      :ref:`kotlin-supported-types`
+
+Array Properties
+~~~~~~~~~~~~~~~~
+
+Both Realm Object Schemas and App Services Schemas support array properties.
+
+You can find information on using array data types in the Realm SDK documentation
+on defining a Realm Object Schema.
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Lists - Java SDK <java-field-relationships-lists>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`swift-supported-types`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Supported Property Types - Node.js SDK <node-supported-property-types>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Supported Property Types - React Native SDK <react-native-supported-property-types>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`Lists - .NET SDK <dotnet-property-lists>`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`Dart Types - Flutter SDK <flutter-dart-types>`
+
+   .. tab::
+      :tabid: kotlin
+
+      :ref:`kotlin-supported-types`
+
+For more information on modeling array properties in an App Services Schema,
+refer to :ref:`BSON Types - Array <schema-type-array>`.
+App Services Schemas support certain constraints that Realm Object Schemas do not,
+such as specifying the minimum and maximum number of items.
+
+Embedded Objects
+~~~~~~~~~~~~~~~~
+
+Embedded objects are embedded as nested data inside of a parent object.
+An embedded object inherits the lifecycle of its parent object.
+It cannot exist as an independent Realm object.
+
+Realm SDK embedded object documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Define an Embedded Object Field - Java SDK <java-define-an-embedded-object-property>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Define an Embedded Object Property - Swift SDK <ios-embedded-objects>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Embedded Objects - Node.js SDK <node-embedded-objects>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Embedded Objects - React Native SDK <react-native-embedded-objects>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-embedded-objects`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`Embedded Objects - Flutter SDK <flutter-embedded-objects>`
+
+   .. tab::
+      :tabid: kotlin
+
+      The Realm Kotlin SDK does not support Embedded Objects yet.
+
+For more information on modeling to-one relationships in an App Services Schema,
+refer to :ref:`Embedded Object Relationships <relationships-embedded-object>`.
+
+Sets
+~~~~
+
+Realm Object Schemas and App Services Schemas both support the Set data type.
+A set is a collection of unique values.
+
+Realm SDK Set documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`java-realmset`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Mutable Set - Swift SDK <ios-mutableset-data-type>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`node-data-types-sets`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`react-native-data-types-sets`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-client-sets`
+
+   .. tab::
+      :tabid: flutter
+
+      The Realm Flutter SDK does not support Sets yet.
+
+   .. tab::
+      :tabid: kotlin
+
+      The Realm Kotlin SDK does not support Sets yet.
+
+
+For more information on modeling sets in an App Services Schema,
+refer to :ref:`Set <schema-type-set>`.
+
+Dictionaries
+~~~~~~~~~~~~
+
+Realm Object Schemas and App Services Schemas both support the Dictionary data type.
+A set is a collection of unique values.
+A dictionary is a collection of dynamic and unique string keys paired with values of a given type.
+A dictionary is functionally an object or document without pre-defined field names.
+
+Realm SDK dictionary documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`java-realmdictionary`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Map/Dictionary - Swift SDK <ios-map>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`node-data-types-dictionaries`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`react-native-data-types-dictionaries`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-client-dictionaries`
+
+   .. tab::
+      :tabid: flutter
+
+      The Realm Flutter SDK does not support Dictionaries yet.
+
+   .. tab::
+      :tabid: kotlin
+
+      The Realm Kotlin SDK does not support Dictionaries yet.
+
+For more information on modeling dictionaries in an App Services Schema,
+refer to :ref:`Dictionary <schema-type-dictionary>`.
+
+Relationships
+-------------
+
+Realm Object Schemas support the following types of relationships:
+
+- To-one relationships: A to-one relationship means that an object is related
+  in a specific way to no more than one other object.
+- To-many relationships: A to-many relationship means that an object is related
+  in a specific way to multiple objects.
+- Inverse relationships: An inverse relationship links an object back
+  to any other objects that refer to it in a defined to-one or to-many relationship.
+
+App Services Schemas support to-one and to-many relationships.
+App Services Schemas *do not* support inverse relationships.
+
+Realm SDK relationship documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Define a Relationship Field - Java SDK <java-relationships>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`swift-model-relationships`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Define Relationship Properties - Node.js SDK <node-define-relationship-properties>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Define Relationship Properties - React Native SDK <react-native-define-relationship-properties>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-client-relationships`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`Define Relationship Properties - Flutter SDK <flutter-client-relationships>`
+
+   .. tab::
+      :tabid: kotlin
+
+      :ref:`kotlin-relationships`
+
+For more information on modeling relationships in an App Services Schema,
+refer to :ref:`Relationships <relationships>`.
 
 Example
 -------
