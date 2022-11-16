@@ -1290,13 +1290,17 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/MessageId"
+  
   "/groups/{groupId}/apps/{appId}/users":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
     get:
       tags:
         - users
       operationId: adminListUsers
       summary: List users
-      description: List [users](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: List confirmed [user accounts](https://www.mongodb.com/docs/atlas/app-services/authentication#std-label-user-accounts).
       parameters:
         - "$ref": "#/components/parameters/UsersAfter"
         - "$ref": "#/components/parameters/UsersSort"
@@ -1317,7 +1321,7 @@ paths:
         - users
       operationId: adminCreateUser
       summary: Create a user
-      description: Create a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Create a new [user account](https://www.mongodb.com/docs/atlas/app-services/authentication#std-label-user-accounts).
       requestBody:
         required: true
         description: The user to create
@@ -1339,10 +1343,11 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/User"
+  
+  "/groups/{groupId}/apps/{appId}/users/verify_token":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  "/groups/{groupId}/apps/{appId}/users/verify_token":
     post:
       tags:
         - users
@@ -1368,61 +1373,62 @@ paths:
                 - token
       responses:
         "200":
-          description: |-
-            Success returns this object. A 200 [may also return token
-            expired](https://www.mongodb.com/docs/realm/reference/authenticate-http-client-requests#std-label-verify-client-access-token-responses).
+          description: Token is valid or expired.
           content:
             application/json:
               schema:
-                properties:
-                  sub:
-                    type: string
-                    description: User ID.
-                  aud:
-                    type: string
-                    description: |-
-                      Optional; specifies which Resource Servers the JWT is valid for. Omitted
-                      if empty.
-                  exp:
-                    type: integer
-                    description: Unix timestamp after which the JWT expires.
-                  iat:
-                    type: integer
-                    description: Unix timestamp at which the JWT was issued.
-                  iss:
-                    type: string
-                    description: The issuer of the JWT.
-                  custom_user_data:
-                    type: object
-                    description: |-
-                      Optional; contains [custom user
-                      data](https://www.mongodb.com/docs/realm/users/enable-custom-user-data#std-label-custom-user-data)
-                      if it exists for the user. Only present if the access token is created
-                      after custom user data is enabled and configured. Omitted if empty.
-                  domain_id:
-                    type: string
-                    description: The UID representing the app domain.
-                  data:
-                    type: string
-                    description:
-                      "Optional: any metadata stored with the token. Omitted
-                      if empty."
-                  device_id:
-                    type: string
-                    description: The UID representing the device.
+                oneOf:
+                  - type: string
+                    const: "token expired"
+                  - properties:
+                      sub:
+                        type: string
+                        description: User ID.
+                      aud:
+                        type: string
+                        description: |-
+                          Optional; specifies which Resource Servers the JWT is valid for. Omitted
+                          if empty.
+                      exp:
+                        type: integer
+                        description: Unix timestamp after which the JWT expires.
+                      iat:
+                        type: integer
+                        description: Unix timestamp at which the JWT was issued.
+                      iss:
+                        type: string
+                        description: The issuer of the JWT.
+                      custom_user_data:
+                        type: object
+                        description: |-
+                          Optional; contains [custom user
+                          data](https://www.mongodb.com/docs/realm/users/enable-custom-user-data#std-label-custom-user-data)
+                          if it exists for the user. Only present if the access token is created
+                          after custom user data is enabled and configured. Omitted if empty.
+                      domain_id:
+                        type: string
+                      data:
+                        type: string
+                        description:
+                          "Optional: any metadata stored with the token. Omitted
+                          if empty."
+                      device_id:
+                        type: string
+
+  "/groups/{groupId}/apps/{appId}/users/{userId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  "/groups/{groupId}/apps/{appId}/users/{uid}":
+      - "$ref": "#/components/parameters/UserId"
     get:
       tags:
         - users
       operationId: adminGetUser
-      summary: Retrieve a user
-      description: Retrieve a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      summary: Get a User
+      description: Get a specific [user account](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts) by ID.
       responses:
         "200":
-          description: Successfully retrieved.
+          description: Success
           content:
             application/json:
               schema:
@@ -1432,15 +1438,16 @@ paths:
         - users
       operationId: adminDeleteUser
       summary: Delete a user
-      description: Delete a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Delete a specific [user account](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts) by ID.
       responses:
         "204":
-          description: Successfully deleted.
+          description: Deleted
+
+  "/groups/{groupId}/apps/{appId}/users/{userId}/devices":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/devices":
+      - "$ref": "#/components/parameters/UserId"
     get:
       tags:
         - users
@@ -1454,11 +1461,12 @@ paths:
               schema:
                 items:
                   type: object
+  
+  "/groups/{groupId}/apps/{appId}/users/{userId}/logout":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/logout":
+      - "$ref": "#/components/parameters/UserId"
     put:
       tags:
         - users
@@ -1470,11 +1478,12 @@ paths:
       responses:
         "204":
           description: Successfully revoked.
+  
+  "/groups/{groupId}/apps/{appId}/users/{userId}/enable":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/enable":
+      - "$ref": "#/components/parameters/UserId"
     put:
       tags:
         - users
@@ -1484,11 +1493,12 @@ paths:
       responses:
         "204":
           description: Successfully enabled.
+  
+  "/groups/{groupId}/apps/{appId}/users/{userId}/disable":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/disable":
+      - "$ref": "#/components/parameters/UserId"
     put:
       tags:
         - users
@@ -1498,11 +1508,12 @@ paths:
       responses:
         "204":
           description: Successfully disabled.
+  
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}":
+      - "$ref": "#/components/parameters/Email"
     delete:
       tags:
         - users
@@ -1512,11 +1523,12 @@ paths:
       responses:
         "204":
           description: Successfully deleted.
+  
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/send_confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/Email"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/send_confirm":
     post:
       tags:
         - email
@@ -1528,11 +1540,12 @@ paths:
       responses:
         "200":
           description: Successfully sent.
+  
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/Email"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/confirm":
     post:
       tags:
         - email
@@ -1542,11 +1555,12 @@ paths:
       responses:
         "204":
           description: Successfully confirmed.
+
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/run_confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/Email"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/run_confirm":
     post:
       tags:
         - email
@@ -1563,10 +1577,7 @@ paths:
             enabled.
         "404":
           description: User does not exist.
-    parameters:
-      - "$ref": "#/components/parameters/GroupId"
-      - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Email"
+  
   "/groups/{groupId}/apps/{appId}/debug/execute_function":
     post:
       tags:
@@ -4050,9 +4061,9 @@ components:
       required: true
       schema:
         type: string
-    Uid:
-      name: uid
-      description: UID
+    UserId:
+      name: userId
+      description: User Account ID
       in: path
       required: true
       schema:
