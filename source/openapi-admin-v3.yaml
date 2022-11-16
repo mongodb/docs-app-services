@@ -1509,6 +1509,76 @@ paths:
         "204":
           description: Successfully disabled.
   
+  "/groups/{groupId}/apps/{appId}/user_registrations/pending_users":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - users
+      operationId: adminListPendingUsers
+      summary: List pending users
+      description: List pending user account registrations
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  required:
+                    - _id
+                    - domain_id
+                    - login_ids
+                  properties:
+                    _id:
+                      type: string
+                      description: The unique pending user account ID
+                    user_id:
+                      type: string
+                    domain_id:
+                      type: string
+                    login_ids:
+                      type: array
+                      description: A list of identities associated with the pending user
+                      items:
+                        required:
+                          - id_type
+                          - id
+                        properties:
+                          id_type:
+                            type: string
+                            enum:
+                              - email
+                          id:
+                            type: string
+                            description: The pending user's username. For example, this is an email/password user's email address.
+                example: [
+                  {
+                    "_id": "63754f968a605a78ea6939e7",
+                    "domain_id": "60c8f69864c0a72d14bb534c",
+                    "login_ids": [
+                      {
+                        "id_type": "email",
+                        "id": "someone@example.com"
+                      }
+                    ],
+                    "user_id": ""
+                  },
+                  {
+                    "_id": "63754fd83c001970b1e5ea66",
+                    "domain_id": "60c8f69864c0a73e3e11c22b",
+                    "login_ids": [
+                      {
+                        "id_type": "email",
+                        "id": "joe@example.com"
+                      }
+                    ],
+                    "user_id": ""
+                  }
+                ]
+  
   "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1517,8 +1587,8 @@ paths:
     delete:
       tags:
         - users
-      operationId: adminDeletePendingUser
-      summary: Delete a pending user
+      operationId: adminDeletePendingEmailPasswordUser
+      summary: Delete a pending email/password authentication user
       description: Delete a pending [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
       responses:
         "204":
