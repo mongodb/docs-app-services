@@ -1,5 +1,4 @@
-.. _enable-realm-sync:
-.. _enable-sync:
+.. _sync-settings:
 
 =============
 Sync Settings
@@ -158,6 +157,22 @@ configure up to 10 queryable fields per application for Flexible Sync.
 .. seealso::
 
    Learn more about :ref:`optimizing performance and storage when using Flexible Sync <optimizing-performance-and-storage-flexible-sync>`.
+
+Consequences of Adding or Removing Queryable Fields
+```````````````````````````````````````````````````
+
+You can :ref:`update your Sync configuration <alter-your-sync-configuration>` to
+add or remove queryable field names, but be aware of the following:
+
+When you add a queryable field, devices can only sync on that field once the
+device has caught up to the point in time in :ref:`Device Sync History
+<sync-history>` where the field was added. 
+
+When you remove a queryable field, any devices still using that field will have
+their Device Sync session dropped and receive a :ref:`client reset
+<client-resets>`. Clients not using the removed field won't receive any errors.
+To avoid triggering a client reset when you remove the queryable field, you
+should first remove usage of that field on the client-side.
 
 
 Permissions
