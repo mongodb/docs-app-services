@@ -115,7 +115,7 @@ paths:
                 type: array
                 description: An array of authentication providers.
                 items:
-                  "$ref": "#/components/schemas/ProviderSummary"
+                  "$ref": "#/components/schemas/BaseAuthProvider"
       security: []
   "/auth/providers/{provider}/login":
     post:
@@ -183,7 +183,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/RealmProfile"
+                "$ref": "#/components/schemas/AdminUser"
   "/auth/session":
     post:
       tags:
@@ -199,6 +199,22 @@ paths:
                 properties:
                   access_token:
                     type: string
+        "401":
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - allOf: 
+                    - $ref: "#/components/schemas/Error"
+                    - properties:
+                        error:
+                          const: "invalid refresh token: incorrect token type"
+                      description: |-
+                        The request did not use bearer token
+                        authentication with a valid refresh token. Make
+                        sure the Authorization header contains the
+                        `refresh_token`, not the `access_token`.
       security:
         - refreshAuth: []
     delete:
@@ -207,8 +223,35 @@ paths:
       operationId: adminDeleteSession
       summary: Delete a session access token
       responses:
+        "204":
+          description: Deleted
         "401":
-          description: "invalid refresh token: incorrect token type"
+          description: Invalid token or session
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - allOf: 
+                    - $ref: "#/components/schemas/Error"
+                    - properties:
+                        error:
+                          const: "invalid refresh token: incorrect token type"
+                      description: |-
+                        The request did not use bearer token
+                        authentication with a valid refresh token. Make
+                        sure the Authorization header contains the
+                        `refresh_token`, not the `access_token`.
+                  - allOf: 
+                    - $ref: "#/components/schemas/Error"
+                    - properties:
+                        error:
+                          const: "invalid session: failed to find refresh token"
+                        error_code:
+                          const: "InvalidSession"
+                      description: |-
+                        The provided refresh token does not match any
+                        current sessions.
+  
   "/provider_regions":
     get:
       tags:
@@ -1812,6 +1855,7 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+
   "/groups/{groupId}/apps/{appId}/auth_providers":
     get:
       tags:
@@ -1829,7 +1873,7 @@ paths:
             application/json:
               schema:
                 items:
-                  "$ref": "#/components/schemas/ProviderSummary"
+                  "$ref": "#/components/schemas/BaseAuthProvider"
     post:
       tags:
         - authproviders
@@ -1844,14 +1888,14 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/NewProvider"
+              "$ref": "#/components/schemas/AuthProvider"
       responses:
         "201":
           description: Successfully created.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/FullProvider"
+                "$ref": "#/components/schemas/AuthProvider"
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
@@ -1870,7 +1914,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/FullProvider"
+                "$ref": "#/components/schemas/AuthProvider"
     delete:
       tags:
         - authproviders
@@ -1896,7 +1940,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/FullProvider"
+              "$ref": "#/components/schemas/AuthProvider"
       responses:
         "204":
           description: Successfully updated.
@@ -2104,6 +2148,8 @@ paths:
         Delete an IP address or CIDR block from the Access List of your App Services
         app
       responses:
+        "204":
+          description: Deleted
         "404":
           description: No IP addresses or CIDR blocks to delete
   "/groups/{groupId}/apps/{appId}/metrics":
@@ -5132,55 +5178,517 @@ components:
         - name
         - function_source
         - respond_result
-    UserProvider:
-      type: object
-      properties:
-        id:
-          type: string
-        provider_type:
-          "$ref": "#/components/schemas/ProviderType"
-        provider_id:
-          type: string
-    ProviderSummary:
-      properties:
-        _id:
-          type: string
-        name:
-          type: string
-          description: The name of the authentication provider. This value must be the same as the value of `type`.
-        type:
-          "$ref": "#/components/schemas/ProviderType"
-        disabled:
-          type: boolean
-    FullProvider:
-      properties:
-        _id:
-          type: string
-        name:
-          type: string
-          description: The name of the authentication provider. This value must be the same as the value of `type`.
-        type:
-          "$ref": "#/components/schemas/ProviderType"
-        disabled:
-          type: boolean
-        config:
-          type: object
-    NewProvider:
-      properties:
-        name:
-          type: string
-          description: The name of the authentication provider. This value must be the same as the value of `type`.
-        type:
-          "$ref": "#/components/schemas/ProviderType"
-        disabled:
-          type: boolean
-        config:
-          type: object
+    
+
+
+
+
+
+
+
+
+
+    BaseAuthProvider:
       required:
         - name
         - type
-        - disabled
-    RealmProfile:
+      properties:
+        _id:
+          type: string
+          description: The authentication provider's unique ID.
+        name:
+          type: string
+          description: The name of the authentication provider. This value must be the same as the value of `type`.
+        type:
+          "$ref": "#/components/schemas/ProviderType"
+        disabled:
+          type: boolean
+          description: If `true`, the auth provider is disabled. Users cannot log in through the provider until it is enabled.
+    
+    AuthProvider:
+      anyOf:
+        - $ref: "#/components/schemas/AnonymousAuthProvider"
+        - $ref: "#/components/schemas/EmailPasswordAuthProvider"
+        - $ref: "#/components/schemas/ApiKeyAuthProvider"
+        - $ref: "#/components/schemas/CustomJwtAuthProvider"
+        - $ref: "#/components/schemas/CustomFunctionAuthProvider"
+        - $ref: "#/components/schemas/AppleAuthProvider"
+        - $ref: "#/components/schemas/GoogleAuthProvider"
+        - $ref: "#/components/schemas/FacebookAuthProvider"
+    
+    AnonymousAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/BaseAuthProvider"
+        - properties:
+            name:
+              const: anonymous
+              description: The name of the authentication provider. For Anonymous authentication, this value is always `anonymous`.
+            type:
+              const: anonymous
+              description: The name of the authentication provider. For Anonymous authentication, this value is always `anonymous`.
+    
+    EmailConfirmationType:
+      oneOf:
+        - $ref: "#/components/schemas/EmailConfirmationAutomatic"
+        - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
+        - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
+    
+    EmailConfirmationAutomatic:
+      type: object
+      properties:
+        autoConfirm:
+          const: true
+          description: If `true`, automatically confirm new user accounts without additional verification.
+    
+    EmailConfirmationBuiltIn:
+      type: object
+      properties:
+        autoConfirm:
+          const: false
+          description: |-
+            If `true`, automatically confirm new user accounts without
+            additional verification. For built-in email account
+            confirmation, set this value to `false`.
+        emailConfirmationUrl:
+          type: string
+          description: |-
+            The URL included in the email sent to new users as part of
+            the built-in confirmation flow. The email also adds a unique
+            confirmation `token` and `tokenId` as query parameters.
+            
+            This URL should handle user confirmation by passing the
+            confirmation token to a Realm SDK's `confirmUser` function
+            or to the Admin API [Confirm a Pending Email/Password
+            User](https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/email/operation/adminConfirmPendingUser)
+            endpoint.
+        confirmEmailSubject:
+          type: string
+          description: |-
+            The subject line of the email sent to new users as
+            part of the built-in confirmation flow.
+    
+    EmailConfirmationCustomFunction:
+      type: object
+      properties:
+        autoConfirm:
+          const: false
+          description: |-
+            If `true`, automatically confirm new user accounts without
+            additional verification. For custom function account
+            confirmation, set this value to `false`.
+        runConfirmationFunction:
+          type: boolean
+          description: |-
+            If `true`, new email/password user account registrations use
+            a custom function that you define to handle the confirmation
+            process.
+        confirmationFunctionName:
+          type: string
+          description: |-
+            The name of the custom function that handles the
+            confirmation process.
+    
+    PasswordRefreshType:
+      oneOf:
+        - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+        - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+    
+    PasswordRefreshBuiltIn:
+      type: object
+      properties:
+        resetPasswordUrl:
+          type: string
+          description: |-
+            The URL included in the email sent to users as part
+            of the built-in password reset flow. The email also
+            adds a unique password reset `token` and `tokenId` as
+            query parameters.
+            
+            This URL should handle user confirmation by passing
+            the password reset token to a Realm SDK's `resetPassword`
+            function.
+        resetPasswordSubject:
+          type: string
+          description: |-
+            The subject line of the email sent to users as
+            part of the built-in password reset flow.
+    
+    PasswordRefreshCustomFunction:
+      type: object
+      properties:
+        runResetFunction:
+          type: boolean
+          const: true
+          description: |-
+            If `true`, use a custom function that you define to handle
+            the password reset process.
+        resetFunctionName:
+          type: string
+          description: |-
+            The name of the custom function that handles the password
+            reset process.
+
+    EmailPasswordAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/BaseAuthProvider"
+        - properties:
+            name:
+              const: local-userpass
+              description: The name of the authentication provider. For Email/Password authentication, this value is always `local-userpass`.
+            type:
+              const: local-userpass
+              description: The name of the authentication provider. For Email/Password authentication, this value is always `local-userpass`.
+            config:
+              oneOf:
+                - allOf:
+                  - title: ConfirmationAutomaticRefreshBuiltIn
+                  - $ref: "#/components/schemas/EmailConfirmationAutomatic"
+                  - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+                - allOf:
+                  - title: ConfirmationAutomaticRefreshCustom
+                  - $ref: "#/components/schemas/EmailConfirmationAutomatic"
+                  - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+                - allOf:
+                  - title: ConfirmationBuiltInRefreshBuiltIn
+                  - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
+                  - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+                - allOf:
+                  - title: ConfirmationBuiltInRefreshCustom
+                  - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
+                  - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+                - allOf:
+                  - title: ConfirmationCustomRefreshBuiltIn
+                  - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
+                  - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+                - allOf:
+                  - title: ConfirmationCustomRefreshCustom
+                  - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
+                  - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+                
+              # allOf:
+              #   # - type: object
+              #   #   title: EmailPasswordAuthProviderConfig
+              #   #   description: A configuration object for the email/password authentication provider.
+              #   # - $ref: "#/components/schemas/EmailConfirmationType"
+              #   - allOf:
+              #     - title: EmailConfirmationType
+              #     - oneOf:
+              #       - $ref: "#/components/schemas/EmailConfirmationAutomatic"
+              #       - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
+              #       - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
+              #   # - $ref: "#/components/schemas/PasswordRefreshType"
+              #   - allOf:
+              #     - title: PasswordRefreshType
+              #     - oneOf:
+              #       - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+              #       - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+    
+    ApiKeyAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/BaseAuthProvider"
+        - properties:
+            name:
+              const: api-key
+              description: The name of the authentication provider. For API key authentication, this value is always `api-key`.
+            type:
+              const: api-key
+              description: The name of the authentication provider. For API key authentication, this value is always `api-key`.
+    
+
+    CustomJwtAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/BaseAuthProvider"
+        - properties:
+            name:
+              const: custom-token
+              description: The name of the authentication provider. For Custom JWT authentication, this value is always `custom-token`.
+            type:
+              const: custom-token
+              description: The name of the authentication provider. For Custom JWT authentication, this value is always `custom-token`.
+            config:
+              type: object
+              title: CustomJwtAuthProviderConfig
+              description: A configuration object for the Custom JWT authentication provider.
+              properties:
+                audience:
+                  type: array
+                  description: |-
+                    Defines the expected values of the `aud` claim in the
+                    external JWT. By default, the Custom JWT provider
+                    expects `aud` to be your App ID.
+                  items:
+                    type: string
+                    description: |-
+                      A specific expected value of the `aud` claim in
+                      the external JWT.
+                requireAnyAudience:
+                  type: string
+                  default: false
+                  description: |-
+                    If `false`, the external JWT must include *all* of
+                    the values defined in `audience` in its `aud` claim.
+
+                    If `true`, a JWT is valid if *any* of the values
+                    defined in `audience` are in its `aud` claim.
+                signingAlgorithm:
+                  type: string
+                  description: |-
+                    The cryptographic method that the external system
+                    uses to sign the JWT. Custom JWT authentication supports
+                    JWTs signed using any of the following algorithms:
+                    
+                    - HS256
+                    - RS256
+                useJWKURI:
+                  type: boolean
+                  description: |-
+                    If `true`, the Custom JWT provider uses a signing
+                    algorithm and signing keys defined in a [JSON Web
+                    Key](https://www.rfc-editor.org/rfc/rfc7517) (JWK)
+                    or JSON Web Key Set (JWKS). The JWK(S) must be
+                    accessible at the URL specified in `jwkURI`.
+                jwkURI:
+                  type: string
+                  description: |-
+                    A URL that hosts a JWK or JWKS that describes the
+                    signing method and signing keys the Custom JWT provider
+                    should use. The JWK(S) may specify up to three signing
+                    keys and must use the RS256 algorithm.
+            secret_config:
+              type: object
+              title: CustomJwtAuthProviderSecretConfig
+              properties:
+                signingKeys:
+                  type: array
+                  items:
+                    type: string
+                    description: |-
+                      A list of the names of up to three
+                      [Secrets](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                      that each contain a signing key used by the
+                      external authentication system to sign JWTs. Each
+                      signing key Secret must be a string with length
+                      between 32 and 512 characters.
+            metadata_fields:
+              description: |-
+                Metadata fields are additional data that describe each
+                user. The value of each metadata field comes from some
+                field included in the JWT from the external
+                authentication system.
+                
+                A user's metadata fields refresh whenever they log in.
+              type: array
+              items:
+                type: object
+                title: CustomJwtMetadataField
+                description: |-
+                  A specific metadata field from the external JWT to
+                  include the user's data. This maps an external JWT
+                  field name (`name`) to the field name in the user's
+                  data (`field_name`) that holds the value of that field.
+                properties:
+                  required:
+                    type: boolean
+                    description: If `true`, this value must always be present in the external JWT.
+                  name:
+                    type: string
+                    description: |-
+                      The name of the field in the external JWT that contains the data.
+
+                      To specify a field in an embedded object, use [dot notation](https://www.mongodb.com/docs/manual/core/document/#dot-notation).
+                  field_name:
+                    type: string
+                    description: |-
+                      The name of the field in User object that holds the value.
+    
+
+    CustomFunctionAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/BaseAuthProvider"
+        - properties:
+            name:
+              const: custom-function
+              description: The name of the authentication provider. For Custom Function authentication, this value is always `custom-function`.
+            type:
+              const: custom-function
+              description: The name of the authentication provider. For Custom Function authentication, this value is always `custom-function`.
+            config:
+              type: object
+              title: CustomFunctionAuthProviderConfig
+              description: A configuration object for the Custom Function authentication provider.
+              properties:
+                authFunctionName:
+                  type: string
+                  description: |-
+                    The name of the [custom authentication
+                    function](https://www.mongodb.com/docs/atlas/app-services/authentication/custom-function/#the-authentication-function)
+                    that handles user logins.
+    
+    BaseOAuthProvider:
+      allOf:
+        - $ref: "#/components/schemas/BaseAuthProvider"
+        - properties:
+            config:
+              type: object
+              description: A configuration object for authentication providers that use OAuth 2.0.
+              properties:
+                clientId:
+                  type: string
+                  description: The OAuth Client ID
+            secret_config:
+              type: object
+              description: An object that maps provider configuration values to the name of a [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/) that holds the value to use.
+              properties:
+                clientSecret:
+                  type: string
+                  description: The name of a [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/) that holds the OAuth Client Secret value.
+            redirect_uris:
+              type: array
+              items:
+                type: string
+                description: A list of URIs that the OAuth flow should allow the user to redirect to.
+    
+    AppleAuthProvider:
+      allOf:
+        - $ref: "#/components/schemas/BaseOAuthProvider"
+        - properties:
+            name:
+              const: oauth2-apple
+              description: The name of the authentication provider. For Apple authentication, this value is always `oauth2-apple`.
+            type:
+              const: oauth2-apple
+              description: The name of the authentication provider. For Apple authentication, this value is always `oauth2-apple`.
+            config:
+              type: object
+              title: AppleAuthProviderConfig
+              description: A configuration object for the Apple authentication provider.
+              properties:
+                clientId:
+                  type: string
+                  description: |-
+                    Your Apple Services ID.
+
+                    To learn how to get this, see [Create a Services ID](https://www.mongodb.com/docs/atlas/app-services/authentication/apple/#create-a-services-id).
+            secret_config:
+              type: object
+              title: AppleAuthProviderSecretConfig
+              properties:
+                clientSecret:
+                  type: string
+                  description: |-
+                    The name of a
+                    [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                    that holds your client secret JWT.
+
+                    To learn how to create this, see [Create the Client Secret JWT](https://www.mongodb.com/docs/atlas/app-services/authentication/apple/#create-the-client-secret-jwt).
+    
+    NonAppleOAuthProvider:
+      allOf:
+        - $ref: "#/components/schemas/BaseOAuthProvider"
+        - properties:
+            metadata_fields:
+              type: array
+              items:
+                description: |-
+                  Metadata fields are additional data that describe each
+                  user. The value of each metadata field comes from the
+                  OAuth provider and is included in the authenticated JWT.
+                  
+                  A user's metadata fields refresh whenever they log in.
+                title: OAuthMetadataField
+                type: array
+                items:
+                  type: object
+                  description: |-
+                    A specific metadata field from OAuth 2.0 JWT to
+                    include the user's data. This maps a  JWT field name
+                    (`name`) to a field name of the same name in the
+                    user's data.
+                  properties:
+                    required:
+                      type: boolean
+                      description: If `true`, include this metadata value in the OAuth JWT and the user's data.
+                    name:
+                      type: string
+                      description: The name of a user metadata property accessible through OAuth, e.g. `email`.
+            domain_restrictions:
+              type: array
+              items:
+                type: string
+                description: |-
+                  A list of approved domain names for user accounts. If
+                  this is defined, a user must have an email address
+                  associated with their OAuth profile that has a domain
+                  included in this list.
+    
+    GoogleAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/NonAppleOAuthProvider"
+        - properties:
+            name:
+              const: oauth2-google
+              description: The name of the authentication provider. For Google authentication, this value is always `oauth2-google`.
+            type:
+              const: oauth2-google
+              description: The name of the authentication provider. For Google authentication, this value is always `oauth2-google`.
+            config:
+              type: object
+              title: GoogleAuthProviderConfig
+              description: A configuration object for the Google authentication provider.
+              properties:
+                clientId:
+                  type: string
+                  description: |-
+                    An OAuth 2.0 Client ID for your GCP project.
+
+                    To learn how to create one, see [Set Up a Project in
+                    the Google API
+                    Console](https://www.mongodb.com/docs/atlas/app-services/authentication/google/#std-label-auth-gcp-project-setup).
+                openId:
+                  type: boolean
+                  description: |-
+                    An OAuth 2.0
+            secret_config:
+              type: object
+              title: GoogleAuthProviderSecretConfig
+              properties:
+                clientSecret:
+                  type: string
+                  description: |-
+                    The name of a
+                    [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                    that holds the OAuth 2.0 Client Secret for the Client ID
+                    specified in `config.clientId`.
+
+    FacebookAuthProvider:
+      allOf: 
+        - $ref: "#/components/schemas/NonAppleOAuthProvider"
+        - properties:
+            name:
+              const: oauth2-facebook
+              description: The name of the authentication provider. For Facebook authentication, this value is always `oauth2-facebook`.
+            type:
+              const: oauth2-facebook
+              description: The name of the authentication provider. For Facebook authentication, this value is always `oauth2-facebook`.
+            config:
+              type: object
+              description: A configuration object for the Facebook authentication provider.
+              properties:
+                clientId:
+                  type: string
+                  description: |-
+                    The App ID of your Facebook app.
+            secret_config:
+              type: object
+              properties:
+                clientSecret:
+                  type: string
+                  description: |-
+                    The name of a
+                    [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                    that holds your Facebook App Secret.
+    
+    AdminUser:
       properties:
         user_id:
           type: string
@@ -5189,7 +5697,7 @@ components:
         identities:
           type: array
           items:
-            "$ref": "#/components/schemas/ProviderSummary"
+            "$ref": "#/components/schemas/UserIdentity"
         data:
           type: object
           properties:
@@ -5198,7 +5706,12 @@ components:
             name:
               type: string
         type:
-          "$ref": "#/components/schemas/ProfileType"
+          type: string
+          enum:
+            - normal
+            - server
+            - system
+            - unknown
         roles:
           type: array
           items:
@@ -5208,6 +5721,7 @@ components:
                 type: string
               group_id:
                 type: string
+    
     NewFunction:
       properties:
         can_evaluate:
@@ -5301,13 +5815,6 @@ components:
         - oauth2-facebook
         - custom-token
         - custom-function
-    ProfileType:
-      type: string
-      enum:
-        - normal
-        - server
-        - system
-        - unknown
     MessageState:
       type: string
       enum:
@@ -5346,23 +5853,68 @@ components:
           type: string
         state:
           "$ref": "#/components/schemas/MessageState"
+    
     User:
       properties:
         _id:
           type: string
+          description: The unique user account ID
         identities:
+          type: array
+          description: A list of authentication provider identities associated with the user account.
           items:
-            "$ref": "#/components/schemas/UserProvider"
+            "$ref": "#/components/schemas/UserIdentity"
         type:
           type: string
+          enum:
+            - normal
+            - server
+          description: |-
+            The user type. Most users are `normal` and represent a
+            specific human user. Users created through the `api-key`
+            provider have the type `server` because they are typically
+            used for programmatic access from a server.
         creation_date:
           type: integer
+          description: |-
+            The date and time that the user account was created.
+            Represented by the number of seconds since the UNIX epoch.
         last_authentication_date:
           type: integer
+          description: |-
+            The date and time that the user account last logged in or
+            authenticated a request. Represented by the number of
+            seconds since the UNIX epoch.
         disabled:
           type: boolean
+          description: If `true`, the user account is inactive and cannot login or interact with App Services.
         data:
           type: object
+          description: |-
+            Metadata that describes the user. This field combines the
+            data for all authentication identities associated with the
+            user. The exact field names and values depend on which
+            authentication providers the user has authenticated with.
+            
+            For example, if a user has linked an email/password account
+            with their Google account, this object might contain their
+            `email` as well as metadata fields from Google like `name`
+            and `picture`.
+    
+    UserIdentity:
+      type: object
+      description: |-
+        An authenticated identity from an authentication provider. This
+        represents the user account within an individual auth provider
+        and maps the account to external authentication systems.
+      properties:
+        id:
+          type: string
+        provider_type:
+          "$ref": "#/components/schemas/ProviderType"
+        provider_id:
+          type: string
+    
     Partition:
       properties:
         key:
