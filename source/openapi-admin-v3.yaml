@@ -239,22 +239,33 @@ paths:
         List all App Services apps within an Atlas
         [project/group](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
       parameters:
-        - name: product
-          in: query
+        - in: query
+          name: product
           required: false
           schema:
             type: string
             enum:
+              - standard
               - atlas
               - data-api
+          style: simple
+          explode: false
           description: |-
-            Include apps with the specified product type. For most apps
-            you won't need to specify a `product`.
+            One or more specific App Services product types. If specified,
+            this endpoint only returns Apps of the specified product type(s).
 
-            The `atlas` and `data-api` product types represent special,
-            singleton apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
-            and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
-            can access through the Atlas UI.
+            Most apps use the `standard` product type, which this
+            endpoint returns by default. The `atlas` and `data-api`
+            product types represent special apps for
+            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers) and
+            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/)
+            that you can access through the Atlas UI.
+            
+            You can specify multiple product types as a comma-separated list:
+
+            ```
+            /groups/{groupId}/apps?product=atlas,data-api
+            ```
       responses:
         "200":
           description: Successfully listed.
@@ -286,10 +297,12 @@ paths:
               - atlas
               - data-api
           description: |-
-            The application's product type. For most cases you should either
-            not specify a product or specify the default product,
-            `standard`. The `atlas` and `data-api` product types represent special,
-            singleton apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
+            The App's product type. Apps use the `standard` product type
+            by default. For most apps, you do not need to specify a
+            `product` at all, or should specify `standard`.
+            
+            The `atlas` and `data-api` product types represent special,
+            apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
             and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
             can access through the Atlas UI.
       requestBody:
