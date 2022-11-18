@@ -218,6 +218,12 @@ Database Triggers have the following configuration options:
 
        .. include:: /includes/trigger-project-expression.rst
 
+   * - :guilabel:`Auto-Resume Triggers`
+
+     - Optional.
+
+       .. include:: /includes/trigger-auto-resume.rst
+
 .. _database-events:
 
 Database Change Events
@@ -273,6 +279,7 @@ Database change event objects have the following general form:
    }
 
 .. _suspended_triggers:
+.. _resume-a-suspended-trigger:
 
 Suspended Triggers
 ------------------
@@ -285,19 +292,72 @@ can suspend a Trigger include:
   such as ``dropDatabase``, ``renameCollection``, or those caused by
   a network disruption.
 
-- the token required to resume the change stream is no longer in the
+- the **resume token** required to resume the change stream is no longer in the
   cluster :manual:`oplog </core/replica-set-oplog/>`. The App logs
   refer to this as a ``ChangeStreamHistoryLost`` error.
 
 In the event of a suspended or failed trigger, Atlas App Services sends the
 project owner an email alerting them of the issue.
 
-.. _resume-a-suspended-trigger:
+.. _automatically-resume-a-suspended-trigger:
 
-Resume a Suspended Trigger
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Automatically Resume a Suspended Trigger
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you resume a suspended Trigger, your App attempts to resume the Trigger
+You can configure a Trigger to automatically resume if the Trigger was suspended
+because the resume token is no longer in the oplog.
+The Trigger does not process any missed change stream events between
+when the resume token is lost and when the resume process completes.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      When :ref:`creating or updating a Database Trigger <create-a-database-trigger>`
+      in the App Services UI, navigate to the configuration page of the Trigger
+      you want to automatically resume if suspended.
+
+      In the :guilabel:`Advanced (Optional)` section, select :guilabel:`Auto-Resume Triggers`.
+
+      Save and deploy the changes.
+
+   .. tab::
+      :tabid: cli
+
+      When :ref:`creating or updating a Database Trigger <create-a-database-trigger>`
+      with the Realm CLI, create or navigate to the configuration file for the Trigger
+      you want to automatically resume if suspended.
+
+      In the :ref:`Trigger's configuration file <appconfig-triggers>`,
+      include the following:
+
+      .. code-block:: js
+        :caption: triggers/<trigger name>.json
+        :emphasize-lines: 5
+
+        {
+          "name": "<Trigger Name>",
+          "type": "DATABASE",
+          "config": {
+            "tolerate_resume_errors": true,
+            // ...rest of Database Trigger configuration
+          },
+          // ...rest of Trigger general configuration
+        }
+
+      Deploy the changes with the following command:
+
+      .. code-block:: shell
+
+          realm-cli push --remote=<App ID>
+
+.. _manually-resume-a-suspended-trigger:
+
+Manually Resume a Suspended Trigger
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you manually resume a suspended Trigger, your App attempts to resume the Trigger
 at the next change stream event after the change stream stopped.
 If the resume token is no longer in the cluster oplog, the Trigger
 must be started without a resume token. This means the Trigger begins
@@ -619,3 +679,5 @@ limit the number of fields that the Trigger processes by using a
           }
         }
       }
+
+.. include:: /includes/triggers-examples-github.rst

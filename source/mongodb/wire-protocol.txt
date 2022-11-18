@@ -73,19 +73,21 @@ App Services connection strings have the following form:
 
 .. code-block:: shell
 
-   mongodb://<credentials>@realm.mongodb.com:27020/?<parameters>
+   mongodb://<credentials>@<region>.realm.mongodb.com:27020/?<parameters>
 
 .. _wire-protocol-credentials:
 
 Credentials
 ~~~~~~~~~~~
 
-All App Services operations that you issue over the wire protocol run in
-the context of a specific application user that you specify in the
-connection string. The user must be registered with the
-:doc:`Email/Password </authentication/email-password>`, :doc:`API Key
-</authentication/api-key>`, or :doc:`Custom JWT
-</authentication/custom-jwt>` authentication provider.
+All operations that you issue over the wire protocol run in the context
+of a specific application user that you specify in the connection
+string. The user must be registered with one of the following
+authentication providers:
+
+- :ref:`Email/Password <email-password-authentication>`
+- :ref:`API Key <api-key-authentication>`
+- :ref:`Custom JWT <custom-jwt-authentication>`
 
 The contents of connection string credentials depend on the
 authentication provider with which the user registered:
@@ -171,6 +173,28 @@ authentication provider with which the user registered:
                 _:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
                   eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.
                   SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+.. _wire-protocol-region:
+
+Region
+~~~~~~
+
+The connection string must specify the :ref:`deployment region
+<deployment-regions>` and cloud provider in which the App is hosted.
+
+Global Apps use the ``global`` region:
+
+.. code-block:: shell
+
+   mongodb://<credentials>@global.realm.mongodb.com:27020/?<parameters>
+
+Local Apps specify the cloud provider and region name using
+``<region>.<cloud>`` format. For example, an app deployed to
+``aws-us-east-1`` would use the following connection string:
+
+.. code-block:: shell
+
+   mongodb://<credentials>@us-east-1.aws.realm.mongodb.com:27020/?<parameters>
 
 .. _wire-protocol-parameters:
 
@@ -310,7 +334,6 @@ you can connect to an App Services app with a connection string.
             .. code-block:: bash
 
                realm-cli push --remote="<Your App ID>"
-
 
 .. _wire-protocol-connect:
 

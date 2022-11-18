@@ -112,6 +112,7 @@ configuration files:
        "operation_types": ["<Operation Type>", ...],
        "full_document": <boolean>,
        "full_document_before_change": <boolean>,
+       "tolerate_resume_errors": <boolean>,
        "unordered": <boolean>,
        "match": { <Match Filter> },
        "project": { <Projection Filter> },
@@ -202,7 +203,17 @@ configuration files:
           preimages for the collection.
           
           For more information, see :ref:`preimages`.
-       
+
+   * - | ``config.tolerate_resume_errors``
+       | Boolean
+     - If ``true``, the Trigger automatically resumes if the token
+       required to process change stream events cannot be found.
+
+       .. include:: /includes/trigger-auto-resume.rst
+
+       For more information on resuming suspended Triggers, see
+       :ref:`Suspended Triggers <suspended_triggers>`.
+
    * - | ``config.unordered``
        | Boolean
      - If ``true``, indicates that event ordering is disabled for this trigger.

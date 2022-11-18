@@ -1,3 +1,21 @@
+.. _backend_20221103:
+
+3 November 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- :ref:`Function context.app.id <context-app>` returns a string (formerly BSON ObjectId).
+- Support :ref:`App Services deployments <deployment-regions>` in the AWS region
+  London (aws-eu-west-2).
+- Added :ref:`Admin API <admin-api>` endpoint to retrieve App Services metrics.
+
+.. _backend_20221020:
+
+20 October 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added option to :ref:`auto-resume Database Triggers <automatically-resume-a-suspended-trigger>`
+  that were suspended because resume token was lost.
+
 .. _backend_20221005:
 
 10 October 2022 Release
@@ -18,7 +36,7 @@
 9 September 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Support App Services deployments in the following :ref:`GCP regions<realm-regions>`:
+- Support App Services deployments in the following :ref:`GCP regions<deployment-regions>`:
 
   - Ohio (``us-central1``)
   - Virginia (``us-east4``)
@@ -53,7 +71,7 @@
 - Released :ref:`Data API <data-api>` as GA.
 - Introduced Data API for all Apps.
 - Introduced field-level permissions for Flexible Sync.
-- Introduced :ref:`local regions for Azure data sources <realm-regions>`.
+- Introduced :ref:`local regions for Azure data sources <deployment-regions>`.
 
 .. _backend_20220519:
 

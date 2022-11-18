@@ -203,7 +203,7 @@ Configuration
    
    * - | ``location``
        | String
-     - The name of the :ref:`cloud region <realm-regions>`
+     - The name of the :ref:`cloud region <deployment-regions>`
        that the application is deployed in.
 
        - :ref:`Local applications <local-deployment>` process all

@@ -17,7 +17,8 @@ Overview
 
 :ref:`Atlas Functions <functions>` have access to a global ``context``
 object that contains metadata for the incoming requests and provides
-access to components and services that you've configured in your app.
+access to components and services that you've configured in your App
+Services App.
 
 The ``context`` object exposes the following interfaces:
 
@@ -27,6 +28,9 @@ The ``context`` object exposes the following interfaces:
 
    * - Property
      - Description
+
+   * - :ref:`context.app <context-app>`
+     - Access metadata about the app running the function.
 
    * - :ref:`context.environment <context-environment>`
      - Access :ref:`environment values <environment-values>` and the
@@ -51,6 +55,106 @@ The ``context`` object exposes the following interfaces:
 
    * - :ref:`context.values <context-values>`
      - Contains static global :ref:`values <values-and-secrets>`.
+
+.. _context-app:
+
+Get App Metadata (``context.app``)
+----------------------------------
+
+The ``context.app`` object contains metadata about the App that
+contains the Function.
+
+.. code-block:: typescript
+   
+   {
+     "id": string,
+     "clientAppId": string,
+     "name": string,
+     "projectId": string,
+     "deployment": {
+       "model": string,
+       "providerRegion": string,
+     },
+     "lastDeployed": string,
+     "hostingUri": string,
+   }
+
+.. method:: context.app.id
+   
+   The unique internal ID of the App that contains the Function.
+
+   .. example::
+      
+      .. code-block:: json
+         
+         "60c8e59866b0c33d14ee634a"
+
+.. method:: context.app.clientAppId
+   
+   The unique Client App ID for the App that contains the Function.
+   
+   .. example::
+      
+      .. code-block:: json
+         
+         "myapp-abcde"
+
+.. method:: context.app.name
+
+   The name of the App that contains the Function.
+
+   .. example::
+      
+      .. code-block:: json
+         
+         "myapp"
+
+.. method:: context.app.projectId
+
+   The :ref:`ID of the Atlas Project/Group <find-your-project-or-app-id>`
+   that contains the App.
+
+   .. example::
+      
+      .. code-block:: json
+         
+         "5e1ec444970199272441a214"
+
+.. method:: context.app.deployment
+   
+   An object that describes the App's :ref:`deployment model and region
+   <deployment-model>`.
+   
+   .. example::
+      
+      .. code-block:: json
+         
+         {
+           "model": "LOCAL",
+           "providerRegion": "aws-us-east-1"
+         }
+
+.. method:: context.app.lastDeployed
+   
+   The date and time that the Atlas App was last deployed, formatted as
+   an ISODate string.
+   
+   .. example::
+      
+      .. code-block:: javascript
+         
+         "2022-10-31T12:00:00.000Z"
+
+.. method:: context.app.hostingUri
+   
+   If :ref:`static hosting <static-hosting>` is enabled, this value is
+   the base URL for hosted assets.
+   
+   .. example::
+      
+      .. code-block:: json
+         
+         "myapp-abcde.mongodbstitch.com"
 
 .. _context-functions:
 
