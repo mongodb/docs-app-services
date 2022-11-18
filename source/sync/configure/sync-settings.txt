@@ -55,15 +55,15 @@ to its own collection in the database specified by
 side, App Services updates the collection schema to match. This lets you update
 objects in your client code as you develop your app.
 
-You can use :ref:`data access rules <sync-rules>` with Development Mode. To make
-changes to the schema from a client, the user on the client must have write
-access to all data.
+You can use :ref:`data access rules <sync-rules>` with Development Mode. Note
+that schema changes ignore data access rules. This means that any client can
+update the backend schema by changing the client model.
 
 To learn more about how the Realm Object Schemas map to the App Services Schemas
 when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
 
-For more information about modifying synced object schemas, including
-how to make breaking changes, see: :ref:`<synced-schema-overview>`.
+For more information about modifying synced object schemas, including how to
+handle breaking changes, see: :ref:`<synced-schema-overview>`.
 
 .. important:: Disable Development Mode for Production Apps
    
@@ -170,7 +170,7 @@ device has caught up to the point in time in :ref:`Device Sync History
 <sync-history>` where the field was added. 
 
 When you remove a queryable field, any devices still using that field will have
-their Device Sync session dropped and receive a :ref:`client reset
+their Device Sync session dropped and must perform a :ref:`client reset
 <client-resets>`. Clients not using the removed field won't receive any errors.
 To avoid triggering a client reset when you remove the queryable field, you
 should first remove usage of that field on the client-side.
@@ -179,7 +179,11 @@ should first remove usage of that field on the client-side.
 Permissions
 ~~~~~~~~~~~
 
-Refer to :ref:`sync-permissions`.
+Atlas Device Sync enforces data access rules for all requests to a synced
+cluster. Sync rules are dynamic :ref:`JSON expressions <expressions>` that
+specify a given user's ability to view and modify synced data.
+
+For details, refer to :ref:`sync-permissions`.
 
 .. _asymmetric-sync:
 .. _optimize-asymmetric-sync:
@@ -209,20 +213,27 @@ Asymmetric Sync collections are only for writing data. You cannot use Flexible
 Sync queries against these collections. Instead, use :ref:`data-sources`.
 
 After you have enabled Asymmetric Sync, you implement it in the client app via
-the client SDKs. Currently, only the following SDKs support Asymmetric Sync:
+the client SDKs. Currently, the following SDKs support Asymmetric Sync:
 
-- JavaScript
-- React Native
+- JavaScript: refer to :ref:`node-define-an-asymmetric-object`
+- React Native: refer to :ref:`react-native-define-an-asymmetric-object`
+- Swift: refer to :ref:`swift-stream-data-to-atlas`
+- .NET: refer to :ref:`dotnet-asymmetric-sync`
 
 Client Max Offline Time
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Refer to :ref:`client-maximum-offline-time`.
+Client Maximum Offline Time determines how long the client can be offline
+between sync sessions. Changing this value enables you to balance offline access
+with storage used in the synced Atlas cluster. For more information, refer to
+:ref:`client-maximum-offline-time`.
 
 Client Recovery
 ~~~~~~~~~~~~~~~
 
-Refer to :ref:`recover-unsynced-changes`.
+Client Recovery enables the client to attempt to automatically perform a client
+reset while recovering data on the device. For more information, refer to
+:ref:`recover-unsynced-changes`.
 
 .. _appconfig-sync:
 .. _sync-configuration-reference:
