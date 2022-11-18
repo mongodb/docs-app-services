@@ -6,6 +6,14 @@ Disable a Trigger
 
 .. default-domain:: mongodb
 
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Overview
+--------
 Triggers may enter a :guilabel:`suspended` state in response to
 an event that prevents the Trigger's change stream from continuing, such
 as a network disruption or change to the underlying cluster. When a
@@ -103,3 +111,29 @@ importing an application directory with {+cli-bin+}.
 
                realm-cli push
 
+
+Restoring from a Snapshot
+-------------------------
+
+Consider the following scenario:
+
+1. A database trigger is disabled or suspended.
+
+#. New documents are added while the trigger is disabled.
+
+#. The database is restored from a snapshot to a time prior to the new documents 
+   being added.
+
+#. The database trigger is restarted.
+
+In this case, the trigger picks up all of the newly-added documents and fires 
+for each document. It will not fire again for events that have already been 
+processed.
+
+.. note::
+
+   If a previously-enabled database trigger is running during snapshot restoration, 
+   you will see an error in the Edit Trigger section of the Atlas UI because the 
+   trigger cannot connect to the Atlas cluster during the restore process. Once
+   snapshot restoration completes, the error disappears and the trigger continues
+   to execute normally.
