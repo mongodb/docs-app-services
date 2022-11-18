@@ -3,10 +3,6 @@
 17 November 2022 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Authenticate requests to the Data API :ref:`using an App Services user bearer token
-  <data-api-bearer-authentication>`.
-- Add :ref:`email/password, API key, and custom JWT authentication
-  <graphql-credential-headers>` to the GraphQL API.
 - Support :ref:`App Services deployments <deployment-regions>` in the AWS region
   São Paulo (aws-sa-east-1).
 - Updated :ref:`Admin API <admin-api>` endpoint to fetch Atlas Triggers and
