@@ -7,7 +7,7 @@ The primary service configuration for a MongoDB Atlas data source is
 ``config.json``, which defines connection parameters and sync rules.
 
 If the data source is not a :doc:`synced cluster </sync>` or
-:ref:`federated database instance <data-federation-caveats>`, then you can
+:ref:`{+adf-instance+} <data-federation-caveats>`, then you can
 define collection-level rules in the ``/rules`` sub-directory.
 
 .. code-block:: none
@@ -26,7 +26,7 @@ define collection-level rules in the ``/rules`` sub-directory.
    data source's name in Atlas. You define the service name for a data
    source when you link it to your application. For linked clusters, the
    default MongoDB service name is ``mongodb-atlas``. For
-   federated data sources, the default service name is
+   {+adf-datasource+}s, the default service name is
    ``mongodb-datafederation``.
 
 .. _mongodb-service-configuration-file:

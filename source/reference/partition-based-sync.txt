@@ -103,7 +103,7 @@ some or all the objects relevant to the end user. A client app
 may use more than one synced realm to access all the objects that the 
 application needs.
 
-Partitions link objects in {+client-database+} to documents in MongoDB. When 
+Partitions link objects in Realm Database to documents in MongoDB. When 
 you initialize a synced realm file, one of its parameters is a partition 
 value. Your client app creates objects in the synced realm. When those 
 objects sync, the partition value becomes a field in the MongoDB documents. 
@@ -120,7 +120,7 @@ At a high level:
 .. figure:: /images/partitioning.png
    :alt: A diagram that explains partitioning using groups of shapes and colors. MongoDB collections group by shape (equivalent to object types) while realms group by color (equivalent to partition value).
    
-   Partition shape data in an `{+atlas+}
+   Partitions shape data in an Atlas
    <https://www.mongodb.com/realm?tck=realm-docs#atlas-form-container>`_
    cluster. Each shape represents an object type. Partitions are determined by
    each shape's ``color``: red, green, or blue.
@@ -264,7 +264,7 @@ Enable Partition-Based Sync
          .. step:: Navigate to the Sync Configuration Screen
 
             To define Device Sync rules and enable Device Sync for your application, navigate to the
-            :guilabel:`Sync` configuration screen through the {+leftnav+}.
+            :guilabel:`Sync` configuration screen through the left navigation menu.
 
             .. note:: Sync Rules Cannot Change
 
@@ -1077,7 +1077,7 @@ With this structure, every user syncs all of your app's data to their device.
 This approach is functionally a decision to not partition data. This works 
 for basic applications or small public data sets.
 
-- **Data Security.** All data is public to clients with a {+realm+} that 
+- **Data Security.** All data is public to clients with a realm that 
   uses the partition. If a user has read or write access to the partition, 
   they can read or write *any* document.
 
@@ -1091,7 +1091,7 @@ field. Don't include a value for this field in any document. App Services maps
 any document that doesn't include a partition value to the **null partition**.
 
 You can also set a **static partition value**. This is when the partition 
-value doesn't change based on the user or data. For example, {+realm+}s 
+value doesn't change based on the user or data. For example, realms 
 across all clients could use the partition value ``"MyPartitionValue"``.
 
 .. example::
@@ -1187,7 +1187,7 @@ identifies the owner makes a natural partition key.
    - Users have read and write access to their user realm. This contains 
      playlists they have created and ratings that they've given to songs.
      
-   - Every user has read access to the {+realm+} for partition value ``PUBLIC``.
+   - Every user has read access to the realm for partition value ``PUBLIC``.
      This contains playlists that are available to all users.
    
    The strategy maps the collections to the following realms:
@@ -1631,7 +1631,7 @@ app uses this Sync configuration:
        | Number
      - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
        process waits before aggressively pruning metadata that some clients
-       require to synchronize from an old version of a {+realm+}.
+       require to synchronize from an old version of a realm.
 
    * - | ``is_recovery_mode_disabled``
        | Boolean

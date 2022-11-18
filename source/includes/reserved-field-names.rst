@@ -1,4 +1,4 @@
-App Services reserves some keywords for the {+rql+} and other purposes.
+App Services reserves some keywords for the Realm Query Language and other purposes.
 You cannot use reserved keywords as field names.
 
 App Services reserves the following keywords with any capitalization:

@@ -82,7 +82,7 @@ MongoDB Clusters
 
 .. _config-adf:
 
-Federated Database Instances
+{+adf-instance+}s
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: json
@@ -92,7 +92,7 @@ Federated Database Instances
      "name": "<Service Name>",
      "type": "datalake",
      "config": {
-        "dataLakeName": "<federated database instance name>"
+        "dataLakeName": "<{+adf-instance+} name>"
       }
    }
 
@@ -107,17 +107,17 @@ Federated Database Instances
        | String
      - Required. Default: ``mongodb-datafederation``
        
-       The service name used to refer to the federated database instance within this App Services
+       The service name used to refer to the {+adf-instance+} within this App Services
        app. The name may be at most 64 characters long and must only
        contain ASCII letters, numbers, underscores, and hyphens.
    
    * - | ``type``
        | String
-     - Required. For a federated database instance, this value is always ``"datalake"``.
+     - Required. For a {+adf-instance+}, this value is always ``"datalake"``.
    
    * - | ``config.dataLakeName``
        | String   
-     - Required. The name of the federated database instance in Atlas.
+     - Required. The name of the {+adf-instance+} in Atlas.
 
 Databases & Collections
 -----------------------
@@ -262,7 +262,7 @@ configuration file.
 Collection Rules
 ~~~~~~~~~~~~~~~~
 
-If the data source is not a :doc:`synced cluster </sync>` or a :ref:`federated data source
+If the data source is not a :doc:`synced cluster </sync>` or a :ref:`{+adf-datasource+}
 <data-federation-caveats>`, then you can define collection-level rules in a
 collection's ``rules.json`` configuration file.
 

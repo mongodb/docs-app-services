@@ -53,7 +53,7 @@
   in :ref:`AWS EventBridge Triggers <aws-eventbridge>` to support sending additional data types such as
   ``Decimal128``.
 - Display the generated data models in SDKs Data Models when :ref:`Development Mode <development-mode>`
-  is enabled for {+sync+}. 
+  is enabled for Atlas Device Sync. 
 
 
 .. _backend_20210728:

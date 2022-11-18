@@ -1,5 +1,5 @@
 .. note::
 
-   Federated data sources :ref:`do not support rules or schemas
-   <data-federation-caveats>`. You can only access a federated data source
+   {+adf-datasource+}s :ref:`do not support rules or schemas
+   <data-federation-caveats>`. You can only access a {+adf-datasource+}
    from a system function.

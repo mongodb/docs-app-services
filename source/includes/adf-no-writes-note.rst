@@ -1,4 +1,4 @@
 .. note::
 
-   Federated data sources :ref:`do not support write operations
+   {+adf-datasource+}s :ref:`do not support write operations
    <data-federation-caveats>`.

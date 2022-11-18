@@ -131,7 +131,7 @@ To learn more about how triggers work and how to define your own, see
 .. important::
 
    Triggers are only available for data sources that support change
-   streams. You cannot define triggers on a federated database instance or
+   streams. You cannot define triggers on a {+adf-instance+} or
    serverless instance.
 
 .. _link-a-data-source:
@@ -157,7 +157,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
          .. step:: Navigate to the Data Source Management Screen
 
             In the App Services UI, click :guilabel:`Linked Data Sources` under :guilabel:`Manage`
-            in the {+leftnav+}.
+            in the left navigation menu.
 
 
          .. step:: Link a New Data Source
@@ -172,7 +172,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
               * - Field
                 - Description
               * - :guilabel:`Data Source`
-                - A MongoDB Atlas cluster or federated database instance associated with the same project as
+                - A MongoDB Atlas cluster or {+adf-instance+} associated with the same project as
                   your App.
               * - :guilabel:`App Services Service Name`
                 - A name for the App Services service that connects to the data source.
@@ -192,20 +192,20 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
 
               * - | :guilabel:`MongoDB Connection String`
                   | *config.wireProtocolEnabled*
-                - Required for Atlas clusters. Not enabled for federated database instances.
+                - Required for Atlas clusters. Not enabled for {+adf-instance+}s.
                   A boolean indicating whether App Services should allow
                   clients to :ref:`connect to this cluster with a connection string over
                   the wire protocol <wire-protocol>`.
 
               * - :guilabel:`Read Preference`
-                - Required for Atlas clusters. Not available for federated database instances. Specifies the
+                - Required for Atlas clusters. Not available for {+adf-instance+}s. Specifies the
                   :ref:`read preference <read-preference>` of the cluster. The default
                   read preference (primary) should be sufficient for most use cases.
 
 
          .. step:: Save the Linked Data Source
 
-            Once you've selected and configured a MongoDB cluster or federated database instance,
+            Once you've selected and configured a MongoDB cluster or {+adf-instance+},
             click :guilabel:`Save`. App Services immediately begins the
             process of linking to the data source, which could take up to five
             minutes.
@@ -218,7 +218,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
 
          .. step:: Pull the Latest Version of Your App
 
-            To link a MongoDB Atlas cluster or federated database instance with {+cli-bin+}, you need a
+            To link a MongoDB Atlas cluster or {+adf-instance+} with {+cli-bin+}, you need a
             local copy of your application's configuration files.
 
             To pull a local copy of the latest version of your app, run the following:
@@ -246,7 +246,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
          .. step:: Add a Data Source Configuration File
 
             Add a file named ``config.json`` to the data source subdirectory. The file can
-            configure either a MongoDB Atlas cluster or a federated database instance.
+            configure either a MongoDB Atlas cluster or a {+adf-instance+}.
 
             The configuration file should have the following general form:
 
@@ -275,7 +275,7 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
                      file, see :ref:`Linked MongoDB Cluster Configuration
                      <config-mongodb-cluster>`.
 
-               .. tab:: Atlas Data Federation
+               .. tab:: {+adf+}
                   :tabid: adf
 
                   .. code-block:: json
@@ -285,13 +285,13 @@ and pushing a configuration file with {+cli+} or GitHub deployment:
                        "name": "<Service Name>",
                        "type": "datalake",
                        "config": {
-                          "dataLakeName": "<federated database instance name>"
+                          "dataLakeName": "<{+adf-instance+} name>"
                         }
                      }
 
                   .. note::
 
-                     For more information, see :ref:`Federated Database Instance Configuration <config-adf>`.
+                     For more information, see :ref:`{+adf-instance+} Configuration <config-adf>`.
 
 
          .. step:: Deploy the Data Source Configuration
@@ -319,7 +319,7 @@ instance type.
 
 .. _data-federation-caveats:
 
-Atlas Data Federation
+{+adf+}
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /mongodb/adf-limitations.rst
