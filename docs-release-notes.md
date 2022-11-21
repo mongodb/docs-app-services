@@ -1,3 +1,27 @@
+# November 18, 2022
+
+## Manage & Deploy Apps
+- Deploy/Deployment Models & Regions: Add São Paulo to the table of deployment regions
+- Secure: Add São Paulo IP addresses to the "AWS Outbound IP Addresses" list
+
+## Device Sync
+- Configure and Update Your Data Model/Data Model Mapping: Add details about `Array`, `EmbeddedObject`, `Set`, and `Dictionaries`, as well as relationships, with links out to relevant documentation
+
+## Users & Authentication
+- Authentication Providers: Where pages show an authentication provider configuration, add a note that `name` is the same as its `type`
+
+## Static Hosting
+- File Metadata Attributes: Add `Website-Redirect-Location` to metadata info
+
+## Other
+- App Services Admin API
+  - Applications: Add documentation for product types in the GET all Apps endpoint
+  - Authentication Providers: where endpoints show an authentication provider configuration, add a note that `name` is the same as its `type`
+  - Deployment: Add documentation for GET and PATCH deployment configuration
+  - Environments: Add documentation for Set Environment & Environment Values endpoints
+  - Add the São Paulo region ID to the list of available AWS deployment regions
+- Release Notes: Add release notes for new São Paulo region, updates to the Admin API endpoint to fetch Atlas Triggers and Atlas Data API apps
+
 # November 11, 2022
 
 ## Manage & Deploy Apps
