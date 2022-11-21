@@ -1321,7 +1321,13 @@ paths:
         - users
       operationId: adminCreateUser
       summary: Create a user
-      description: Create a new [user account](https://www.mongodb.com/docs/atlas/app-services/authentication#std-label-user-accounts).
+      description: |-
+        Create a new
+        [email/password](https://www.mongodb.com/docs/atlas/app-services/authentication/email-password/)
+        user account.
+
+        *Note:* You cannot create user accounts through the Admin API
+        for any authentication provider other than email/password.
       requestBody:
         required: true
         description: The user to create
