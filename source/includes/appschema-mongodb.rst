@@ -1,4 +1,4 @@
-Every :ref:`{+atlas+} data source <data-sources>`
+Every :ref:`MongoDB Atlas data source <data-sources>`
 linked to your app is configured as a service in the ``/services``
 directory. Each data source maps to its own sub-directory with the same
 name as the service.
@@ -78,7 +78,7 @@ the cluster.
    * - | ``sync.state``
        | Boolean
      - If ``true``, :doc:`Sync </sync>` is enabled for the cluster, which means
-       that client applications can sync data in the cluster with {+client-database+}
+       that client applications can sync data in the cluster with Realm Database
        and that :ref:`non-sync collection rules <mongodb-service-rules>` do not
        apply.
    

@@ -27,7 +27,7 @@ Overview
 --------
 
 The Atlas :graphql:`GraphQL <>` API allows client applications to access
-data stored in a linked {+atlas+} cluster using any standard GraphQL client.
+data stored in a linked MongoDB Atlas cluster using any standard GraphQL client.
 
 Atlas App Services automatically creates GraphQL types for every linked
 collection that has a defined :ref:`schema <schemas>` and evaluates
@@ -48,7 +48,7 @@ see :ref:`Define a Custom Resolver <graphql-custom-resolvers>`.
    `MongoDB Atlas
    <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`__ cluster or
    {+adf-instance+}. To get started, create a free cluster and :ref:`link it to
-   your {+app+} <link-a-data-source>`.
+   your App <link-a-data-source>`.
 
    If you don't have any data yet but you still want to explore the
    GraphQL API, consider adding a :atlas:`sample data set
@@ -65,16 +65,16 @@ circumvents the need for multiple costly round trips to the server.
 To learn more about GraphQL, check out the :graphql:`official GraphQL
 tutorial <learn>`.
 
-How {+service-short+} Creates GraphQL Schemas
+How App Services Creates GraphQL Schemas
 ----------------------------------------
 
 Using App Services, you generate the GraphQL schema and resolvers from JSON schemas
 for MongoDB collections. This differs from the traditional code-first and schema-first approaches
 to GraphQL schema development.
 
-To define your GraphQL schema with {+service-short+}:
+To define your GraphQL schema with App Services:
 
-#. :ref:`Define a JSON schema <schemas>` for a MongoDB collection in your {+atlas+} cluster.
+#. :ref:`Define a JSON schema <schemas>` for a MongoDB collection in your MongoDB Atlas cluster.
    You can :ref:`enforce the shape of the collection schema <enforce-a-schema>`
    based on custom definitions or use a generated schema based on the documents in the collection.
 #. :ref:`Generate the GraphQL schema and resolvers
@@ -85,10 +85,10 @@ To define your GraphQL schema with {+service-short+}:
 GraphQL Operations
 ------------------
 
-{+service-short+} automatically generates types and resolvers for data that you
+App Services automatically generates types and resolvers for data that you
 :ref:`expose to the GraphQL API <graphql-expose-data>`. The generated
 types and operations are all named after the base type name for each
-exposed collection. If you don't define a type name, {+service-short+} uses the
+exposed collection. If you don't define a type name, App Services uses the
 collection name instead.
 
 For more information on how to expose a collection and name its data
@@ -105,7 +105,7 @@ Queries
 ~~~~~~~
 
 A GraphQL **query** is a read operation that requests specific fields from one
-or more types. {+service-short+} automatically generates query types for
+or more types. App Services automatically generates query types for
 documents in each collection that has a defined :ref:`schema <schemas>`.
 
 For more information and examples, including a list of all automatically
@@ -152,7 +152,7 @@ Mutations
 ~~~~~~~~~
 
 A GraphQL **mutation** is a write operation that creates, modifies, or deletes
-one or more documents. {+service-short+} automatically generates mutation types
+one or more documents. App Services automatically generates mutation types
 for documents in each collection that has a defined :ref:`schema <schemas>`.
 App Services uses transactions to ensure safe writes via mutations.
 

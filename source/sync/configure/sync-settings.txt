@@ -51,7 +51,7 @@ streamlines development, but should not be used in production.
 Development Mode speeds up development by allowing you to design :ref:`schemas
 <configure-your-data-model>` directly in client application code.
 
-When you sync a {+realm+} file, Atlas App Services maps every synced object type
+When you sync a realm file, Atlas App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`. If you update the object model on the client
 side, App Services updates the collection schema to match. This lets you update
@@ -96,7 +96,7 @@ Development Mode database for every type of synced object.
 .. example::
 
    Specify a Development Mode database of ``myapp``. Your iOS client has a 
-   ``Person`` model. You sync a {+realm+} that contains an instance of the 
+   ``Person`` model. You sync a realm that contains an instance of the 
    ``Person`` object. Development Mode creates a server-side schema associated 
    with the model. The object syncs to the ``myapp.Person`` collection. 
 
@@ -114,7 +114,7 @@ When you configure Flexible Sync, you specify up to 10 field names that your
 client application can query. Fields that can be used in a subscription query
 are called **queryable fields**.
 
-Queryable fields apply across all collections in an {+app+}'s Sync Schema. You
+Queryable fields apply across all collections in an App's Schema. You
 can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` to
 configure more granular access control on individual collections.
 
@@ -124,7 +124,7 @@ Device Sync to query.
 
 .. example::
 
-   In a task tracker app, you might set ``assignee`` or ``owner`` 
+   In a to-do list app, you might set ``assignee`` or ``owner`` 
    as queryable fields. On the client side, you can then query for tasks 
    whose ``assignee`` or ``owner`` matches the logged-in user. 
 
@@ -138,7 +138,7 @@ queryable fields. You can also include arrays of these primitives as queryable
 fields. Flexible Sync does not support embedded objects or arrays of 
 objects as queryable fields.
 
-.. seealso:: {+rql+} - Flexible Sync Limitations
+.. seealso:: Realm Query Language - Flexible Sync Limitations
 
    For information on the queries you can perform on these fields, see:
    :ref:`flexible-sync-rql-limitations`
@@ -365,7 +365,7 @@ Root Object
      
      - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
        process waits before aggressively pruning metadata that some clients
-       require to synchronize from an old version of a {+realm+}.
+       require to synchronize from an old version of a realm.
 
    * - | ``is_recovery_mode_disabled``
        | Boolean

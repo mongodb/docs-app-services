@@ -654,7 +654,7 @@ Firebase JWT Authentication
 
 You can use the `Firebase Authentication
 <https://firebase.google.com/docs/auth>`__ service to authenticate users into
-App Services apps as well as Firebase apps. Use App Services Custom JWT
+App Services Apps as well as Firebase apps. Use App Services Custom JWT
 authentication to access App Services with Firebase credentials. 
 
 To set up Firebase Authentication as your Custom JWT provider in App Services: 
@@ -789,8 +789,8 @@ To set up Firebase Authentication as your Custom JWT provider in App Services:
       #. Retrieve the user's Firebase JWT. See the documentation on 
          `using a client Firebase SDK to get  a user's JWT
          <https://firebase.google.com/docs/auth/admin/verify-id-tokens#retrieve_id_tokens_on_clients>`__. 
-      #. Pass the Firebase JWT to a a {+client-sdk+} Custom JWT authentication method. 
-         For more information how to use {+client-sdks+} to perform Custom JWT authentication, 
+      #. Pass the Firebase JWT to a Realm SDK Custom JWT authentication method. 
+         For more information how to use Realm SDKs to perform Custom JWT authentication, 
          refer to :ref:`Custom JWT Examples <custom-jwt-authentication-examples>`. 
 
 .. _custom-jwt-authentication-examples:
@@ -799,7 +799,7 @@ Examples
 --------
 
 For code examples that demonstrate how to register and log in using
-Custom JWT authentication, see the documentation for the {+client-sdks+}:
+Custom JWT authentication, see the documentation for the Realm SDKs:
 
 .. tabs-realm-sdks::
 
@@ -857,7 +857,7 @@ Walkthrough
 -----------
 
 In this walkthrough, you will implement :ref:`Custom JWT Authentication <config-custom-jwt>`  
-for your {+service-short+} app. You will learn how to:
+for your App Services App. You will learn how to:
 
 - Enable JWT Authentication
 - Use a third-party JWT provider to generate a valid token
@@ -866,8 +866,8 @@ for your {+service-short+} app. You will learn how to:
 Prerequisites
 ~~~~~~~~~~~~~
 
-You can use any {+service-short+} app for this tutorial. If you do not have 
-a test app to use, you can :ref:`create an {+app+} <create-a-realm-app>` or 
+You can use any App Services App for this tutorial. If you do not have 
+a test app to use, you can :ref:`create an app <create-a-realm-app>` or 
 use one of the :ref:`Template Apps <template-apps>`.
 
 Procedure
@@ -875,7 +875,7 @@ Procedure
 This procedure is divided into three logical steps:
 
 1. Create a JWT token
-2. Enable and configure JWT Authentication in {+service-short+}
+2. Enable and configure JWT Authentication in App Services
 3. Add authentication code to your client app
 
 Create a JWT Token
@@ -899,14 +899,14 @@ encode the token. The default, which we will use for this tutorial, is ``HS256``
    For more information on JWT algorithms, see 
    `JSON Web Token (JWT) Signing Algorithms Overview 
    <https://auth0.com/blog/json-web-token-signing-algorithms-overview/>`_.
-   {+service-short+} supports ``HS256`` and ``RS256``.
+   App Services supports ``HS256`` and ``RS256``.
 
 
 Payload
 +++++++
 
 The Payload section contains the information that we need to configure for 
-our {+service-short+}-specific needs. By default, three fields are included: ``sub``, 
+our App Services-specific needs. By default, three fields are included: ``sub``, 
 ``name``, and ``iat``. We will use these three, plus two more fields. The following 
 table explains each field and the value expected:
 
@@ -924,7 +924,7 @@ table explains each field and the value expected:
      - <your email or any other unique value>
    
    * - ``name`` 
-     - The name of the user to whom this JWT is assigned. If specified, {+service-short+} 
+     - The name of the user to whom this JWT is assigned. If specified, App Services 
        uses this value as the user's display name. Optional.
      - <your name>
    
@@ -938,8 +938,8 @@ table explains each field and the value expected:
    
    * - ``aud``
      - The audience (consumer) of the token.
-     - Your {+service-short+} App ID, which you can 
-       :ref:`find in the {+service-short+} UI <find-your-app-id>`.
+     - Your App Services App ID, which you can 
+       :ref:`find in the App Services UI <find-your-app-id>`.
        If applicable, you can input multiple App IDs as a comma-separated
        list. When inputting multiple, you can specify whether the JWT requires 
        all or any one of the listed audiences.
@@ -947,7 +947,7 @@ table explains each field and the value expected:
   
 For this tutorial, we have created a JWT for a user named "Caleb". The token was 
 issued at the time of writing and will expire in exactly 1 year, and is 
-intended to be used by an {+service-short+} with an ID of "boiboi-cul8r". Our 
+intended to be used by an App Services with an ID of "boiboi-cul8r". Our 
 completed JSON payload looks like this:
 
 .. code-block:: javascript
@@ -979,12 +979,12 @@ copy one of the 256-bit values that has been generated.
 .. note::
 
    Keep track of this secret, as you will need it in the next section when 
-   we configure {+service-short+} authentication.
+   we configure App Services authentication.
 
 After pasting in your key, check the ``secret base64 encoded`` check box.
 
 At this point, you have generated a JWT key that can be used with — and 
-only with — the {+app+} you specified. Copy this key from the 
+only with — the App you specified. Copy this key from the 
 :guilabel:`Encoded` box and temporarily save it in a text document. Your JWT 
 will be 3 sections of values, separated by periods, and looks something like 
 the following (your token will **not** match this!):
@@ -998,11 +998,11 @@ the following (your token will **not** match this!):
    GaIE4e6mGxlIBNnz4FcheFBUmxd25GK-rfOfF6F85rY
 
 
-Enable JWT Authentication in Your {+app+}
+Enable JWT Authentication in Your App
 `````````````````````````````````````
 
-If you are not currently logged in to `{+service-short+} <https://realm.mongodb.com?tck=docs_realm>`_ 
-do so now and navigate to the {+app+} that you specified when generating the 
+If you are not currently logged in to `App Services <https://realm.mongodb.com?tck=docs_realm>`_ 
+do so now and navigate to the App that you specified when generating the 
 JWT in the previous section.
 
 
