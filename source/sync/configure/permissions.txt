@@ -1,9 +1,9 @@
 .. _sync-permissions:
 .. _sync-rules:
 
-==========================
-Sync Rules and Permissions
-==========================
+=========================
+Sync Permissions Overview
+=========================
 
 .. default-domain:: mongodb
 
@@ -13,17 +13,18 @@ Sync Rules and Permissions
    :depth: 3
    :class: singlecol
 
-Rules
------
 
-Atlas App Services enforces data access rules for all requests to a synced cluster.
-Sync rules are dynamic :ref:`JSON expressions <expressions>` that specify a
-given user's ability to view and modify synced data.
+Atlas Device Sync enforces data access rules for all requests to a synced
+cluster. Sync rules are dynamic :ref:`JSON expressions <expressions>` that
+specify a given user's ability to view and modify synced data.
 
-The way Sync rules work depends on whether you are using Flexible Sync
+The way Device Sync rules work depends on whether you are using Flexible Sync
 (recommended) or the older Partition-Based Sync mode. This page documents
 Flexible Sync permissions. To configure Partition-Based Sync permissions, refer
 to :ref:`partition-based-sync-permissions`.
+
+For examples of how you might configure permissions for common scenarios, refer
+to :ref:`flexible-sync-permissions-guide`.
 
 .. important:: Non-Sync Rules
    
@@ -34,11 +35,12 @@ to :ref:`partition-based-sync-permissions`.
    If your app does not use sync, check out :ref:`MongoDB Collection Rules
    <mongodb-rules>` for more information on rules for non-synced clusters.
 
+
 .. _flexible-sync-rules-and-permissions:
 .. _flexible-sync-roles:
 
-Flexible Sync - Session Roles
------------------------------
+Session Roles
+-------------
 
 A **session role** determines which permissions apply for the duration
 of a Flexible Sync session.
@@ -339,3 +341,31 @@ information, see :ref:`appconfig-sync`.
 
         - May not read or write any other fields despite having document-level
           access to the document.
+
+
+.. flexible-sync-permission-changes:
+
+Permission Changes
+------------------
+
+If a user's permissions have changed since the last Sync session, Sync triggers
+a :ref:`client reset <client-resets>` and re-downloads all data with the new
+permissions applied.
+
+A user's permissions might change in the following situations:
+
+- You :ref:`updated the Sync configuration <alter-your-sync-configuration>` to
+  modify the rules.
+- Your rules reference :ref:`custom user data <custom-user-data>` to determine
+  permissions dynamically, and the value of that custom user data has changed
+  since the last Sync session.
+
+A client reset will **not** be triggered under the following cases: 
+
+- Adding a new collection to a App Services Schema and defining permissions for
+  the new namespace or using default roles. This will not trigger a client reset
+  because permissions have not been applied previously.
+- Configuring custom permissions for the new collection in the same :ref:`draft
+  <deploy-ui>` as the new schema. Conversely, deploying a draft with permission
+  changes after you deploy the schema will lead to a client reset, since default
+  permissions were applied in the initial deployment.
