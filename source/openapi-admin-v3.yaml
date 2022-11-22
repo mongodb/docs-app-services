@@ -5497,33 +5497,9 @@ components:
                     function](https://www.mongodb.com/docs/atlas/app-services/authentication/custom-function/#the-authentication-function)
                     that handles user logins.
     
-    BaseOAuthProvider:
-      allOf:
-        - $ref: "#/components/schemas/BaseAuthProvider"
-        - properties:
-            config:
-              type: object
-              description: A configuration object for authentication providers that use OAuth 2.0.
-              properties:
-                clientId:
-                  type: string
-                  description: The OAuth Client ID
-            secret_config:
-              type: object
-              description: An object that maps provider configuration values to the name of a [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/) that holds the value to use.
-              properties:
-                clientSecret:
-                  type: string
-                  description: The name of a [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/) that holds the OAuth Client Secret value.
-            redirect_uris:
-              type: array
-              items:
-                type: string
-                description: A list of URIs that the OAuth flow should allow the user to redirect to.
-    
     AppleAuthProvider:
       allOf:
-        - $ref: "#/components/schemas/BaseOAuthProvider"
+        - $ref: "#/components/schemas/BaseAuthProvider"
         - title: AppleAuthProvider
           properties:
             name:
@@ -5555,49 +5531,15 @@ components:
                     that holds your client secret JWT.
 
                     To learn how to create this, see [Create the Client Secret JWT](https://www.mongodb.com/docs/atlas/app-services/authentication/apple/#create-the-client-secret-jwt).
-    
-    NonAppleOAuthProvider:
-      allOf:
-        - $ref: "#/components/schemas/BaseOAuthProvider"
-        - properties:
-            metadata_fields:
-              type: array
-              items:
-                description: |-
-                  Metadata fields are additional data that describe each
-                  user. The value of each metadata field comes from the
-                  OAuth provider and is included in the authenticated JWT.
-                  
-                  A user's metadata fields refresh whenever they log in.
-                title: OAuthMetadataField
-                type: array
-                items:
-                  type: object
-                  description: |-
-                    A specific metadata field from OAuth 2.0 JWT to
-                    include the user's data. This maps a  JWT field name
-                    (`name`) to a field name of the same name in the
-                    user's data.
-                  properties:
-                    required:
-                      type: boolean
-                      description: If `true`, include this metadata value in the OAuth JWT and the user's data.
-                    name:
-                      type: string
-                      description: The name of a user metadata property accessible through OAuth, e.g. `email`.
-            domain_restrictions:
+            redirect_uris:
               type: array
               items:
                 type: string
-                description: |-
-                  A list of approved domain names for user accounts. If
-                  this is defined, a user must have an email address
-                  associated with their OAuth profile that has a domain
-                  included in this list.
+                description: A list of URIs that the OAuth flow should allow the user to redirect to.
     
     GoogleAuthProvider:
-      allOf: 
-        - $ref: "#/components/schemas/NonAppleOAuthProvider"
+      allOf:
+        - $ref: "#/components/schemas/BaseAuthProvider"
         - title: GoogleAuthProvider
           properties:
             name:
@@ -5634,10 +5576,48 @@ components:
                     [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
                     that holds the OAuth 2.0 Client Secret for the Client ID
                     specified in `config.clientId`.
+            redirect_uris:
+              type: array
+              items:
+                type: string
+                description: A list of URIs that the OAuth flow should allow the user to redirect to.
+            metadata_fields:
+              type: array
+              items:
+                description: |-
+                  Metadata fields are additional data that describe each
+                  user. The value of each metadata field comes from
+                  Google and is included in the authenticated JWT.
+                  
+                  A user's metadata fields refresh whenever they log in.
+                type: array
+                items:
+                  type: object
+                  description: |-
+                    A specific metadata field from OAuth 2.0 JWT to
+                    include the user's data. This maps a  JWT field name
+                    (`name`) to a field name of the same name in the
+                    user's data.
+                  properties:
+                    required:
+                      type: boolean
+                      description: If `true`, include this metadata value in the OAuth JWT and the user's data.
+                    name:
+                      type: string
+                      description: The name of a user metadata property accessible through OAuth, e.g. `email`.
+            domain_restrictions:
+              type: array
+              items:
+                type: string
+                description: |-
+                  A list of approved domain names for user accounts. If
+                  this is defined, a user must have an email address
+                  associated with their OAuth profile that has a domain
+                  included in this list.
 
     FacebookAuthProvider:
       allOf: 
-        - $ref: "#/components/schemas/NonAppleOAuthProvider"
+        - $ref: "#/components/schemas/BaseOAuthProvider"
         - title: FacebookAuthProvider
           properties:
             name:
@@ -5665,6 +5645,44 @@ components:
                     The name of a
                     [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
                     that holds your Facebook App Secret.
+            redirect_uris:
+              type: array
+              items:
+                type: string
+                description: A list of URIs that the OAuth flow should allow the user to redirect to.
+            metadata_fields:
+              type: array
+              items:
+                description: |-
+                  Metadata fields are additional data that describe each
+                  user. The value of each metadata field comes from
+                  Facebook and is included in the authenticated JWT.
+                  
+                  A user's metadata fields refresh whenever they log in.
+                type: array
+                items:
+                  type: object
+                  description: |-
+                    A specific metadata field from OAuth 2.0 JWT to
+                    include the user's data. This maps a  JWT field name
+                    (`name`) to a field name of the same name in the
+                    user's data.
+                  properties:
+                    required:
+                      type: boolean
+                      description: If `true`, include this metadata value in the OAuth JWT and the user's data.
+                    name:
+                      type: string
+                      description: The name of a user metadata property accessible through OAuth, e.g. `email`.
+            domain_restrictions:
+              type: array
+              items:
+                type: string
+                description: |-
+                  A list of approved domain names for user accounts. If
+                  this is defined, a user must have an email address
+                  associated with their OAuth profile that has a domain
+                  included in this list.
     
     AdminUser:
       properties:
