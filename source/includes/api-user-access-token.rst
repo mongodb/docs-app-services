@@ -105,11 +105,11 @@ their ``User`` object. The SDKs can refresh expired access tokens.
              return app.CurrentUser.AccessToken;
          }
 
-Get a User Access Token from the Client API
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Get a User Access Token Over HTTP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can get an access token by sending an authentication request
-directly to the App Services Client API. The authentication endpoint
+directly to App Services over HTTP. The authentication endpoint
 accepts an HTTPS POST request with a JSON body that contains user
 credentials. If the credentials are valid, the response contains a user
 access token.

@@ -18,8 +18,10 @@ authentication information for the user calling the endpoint. This lets
 the endpoint enforce rules and validate document schemas for each
 request.
 
-Users can authenticate through any of the following authentication
-providers:
+Users authenticate requests by providing authentication information in
+the request headers. They can either use an authentication access token
+or directly include login credentials from any of the following
+authentication providers:
 
 - :ref:`Email/Password <email-password-authentication>`
 
@@ -33,8 +35,37 @@ providers:
    <authentication-providers>` before users can authenticate with
    it.
 
-This guide shows you how to include authentication information in Data
-API requests.
+.. _data-api-bearer-authentication:
+
+Bearer Authentication
+---------------------
+
+The Data API supports Bearer Authentication, which lets you authenticate
+a request by including a valid user access token in the request's
+``Authorization`` header using the following format:
+
+.. code-block:: text
+   
+   Authorization: Bearer <AccessToken>
+
+For example, the following request uses Bearer Authentication:
+
+.. code-block:: shell
+   :emphasize-lines: 2
+
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
+      --header 'Authorization: Bearer <AccessToken>' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
+
+.. include:: /includes/api-user-access-token.rst
 
 .. _data-api-credential-headers:
 
@@ -53,10 +84,13 @@ Credential headers are useful for:
 
 - manual or test requests sent from an HTTPS client like Postman
 
-You cannot use credential headers to authenticate requests sent from a
-web browser due to :wikipedia:`Cross-Origin Resource Sharing
-<Cross-origin_resource_sharing>` restrictions. Instead, use
-:ref:`Bearer Authentication <data-api-bearer-authentication>`.
+.. important::
+   
+   You cannot use credential headers to authenticate requests sent from
+   a web browser due to :wikipedia:`Cross-Origin Resource Sharing
+   <Cross-origin_resource_sharing>` restrictions. Instead, to
+   authenticate Data API requests from a browser, use :ref:`Bearer
+   Authentication <data-api-bearer-authentication>`.
 
 Email/Password
 ~~~~~~~~~~~~~~
@@ -124,29 +158,3 @@ request's ``jwtTokenString`` header.
           "title": "The Matrix"
         }
       }'
-
-.. _data-api-bearer-authentication:
-
-Bearer Authentication
----------------------
-
-The Data API supports Bearer Authentication, which lets you authenticate
-a Data API request by including a valid user access token in the
-request's ``Authorization`` header.
-
-.. code-block:: shell
-   :emphasize-lines: 2
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'Authorization: Bearer <AccessToken>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
-
-.. include:: /includes/api-user-access-token.rst
