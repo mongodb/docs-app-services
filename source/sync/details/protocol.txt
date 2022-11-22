@@ -20,7 +20,7 @@ real time across multiple clients that each maintain their own local
 Realm files. The protocol defines a set of pre-defined :ref:`request
 types <sync-request-types>` as well as a :ref:`process <sync-session-process>`
 by which a client, like a Realm SDK, can connect to an
-Atlas App Services application server and sync data.
+Atlas App Services Application server and sync data.
 
 .. note::
    
@@ -130,7 +130,7 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 .. code-block:: text
    :copyable: false
    
-   Realm SDK                      App Server
+   Realm SDK                        Device Sync Server
        |                                  |
        |  <---- 1. HTTP Handshake ----->  |
        |                                  |
@@ -146,7 +146,7 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 
 .. procedure::
 
-   .. step:: Client Connects to the App Server
+   .. step:: Client Connects to the Device Sync Server
 
       The sync protocol is primarily handled over a WebSocket connection between the
       SDK and the server. To establish a connection, the SDK sends a handshake HTTP
@@ -154,7 +154,7 @@ Realm file to each other via :sync-client-message:`UPLOAD` and
 
       - a protocol version
       - a WebSocket key
-      - a valid access token for an authenticated App Services application user
+      - a valid access token for an authenticated App Services Application user
 
       The server sends an :mdn:`HTTP 101 Switching Protocols <Web/HTTP/Status/101>`
       response that specifies a WebSocket connection for the SDK. The rest of the
