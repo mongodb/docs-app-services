@@ -5305,12 +5305,6 @@ components:
               const: anonymous
               description: The name of the authentication provider. For Anonymous authentication, this value is always `anonymous`.
     
-    EmailConfirmationType:
-      oneOf:
-        - $ref: "#/components/schemas/EmailConfirmationAutomatic"
-        - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
-        - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
-    
     EmailConfirmationAutomatic:
       type: object
       properties:
@@ -5365,11 +5359,6 @@ components:
           description: |-
             The name of the custom function that handles the
             confirmation process.
-    
-    PasswordRefreshType:
-      oneOf:
-        - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
-        - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
     
     PasswordRefreshBuiltIn:
       type: object
