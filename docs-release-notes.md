@@ -1,3 +1,63 @@
+# November 18, 2022
+
+## Manage & Deploy Apps
+- Deploy/Deployment Models & Regions: Add São Paulo to the table of deployment regions
+- Secure: Add São Paulo IP addresses to the "AWS Outbound IP Addresses" list
+
+## Device Sync
+- Configure and Update Your Data Model/Data Model Mapping: Add details about `Array`, `EmbeddedObject`, `Set`, and `Dictionaries`, as well as relationships, with links out to relevant documentation
+
+## Users & Authentication
+- Authentication Providers: Where pages show an authentication provider configuration, add a note that `name` is the same as its `type`
+
+## Static Hosting
+- File Metadata Attributes: Add `Website-Redirect-Location` to metadata info
+
+## Other
+- App Services Admin API
+  - Applications: Add documentation for product types in the GET all Apps endpoint
+  - Authentication Providers: where endpoints show an authentication provider configuration, add a note that `name` is the same as its `type`
+  - Deployment: Add documentation for GET and PATCH deployment configuration
+  - Environments: Add documentation for Set Environment & Environment Values endpoints
+  - Add the São Paulo region ID to the list of available AWS deployment regions
+- Release Notes: Add release notes for new São Paulo region, updates to the Admin API endpoint to fetch Atlas Triggers and Atlas Data API apps
+
+# November 11, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Atlas Device Sync: Clarify that if a user has write permission, they also have read permission, regardless of the value of a `read` field or expression.
+- Deploy/Deployment Models & Regions: Add `Region` column to Cloud Deployment Regions reference table
+
+## Device Sync
+- Configure and Update Your Data Model: Refactor section to improve clarity about schema/data modeling
+  - Refactor Data Model Overview to be higher level 
+  - Change "Schema" to "Data Model" in navigation
+  - Refer to "App Services Schema" instead of "Device Sync Schema"
+  - Add a new "Data Model Mapping" page describing how Realm Objects map to the App Services Schema
+- Configure Sync/Compact an Atlas Volume: New page with an overview and steps to compact an Atlas volume
+- Handle Errors/Client Reset: Add a new tab with a link to the Flutter SDK client reset docs
+- Throughout section: De-emphasize Partition-Based Sync. Where both apply, for example in configuration, present Flexible Sync first. Where possible, move Partition-Based Sync docs to a new Partition-Based Sync Mode page in the Reference section.
+
+## Data API
+- Data API Endpoints: Add `<Cloud>` to endpoint base URL example
+
+## Triggers
+- Disable a Trigger: New "Restoring from a Snapshot" section
+
+## Users & Authentication
+- Authentication Providers/API Key Authentication: Add more details about User vs. Server API keys
+
+## Reference
+- Template Apps: Remove note about how to get outdated UIKit template app; it only supports Partition-Based Sync and is not compatible with the Flexible Sync backend
+
+## Other
+- Admin API
+  - Data API
+    - Fix broken link to configuration reference docs
+    - Add `validation_method` details to endpoints
+  - GraphQL API: Fix broken link to configuration reference docs
+  - Endpoints: Add `function_id` to config object details in create endpoint
+
 # November 4, 2022
 
 ## Get Started

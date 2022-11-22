@@ -1,11 +1,15 @@
 .. _enable-realm-sync:
 .. _enable-sync:
+.. _alter-your-sync-configuration:
 
-========================
-Enable Atlas Device Sync
-========================
+======================================
+Configure and Enable Atlas Device Sync
+======================================
 
 .. default-domain:: mongodb
+
+..
+   Note: Depth is "1" to avoid headings within tabs
 
 .. contents:: On this page
    :local:
@@ -16,13 +20,23 @@ Enable Atlas Device Sync
 Overview
 --------
 
-You can enable Atlas Device Sync via the {+app+} UI, {+cli+}, or the 
-Atlas App Services Admin API. If it is your first time enabling Device Sync, 
-the UI is a great choice because it walks you through the required steps.
+You can configure and enable Atlas Device Sync via the {+app+} UI, {+cli+}, or
+the Atlas App Services Admin API. You can update an existing configuration in
+the same way. If it is your first time enabling Device Sync, the UI is a great
+choice because it walks you through the required steps.
 
-If you're re-enabling it after pausing or terminating it, see: 
-:ref:`Resume <resume-sync>` or :ref:`Re-Enable <re-enable-realm-sync>` 
-Device Sync.
+You might want to alter your Atlas Device Sync configuration after you have
+already enabled Device Sync. You can update a configuration using the same
+procedure as enabling Device Sync in the first place. If you're using Flexible
+Sync mode, you can update your configuration without needing to terminate and
+re-enable Sync.
+
+If you're re-enabling Device Sync after pausing or terminating it, refer to
+:ref:`Resume <resume-sync>` or :ref:`Re-Enable <re-enable-realm-sync>` Device
+Sync.
+
+If you are using the older Partition-Based Sync mode, refer to
+:ref:`alter-partition-based-sync-config`.
 
 Prerequisites
 -------------
@@ -48,8 +62,8 @@ configure your data model and access Device Sync, see:
 .. _sync-modes:
 .. _enable-flexible-sync:
 
-Enable Sync
------------
+Procedure
+---------
 
 .. include:: /includes/note-flexible-sync-prerequisite.rst
 
@@ -65,68 +79,15 @@ Enable Sync
             To define Device Sync rules and enable Device Sync for your application, navigate to the
             :guilabel:`Device Sync` configuration screen through the {+leftnav+}.
 
-         .. step:: Select Development Details
+         .. step:: Specify Your Sync Settings
 
-            Under the :guilabel:`Select Development Details` heading, you can configure
-            various development details, such as Device Sync types, Development Mode,
-            and a cluster to Device Sync.
-
-            There are two Device Sync modes: Flexible Sync and the older
-            Partition-Based Sync. We recommend using Flexible Sync. Below the
-            :guilabel:`Sync Type` subheading, select the :guilabel:`Flexible`
-            option to enable Flexible Sync. (For more information on the older
-            Partition-Based Sync mode, refer to :ref:`partition-based-sync`.)
-
-            Next, under the :guilabel:`Development Mode` subheading, you can
-            choose to toggle :ref:`Development Mode <development-mode>` on/off.
-            Enabling ``Development Mode`` allows you to define schemas directly
-            in your client application code and is suitable if you are in
-            development and do not have application data in Atlas yet.
-
-            Finally, you can enable Device Sync for a single linked cluster in your
-            application. Determine which cluster you want to use and select it from
-            the :guilabel:`Select Cluster To Sync` dropdown menu.
-
-            .. important:: Ineligible Clusters
-
-               Flexible Sync requires MongoDB 5.0. Clusters display as gray and not-selectable
-               in the UI when they do not meet the requirements for Flexible Sync.
-
-         .. step:: Select Queryable Fields
-
-            When configuring Flexible Sync, specify one or more :ref:`queryable
-            fields <queryable-fields>` from your Sync Schema.
-
-            To configure queryable fields for your application, navigate to the
-            :guilabel:`Select Queryable Fields` heading. Select up to 10 existing fields
-            from your schema to query on. If you want to create a new field(s) to
-            construct a query on, you must define a database and enable ``Development Mode``.
-
-         .. step:: Define Read & Write Permissions
-
-            In the :guilabel:`Define Permissions` section, you can define the session
-            roles and rules for your app.
-
-            For details, see :ref:`flexible-sync-rules-and-permissions`.
-
-         .. step:: Configure Asymmetric Sync (Optional)
-
-            Expand the :guilabel:`Advanced Configuration` section.
-
-            The dropdown under the :guilabel:`Asymmetric Sync` heading shows the
-            collections that you can select for this Asymmetric Sync. When you select a
-            collection, it is listed below the dropdown.
-
-            If you have Dev Mode enabled, you can also create a new collection. When you
-            select the dropdown, you can type in the name of the new collection, and
-            App Services creates the collection automatically.
-
+            Follow the prompts to configure Device Sync. For details on the
+            available configuration settings, refer to :ref:`sync-settings`.
 
          .. step:: Turn On Sync
 
-            Now that you've configured rules for your synced cluster, all that's left to
-            do is turn on Device Sync for client applications. Click :guilabel:`Enable Device Sync`,
-            take note of any recommendations that appear and then confirm your choice.
+            Click :guilabel:`Enable Sync`, take note of any
+            recommendations that appear and then confirm your choice.
 
      
    .. tab::
@@ -148,8 +109,7 @@ Enable Sync
 
             You can enable sync for a single linked cluster in your application.
             If you have not yet linked the cluster to your application, follow the
-            :ref:`link-a-data-source` guide to link it before
-            you continue.
+            :ref:`link-a-data-source` guide first.
 
             The App Services App has a ``sync`` directory where you can find 
             the :ref:`sync configuration file <appconfig-sync>`. If you have not 
@@ -172,7 +132,7 @@ Enable Sync
                      "<Type Name>": [
                        {
                          "name": <String>,
-                         "applyWhen": { <Expression> },
+                         "applyWhen": <Expression>,
                          "read": <Expression>,
                          "write": <Expression>,
                          "fields": {
@@ -198,137 +158,15 @@ Enable Sync
                      }
                    ]       
                  },
-                 "queryable_fields_names": [
-                   <Array of String Field Names>
-                 ]
+                 "queryable_fields_names": <Array of String Field Names>
                }
                
-            There are two Device Sync modes: Flexible Sync and the older
-            Partition-Based Sync. We recommend using Flexible Sync, so we set
-            the ``type`` field of the configuration to ``flexible``. (For more
-            information on the older Partition-Based Sync mode, refer to
-            :ref:`partition-based-sync`.)
-
-         .. step:: Choose Queryable Fields
-
-            The ``queryable_fields_names`` property allows you to define a set of
-            queryable fields for the device should query on.
-
-            To learn more about queryable fields, such as eligible field types, 
-            reserved field names, and performance implications, see the 
-            :ref:`queryable fields <queryable-fields>` documentation.
-
-            .. code-block:: json
-               :emphasize-lines: 12-14
-
-               {
-                 "type": "flexible",
-                 "development_mode_enabled": <Boolean>,
-                 "service_name": "<Data Source Name>",
-                 "database_name": "<Development Mode Database Name>",
-                 "state": <"enabled" | "disabled">,
-                 "client_max_offline_days": <Number>,
-                 "is_recovery_mode_disabled": <Boolean>,
-                 "permissions": {
-                   ... 
-                 },
-                 "queryable_fields_names": [
-                   ["age", "name"]
-                 ]
-               }
-
-         .. step:: Define Read & Write Permissions
-
-            In the ``flexible_sync`` configuration field, you can define the session roles
-            and rules for your app.
-
-            For details, see :ref:`flexible-sync-rules-and-permissions`.
-
-            In the following example, there is a user-defined role in the ``Employees``
-            collection. This role takes precedent, and the default role is not applied for
-            the ``Employees`` collection. However, since the ``Items`` collection does not
-            specify a value, App Services will apply the default role to the ``Items`` collection.
-
-            .. code-block:: json
-               :emphasize-lines: 5-24
-
-               {
-                 "type": "flexible",
-                 ...
-                 "permissions": {
-                   "Employees": {
-                     "roles": [
-                       {
-                         "name": "everyone",
-                         "applyWhen": {},
-                         "read": { "owner_id": "%%user.id" },
-                           "write": false
-                         }
-                     ]
-                   },
-                   "Items": {},
-                   "defaultRoles": [
-                     {
-                       "applyWhen": {},
-                       "name": "all",
-                       "read": true,
-                       "write": true
-                     }
-                    ],
-                   "rules": {}
-                 },
-                 "queryable_fields_names": ["age", "name"]
-               }
-
-         .. step:: Specify Values for Sync Optimization
-
-            Sync provides features that enable you to optimize Sync 
-            performance and improve the client data recovery process. These 
-            features are represented by additional settings:
-
-            - ``client_max_offline_days``
-            - ``is_recovery_mode_disabled``
-
-            You can set a numerical value for ``client_max_offline_days``.
-            When you enable Sync via the App Services UI, the default 
-            value is ``30``, which represents 30 days. 
-            
-            For more information, see: :ref:`client-maximum-offline-time`.
-
-            Recovery Mode enables Sync to attempt to recover unsynced data 
-            when a client reset occurs. When you enable Sync via the App 
-            Services UI, Recovery Mode is enabled by default. We recommend
-            enabling Recovery Mode for automatic client reset handling.
-            To enable Recovery Mode, set ``is_recovery_mode_disabled`` to 
-            ``false``.
-            
-            For more information, see: :ref:`recover-unsynced-changes`.
-
-            Specify the values for these settings:
-
-            .. code-block:: json
-               :emphasize-lines: 4-5
-
-               {
-                 "type": "flexible",
-                 ...
-                 "client_max_offline_days": 30,
-                 "is_recovery_mode_disabled": false,
-                 "permissions": {
-                   ... 
-                 },
-                 "queryable_fields_names": [
-                   ["age", "name"]
-                 ]
-               }
+            For details, refer to the :ref:`sync-configuration-reference`.
 
          .. step:: Deploy the Sync Configuration
 
-            Now that you've defined the Device Sync configuration, you can 
-            deploy your changes to start syncing data and enforcing
-            Device Sync rules.
-
-            To deploy your changes, import your app configuration:
+            Deploy your changes to start syncing data and enforcing Device Sync
+            rules. Import your app configuration:
 
             .. code-block:: shell
 
@@ -341,10 +179,9 @@ Enable Sync
 
          .. step:: Select a Cluster to Sync
 
-            You can enable Device Sync for a single linked cluster in your application.
-            If you have not yet linked the cluster to your application, follow the
-            :ref:`link-a-data-source` guide to link it before
-            you continue.
+            You can enable Device Sync for a single linked cluster in your
+            application. If you have not yet linked the cluster to your
+            application, follow the :ref:`link-a-data-source` guide.
 
             .. note:: Authenticating Your Request with an Access Token
 
@@ -386,7 +223,7 @@ Enable Sync
                  ...
                  "flexible_sync": {
                    "state": "enabled",
-                   "database_name": "",
+                   "database_name": "<Name of Database>",
                    "permissions": {
                      "defaultRoles": [
                        {
@@ -398,162 +235,21 @@ Enable Sync
                      ],
                      "rules": {}
                    },
-                   "queryable_fields_names": [],
+                   "queryable_fields_names": <Array of String Field Names>,
                    "client_max_offline_days": <Number>,
                    "is_recovery_mode_disabled": <Boolean>
                  }
                  ...
                }
 
-            Replace the ``database_name`` field's value with the name of your database.
-
-            .. note::
-
-              The default role applies to any collection where you do not define custom roles.
-              Since no custom roles are defined in the above example, the default role
-              applies to all collections. For more information, see: 
-              :ref:`Default Roles <default-roles>`.
-
-         .. step:: Choose Queryable Fields
-
-            The ``queryable_fields_names`` property defines a set of queryable 
-            fields that the device may query on. 
-            
-            To learn more about queryable fields, such as eligible field types, 
-            reserved field names, and performance implications, see the 
-            :ref:`queryable fields <queryable-fields>` documentation.
-
-            Add the fields you would like your application to query on to 
-            the ``flexible_sync.queryable_fields_names``:
-
-            .. code-block:: json
-               :emphasize-lines: 17
-
-               {
-                ...
-                 "flexible_sync": {
-                   "state": "enabled",
-                   "database_name": "",
-                   "permissions": {
-                     "defaultRoles": [
-                       {
-                         "applyWhen": {},
-                         "name": "all",
-                         "read": true,
-                         "write": true
-                       }
-                     ],
-                     "rules": {}
-                   },
-                   "queryable_fields_names": ["age", "name"],
-                   "client_max_offline_days": <Number>,
-                   "is_recovery_mode_disabled": <Boolean>
-                 }
-                 ...
-               }
-
-         .. step:: Define Read & Write Permissions
-
-            In the ``flexible_sync`` configuration field, you can define the session roles
-            and rules for your app.
-
-            For details, see :ref:`flexible-sync-rules-and-permissions`.
-
-            In the following example, there is a user-defined role in the ``Employees``
-            collection. This role takes precedent, and the default role is not applied for
-            the ``Employees`` collection. However, since the ``Items`` collection does not
-            specify a value, App Services will apply the default role to the ``Items`` collection.
-
-            .. code-block:: json
-               :emphasize-lines: 7-26
-
-               {
-                 ...
-                 "flexible_sync": {
-                   "state": "enabled",
-                   "database_name": "test-database",
-                   "permissions": {
-                     "Employees": {
-                       "roles": [
-                         {
-                           "name": "everyone",
-                           "applyWhen": {},
-                           "read": { "owner_id": "%%user.id" },
-                           "write": false
-                         }
-                       ]
-                     },
-                     "Items": {},
-                     "defaultRoles": [
-                       {
-                         "applyWhen": {},
-                         "name": "all",
-                         "read": true,
-                         "write": true
-                       }
-                     ],
-                     "rules": {}
-                   },
-                   "queryable_fields_names": ["age", "name"],
-                   "client_max_offline_days": <Number>,
-                   "is_recovery_mode_disabled": <Boolean>
-                 }
-                 ...
-               }
-
-         .. step:: Specify Values for Sync Optimization
-
-            Sync provides features that enable you to optimize Sync 
-            performance and improve the client data recovery process. These 
-            features are represented by additional settings:
-
-            - ``client_max_offline_days``
-            - ``is_recovery_mode_disabled``
-
-            You can set a numerical value for ``client_max_offline_days``.
-            When you enable Sync via the App Services UI, the default 
-            value is ``30``, which represents 30 days. 
-            
-            For more information, see: :ref:`client-maximum-offline-time`.
-
-            Recovery Mode enables Sync to attempt to recover unsynced data 
-            when a client reset occurs. When you enable Sync via the App 
-            Services UI, Recovery Mode is enabled by default. We recommend
-            enabling Recovery Mode for automatic client reset handling.
-            To enable Recovery Mode, set ``is_recovery_mode_disabled`` to 
-            ``false``.
-            
-            For more information, see: :ref:`recover-unsynced-changes`.
-
-            Specify the values for these settings:
-
-            .. code-block:: json
-               :emphasize-lines: 10-11
-
-               {
-                 ...
-                 "flexible_sync": {
-                   "state": "enabled",
-                   "database_name": "test-database",
-                   "permissions": {
-                     ...
-                   },
-                   "queryable_fields_names": ["age", "name"],
-                   "client_max_offline_days": 30,
-                   "is_recovery_mode_disabled": false
-                 }
-                 ...
-               }
+            For details, refer to the :ref:`sync-configuration-reference`.
 
          .. step:: Deploy the Sync Configuration
 
-            Now that you've defined the Device Sync configuration, including read and write
-            permissions, you can deploy your changes to start syncing data and enforcing
-            Device Sync rules.
-
-            To deploy your changes, send an :admin-api-endpoint:`Admin API 
-            request <operation/adminGetServiceConfig>` that updates the 
-            cluster configuration with your sync configuration:
+            To deploy your changes to start syncing data and enforcing Device
+            Sync rules, send an :admin-api-endpoint:`Admin API request
+            <operation/adminGetServiceConfig>` that updates the cluster
+            configuration with your sync configuration:
 
             .. note:: Authenticating Your Request with an Access Token
 

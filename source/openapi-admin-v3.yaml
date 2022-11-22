@@ -239,22 +239,33 @@ paths:
         List all App Services apps within an Atlas
         [project/group](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
       parameters:
-        - name: product
-          in: query
+        - in: query
+          name: product
           required: false
           schema:
             type: string
             enum:
+              - standard
               - atlas
               - data-api
+          style: simple
+          explode: false
           description: |-
-            Include apps with the specified product type. For most apps
-            you won't need to specify a `product`.
+            One or more specific App Services product types. If specified,
+            this endpoint only returns Apps of the specified product type(s).
 
-            The `atlas` and `data-api` product types represent special,
-            singleton apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
-            and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
-            can access through the Atlas UI.
+            Most apps use the `standard` product type, which this
+            endpoint returns by default. The `atlas` and `data-api`
+            product types represent special apps for
+            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers) and
+            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/)
+            that you can access through the Atlas UI.
+            
+            You can specify multiple product types as a comma-separated list:
+
+            ```
+            /groups/{groupId}/apps?product=atlas,data-api
+            ```
       responses:
         "200":
           description: Successfully listed.
@@ -286,10 +297,12 @@ paths:
               - atlas
               - data-api
           description: |-
-            The application's product type. For most cases you should either
-            not specify a product or specify the default product,
-            `standard`. The `atlas` and `data-api` product types represent special,
-            singleton apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
+            The App's product type. Apps use the `standard` product type
+            by default. For most apps, you do not need to specify a
+            `product` at all, or should specify `standard`.
+            
+            The `atlas` and `data-api` product types represent special,
+            apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
             and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
             can access through the Atlas UI.
       requestBody:
@@ -307,11 +320,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/AppInstance"
         "400":
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Error"
+          "$ref": "#/components/responses/BadRequest"
   "/groups/{groupId}/apps/{appId}":
     get:
       tags:
@@ -351,6 +360,114 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+  
+  "/groups/{groupId}/apps/{appId}/event_subscriptions":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - name: type
+        description: |-
+          The type of event subscription to return.
+          
+          - `DATABASE`: Return Database Triggers
+          - `AUTHENTICATION`: Return Authentication Triggers
+          - `SCHEDULED`: Return Scheduled Triggers
+          - `SYNCTRANSLATOR`: Return Device Sync translators
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+            - DATABASE
+            - AUTHENTICATION
+            - SCHEDULED
+            - SYNCTRANSLATOR
+          x-enumDescriptions:
+            DATABASE: Return Database Triggers
+            AUTHENTICATION: Return Authentication Triggers
+            SCHEDULED: Return Scheduled Triggers
+            SYNCTRANSLATOR: Return Device Sync translators
+    get:
+      tags:
+        - event-subscriptions
+      operationId: adminListEventSubscriptions
+      summary: List Event Subscriptions
+      description: Get all event subscriptions.
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: |-
+                  A list of all event subscriptions for the app. To see
+                  Device Sync translator subscriptions, call this
+                  endpoint with the query parameter
+                  `?type=SYNCTRANSLATOR`.
+                items:
+                  $ref: "#/components/schemas/EventSubscription"
+  "/groups/{groupId}/apps/{appId}/event_subscriptions/{eventSubscriptionId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EventSubscriptionId"
+    get:
+      tags:
+        - event-subscriptions
+      operationId: adminGetEventSubscription
+      summary: Get an Event Subscription
+      description: Return information about an event subscription.
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSubscription"
+  
+  "/groups/{groupId}/apps/{appId}/event_subscriptions/{eventSubscriptionId}/execution":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EventSubscriptionId"
+    get:
+      tags:
+        - event-subscriptions
+      operationId: adminGetLatestEventSubscriptionExecution
+      summary: Get the Latest Event Subscription Execution
+      description: Return information about the most recent execution of an event subscription.
+      responses:
+        "200":
+          description: Success.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                  resource_id:
+                    type: object
+                  completed_at:
+                    type: object
+                    description: |-
+                      The last time a batch was processed from the event stream.
+
+                      The value of `completed_at` should be relatively
+                      close to the current time. If `completed_at` is
+                      not updating over time, it might mean that the
+                      event processor (e.g. Device Sync) is down or
+                      stuck.
+                  cluster_time:
+                    type: object
+                    description: |-
+                      The time of the latest event in the most recently processed batch.
+
+                      If the value of `cluster_time` is significantly
+                      earlier than the `completed_at` time, the event
+                      processor (e.g. Device Sync) is lagging behind the event .
+
   "/groups/{groupId}/apps/{appId}/triggers":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1294,13 +1411,17 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/MessageId"
+  
   "/groups/{groupId}/apps/{appId}/users":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
     get:
       tags:
         - users
       operationId: adminListUsers
       summary: List users
-      description: List [users](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: List confirmed [user accounts](https://www.mongodb.com/docs/atlas/app-services/authentication#std-label-user-accounts).
       parameters:
         - "$ref": "#/components/parameters/UsersAfter"
         - "$ref": "#/components/parameters/UsersSort"
@@ -1321,7 +1442,13 @@ paths:
         - users
       operationId: adminCreateUser
       summary: Create a user
-      description: Create a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: |-
+        Create a new
+        [email/password](https://www.mongodb.com/docs/atlas/app-services/authentication/email-password/)
+        user account.
+
+        *Note:* You cannot create user accounts through the Admin API
+        for any authentication provider other than email/password.
       requestBody:
         required: true
         description: The user to create
@@ -1343,10 +1470,11 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/User"
+  
+  "/groups/{groupId}/apps/{appId}/users/verify_token":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  "/groups/{groupId}/apps/{appId}/users/verify_token":
     post:
       tags:
         - users
@@ -1372,61 +1500,62 @@ paths:
                 - token
       responses:
         "200":
-          description: |-
-            Success returns this object. A 200 [may also return token
-            expired](https://www.mongodb.com/docs/realm/reference/authenticate-http-client-requests#std-label-verify-client-access-token-responses).
+          description: Token is valid or expired.
           content:
             application/json:
               schema:
-                properties:
-                  sub:
-                    type: string
-                    description: User ID.
-                  aud:
-                    type: string
-                    description: |-
-                      Optional; specifies which Resource Servers the JWT is valid for. Omitted
-                      if empty.
-                  exp:
-                    type: integer
-                    description: Unix timestamp after which the JWT expires.
-                  iat:
-                    type: integer
-                    description: Unix timestamp at which the JWT was issued.
-                  iss:
-                    type: string
-                    description: The issuer of the JWT.
-                  custom_user_data:
-                    type: object
-                    description: |-
-                      Optional; contains [custom user
-                      data](https://www.mongodb.com/docs/realm/users/enable-custom-user-data#std-label-custom-user-data)
-                      if it exists for the user. Only present if the access token is created
-                      after custom user data is enabled and configured. Omitted if empty.
-                  domain_id:
-                    type: string
-                    description: The UID representing the app domain.
-                  data:
-                    type: string
-                    description:
-                      "Optional: any metadata stored with the token. Omitted
-                      if empty."
-                  device_id:
-                    type: string
-                    description: The UID representing the device.
+                oneOf:
+                  - type: string
+                    const: "token expired"
+                  - properties:
+                      sub:
+                        type: string
+                        description: User ID.
+                      aud:
+                        type: string
+                        description: |-
+                          Optional; specifies which Resource Servers the JWT is valid for. Omitted
+                          if empty.
+                      exp:
+                        type: integer
+                        description: Unix timestamp after which the JWT expires.
+                      iat:
+                        type: integer
+                        description: Unix timestamp at which the JWT was issued.
+                      iss:
+                        type: string
+                        description: The issuer of the JWT.
+                      custom_user_data:
+                        type: object
+                        description: |-
+                          Optional; contains [custom user
+                          data](https://www.mongodb.com/docs/realm/users/enable-custom-user-data#std-label-custom-user-data)
+                          if it exists for the user. Only present if the access token is created
+                          after custom user data is enabled and configured. Omitted if empty.
+                      domain_id:
+                        type: string
+                      data:
+                        type: string
+                        description:
+                          "Optional: any metadata stored with the token. Omitted
+                          if empty."
+                      device_id:
+                        type: string
+
+  "/groups/{groupId}/apps/{appId}/users/{userId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  "/groups/{groupId}/apps/{appId}/users/{uid}":
+      - "$ref": "#/components/parameters/UserId"
     get:
       tags:
         - users
       operationId: adminGetUser
-      summary: Retrieve a user
-      description: Retrieve a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      summary: Get a User
+      description: Get a specific [user account](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts) by ID.
       responses:
         "200":
-          description: Successfully retrieved.
+          description: Success
           content:
             application/json:
               schema:
@@ -1436,15 +1565,16 @@ paths:
         - users
       operationId: adminDeleteUser
       summary: Delete a user
-      description: Delete a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Delete a specific [user account](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts) by ID.
       responses:
         "204":
-          description: Successfully deleted.
+          description: Deleted
+
+  "/groups/{groupId}/apps/{appId}/users/{userId}/devices":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/devices":
+      - "$ref": "#/components/parameters/UserId"
     get:
       tags:
         - users
@@ -1458,11 +1588,12 @@ paths:
               schema:
                 items:
                   type: object
+  
+  "/groups/{groupId}/apps/{appId}/users/{userId}/logout":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/logout":
+      - "$ref": "#/components/parameters/UserId"
     put:
       tags:
         - users
@@ -1474,11 +1605,12 @@ paths:
       responses:
         "204":
           description: Successfully revoked.
+  
+  "/groups/{groupId}/apps/{appId}/users/{userId}/enable":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/enable":
+      - "$ref": "#/components/parameters/UserId"
     put:
       tags:
         - users
@@ -1488,11 +1620,12 @@ paths:
       responses:
         "204":
           description: Successfully enabled.
+  
+  "/groups/{groupId}/apps/{appId}/users/{userId}/disable":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/users/{uid}/disable":
+      - "$ref": "#/components/parameters/UserId"
     put:
       tags:
         - users
@@ -1502,25 +1635,97 @@ paths:
       responses:
         "204":
           description: Successfully disabled.
+  
+  "/groups/{groupId}/apps/{appId}/user_registrations/pending_users":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Uid"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}":
-    delete:
+    get:
       tags:
         - users
-      operationId: adminDeletePendingUser
-      summary: Delete a pending user
-      description: Delete a pending [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      operationId: adminListPendingUsers
+      summary: List pending users
+      description: List pending user account registrations
       responses:
-        "204":
-          description: Successfully deleted.
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  required:
+                    - _id
+                    - domain_id
+                    - login_ids
+                  properties:
+                    _id:
+                      type: string
+                      description: The unique pending user account ID
+                    user_id:
+                      type: string
+                    domain_id:
+                      type: string
+                    login_ids:
+                      type: array
+                      description: A list of identities associated with the pending user
+                      items:
+                        required:
+                          - id_type
+                          - id
+                        properties:
+                          id_type:
+                            type: string
+                            enum:
+                              - email
+                          id:
+                            type: string
+                            description: The pending user's username. For example, this is an email/password user's email address.
+                example: [
+                  {
+                    "_id": "63754f968a605a78ea6939e7",
+                    "domain_id": "60c8f69864c0a72d14bb534c",
+                    "login_ids": [
+                      {
+                        "id_type": "email",
+                        "id": "someone@example.com"
+                      }
+                    ],
+                    "user_id": ""
+                  },
+                  {
+                    "_id": "63754fd83c001970b1e5ea66",
+                    "domain_id": "60c8f69864c0a73e3e11c22b",
+                    "login_ids": [
+                      {
+                        "id_type": "email",
+                        "id": "joe@example.com"
+                      }
+                    ],
+                    "user_id": ""
+                  }
+                ]
+  
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/Email"
+    delete:
+      tags:
+        - users
+      operationId: adminDeletePendingEmailPasswordUser
+      summary: Delete a pending email/password authentication user
+      description: Delete a pending [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      responses:
+        "204":
+          description: Successfully deleted.
+  
   "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/send_confirm":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/Email"
     post:
       tags:
         - email
@@ -1532,11 +1737,12 @@ paths:
       responses:
         "200":
           description: Successfully sent.
+  
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/Email"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/confirm":
     post:
       tags:
         - email
@@ -1546,11 +1752,12 @@ paths:
       responses:
         "204":
           description: Successfully confirmed.
+
+  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/run_confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/Email"
-  "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/run_confirm":
     post:
       tags:
         - email
@@ -1567,10 +1774,7 @@ paths:
             enabled.
         "404":
           description: User does not exist.
-    parameters:
-      - "$ref": "#/components/parameters/GroupId"
-      - "$ref": "#/components/parameters/AppId"
-      - "$ref": "#/components/parameters/Email"
+  
   "/groups/{groupId}/apps/{appId}/debug/execute_function":
     post:
       tags:
@@ -2618,6 +2822,40 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+
+  "/groups/{groupId}/apps/{appId}/deploy/config":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - deploy
+      operationId: adminGetDeploymentConfig
+      summary: Get the Deployment Configuration
+      description: See information about how your App deploys changes.
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeploymentConfig"
+    patch:
+      tags:
+        - deploy
+      operationId: adminConfigureDeployment
+      summary: Configure Deployment
+      description: Modify an App's deployment configuration to customize how the App deploys changes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: An updated deployment configuration
+              $ref: "#/components/schemas/DeploymentConfig"
+      responses:
+        "204":
+          description: Success
+
   "/groups/{groupId}/apps/{appId}/deployments":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -2770,6 +3008,144 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/DraftId"
+  
+  "/groups/{groupId}/apps/{appId}/environment":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    put:
+      operationId: adminSetEnvironment
+      summary: Set the App Environment
+      description: Set the App's active environment
+      tags:
+        - environments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                environment:
+                  $ref: "#/components/schemas/AppEnvironment"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppInstance"
+        "400":
+          description: Invalid environment
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  "/groups/{groupId}/apps/{appId}/environment_values":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      operationId: adminListEnvironmentValues
+      summary: List All Environment Values
+      description: |-
+        Get basic information about all environment values in the App.
+        Results do not include the environment-specific `values`. For
+        details on a specific environment, call [Get an Environment
+        Value](#tag/environments/operation/adminGetEnvironmentValue).
+      tags:
+        - environments
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EnvironmentValueDescription"
+        "400":
+          "$ref": "#/components/responses/BadRequest"
+        
+    post:
+      operationId: adminCreateEnvironmentValue
+      summary: Create an Environment Value
+      description: Define a new environment value.
+      tags:
+        - environments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnvironmentValue"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnvironmentValueDescription"
+        "409":
+          description: Environment value name already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  
+  "/groups/{groupId}/apps/{appId}/environment_values/{environmentValueId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EnvironmentValueId"
+    get:
+      operationId: adminGetEnvironmentValue
+      summary: Get an Environment Value
+      description: Get details about a specific environment value
+      tags:
+        - environments
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnvironmentValue"
+        "404":
+          $ref: "#/components/responses/EnvironmentValueNotFound"
+          
+    put:
+      operationId: adminModifyEnvironmentValue
+      summary: Modify an Environment Value
+      description: Modify an existing environment value
+      tags:
+        - environments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnvironmentValue"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EnvironmentValueDescription"
+        "404":
+          $ref: "#/components/responses/EnvironmentValueNotFound"
+        
+    delete:
+      operationId: adminDeleteEnvironmentValue
+      summary: Delete an Environment Value
+      description: Delete an existing environment value
+      tags:
+        - environments
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          $ref: "#/components/responses/EnvironmentValueNotFound"
+  
   "/groups/{groupId}/apps/{appId}/hosting/config":
     get:
       tags:
@@ -2937,14 +3313,7 @@ paths:
         "204":
           description: Successfully added/replaced the hosted asset.
         "400":
-          description: Bad Request.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    "$ref": "#/components/schemas/Error"
+          "$ref": "#/components/responses/BadRequest"
     patch:
       tags:
         - hosting
@@ -2959,7 +3328,7 @@ paths:
         "204":
           description: Successfully updated the hosted asset.
         "400":
-          description: Bad Request.
+          "$ref": "#/components/responses/BadRequest"
       requestBody:
         description: |-
           The new metadata attributes for the hosted asset. These attributes
@@ -3084,7 +3453,7 @@ paths:
                                   The value at the time in the `unit` of
                                   the measurement.
         "400":
-          "$ref": "#/components/responses/ClientErrorResponse"
+          "$ref": "#/components/responses/BadRequest"
   "/groups/{groupId}/apps/{appId}/measurements":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3205,7 +3574,7 @@ paths:
                                   The value at the time in the `unit` of
                                   the measurement.
         "400":
-          "$ref": "#/components/responses/ClientErrorResponse"
+          "$ref": "#/components/responses/BadRequest"
   "/groups/{groupId}/apps/{appId}/schemas":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3772,6 +4141,14 @@ components:
       required: true
       schema:
         type: string
+    EnvironmentValueId:
+      name: environmentValueId
+      description: |-
+        The `_id` value of an environment value.
+      in: path
+      required: true
+      schema:
+        type: string
     ForwarderId:
       name: "forwarderId"
       description: The _id ObjectID of a log forwarder.
@@ -3814,6 +4191,13 @@ components:
     DatasourceId:
       name: datasourceId
       description: The unique `_id` value of a MongoDB data source.
+      in: path
+      required: true
+      schema:
+        type: string
+    EventSubscriptionId:
+      name: eventSubscriptionId
+      description: The unique `_id` value of an event subscription.
       in: path
       required: true
       schema:
@@ -3881,9 +4265,9 @@ components:
       required: true
       schema:
         type: string
-    Uid:
-      name: uid
-      description: UID
+    UserId:
+      name: userId
+      description: User Account ID
       in: path
       required: true
       schema:
@@ -4077,6 +4461,7 @@ components:
         - "aws-ap-southeast-1"
         - "aws-ap-southeast-2"
         - "aws-ap-south-1"
+        - "aws-sa-east-1"
     AzureDeploymentRegion:
       type: string
       enum:
@@ -4266,6 +4651,42 @@ components:
             A link to the diff of changes in the deployment
         remote_location:
           $ref: "#/components/schemas/DeploymentLocation"
+    DeploymentConfig:
+      type: object
+      description: A configuration file that controls your app's deployment behavior.
+      required:
+        - ui_drafts_disabled
+        - automatic_deployment
+      properties:
+        ui_drafts_disabled:
+          type: boolean
+          description: |-
+            If `true`, every change made in the Admin UI deploys
+            automatically on save. If `false`, changes are grouped into
+            a deployment draft that you deploy separately.
+        automatic_deployment:
+          type: object
+          description: Configuration for automatic deployment methods
+          properties:
+            enabled:
+              type: boolean
+              description: If `true`, the app automatically deploys using the method defined for `provider`.
+            provider:
+              type: string
+              description: The type of automatic deployment.
+              enum:
+                - "github"
+            installation_ids:
+              type: array
+              description: |-
+                The unique ID values of automatic deployment provider
+                installations. For example, the ID of a GitHub app
+                installation.
+              items:
+                type: string
+        last_modified:
+          type: number
+          description: The time this configuration was last modified represented by the number of seconds since the UNIX epoch.
     Diff:
       type: object
       properties:
@@ -4353,6 +4774,43 @@ components:
       enum:
         - JSON
         - EJSON
+    EnvironmentValueDescription:
+      properties:
+        _id:
+          type: string
+          description: The environment value's internal ID
+        name:
+          type: string
+          description: The environment value name
+        last_modified:
+          type: number
+          description: The time this configuration was last modified represented by the number of seconds since the UNIX epoch.
+    EnvironmentValue:
+      allOf:
+        - $ref: "#/components/schemas/EnvironmentValueDescription"
+        - properties:
+            values:
+              type: object
+              description: |-
+                An object that maps environment names to values. The
+                environment value resolves to the current active
+                environment's mapped value. 
+                
+                If no value is mapped to the current active environment,
+                the environment value resolves to `undefined`.
+              properties:
+                none:
+                  $ref: "#/components/schemas/AnyValue"
+                development:
+                  $ref: "#/components/schemas/AnyValue"
+                testing:
+                  $ref: "#/components/schemas/AnyValue"
+                qa:
+                  $ref: "#/components/schemas/AnyValue"
+                production:
+                  $ref: "#/components/schemas/AnyValue"
+    AnyValue:
+      description: Any valid JSON value
     DataApiVersion:
       type: string
       description: A supported version of the Data API.
@@ -4566,6 +5024,38 @@ components:
           type: string
         collection:
           type: string
+    EventSubscription:
+      description: |-
+        A subscription to a change event stream.
+      oneOf:
+        - "$ref": "#/components/schemas/AnyTrigger"
+        - title: SyncTranslator
+          type: object
+          properties:
+            _id:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+              const: "SYNCTRANSLATOR"
+            function_id:
+              type: string
+            disabled:
+              type: boolean
+            config:
+              type: "null"
+            last_modified:
+              type: number
+          example: {
+            "_id": "636c189a93daaf89c4900a81",
+            "name": "SyncTranslator",
+            "type": "SYNCTRANSLATOR",
+            "function_id": "000000000000000000000000",
+            "disabled": false,
+            "config": null,
+            "last_modified": 1668028570
+          }
     Expression:
       description: A [rule expression](https://mongodb.com/docs/atlas/app-services/rules/expressions/).
       oneOf:
@@ -4744,6 +5234,7 @@ components:
           type: string
         name:
           type: string
+          description: The name of the authentication provider. This value must be the same as the value of `type`.
         type:
           "$ref": "#/components/schemas/ProviderType"
         disabled:
@@ -4754,6 +5245,7 @@ components:
           type: string
         name:
           type: string
+          description: The name of the authentication provider. This value must be the same as the value of `type`.
         type:
           "$ref": "#/components/schemas/ProviderType"
         disabled:
@@ -4764,6 +5256,7 @@ components:
       properties:
         name:
           type: string
+          description: The name of the authentication provider. This value must be the same as the value of `type`.
         type:
           "$ref": "#/components/schemas/ProviderType"
         disabled:
@@ -5676,15 +6169,23 @@ components:
         [POST /auth/providers/{provider}/login](#section/adminLogin)
         API endpoint.
   responses:
-    ClientErrorResponse:
+    BadRequest:
       description: There is an error in the request.
       content:
         application/json:
           schema:
-            properties:
-              error:
-                type: string
-                description: A message describing the error.
+            $ref: "#/components/schemas/Error"
+    
+    EnvironmentValueNotFound:
+      description: Environment value not found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/Error"
+              - properties:
+                  error_code:
+                    const: EnvironmentValueNotFound
 tags:
   - name: admin
     x-displayName: Administrator
@@ -5773,6 +6274,15 @@ tags:
   - name: endpoints
     x-displayName: Endpoints
     description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
+  - name: event-subscriptions
+    x-displayName: Event Subscriptions
+    description: |-
+      View your app's active event subscriptions. These monitor
+      real-time events, e.g. from a MongoDB change stream, to power
+      application services like Triggers and Device Sync.
+  - name: environments
+    x-displayName: Environments
+    description: View and manage your app's [environment](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/environments/) and environment values.
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).

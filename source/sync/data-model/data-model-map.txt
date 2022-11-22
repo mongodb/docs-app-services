@@ -1,0 +1,614 @@
+.. _sync-data-model-mapping:
+
+==================
+Data Model Mapping
+==================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Overview
+--------
+
+This page contains information on how the App Services Schema used by
+Atlas Device Sync maps to the Realm Object Schema used by the Realm SDKs.
+
+To generate Realm SDK Schemas from your App Services Schemas,
+refer to :ref:`Generate SDK Object Models <generate-sdk-object-models>`.
+To generate App Services Schemas from Realm SDK client code,
+refer to :ref:`Development Mode <development-mode>`.
+
+To learn more about how Device Sync uses these two schemas,
+refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
+
+.. _object-schema:
+.. _property-schema:
+
+Mappings
+--------
+
+.. _sync-type-name:
+
+Type Name
+~~~~~~~~~
+
+The ``title`` field contains the name of the object type represented by
+the schema. This is equivalent to a class or schema name in a Realm SDK.
+The type name must be unique among all schemas in your synced cluster
+but is otherwise arbitrary and does not need to match the collection
+name.
+
+A conventional approach is to name each object type with a singular
+noun, like "Dog" or "Person". Schemas generated in development mode or
+by sampling existing documents use this convention.
+
+Property Types
+~~~~~~~~~~~~~~
+
+You can configure the following constraints for a given property:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 20 60
+
+   * - Parameter
+     - Type
+     - Description
+
+   * - Type
+     - String
+     - Every property in a Realm Object Schema has a strongly defined data
+       type. A property's type can be a primitive data type or an object
+       type defined in the same Realm Object Schema. The type also specifies whether
+       the property contains a single value or a list of values.
+
+       {+client-database+} supports the following property types:
+
+       - boolean
+       - integer
+       - double
+       - string
+       - date
+       - decimal128
+       - objectId
+       - uuid
+       - mixed
+       - array
+       - object
+
+       For more information on supported data types, refer to :ref:`Schema Types <schema-types>`.
+
+   * - Optional
+     - Boolean
+     - Optional properties may contain a null value or be entirely
+       omitted from an object. By default, all properties are optional
+       unless explicitly marked as required.
+
+   * - Default
+     - Boolean
+     - If a client application creates a new object that does not have a
+       value for a defined property, the object uses the default value
+       instead.
+
+       When you attempt to create an object that is missing a value
+       for a required field, it fails validation and does not persist
+       to the {+realm+}.
+
+   * - Indexed
+     - Boolean
+     - A property index significantly increases the speed of certain
+       read operations at the cost of additional overhead for write
+       operations. Indexes are particularly useful for equality
+       comparison, such as querying for an object based on the value of
+       a property. However, indexes consume additional storage.
+
+Realm SDK data type documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`java-data-types`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Supported Property Types - Swift SDK <ios-supported-property-types>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`node-data-types`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`react-native-data-types`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-field-types`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`flutter-data-types`
+
+   .. tab::
+      :tabid: kotlin
+
+      :ref:`kotlin-supported-types`
+
+Array Properties
+~~~~~~~~~~~~~~~~
+
+Both Realm Object Schemas and App Services Schemas support array properties.
+
+You can find information on using array data types in the Realm SDK documentation
+on defining a Realm Object Schema.
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Lists - Java SDK <java-field-relationships-lists>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`swift-supported-types`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Supported Property Types - Node.js SDK <node-supported-property-types>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Supported Property Types - React Native SDK <react-native-supported-property-types>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`Lists - .NET SDK <dotnet-property-lists>`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`Dart Types - Flutter SDK <flutter-dart-types>`
+
+   .. tab::
+      :tabid: kotlin
+
+      :ref:`kotlin-supported-types`
+
+For more information on modeling array properties in an App Services Schema,
+refer to :ref:`BSON Types - Array <schema-type-array>`.
+App Services Schemas support certain constraints that Realm Object Schemas do not,
+such as specifying the minimum and maximum number of items.
+
+Embedded Objects
+~~~~~~~~~~~~~~~~
+
+Embedded objects are embedded as nested data inside of a parent object.
+An embedded object inherits the lifecycle of its parent object.
+It cannot exist as an independent Realm object.
+
+Realm SDK embedded object documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Define an Embedded Object Field - Java SDK <java-define-an-embedded-object-property>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Define an Embedded Object Property - Swift SDK <ios-embedded-objects>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Embedded Objects - Node.js SDK <node-embedded-objects>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Embedded Objects - React Native SDK <react-native-embedded-objects>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-embedded-objects`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`Embedded Objects - Flutter SDK <flutter-embedded-objects>`
+
+   .. tab::
+      :tabid: kotlin
+
+      The Realm Kotlin SDK does not support Embedded Objects yet.
+
+For more information on modeling to-one relationships in an App Services Schema,
+refer to :ref:`Embedded Object Relationships <relationships-embedded-object>`.
+
+Sets
+~~~~
+
+Realm Object Schemas and App Services Schemas both support the Set data type.
+A set is a collection of unique values.
+
+Realm SDK Set documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`java-realmset`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Mutable Set - Swift SDK <ios-mutableset-data-type>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`node-data-types-sets`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`react-native-data-types-sets`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-client-sets`
+
+   .. tab::
+      :tabid: flutter
+
+      The Realm Flutter SDK does not support Sets yet.
+
+   .. tab::
+      :tabid: kotlin
+
+      The Realm Kotlin SDK does not support Sets yet.
+
+
+For more information on modeling sets in an App Services Schema,
+refer to :ref:`Set <schema-type-set>`.
+
+Dictionaries
+~~~~~~~~~~~~
+
+Realm Object Schemas and App Services Schemas both support the Dictionary data type.
+A set is a collection of unique values.
+A dictionary is a collection of dynamic and unique string keys paired with values of a given type.
+A dictionary is functionally an object or document without pre-defined field names.
+
+Realm SDK dictionary documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`java-realmdictionary`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`Map/Dictionary - Swift SDK <ios-map>`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`node-data-types-dictionaries`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`react-native-data-types-dictionaries`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-client-dictionaries`
+
+   .. tab::
+      :tabid: flutter
+
+      The Realm Flutter SDK does not support Dictionaries yet.
+
+   .. tab::
+      :tabid: kotlin
+
+      The Realm Kotlin SDK does not support Dictionaries yet.
+
+For more information on modeling dictionaries in an App Services Schema,
+refer to :ref:`Dictionary <schema-type-dictionary>`.
+
+Relationships
+-------------
+
+Realm Object Schemas support the following types of relationships:
+
+- To-one relationships: A to-one relationship means that an object is related
+  in a specific way to no more than one other object.
+- To-many relationships: A to-many relationship means that an object is related
+  in a specific way to multiple objects.
+- Inverse relationships: An inverse relationship links an object back
+  to any other objects that refer to it in a defined to-one or to-many relationship.
+
+App Services Schemas support to-one and to-many relationships.
+App Services Schemas *do not* support inverse relationships.
+
+Realm SDK relationship documentation:
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      :ref:`Define a Relationship Field - Java SDK <java-relationships>`
+
+   .. tab::
+      :tabid: ios
+
+      :ref:`swift-model-relationships`
+
+   .. tab::
+      :tabid: node
+
+      :ref:`Define Relationship Properties - Node.js SDK <node-define-relationship-properties>`
+
+   .. tab::
+      :tabid: react-native
+
+      :ref:`Define Relationship Properties - React Native SDK <react-native-define-relationship-properties>`
+
+   .. tab::
+      :tabid: dotnet
+
+      :ref:`dotnet-client-relationships`
+
+   .. tab::
+      :tabid: flutter
+
+      :ref:`Define Relationship Properties - Flutter SDK <flutter-client-relationships>`
+
+   .. tab::
+      :tabid: kotlin
+
+      :ref:`kotlin-relationships`
+
+For more information on modeling relationships in an App Services Schema,
+refer to :ref:`Relationships <relationships>`.
+
+Example
+-------
+
+This example shows how to model a ``Dog`` with Device Sync.
+
+App Services Schema
+~~~~~~~~~~~~~~~~~~~
+
+This App Services Schema creates the ``Dog`` data model used by Device Sync.
+
+.. code-block:: json
+
+   {
+     "title": "Dog",
+     "bsonType": "object",
+     "required": [
+       "_id",
+       "_partition",
+       "name"
+     ],
+     "properties": {
+       "_id": {
+         "bsonType": "objectId"
+       },
+       "_partition": {
+         "bsonType": "string"
+       },
+       "name": {
+         "bsonType": "string"
+       },
+       "age": {
+         "bsonType": "int"
+       }
+       "breed": {
+         "bsonType": "string"
+       }
+     }
+   }
+
+Realm Object Schema
+~~~~~~~~~~~~~~~~~~~
+
+The following code examples create the ``Dog`` Realm Object Schema in each of the
+Realm SDKs.
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      .. code-block:: java
+
+         import io.realm.RealmObject;
+         import org.bson.types.ObjectId;
+
+         public class Dog extends RealmObject {
+             @PrimaryKey
+             @Required
+             private ObjectId _id;
+
+             private Integer age;
+
+             private String breed;
+
+             @Required
+             private String name;
+
+             // Standard getters & setters
+             public ObjectId getId() { return _id; }
+             public void setId(ObjectId _id) { this._id = _id; }
+
+             public Integer getAge() { return age; }
+             public void setAge(Integer age) { this.age = age; }
+
+             public String getBreed() { return breed; }
+             public void setBreed(String breed) { this.breed = breed; }
+
+             public String getName() { return name; }
+             public void setName(String name) { this.name = name; }
+         }
+
+   .. tab::
+      :tabid: ios
+
+      .. code-block:: swift
+
+         import Foundation
+         import RealmSwift
+
+         class Dog: Object {
+             @Persisted(primaryKey: true) var _id: ObjectId
+
+             @Persisted var age: Int?
+
+             @Persisted var breed: String?
+
+             @Persisted var name: String = ""
+         }
+
+   .. tab::
+      :tabid: node
+
+      .. code-block:: js
+
+         export const DogSchema = {
+           name: 'Dog',
+           properties: {
+             _id: 'objectId',
+             age: 'int?',
+             breed: 'string?',
+             name: 'string',
+           },
+           primaryKey: '_id',
+         };
+
+   .. tab::
+      :tabid: react-native
+
+      .. code-block:: js
+
+         export const DogSchema = {
+           name: 'Dog',
+           properties: {
+             _id: 'objectId',
+             age: 'int?',
+             breed: 'string?',
+             name: 'string',
+           },
+           primaryKey: '_id',
+         };
+
+   .. tab::
+      :tabid: dotnet
+
+      .. code-block:: csharp
+
+         using System;
+         using System.Collections.Generic;
+         using Realms;
+         using MongoDB.Bson;
+
+         public class Dog : RealmObject
+         {
+             [MapTo("_id")]
+             [PrimaryKey]
+             public ObjectId Id { get; set; }
+
+             [MapTo("age")]
+             public int? Age { get; set; }
+
+             [MapTo("breed")]
+             public string Breed { get; set; }
+
+             [MapTo("name")]
+             [Required]
+             public string Name { get; set; }
+         }
+
+   .. tab::
+      :tabid: flutter
+
+      .. code-block:: dart
+
+         import 'package:realm/realm.dart';
+         part 'realm_models.g.dart';
+
+         @RealmModel()
+         class _Dog {
+           @PrimaryKey()
+           @MapTo('_id')
+           late ObjectId id;
+
+           int? age;
+
+           String? breed;
+
+           late String name;
+         }
+
+
+   .. tab::
+      :tabid: kotlin
+
+      .. code-block:: kotlin
+
+         import io.realm.RealmObject;
+         import org.bson.types.ObjectId;
+
+         open class Dog(
+             @PrimaryKey
+             var _id: ObjectId = ObjectId(),
+
+             var age: Int? = null,
+
+             var breed: String? = null,
+
+             var name: String = ""
+         ): RealmObject() {}
+
+Data in Atlas
+~~~~~~~~~~~~~
+
+An application using Device Sync for the ``Dog`` data model creates MongoDB documents
+in Atlas that looks like the following example.
+
+.. code-block:: js
+
+   {
+     "_id": ObjectId('616f44305a205add93ff1081'),
+     "age": 8,
+     "breed": "Golden Retriever",
+     "name": "Jasper"
+   }
