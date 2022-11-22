@@ -5179,15 +5179,6 @@ components:
         - function_source
         - respond_result
     
-
-
-
-
-
-
-
-
-
     BaseAuthProvider:
       required:
         - name
@@ -5259,7 +5250,7 @@ components:
             This URL should handle user confirmation by passing the
             confirmation token to a Realm SDK's `confirmUser` function
             or to the Admin API [Confirm a Pending Email/Password
-            User](https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/email/operation/adminConfirmPendingUser)
+            User](#tag/email/operation/adminConfirmPendingUser)
             endpoint.
         confirmEmailSubject:
           type: string
@@ -5364,24 +5355,6 @@ components:
                   - title: ConfirmationCustomRefreshCustom
                   - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
                   - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
-                
-              # allOf:
-              #   # - type: object
-              #   #   title: EmailPasswordAuthProviderConfig
-              #   #   description: A configuration object for the email/password authentication provider.
-              #   # - $ref: "#/components/schemas/EmailConfirmationType"
-              #   - allOf:
-              #     - title: EmailConfirmationType
-              #     - oneOf:
-              #       - $ref: "#/components/schemas/EmailConfirmationAutomatic"
-              #       - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
-              #       - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
-              #   # - $ref: "#/components/schemas/PasswordRefreshType"
-              #   - allOf:
-              #     - title: PasswordRefreshType
-              #     - oneOf:
-              #       - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
-              #       - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
     
     ApiKeyAuthProvider:
       allOf: 
@@ -5551,7 +5524,8 @@ components:
     AppleAuthProvider:
       allOf:
         - $ref: "#/components/schemas/BaseOAuthProvider"
-        - properties:
+        - title: AppleAuthProvider
+          properties:
             name:
               const: oauth2-apple
               description: The name of the authentication provider. For Apple authentication, this value is always `oauth2-apple`.
@@ -5624,7 +5598,8 @@ components:
     GoogleAuthProvider:
       allOf: 
         - $ref: "#/components/schemas/NonAppleOAuthProvider"
-        - properties:
+        - title: GoogleAuthProvider
+          properties:
             name:
               const: oauth2-google
               description: The name of the authentication provider. For Google authentication, this value is always `oauth2-google`.
@@ -5663,7 +5638,8 @@ components:
     FacebookAuthProvider:
       allOf: 
         - $ref: "#/components/schemas/NonAppleOAuthProvider"
-        - properties:
+        - title: FacebookAuthProvider
+          properties:
             name:
               const: oauth2-facebook
               description: The name of the authentication provider. For Facebook authentication, this value is always `oauth2-facebook`.
@@ -5672,6 +5648,7 @@ components:
               description: The name of the authentication provider. For Facebook authentication, this value is always `oauth2-facebook`.
             config:
               type: object
+              title: FacebookAuthProviderConfig
               description: A configuration object for the Facebook authentication provider.
               properties:
                 clientId:
@@ -5680,6 +5657,7 @@ components:
                     The App ID of your Facebook app.
             secret_config:
               type: object
+              title: FacebookAuthProviderSecretConfig
               properties:
                 clientSecret:
                   type: string
