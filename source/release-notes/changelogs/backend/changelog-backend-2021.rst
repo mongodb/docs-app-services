@@ -22,7 +22,7 @@
 - Added the ability to configure an :ref:`IP Access List <realm-cli-accessList-create>`.
 - Increased function :ref:`execution timeout <function-constraints>` from 90 seconds to 120 seconds.
 - Added the ability to create apps with a Template Starter Application.
-- {+service-short+} Events are now available to view on the :atlas:`Atlas Activity Feed </tutorial/activity-feed/>`.
+- App Services Events are now available to view on the :atlas:`Atlas Activity Feed </tutorial/activity-feed/>`.
   You can configure these events in the :atlas:`Atlas Alert Settings </configure-alerts/>`.
 
 .. _backend_20210908:
@@ -31,10 +31,10 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Increased :ref:`request limit <mongodb-service-limitations-request-traffic>` from 3000 requests per second to 5000 requests per second.
-- Allows users to store non-Realm files in the {+service-short+}
+- Allows users to store non-Realm files in the App Services
   :ref:`app structure <app-configuration>`.
 - Updates to documents that do not match an application's :ref:`schema <schemas>`
-  can now enable {+sync+} for those documents.
+  can now enable Atlas Device Sync for those documents.
 
 
 .. _backend_20210825:
@@ -53,7 +53,7 @@
   in :ref:`AWS EventBridge Triggers <aws-eventbridge>` to support sending additional data types such as
   ``Decimal128``.
 - Display the generated data models in SDKs Data Models when :ref:`Development Mode <development-mode>`
-  is enabled for {+sync+}. 
+  is enabled for Atlas Device Sync. 
 
 
 .. _backend_20210728:

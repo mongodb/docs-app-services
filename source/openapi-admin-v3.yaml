@@ -34,7 +34,7 @@ info:
       https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps
     ```
 
-    This will return a list of objects describing each Atlas App Services app in the
+    This will return a list of objects describing each Atlas App Services App in the
     provided group. For Admin API requests, your Application ID is the
     ObjectId value in the `_id` field, _not_ the `client_app_id`.
 
@@ -277,9 +277,9 @@ paths:
       tags:
         - apps
       operationId: adminListApplications
-      summary: List all App Services apps in an Atlas project/group
+      summary: List all App Services Apps in an Atlas project/group
       description: |-
-        List all App Services apps within an Atlas
+        List all App Services Apps within an Atlas
         [project/group](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
       parameters:
         - in: query
@@ -1966,11 +1966,11 @@ paths:
       tags:
         - authproviders
       operationId: adminListAuthProviders
-      summary: List authentication providers in a Atlas App Services app
+      summary: List authentication providers in a Atlas App Services App
       description: |-
         List [authentication
         providers](https://www.mongodb.com/docs/realm/authentication/providers)
-        within a Atlas App Services app.
+        within a Atlas App Services App.
       responses:
         "200":
           description: Successfully listed.
@@ -2133,7 +2133,7 @@ paths:
         - security
       operationId: allowedIPAccessListGet
       summary: List the allowed entries in the Access List
-      description: List the allowed entries in the Access List of your Atlas App Services app.
+      description: List the allowed entries in the Access List of your Atlas App Services App.
       responses:
         "200":
           description: ""
@@ -2568,7 +2568,7 @@ paths:
       summary: List API keys
       description: |-
         List [API keys](https://www.mongodb.com/docs/realm/authentication/api-key)
-        associated with a Atlas App Services app.
+        associated with a Atlas App Services App.
       responses:
         "200":
           description: The API keys were successfully listed.
@@ -2686,7 +2686,7 @@ paths:
       summary: List secrets
       description: |-
         List [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets#std-label-define-secret)
-        associated with a Atlas App Services app.
+        associated with a Atlas App Services App.
       responses:
         "200":
           description: The Secrets were successfully listed.
@@ -2746,7 +2746,7 @@ paths:
       description: |-
         Modify a
         [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
-        associated with a Atlas App Services app.
+        associated with a Atlas App Services App.
       requestBody:
         description: The modified value of the Secret.
         required: true
@@ -2774,7 +2774,7 @@ paths:
       description: |-
         Delete a
         [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
-        associated with a Atlas App Services app.
+        associated with a Atlas App Services App.
       responses:
         "204":
           description: The Secret was successfully deleted.
@@ -2875,7 +2875,7 @@ paths:
       description: |-
         List [external
         dependencies](https://www.mongodb.com/docs/realm/functions/dependencies/) uploaded
-        to the Atlas App Services app.
+        to the Atlas App Services App.
       responses:
         "200":
           description: The function was successfully retrieved.
@@ -3590,11 +3590,11 @@ paths:
                       ID](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
                   appId:
                     type: string
-                    description: The Atlas App Services app ID specified by the `appId` path parameter.
+                    description: The Atlas App Services App ID specified by the `appId` path parameter.
                   appName:
                     type: string
                     description:
-                      The name of the Atlas App Services app specified by the `appId`
+                      The name of the Atlas App Services App specified by the `appId`
                       path parameter.
                   measurements:
                     type: array
@@ -4677,7 +4677,7 @@ components:
             value as ``_id``.
         app_id:
           type: string
-          description: The unique `_id` value of the Atlas App Services app.
+          description: The unique `_id` value of the Atlas App Services App.
         draft_id:
           type: string
           description: |-
@@ -6369,14 +6369,14 @@ components:
               properties:
                 app_default_domain:
                   type: string
-                  description: Default domain of hosted Atlas App Services app provided by App Services.
+                  description: Default domain of hosted Atlas App Services App provided by App Services.
                   example: myapp-qldqx.mongodbstitch.com
 
     HostedAssetMetadata:
       properties:
         appId:
           type: string
-          description: The unique App ID of the Atlas App Services app that is hosting the file.
+          description: The unique App ID of the Atlas App Services App that is hosting the file.
         last_modified:
           type: integer
           description: |-
@@ -6744,7 +6744,7 @@ components:
 tags:
   - name: admin
     x-displayName: Administrator
-    description: Log in and adminstrate App Services apps.
+    description: Log in and adminstrate App Services Apps.
   - name: apikeys
     x-displayName: API Keys
     description: View and manage API keys through the [API Key provider](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key/).

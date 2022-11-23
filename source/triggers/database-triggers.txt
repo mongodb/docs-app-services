@@ -11,7 +11,7 @@ Database Triggers
    :class: singlecol
 
 Database Triggers allow you to execute server-side logic whenever a
-document is added, updated, or removed in a linked {+atlas+} cluster.
+document is added, updated, or removed in a linked MongoDB Atlas cluster.
 Unlike SQL data triggers, which run on the database server, triggers run
 on a serverless compute layer that scales independently of the database
 server. Triggers automatically call :ref:`Atlas Functions <functions>`
@@ -64,7 +64,7 @@ Create a Database Trigger
       :tabid: ui
       
       To open the database trigger configuration screen in the App Services UI, click
-      :guilabel:`Triggers` in the {+leftnav+}, select the
+      :guilabel:`Triggers` in the left navigation menu, select the
       :guilabel:`Database Triggers` tab, and then click :guilabel:`Add a
       Trigger`.
          
@@ -150,7 +150,7 @@ Database Triggers have the following configuration options:
 
        .. warning::
 
-          Update operations executed from {+compass+} or the {+atlas+}
+          Update operations executed from MongoDB Compass or the MongoDB Atlas
           Data Explorer fully replace the previous document. As a result,
           update operations from these clients will generate ``REPLACE``
           change events rather than ``UPDATE`` events.
@@ -232,7 +232,7 @@ Database Change Events
 .. _database-event-operation-types:
 
 Database change events represent individual changes in a specific
-collection of your linked {+atlas+} cluster.
+collection of your linked MongoDB Atlas cluster.
 
 Every database event has the same operation type and structure as the
 :manual:`change event </reference/change-events/>` object that was
@@ -472,7 +472,7 @@ mitigations:
 - If your Trigger uses Event Ordering, consider switching ordering off
   to reduce latency.
 
-- Add resources by upgrading your {+atlas+} cluster.
+- Add resources by upgrading your MongoDB Atlas cluster.
 
 Example
 -------

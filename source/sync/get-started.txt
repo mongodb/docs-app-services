@@ -4,7 +4,7 @@
 .. _realm-sync-get-started:
 
 ==================================
-Get Started with {+sync+}
+Get Started with Atlas Device Sync
 ==================================
 
 .. contents:: On this page
@@ -14,14 +14,14 @@ Get Started with {+sync+}
    :class: singlecol
 
 To sync data across devices, you :ref:`enable Device Sync <enable-sync>` for your
-{+app+} and then use the sync-related methods and properties in the SDKs.
+App and then use the sync-related methods and properties in the SDKs.
 
 .. tip:: Check out the tutorial
    
-   If you prefer to learn by example, check out the {+service-short+} 
+   If you prefer to learn by example, check out the App Services 
    `tutorial <https://www.mongodb.com/docs/realm/tutorial/>`_, which describes
-   how to build a synced Task Tracker application with clients for common 
-   platforms that {+service-short+} supports.
+   how to build a synced to-do list application with clients for common 
+   platforms that App Services supports.
 
 Before You Start
 ----------------
@@ -37,7 +37,7 @@ Before You Start
   <partition-based-sync>`, requires a MongoDB Atlas cluster that runs MongoDB
   version 4.4 or later.
   
-- If you don't already have one, :ref:`create a new {+app+}
+- If you don't already have one, :ref:`create a new App
   <create-a-realm-app>` linked to your Atlas cluster.
 
 Configure Your Data Model
@@ -47,13 +47,13 @@ Choose an SDK
 ~~~~~~~~~~~~~
 
 Realm is an object database optimized for mobile use cases. The
-:ref:`{+client-sdks+} <realm-sdks>`, available for multiple languages and
+:ref:`Realm SDKs <realm-sdks>`, available for multiple languages and
 platforms, include everything you need to work with synced "realms" in your
 client code. You can use multiple SDKs to work with the same set of synced data
 across devices and platforms.
 
 This guide focuses on configuring sync with an SDK. For in-depth documentation
-that includes details on how to install and use the {+client-sdks+} more generally,
+that includes details on how to install and use the Realm SDKs more generally,
 check out the SDK docs:
 
 - :ref:`Java SDK <java-intro>`
@@ -143,21 +143,14 @@ user can read and write.
 
 You can define session roles on specific collections. Default roles
 provide read and write permissions when more specific session roles do
-not apply. Default roles apply to all collections an {+app+} can
+not apply. Default roles apply to all collections an App can
 access, but you can restrict a session role to a specific collection by
 specifying the collection name.
-
-Configure and Enable Sync
--------------------------
-
-Once you have defined a data model and corresponding access rules, you can
-enable sync for your app. You can also optimize sync data usage by
-specifying a client maximum offline time.
 
 Enable Sync
 ~~~~~~~~~~~
 
-When you enable Sync, you specify how clients can access data in your {+app+}.
+When you enable Sync, you specify how clients can access data in your App.
 For a walkthrough of how to turn on sync, refer to :ref:`enable-sync`.
 
 Optimize Sync Data Usage
@@ -174,3 +167,60 @@ the amount of utility data stored in synced clusters. If you'd like to
 reduce the amount of utility data further to suit your use case, see
 our guide to :ref:`Optimize Device Sync Atlas Usage
 <optimize-sync-atlas-usage>`.
+
+.. _flexible-sync-query-subscription:
+
+Create Queries in Your Client Application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With Flexible Sync enabled, you can start creating queries from your client
+application. 
+
+The Realm SDKs provide methods to create, update, and remove queries from the
+client application. The SDKs use **subscriptions** to maintain those queries on
+the client side. Through these subscriptions, your applications sync objects
+with the backend app and can watch for and react to changes.
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: android
+
+      To create queries from the Java Client SDK, see the
+      :ref:`Java SDK guide to Flexible Sync <java-flexible-sync>`.
+
+   .. tab::
+      :tabid: ios
+
+      To create queries from the Swift Client SDK, see the :ref:`Swift SDK 
+      guide to Flexible Sync <ios-flexible-sync>`.
+
+   .. tab::
+      :tabid: node
+      
+      To create queries from the Node Client SDK, see the :ref:`Node SDK 
+      guide to Flexible Sync <node-flexible-sync>`.
+
+   .. tab::
+      :tabid: react-native
+
+      To create queries from the React Native Client SDK, see the
+      :ref:`React Native SDK guide to Flexible Sync <react-native-flexible-sync>`.
+
+   .. tab::
+      :tabid: dotnet
+
+      To create queries from the .NET Client SDK, see the :ref:`.NET SDK 
+      guide to Flexible Sync <dotnet-flexible-sync>`.
+   
+   .. tab::
+      :tabid: flutter
+
+      To create queries from the Flutter Client SDK, see the :ref:`Flutter SDK
+      guide to Flexible Sync <flutter-sync>`.
+
+   .. tab::
+      :tabid: kotlin
+
+      To create queries from the Kotlin Client SDK, see the :ref:`Kotlin SDK
+      guide to Flexible Sync <kotlin-subscriptions>`.
