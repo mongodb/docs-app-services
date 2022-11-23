@@ -229,8 +229,8 @@ Select a deployment model below for more information.
         "user_id": "636aba021728b6c1c03db7f9"
       }
 
-Refresh a User Access Token from the Client API
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Refresh a User Access Token Over HTTP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Access tokens expire 30 minutes after they are granted. When an access
 token expires, you must get a new access token to continue sending
