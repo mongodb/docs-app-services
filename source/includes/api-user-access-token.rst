@@ -104,6 +104,18 @@ their ``User`` object. The SDKs can refresh expired access tokens.
              }
              return app.CurrentUser.AccessToken;
          }
+   
+   .. tab::
+      :tabid: dart
+      
+      .. code-block:: dart
+         
+         Future<String> getValidAccessToken(User user) async {
+           // An already logged in user's access token might be stale. To
+           // guarantee that the token is valid, refresh it if necessary.
+           await user.refreshCustomData();
+           return user.accessToken;
+         }
 
 Get a User Access Token Over HTTP
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
