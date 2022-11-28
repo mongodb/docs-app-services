@@ -155,7 +155,7 @@ paths:
                   refresh_token:
                     type: string
                     description: |
-                      A refresh token you may provide in the `Authorization` header of 
+                      A refresh token you may provide in the `Authorization` header of
                       [POST auth/session](#section/adminCreateSession)
                       to obtain a new `access_token` for the current user session.
                   user_id:
@@ -205,7 +205,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - allOf: 
+                  - allOf:
                     - $ref: "#/components/schemas/Error"
                     - properties:
                         error:
@@ -231,7 +231,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - allOf: 
+                  - allOf:
                     - $ref: "#/components/schemas/Error"
                     - properties:
                         error:
@@ -241,7 +241,7 @@ paths:
                         authentication with a valid refresh token. Make
                         sure the Authorization header contains the
                         `refresh_token`, not the `access_token`.
-                  - allOf: 
+                  - allOf:
                     - $ref: "#/components/schemas/Error"
                     - properties:
                         error:
@@ -3199,7 +3199,7 @@ paths:
       operationId: adminGetHostingConfig
       summary: Get Hosting Configuration
       description: |
-        Returns the current hosting configuration. Hosting is active 
+        Returns the current hosting configuration. Hosting is active
         if the response includes `status: "setup_ok"`.
       responses:
         200:
@@ -3214,12 +3214,12 @@ paths:
       operationId: adminEnableDisableHosting
       summary: Enable/Disable Hosting
       description: |
-        Enable or disable App Services Hosting for your app. 
+        Enable or disable App Services Hosting for your app.
         Changes to hosting can take up to 15 minutes to take effect.
-        This endpoint does not notify you when the changes have taken effect, 
+        This endpoint does not notify you when the changes have taken effect,
         only that the change operation was successfully received by the server.
 
-        You can see if the hosting enablement/disablement is complete 
+        You can see if the hosting enablement/disablement is complete
         by calling the [Get Hosting Configuration](#operation/adminGetHostingConfig) endpoint.
 
       requestBody:
@@ -4840,7 +4840,7 @@ components:
               description: |-
                 An object that maps environment names to values. The
                 environment value resolves to the current active
-                environment's mapped value. 
+                environment's mapped value.
                 
                 If no value is mapped to the current active environment,
                 the environment value resolves to `undefined`.
@@ -5295,7 +5295,7 @@ components:
         - $ref: "#/components/schemas/FacebookAuthProvider"
     
     AnonymousAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5396,7 +5396,7 @@ components:
             reset process.
 
     EmailPasswordAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5433,7 +5433,7 @@ components:
                   - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
     
     ApiKeyAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5445,7 +5445,7 @@ components:
     
 
     CustomJwtAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5552,7 +5552,7 @@ components:
     
 
     CustomFunctionAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5692,7 +5692,7 @@ components:
                   included in this list.
 
     FacebookAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - title: FacebookAuthProvider
           properties:
@@ -6804,13 +6804,110 @@ tags:
       the UI.
   - name: data-api
     x-displayName: Data API
-    description: Manage your app's generated [Data API endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/).
+    description: |-
+      Manage your app's generated [Data API endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/).
+      
+      ## Construct a Data API Base URL
+      
+      Data API requests use a base URL that's specific to your App and
+      deployment model.
+      
+      For a globally deployed app, the base URL has the following format:
+      
+      ```
+      https://data.mongodb-api.com/app/{ClientAppID}/endpoint/data/{DataAPIVersion}
+      ```
+      
+      A locally deployed app uses a similar base URL also includes the
+      App's deployment region and cloud provider:
+      
+      ```
+      https://{Region}.{Cloud}.data.mongodb-api.com/app/{ClientAppID}/endpoint/data/{DataAPIVersion}
+      ```
+      
+      You can find an App's `Region`, `Cloud`, and `ClientAppId` in the
+      [App Configuration](#tag/apps/operation/adminGetApplication):
+      
+      ```sh
+      curl -X GET https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId} \
+        -h 'Authorization: Bearer <AccessToken>'
+      ```
+      
+      You can see a list of all `DataAPIVersion` values supported by an App in
+      the `versions` field of its [Data API
+      Configuration](#tag/data-api/operation/adminGetDataApiConfig):
+      
+      ```sh
+      curl -X GET "https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/data_api/config" \
+        -h 'Authorization: Bearer <AccessToken>'
+      ```
+      
+      For example, consider an App that has the following configuration:
+      
+      ```json
+      {
+        "client_app_id": "myapp-abcde",
+        "deployment_model": "LOCAL",
+        "provider_region": "aws-us-east-1",
+        ...
+      }
+      ```
+      
+      This App would use the following base URL for Data API v1 requests:
+      
+      ```text
+      https://us-east-1.aws.data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1
+      ```
   - name: dependencies
     x-displayName: Dependencies
     description: Manage your application's [external dependencies](https://www.mongodb.com/docs/atlas/app-services/functions/dependencies/).
   - name: endpoints
     x-displayName: Endpoints
-    description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
+    description: |-
+      View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
+      
+      ## Construct a Custom HTTPS Endpoint Base URL
+      
+      HTTPS Endpoint requests use a base URL that's specific to your App and
+      deployment model.
+      
+      For a globally deployed app, the base URL has the following format:
+      
+      ```
+      https://data.mongodb-api.com/app/{ClientAppID}/endpoint
+      ```
+      
+      A locally deployed app uses a similar base URL also includes the
+      App's deployment region and cloud provider:
+      
+      ```
+      https://{Region}.{Cloud}.data.mongodb-api.com/app/{ClientAppID}/endpoint
+      ```
+      
+      You can find an App's `Region`, `Cloud`, and `ClientAppId` by
+      calling the [Get an App](#tag/apps/operation/adminGetApplication) endpoint:
+      
+      ```sh
+      curl -X GET https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId} \
+        -h 'Authorization: Bearer <AccessToken>'
+      ```
+      
+      For example, consider an App that has the following configuration:
+      
+      ```json
+      {
+        "client_app_id": "myapp-abcde",
+        "deployment_model": "LOCAL",
+        "provider_region": "aws-us-east-1",
+        ...
+      }
+      ```
+      
+      This App would use the following base URL for incoming Data API v1 requests:
+      
+      ```
+      https://us-east-1.aws.data.mongodb-api.com/app/myapp-abcde/endpoint
+      ```
   - name: event-subscriptions
     x-displayName: Event Subscriptions
     description: |-
