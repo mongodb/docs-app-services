@@ -1,3 +1,28 @@
+# November 25, 2022
+
+## Get Started
+- Update Device Sync tutorials with prerequisites related to having an Atlas account, API key, and realm-cli
+
+## Device Sync
+- Streamline the Device Sync docs section, including:
+  - Sync Settings: New page that details all the settings available in Sync.
+  - Alter Your Sync Configuration: Remove page, merging relevant caveats into "Settings" and "Permissions" pages
+  - Optimize Sync Atlas Usage: Move into the "Go to Production" section
+  - Compact an Atlas Volume: Move into the "Go to Production" section
+  - Various rewrites, touch-ups, and technical clarifications, with an emphasis on Flexible Sync usage
+- Get Started: Add back a "Create Queries in Your Client Application" section that was removed in a recent refactoring
+
+## Rules
+- Expressions: Update json expansions to list the expansion first, fixing a broken closing parenthesis
+
+## Other
+- App Services Admin API
+  - List pending user registrations
+  - Update the auth provider endpoints to have full details for each provider type
+- Add a Redocly OpenAPI lint config to turn off a couple of rules emitting warnings
+- Add redirects for some moved pages to fix broken links
+- Internal: update many pages to remove source constants, replace them with the product name
+
 # November 18, 2022
 
 ## Manage & Deploy Apps
