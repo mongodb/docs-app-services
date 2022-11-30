@@ -89,42 +89,32 @@ Change Streams
 --------------
 
 App Services limits the total number of change streams open against a given
-cluster across all Apps based on the cluster's size. It also limits the
-number of client applications that can concurrently listen for changes using
-``watch()`` and :ref:`Sync <sync>`. The
-following table lists the limitations for each cluster size:
+cluster across all Apps based on the cluster's size. The following table lists
+the limitations for each cluster size:
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 30 30
 
    * - Cluster Size
      - Maximum Number of Change Streams
-     - Maximum Number of Concurrent Listening Clients
 
    * - Free Tier (``M0``)
      - 5
-     - 250
 
    * - Shared Clusters (``M2``/``M5``)
      - 10
-     - 500
 
    * - Small, Dedicated Clusters (``M10``/``M20``)
      - 100
-     - 1000
 
    * - Standard Clusters (``M30``/``M40``)
      - 1000
-     - 10000
 
    * - Standard Clusters (``M50`` - ``M90``)
      - 2500
-     - 50000
 
    * - High-Power Clusters (``M100+``)
      - 2500
-     - 100000 (Contact Support for Additional Usage)
 
 .. note::
 
@@ -134,8 +124,7 @@ following table lists the limitations for each cluster size:
 
 .. important:: Usage Recommendation
 
-   To minimize the number of concurrent listening clients and open
-   change streams:
+   To minimize the number of open change streams:
 
    - Start Watch and Sync operations only when necessary. Close any open
      Watch and Sync streams immediately when they're no longer

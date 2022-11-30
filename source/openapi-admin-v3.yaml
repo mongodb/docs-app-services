@@ -4405,7 +4405,11 @@ components:
             hyphens.
           example: "MyApp"
         provider_region:
-          description: The application's cloud deployment region.
+          description: |-
+            The short identifier of a cloud provider-specific deployment region.
+            Some regions are available for global deployment while others are
+            only available for local apps. See [Cloud Deployment
+            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           $ref: "#/components/schemas/CloudProviderRegionId"
         location:
           $ref: "#/components/schemas/DeploymentLocation"
@@ -4487,11 +4491,6 @@ components:
         - "GLOBAL"
         - "LOCAL"
     CloudProviderRegionId:
-      description: |-
-        The ID of a cloud provider-specific deployment region. Some
-        regions are available for global deployment while others are
-        only available for local apps. See [Cloud Deployment
-        Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
       oneOf:
         - $ref: "#/components/schemas/AwsDeploymentRegion"
         - $ref: "#/components/schemas/AzureDeploymentRegion"
@@ -4529,7 +4528,11 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/CloudProviderRegionId"
-          description: The short identifier for the region.
+          description: |-
+            The short identifier of a cloud provider-specific deployment region.
+            Some regions are available for global deployment while others are
+            only available for local apps. See [Cloud Deployment
+            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           example: "aws-us-east-1"
         name:
           type: string
