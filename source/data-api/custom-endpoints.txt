@@ -25,7 +25,7 @@ call them. Instead, you send requests like this from any HTTP client:
 .. code-block:: bash
    
    curl -X POST \
-        -H 'api-key: <API Key>' \
+        -H 'apiKey: <API Key>' \
         -H 'Content-Type: application/json' \
         -H 'Accept: application/json' \
         -d '{ "message": "Hello, world!" }' \
@@ -93,7 +93,7 @@ HTTP Methods
 Each endpoint in your app handles one or more :mdn:`HTTP methods
 <Web/HTTP/Methods>` for a given route. For example, you might have a
 single route that accepts ``POST`` requests to create a new resource and
-a ``GET`` request to list existing resources. 
+a ``GET`` request to list existing resources.
 
 You can define multiple custom endpoints that serve the same route but
 handle different request methods. Alternatively, you can define a single
@@ -554,7 +554,7 @@ You can call a custom endpoint from any standard HTTPS client.
 .. code-block:: bash
    
    curl -X GET \
-     -H 'api-key: <API Key>' \
+     -H 'apiKey: <API Key>' \
      -H 'Content-Type: application/ejson' \
      -H 'Accept: application/json' \
      --data-raw '{
@@ -585,7 +585,7 @@ data format specified in the endpoint configuration.
             :emphasize-lines: 3
             
             curl -X GET \
-              -H 'api-key: <API Key>' \
+              -H 'apiKey: <API Key>' \
               -H 'Accept: application/ejson' \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/greeting/latest
          
@@ -607,7 +607,7 @@ data format specified in the endpoint configuration.
             :emphasize-lines: 3
             
             curl -X GET \
-              -H 'api-key: <API Key>' \
+              -H 'apiKey: <API Key>' \
               -H 'Accept: application/json' \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/greeting/latest
          
@@ -654,7 +654,7 @@ authentication providers:
          :emphasize-lines: 2
       
          curl -X GET \
-            -H 'api-key: <API Key>' \
+            -H 'apiKey: <API Key>' \
             -H 'Content-Type: application/json' \
             https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello
    
