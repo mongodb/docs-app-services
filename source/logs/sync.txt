@@ -30,9 +30,9 @@ starts a connection. Logging out that user ends the connection.
 Sessions
 ~~~~~~~~
 
-Users download and upload changes to a synced {+realm+} using a *session*. 
-Instantiating a local instance of a synced {+realm+} starts a session. 
-Destroying that {+realm+} object ends the session.
+Users download and upload changes to a synced realm using a *session*. 
+Instantiating a local instance of a synced realm starts a session. 
+Destroying that realm object ends the session.
 
 MongoDB Atlas Sync Events
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -61,10 +61,6 @@ Fields
        version on client and server, the number of changes, and whether
        or not conflict resolution was required in order to incorporate
        the operation into the server's copy of the data.
-
-   * - Partition
-     - When using :ref:`Partition-Based Sync <partition-based-sync>`, which 
-       :ref:`partition <sync-partitions>` changed as a result of the operation.
 
    * - Write Summary
      - Includes information about the data that changed, such as:
@@ -97,3 +93,7 @@ Fields
       
    * - Platform Version
      - The version of the platform that sent the request.
+
+   * - Partition
+     - If using :ref:`Partition-Based Sync <partition-based-sync>`, which 
+       :ref:`partition <sync-partitions>` changed as a result of the operation.

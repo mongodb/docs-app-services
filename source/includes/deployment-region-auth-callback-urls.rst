@@ -3,51 +3,51 @@
    :widths: 1 4
 
    * - Region
-     - {+service-short+} Authentication Callback URL
+     - App Services Authentication Callback URL
 
    * - | **Global**
      - .. code-block:: text
 
-          https://stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://realm.mongodb.com/api/client/v2.0/auth/callback 
 
    * - | **Virginia**
        | (``us-east-1``)
      - .. code-block:: text
 
-          https://us-east-1.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://us-east-1.aws.realm.mongodb.com/api/client/v2.0/auth/callback
 
    * - | **Oregon**
        | (``us-west-2``)
      - .. code-block:: text
 
-          https://us-west-2.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/auth/callback
 
    * - | **Ireland**
        | (``eu-west-1``)
      - .. code-block:: text
 
-          https://eu-west-1.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://eu-west-1.aws.realm.mongodb.com/api/client/v2.0/auth/callback
 
    * - | **Frankfurt**
        | (``eu-central-1``)
      - .. code-block:: text
 
-          https://eu-central-1.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://eu-central-1.aws.realm.mongodb.com/api/client/v2.0/auth/callback
 
    * - | **Mumbai**
        | (``ap-south-1``)
      - .. code-block:: text
 
-          https://ap-south-1.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://ap-south-1.aws.realm.mongodb.com/api/client/v2.0/auth/callback
 
    * - | **Singapore**
        | (``ap-southeast-1``)
      - .. code-block:: text
 
-          https://ap-southeast-1.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://ap-southeast-1.aws.realm.mongodb.com/api/client/v2.0/auth/callback
 
    * - | **Sydney**
        | (``ap-southeast-2``)
      - .. code-block:: text
 
-          https://ap-southeast-2.aws.stitch.mongodb.com/api/client/v2.0/auth/callback
+          https://ap-southeast-2.aws.realm.mongodb.com/api/client/v2.0/auth/callback

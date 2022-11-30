@@ -1,0 +1,66 @@
+.. _realm-sync-best-practices:
+.. _sync-production-checklist:
+
+================================
+Device Sync Production Checklist
+================================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+
+Best Practices
+--------------
+
+We recommend following these best
+practices to ensure optimal performance and a smooth user experience:
+
+Avoid breaking changes
+  Once you've enabled sync, there are limitations on how you can modify your
+  data model. Specifically, sync does not support breaking changes to your
+  object types such as changing a given property's type. If you want to make a
+  breaking change you need to terminate and re-enable sync with the updated
+  data models.
+
+Define a client reset handler
+  To recover from a serious error conditions where the client and server
+  histories diverge, you should define a :ref:`client reset <client-resets>`
+  handler when you open each synced realm with an SDK.
+
+Define a client maximum offline time
+  The App Services backend uses a history of changes to underlying
+  data to synchronize clients. Configure a :ref:`client maximum offline time
+  <client-maximum-offline-time>` to control the number of days of
+  history stored by your App. Clients that have not synchronized in
+  more than that number of days must perform a client reset the next
+  time they connect to the backend.
+
+Deployment model and geographic regions
+  Use a :ref:`local deployment model <local-deployment>` when building a
+  Device Sync application. Configure your App and MongoDB data source
+  to run within the same geographic region and cloud provider.
+
+Atlas oplog
+  Device Sync requires access to the :atlas:`oplog </reference/atlas-oplog>` of
+  your synced cluster. For best results, keep 48 hours of oplog for a cluster
+  using Device Sync.
+
+App Services Schema Data Consistency
+  If you create or modify Device Sync documents using another tool, such as the
+  :binary:`~bin.mongo` shell or MongoDB Compass, be sure the documents validate 
+  against the App Services Schema for the collection. For more information, see 
+  :ref:`Unsynced Documents <unsynced-documents>`.
+
+Production Load Testing
+  Measure performance and identify issues in a scaled-up production
+  deployment with :ref:`sync-production-load-testing`.
+
+Write Transaction Size
+  When writing large amounts of data, consider using multiple small
+  write transactions instead of a single larger transaction. Depending
+  on your Atlas cluster version and configuration, write transactions
+  greater than 16MB may be rejected by MongoDB and cause the sync
+  operation to fail.

@@ -1,0 +1,630 @@
+.. _sync-settings:
+
+=============
+Sync Settings
+=============
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This page explains the settings available when you :ref:`enable or configure
+Device Sync <enable-sync>`.
+
+Available Settings
+------------------
+
+.. _flexible-sync:
+
+Sync Type
+~~~~~~~~~
+
+Atlas Device Sync has two sync modes: Flexible Sync and the older
+Partition-Based Sync. We recommend using Flexible Sync. For information about
+Partition-Based Sync, refer to :ref:`partition-based-sync`.
+
+Flexible Sync lets you define a query in the client and sync only the objects
+that match the query. With client-side subscriptions, client applications can:
+
+- Maintain queries
+- React to changes
+- Add, change, or delete queries
+
+Together with rules and permissions, Flexible Sync provides a powerful way to
+configure Sync around your business logic.
+
+.. _development-mode:
+.. _enable-development-mode:
+.. _enable-disable-development-mode:
+
+Development Mode
+~~~~~~~~~~~~~~~~
+
+**Development Mode** is a configuration setting that allows Device Sync
+to infer and update schemas based on client-side data models. This 
+streamlines development, but should not be used in production.
+
+Development Mode speeds up development by allowing you to design :ref:`schemas
+<configure-your-data-model>` directly in client application code.
+
+When you sync a realm file, Atlas App Services maps every synced object type
+to its own collection in the database specified by
+:ref:`sync-config-database-name`. If you update the object model on the client
+side, App Services updates the collection schema to match. This lets you update
+objects in your client code as you develop your app.
+
+You can use :ref:`data access rules <sync-rules>` with Development Mode. Note
+that schema changes ignore data access rules. This means that any client can
+update the backend schema by changing the client model.
+
+To learn more about how the Realm Object Schemas map to the App Services Schemas
+when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
+
+For more information about modifying synced object schemas, including how to
+handle breaking changes, see: :ref:`<synced-schema-overview>`.
+
+.. important:: Disable Development Mode for Production Apps
+   
+   Development mode is a development utility that is not suitable for 
+   production use. Make sure that you turn off Development Mode before you 
+   make your app accessible in a production environment.
+
+
+Cluster to Sync
+~~~~~~~~~~~~~~~
+
+The name of the Atlas cluster :ref:`data source <appconfig-data_sources>` where
+you want the synced data stored.
+
+Flexible Sync requires MongoDB 5.0. You cannot use Sync with a :ref:`serverless
+instance <serverless-caveats>`. In the UI, clusters display as gray and
+not-selectable when they do not meet the requirements for Flexible Sync.
+
+.. _sync-config-database-name:
+
+Database Name (Development Mode Only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you enable :ref:`Development Mode <development-mode>`, you specify a
+database to store synced objects. App Services creates new collections in this
+Development Mode database for every type of synced object.
+
+.. example::
+
+   Specify a Development Mode database of ``myapp``. Your iOS client has a 
+   ``Person`` model. You sync a realm that contains an instance of the 
+   ``Person`` object. Development Mode creates a server-side schema associated 
+   with the model. The object syncs to the ``myapp.Person`` collection. 
+
+   App Services continues creating new server-side schemas and collections 
+   for each new object type. If you later add a ``Dog`` object, that object 
+   will sync to a new ``myapp.Dog`` collection that App Services will
+   create.
+
+.. _queryable-fields:
+
+Queryable Fields
+~~~~~~~~~~~~~~~~
+
+When you configure Flexible Sync, you specify up to 10 field names that your
+client application can query. Fields that can be used in a subscription query
+are called **queryable fields**.
+
+Queryable fields apply across all collections in an App's Schema. You
+can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` to
+configure more granular access control on individual collections.
+
+The field names you provide are arbitrary strings. If an object type has a field
+whose name matches a field name you provided (and meets other eligibility criteria), that field becomes available to
+Device Sync to query.
+
+.. example::
+
+   In a to-do list app, you might set ``assignee`` or ``owner`` 
+   as queryable fields. On the client side, you can then query for tasks 
+   whose ``assignee`` or ``owner`` matches the logged-in user. 
+
+.. _flexible-sync-eligible-field-types:
+
+Eligible Field Types
+````````````````````
+
+Flexible Sync only supports top-level primitive fields with a scalar type as 
+queryable fields. You can also include arrays of these primitives as queryable 
+fields. Flexible Sync does not support embedded objects or arrays of 
+objects as queryable fields.
+
+.. seealso:: Realm Query Language - Flexible Sync Limitations
+
+   For information on the queries you can perform on these fields, see:
+   :ref:`flexible-sync-rql-limitations`
+
+.. _flexible-sync-reserved-field-names:
+
+Reserved Field Names
+````````````````````
+
+.. include:: /includes/reserved-field-names.rst
+
+Performance and Storage
+```````````````````````
+
+Queryable fields use storage on the backing Atlas cluster. The more queryable
+fields you configure, the more storage you use on the backing cluster. You can
+configure up to 10 queryable fields per application for Flexible Sync.
+
+.. seealso::
+
+   Learn more about :ref:`optimizing performance and storage when using Flexible Sync <optimizing-performance-and-storage-flexible-sync>`.
+
+Consequences of Adding or Removing Queryable Fields
+```````````````````````````````````````````````````
+
+You can :ref:`update your Sync configuration <alter-your-sync-configuration>` to
+add or remove queryable field names, but be aware of the following:
+
+When you add a queryable field, devices can only sync on that field once the
+device has caught up to the point in time in :ref:`Device Sync History
+<sync-history>` where the field was added. 
+
+When you remove a queryable field, any devices still using that field will have
+their Device Sync session dropped and must perform a :ref:`client reset
+<client-resets>`. Clients not using the removed field won't receive any errors.
+To avoid triggering a client reset when you remove the queryable field, you
+should first remove usage of that field on the client-side.
+
+
+Permissions
+~~~~~~~~~~~
+
+Atlas Device Sync enforces data access rules for all requests to a synced
+cluster. Sync rules are dynamic :ref:`JSON expressions <expressions>` that
+specify a given user's ability to view and modify synced data.
+
+For details, refer to :ref:`sync-permissions`.
+
+.. _asymmetric-sync:
+.. _optimize-asymmetric-sync:
+
+Asymmetric Sync
+~~~~~~~~~~~~~~~
+
+Asymmetric Sync is a sync strategy for applications with heavy client-side
+insert-only workloads. You can enable it for one or more collections. It
+supports writing to any collection type, including an Atlas time-series
+collection.
+
+For example, an IoT app that frequently logs sensor data has a significant write
+workload and no read workload. The device may also be offline for extended
+periods of time. Asymmetric Sync bypasses some of the processing required for
+bi-directional sync, significantly improving write speed to an Atlas collection.
+
+Other use cases include writing immutable data, such as invoices from a retail
+app, or logging application events, neither of which requires conflict
+resolution.
+
+You can apply Asymmetric Sync to individual collections. This means your app can
+use Asymmetric Sync to write some data, but bi-directional Flexible Sync on
+other collections.
+
+Asymmetric Sync collections are only for writing data. You cannot use Flexible
+Sync queries against these collections. Instead, use :ref:`data-sources`.
+
+After you have enabled Asymmetric Sync, you implement it in the client app via
+the client SDKs. Currently, the following SDKs support Asymmetric Sync:
+
+- JavaScript: refer to :ref:`node-define-an-asymmetric-object`
+- React Native: refer to :ref:`react-native-define-an-asymmetric-object`
+- Swift: refer to :ref:`swift-stream-data-to-atlas`
+- .NET: refer to :ref:`dotnet-asymmetric-sync`
+
+Client Max Offline Time
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Client Maximum Offline Time determines how long the client can be offline
+between sync sessions. Changing this value enables you to balance offline access
+with storage used in the synced Atlas cluster. For more information, refer to
+:ref:`client-maximum-offline-time`.
+
+Client Recovery
+~~~~~~~~~~~~~~~
+
+Client Recovery enables the client to attempt to automatically perform a client
+reset while recovering data on the device. For more information, refer to
+:ref:`recover-unsynced-changes`.
+
+.. _appconfig-sync:
+.. _sync-configuration-reference:
+
+Sync Configuration File Reference
+---------------------------------
+
+You can find the Sync configuration file for your application in the ``sync``
+directory of an :ref:`exported <export-realm-app>` app:
+
+.. code-block:: none
+   
+   app/
+   └── sync/
+       └── config.json
+
+For example, the following Sync configuration applies to apps using Flexible
+Sync (recommended). If you are using the older Partition-Based Sync, refer to
+:ref:`partition-based-sync-config-object`.
+
+.. code-block:: json
+   :caption: sync/config.json
+
+   {
+     "type": "flexible",
+     "development_mode_enabled": <Boolean>,
+     "service_name": "<Data Source Name>",
+     "database_name": "<Development Mode Database Name>",
+     "state": <"enabled" | "disabled">,
+     "client_max_offline_days": <Number>,
+     "is_recovery_mode_disabled": <Boolean>,
+     "permissions": {
+       "rules": {
+         "<Type Name>": [
+           {
+             "name": <String>,
+             "applyWhen": { <Expression> },
+             "read": <Expression>,
+             "write": <Expression>,
+             "fields": {
+               "<Field Name>": {
+                 "read": <Boolean>,
+                 "write": <Boolean>,
+                 "fields": <Embedded Object Fields>
+               }
+             }
+             "additional_fields": {
+               "read": <Boolean>,
+               "write": <Boolean>
+             }
+           }
+         ]
+       },
+       "defaultRoles": [
+         {
+           "name": <String>,
+           "applyWhen": { <Expression> },
+           "read": <Expression>,
+           "write": <Expression>
+         }
+       ]
+     },
+     "queryable_fields_names": [
+       <Array of String Field Names>
+     ]
+   }
+
+Root Object
+~~~~~~~~~~~
+
+.. _flexible-sync-config-object:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - Field
+     - Description
+
+   * - | ``type``
+       | String
+     
+     - The sync mode. There are two Sync modes: Flexible Sync and the older
+       Partition-Based Sync. We recommend using Flexible Sync. For more
+       information about Partition-Based Sync, refer to
+       :ref:`partition-based-sync`.
+       
+       Valid Options for a Flexible Sync Configuration:
+
+       - ``"flexible"``
+
+   * - | ``development_mode_enabled``
+       | Boolean
+     
+     - If ``true``, :ref:`Development Mode <development-mode>` is enabled
+       for the application. While enabled, App Services automatically stores synced
+       objects in a specific database (specified in ``database_name``) and
+       mirrors objects types in that database's collection schemas.
+
+   * - | ``service_name``
+       | String
+     
+     - The name of the Atlas cluster :ref:`data source <appconfig-data_sources>`
+       to sync. You cannot use sync with a :ref:`serverless instance
+       <serverless-caveats>`.
+
+   * - | ``database_name``
+       | String
+     
+     - The name of a database in the synced cluster where App Services stores data in
+       :ref:`Development Mode <development-mode>`. App Services automatically
+       generates a schema for each synced type and maps each object type to a
+       collection within the database.
+
+   * - | ``state``
+       | String
+     
+     - The current state of the sync protocol for the application.
+       
+       Valid Options:
+
+       - ``"enabled"``
+       - ``"disabled"``
+
+   * - | ``client_max_offline_days``
+       | Number
+     
+     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
+       process waits before aggressively pruning metadata that some clients
+       require to synchronize from an old version of a realm.
+
+   * - | ``is_recovery_mode_disabled``
+       | Boolean
+     - If ``false``, :ref:`Recovery Mode <recover-unsynced-changes>` is enabled
+       for the application. While enabled, Realm SDKs that support this feature 
+       attempt to recover unsynced changes upon performing a client reset.
+       Recovery mode is enabled by default.
+
+   * - | ``permissions.rules``
+       | Object
+     
+     - An object where the keys are object type names and the values are arrays
+       of :ref:`Rules Objects <appconfig-sync-type-specific-roles>`.
+
+       .. code-block:: json
+          
+          {
+            "<Type Name>": [ <Role>, ... ]
+          }
+
+   * - | ``permissions.defaultRoles``
+       | Array<Object>
+     
+     - An array of :ref:`Default Roles <appconfig-sync-default-roles>`.
+
+       .. code-block:: json
+          
+          [ <Role>, ... ]
+
+   * - | ``queryable_fields_names``
+       | Array<String>
+     
+     - The :ref:`names of the fields <queryable-fields>` that your client 
+       application can query to determine which data to synchronize.
+
+   * - | ``last_disabled``
+       | Number
+     
+     - The date and time that sync was last paused or disabled, represented by
+       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
+       UTC).
+
+.. _appconfig-sync-type-specific-roles:
+
+Rules Object
+~~~~~~~~~~~~
+
+The ``permissions.rules`` field maps object type names to sets of roles
+that apply specifically to each object type.
+
+For more information, see :ref:`type-specific-roles`.
+
+.. include:: /includes/tip-role-order-config-files.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - | ``name``
+       | String
+       | *Required*
+
+     - The name of the role. You might use a descriptive name, such as
+       ``"adminReadWrite"`` or ``"employeeReadOnly"``, to make it easier
+       to understand the rules.
+
+   * - | ``applyWhen``
+       | Expression
+       | *Required*
+     
+     - An :ref:`expression <expressions>` that evaluates to ``true``
+       when the role applies to the user. 
+       
+       .. example::
+          
+          The following expression defines a role that applies when a
+          :ref:`user's custom data <custom-user-data>` contains a field
+          named ``isGlobalAdmin`` with the value set to ``true``:
+
+          .. code-block:: json
+             
+             {
+               "%%user.custom_data.isGlobalAdmin": true
+             }
+
+   * - | ``read``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can read data. If the expression evaluates to ``true``,
+       the user has permission to read objects of this type. If
+       ``false``, the user cannot read an object or any of its
+       properties. 
+
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
+
+   * - | ``write``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can write data. If the expression evaluates to ``true``,
+       the user has permission to write objects of this type. If
+       ``false``, the user cannot write an object or any of its
+       properties.
+   
+   * - | ``fields``
+       | Object
+       | *Optional*
+     
+     - An object that defines read and write permissions for specific
+       fields. A field-level permission definition has the following
+       form:
+
+       .. code-block:: json
+          
+          "fields": {
+            "<Field Name>": {
+              "read": <Boolean>,
+              "write": <Boolean>,
+              "fields": <Embedded Object Fields>
+            }
+          }
+
+   * - | ``fields.<Field Name>.read``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to read this field. If
+       ``false``, the user cannot read the field.       
+       
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
+
+   * - | ``fields.<Field Name>.write``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to write this field. If
+       ``false``, the user cannot write the field.
+
+   * - | ``fields.<Field Name>.fields``
+       | Object
+       | *Optional*
+     
+     - Nested field-level permissions for an embedded object.
+       
+       .. example::
+          
+          The following role defines read and write permissions for the
+          embedded field ``address.street``:
+
+          .. code-block:: json
+             
+             {
+               "fields": {
+                 "address": {
+                   "fields": {
+                     "street": {
+                       "read": true,
+                       "write": true
+                     }
+                   }
+                 }
+               }
+             }
+   
+   * - | ``additional_fields``
+       | Object
+       | *Optional*
+     
+     - An object that defines read and write permissions for all fields
+       that do not have any permissions defined in ``fields``. A
+       field-level permission definition for generic fields has the
+       following form:
+
+       .. code-block:: json
+          
+          "additional_fields": {
+            "read": <Boolean>,
+            "write": <Boolean>
+          }
+   
+   * - | ``additional_fields.read``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to read any field that
+       isn't defined in ``fields``. If ``false``, the user can only
+       read a field with specific permissions.
+
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
+
+   * - | ``additional_fields.write``
+       | Boolean
+       | *Required*
+     
+     - If ``true``, the role has permission to write any field that
+       isn't defined in ``fields``. If ``false``, the user can only
+       write a field with specific permissions.
+
+.. _appconfig-sync-default-roles:
+
+Default Roles
+~~~~~~~~~~~~~
+
+The ``permissions.defaultRoles`` field contains an array of generic
+roles that apply to all object types. Type-specific roles defined in the
+``rules`` property always take precedence over default roles. A user may
+be assigned a default role when type-specific roles do not apply or are
+not defined.
+       
+For more information, see :ref:`Default Roles <default-roles>`.
+
+.. include:: /includes/tip-role-order-config-files.rst
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - | ``name``
+       | String
+       | *Required*
+
+     - The name of the role in the ``defaultRoles`` array. You might 
+       use a descriptive name to make it easier to parse the roles, such as 
+       "adminReadWrite" or "employeeReadOnly".
+
+   * - | ``applyWhen``
+       | Expression
+       | *Required*
+
+     - An :ref:`expression <expressions>` that evaluates to ``true`` when 
+       the role should be applied. An example might be 
+       ``{"%%user.custom_data.isGlobalAdmin": true}``. This reads the 
+       value of the ``isGlobalAdmin`` bool from the :ref:`user's custom data 
+       <custom-user-data>`, and applies the role when the value of this 
+       bool is ``true``.
+
+   * - | ``read``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can read data. If the expression evaluates to ``true``,
+       the user has permission to read objects. If ``false``, the user
+       cannot read an object or any of its properties.
+
+       If a user has write permission, they also have read permission, 
+       regardless of the value of this field.
+
+   * - | ``write``
+       | Expression
+       | *Optional*
+     
+     - An :ref:`expression <expressions>` that determines whether or not
+       the user can write data. If the expression evaluates to ``true``,
+       the user has permission to write objects. If ``false``, the user
+       cannot write an object or any of its properties.

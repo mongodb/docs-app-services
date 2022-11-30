@@ -2,9 +2,9 @@
 .. _destructive-changes-synced-schema:
 .. _additive-changes-synced-schema:
 
-==================
-Update Your Schema
-==================
+======================
+Update Your Data Model
+======================
 
 .. default-domain:: mongodb
 
@@ -60,7 +60,7 @@ sync to client-side applications.
 A non-breaking change is a change that you can make in your server-side
 schema or your object model without requiring additional handling in your
 app. App Services refers to these types of non-breaking changes as additive changes.
-They apply automatically to synced {+realms+}; you can make these 
+They apply automatically to synced realms; you can make these 
 non-breaking schema changes with no additional client-side configuration 
 changes.
 
@@ -123,7 +123,7 @@ the client-side object model. For more details, see relevant sections below.
 
 .. tip:: Rename a property
 
-   While renaming a property is a breaking change, some of the {+client-sdks+}
+   While renaming a property is a breaking change, some of the Realm SDKs
    offer a workaround to remap the property name. See 
    :ref:`schema-update-change-property-name` for more details.
 
@@ -140,11 +140,11 @@ How to Add an Object Type
 
 If you want to add an object type to both the server-side schema and the 
 client object model, you can add the object type to the object model, and 
-use :ref:`Development Mode <enable-development-mode>` to let App Services infer the 
+use :ref:`Development Mode <development-mode>` to let App Services infer the 
 server-side schema updates. Or you can manually add the object type to both 
 the model and the schema.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data, you must
@@ -184,7 +184,7 @@ How to Add a Required Property
 
 If you want to add a required property to both the server-side schema and 
 the client object model, you can add the required property to the object 
-model, and use :ref:`Development Mode <enable-development-mode>` to let 
+model, and use :ref:`Development Mode <development-mode>` to let 
 App Services infer the server-side schema updates. Or you can manually add the 
 required property to both the model and the schema.
 
@@ -213,7 +213,7 @@ populating it with a default value.
 After you've made these changes, the appropriate documents should once again 
 sync to the client application.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data, you must
@@ -240,11 +240,11 @@ How to Add an Optional Property
 
 If you want to add an optional property to both the server-side schema and 
 the client object model, you can add the optional property to the object 
-model, and use :ref:`Development Mode <enable-development-mode>` to let 
+model, and use :ref:`Development Mode <development-mode>` to let 
 App Services infer the server-side schema updates. Or you can manually add the 
 optional property to both the model and the schema.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data, you must
@@ -279,7 +279,7 @@ As a result, we do not recommend making breaking server-side schema changes.
 Instead, you can remove the object type from the client-side object model and 
 leave it in place on the server-side schema. 
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data, you must
@@ -315,7 +315,7 @@ appropriate empty value, such as a 0 for integer values or an empty string
 for string values. This is considered a non-breaking or additive change
 to the object model.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data, you must
@@ -351,7 +351,7 @@ appropriate empty value, such as a 0 for integer values or an empty string
 for string values. This is considered a non-breaking or additive change
 to the object model.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data, you must
@@ -389,10 +389,10 @@ see :ref:`<migrate-schema-partner-collection>`.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, you must 
-manually update the schema. :ref:`Development Mode <enable-development-mode>` 
+manually update the schema. :ref:`Development Mode <development-mode>` 
 does not automatically update your schema for breaking changes.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data when you
@@ -458,7 +458,7 @@ see :ref:`<migrate-schema-partner-collection>`.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, you must 
-manually update the schema. :ref:`Development Mode <enable-development-mode>` 
+manually update the schema. :ref:`Development Mode <development-mode>` 
 does not automatically update your schema for breaking changes.
 
 Handle Existing Atlas Documents
@@ -480,7 +480,7 @@ few ways:
 After you've made these changes, the appropriate documents should once again 
 sync to the client application.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data when you
@@ -533,7 +533,7 @@ see :ref:`<migrate-schema-partner-collection>`.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, you must 
-manually update the schema. :ref:`Development Mode <enable-development-mode>` 
+manually update the schema. :ref:`Development Mode <development-mode>` 
 does not automatically update your schema for breaking changes.
 
 Handle Existing Atlas Documents
@@ -555,7 +555,7 @@ few ways:
 After you've made these changes, the appropriate documents should once again 
 sync to the client application.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data when you
@@ -601,10 +601,10 @@ see :ref:`<migrate-schema-partner-collection>`.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, you must 
-manually update the schema. :ref:`Development Mode <enable-development-mode>` 
+manually update the schema. :ref:`Development Mode <development-mode>` 
 does not automatically update your schema for breaking changes.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data when you
@@ -650,10 +650,10 @@ see :ref:`<migrate-schema-partner-collection>`.
 
 If you choose to terminate and re-enable sync instead of using the partner
 collection strategy to resolve this type of breaking change, you must 
-manually update the schema. :ref:`Development Mode <enable-development-mode>` 
+manually update the schema. :ref:`Development Mode <development-mode>` 
 does not automatically update your schema for breaking changes.
 
-Handle Client {+client-database+} Files
+Handle Client Realm Database Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you already have a client-side realm file that contains data when you
@@ -670,9 +670,9 @@ some custom logic in this scenario.
 Summary
 -------
 
-- Non-breaking schema changes on synced {+realms+} are backward compatible, allowing old clients to sync with newer ones.
-- Non-breaking changes to the schema of a synced {+realm+} do not require any additional configuration. However, you may need to migrate client realm files even when making non-breaking changes.
+- Non-breaking schema changes on synced realms are backward compatible, allowing old clients to sync with newer ones.
+- Non-breaking changes to the schema of a synced realm do not require any additional configuration. However, you may need to migrate client realm files even when making non-breaking changes.
 - Breaking changes are modifications to existing properties of a schema.
-- To perform breaking schema changes to a synced {+realm+}, create a partner collection with the necessary schema changes and manually copy the data from the first collection to the second collection.
+- To perform breaking schema changes to a synced realm, create a partner collection with the necessary schema changes and manually copy the data from the first collection to the second collection.
 - To keep partner collections up-to-date with each other, set up database triggers to copy changed data from one collection to its partner.
 - You can implement a breaking change by terminating and re-enabling sync and performing a manual client reset, but it is not recommended.

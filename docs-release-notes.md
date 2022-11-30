@@ -1,3 +1,221 @@
+# November 25, 2022
+
+## Get Started
+- Update Device Sync tutorials with prerequisites related to having an Atlas account, API key, and realm-cli
+
+## Device Sync
+- Streamline the Device Sync docs section, including:
+  - Sync Settings: New page that details all the settings available in Sync.
+  - Alter Your Sync Configuration: Remove page, merging relevant caveats into "Settings" and "Permissions" pages
+  - Optimize Sync Atlas Usage: Move into the "Go to Production" section
+  - Compact an Atlas Volume: Move into the "Go to Production" section
+  - Various rewrites, touch-ups, and technical clarifications, with an emphasis on Flexible Sync usage
+- Get Started: Add back a "Create Queries in Your Client Application" section that was removed in a recent refactoring
+
+## Rules
+- Expressions: Update json expansions to list the expansion first, fixing a broken closing parenthesis
+
+## Other
+- App Services Admin API
+  - List pending user registrations
+  - Update the auth provider endpoints to have full details for each provider type
+- Add a Redocly OpenAPI lint config to turn off a couple of rules emitting warnings
+- Add redirects for some moved pages to fix broken links
+- Internal: update many pages to remove source constants, replace them with the product name
+
+# November 18, 2022
+
+## Manage & Deploy Apps
+- Deploy/Deployment Models & Regions: Add São Paulo to the table of deployment regions
+- Secure: Add São Paulo IP addresses to the "AWS Outbound IP Addresses" list
+
+## Device Sync
+- Configure and Update Your Data Model/Data Model Mapping: Add details about `Array`, `EmbeddedObject`, `Set`, and `Dictionaries`, as well as relationships, with links out to relevant documentation
+
+## Users & Authentication
+- Authentication Providers: Where pages show an authentication provider configuration, add a note that `name` is the same as its `type`
+
+## Static Hosting
+- File Metadata Attributes: Add `Website-Redirect-Location` to metadata info
+
+## Other
+- App Services Admin API
+  - Applications: Add documentation for product types in the GET all Apps endpoint
+  - Authentication Providers: where endpoints show an authentication provider configuration, add a note that `name` is the same as its `type`
+  - Deployment: Add documentation for GET and PATCH deployment configuration
+  - Environments: Add documentation for Set Environment & Environment Values endpoints
+  - Add the São Paulo region ID to the list of available AWS deployment regions
+- Release Notes: Add release notes for new São Paulo region, updates to the Admin API endpoint to fetch Atlas Triggers and Atlas Data API apps
+
+# November 11, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Atlas Device Sync: Clarify that if a user has write permission, they also have read permission, regardless of the value of a `read` field or expression.
+- Deploy/Deployment Models & Regions: Add `Region` column to Cloud Deployment Regions reference table
+
+## Device Sync
+- Configure and Update Your Data Model: Refactor section to improve clarity about schema/data modeling
+  - Refactor Data Model Overview to be higher level 
+  - Change "Schema" to "Data Model" in navigation
+  - Refer to "App Services Schema" instead of "Device Sync Schema"
+  - Add a new "Data Model Mapping" page describing how Realm Objects map to the App Services Schema
+- Configure Sync/Compact an Atlas Volume: New page with an overview and steps to compact an Atlas volume
+- Handle Errors/Client Reset: Add a new tab with a link to the Flutter SDK client reset docs
+- Throughout section: De-emphasize Partition-Based Sync. Where both apply, for example in configuration, present Flexible Sync first. Where possible, move Partition-Based Sync docs to a new Partition-Based Sync Mode page in the Reference section.
+
+## Data API
+- Data API Endpoints: Add `<Cloud>` to endpoint base URL example
+
+## Triggers
+- Disable a Trigger: New "Restoring from a Snapshot" section
+
+## Users & Authentication
+- Authentication Providers/API Key Authentication: Add more details about User vs. Server API keys
+
+## Reference
+- Template Apps: Remove note about how to get outdated UIKit template app; it only supports Partition-Based Sync and is not compatible with the Flexible Sync backend
+
+## Other
+- Admin API
+  - Data API
+    - Fix broken link to configuration reference docs
+    - Add `validation_method` details to endpoints
+  - GraphQL API: Fix broken link to configuration reference docs
+  - Endpoints: Add `function_id` to config object details in create endpoint
+
+# November 4, 2022
+
+## Get Started
+- Device Sync Tutorial/Flutter: Remove the step instructing users to delete app data; no longer needed after template app updates
+- Triggers, Functions & Values Tutorial: Update the GitHub Issue Tracker tutorial to fix bugs, clarify wording, add info in places
+
+## Device Sync
+- Define Data Access Patterns/Flexible Sync Permissions Guide: Update permissions template names
+
+## Triggers
+- Triggers Code Examples: New link in the Table of Contents going to the Triggers examples GitHub repository
+- Various pages: Link to the Triggers examples GitHub repository where relevant throughout section
+
+## Users & Authentication
+- Various pages: Add Flutter SDK to SDK tabs on authentication provider pages
+
+## Reference
+- Template Apps: Update template app descriptions in the table of available templates
+
+## Other
+- Admin API: Add new endpoint to retrieve App Services metrics
+- New [atlas-app-services-examples GitHub repository in the MongoDB org](https://github.com/mongodb/atlas-app-services-examples/tree/main/triggers-examples) containing Triggers & Functions use cases and code examples, including integration tests
+
+# October 28, 2022
+
+## Get Started/Tutorials
+- Change "Tutorials" to "Get Started" in the left navigation
+- Create a "Get Started" landing page with information about template apps and cards for tutorials
+- Move client tutorials from Realm docs to this section
+- Device Sync Tutorial - Flutter: Incorporate feedback from a Google Developer Advocate's review
+
+## Device Sync
+- Landing Page: Create new Device Sync landing page, and apply small tweaks
+- Get Started: Remove unnecessary text from "Overview" page, rename it to "Get Started"
+- Define Data Access Patterns/Sync Rules and Permissions: Add `%stringToOid` to supported expansions
+- Go to Production: New section 
+  - Production Load Testing: Existing page moved from the top-level navigation within the Sync section
+  - Production Checklist: New page containing the "Best Practices" from the old "Overview" page
+- Technical Details: New section containing the Sync Protocol & Conflict Resolution pages moved from "Learn" section
+- Remove the "Learn" section
+
+## Users & Authentication
+- Authentication Providers/Custom JWT Authentication: Move former "JWT Tutorial" to a new "Walkthrough" section on this page
+
+## MongoDB Data Sources
+- CRUD & Aggregation APIs: Remove `arrayFilters` from unsupported options
+
+## Reference
+- Billing
+  - Clarify free tier billing description
+  - Add new "Free tier thresholds" subsection to improve information discoverability
+  - Remove bold text after links to address styling bug
+
+## Other
+- Admin API: Add details for Trigger event processors
+- Various: Update note about third-party service deprecation to reflect new date of **1 Aug 2023**
+
+# October 21, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Triggers: Add the `tolerate_resume_errors` bool to the config documentation
+
+## Device Sync
+- What is Atlas Device Sync/Atlas Device Sync Overview: Update prerequisites to add details about MongoDB version required for Flexible Sync
+- Configure Sync/Enable Atlas Device Sync: Remove unnecessary screenshots, remove steps from Asymmetric Sync details
+
+## Functions
+- Context: Add `context.app` to Function context, new "Get App Metadata" section with details
+
+## Triggers
+- Database Triggers: Add details about automatically resuming a suspended trigger
+
+## MongoDB Data Sources
+- Wire Protocol: Update Wire Protocol URLs to match new pattern
+
+## Other
+- Admin API: Add `tolerate_resume_errors` to trigger properties
+- Release Notes: Add release notes for October 20, 2022 release
+
+# October 14, 2022
+
+## Functions
+- JavaScript Support: Added BigInt to list of supported JS objects and alphabetized list of objects
+- Query MongoDB Atlas, Aggregate Data
+  - Find Data with Atlas Search: Made note about limitations to the $$SEARCH_META aggregation variable and under what conditions the variable is available for use
+- Functions, Constraints: Raised request timeout from 120s to 150s
+
+## MongoDB Data Sources
+- CRUD & Aggregation APIs: Made note about limitations to the $$SEARCH_META aggregation variable and under what conditions the variable is available for use
+
+## Manage & Deploy Apps
+- Deployment Models & Regions: Removed Ohio and Sao Paulo from local regions list
+- Secure, Firewall Configuration: Added AWS, Azure, and GCP IP addresses to firewall configuration
+
+## Admin API
+- Applications: Removed Ohio and Sao Paulo from local regions list
+
+# October 7, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Atlas Device Sync: Update configuration details for Recovery Mode
+
+## Device Sync
+- What is Atlas Device Sync?/Atlas Device Sync Overview: Add link to Realm SDKs on first reference
+- Configure and Update Your Data Model
+  - Update a Schema: Specify that breaking changes prevent automatic client recovery and require client applications to implement a manual error handler
+- Configure Sync
+  - Enable Atlas Device Sync: Update procedure details with info about Client Max Offline Days and Recovery Mode
+  - Pause or Terminate Sync: Remove "manual" from client reset mentions, add link to React Native SDK client reset docs
+- Handle Errors
+  - Client Reset: Update docs for client recovery, including:
+    - Add information about automatic client recovery
+    - Add a new procedure for how to enable or disable Recovery Mode
+    - Provide details about the different client reset modes & client reset recovery rules
+    - Update details about discard local - now discard unsynced changes
+    - Cover how to handle breaking schema changes
+  - Sync Errors: Clarify that `ErrorWriteNotAllowed` in older Realm SDK versions requires a manual client reset
+
+## Static Hosting
+- Landing page
+  - Add note about static hosting requiring a paid tier
+  - Remove reference docs links from landing page to reduce duplication & maintenance issues
+- Enable Hosting: Add note about static hosting requiring a paid tier
+
+## Values & Secrets
+- Landing page: Remove reference docs links from landing page to reduce duplication & maintenance issues
+
+## Logs
+- Landing page: Remove reference docs links from landing page to reduce duplication & maintenance issues
+
+## Other
+- Admin API: Add endpoints for getting a single deploy and redeploying an app
+
 # September 30, 2022
 
 ## Manage & Deploy Apps

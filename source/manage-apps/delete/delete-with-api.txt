@@ -1,7 +1,7 @@
 .. _delete-app-api:
 
 ======================================
-Delete an {+app+} (Atlas App Services API)
+Delete an App (Atlas App Services API)
 ======================================
 
 .. default-domain:: mongodb
@@ -12,17 +12,17 @@ Delete an {+app+} (Atlas App Services API)
    :depth: 2
    :class: singlecol
 
-You can use the :ref:`{+service-short+} Admin API <admin-api>` to delete a server-side
-{+app+}.
+You can use the :ref:`App Services Admin API <admin-api>` to delete a server-side
+App.
 
 Prerequisites
 -------------
-A `{+atlas+}
+A `MongoDB Atlas
 <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_
 :atlas:`programmatic API key </configure-api-access/#programmatic-api-keys>`
 for the MongoDB Cloud account you wish to log in with. You must be a
 :atlas:`Project Owner </reference/user-roles/#project-roles>` of the 
-{+atlas-short+} project where you want to delete the {+app+}.
+Atlas project where you want to delete the App.
 
 Procedure
 ---------
@@ -36,24 +36,24 @@ Procedure
 
    .. step:: Get the Group ID
 
-      To delete a {+app+} you need the Project ID (sometimes referred to as
-      the Group ID) of the {+atlas+} project that contains the app. You will
+      To delete a app you need the Project ID (sometimes referred to as
+      the Group ID) of the MongoDB Atlas project that contains the App. You will
       include this ID in the URL of API requests.
 
 
    .. step:: Get the Application ID
 
-      To delete an {+app+} you will need to find the Application ID of the app.
+      To delete an App you will need to find the Application ID of the app.
 
       .. include:: /includes/api-get-application-id.rst
 
       Find the app you want to delete and save the ``_id`` field for the last step.
 
 
-   .. step:: Delete the {+app+}
+   .. step:: Delete the App
 
       The API has an :admin-api-endpoint:`endpoint <operation/adminDeleteApplication>`
-      through which you can delete an {+app+}.
+      through which you can delete an App.
       Your request should include:
 
       - The ``access_token`` from step 1 in a :mdn:`Bearer token <Web/HTTP/Authentication>` ``Authorization`` header.

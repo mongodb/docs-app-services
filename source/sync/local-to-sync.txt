@@ -22,7 +22,7 @@ backend. Then, make code changes in your client applications.
 
 In the following sections, you will learn to do the following on the backend:
 
-#. Create a new App in {+atlas+},
+#. Create a new App in MongoDB Atlas,
 #. Configure at least one authentication provider
 #. Choose a Sync type.
 
@@ -38,8 +38,8 @@ synced realm.
 Create an App
 ~~~~~~~~~~~~~
 
-To sync your data between devices and {+atlas+}, you first need to create
-an {+app+}. This App provides a gateway to the data and data security
+To sync your data between devices and MongoDB Atlas, you first need to create
+an App. This App provides a gateway to the data and data security
 in the form of user authentication, data encryption, and access control.
 
 To get started creating the backend app, follow the steps in 
@@ -57,27 +57,16 @@ To set up an authentication provider, choose one of the
 providers and follow the configuration steps for the provider(s)
 of your choice.
 
-Choose a Sync Type
+Choose a Sync Mode
 ~~~~~~~~~~~~~~~~~~
 
-.. tabs::
+There are two Sync Modes: Flexible Sync and the older :ref:`Partition-Based Sync
+<partition-based-sync>`. We recommend using Flexible Sync.
 
-   .. tab:: Flexible Sync
-      :tabid: flex
-
-      With Flexible Sync, clients synchronize subsets of data based
-      on queries to **queryable fields**. When configuring Flexible Sync,
-      you'll decide which fields clients can query upon. To learn more about
-      configuring flexible sync, follow the steps in :ref:`<enable-flexible-sync>`.
-
-   .. tab:: Partition Based Sync
-      :tabid: pbs
-
-      With Partition Based Sync, clients synchronize data based on
-      **partitions**. When configuring Partition Based Sync, you'll choose
-      a field whose discrete values represent those partitions. We call
-      this field the **partition key**. To learn more about how to
-      choose a partition key, see :ref:`<sync-partitions>`.
+With Flexible Sync, clients synchronize subsets of data based on queries to
+**queryable fields**. When configuring Flexible Sync, you decide which fields
+clients can query upon. To learn more, follow the steps in
+:ref:`<enable-flexible-sync>`.
 
 Update the Client App
 ---------------------
@@ -127,7 +116,7 @@ App Logic
    synced realm.
 
 #. Copy the modified record to the new synced realm. Sync automatically
-   copies the record to {+atlas+} when connected to your App.
+   copies the record to MongoDB Atlas when connected to your App.
 
 #. Confirm that all records you want to preserve are in the new realm.
 

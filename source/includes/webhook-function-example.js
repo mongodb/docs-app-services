@@ -19,6 +19,6 @@ exports = async function (payload, response) {
   }
   // This return value does nothing because we already modified the response object.
   // If you do not modify the response object and you enable *Respond with Result*,
-  // {+service-short+} will include this return value as the response body.
+  // App Services will include this return value as the response body.
   return { msg: "finished!" };
 };

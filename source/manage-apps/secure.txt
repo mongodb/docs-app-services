@@ -36,7 +36,7 @@ like:
 Application Users
 -----------------
 
-You can secure App Services applications with :ref:`built-in user management
+You can secure App Services Apps with :ref:`built-in user management
 <users-and-authentication>`. With the built-in user management of App Services,
 only authorized users can access your App. You can
 :ref:`delete <delete-user>` or :ref:`disable <disable-user>` users, and 
@@ -64,7 +64,7 @@ Data Access Permissions
 Use App Services data access rules to grant read and write access to data.
 Apps that use Atlas Device Sync define data access permissions during the process
 of enabling Device Sync. Apps that do not use Device Sync can 
-link an {+atlas+} data source, and define permissions to perform CRUD 
+link an MongoDB Atlas data source, and define permissions to perform CRUD 
 operations on that data source.
 
 MongoDB data access rules prevent operations where users do not have 
@@ -76,48 +76,16 @@ cannot view or modify data.
 App Services Applications with Sync
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you enable Atlas Device Sync for your App, you define data access rules
-that determine which data users can read and write. The :ref:`Sync Mode 
-<sync-modes>` you select determines which types of permissions apply 
-for your application.
-
-Partition-Based Sync
-````````````````````
-
-When you :ref:`enable Partition-Based Sync <enable-pbs-sync>`, you
-specify the :ref:`partition key <sync-partitions>` that gives users 
-access to data. You can define :ref:`JSON expressions <expressions>` to 
-give users read and write permissions for the partition.
-
-When you access a synced App from a client, you specify the partition
-value that the logged-in user can access. The user only has access to the 
-partition key and value you define in your app. The user cannot read or 
-write data whose partition key value does not match the conditions you specify
-when you configure Device Sync.
-
-Flexible Sync
-`````````````
-
-When you :ref:`enable Flexible Sync <enable-flexible-sync>`, you specify
-the :ref:`fields that your client application can query <queryable-fields>`, 
-as well as :ref:`rules to apply read and write permissions 
-<flexible-sync-rules-and-permissions>`. You can define :ref:`JSON expressions 
-<expressions>` to give users read and write permissions for specific 
-collections, and define :ref:`default roles <default-roles>` that apply 
-permissions across all collections.
-
-Your client application can query for objects via these queryable fields. 
-Users can then access objects that match the query where they have read or 
-read and write permission to access the objects. Objects that match the query, 
-but where the user does not have read or read and write permission, do not 
-sync to the client application.
+Atlas Device Sync allows you to define data access rules that determine which
+users can read or write which data. To learn how to configure these rules, refer
+to :ref:`sync-permissions`.
 
 .. _security-atlas-permissions:
 
 MongoDB Atlas Data Sources
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you access `{+atlas+}
+When you access `MongoDB Atlas
 <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_
 through App Services, you can define roles that enable users to read and
 modify data. App Services uses a strict rules system that prevents
@@ -132,17 +100,17 @@ search or read data.
 
 .. note::
 
-   When you access {+atlas+} through an App with Atlas Device Sync enabled, the
+   When you access MongoDB Atlas through an App with Atlas Device Sync enabled, the
    permissions you define for Device Sync apply, instead of the 
    :ref:`role-based permissions <define-roles-and-permissions>` you define 
-   when you link an {+atlas+} data source.
+   when you link an MongoDB Atlas data source.
 
 .. _security-developer-access:
 
 Developer Access
 ~~~~~~~~~~~~~~~~
 
-Every App Services application is associated with a specific :atlas:`MongoDB
+Every App is associated with a specific :atlas:`MongoDB
 Atlas organization and project </organizations-projects>`. App Services determines the
 developer access permissions for a given MongoDB Cloud user based on their
 assigned :atlas:`project roles </access/manage-project-access>` in the project
@@ -190,9 +158,9 @@ Transport Layer Security (TLS)
 App Services uses `TLS 1.3 <https://datatracker.ietf.org/doc/html/rfc8446>`__
 to secure all network requests to and from your application, including:
 
-- Apps that connect from a {+client-sdk+}.
+- Apps that connect from a Realm SDK.
 - Data API and GraphQL requests sent over HTTPS.
-- Queries and operations on a linked {+atlas+} data source.
+- Queries and operations on a linked MongoDB Atlas data source.
 
 The TLS certificate is pre-defined and cannot be customized or disabled.
 
@@ -221,7 +189,7 @@ the following sections.
 
 .. note::
    
-   If you run a function from the {+ui+}, the request originates from
+   If you run a function from the Atlas App Services UI, the request originates from
    the server nearest to you, not the region the app is deployed to.
 
 AWS
@@ -293,6 +261,12 @@ the following IP addresses:
    15.188.152.56
    13.39.52.19
    15.188.159.135
+   177.71.159.160
+   52.67.231.12
+   18.230.146.14
+   52.67.94.32
+   18.230.109.192
+   18.229.199.232
    3.212.79.116
    3.92.113.229
    34.193.91.42
@@ -430,7 +404,7 @@ Summary
 - Built-in user management handles authentication and ensures only logged-in
   users can access your App. 
 - Data access permissions enable you to specify read and write permissions for 
-  Atlas Device Sync, linked {+atlas+} data sources, and developers building your apps.
+  Atlas Device Sync, linked MongoDB Atlas data sources, and developers building your apps.
 - Network security features enable you to guard against unauthorized access 
   from unknown IP addresses or URLs.
 - Store values and secrets and refer to them by name to remove sensitive 

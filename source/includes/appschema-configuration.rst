@@ -164,7 +164,7 @@ Configuration
 
           * - | ``mongo_service_id``
               | String
-            - The service ID of the :ref:`{+atlas+} data source
+            - The service ID of the :ref:`MongoDB Atlas data source
               <data-sources>` that contains the custom user
               data. You can find this value in the ``id`` field of the
               service configuration file.
@@ -203,7 +203,7 @@ Configuration
    
    * - | ``location``
        | String
-     - The name of the :ref:`cloud region <realm-regions>`
+     - The name of the :ref:`cloud region <deployment-regions>`
        that the application is deployed in.
 
        - :ref:`Local applications <local-deployment>` process all

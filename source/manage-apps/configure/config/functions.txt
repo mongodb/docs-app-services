@@ -30,7 +30,7 @@ in the function manifest file: ``/functions/config.json``.
    Atlas App Services automatically adds functions to the manifest on import if
    they don't already have a configuration defined. If you're okay with the
    default settings, you can skip defining the configuration for a function and
-   let {+service-short+} do it for you. The manifest will include the generated
+   let App Services do it for you. The manifest will include the generated
    configurations the next time you export or pull your app.
 
 .. code-block:: json
@@ -43,7 +43,7 @@ in the function manifest file: ``/functions/config.json``.
        "can_evaluate": { <JSON Expression> },
        "disable_arg_logs": <Boolean>,
        "run_as_system": <Boolean>,
-       "run_as_user_id": "<{+service-short+} User ID>",
+       "run_as_user_id": "<App Services User ID>",
        "run_as_user_id_script_source": "<Function Source Code>"
      },
      ...
@@ -71,12 +71,12 @@ in the function manifest file: ``/functions/config.json``.
    * - | ``can_evaluate``
        | JSON Expression (default: ``true``)
      - A :ref:`JSON expression <expressions>` that evaluates to ``true`` if the
-       function is allowed to execute. {+service-short+} evaluates this
+       function is allowed to execute. App Services evaluates this
        expression for every incoming request.
    
    * - | ``disable_arg_logs``
        | Boolean
-     - If ``true``, {+service-short+} omits the arguments provided to the
+     - If ``true``, App Services omits the arguments provided to the
        function from the :doc:`function execution log entry </logs/function>`.
    
    * - | ``run_as_system``
@@ -87,14 +87,14 @@ in the function manifest file: ``/functions/config.json``.
    
    * - | ``run_as_user_id``
        | String
-     - The unique ID of a :doc:`{+service-short+} User </authentication>` that the
+     - The unique ID of a :doc:`App Services User </authentication>` that the
        function always executes as. Cannot be used with
        ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id_script_source``
        | String
      - A stringified :doc:`function </functions>` that runs whenever the
-       function is called and returns the unique ID of a :doc:`{+service-short+}
+       function is called and returns the unique ID of a :doc:`App Services
        User </authentication>` that the function executes as. Cannot be used with
        ``run_as_user_id``.
 
@@ -110,7 +110,7 @@ the main function that runs whenever a request calls the function.
 .. important::
    
    All of your function source code files must be in the ``/functions``
-   directory. {+service-short+} does not recognize functions nested in subdirectories of
+   directory. App Services does not recognize functions nested in subdirectories of
    ``/functions``.
 
 .. code-block:: javascript

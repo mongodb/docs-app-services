@@ -1,28 +1,185 @@
-==========================
-{+sync+} Overview
-==========================
+:template: product-landing
+:hidefeedback: header
+:noprevnext:
 
-.. default-domain:: mongodb
+=================
+Atlas Device Sync
+=================
 
 .. toctree::
    :titlesonly:
    :hidden:
    
-   What is {+sync+}? </sync/learn>
+   Get Started </sync/get-started>
    Configure and Update Your Data Model </sync/configure-your-data-model>
-   Define Data Access Patterns </sync/data-access-patterns>
    Configure Sync </sync/configure-device-sync>
    Handle Errors </sync/error-handling>
    Add Sync to a Local-Only App </sync/local-to-sync>
-   Sync Production Load Testing </sync/production-load-testing>
-   Event Library </sync/event-library>
+   Go to Production with Sync </sync/go-to-production>
+   Technical Details </sync/details>
 
-Want to learn more about {+sync+}? See: :ref:`{+sync+} Overview <sync-overview>`.
+.. introduction::
 
-- :doc:`What is {+sync+}? </sync/learn>`
-- :doc:`Configure and Update Your Data Model </sync/configure-your-data-model>`
-- :doc:`Define Data Access Patterns </sync/data-access-patterns>`
-- :doc:`Configure Sync </sync/configure-device-sync>`
-- :doc:`Handle Errors </sync/error-handling>`
-- :doc:`Add Sync to a Local-Only App </sync/local-to-sync>`
-- :doc:`Sync Production Load Testing </sync/production-load-testing>`
+   You're developing a mobile app. Your users want their data saved in the cloud
+   and accessible from their other devices. Network access on a mobile device
+   can be intermittent, so you write data locally on the device first. A
+   background process then synchronizes the data to the cloud and resolves any
+   conflicting writes.
+ 
+   Atlas Device Sync provides all of the above, so you can build better apps faster.
+
+   .. button:: Start Building with a Template App
+      :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
+
+.. image:: /images/plp/Spot_AzureBlue_Sync_Tech_RealmSync.png
+   :alt: Atlas Device Sync Illustration
+
+
+.. kicker:: What It Is
+
+Key Features
+------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: Realm in the Front, MongoDB in the Back
+      :icon: /images/icons/General_FEATURES_IntelligentEdge3x.png
+      :icon-alt: An icon depicting a mobile phone connecting with the cloud
+
+      Atlas Device Sync is a bridge between client apps using the :realm:`Realm SDKs </>`
+      and a MongoDB instance running in Atlas. Realm is a lightweight database
+      optimized for mobile development.
+
+   .. card::
+      :headline: Robust & Secure
+      :icon: /images/icons/Technical_REALM_ConflictResolution3x.png
+      :icon-alt: An icon depicting conflict resolution
+
+      Device Sync handles conflicts for you, so you don't have to write
+      complex custom code to resolve conflicting writes from multiple clients.
+      A user-based permissions system lets you control who can access which data.
+
+   .. card::
+      :headline: "Always-On" Experience
+      :icon: /images/icons/Technical_REALM_Offline3x.png
+      :icon-alt: An icon depicting network loss
+
+      Realm Database and Device Sync seamlessly handle intermittent
+      connectivity so users can continue using your app regardless of their
+      current network status.
+
+
+.. kicker:: Where to Begin
+
+Get Started
+-----------
+
+.. card-group::
+   :columns: 2
+   :style: compact
+
+   .. card::
+      :headline: Launch a Template Starter App
+      :cta: Register for a free Atlas account
+      :url: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
+      :icon: /images/icons/Technical_REALM_iOSAndriodCrossPlatform3x.png
+      :icon-alt: An icon depicting two mobile devices synchronizing data between each other
+
+      The best way to start using Device Sync is with a template starter app.
+      In the Atlas App Services UI, under the :guilabel:`App Services` tab, you can select a
+      template. Atlas configures a backend instance and gives you the
+      frontend code for a selection of platforms.
+
+   .. card::
+      :headline: Follow a Device Sync Tutorial
+      :cta: Visit the Tutorials Page
+      :url: https://www.mongodb.com/docs/atlas/app-services/get-started/#tutorials
+      :icon: /images/icons/General_CONTENT_Tutorial3x.png
+      :icon-alt: A tutorial icon
+
+      The mobile app tutorials guide you through building a feature on top of a
+      template starter app with Atlas Device Sync.
+
+
+.. kicker:: Next Steps
+
+Explore the Device Sync Documentation
+-------------------------------------
+
+.. procedure::
+
+   .. step:: Maintain Data Integrity with Schemas
+
+      Define your application data model with standard schemas that you can use
+      to validate data and generate language-specific classes. Read the
+      :ref:`sync-schema-overview` to get oriented.
+
+   .. step:: Configure & Enable Device Sync
+
+      Whether you based your app on one of our template apps or started from
+      scratch, at some point you'll want to configure Sync specially for your
+      needs. Read more: :ref:`enable-sync`.
+
+   .. step:: Protect User Data with Permissions
+
+      Device Sync provides a user-based permissions system that lets you
+      control who can access which data. To learn how to set up permissions for
+      a variety of real use cases, check out the
+      :ref:`flexible-sync-permissions-guide`.
+
+   .. step:: Handle Errors
+
+      Develop a robust app that can handle schema changes and data recovery
+      scenarios with the :ref:`client-resets` documentation. Troubleshoot other
+      errors and edge cases with the :ref:`sync-errors` reference. 
+
+   .. step:: Go to Production
+
+      Test your app under a simulated load with the
+      :ref:`sync-production-load-testing` guide, then get your app ready to ship
+      with the :ref:`sync-production-checklist`. To understand how costs scale
+      with usage beyond the free tier, refer to the :ref:`billing` page.
+
+
+.. kicker:: More Info
+
+End-to-End Security
+-------------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: On Device
+      :icon: /images/icons/Technical_REALM_Mobile3x.png
+      :icon-alt: An icon depicting a mobile app
+
+      Encrypt sensitive data in Realm Database files with the encryption APIs.
+
+      Built-in user authentication providers include anonymous, email/password,
+      API key, Custom Function, Custom JWT, Facebook, Google, and Apple.
+      
+   .. card::
+      :headline: In Flight
+      :icon: /images/icons/General_CLOUD_Transfer3x.png
+      :icon-alt: An icon depicting network upload and download
+
+      Device Sync encrypts all network traffic using Transport Layer Security
+      (TLS). Document and field-level permissions determine which data may be
+      synced to the device.
+
+   .. card::
+      :headline: In the Cloud
+      :icon: /images/icons/General_SECURITY_Default3x.png
+      :icon-alt: A padlock icon
+
+      MongoDB Atlas has features that meet essential compliance standards:
+
+      - Encrypted storage volumes
+      - Network isolation
+      - Role-based access management
+      - ISO, SOC, PCI, HIPAA, HITRUST, VPAT, GDPR, CSA
