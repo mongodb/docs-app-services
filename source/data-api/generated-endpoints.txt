@@ -29,7 +29,7 @@ document in a linked cluster by calling the ``insertOne`` endpoint:
         'https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne' \
         --header 'Content-Type: application/json' \
         --header 'Accept: application/json' \
-        --header 'api-key: TpqAKQgvhZE4r6AOzpVydJ9a3tB1BLMrgDzLlBLbihKNDzSJWTAHMVbsMoIOpnM6' \
+        --header 'apiKey: TpqAKQgvhZE4r6AOzpVydJ9a3tB1BLMrgDzLlBLbihKNDzSJWTAHMVbsMoIOpnM6' \
         --data-raw '{
             "dataSource": "mongodb-atlas",
             "database": "learn-data-api",
@@ -345,7 +345,7 @@ Data API requests must include a ``Content-Type`` header to specify the
             
             curl -X GET \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne \
-              -H 'api-key: <API Key>' \
+              -H 'apiKey: <API Key>' \
               -H 'Content-Type: application/ejson' \
               -H 'Accept: application/ejson' \
               --data-raw '{
@@ -375,7 +375,7 @@ Data API requests must include a ``Content-Type`` header to specify the
             
             curl -X POST \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/updateOne \
-              -H 'api-key: <API Key>' \
+              -H 'apiKey: <API Key>' \
               -H 'Content-Type: application/json' \
               --data-raw '{
                  "dataSource": "mongodb-atlas",
@@ -414,7 +414,7 @@ specified in your :ref:`Data API configuration <data-api-response-type>`.
             
             curl -X GET \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
-              -H 'api-key: <API Key>' \
+              -H 'apiKey: <API Key>' \
               -H 'Content-Type: application/json' \
               -H 'Accept: application/ejson' \
               --data-raw '{
@@ -444,7 +444,7 @@ specified in your :ref:`Data API configuration <data-api-response-type>`.
             
             curl -X POST \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
-              -H 'api-key: <API Key>' \
+              -H 'apiKey: <API Key>' \
               -H 'Content-Type: application/json' \
               -H 'Accept: application/json' \
               --data-raw '{
@@ -506,7 +506,7 @@ authentication providers:
          
          curl -X POST \
            https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
-           -H 'api-key: <API Key>' \
+           -H 'apiKey: <API Key>' \
            -H 'Content-Type: application/json' \
            --data-raw '{
              "dataSource": "mongodb-atlas",
@@ -553,7 +553,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/findOne' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -639,7 +639,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -678,7 +678,7 @@ Request Body
      - Optional
      - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`. The
        ``find`` action returns documents in the collection that match
-       this filter. 
+       this filter.
        
        If you do not specify a ``filter``, the action matches all
        document in the collection.
@@ -764,7 +764,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -798,7 +798,7 @@ Request Body
      - Required
      - An :manual:`EJSON </reference/mongodb-extended-json/>` document
        to insert into the collection.
-     - 
+     -
 
 Response
 ````````
@@ -842,7 +842,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertMany' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -876,7 +876,7 @@ Request Body
      - Required
      - An array of one or more :manual:`EJSON </reference/mongodb-extended-json/>`
        documents to insert into the collection.
-     - 
+     -
 
 Response
 ````````
@@ -908,7 +908,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/updateOne' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -948,14 +948,14 @@ Request Body
      - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
        The ``updateOne`` action modifies the first document in the
        collection that matches this filter.
-     - 
+     -
 
    * - update
      - object
      - Required
      - A :manual:`MongoDB Update Expression </tutorial/update-documents/>`
        that specifies how to modify the matched document.
-     - 
+     -
 
    * - upsert
      - boolean
@@ -1006,7 +1006,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/updateMany' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -1046,14 +1046,14 @@ Request Body
      - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
        The ``updateMany`` action modifies all documents in the
        collection that match this filter.
-     - 
+     -
 
    * - update
      - object
      - Required
      - A :manual:`MongoDB Update Expression </tutorial/update-documents/>`
        that specifies how to modify matched documents.
-     - 
+     -
 
    * - upsert
      - boolean
@@ -1104,7 +1104,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/replaceOne' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -1142,14 +1142,14 @@ Request Body
      - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
        The ``replaceOne`` action overwrites the first document in the
        collection that matches this filter.
-     - 
+     -
 
    * - replacement
      - object
      - Required
      - An :manual:`EJSON </reference/mongodb-extended-json/>` document
        that overwrites the matched document.
-     - 
+     -
 
    * - upsert
      - boolean
@@ -1199,7 +1199,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/deleteOne' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -1231,7 +1231,7 @@ Request Body
      - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
        The ``deleteOne`` action deletes the first document in the
        collection that matches this filter.
-     - 
+     -
 
 Response
 ````````
@@ -1263,7 +1263,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/deleteMany' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -1295,7 +1295,7 @@ Request Body
      - A :manual:`MongoDB Query Filter </tutorial/query-documents/>`.
        The ``deleteMany`` action deletes all documents in the collection
        that match this filter.
-     - 
+     -
 
 Response
 ````````
@@ -1327,7 +1327,7 @@ Example
    curl --request POST \
      'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/aggregate' \
      --header 'Content-Type: application/json' \
-     --header 'api-key: <API Key>' \
+     --header 'apiKey: <API Key>' \
      --data-raw '{
          "dataSource": "mongodb-atlas",
          "database": "learn-data-api",
@@ -1366,7 +1366,7 @@ Request Body
      - array of objects
      - Required
      - A :manual:`MongoDB Aggregation Pipeline </core/aggregation-pipeline/>`.
-     - 
+     -
 
 Response
 ````````
@@ -1412,7 +1412,7 @@ Error Codes
        
        The request was sent to an endpoint that does not exist.
        
-   * - 500s 
+   * - 500s
      - Server errors
        
        The Data API encountered an internal error and could not complete
