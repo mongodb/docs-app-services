@@ -1,3 +1,26 @@
+# December 2, 2022
+
+## Manage & Deploy Apps
+- Create
+  - Realm CLI: Remove outdated Template App table, and link out to the Template App page for the list of current app templates
+  - App Services API: Remove outdated Template App table, and link out to the Template App page for the list of current app templates
+- Deploy
+  - Deployment Models & Regions: 
+    - Cloud Deployment Regions: Add more details about global vs. local deployment region availability, deployment proximity, link to deployment model
+    - Add new deployment region: `aws-us-east-2` (Ohio)
+- Secure: Network Security/Firewall Configuration: Add new IP addresses for `aws-us-east-2` to AWS outbound requests list
+
+## Reference
+- Template Apps: Add Flexible Sync Rules guides to table of available app templates, update descriptions, alphabetize list
+- Service Limitations: Remove "Maximum Number of Concurrent Listening Clients" and information about `watch()` limits from the Change Stream Limitations section
+
+## App Services Admin API
+- Applications: 
+  - Update description of `provider_region` and the `CloudProviderRegion` `id` with more details and link to Cloud Deployment Regions page
+  - Add `aws-us-east-2` to the list of valid AWS deployment regions
+- Data API & Endpoints: Add details and example of creating a base URL for Data API endpoints & custom HTPPS endpoints
+- Unify credential support across the APIs by changing `-H 'api-key: <API Key>'` to `-H 'apiKey: <API Key>'`
+
 # November 25, 2022
 
 ## Get Started
