@@ -14,6 +14,9 @@ App Services provides a variety of metrics related to App Services and Device
 Sync. You can access your metrics data with the Admin API's
 :admin-api-endpoint:`getMetrics <tag/metrics/operation/adminGetMetrics>` endpoint.
 
+The content on this page is provided for your information. The exact metrics
+returned may be subject to change.
+
 .. Source derived from https://docs.google.com/spreadsheets/d/1cjQopjPUsEKde6TlqO38B0Ko6n4vTwl4tgJ-LHSbf7Y/edit#gid=1354315462
 
 Units
@@ -24,10 +27,14 @@ App Services expresses each metric in one of the following units:
 - BYTES_PER_SECOND
 - MILLISECONDS
 - SCALAR
-- SCALAR_PER_SECOND (that is, a count over time)
+- SCALAR_PER_SECOND
 
-A **scalar** is a singular value representing a magnitude or "count". Its exact
+A **scalar** is a singular value representing a magnitude or count. Its exact
 interpretation depends on the metric.
+
+A **scalar per second** represents a count over time ("rate"). The value is
+effectively the total count in the requested time window divided by the number
+of seconds in the window.
 
 Available Metrics
 -----------------
@@ -50,7 +57,7 @@ Available Metrics
 
   * - AUTH_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Total failed authentication requests.
+    -  failed authentication requests.
 
   * - AUTH_RESPONSE_MS
     - MILLISECONDS
@@ -58,19 +65,19 @@ Available Metrics
 
   * - AUTH_SUCCESSFUL_LOGIN
     - SCALAR_PER_SECOND
-    - Total successful logins.
+    - Rate of successful logins.
 
   * - AUTH_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful authentication requests.
+    - Rate of successful authentication requests.
 
   * - AUTH_TOTAL_USERS
     - SCALAR
-    - Authentication Users (Total)
+    - The total number of users.
 
   * - ENDPOINTS_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Endpoints Total Compute
+    - The number of milliseconds per second spent computing endpoint requests.
 
   * - ENDPOINTS_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -79,7 +86,7 @@ Available Metrics
 
   * - ENDPOINTS_FAILED_REQUEST
     - SCALAR_PER_SECOND
-    - Total failed endpoints requests.
+    - Rate of failed endpoints requests.
 
   * - ENDPOINTS_RESPONSE_MS
     - MILLISECONDS
@@ -87,7 +94,7 @@ Available Metrics
 
   * - ENDPOINTS_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful endpoint requests.
+    - Rate of successful endpoint requests.
 
   * - GQL_RESPONSE_MS
     - MILLISECONDS
@@ -95,7 +102,7 @@ Available Metrics
 
   * - GRAPH_QL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Total compute time for GraphQL.
+    - The number of milliseconds per second spent computing GraphQL requests.
 
   * - GRAPH_QL_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -103,11 +110,11 @@ Available Metrics
 
   * - GRAPH_QL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Total failed GraphQL requests.
+    - Rate of failed GraphQL requests.
 
   * - GRAPH_QL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful GraphQL requests.
+    - Rate of successful GraphQL requests.
 
   * - LF_RESPONSE_MS
     - MILLISECONDS
@@ -115,7 +122,7 @@ Available Metrics
 
   * - OVERALL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Overall total compute time.
+    - The number of milliseconds per second spent computing, overall.
 
   * - OVERALL_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -123,11 +130,11 @@ Available Metrics
 
   * - OVERALL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Overall total failed requests.
+    - Overall rate of failed requests.
 
   * - OVERALL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Overall total successful requests.
+    - Overall rate of successful requests.
 
   * - OVERALL_SYNC_MINUTES
     - SCALAR_PER_SECOND
@@ -135,7 +142,7 @@ Available Metrics
 
   * - SDK_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Total compute time spent in client SDK functions calls.
+    - The number of milliseconds per second spent computing client SDK functions calls.
 
   * - SDK_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -143,7 +150,7 @@ Available Metrics
 
   * - SDK_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Total failed function call requests from client SDKs.
+    - Rate of failed function call requests from client SDKs.
 
   * - SDK_FNS_RESPONSE_MS
     - MILLISECONDS
@@ -151,7 +158,8 @@ Available Metrics
 
   * - SDK_MQL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Total compute time spent in client SDK remote MongoDB access requests.
+    - The number of milliseconds per second spent computing client SDK remote
+      MongoDB access requests.
 
   * - SDK_MQL_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -160,7 +168,7 @@ Available Metrics
 
   * - SDK_MQL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Total failed client SDK remote MongoDB access requests.
+    - Rate of failed client SDK remote MongoDB access requests.
 
   * - SDK_MQL_RESPONSE_MS
     - MILLISECONDS
@@ -168,11 +176,11 @@ Available Metrics
 
   * - SDK_MQL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful client SDK remote MongoDB access requests.
+    - Rate of successful client SDK remote MongoDB access requests.
 
   * - SDK_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful function call requests from client SDKs.
+    - Rate of successful function call requests from client SDKs.
 
   * - SYNC_CLIENT_BOOTSTRAP_MS
     - MILLISECONDS
@@ -192,7 +200,7 @@ Available Metrics
 
   * - SYNC_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Total failed Device Sync requests.
+    - Rate of failed Device Sync requests.
 
   * - SYNC_HISTORY_WRITE_MS
     - MILLISECONDS
@@ -217,15 +225,15 @@ Available Metrics
 
   * - SYNC_SESSIONS_ENDED
     - SCALAR_PER_SECOND
-    - Total ended Device Sync sessions.
+    - Rate of ended Device Sync sessions.
 
   * - SYNC_SESSIONS_STARTED
     - SCALAR_PER_SECOND
-    - Total started Device Sync sessions.
+    - Rate of started Device Sync sessions.
 
   * - SYNC_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful Device Sync requests.
+    - Rate of successful Device Sync requests.
 
   * - SYNC_UPLOAD_PROPS_MS
     - MILLISECONDS
@@ -233,7 +241,7 @@ Available Metrics
 
   * - TRIGGERS_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Compute time spent for Triggers.
+    - Rate of compute time spent for Triggers.
 
   * - TRIGGERS_CURRENT_OPLOG_LAG_MS_SUM
     - MILLISECONDS
@@ -245,7 +253,7 @@ Available Metrics
 
   * - TRIGGERS_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Total failed Triggers requests.
+    - Rate of failed Triggers requests.
 
   * - TRIGGERS_RESPONSE_MS
     - MILLISECONDS
@@ -253,7 +261,7 @@ Available Metrics
 
   * - TRIGGERS_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Total successful Triggers requests.
+    - Rate of successful Triggers requests.
 
 .. [#f1] 95th percentile means that the reading for the given metric is below
     the given value 95% of the time.
