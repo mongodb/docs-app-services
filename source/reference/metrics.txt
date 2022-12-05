@@ -1,0 +1,252 @@
+.. _app-services-metrics:
+
+==============================
+App Services Metrics Reference
+==============================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+App Services provides a variety of metrics related to App Services and Device
+Sync. You can access your metrics data with the Admin API's
+:admin-api-endpoint:`getMetrics <tag/metrics/operation/adminGetMetrics>` endpoint.
+
+.. Source derived from https://docs.google.com/spreadsheets/d/1cjQopjPUsEKde6TlqO38B0Ko6n4vTwl4tgJ-LHSbf7Y/edit#gid=1354315462
+
+Units
+-----
+
+App Services expresses each metric in one of the following units:
+
+- ``BYTES_PER_SECOND``
+- ``MILLISECONDS``
+- ``SCALAR``
+- ``SCALAR_PER_SECOND``
+
+Available Metrics
+-----------------
+
+P95 means 95th percentile, which means that the reading for the given metrics is
+below the given value 95% of the time.
+
+.. list-table::
+   :header-rows: 1
+
+  * - Metric Name
+    - Unit
+    - Description
+
+  * - ACTIVE_OPEN_SYNC_SESSIONS
+    - SCALAR
+    - Active Open Sync Sessions
+
+  * - AUTH_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - Authentication Data Egress
+
+  * - AUTH_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - Authentication Total Requests (Failure)
+
+  * - AUTH_RESPONSE_MS
+    - MILLISECONDS
+    - Auth Response (P95)
+
+  * - AUTH_SUCCESSFUL_LOGIN
+    - SCALAR_PER_SECOND
+    - Authentication Login (Success)
+
+  * - AUTH_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - Authentication Total Requests (Success)
+
+  * - AUTH_TOTAL_USERS
+    - SCALAR
+    - Authentication Users (Total)
+
+  * - ENDPOINTS_COMPUTE_MS
+    - SCALAR_PER_SECOND
+    - Endpoints Total Compute
+
+  * - ENDPOINTS_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - Endpoints Data Egress
+
+  * - ENDPOINTS_FAILED_REQUEST
+    - SCALAR_PER_SECOND
+    - Endpoints Total Requests (Failure)
+
+  * - ENDPOINTS_RESPONSE_MS
+    - MILLISECONDS
+    - Endpoints Response (P95)
+
+  * - ENDPOINTS_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - Endpoints Total Requests (Success)
+
+  * - GQL_RESPONSE_MS
+    - MILLISECONDS
+    - GraphQL Response (P95)
+
+  * - GRAPH_QL_COMPUTE_MS
+    - SCALAR_PER_SECOND
+    - GraphQL Total Compute
+
+  * - GRAPH_QL_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - GraphQL Data Egress
+
+  * - GRAPH_QL_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - GraphQL Total Requests (Failure)
+
+  * - GRAPH_QL_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - GraphQL Total Requests (Success)
+
+  * - LF_RESPONSE_MS
+    - MILLISECONDS
+    - LF Response (P95)
+
+  * - OVERALL_COMPUTE_MS
+    - SCALAR_PER_SECOND
+    - Overall Total Compute
+
+  * - OVERALL_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - Overall Data Egress
+
+  * - OVERALL_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - Overall Total Requests (Failure)
+
+  * - OVERALL_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - Overall Total Requests (Success)
+
+  * - OVERALL_SYNC_MINUTES
+    - SCALAR_PER_SECOND
+    - Overall Sync Minutes
+
+  * - SDK_COMPUTE_MS
+    - SCALAR_PER_SECOND
+    - SDK Functions Total Compute
+
+  * - SDK_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - SDK Functions Data Egress
+
+  * - SDK_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - SDK Functions Requests (Failure)
+
+  * - SDK_FNS_RESPONSE_MS
+    - MILLISECONDS
+    - Sync FNs Response (P95)
+
+  * - SDK_MQL_COMPUTE_MS
+    - SCALAR_PER_SECOND
+    - SDK MQL Compute MS
+
+  * - SDK_MQL_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - SDK MQL Data Egress
+
+  * - SDK_MQL_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - SDK MQL Total Requests (Failure)
+
+  * - SDK_MQL_RESPONSE_MS
+    - MILLISECONDS
+    - SDK MQL Response (P95)
+
+  * - SDK_MQL_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - SDK MQL Total Requests (Success)
+
+  * - SDK_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - SDK Functions Total Requests (Success)
+
+  * - SYNC_CLIENT_BOOTSTRAP_MS
+    - MILLISECONDS
+    - Sync Client Bootstrap (P95)
+
+  * - SYNC_CLIENT_UPLOADS_INVALID
+    - SCALAR_PER_SECOND
+    - Sync Client Invalid Uploads
+
+  * - SYNC_CURRENT_OPLOG_LAG_MS_SUM
+    - MILLISECONDS
+    - Sync Current Oplog Lag MS Sum
+
+  * - SYNC_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - Sync Data Egress
+
+  * - SYNC_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - Sync Total Requests (Failure)
+
+  * - SYNC_HISTORY_WRITE_MS
+    - MILLISECONDS
+    - Sync History Write (P95)
+
+  * - SYNC_MINUTES
+    - SCALAR_PER_SECOND
+    - Sync Minutes
+
+  * - SYNC_NUM_INTEGRATION_ATTEMPTS
+    - SCALAR_PER_SECOND
+    - Sync Num Integration Attempts
+
+  * - SYNC_NUM_UNSYNCABLE_DOC
+    - SCALAR
+    - Sync Unsyncable Documents
+
+  * - SYNC_OT_MS
+    - MILLISECONDS
+    - Sync Operational Transform (P95)
+
+  * - SYNC_SESSIONS_ENDED
+    - SCALAR_PER_SECOND
+    - Sync Sessions Ended
+
+  * - SYNC_SESSIONS_STARTED
+    - SCALAR_PER_SECOND
+    - Sync Sessions Started
+
+  * - SYNC_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - Sync Total Requests (Success)
+
+  * - SYNC_UPLOAD_PROPS_MS
+    - MILLISECONDS
+    - Sync Upload Props (P95)
+
+  * - TRIGGERS_COMPUTE_MS
+    - SCALAR_PER_SECOND
+    - Triggers Total Compute
+
+  * - TRIGGERS_CURRENT_OPLOG_LAG_MS_SUM
+    - MILLISECONDS
+    - Triggers Current Oplog Lag MS Sum
+
+  * - TRIGGERS_EGRESS_BYTES
+    - BYTES_PER_SECOND
+    - Triggers Data Egress
+
+  * - TRIGGERS_FAILED_REQUESTS
+    - SCALAR_PER_SECOND
+    - Triggers Total Requests (Failure)
+
+  * - TRIGGERS_RESPONSE_MS
+    - MILLISECONDS
+    - Triggers Response (P95)
+
+  * - TRIGGERS_SUCCESSFUL_REQUESTS
+    - SCALAR_PER_SECOND
+    - Triggers Total Requests (Success)
