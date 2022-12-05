@@ -21,16 +21,16 @@ Units
 
 App Services expresses each metric in one of the following units:
 
-- ``BYTES_PER_SECOND``
-- ``MILLISECONDS``
-- ``SCALAR``
-- ``SCALAR_PER_SECOND``
+- BYTES_PER_SECOND
+- MILLISECONDS
+- SCALAR
+- SCALAR_PER_SECOND (that is, a count over time)
+
+A **scalar** is a singular value representing a magnitude or "count". Its exact
+interpretation depends on the metric.
 
 Available Metrics
 -----------------
-
-P95 means 95th percentile, which means that the reading for the given metrics is
-below the given value 95% of the time.
 
 .. list-table::
    :header-rows: 1
@@ -41,27 +41,28 @@ below the given value 95% of the time.
 
   * - ACTIVE_OPEN_SYNC_SESSIONS
     - SCALAR
-    - Active Open Sync Sessions
+    - Active open sync sessions.
 
   * - AUTH_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - Authentication Data Egress
+    - The amount of data transferred from the server due to
+      authentication requests.
 
   * - AUTH_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Authentication Total Requests (Failure)
+    - Total failed authentication requests.
 
   * - AUTH_RESPONSE_MS
     - MILLISECONDS
-    - Auth Response (P95)
+    - 95th percentile [#f1]_ authentication response time.
 
   * - AUTH_SUCCESSFUL_LOGIN
     - SCALAR_PER_SECOND
-    - Authentication Login (Success)
+    - Total successful logins.
 
   * - AUTH_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Authentication Total Requests (Success)
+    - Total successful authentication requests.
 
   * - AUTH_TOTAL_USERS
     - SCALAR
@@ -73,180 +74,186 @@ below the given value 95% of the time.
 
   * - ENDPOINTS_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - Endpoints Data Egress
+    - The amount of data transferred from the server due to endpoints
+      requests.
 
   * - ENDPOINTS_FAILED_REQUEST
     - SCALAR_PER_SECOND
-    - Endpoints Total Requests (Failure)
+    - Total failed endpoints requests.
 
   * - ENDPOINTS_RESPONSE_MS
     - MILLISECONDS
-    - Endpoints Response (P95)
+    - 95th percentile [#f1]_ endpoint response time.
 
   * - ENDPOINTS_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Endpoints Total Requests (Success)
+    - Total successful endpoint requests.
 
   * - GQL_RESPONSE_MS
     - MILLISECONDS
-    - GraphQL Response (P95)
+    - 95th percentile [#f1]_ GraphQL response time.
 
   * - GRAPH_QL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - GraphQL Total Compute
+    - Total compute time for GraphQL.
 
   * - GRAPH_QL_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - GraphQL Data Egress
+    - The amount of data transferred from the server for GraphQL.
 
   * - GRAPH_QL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - GraphQL Total Requests (Failure)
+    - Total failed GraphQL requests.
 
   * - GRAPH_QL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - GraphQL Total Requests (Success)
+    - Total successful GraphQL requests.
 
   * - LF_RESPONSE_MS
     - MILLISECONDS
-    - LF Response (P95)
+    - 95th percentile [#f1]_ Log Forwarder (LF) response time.
 
   * - OVERALL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Overall Total Compute
+    - Overall total compute time.
 
   * - OVERALL_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - Overall Data Egress
+    - The amount of data transferred from the server overall.
 
   * - OVERALL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Overall Total Requests (Failure)
+    - Overall total failed requests.
 
   * - OVERALL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Overall Total Requests (Success)
+    - Overall total successful requests.
 
   * - OVERALL_SYNC_MINUTES
     - SCALAR_PER_SECOND
-    - Overall Sync Minutes
+    - Overall sync minutes.
 
   * - SDK_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - SDK Functions Total Compute
+    - Total compute time spent in client SDK functions calls.
 
   * - SDK_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - SDK Functions Data Egress
+    - The amount of data transferred from the server due to SDK functions calls.
 
   * - SDK_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - SDK Functions Requests (Failure)
+    - Total failed function call requests from client SDKs.
 
   * - SDK_FNS_RESPONSE_MS
     - MILLISECONDS
-    - Sync FNs Response (P95)
+    - 95th percentile [#f1]_ response time for client SDK function calls.
 
   * - SDK_MQL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - SDK MQL Compute MS
+    - Total compute time spent in client SDK remote MongoDB access requests.
 
   * - SDK_MQL_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - SDK MQL Data Egress
+    - The amount of data transferred from the server due to client SDK remote
+      MongoDB access requests.
 
   * - SDK_MQL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - SDK MQL Total Requests (Failure)
+    - Total failed client SDK remote MongoDB access requests.
 
   * - SDK_MQL_RESPONSE_MS
     - MILLISECONDS
-    - SDK MQL Response (P95)
+    - 95th percentile [#f1]_ client SDK remote MongoDB access response time.
 
   * - SDK_MQL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - SDK MQL Total Requests (Success)
+    - Total successful client SDK remote MongoDB access requests.
 
   * - SDK_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - SDK Functions Total Requests (Success)
+    - Total successful function call requests from client SDKs.
 
   * - SYNC_CLIENT_BOOTSTRAP_MS
     - MILLISECONDS
-    - Sync Client Bootstrap (P95)
+    - 95th percentile [#f1]_ Device Sync client bootstrap time.
 
   * - SYNC_CLIENT_UPLOADS_INVALID
     - SCALAR_PER_SECOND
-    - Sync Client Invalid Uploads
+    - Device Sync client invalid uploads.
 
   * - SYNC_CURRENT_OPLOG_LAG_MS_SUM
     - MILLISECONDS
-    - Sync Current Oplog Lag MS Sum
+    - The sum of Device Sync oplog lag in milliseconds.
 
   * - SYNC_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - Sync Data Egress
+    - The amount of data transferred from the server for Device Sync.
 
   * - SYNC_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Sync Total Requests (Failure)
+    - Total failed Device Sync requests.
 
   * - SYNC_HISTORY_WRITE_MS
     - MILLISECONDS
-    - Sync History Write (P95)
+    - 95th percentile [#f1]_ Device Sync history write time.
 
   * - SYNC_MINUTES
     - SCALAR_PER_SECOND
-    - Sync Minutes
+    - Minutes spent syncing.
 
   * - SYNC_NUM_INTEGRATION_ATTEMPTS
     - SCALAR_PER_SECOND
-    - Sync Num Integration Attempts
+    - Number of Device Sync integration attempts.
 
   * - SYNC_NUM_UNSYNCABLE_DOC
     - SCALAR
-    - Sync Unsyncable Documents
+    - Number of unsyncable documents.
 
   * - SYNC_OT_MS
     - MILLISECONDS
-    - Sync Operational Transform (P95)
+    - 95th percentile [#f1]_ time spent doing operational transform (OT) for
+      Device Sync.
 
   * - SYNC_SESSIONS_ENDED
     - SCALAR_PER_SECOND
-    - Sync Sessions Ended
+    - Total ended Device Sync sessions.
 
   * - SYNC_SESSIONS_STARTED
     - SCALAR_PER_SECOND
-    - Sync Sessions Started
+    - Total started Device Sync sessions.
 
   * - SYNC_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Sync Total Requests (Success)
+    - Total successful Device Sync requests.
 
   * - SYNC_UPLOAD_PROPS_MS
     - MILLISECONDS
-    - Sync Upload Props (P95)
+    - 95th percentile [#f1]_ Device Sync upload propagation time.
 
   * - TRIGGERS_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - Triggers Total Compute
+    - Compute time spent for Triggers.
 
   * - TRIGGERS_CURRENT_OPLOG_LAG_MS_SUM
     - MILLISECONDS
-    - Triggers Current Oplog Lag MS Sum
+    - Sum of Triggers oplog lag.
 
   * - TRIGGERS_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - Triggers Data Egress
+    - The amount of data transferred from the server for Triggers.
 
   * - TRIGGERS_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    - Triggers Total Requests (Failure)
+    - Total failed Triggers requests.
 
   * - TRIGGERS_RESPONSE_MS
     - MILLISECONDS
-    - Triggers Response (P95)
+    - 95th percentile [#f1]_ Triggers response time.
 
   * - TRIGGERS_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
-    - Triggers Total Requests (Success)
+    - Total successful Triggers requests.
+
+.. [#f1] 95th percentile means that the reading for the given metric is below
+    the given value 95% of the time.
