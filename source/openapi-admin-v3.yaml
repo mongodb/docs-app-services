@@ -2239,8 +2239,10 @@ paths:
       operationId: adminGetMetrics
       summary: Retrieve App Services metrics
       description: |-
-        Retrieves a variety of metrics, including: Compute Time, Data
-        Transfer, Sync Minutes, Requests Succeeded, Requests Failed.
+        Retrieves a variety of metrics, including: Compute Time, Data Transfer,
+        Sync Minutes, Requests Succeeded, Requests Failed. For a complete list
+        of available metrics, see [App
+        Services Metrics Reference](https://mongodb.com/docs/atlas/app-services/reference/metrics)
       parameters:
         - "$ref": "#/components/parameters/GroupId"
         - "$ref": "#/components/parameters/AppId"
@@ -2306,7 +2308,11 @@ paths:
                                   specified by the metric's `unit` property.
                         name:
                           type: string
-                          description: The name of the metric.
+                          description: |-
+                            The name of the metric. For a complete list of
+                            available metrics and their units, see [App Services
+                            Metrics
+                            Reference](https://mongodb.com/docs/atlas/app-services/reference/metrics).
                         units:
                           type: string
                           description: The unit of each data point's `value` property.
