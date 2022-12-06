@@ -14,8 +14,7 @@ App Services provides a variety of metrics related to App Services and Device
 Sync. You can access your metrics data with the Admin API's
 :admin-api-endpoint:`getMetrics <tag/metrics/operation/adminGetMetrics>` endpoint.
 
-The content on this page is provided for your information. The exact metrics
-returned may be subject to change.
+The exact metrics returned may be subject to change.
 
 .. Source derived from https://docs.google.com/spreadsheets/d/1cjQopjPUsEKde6TlqO38B0Ko6n4vTwl4tgJ-LHSbf7Y/edit#gid=1354315462
 
@@ -53,16 +52,17 @@ Available Metrics
 
   * - ACTIVE_OPEN_SYNC_SESSIONS
     - SCALAR
-    - Active open sync sessions.
+    - The total number of sync sessions ever opened or activated up to the
+      reading's point in time.
 
   * - AUTH_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server due to
+    - The rate of data transferred from the server due to
       authentication requests.
 
   * - AUTH_FAILED_REQUESTS
     - SCALAR_PER_SECOND
-    -  Failed authentication requests.
+    - Rate of failed authentication requests.
 
   * - AUTH_RESPONSE_MS
     - MILLISECONDS
@@ -78,7 +78,7 @@ Available Metrics
 
   * - AUTH_TOTAL_USERS
     - SCALAR
-    - The total number of users.
+    - The total number of users ever created up to the reading's point in time.
 
   * - ENDPOINTS_COMPUTE_MS
     - SCALAR_PER_SECOND
@@ -86,7 +86,7 @@ Available Metrics
 
   * - ENDPOINTS_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server due to endpoints
+    - The rate of data transferred from the server due to endpoints
       requests.
 
   * - ENDPOINTS_FAILED_REQUEST
@@ -111,7 +111,7 @@ Available Metrics
 
   * - GRAPH_QL_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server for GraphQL.
+    - The rate of data transferred from the server for GraphQL.
 
   * - GRAPH_QL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
@@ -131,7 +131,7 @@ Available Metrics
 
   * - OVERALL_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server overall.
+    - The rate of data transferred from the server overall.
 
   * - OVERALL_FAILED_REQUESTS
     - SCALAR_PER_SECOND
@@ -151,7 +151,7 @@ Available Metrics
 
   * - SDK_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server due to SDK functions calls.
+    - The rate of data transferred from the server due to SDK functions calls.
 
   * - SDK_FAILED_REQUESTS
     - SCALAR_PER_SECOND
@@ -168,7 +168,7 @@ Available Metrics
 
   * - SDK_MQL_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server due to client SDK remote
+    - The rate of data transferred from the server due to client SDK remote
       MongoDB access requests.
 
   * - SDK_MQL_FAILED_REQUESTS
@@ -201,7 +201,7 @@ Available Metrics
 
   * - SYNC_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server for Device Sync.
+    - The rate of data transferred from the server for Device Sync.
 
   * - SYNC_FAILED_REQUESTS
     - SCALAR_PER_SECOND
@@ -221,7 +221,8 @@ Available Metrics
 
   * - SYNC_NUM_UNSYNCABLE_DOC
     - SCALAR
-    - Number of unsyncable documents.
+    - The total count of documents ever considered unsyncable up to the
+      reading's point in time.
 
   * - SYNC_OT_MS
     - MILLISECONDS
@@ -254,7 +255,7 @@ Available Metrics
 
   * - TRIGGERS_EGRESS_BYTES
     - BYTES_PER_SECOND
-    - The amount of data transferred from the server for Triggers.
+    - The rate of data transferred from the server for Triggers.
 
   * - TRIGGERS_FAILED_REQUESTS
     - SCALAR_PER_SECOND
