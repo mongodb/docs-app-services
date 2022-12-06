@@ -36,11 +36,16 @@ A **scalar per second** represents a count over time ("rate"). The value is
 effectively the total count in the requested time window divided by the number
 of seconds in the window.
 
+Some scalar per second values are expressed as a 95th percentile. This means
+that the reading for the given metric is below the given value 95% of the time
+and above it the other 5% of the time.
+
 Available Metrics
 -----------------
 
 .. list-table::
    :header-rows: 1
+   :widths: 50 20 30
 
   * - Metric Name
     - Unit
@@ -61,7 +66,7 @@ Available Metrics
 
   * - AUTH_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ authentication response time.
+    - 95th percentile authentication response time.
 
   * - AUTH_SUCCESSFUL_LOGIN
     - SCALAR_PER_SECOND
@@ -90,7 +95,7 @@ Available Metrics
 
   * - ENDPOINTS_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ endpoint response time.
+    - 95th percentile endpoint response time.
 
   * - ENDPOINTS_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
@@ -98,7 +103,7 @@ Available Metrics
 
   * - GQL_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ GraphQL response time.
+    - 95th percentile GraphQL response time.
 
   * - GRAPH_QL_COMPUTE_MS
     - SCALAR_PER_SECOND
@@ -118,7 +123,7 @@ Available Metrics
 
   * - LF_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ Log Forwarder (LF) response time.
+    - 95th percentile Log Forwarder (LF) response time.
 
   * - OVERALL_COMPUTE_MS
     - SCALAR_PER_SECOND
@@ -154,7 +159,7 @@ Available Metrics
 
   * - SDK_FNS_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ response time for client SDK function calls.
+    - 95th percentile response time for client SDK function calls.
 
   * - SDK_MQL_COMPUTE_MS
     - SCALAR_PER_SECOND
@@ -172,7 +177,7 @@ Available Metrics
 
   * - SDK_MQL_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ client SDK remote MongoDB access response time.
+    - 95th percentile client SDK remote MongoDB access response time.
 
   * - SDK_MQL_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
@@ -184,7 +189,7 @@ Available Metrics
 
   * - SYNC_CLIENT_BOOTSTRAP_MS
     - MILLISECONDS
-    - 95th percentile [*]_ Device Sync client bootstrap time.
+    - 95th percentile Device Sync client bootstrap time.
 
   * - SYNC_CLIENT_UPLOADS_INVALID
     - SCALAR_PER_SECOND
@@ -204,7 +209,7 @@ Available Metrics
 
   * - SYNC_HISTORY_WRITE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ Device Sync history write time.
+    - 95th percentile Device Sync history write time.
 
   * - SYNC_MINUTES
     - SCALAR_PER_SECOND
@@ -220,7 +225,7 @@ Available Metrics
 
   * - SYNC_OT_MS
     - MILLISECONDS
-    - 95th percentile [*]_ time spent doing operational transform (OT) for
+    - 95th percentile time spent doing operational transform (OT) for
       Device Sync.
 
   * - SYNC_SESSIONS_ENDED
@@ -237,7 +242,7 @@ Available Metrics
 
   * - SYNC_UPLOAD_PROPS_MS
     - MILLISECONDS
-    - 95th percentile [*]_ Device Sync upload propagation time.
+    - 95th percentile Device Sync upload propagation time.
 
   * - TRIGGERS_COMPUTE_MS
     - SCALAR_PER_SECOND
@@ -257,11 +262,9 @@ Available Metrics
 
   * - TRIGGERS_RESPONSE_MS
     - MILLISECONDS
-    - 95th percentile [*]_ Triggers response time.
+    - 95th percentile Triggers response time.
 
   * - TRIGGERS_SUCCESSFUL_REQUESTS
     - SCALAR_PER_SECOND
     - Rate of successful Triggers requests.
 
-.. [*] 95th percentile means that the reading for the given metric is below
-    the given value 95% of the time.
