@@ -1,0 +1,908 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: MongoDB Atlas Data API
+  description: An API to read, write, and aggregate data in MongoDB Atlas
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+security:
+  - Email: []
+    Password: []
+  - ApiKey: []
+  - CustomJwt: []
+servers:
+  - description: Data API Base URL
+    url: https://{region}.mongodb-api.com/app/{appId}/endpoint/data/v1
+    variables:
+      appId:
+        default: "your-app-id"
+      region:
+        default: "data"
+        enum:
+          # Global Deployment
+          - "data"
+          # AWS Local Deployment
+          - "us-east-1.aws.data"
+          - "us-west-2.aws.data"
+          - "us-east-2.aws.data"
+          - "eu-central-1.aws.data"
+          - "eu-west-1.aws.data"
+          - "eu-west-2.aws.data"
+          - "ap-southeast-1.aws.data"
+          - "ap-southeast-2.aws.data"
+          - "ap-south-1.aws.data"
+          - "sa-east-1.aws.data"
+          # Azure Local Deployment
+          - "eastus2.azure.data"
+          - "westus.azure.data"
+          - "westeurope.azure.data"
+          - "eastasia.azure.data"
+          - "southeastasia.azure.data"
+          # GCP Local Deployment
+          - "us-central1.gcp.data"
+          - "us-east4.gcp.data"
+          - "us-west1.gcp.data"
+          - "europe-west1.gcp.data"
+          - "asia-south1.gcp.data"
+paths:
+  /action/findOne:
+    post:
+      operationId: findOne
+      summary: Find One Document
+      description: Find a single document that matches a query.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/FindOneRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: { "text": "Do the dishes" }
+                projection: {
+                  "status": 1,
+                  "text": 1
+                }
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/FindOneRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: { "text": "Do the dishes" }
+                projection: {
+                  "status": 1,
+                  "text": 1
+                }
+      responses:
+        '200':
+          description: Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindOneResponseBody"
+              example:
+                document: {
+                  "_id": "6193504e1be4ab27791c8133",
+                  "status": "open",
+                  "text": "Do the dishes"
+                }
+            application/ejson:
+              schema:
+                $ref: "#/components/schemas/FindOneResponseBody"
+              example:
+                document: {
+                  "_id": { "$oid": "6193504e1be4ab27791c8133" },
+                  "status": "open",
+                  "text": "Do the dishes"
+                }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+  /action/find:
+    post:
+      operationId: find
+      summary: Find Documents
+      description: Find multiple documents that match a query.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/FindManyRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {
+                  "status": "complete"
+                }
+                projection: {
+                  "text": 1,
+                  "completedAt": 1
+                }
+                sort: {
+                  "completedAt": 1
+                }
+                limit: 10
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/FindManyRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {
+                  "status": "complete"
+                }
+                projection: {
+                  "text": 1,
+                  "completedAt": 1
+                }
+                sort: {
+                  "completedAt": 1
+                }
+                limit: 10
+      responses:
+        '200':
+          description: Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FindManyResponseBody"
+              example:
+                documents: [
+                  { "_id": "6193504e1be4ab27791c8133", "text": "Do the dishes", "completedAt": "2022-05-16T20:22:01.104Z" },
+                  { "_id": "6194604e1d38dc33792d8257", "text": "Feed the dog", "completedAt": "2022-05-17T05:12:42.828Z" }
+                ]
+            application/ejson:
+              schema:
+                $ref: "#/components/schemas/FindManyResponseBody"
+              example:
+                documents: [
+                  { "_id": { "$oid": "6193504e1be4ab27791c8133" }, "text": "Do the dishes", "completedAt": { $date: { $numberLong: "1652732521104" } } },
+                  { "_id": { "$oid": "6194604e1d38dc33792d8257" }, "text": "Feed the dog", "completedAt": { $date: { $numberLong: "1652764362828" } } }
+                ]
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+  /action/insertOne:
+    post:
+      operationId: insertOne
+      summary: Insert One Document
+      description: Insert a single document into a collection.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/InsertOneRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                document: {
+                  "status": "open",
+                  "text": "Do the dishes"
+                }
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/InsertOneRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                document: {
+                  "status": "open",
+                  "text": "Do the dishes"
+                }
+      responses:
+        '200':
+          description: Inserted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/InsertOneResponseBody"
+                  - properties:
+                      insertedId:
+                        type: string
+              example:
+                insertedId: "6193504e1be4ab27791c8133"
+            application/ejson:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/InsertOneResponseBody"
+                  - properties:
+                      insertedId:
+                        type: object
+              example:
+                insertedId: { "$oid": "6193504e1be4ab27791c8133" }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+  /action/insertMany:
+    post:
+      operationId: insertMany
+      summary: Insert Documents
+      description: Insert multiple documents into a collection.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/InsertManyRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                documents: [
+                  { "status": "open", "text": "Mop the floor" },
+                  { "status": "open", "text": "Clean the windows" }
+                ]
+              }
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/InsertManyRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                documents: [
+                  { "status": "open", "text": "Mop the floor" },
+                  { "status": "open", "text": "Clean the windows" }
+                ]
+              }
+      responses:
+        '200':
+          description: Inserted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/InsertManyResponseBody"
+                  - properties:
+                      insertedIds:
+                        type: array
+                        items:
+                          type: string
+                example: { insertedIds: ["61935189ec53247016a623c9", "61935189ec53247016a623ca"] }
+            application/ejson:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/InsertManyResponseBody"
+                  - properties:
+                      insertedIds:
+                        type: array
+                        items:
+                          type: object
+                example: {
+                  insertedIds: [
+                    {"$oid":"61935189ec53247016a623c9"},
+                    {"$oid":"61935189ec53247016a623ca"}
+                  ]
+                }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+  /action/updateOne:
+    post:
+      operationId: updateOne
+      summary: Update One Document
+      description: Update a single document in a collection.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/UpdateRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {} # todo
+                update: {} # todo
+                upsert: true
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/UpdateRequestBody"
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {} # todo
+                update: {} # todo
+                upsert: true
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/UpdateResponseBody"
+                  - properties:
+                      matchedCount:
+                        type: number
+                      modifiedCount:
+                        type: number
+              example:
+                matchedCount: 1
+                modifiedCount: 1
+            application/ejson:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/UpdateResponseBody"
+                  - properties:
+                      matchedCount:
+                        type: object
+                      modifiedCount:
+                        type: object
+                example:
+                  matchedCount: { "$numberInt": "1" }
+                  modifiedCount: { "$numberInt": "1" }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+  
+  /action/updateMany:
+    post:
+      operationId: updateMany
+      summary: Update Documents
+      description: Update multiple documents in a collection.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/UpdateRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                filter: {}, # todo
+                update: {} # todo
+              }
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/UpdateRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                filter: {}, # todo
+                update: {} # todo
+              }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/UpdateResponseBody"
+                  - properties:
+                      matchedCount:
+                        type: number
+                      modifiedCount:
+                        type: number
+                example:
+                  matchedCount: 12
+                  modifiedCount: 12
+            application/ejson:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/UpdateResponseBody"
+                  - properties:
+                      matchedCount:
+                        type: object
+                      modifiedCount:
+                        type: object
+                example:
+                  matchedCount: { "$numberInt": "12" }
+                  modifiedCount: { "$numberInt": "12" }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+  
+  /action/deleteOne:
+    post:
+      operationId: deleteOne
+      summary: Delete One Document
+      description: Delete a single document that matches a query.
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/DeleteRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                filter: {}, # todo
+              }
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/DeleteRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                filter: {}, # todo
+              }
+      responses: 
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/DeleteResponseBody"
+                  - properties:
+                      deletedCount:
+                        type: number
+                example:
+                  deletedCount: 1
+            application/ejson:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/DeleteResponseBody"
+                  - properties:
+                      deletedCount:
+                        type: object
+                example:
+                  deletedCount: { "$numberInt": 1 }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+  /action/deleteMany:
+    post:
+      operationId: deleteMany
+      summary: Delete Documents
+      description: Delete multiple documents that match a query.
+      requestBody: 
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/DeleteRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                filter: {}, # todo
+              }
+          application/ejson:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/DeleteRequestBody"
+              example: {
+                dataSource: "mongodb-atlas",
+                database: "todo",
+                collection: "tasks",
+                filter: {}, # todo
+              }
+      responses: 
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/DeleteResponseBody"
+                  - properties:
+                      deletedCount:
+                        type: number
+                example:
+                  deletedCount: 12
+            application/ejson:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/DeleteResponseBody"
+                  - properties:
+                      deletedCount:
+                        type: object
+                example:
+                  deletedCount: { "$numberInt": 12 }
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+  /action/aggregate:
+    post:
+      operationId: aggregate
+      summary: Aggregate Documents
+      description: todo
+      requestBody: 
+        content:
+          application/json:
+            schema: 
+              allOf: 
+                - "$ref": "#/components/schemas/AggregateRequestBody"
+              example:
+                foo: todo
+          application/ejson:
+            schema: 
+              allOf: 
+                - "$ref": "#/components/schemas/AggregateRequestBody"
+              example:
+                foo: todo
+      responses: 
+        "200": 
+          description: Success
+          content:
+            application/json:
+              schema: 
+                allOf: 
+                  - "$ref": "#/components/schemas/AggregateResponseBody"
+                example:
+                  foo: todo
+            application/ejson:
+              schema: 
+                allOf: 
+                  - "$ref": "#/components/schemas/AggregateResponseBody"
+                example:
+                  foo: todo
+        '400':
+          description: Bad Request
+          $ref: "#/components/responses/BadRequestError"
+        '401':
+          description: Unauthorized
+          $ref: "#/components/responses/UnauthorizedRequestError"
+
+components:
+  securitySchemes:
+    Email:
+      type: apiKey
+      in: header
+      name: email
+      description: |-
+        NEEDS_DESCRIPTION # todo
+    
+    Password:
+      type: apiKey
+      in: header
+      name: password
+      description: |-
+        NEEDS_DESCRIPTION # todo
+    
+    ApiKey:
+      type: apiKey
+      in: header
+      name: api-key
+      description: |-
+        NEEDS_DESCRIPTION # todo
+    
+    CustomJwt:
+      type: apiKey
+      in: header
+      name: jwtTokenString
+      description: |-
+        NEEDS_DESCRIPTION # todo
+  
+  responses:
+
+    BadRequestError:
+      description: The request was malformed or incomplete.
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/ErrorNoAuthenticationSpecified"
+              - $ref: "#/components/schemas/ErrorMissingAuthenticationParameter"          
+    
+    UnauthorizedRequestError:
+      description: The authenticated user does not have permission to access this endpoint.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorUserNotFound"
+        
+  schemas:
+    
+    # Query Operations
+    Namespace:
+      type: object
+      required: ["dataSource", "database", "collection"]
+      properties:
+        dataSource:
+          type: string
+          description: The name of a linked MongoDB Atlas data source.
+        database:
+          type: string
+          description: The name of a database in the specified data source.
+        collection:
+          type: string
+          description: The name of a collection in the specified database.
+    
+    Filter:
+      type: object
+      properties:
+        filter:
+          type: object
+          description: A MongoDB query filter that matches documents.
+    
+    Projection:
+      type: object
+      properties:
+        projection:
+          type: object
+          additionalProperties:
+            type: number
+            enum: [0, 1]
+          description: A MongoDB projection for matched documents returned by the operation.
+    
+    Sort:
+      type: object
+      properties:
+        sort:
+          type: object
+          description: A MongoDB sort expression that indicates sorted field names and directions.
+    
+    Limit:
+      type: object
+      properties:
+        limit:
+          type: number
+          description: The maximum number of matching documents to include the in the response.
+    
+    Skip:
+      type: object
+      properties:
+        skip:
+          type: number
+          description: The number of matching documents to omit from the response.
+    
+    # Request Bodies
+    AggregateRequestBody:
+      title: AggregateRequestBody
+      required: 
+        - pipeline
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - properties:
+            pipeline:
+              type: array
+              description: An array of aggregation stages.
+              items:
+                type: object
+                description: An aggregation stage.
+    
+    AggregateResponseBody:
+      title: AggregateResponseBody
+      required: 
+        -  documents
+      properties:
+        documents:
+          description: An array that contains the result set of the aggregation.
+          type: array
+          items:
+            type: object
+            description: A document included in the result set of the aggregation.
+    
+    FindOneRequestBody:
+      title: FindOneRequestBody
+      required: 
+        - filter
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - $ref: "#/components/schemas/Filter"
+        - $ref: "#/components/schemas/Projection"
+    
+    FindManyRequestBody:
+      title: FindManyRequestBody
+      required: 
+        - filter
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - $ref: "#/components/schemas/Filter"
+        - $ref: "#/components/schemas/Projection"
+        - $ref: "#/components/schemas/Sort"
+        - $ref: "#/components/schemas/Limit"
+        - $ref: "#/components/schemas/Skip"
+    
+    InsertOneRequestBody:
+      title: InsertOneRequestBody
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - type: object
+          required: ["document"]
+          properties:
+            document:
+              type: object
+              description: A document to insert into the collection.
+    
+    InsertManyRequestBody:
+      title: InsertManyRequestBody
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - type: object
+          required: ["documents"]
+          properties:
+            documents:
+              type: array
+              items:
+                type: object
+              description: A list of documents to insert into the collection.
+
+    UpdateRequestBody:
+      title: UpdateRequestBody
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - $ref: "#/components/schemas/Filter"
+        - type: object
+          required: ["filter", "update"]
+          properties:
+            update:
+              type: object
+              description: A MongoDB update expression to apply to matching documents.
+            upsert:
+              type: boolean
+              default: false
+              description: NEEDS_DESCRIPTION # todo
+    
+    DeleteRequestBody:
+      title: DeleteRequestBody
+      allOf:
+        - $ref: "#/components/schemas/Namespace"
+        - $ref: "#/components/schemas/Filter"
+
+    # Response Bodies
+    FindOneResponseBody:
+      title: FindOneResponseBody
+      type: object
+      description: The result of a findOne operation.
+      properties:
+        document:
+          type: ["object", "null"]
+          description: A document that matches the specified filter. If no documents match, this is `null`.
+    
+    FindManyResponseBody:
+      title: FindManyResponseBody
+      type: object
+      description: The result of a find operation.
+      properties:
+        documents:
+          type: array
+          items:
+            type: object
+          description: A list of documents that match the specified filter.
+    
+    InsertOneResponseBody:
+      title: InsertOneResponseBody
+      description: The result of an insertOne operation.
+      type: object
+      properties:
+        insertedId:
+          type: ["string", "object"]
+          description: The `_id` value of the inserted document.
+    
+    InsertManyResponseBody:
+      title: InsertManyResponseBody
+      description: The result of an insertMany operation.
+      type: object
+      properties:
+        insertedIds:
+          type: array
+          items:
+            type: ["string", "object"]
+          description: A list of the `_id` values of the inserted documents.
+    
+    UpdateResponseBody:
+      title: UpdateResponseBody
+      type: object
+      required: 
+        - matchedCount
+        - modifiedCount
+      properties:
+        matchedCount:
+          type: ["number", "object"]
+          description: The number of documents matched by the query filter.
+        modifiedCount:
+          type: ["number", "object"]
+          description: The number of matched documents that were modified.
+        upsertedId:
+          type: string
+          description: The `_id` value of the upserted document.
+    
+    DeleteResponseBody:
+      title: DeleteResponseBody
+      type: object
+      required: 
+        - deletedCount
+      properties:
+        deletedCount:
+          type: ["number", "object"]
+          description: The number of documents that were deleted.
+    
+    # Errors
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A message that describes the error.
+        error_code:
+          type: string
+          description: The error type.
+        link:
+          type: string
+          description: A link to a log entry for the failed operation.
+    
+    ErrorNoAuthenticationSpecified:
+      description: |-
+        Indicates that the request did not include any authentication
+        credentials.
+      allOf:
+        - $ref: "#/components/schemas/Error"
+        - properties:
+            error:
+              const: "no authentication methods were specified"
+            error_code:
+              const: "InvalidParameter"
+    
+    ErrorMissingAuthenticationParameter:
+      description: |-
+        Indicates that an authentication parameter is missing from the
+        request body or headers. For example, the request might include
+        an `email` header but no corresponding `password` header.
+      allOf:
+        - $ref: "#/components/schemas/Error"
+        - properties:
+            error:
+              const: "must specify some form of authentication (either email+password, api-key, or jwt) in the request header or body"
+            error_code:
+              const: "MissingParameter"
+    
+    ErrorUserNotFound:
+      description: |-
+        Indicates that no user matched the provided authentication
+        credentials.
+      allOf:
+        - $ref: "#/components/schemas/Error"
+        - properties:
+            error:
+              const: "invalid session: error finding user for endpoint"
+            error_code:
+              const: "InvalidSession"
