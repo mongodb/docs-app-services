@@ -87,10 +87,14 @@ Procedure
             .. figure:: /images/eventbridge-trigger-configuration.png
                :alt: The EventBridge input boxes in the trigger configuration.
 
-            Optionally, you can serialize event objects into 
-            :manual:`Extended JSON format </reference/mongodb-extended-json>`. 
-            To enable Extended JSON, click the 
-            :guilabel:`Enable Extended JSON` toggle in the 
+            By default, triggers convert the BSON types in event objects into 
+            standard JSON types. To preserve BSON type information, you can 
+            serialize event objects into :manual:`Extended JSON format 
+            </reference/mongodb-extended-json>` instead. Extended JSON preserves type 
+            information at the expense of readability and interoperability.
+            
+            To enable Extended JSON, 
+            click the :guilabel:`Enable Extended JSON` toggle in the 
             :guilabel:`Advanced (Optional)` section.
 
          .. tab::
@@ -104,11 +108,13 @@ Procedure
             that you copied from EventBridge and set the ``region`` field to
             an AWS Region. 
             
-            Optionally, you can serialize event objects into 
-            :manual:`Extended JSON format </reference/mongodb-extended-json>`. 
-            To enable Extended JSON, set the ``extended_json_enabled`` 
-            field to ``true``. By default, ``extended_json_enabled``  
-            is ``false``.
+            By default, triggers convert the BSON types in event objects into 
+            standard JSON types. To preserve BSON type information, you can 
+            serialize event objects into :manual:`Extended JSON format 
+            </reference/mongodb-extended-json>` instead. Extended JSON preserves type 
+            information at the expense of readability and interoperability.
+            
+            To enable Extended JSON, set the ``extended_json_enabled`` field to ``true``.
 
             The trigger configuration file should resemble the following:
 
