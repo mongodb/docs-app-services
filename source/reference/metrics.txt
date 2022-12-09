@@ -17,7 +17,19 @@ Sync. You can access your metrics data with the Admin API's
 
 The exact metrics returned may be subject to change.
 
-.. Source derived from https://docs.google.com/spreadsheets/d/1cjQopjPUsEKde6TlqO38B0Ko6n4vTwl4tgJ-LHSbf7Y/edit#gid=1354315462
+Metric Format
+-------------
+
+When you request metrics, you specify a start time, end time, and time
+granularity such as "hourly". The response contains a list of **measurement**
+objects, one for each metric listed below. Each measurement object contains a
+list of **data points** that represent that metric's value at a specific time.
+
+For example, you request hourly metrics from 12:00am to 11:59pm Tuesday. App
+Services sends back a list of measurements. Each measurement contains about 24
+data points (one for each hour between start and end time). The value field of
+each data point is the value of that metric at the time specified by the
+timestamp.
 
 Units
 -----
@@ -37,11 +49,13 @@ effectively the total count in the requested time window divided by the number
 of seconds in the window.
 
 Some scalar per second values are expressed as a 95th percentile. This means
-that the reading for the given metric is below the given value 95% of the time
+that the measurement for the given metric is below the given value 95% of the time
 and above it the other 5% of the time.
 
 Available Metrics
 -----------------
+
+.. Source derived from https://github.com/10gen/mms/blob/master/server/src/main/com/xgen/svc/mms/api/model/ApiRealmApplicationMeasurement.java
 
 .. list-table::
    :header-rows: 1
@@ -53,7 +67,7 @@ Available Metrics
 
   * - ACTIVE_OPEN_SYNC_SESSIONS
     - SCALAR
-    - The number of active, open sync sessions at the time of the reading.
+    - The number of active, open sync sessions at the time of the data point.
 
   * - AUTH_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -78,7 +92,7 @@ Available Metrics
 
   * - AUTH_TOTAL_USERS
     - SCALAR
-    - The number of existing users at the time of the reading.
+    - The number of existing users at the time of the data point.
 
   * - ENDPOINTS_COMPUTE_MS
     - SCALAR_PER_SECOND
@@ -221,7 +235,7 @@ Available Metrics
 
   * - SYNC_NUM_UNSYNCABLE_DOC
     - SCALAR
-    - The number of unsyncable documents at the time of the reading.
+    - The number of unsyncable documents at the time of the data point.
 
   * - SYNC_OT_MS
     - MILLISECONDS
