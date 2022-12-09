@@ -45,8 +45,8 @@ A **scalar** is a singular value representing a magnitude or count. Its exact
 interpretation depends on the metric.
 
 A **scalar per second** represents a count over time ("rate"). The value is
-effectively the total count in the requested time window divided by the number
-of seconds in the window.
+effectively the total count since the previous data point divided by the number
+of seconds since the previous data point.
 
 Some scalar per second values are expressed as a 95th percentile. This means
 that the measurement for the given metric is below the given value 95% of the time
@@ -96,7 +96,9 @@ Available Metrics
 
   * - ENDPOINTS_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - The number of milliseconds per second spent computing endpoint requests.
+    - The number of milliseconds spent computing endpoint requests since the
+      last data point divided by the total number of seconds since the last data
+      point.
 
   * - ENDPOINTS_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -121,7 +123,9 @@ Available Metrics
 
   * - GRAPH_QL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - The number of milliseconds per second spent computing GraphQL requests.
+    - The number of milliseconds spent computing GraphQL requests since the last
+      data point divided by the total number of seconds since the last data
+      point.
 
   * - GRAPH_QL_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -141,7 +145,8 @@ Available Metrics
 
   * - OVERALL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - The number of milliseconds per second spent computing, overall.
+    - The number of milliseconds spent computing overall since the last data
+      point divided by the total number of seconds since the last data point.
 
   * - OVERALL_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -157,11 +162,14 @@ Available Metrics
 
   * - OVERALL_SYNC_MINUTES
     - SCALAR_PER_SECOND
-    - The total minutes spent syncing divided by the number of seconds in the requested time window.
+    - The total minutes spent syncing since the last data point divided by the
+      number of seconds since the last data point.
 
   * - SDK_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - The number of milliseconds per second spent computing client SDK functions calls.
+    - The number of milliseconds spent computing client SDK functions calls
+      since the last data point divided by the total number of seconds since the
+      last data point.
 
   * - SDK_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -177,8 +185,9 @@ Available Metrics
 
   * - SDK_MQL_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - The number of milliseconds per second spent computing client SDK remote
-      MongoDB access requests.
+    - The number of milliseconds spent computing client SDK remote MongoDB
+      access requests since the last data point divided by the total number of
+      seconds since the last data point.
 
   * - SDK_MQL_EGRESS_BYTES
     - BYTES_PER_SECOND
@@ -227,7 +236,9 @@ Available Metrics
 
   * - SYNC_MINUTES
     - SCALAR_PER_SECOND
-    - Minutes spent syncing.
+    - The total minutes spent syncing since the last data point divided by the
+      number of seconds since the last data point. Equivalent to
+      OVERALL_SYNC_MINUTES.
 
   * - SYNC_NUM_INTEGRATION_ATTEMPTS
     - SCALAR_PER_SECOND
@@ -260,7 +271,9 @@ Available Metrics
 
   * - TRIGGERS_COMPUTE_MS
     - SCALAR_PER_SECOND
-    - The rate of compute time spent for Triggers.
+    - The number of milliseconds spent computing for Triggers since the last
+      data point divided by the total number of seconds since the last data
+      point.
 
   * - TRIGGERS_CURRENT_OPLOG_LAG_MS_SUM
     - MILLISECONDS
