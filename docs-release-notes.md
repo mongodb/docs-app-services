@@ -1,3 +1,34 @@
+# December 9, 2022
+
+## Device Sync
+- Configure and Update Your Data Model
+  - Create a Data Model: Update a link to the React Native SDK
+  - Update a Data Model: Add a link to the Swift SDK's new remap a property name feature
+  - Data Model Mapping: Update a link to the React Native SDK
+- Handle Errors/Sync Errors: Add links to the Flutter and Kotlin SDK pages for handling Sync errors
+
+## Functions
+- Landing page: Add a link to the Flutter SDK, update SDK names
+
+## Triggers
+- Send Trigger Events to AWS EventBridge: Add information about enabling the Extended JSON (EJSON) format
+
+## Users & Authentication
+- Delete or Prevent Users from Accessing an App: Add tabs for Flutter, Kotlin, and the Web SDK, update SDK names
+
+## Realm CLI
+- Landing page: Typo fix
+
+## App Services Admin API
+- Update the `AWS_EVENTBRIDGE` object's `extended_json_enabled` field to show that it defaults to `false`
+- Metrics: Update the description & provide an example response for the `GET` metrics endpoint
+
+## Reference
+- Metrics Reference: New page with detailed information about metric format, units, and available metrics
+
+## Other
+- Landing page: Fix an incorrect Realm SDK naming reference
+
 # December 2, 2022
 
 ## Manage & Deploy Apps
