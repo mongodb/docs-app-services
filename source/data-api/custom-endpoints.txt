@@ -293,6 +293,16 @@ An endpoint can require authenticated users to provide additional
 authorization information in the request. You define the authorization
 scheme for each custom endpoint by configuring the endpoint function.
 
+Endpoints natively support a set of built-in authorization schemes
+that use a secret string to prove that the request is authorized. You
+can also define a custom authorization scheme that can replace or
+supplement the built-in schemes.
+
+Built-In Authorization Schemes
+++++++++++++++++++++++++++++++
+
+Endpoints support the following built-in authorization schemes:
+
 .. tabs::
      
    .. tab:: No Additional Authorization
@@ -334,6 +344,27 @@ scheme for each custom endpoint by configuring the endpoint function.
       reference the secret by name in the endpoint configuration.
 
       To learn how to sign your requests, see :ref:`Authorize the Request <endpoint-authorize>`.
+
+Custom Authorization Schemes
+++++++++++++++++++++++++++++
+
+You can define a custom authorization :ref:`expression <expressions>` to
+determine if an incoming authenticated request is allowed to run. The
+expression is evaluated for each request and must evaluate to ``true``
+to allow the request. If the expression evaluates to ``false``, the
+request is not authorized and fails with an error. Requests that fail
+authorization are not counted toward your App's billed usage.
+
+To define a custom authorization scheme, specify the expression in the
+endpoint function's configuration:
+
+.. code-block:: json
+
+   {
+     "can_evaluate": {
+       "%%request.headers.x-secret-key": "my-secret"
+     }
+   }
 
 .. _endpoint-function:
 
