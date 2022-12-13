@@ -69,7 +69,7 @@ Set up Atlas Access
       you can use your Realm Object Model to generate the App Services Schema
       that maps data between client devices and Atlas. You can do this
       by enabling Development Mode, a feature that reads your object model
-      data from synchronized realm data, and generates a schema from that data.
+      data from synced realm data, and generates a schema from that data.
       
       For more information on how to generate an App Services schema from your
       Realm object model, refer to: :ref:`create-schema-from-rom`.
@@ -90,7 +90,7 @@ Atlas.
       In your client application code, initialize an App client to connect
       your client to your App Services backend. This lets your client use
       App Services features like authentication, and enables opening a 
-      synchronized realm.
+      synced realm.
 
       .. tabs-realm-sdks::
 
@@ -172,7 +172,7 @@ Atlas.
 
             :ref:`Authenticate Users - Kotlin SDK <kotlin-authenticate>`
 
-   .. step:: Open a Synchronized Realm
+   .. step:: Open a Synced Realm
 
       Once you have an authenticated user, you can open a synchronized 
       instance of Realm Database to use for that user. 
@@ -236,11 +236,11 @@ Atlas.
 
             :ref:`Subscribe to Queryable Fields - Kotlin SDK <kotlin-subscriptions>`
 
-   .. step:: Copy Existing Data Into a Synchronized Realm
+   .. step:: Copy Existing Data Into a Synced Realm
 
       If you already have client data, you cannot add Device Sync directly 
       to a non-synced realm. You must copy the data from the non-synced 
-      realm into the synchronized realm. If you do not have any client data,
+      realm into the synced realm. If you do not have any client data,
       you can skip this step.
 
       Some of the SDKs provide methods that enable you to do this when you 
@@ -249,9 +249,9 @@ Atlas.
       
       If your SDK does not support copying a local realm to a Flexible Sync 
       realm, you must write logic to iterate over each object in the 
-      non-synced realm and copy it into the synchronized realm. This is a 
+      non-synced realm and copy it into the synced realm. This is a 
       one-time process. After you copy the data over, you can discard the 
-      non-synced Realm and open only the synchronized realm going forward.
+      non-synced Realm and open only the synced realm going forward.
 
       .. tabs-realm-sdks::
 
