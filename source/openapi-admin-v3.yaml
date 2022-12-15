@@ -2232,6 +2232,46 @@ paths:
           description: Deleted
         "404":
           description: No IP addresses or CIDR blocks to delete
+  "/groups/{groupId}/apps/{appId}/security/refresh_token_expiration":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - security
+      operationId: adminGetRefreshTokenExpiration
+      summary: Get User Refresh Token Expiration Time
+      descripti:on: |-
+        Get the current expiration time in seconds for user session refresh tokens.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshTokenExpiration"
+        "404":
+          description: Group or App Not Found
+    put:
+      tags:
+        - security
+      operationId: adminSetRefreshTokenExpiration
+      summary: Set User Refresh Token Expiration Time
+      descripti:on: |-
+        Set the expiration time in seconds for user session refresh tokens.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenExpiration"
+      responses:
+        "204":
+          description: Expiration time updated
+        "400":
+          description: Invalid expiration time
+        "404":
+          description: Group or App Not Found
   "/groups/{groupId}/apps/{appId}/metrics":
     get:
       tags:
@@ -6454,6 +6494,21 @@ components:
         hash:
           type: string
           description: The MD5 checksum hash for the hosted asset
+    RefreshTokenExpiration:
+      type: object
+      properties:
+        expiration_time_seconds:
+          type: number
+          minimum: 1800
+          maximum: 15552000
+          default: 5184000
+          description: |-
+            The time in seconds that a user session refresh
+            token is valid for once issued. After this time, the
+            token is expired and the user must re-authenticate.
+
+            The expiration time must be between 30 minutes and 180 days,
+            inclusive. The default expiration time is 60 days.
     Relationship:
       type: object
       description: A [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition.
