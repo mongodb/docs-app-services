@@ -136,16 +136,18 @@ deploying configuration files with Realm CLI:
          JSON or EJSON. You can enable :guilabel:`Respond With Result`
          to automatically include the endpoint function's return value
          as the response body.
+
+      5. Optionally, specify or write an :ref:`endpoint function <endpoint-function>`.
       
-      5. For additional security, you can configure :ref:`request
+      6. For additional security, you can configure :ref:`request
          authorization <endpoint-authorization>`.
       
-      6. Save the Data API configuration.
+      7. Save the Data API configuration.
       
-      6. Configure :ref:`access permissions <data-api-permissions>` to
+      8. Configure :ref:`access permissions <data-api-permissions>` to
          allow requests to securely read and write data.
       
-      7. Save and deploy your app.
+      9. Save and deploy your app.
      
    .. tab::
       :tabid: cli
@@ -347,14 +349,20 @@ that runs whenever the endpoint receives an incoming request. In the
 function, you can import libraries from npm, connect to a linked MongoDB
 Atlas cluster, and call other serverless functions. 
 
-To define and edit endpoint handler functions:
+To define a new function when :ref:`creating an endpoint 
+<create-custom-endpoint>` in the App Services UI, navigate
+to the :guilabel:`Function` section and select
+:guilabel:`+ New Function` from the dropdown.
 
-- Use the editor in the :guilabel:`Functions` page of the App Services UI.
-- Directly edit the :ref:`/functions <appconfig-functions>` folder of an app 
-  configuration directory. 
-- Select the :guilabel:`+ New Function` option
-  in the :guilabel:`Function` section when using the UI to 
-  :ref:`add an endpoint <create-custom-endpoint>`.
+Depending on your workflow, you can also define and edit endpoint 
+handler functions:
+
+- On the :guilabel:`Functions` page in the :ref:`App Services UI 
+  <define-a-function>`.
+- In the ``functions`` directory of your application using the 
+  :ref:`App Services CLI <define-a-function>`.
+- From your client using the :admin-api-endpoint:`Admin API 
+  <operation/adminCreateFunction>`.
 
 Endpoint functions always receive two arguments:
 
