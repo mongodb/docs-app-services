@@ -556,11 +556,7 @@ responds to the caller:
       }
    }
 
-The following example demonstrates a sample request and response when using the
-preceding function. After the function verifies that the body of the incoming 
-request is defined, it stores the parsed body as a new document in 
-a collection named ``myCollection``. The resulting output displays 
-the configured response, which includes a custom message and the ``insertedId``.
+The function receives the following ``POST`` request:
 
 .. io-code-block::
    
@@ -581,6 +577,11 @@ the configured response, which includes a custom message and the ``insertedId``.
         "message": "Successfully saved the request body", 
         "insertedId": "639a521bbdec9b85ba94014b" 
       }
+
+After the function verifies that the body of the incoming request 
+is defined, it stores the parsed body as a new document in a collection 
+named ``myCollection``. The resulting output displays the configured 
+response, which includes a custom message and the ``insertedId``.
 
 Call a Custom Endpoint
 ----------------------
