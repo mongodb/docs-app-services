@@ -343,13 +343,13 @@ Write an Endpoint Function
 Every custom endpoint is associated with a :ref:`function <functions>`
 that runs whenever the endpoint receives an incoming request. In the
 function, you can import libraries from npm, connect to a linked MongoDB
-Atlas cluster, and call other serverless functions.
+Atlas cluster, and call other serverless functions. 
 
-.. tip::
-   
-   You define and edit endpoint handler functions on the
-   :guilabel:`Functions` page of the App Services UI or in the :ref:`/functions
-   <appconfig-functions>` folder of an app configuration directory.
+To define and edit endpoint handler functions, use the editor in the
+:guilabel:`Functions` page of the App Services UI or directly 
+edit the :ref:`/functions <appconfig-functions>` folder of an app 
+configuration directory. For a complete example, see 
+:ref:`endpoint-function-example`.
 
 Endpoint functions always receive two arguments:
 
@@ -358,40 +358,6 @@ Endpoint functions always receive two arguments:
 
 - A :ref:`Response <endpoint-response-object>` object that you use to
   configure the HTTPS response sent back to the caller.
-
-.. example::
-   
-   This endpoint function parses the body of an incoming ``POST``
-   request, stores the parsed body in a MongoDB collection, and then
-   responds to the caller:
-
-   .. code-block:: javascript
-   
-      exports = async function (request, response) {
-        try {
-          // 1. Parse data from the incoming request
-          if(request.body === undefined) {
-            throw new Error(`Request body was not defined.`)
-          }
-          const body = JSON.parse(request.body.text());
-          // 2. Handle the request
-          const { insertedId } = await context.services
-            .get("mongodb-atlas")
-            .db("myDb")
-            .collection("myCollection")
-            .insertOne({ date: new Date(), requestBody: body });
-          // 3. Configure the response
-          response.setStatusCode(201);
-          // tip: You can also use EJSON.stringify instead of JSON.stringify.
-          response.setBody(JSON.stringify({
-             message: "Successfully saved the request body",
-             insertedId,
-          }));
-        } catch (error) {
-          response.setStatusCode(400);
-          response.setBody(error.message);
-        }
-      }
 
 .. _endpoint-request-object:
 
@@ -545,6 +511,69 @@ headers, and include data in the response body.
                "Cache-Control",
                "min-fresh=60"
              )
+
+.. _endpoint-function-example:
+
+Example
+~~~~~~~
+
+Consider an endpoint function that parses the body of an incoming ``POST``
+request, stores the parsed body in a MongoDB collection, and then
+responds to the caller:
+
+.. code-block:: javascript
+
+   exports = async function (request, response) {
+      try {
+         // 1. Parse data from the incoming request
+         if(request.body === undefined) {
+         throw new Error(`Request body was not defined.`)
+         }
+         const body = JSON.parse(request.body.text());
+         // 2. Handle the request
+         const { insertedId } = await context.services
+         .get("mongodb-atlas")
+         .db("myDb")
+         .collection("myCollection")
+         .insertOne({ date: new Date(), requestBody: body });
+         // 3. Configure the response
+         response.setStatusCode(201);
+         // tip: You can also use EJSON.stringify instead of JSON.stringify.
+         response.setBody(JSON.stringify({
+            message: "Successfully saved the request body",
+            insertedId,
+         }));
+      } catch (error) {
+         response.setStatusCode(400);
+         response.setBody(error.message);
+      }
+   }
+
+The following example demonstrates a sample request and response when using the
+preceding function. After the function verifies that the body of the incoming 
+request is defined, it stores the parsed body as a new document in 
+a collection named ``myCollection``. The resulting output displays 
+the configured response, which includes a custom message and the ``insertedId``.
+
+.. io-code-block::
+   
+   .. input::
+      :language: bash
+      
+      curl -X POST \
+         -H 'apiKey: abcde12345' \
+         -H 'Content-Type: application/json' \
+         -H 'Accept: application/json' \
+         -d '{ "foo": "bar" }'
+         https://data.mongodb-api.com/app/myapp-abcde/endpoint/custom
+   
+   .. output::
+      :language: json
+      
+      { 
+        "message": "Successfully saved the request body", 
+        "insertedId": "639a521bbdec9b85ba94014b" 
+      }
 
 Call a Custom Endpoint
 ----------------------
