@@ -107,6 +107,8 @@ Custom endpoints support the following standard HTTP methods:
 - :mdn:`PATCH <Web/HTTP/Methods/PATCH>`
 - :mdn:`DELETE <Web/HTTP/Methods/DELETE>`
 
+.. _create-custom-endpoint: 
+
 Create a Custom HTTPS Endpoint
 ------------------------------
 
@@ -345,19 +347,24 @@ that runs whenever the endpoint receives an incoming request. In the
 function, you can import libraries from npm, connect to a linked MongoDB
 Atlas cluster, and call other serverless functions. 
 
-To define and edit endpoint handler functions, use the editor in the
-:guilabel:`Functions` page of the App Services UI or directly 
-edit the :ref:`/functions <appconfig-functions>` folder of an app 
-configuration directory. For a complete example, see 
-:ref:`endpoint-function-example`.
+To define and edit endpoint handler functions:
+
+- Use the editor in the :guilabel:`Functions` page of the App Services UI.
+- Directly edit the :ref:`/functions <appconfig-functions>` folder of an app 
+  configuration directory. 
+- Select the :guilabel:`+ New Function` option
+  in the :guilabel:`Function` section when using the UI to 
+  :ref:`add an endpoint <create-custom-endpoint>`.
 
 Endpoint functions always receive two arguments:
 
 - A :ref:`Request <endpoint-request-object>` object that lets you access
   incoming request headers, query parameters, and body data.
-
 - A :ref:`Response <endpoint-response-object>` object that you use to
   configure the HTTPS response sent back to the caller.
+
+For a sample function and an example request and response, see 
+:ref:`endpoint-function-example`.
 
 .. _endpoint-request-object:
 
@@ -564,7 +571,7 @@ the configured response, which includes a custom message and the ``insertedId``.
          -H 'apiKey: abcde12345' \
          -H 'Content-Type: application/json' \
          -H 'Accept: application/json' \
-         -d '{ "foo": "bar" }'
+         -d '{ "foo": "bar" }' \
          https://data.mongodb-api.com/app/myapp-abcde/endpoint/custom
    
    .. output::
