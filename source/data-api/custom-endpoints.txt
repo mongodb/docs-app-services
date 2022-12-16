@@ -107,6 +107,8 @@ Custom endpoints support the following standard HTTP methods:
 - :mdn:`PATCH <Web/HTTP/Methods/PATCH>`
 - :mdn:`DELETE <Web/HTTP/Methods/DELETE>`
 
+.. _create-custom-endpoint: 
+
 Create a Custom HTTPS Endpoint
 ------------------------------
 
@@ -134,16 +136,18 @@ deploying configuration files with Realm CLI:
          JSON or EJSON. You can enable :guilabel:`Respond With Result`
          to automatically include the endpoint function's return value
          as the response body.
+
+      5. Optionally, specify or write an :ref:`endpoint function <endpoint-function>`.
       
-      5. For additional security, you can configure :ref:`request
+      6. For additional security, you can configure :ref:`request
          authorization <endpoint-authorization>`.
       
-      6. Save the Data API configuration.
+      7. Save the Data API configuration.
       
-      6. Configure :ref:`access permissions <data-api-permissions>` to
+      8. Configure :ref:`access permissions <data-api-permissions>` to
          allow requests to securely read and write data.
       
-      7. Save and deploy your app.
+      9. Save and deploy your app.
      
    .. tab::
       :tabid: cli
@@ -343,55 +347,32 @@ Write an Endpoint Function
 Every custom endpoint is associated with a :ref:`function <functions>`
 that runs whenever the endpoint receives an incoming request. In the
 function, you can import libraries from npm, connect to a linked MongoDB
-Atlas cluster, and call other serverless functions.
+Atlas cluster, and call other serverless functions. 
 
-.. tip::
-   
-   You define and edit endpoint handler functions on the
-   :guilabel:`Functions` page of the App Services UI or in the :ref:`/functions
-   <appconfig-functions>` folder of an app configuration directory.
+To define a new function when :ref:`creating an endpoint 
+<create-custom-endpoint>` in the App Services UI, navigate
+to the :guilabel:`Function` section and select
+:guilabel:`+ New Function` from the dropdown.
+
+Depending on your workflow, you can also define and edit endpoint 
+handler functions:
+
+- On the :guilabel:`Functions` page in the :ref:`App Services UI 
+  <define-a-function>`.
+- In the ``functions`` directory of your application using the 
+  :ref:`App Services CLI <define-a-function>`.
+- From your client using the :admin-api-endpoint:`Admin API 
+  <operation/adminCreateFunction>`.
 
 Endpoint functions always receive two arguments:
 
 - A :ref:`Request <endpoint-request-object>` object that lets you access
   incoming request headers, query parameters, and body data.
-
 - A :ref:`Response <endpoint-response-object>` object that you use to
   configure the HTTPS response sent back to the caller.
 
-.. example::
-   
-   This endpoint function parses the body of an incoming ``POST``
-   request, stores the parsed body in a MongoDB collection, and then
-   responds to the caller:
-
-   .. code-block:: javascript
-   
-      exports = async function (request, response) {
-        try {
-          // 1. Parse data from the incoming request
-          if(request.body === undefined) {
-            throw new Error(`Request body was not defined.`)
-          }
-          const body = JSON.parse(request.body.text());
-          // 2. Handle the request
-          const { insertedId } = await context.services
-            .get("mongodb-atlas")
-            .db("myDb")
-            .collection("myCollection")
-            .insertOne({ date: new Date(), requestBody: body });
-          // 3. Configure the response
-          response.setStatusCode(201);
-          // tip: You can also use EJSON.stringify instead of JSON.stringify.
-          response.setBody(JSON.stringify({
-             message: "Successfully saved the request body",
-             insertedId,
-          }));
-        } catch (error) {
-          response.setStatusCode(400);
-          response.setBody(error.message);
-        }
-      }
+For a sample function and an example request and response, see 
+:ref:`endpoint-function-example`.
 
 .. _endpoint-request-object:
 
@@ -545,6 +526,70 @@ headers, and include data in the response body.
                "Cache-Control",
                "min-fresh=60"
              )
+
+.. _endpoint-function-example:
+
+Example
+~~~~~~~
+
+Consider an endpoint function that parses the body of an incoming ``POST``
+request, stores the parsed body in a MongoDB collection, and then
+responds to the caller:
+
+.. code-block:: javascript
+
+   exports = async function (request, response) {
+      try {
+         // 1. Parse data from the incoming request
+         if(request.body === undefined) {
+         throw new Error(`Request body was not defined.`)
+         }
+         const body = JSON.parse(request.body.text());
+         // 2. Handle the request
+         const { insertedId } = await context.services
+         .get("mongodb-atlas")
+         .db("myDb")
+         .collection("myCollection")
+         .insertOne({ date: new Date(), requestBody: body });
+         // 3. Configure the response
+         response.setStatusCode(201);
+         // tip: You can also use EJSON.stringify instead of JSON.stringify.
+         response.setBody(JSON.stringify({
+            message: "Successfully saved the request body",
+            insertedId,
+         }));
+      } catch (error) {
+         response.setStatusCode(400);
+         response.setBody(error.message);
+      }
+   }
+
+The function receives the following ``POST`` request:
+
+.. io-code-block::
+   
+   .. input::
+      :language: bash
+      
+      curl -X POST \
+         -H 'apiKey: abcde12345' \
+         -H 'Content-Type: application/json' \
+         -H 'Accept: application/json' \
+         -d '{ "foo": "bar" }' \
+         https://data.mongodb-api.com/app/myapp-abcde/endpoint/custom
+   
+   .. output::
+      :language: json
+      
+      { 
+        "message": "Successfully saved the request body", 
+        "insertedId": "639a521bbdec9b85ba94014b" 
+      }
+
+After the function verifies that the body of the incoming request 
+is defined, it stores the parsed body as a new document in a collection 
+named ``myCollection``. The resulting output displays the configured 
+response, which includes a custom message and the ``insertedId``.
 
 Call a Custom Endpoint
 ----------------------
