@@ -158,7 +158,7 @@ deploying configuration files with Realm CLI:
          the custom endpoint.
          
          .. code-block:: bash
-            :caption: https_endpoints/config.json
+            :caption: http_endpoints/config.json
 
             [
               {
@@ -236,11 +236,14 @@ authentication schemes to fit your application's needs.
       configuration.
       
       .. code-block:: json
-         :caption: http_endpoints/config.json
-
-         {
-           "run_as_user_id": "628e47baf4c2ac2796fc8a91"
-         }
+         :caption: functions/config.json
+         
+         [
+           {
+             ...,
+             "run_as_user_id": "628e47baf4c2ac2796fc8a91"
+           }
+         ]
    
    .. tab:: Script
       :tabid: auth-script
@@ -259,11 +262,14 @@ authentication schemes to fit your application's needs.
       configuration.
       
       .. code-block:: json
-         :caption: http_endpoints/config.json
-
-         {
-           "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
-         }
+         :caption: functions/config.json
+         
+         [
+           {
+             ...,
+             "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
+           }
+         ]
    
    .. tab:: System
       :tabid: auth-system
@@ -274,11 +280,14 @@ authentication schemes to fit your application's needs.
       subject to any rules, roles, or limited permissions.
       
       .. code-block:: json
-         :caption: http_endpoints/config.json
-
-         {
-           "run_as_system": true
-         }
+         :caption: functions/config.json
+         
+         [
+           {
+             ...,
+             "run_as_system": true
+           }
+         ]
 
 .. tip::
    
@@ -293,10 +302,13 @@ An endpoint can require authenticated users to provide additional
 authorization information in the request. You define the authorization
 scheme for each custom endpoint by configuring the endpoint function.
 
-Endpoints natively support a set of built-in authorization schemes
-that use a secret string to prove that the request is authorized. You
-can also define a custom authorization scheme that
-you can use together with or instead of the built-in schemes.
+Endpoints natively support a set of built-in authorization schemes that
+use a secret string to prove that the request is authorized. You can
+also define a custom authorization scheme that you can use together with
+or instead of the built-in schemes.
+
+To learn how to configure authorization for a specific function, see
+:ref:`Define a Function <define-a-function>`.
 
 Built-In Authorization Schemes
 ++++++++++++++++++++++++++++++
@@ -323,11 +335,15 @@ Endpoints support the following built-in authorization schemes:
       reference the secret by name in the endpoint configuration.
 
       .. code-block:: json
+         :caption: http_endpoints/config.json
          
-         {
-            "verification_method": "SECRET_AS_QUERY_PARAM",
-            "secret_name": "secret_verification_string"
-         }
+         [
+           {
+              ...,
+              "verification_method": "SECRET_AS_QUERY_PARAM",
+              "secret_name": "secret_verification_string"
+           }
+         ]
 
       To learn how to include the secret in a request, see :ref:`Authorize the Request <endpoint-authorize>`.
    
@@ -355,16 +371,25 @@ to allow the request. If the expression evaluates to ``false``, the
 request is not authorized and fails with an error. Requests that fail
 authorization are not counted toward your App's billed usage.
 
+Authorization expressions can use variables like
+:json-expansion:`%%user` to authorize based on the calling user's data
+or :json-expansion:`%%request` to make decisions based on the specifics
+of each incoming request.
+
 To define a custom authorization scheme, specify the expression in the
 endpoint function's configuration:
 
 .. code-block:: json
-
-   {
-     "can_evaluate": {
-       "%%request.headers.x-secret-key": "my-secret"
+   :caption: http_endpoints/config.json
+         
+   [
+     {
+        ...,
+        "can_evaluate": {
+          "%%request.headers.x-secret-key": "my-secret"
+        }
      }
-   }
+   ]
 
 .. _endpoint-function:
 

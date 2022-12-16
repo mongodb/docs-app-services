@@ -223,9 +223,12 @@ authentication schemes to fit your application's needs.
       .. code-block:: json
          :caption: http_endpoints/data_api_config.json
 
-         {
-           "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
-         }
+         [
+           {
+             ...,
+             "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
+           }
+         ]
 
 .. _data-api-authorization:
 
@@ -236,10 +239,10 @@ You can require authenticated users to provide additional authorization
 information in each request. You define the authorization scheme for
 all generated Data API endpoints in your Data API configuration.
 
-Endpoints natively support a set of built-in authorization schemes
-that use a secret string to prove that the request is authorized. You
-can also define a custom authorization scheme that can replace or
-supplement the built-in schemes.
+Endpoints natively support a set of built-in authorization schemes that
+use a secret string to prove that the request is authorized. You can
+also define a custom authorization scheme that you can use together with
+or instead of the built-in schemes.
 
 Built-In Authorization Schemes
 ``````````````````````````````
@@ -266,11 +269,15 @@ Endpoints support the following built-in authorization schemes:
       reference the secret by name in the endpoint configuration.
 
       .. code-block:: json
+         :caption: http_endpoints/data_api_config.json
          
-         {
-            "verification_method": "SECRET_AS_QUERY_PARAM",
-            "secret_name": "secret_verification_string"
-         }
+         [
+           {
+             ...,
+             "verification_method": "SECRET_AS_QUERY_PARAM",
+             "secret_name": "secret_verification_string"
+           }
+         ]
 
       To learn how to include the secret in a request, see :ref:`Authorize the Request <data-api-authorize>`.
    
@@ -298,12 +305,19 @@ to allow the request. If the expression evaluates to ``false``, the
 request is not authorized and fails with an error. Requests that fail
 authorization are not counted toward your App's billed usage.
 
+Authorization expressions can use variables like
+:json-expansion:`%%user` to authorize based on the calling user's data
+or :json-expansion:`%%request` to make decisions based on the specifics
+of each incoming request.
+
 To define a custom authorization scheme, specify the expression in your
 app's Data API configuration:
 
 .. code-block:: json
-
+   :caption: http_endpoints/data_api_config.json
+   
    {
+     ...,
      "can_evaluate": {
        "%%request.headers.x-secret-key": "my-secret"
      }
@@ -339,6 +353,7 @@ application understands how to parse and use EJSON.
        :tabid: json
 
        .. code-block:: json
+          :caption: https_endpoints/data_api_config.json
 
           {
              "return_type": "JSON"
@@ -348,6 +363,7 @@ application understands how to parse and use EJSON.
        :tabid: ejson
 
        .. code-block:: json
+          :caption: https_endpoints/data_api_config.json
 
           {
              "return_type": "EJSON"
