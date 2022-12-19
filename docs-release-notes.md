@@ -1,3 +1,23 @@
+# December 16, 2022
+
+## Device Sync
+- App Builder's Resources: New section with new and moved pages
+  - Flexible Sync Permissions Guide: Existing content moved from the "Configure Device Sync" section
+  - Sync Atlas Data with Client: New page showing how to sync data that already exists in Atlas with a client app
+  - Sync Client Data with Atlas: New page showing how to sync data in a client application with Atlas
+  - Stream Data from Client to Atlas: New page showing how to use asymmetric sync to sync data unidirectionally from a client app to Atlas
+  - Add Sync to a Local-Only App: Existing content moved from the top-level Device Sync navigation into this section
+
+## Data API
+- Custom HTTPS Endpoints: Add an end-to-end example for a custom HTTPS endpoint function
+
+## Functions
+- Landing Page: Update Atlas Function max timeout in "Constraints" section from 150 seconds to 180 seconds
+
+## App Services Admin API
+- Document new GET/PUT endpoints to get or set the user refresh token expiration time
+
+
 # December 9, 2022
 
 ## Device Sync
