@@ -1,3 +1,7 @@
+# December 30, 2022
+
+- Added examples for valid ISO-8601 start and end query parameters in `adminGetMetrics` endpoint
+
 # December 23, 2022
 
 - Device Sync:
