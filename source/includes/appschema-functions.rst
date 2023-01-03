@@ -72,7 +72,7 @@ Configuration
    
    * - | ``run_as_user_id``
        | String
-     - The unique ID of a :doc:`App Services User </authentication>` that the
+     - The unique ID of a :doc:`App Services User </users>` that the
        function always executes as. Cannot be used with
        ``run_as_user_id_script_source``.
    
@@ -80,7 +80,7 @@ Configuration
        | String
      - A stringified :doc:`function </functions>` that runs whenever the
        function is called and returns the unique ID of a :doc:`App Services
-       User </authentication>` that the function executes as. Cannot be used with
+       User </users>` that the function executes as. Cannot be used with
        ``run_as_user_id``.
 
 Source Code
