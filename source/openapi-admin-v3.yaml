@@ -2241,7 +2241,7 @@ paths:
         - security
       operationId: adminGetRefreshTokenExpiration
       summary: Get User Refresh Token Expiration Time
-      descripti:on: |-
+      description: |-
         Get the current expiration time in seconds for user session refresh tokens.
       responses:
         "200":
@@ -2257,7 +2257,7 @@ paths:
         - security
       operationId: adminSetRefreshTokenExpiration
       summary: Set User Refresh Token Expiration Time
-      descripti:on: |-
+      description: |-
         Set the expiration time in seconds for user session refresh tokens.
       requestBody:
         required: true
@@ -2289,14 +2289,14 @@ paths:
         - name: start
           in: query
           description: |-
-            The ISO 8601 date and time of the start of the query period.
+            The ISO-8601 date and time of the start of the query period (e.g. "2022-10-27T14:01:01Z").
           schema:
             type: string
           required: true
         - name: end
           in: query
           description: |-
-            The ISO 8601 date and time of the end of the query period.
+            The ISO-8601 date and time of the end of the query period (e.g. "2022-12-27T14:01:01Z").
           schema:
             type: string
           required: true
@@ -2370,10 +2370,12 @@ paths:
                       The group ID sent in the request.
                   start:
                     type: string
+                    example: "2022-10-27T14:01:01Z"
                     description: |-
                       The date and time (ISO-8601 format) of the earliest requested measurement.
                   end:
                     type: string
+                    example: "2022-12-27T14:01:01Z"
                     description: |-
                       The date and time (ISO-8601 format) of the latest requested measurement.
                   granularity:
