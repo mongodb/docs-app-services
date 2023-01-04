@@ -10,7 +10,7 @@ Read User Metadata
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 1
+   :depth: 2
    :class: singlecol
 
 Overview
@@ -33,8 +33,8 @@ objects:
   :ref:`React Native <react-native-authenticate-users>`, and 
   :ref:`.NET <dotnet-authenticate>` client applications.
 
-User Object Schema
-------------------
+Schema
+------
 
 User objects have the following form:
 
@@ -117,7 +117,7 @@ Find Users
       :tabid: api
 
       To find information about one or more users, create a ``GET`` request 
-      in the following format:
+      in the following format. You must specify the Group and App ID.
 
       .. code-block:: sh
 
@@ -125,8 +125,8 @@ Find Users
          --header 'Authorization: Bearer <access_token>' \
          'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users'
 
-      If you already know the ID of the user you want to find, you can append the ID to
-      the request URL: 
+      If you already know the ID of the user you want to find, you can append 
+      the ID to the request URL:
 
       .. code-block:: sh
 
@@ -134,8 +134,10 @@ Find Users
          --header 'Authorization: Bearer <access_token>' \
          'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>'
 
-      For more information, see :admin-api-endpoint:`Admin API Documentation <section/users>`.
-
+      .. seealso::
+      
+        :admin-api-endpoint:`Admin API Documentation <tag/users>`
+        
 .. _filter-users:
 
 Filter Users
@@ -217,16 +219,7 @@ satisfy the filter conditions.
    .. tab::
       :tabid: api
 
-      You can limit the list of users to only :ref:`pending <confirm-user>` (unconfirmed) 
-      email/password users. Create a ``GET`` request in the following format:
-
-      .. code-block:: shell
-
-         curl --request GET \
-            --header 'Authorization: Bearer <access_token>' \
-            'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/pending_users'
-
-      You can also sort results with the following query parameters:
+      You can filter user operations with the following query parameters:
 
       .. list-table::
          :header-rows: 1
@@ -259,8 +252,19 @@ satisfy the filter conditions.
             curl --request GET \
               --header 'Authorization: Bearer <access_token>' \
               'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users?desc=true'
+      
+      You can also limit results to only :ref:`pending <confirm-user>` (unconfirmed) 
+      email/password users. Create a ``GET`` request in the following format:
+
+      .. code-block:: shell
+
+         curl --request GET \
+            --header 'Authorization: Bearer <access_token>' \
+            'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/pending_users'
    
-      For more information, see :admin-api-endpoint:`Admin API Documentation <section/users>`.
+      .. seealso::
+      
+        :admin-api-endpoint:`Admin API Documentation <tag/users>`
 
 .. _view-user-data:
 
