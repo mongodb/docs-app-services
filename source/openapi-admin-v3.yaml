@@ -66,7 +66,7 @@ info:
     Once you have an API key pair, call the authentication endpoint:
 
     ```shell
-    uest POST \
+    curl --request POST \
       --header 'Content-Type: application/json' \
       --header 'Accept: application/json' \
       --data '{"username": "<Public API Key>", "apiKey": "<Private API Key>"}' \
@@ -270,7 +270,7 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/CloudProviderRegion"
-  "{groupId}/apps":
+  "/groups/{groupId}/apps":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
     get:
@@ -4318,7 +4318,7 @@ components:
       name: sort
       required: false
       description: |-
-        The field name to sort to sort results by. The only valid value is the
+        The field name to sort results by. The only valid value is the
         default: `_id`.
       in: query
       schema:

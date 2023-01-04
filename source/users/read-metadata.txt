@@ -122,22 +122,23 @@ Find Users
       .. code-block:: sh
 
          curl --request GET \
-         --header 'Authorization: Bearer <access_token>' \
-         'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users'
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users
 
       If you already know the ID of the user you want to find, you can append 
       the ID to the request URL:
 
       .. code-block:: sh
+         :emphasize-lines: 3
 
          curl --request GET \
-         --header 'Authorization: Bearer <access_token>' \
-         'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>'
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>
 
       .. seealso::
       
         :admin-api-endpoint:`Admin API Documentation <tag/users>`
-        
+
 .. _filter-users:
 
 Filter Users
@@ -235,7 +236,7 @@ satisfy the filter conditions.
             
          * - ``sort``	
            - string
-           - The field name to sort to sort results by. The only valid value is the 
+           - The field name to sort results by. The only valid value is the 
              default: ``_id``.
 
          * - ``desc``	
@@ -245,13 +246,13 @@ satisfy the filter conditions.
 
       .. example::
                 
-         The following request returns results in descending order:
+         The following request returns users in descending order by their ``_id``:
 
          .. code-block:: shell
-                  
+            
             curl --request GET \
               --header 'Authorization: Bearer <access_token>' \
-              'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users?desc=true'
+              https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users?desc=true
       
       You can also limit results to only :ref:`pending <confirm-user>` (unconfirmed) 
       email/password users. Create a ``GET`` request in the following format:
@@ -259,8 +260,8 @@ satisfy the filter conditions.
       .. code-block:: shell
 
          curl --request GET \
-            --header 'Authorization: Bearer <access_token>' \
-            'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/pending_users'
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/pending_users
    
       .. seealso::
       
@@ -342,4 +343,4 @@ Summary
 - The exact information contained in the user object depends on the :doc:`authentication providers </authentication/providers>` used.
 - You can search for users in the ``Users`` page of the App Services UI.
 - App Services logs information such as user's connected devices,
-  provider data, and activity log
+  provider data, and activity log.
