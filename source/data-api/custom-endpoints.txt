@@ -824,16 +824,8 @@ authorization information.
       You could use the following function to generate the payload
       signature:
       
-      .. code-block:: javascript
-      
-         // Generate an HMAC request signature
-         exports = function signEndpointRequest(
-           secret, // the secret validation string e.g. 12345
-           body, // the endpoint request body e.g. { "message": "MESSAGE" }
-         ) {
-           const payload = EJSON.stringify(body)
-           return utils.crypto.hmac(payload, secret, "sha256", "hex");
-         }
+      .. literalinclude:: /data-api/signEndpointRequest.js
+         :language: javascript
 
       .. example::
          
