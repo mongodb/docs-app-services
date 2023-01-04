@@ -1,6 +1,9 @@
-====================
-Find and View a User
-====================
+.. _read-metadata:
+.. _user-objects:
+
+==================
+Read User Metadata
+==================
 
 .. default-domain:: mongodb
 
@@ -10,10 +13,70 @@ Find and View a User
    :depth: 1
    :class: singlecol
 
+Overview
+--------
+
+Atlas App Services represents each application user internally with a
+**User Object** that includes a unique ID and additional
+metadata that describes the user. You can access user
+objects:
+
+- With the App Services UI, CLI, or Admin API to :ref:`find <find-users>` 
+  and :ref:`filter <filter-users>` users.
+- In the App Services UI by :ref:`viewing user data <view-user-data>`.
+- In a :doc:`Function </functions>` by accessing the :ref:`context.user
+  <context-user>` interface.
+- In a :ref:`rule expression <expressions>` with the :json-expansion:`%%user`
+  expansion.
+- In :ref:`Android <java-authenticate>`, :ref:`iOS
+  <ios-authenticate-users>`, :ref:`Node <node-authenticate-users>`,
+  :ref:`React Native <react-native-authenticate-users>`, and 
+  :ref:`.NET <dotnet-authenticate>` client applications.
+
+User Object Schema
+------------------
+
+User objects have the following form:
+
+.. code-block:: json
+
+   {
+     "id": "<Unique User ID>",
+     "type": "<User Type>",
+     "data": {
+       "<Metadata Field>": <Value>,
+       ...
+     },
+     "custom_data": {
+       "<Custom Data Field>": <Value>,
+       ...
+     },
+     "identities": [
+       {
+         "id": <Unique Identity ID>,
+         "provider_type": "<Authentication Provider>",
+         "data": {
+           "<Metadata Field>": <Value>,
+           ...
+         }
+       }
+     ]
+   }
+
+.. include:: /includes/user-object-fields.rst
+
+.. note::
+
+   In general, App Services creates a user object for a given user
+   the first time that they authenticate. If you create a
+   test :doc:`Email/Password </users/create>`
+   user through the App Services UI, App Services creates that user's user
+   object immediately.
+
 .. _find-users:
 
-Find a User
------------
+Find Users
+----------
 
 .. tabs-realm-admin-interfaces::
    
@@ -49,6 +112,29 @@ Find a User
       .. code-block:: bash
          
          realm-cli users list --app=<Your App ID>
+
+   .. tab::
+      :tabid: api
+
+      To find information about one or more users, create a ``GET`` request 
+      in the following format:
+
+      .. code-block:: sh
+
+         curl --request GET \
+         --header 'Authorization: Bearer <access_token>' \
+         'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users'
+
+      If you already know the ID of the user you want to find, you can append the ID to
+      the request URL: 
+
+      .. code-block:: sh
+
+         curl --request GET \
+         --header 'Authorization: Bearer <access_token>' \
+         'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>'
+
+      For more information, see :admin-api-endpoint:`Admin API Documentation <section/users>`.
 
 .. _filter-users:
 
@@ -128,8 +214,61 @@ satisfy the filter conditions.
             
             realm-cli users list --state="disabled"
 
+   .. tab::
+      :tabid: api
+
+      You can limit the list of users to only :ref:`pending <confirm-user>` (unconfirmed) 
+      email/password users. Create a ``GET`` request in the following format:
+
+      .. code-block:: shell
+
+         curl --request GET \
+            --header 'Authorization: Bearer <access_token>' \
+            'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/pending_users'
+
+      You can also sort results with the following query parameters:
+
+      .. list-table::
+         :header-rows: 1
+         :widths: 15 15 70
+      
+         * - Parameter
+           - Type
+           - Description
+
+         * - ``after``
+           - string
+           - The ``id`` of the last user returned by a previous paginated request.
+            
+         * - ``sort``	
+           - string
+           - The field name to sort to sort results by. The only valid value is the 
+             default: ``_id``.
+
+         * - ``desc``	
+           - boolean
+           - If ``true``, returns sorted results in descending order. If not specified or 
+             set to false, results return in ascending order.
+
+      .. example::
+                
+         The following request returns results in descending order:
+
+         .. code-block:: shell
+                  
+            curl --request GET \
+              --header 'Authorization: Bearer <access_token>' \
+              'https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users?desc=true'
+   
+      For more information, see :admin-api-endpoint:`Admin API Documentation <section/users>`.
+
+.. _view-user-data:
+
+View User Data
+--------------
+
 View a User's Devices
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 When a user connects to your application, Atlas App Services
 :ref:`logs information <authentication-logs>` similar to the following:
@@ -153,7 +292,7 @@ expand :guilabel:`Devices`.
 .. _view-provider-data:
 
 View a User's Provider Data
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Whenever a user connects to your application and authenticates using one
 of the authentication providers you have enabled, App Services logs the
@@ -173,7 +312,7 @@ users by doing the following:
 .. _view-user-log:
 
 View a User's Activity Log
---------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 App Services logs every request made by each of your App
 users, including executed function calls.  Also, if a function writes to
@@ -195,7 +334,8 @@ To view a user's request logs, follow these steps:
 Summary
 -------
 
+- The user object contains relevant information about the user that you can use in your app logic.
+- The exact information contained in the user object depends on the :doc:`authentication providers </authentication/providers>` used.
 - You can search for users in the ``Users`` page of the App Services UI.
-
 - App Services logs information such as user's connected devices,
   provider data, and activity log
