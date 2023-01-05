@@ -292,46 +292,15 @@ are and allow us to focus only on the most important ones.
       
       Add the following code directly under the import statements in
       ``src/ItemSchema.tsx``:
-      
-      .. code-block:: javascript
-         :caption: ItemSchema.tsx
-         
-         function createEnum(arr) {
-           arr.forEach((p, i) => arr[p] = i);
-           return arr;
-         }
-         
-         // Priority.High === 1
-         // Priority[Priority.High] === "High"
-         export const Priority = createEnum([
-           "Severe",
-           "High",
-           "Medium",
-           "Low",
-         ])
+
+      .. literalinclude:: /examples/generated/react-native/ItemSchema.snippet.create-priority-enum.tsx
+        :language: javascript
       
       The priority levels in the enum are ordered from most important
       to least. The corresponding index value for each level increases
       from the most important, ``Priority[0]``, to the least important,
       ``Priority[3]``. This means that a "higher" priority level (i.e. a
       more important one) has a lower index value.
-
-      .. tip::
-      
-         In a TypeScript app, you could define an `enum
-         <https://www.typescriptlang.org/docs/handbook/enums.html>`_ to
-         model this instead of using the helper function:
-
-         .. code-block:: javascript
-            
-            // Priority.High === 1
-            // Priority[Priority.High] === "High"
-            export enum Priority {
-              Severe = 0,
-              High = 1,
-              Medium = 2,
-              Low = 3,
-            }
    
    .. step:: Update the To-Do Item Data Model
 
@@ -341,40 +310,11 @@ are and allow us to focus only on the most important ones.
 
       Add the following lines to your code in ``src/ItemSchema.tsx`` to
       add ``priority`` to the model:
-      
-      .. code-block:: javascript
-         :caption: ItemSchema.tsx
-         :emphasize-lines: 6, 11, 21
-         
-         export class Item {
-           constructor({
-             _id = new BSON.ObjectId(),
-             isComplete = false,
-             owner_id,
-             priority = Priority.High, // Default to High priority if none is specified
-           }) {
-             this.isComplete = isComplete;
-             this._id = _id;
-             this.owner_id = owner_id
-             this.priority = priority
-           }
-           
-           static schema = {
-             name: 'Item',
-             properties: {
-               _id: 'objectId',
-               isComplete: {type: 'bool', default: false},
-               summary: 'string',
-               owner_id: 'string',
-               priority: {
-                 // Store the index value of the Priority enum rather than the name
-                 type: 'int',
-                 default: Priority.High
-               },
-             },
-             primaryKey: '_id',
-           };
-         }
+
+      .. literalinclude:: /examples/generated/react-native/ItemSchema.snippet.define-item-class.tsx
+        :language: javascript
+        :caption: src/ItemSchema.tsx
+        :emphasize-lines: 6, 18-22
       
       .. note:: Why Didn't This Break Sync
 
@@ -446,109 +386,41 @@ are and allow us to focus only on the most important ones.
    
       Then, modify the ``CreateToDoPrompt`` component:
       
+      - add ``priority`` to the ``onSubmit()`` props definition
       - keep track of ``priority`` in a state hook
       - connect the state to the ``Picker`` component that you imported
       - pass ``priority`` to the ``onSubmit()`` handler
 
-      .. code-block:: javascript
-         :caption: src/CreateToDoPrompt.tsx
-         :emphasize-lines: 4, 12-23, 27
-         
-         export function CreateToDoPrompt(props) {
-           const {onSubmit} = props;
-           const [summary, setSummary] = useState(null);
-           const [priority, setPriority] = useState(Priority.High);
-           
-           return (
-             <View style={styles.modalWrapper}>
-               <Text h4 style={styles.addItemTitle}>
-                 Add Item
-               </Text>
-               <Input placeholder="What do you want to do?" onChangeText={setSummary} />
-               <Picker
-                 style={{width: '80%'}}
-                 selectedValue={priority}
-                 onValueChange={value => setPriority(value)}>
-                 {Priority.map(priority => (
-                   <Picker.Item
-                     key={priority}
-                     label={priority}
-                     value={Priority[priority]}
-                    />
-                 ))}
-               </Picker>
-               <Button
-                 title="Save"
-                 buttonStyle={styles.saveButton}
-                 onPress={() => onSubmit({summary, priority})}
-               />
-             </View>
-           );
-         }
-      
+      .. literalinclude:: /examples/generated/react-native/CreateToDoPrompt.snippet.create-todo-prompt.tsx
+        :language: javascript
+        :caption: src/CreateToDoPrompt.tsx
+        :emphasize-lines: 2, 8, 20-31, 35
+
       In ``src/ItemListView.tsx``, modify the ``createItem()`` function
       to accept and use ``priority``:
 
-      .. code-block:: javascript
-         :caption: ItemListView.tsx
-         :emphasize-lines: 1, 9
-         
-         const createItem = ({summary, priority}) => {
-           // if the realm exists, create a to-do item
-           if (realm) {
-             realm.write(() => {
-               realm.create('Item', {
-                 _id: new BSON.ObjectID(),
-                 owner_id: user.id,
-                 summary,
-                 priority,
-               });
-             });
-           }
-         };
-      
+      .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.create-item.tsx
+        :language: javascript
+        :caption: src/ItemListView.tsx
+        :emphasize-lines: 1, 8
+
       Then, modify the new to-do submission handler to accept the
       ``priority`` level and pass it to ``createItem()``:
 
-      .. code-block:: javascript
-         :caption: ItemListView.tsx
-         :emphasize-lines: 2, 4
-         
-         <CreateToDoPrompt
-           onSubmit={({summary, priority}) => {
-             setShowNewItemOverlay(false);
-             createItem({summary, priority});
-           }}
-         />
-      
+      .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.instantiate-create-todo-prompt.tsx
+        :language: javascript
+        :caption: src/ItemListView.tsx
+        :emphasize-lines: 2, 4
+
       Finally, modify each to-do's list item to include its ``priority``
       before the ``summary``:
 
-      .. code-block:: javascript
-         :caption: ItemListView.tsx
-         :emphasize-lines: 2
-         
-         <ListItem key={`${item._id}`} bottomDivider topDivider>
-           <Text>{item.priority}</Text>
-           <ListItem.Title style={styles.itemTitle}>
-             {item.summary}
-           </ListItem.Title>
-           <ListItem.CheckBox
-             checked={item.isComplete}
-             onPress={() => toggleItemIsComplete(item._id)}
-           />
-           <Button
-             type="clear"
-             icon={
-               <Icon
-                 name="times"
-                 size={12}
-                 color="#979797"
-                 onPress={() => deleteItem(item._id)}
-               />
-             }
-           />
-         </ListItem>
+      .. TODO: replace with define-list-item - add emphasis
+
+      .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.define-list-item.tsx
+        :language: javascript
+        :caption: src/ItemListView.tsx
+        :emphasize-lines: 7
 
    .. step:: Run and Test the App
 
