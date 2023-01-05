@@ -26,15 +26,15 @@ the creation of a to-do list application. This application enables users to:
 
 The template app also provides a toggle that simulates the device being in 
 "Offline Mode." This toggle lets you quickly test Device Sync functionality 
-on a simulator, simulating the user having no internet connection. However,
+on the simulator, emulating the user having no internet connection. However,
 you would likely remove this toggle in a production application.
 
 This tutorial builds on the Template App. You will add a new ``priority`` field 
 to the existing ``Item`` model and update the 
 :ref:`Flexible Sync subscription <queryable-fields>` to only show items within 
-a range of priorities. This is an arbitrary example to illustrate how you might 
-adapt the template app for your own needs. You would not realistically make 
-this specific change given the current structure of the template app. 
+a range of priorities. This example illustrates how you might adapt the 
+template app for your own needs. You would not necessarily make 
+this change given the current structure of the template app. 
 
 Depending on your experience with SwiftUI, this tutorial should take 
 around 30 minutes.
@@ -115,7 +115,7 @@ Explore the Template App
              the ``realmApp``. The ``realmApp`` is how your app communicates 
              with the App Services backend. This provides access to login and 
              authentication. This file also contains the error handler that 
-             listens for Sync errors.
+             listens for Device Sync errors.
 
              To learn more about how you can customize your app configuration,
              see: :ref:`Connect to an Atlas App Services Backend <ios-init-appclient>`.
@@ -362,9 +362,9 @@ Change the Subscription
       Return to your mobile app. Because we added ``reRunOnOpen``, the app
       should re-sync only the documents that match the Flexible Sync query.
       After an initial moment when Realm resyncs the document collection, you 
-      will see only the new Item of High priority that you created.
+      will only see the new Item of High priority that you created.
 
-      You'll note that the document you initially created is not synced, 
+      The Item document you initially created is not synced, 
       because it does not have a ``priority`` field. If you want this Item to 
       be synced, you can edit the document in the Atlas UI and add a value for 
       the priority field.
@@ -383,7 +383,7 @@ Change the Subscription
 
       You can also see this message in the console log.
 
-      In this instance, Realm creates the Item locally, syncs it with the 
+      In this scenario, Realm creates the Item locally, syncs it with the 
       backend, and then reverts the write because it doesn't meet the 
       subscription rules.
 
