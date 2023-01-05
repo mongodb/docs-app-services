@@ -21,12 +21,20 @@ the creation of a to-do list application. This application enables users to:
 
 - Register their email as a new user account.
 - Sign in to their account with their email and password (and sign out later).
-- View, create, modify, and delete tasks.
+- View, create, modify, and delete their own tasks.
+- View all tasks, even where the user is not the owner.
 
-This tutorial adds on to the Template App. You will add a new ``priority`` field 
+The template app also provides a toggle that simulates the device being in 
+"Offline Mode." This toggle lets you quickly test Device Sync functionality 
+on the simulator, emulating the user having no internet connection. However,
+you would likely remove this toggle in a production application.
+
+This tutorial builds on the Template App. You will add a new ``priority`` field 
 to the existing ``Item`` model and update the 
 :ref:`Flexible Sync subscription <queryable-fields>` to only show items within 
-a range of priorities. 
+a range of priorities. This example illustrates how you might adapt the 
+template app for your own needs. You would not necessarily make 
+this change given the current structure of the template app. 
 
 Depending on your experience with SwiftUI, this tutorial should take 
 around 30 minutes.
@@ -48,6 +56,7 @@ Prerequisites
 
 Start with the Template
 -----------------------
+
 This tutorial is based on the SwiftUI Flexible Sync Template App named 
 ``swiftui.todo.flex``. We start with the default app and build new features 
 on it. 
@@ -105,7 +114,8 @@ Explore the Template App
            - This file uses the values from ``AppConfig.swift`` to initialize
              the ``realmApp``. The ``realmApp`` is how your app communicates 
              with the App Services backend. This provides access to login and 
-             authentication.
+             authentication. This file also contains the error handler that 
+             listens for Device Sync errors.
 
              To learn more about how you can customize your app configuration,
              see: :ref:`Connect to an Atlas App Services Backend <ios-init-appclient>`.
@@ -206,7 +216,7 @@ Add a New Property
          enum types as persistable directly in Realm. We set the enum's type
          as ``Int`` here instead of ``String`` so we can query based on a 
          numeric priority level later. We use a ``description`` computed property
-         to display a nice string representation of the priority in the UI.
+         to display a string representation of the priority in the UI.
          
    .. step:: Set the Priority when Creating a New Item
 
@@ -296,18 +306,19 @@ Change the Subscription
       every time we open the app.
 
       .. code-block:: swift
-         :emphasize-lines: 3-5, 8, 11
+         :emphasize-lines: 2-5, 9, 12
 
          let config = user.flexibleSyncConfiguration(initialSubscriptions: { subs in
-             if let foundSubscription = subs.first(named: "user_tasks") {
-                 foundSubscription.updateQuery(toType: Item.self, where: {
-                     $0.owner_id == user.id && $0.priority <= PriorityLevel.high
-                 })
-             } else {
-                 subs.append(QuerySubscription<Item>(name: "user_tasks") {
-                     $0.owner_id == user.id && $0.priority <= PriorityLevel.high
-                 })
-             }
+            if let foundSubscription = subs.first(named: Constants.myItems) {
+               foundSubscription.updateQuery(toType: Item.self, where: {
+                  $0.owner_id == user.id && $0.priority <= PriorityLevel.high
+               })
+            } else {
+               // No subscription - create it
+               subs.append(QuerySubscription<Item>(name: Constants.myItems) {
+                  $0.owner_id == user.id && $0.priority <= PriorityLevel.high
+               })
+            }
          }, rerunOnOpen: true)
 
    .. step:: Run and Test
@@ -351,31 +362,34 @@ Change the Subscription
       Return to your mobile app. Because we added ``reRunOnOpen``, the app
       should re-sync only the documents that match the Flexible Sync query.
       After an initial moment when Realm resyncs the document collection, you 
-      will see the new Item of High priority that you created.
+      will only see the new Item of High priority that you created.
+
+      The Item document you initially created is not synced, 
+      because it does not have a ``priority`` field. If you want this Item to 
+      be synced, you can edit the document in the Atlas UI and add a value for 
+      the priority field.
       
       If you want to further test the functionality, you can create Items of various 
       priorities. You will see that a new Item with a lower priority briefly
-      appears in the list of Items and then disappears. You can see a message
-      similar to this one in the logs:
+      appears in the list of Items and then disappears. The Sync error handler
+      helpfully provides a message describing this behavior:
 
       .. code-block:: sh
          :copyable: false
 
-         2022-08-08 18:00:45.726138-0400 App[18133:242396] Sync: Connection[2]: 
-         Session[2]: Received: ERROR "Client attempted a write that is outside 
-         of permissions or query filters; it has been reverted" 
-         (error_code=231, try_again=true, recovery_disabled=false)
+         ERROR 
+         "Client attempted a write that is outside 
+         of permissions or query filters; it has been reverted"
 
-      Realm creates the Item locally, syncs it with the backend, and then reverts 
-      the write because it doesn't meet the subscription rules.
+      You can also see this message in the console log.
 
-      You'll note, too, that the document you initially created is not synced, 
-      because it does not have a ``priority`` field. If you want this Item to 
-      be synced, you can edit the document in the Atlas UI and add a value for 
-      the priority field.
+      In this scenario, Realm creates the Item locally, syncs it with the 
+      backend, and then reverts the write because it doesn't meet the 
+      subscription rules.
 
 Conclusion
 ----------
+
 Adding a property to an existing Realm object is a non-breaking change, and 
 Development Mode ensures that the schema change is reflected server-side. If 
 you add or change a subscription to use an additional field, whether newly 
