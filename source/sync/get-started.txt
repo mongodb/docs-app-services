@@ -225,19 +225,3 @@ with the backend app and can watch for and react to changes.
 
       To create queries from the Kotlin Client SDK, see the :ref:`Kotlin SDK
       guide to Flexible Sync <kotlin-subscriptions>`.
-
-.. _sync-troubleshooting:
-
-Troubleshooting
----------------
-
-Sync Fails To Enable Shortly After Cluster Creation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Enabling Atlas Device Sync on a newly-created cluster may fail with an error
-message about parsing the URI. This happens because an SRV record hasn't
-propagated yet. While we work to provide more helpful diagnostics around
-this issue, there are two possible workarounds:
-
-- Wait five minutes, then enable Atlas Device Sync.
-- Unlink and :ref:`re-link the cluster <link-a-data-source>`.
