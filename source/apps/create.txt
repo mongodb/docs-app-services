@@ -1,20 +1,288 @@
-.. _create-realm-apps:
+.. _create-an-app:
 
-===========
-Create Apps
-===========
+=============
+Create an App
+=============
 
-.. default-domain:: mongodb
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
 
-.. toctree::
-   :titlesonly:
-   :caption: Create Apps
-   :hidden:
+Overview
+--------
 
-   App Services UI </apps/create/create-with-ui>
-   {+cli+} </apps/create/create-with-cli>
-   App Services API </apps/create/create-with-api>
+You can create a new App Services App from the App Services UI, CLI, or
+Admin API.
 
-- :doc:`App Services UI </apps/create/create-with-ui>`
-- :doc:`{+cli+} </apps/create/create-with-cli>`
-- :doc:`App Services API </apps/create/create-with-api>`
+An App Services App is a managed backend instance that contains your
+application's services. Each app belongs to a specific Atlas project.
+
+To create an App in a project, you must be logged in to `MongoDB Atlas
+<https://cloud.mongodb.com/user/register?tck=docs_realm>`_ and have
+**Project Owner** permissions.
+
+.. _create-app-ui:
+
+Atlas UI
+--------
+
+You can create a new App Services App from the App Services UI.
+
+Before You Begin
+~~~~~~~~~~~~~~~~
+
+You will need the following to create an App in the Atlas UI:
+
+- .. include:: /includes/prereqs/atlas-account.rst
+
+- .. include:: /includes/prereqs/atlas-cluster.rst
+
+Procedure
+~~~~~~~~~
+
+.. procedure::
+
+   .. step:: Navigate to the App Services Tab
+
+      Go to the Project Dashboard where you want to create the App.
+      Select the :guilabel:`App Services` tab.
+
+
+   .. step:: Create a new App
+
+      If you are creating your first app in this Atlas
+      project, you will be shown all the :ref:`template apps <template-apps>`
+      available for you to start with, and an option to start without a template
+      (:guilabel:`Build your own App`).
+
+      .. figure:: /images/template-apps.png
+         :alt: Modal showing all available template apps to start building from.
+         :figwidth: 600px
+         :width: 600px
+
+      If you have already created at least one app
+      in this Atlas project, you can choose between two create buttons at
+      the top right of the :guilabel:`App Services` tab
+
+      .. tabs::
+
+       .. tab:: Create App from Template
+          :tabid: template
+
+          Click the :guilabel:`Create App from Template` button
+          to see a dropdown menu with all the template apps and pick one that suits your needs.
+
+          .. figure:: /images/template-apps-dropdown.png
+             :alt: Dropdown menu showing all available template apps to start building from.
+             :figwidth: 600px
+             :width: 600px
+
+       .. tab:: Create a New App
+          :tabid: blank
+
+          Click the :guilabel:`Create a New App` button to start without a template.
+
+          .. figure:: /images/create-a-new-app.png
+             :alt: Button to create a new App.
+             :figwidth: 600px
+             :width: 600px
+
+
+   .. step:: Configure your App
+
+      You will be shown a dialog where you can configure your App, including the:
+
+      - **Application Name**.
+
+        .. include:: /includes/note-app-name-limitations.rst
+
+      - **Linked Atlas cluster**. If you do not have a cluster in this
+        project, App Services creates one for you and automatically creates a
+        linked data source with the name ``mongodb-atlas``.
+
+        .. include:: /includes/mongodb-4.4-required-for-sync-admonition.rst
+
+      - :ref:`Deployment model <realm-deployment-models>`.
+
+      - :ref:`Deployment region <deployment-regions>`.
+
+      Click :guilabel:`Create a New App`.
+
+      Upon creation of your App, you will be redirected to the
+      App Services console. App Services creates your app with a
+      Linked Data Source named :guilabel:`mongodb-atlas`.
+
+.. _create-app-cli:
+
+App Services CLI
+----------------
+
+You can create a new App Services App with the :ref:`App Services
+CLI <realm-cli-quickstart>`.
+
+Before You Begin
+~~~~~~~~~~~~~~~~
+
+You will need the following to create an App in the CLI:
+
+- .. include:: /includes/prereqs/atlas-account.rst
+
+- .. include:: /includes/prereqs/atlas-cluster.rst
+
+- .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+- .. include:: /includes/prereqs/app-services-cli.rst
+
+Procedure
+~~~~~~~~~
+
+.. procedure::
+
+   .. step:: Authenticate a MongoDB Atlas User
+
+
+      .. include:: /includes/cli-login.rst
+
+
+   .. step:: Run the App Creation Command
+
+      The CLI can create an app and copy its :ref:`configuration files
+      <app-configuration>` to a local directory with a single command. The command
+      asks you to specify the app name and the Atlas project that should contain the
+      app. You can configure the command with flags or interactively.
+
+      .. code-block:: shell
+
+         realm-cli apps create
+
+      The command also supports additional flags that you can optionally include
+      to customize your app. The following table lists common flags you might use:
+
+      .. list-table::
+
+         * - ``--template``
+           - Choose a :ref:`template app <template-apps>` to start from.
+
+             For a list of all template apps, refer to :ref:`Available Template Apps
+             <template-apps-list>`.
+
+         * - ``--deployment-model``
+           - Defines the app's :ref:`deployment model <deployment-model>`.
+
+             Valid values:
+
+             - ``GLOBAL``
+             - ``LOCAL``
+
+         * - ``--location``
+           - Defines a local app's :ref:`deployment region <deployment-region>`.
+
+         * - ``--environment``
+           - Defines the app's :ref:`environment <environment-values>`.
+
+             Valid values:
+
+             - ``development``
+             - ``testing``
+             - ``qa``
+             - ``production``
+
+      .. seealso::
+
+        For more details and additional flags, see the
+        :ref:`CLI documentation for the create command <realm-cli-apps-create>`.
+
+.. _create-app-api:
+
+App Services Admin API
+----------------------
+
+You can create a new App Services App with the :ref:`App Services Admin
+API <admin-api>`.
+
+Before You Begin
+~~~~~~~~~~~~~~~~
+
+You will need the following to create an App with the Admin API:
+
+- .. include:: /includes/prereqs/atlas-account.rst
+
+- .. include:: /includes/prereqs/atlas-cluster.rst
+
+- .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+Procedure
+~~~~~~~~~
+
+.. procedure::
+
+   .. step:: Get an Admin API Access Token
+
+      .. include:: /includes/api-authenticate-instructions.rst
+
+   .. step:: Get the Project ID
+
+      Every App Services App belongs to a MongoDB Atlas project.
+
+      To create a App you need the Project ID (sometimes referred to as
+      the Group ID) of the MongoDB Atlas project that contains the app.
+      You will include this ID in the URL of API requests.
+
+   .. step:: Create a new App
+
+      You can create a new App through the :admin-api-endpoint:`create endpoint <operation/adminCreateApplication>`.
+
+      Your request should include:
+
+      - The ``access_token`` from step 1 in a :mdn:`Bearer token <Web/HTTP/Authentication>` ``Authorization`` header.
+
+      - The :admin-api-endpoint:`Group ID <section/Project-and-Application-IDs>` from step 2.
+
+      - A name for your new app.
+
+      .. tabs::
+
+         .. tab:: Blank App
+            :tabid: blank
+
+            .. code-block:: shell
+
+               curl --request POST 'https://realm.mongodb.com/api/admin/v3.0/groups/<GroupID>/apps' \
+                 --header 'Authorization:  Bearer <AccessToken>' \
+                 --header 'Content-Type: application/json' \
+                 --data '{ "name": "<AppName>" }'
+
+         .. tab:: Template App
+            :tabid: template
+
+            If you want to create an app from a :ref:`template <template-apps>`, you must also
+            include the following in the request body:
+
+            - The ``template_id`` field with one of the available template apps.
+              For a list of all template apps, refer to :ref:`Available Template Apps <template-apps-list>`.
+
+            - The ``data_source`` field with information about an existing Atlas cluster.
+
+            .. code-block:: shell
+
+              curl --request POST 'https://realm.mongodb.com/api/admin/v3.0/groups/<GroupID>/apps' \
+                --header 'Authorization:  Bearer <AccessToken>' \
+                --header 'Content-Type: application/json' \
+                --data '{
+                    "name": "<AppName>",
+                    "template_id": "<ChosenTemplateAppId>",
+                    "data_source": {
+                      "name": "mongodb-atlas",
+                      "type": "mongodb-atlas",
+                      "config": {
+                          "clusterName": "<NameOfExistingCluster>"
+                      }
+                    }
+                  }'
+
+      If creation succeeds, App Services returns a ``201`` response and a JSON document.
+
+      .. seealso::
+
+         :admin-api-endpoint:`API Documentation for the create endpoint <operation/adminCreateApplication>`
