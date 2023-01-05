@@ -415,8 +415,6 @@ are and allow us to focus only on the most important ones.
       Finally, modify each to-do's list item to include its ``priority``
       before the ``summary``:
 
-      .. TODO: replace with define-list-item - add emphasis
-
       .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.define-list-item.tsx
         :language: javascript
         :caption: src/ItemListView.tsx
@@ -443,17 +441,9 @@ data between devices.
 For example, the template app you're using has the following
 built-in subscription to items that the current user owns:
 
-.. code-block:: javascript
-   :caption: ItemListView.tsx
-   
-   await realm.subscriptions.update(mutableSubs => {
-     // subscribe to all of the logged in user's to-do items
-     let ownItems = realm
-      .objects("Item")
-      .filtered(`owner_id == "${user.id}"`);
-     // use the same name as the initial subscription to update it
-     mutableSubs.add(ownItems, {name: "ownItems"});
-   });
+.. literalinclude:: /examples/generated/react-native/ItemListView.snippet.set-owner-subscription.tsx
+  :language: javascript
+  :caption: src/ItemListView.tsx
 
 You can customize the subscription on the fly to sync only the data that
 your app needs. Let's add a feature to demonstrate how.
@@ -475,25 +465,11 @@ only syncs "important" ones with a ``priority`` of High or Severe.
          const [showImportantOnly, setShowImportantOnly] = useState(false);
 
       Then, add a new button that toggles the mode to the bottom of the
-      to-do list:
+      to-do list, after ``<ListItem>``:
 
-      .. code-block:: javascript
-         :caption: ItemListView.tsx
-         :emphasize-lines: 6-13
-
-         {items.map(item => (
-           <ListItem key={`${item._id}`} bottomDivider topDivider>
-             {/* ... */}
-           </ListItem>
-         ))}
-         <Button
-           title={showImportantOnly ? 'Show All' : 'Show Important Only'}
-           buttonStyle={{
-             ...styles.addToDoButton,
-             backgroundColor: showImportantOnly ? '#00A35C' : '#FFC010',
-           }}
-           onPress={() => setShowImportantOnly(showImportantOnly => !showImportantOnly)}
-         />
+      .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.important-only-button.tsx
+        :language: javascript
+        :caption: src/ItemListView.tsx
 
    .. step:: Update the Sync Subscription
 
@@ -507,28 +483,10 @@ only syncs "important" ones with a ``priority`` of High or Severe.
       ``priority`` filter to the query if "important only" mode is
       active:
 
-      .. code-block:: javascript
-         :caption: ItemListView.tsx
-         :emphasize-lines: 9-12, 18
-
-         useEffect(() => {
-           // initialize the subscriptions
-           const updateSubscriptions = async () => {
-             await realm.subscriptions.update(mutableSubs => {
-               // subscribe to all of the logged in user's to-do items
-               let ownItems = realm
-                 .objects("Item")
-                 .filtered(`owner_id == "${user.id}"`);
-               if(showImportantOnly) {
-                 // 'Severe' or 'High' priority items
-                 ownItems = ownItems.filtered(`priority <= 1`);
-               }
-               // use the same name as the initial subscription to update it
-               mutableSubs.add(ownItems, {name: 'ownItems'});
-             });
-           };
-           updateSubscriptions();
-         }, [realm, user, showImportantOnly]);
+      .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.mutable-subs.tsx
+        :language: javascript
+        :caption: src/ItemListView.tsx
+        :emphasize-lines: 7-15
 
       .. important::
 
