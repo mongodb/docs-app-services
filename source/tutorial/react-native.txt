@@ -13,14 +13,24 @@ React Native Tutorial
 Overview
 --------
 
-You can use the Realm JavaScript SDK, and the official Realm React
-library to build a mobile application with React Native. This tutorial
+You can use the Realm React Native SDK and :npm:`@realm/react`
+to build a mobile application with React Native. This tutorial
 walks you through how to build your own app that uses Flexible Sync.
 
-For this tutorial, we'll start with a pre-built template application to
-see how everything fits together. Then, you will add a new Priority
-field to the existing Item model and update the Flexible Sync
-Subscription to only show items within a range of priorities.
+For this tutorial, we'll start with a pre-built TypeScript template application
+to see how everything fits together. 
+
+After you've got the template app running, you will add a new ``priority``
+field to the existing ``Item`` model and update the Flexible Sync
+Subscription to only show items within a range of priorities. This example 
+illustrates how you might adapt the template app for your own needs. 
+You would not necessarily make this change given the current structure of 
+the template app.
+
+The template app provides a toggle that simulates the device being in 
+an offline mode. This toggle lets you quickly test Device Sync functionality,
+emulating the user having no internet connection. However,
+you would likely remove this toggle in a production application.
 
 This tutorial should take around 30 minutes.
 
@@ -47,20 +57,15 @@ Start with the Template App
 ---------------------------
 
 To start, you'll create a new app on your computer and get familiar with
-it. The app will use a pre-built template that includes a working React
-Native app and its corresponding Atlas App configuration files.
+it. The app is a pre-built template that includes a working React
+Native application and its corresponding Atlas App configuration files.
 
-The template app is a basic "to-do list" application. Users can input a
-list of tasks that they need to do and then check each to-do off when
-they finish it. Some basic functionality is already set up for you:
+The template app is a basic to-do list application that lets users do various
+things to manage their tasks.
 
-- Users can create email/password accounts and log in and out of the app.
-
-- Users can create, read, update, and delete ``Item`` objects that
-  represent individual items to do.
-
-- The ``Item`` class is set up to automatically sync to Atlas and other
-  clients with Atlas Device Sync.
+- Create email/password accounts and log in and out of the app.
+- Create, read, update, and delete their own tasks.
+- View all tasks, even where the user is not the owner.
 
 Use the following steps to get the template app up and running on your
 computer:
@@ -77,16 +82,14 @@ computer:
          npx mongodb-realm-cli apps create \
            --template react-native.todo.flex \
            --name realm-sync-tutorial
-      
-      .. tip::
          
-         The command creates a new folder in your current directory with
-         the same name as the value of the ``--name`` flag.
+      The command creates a new folder in your current directory with
+      the same name as the value of the ``--name`` flag.
    
    .. step:: Install Dependencies
 
       In your terminal, run the following commands to navigate to the
-      react native app and install its dependencies:
+      React Native app and install its dependencies:
 
       .. code-block:: shell
 
@@ -151,17 +154,17 @@ computer:
    .. step:: Test the App
       
       When the build completes, you should have a functional app running
-      on your simulator. In the app, register a new account and play
-      around with the app for a few minutes:
+      on your simulator. In the app, register a new account and test the features:
 
       - Add a few to-do items to the list.
       - Press the checkbox on one or two items to mark them as complete.
       - Press the X on an item to delete it from the list.
+      - Toggle internet connectivity in the app to simulate offline mode.
 
       If you connect to your Atlas cluster and query the
-      ``todo.Item`` collection you can see your app's data. New data
-      and changes from the React Native app automatically sync to
-      this collection.
+      ``todo.Item`` collection you can see your App's data. As long as it's not
+      in offline mode, new data and changes from the React Native app automatically 
+      sync to this collection.
 
       .. tip::
 
@@ -174,20 +177,10 @@ computer:
       with the new value whenever there is a network connection
       available.
 
-      .. code-block:: javascript
-         
-         db.Item.updateOne(
-           { "_id": "630665dba3f53b578b75bd7e" },
-           { "$set": { "isComplete": true }
-         })
-
       .. tip::
 
          To learn more about updating data in your cluster, see
          :ref:`write-op-update`.
-      
-      .. image:: /images/rn-tutorial-template-client.png
-         :alt: Screenshots of the welcome and to-do list screens from the template app.
 
 Get Familiar With the Template App
 ----------------------------------
@@ -213,7 +206,7 @@ It also includes the following pre-defined configurations:
   your app with an email and password.
 
 - A flexible sync configuration with a single session role that allows
-  users to read and write only their own data.
+  users to read and write their own items and view other users' items.
 
 React Native App
 ~~~~~~~~~~~~~~~~
@@ -240,40 +233,40 @@ directory:
        
      - Description
      
-   * - ``ItemSchema.js``
+   * - ``ItemSchema.tsx``
        
-     - The ``Item`` class, including its object schema. We import the
-       class in ``RealmContext.js`` to include it in the app's Realm
+     - The ``Item`` class, including its object schema. We import this
+       class in ``RealmContext.ts`` to include it in the app's Realm
        schema.
      
-   * - ``RealmContext.js``
+   * - ``RealmContext.ts``
        
      - The Realm hooks and providers that we create and export to work
        with Realm throughout the app.
      
-   * - ``App.js``
+   * - ``App.tsx``
        
      - The root component of the app, which we wrap with the Realm hook
-       providers from ``RealmContext.js``.
+       providers from ``RealmContext.ts``.
      
-   * - ``WelcomeView.js``
+   * - ``WelcomeView.tsx``
        
      - The user registration and login form that users see when they
        first open the app.
      
-   * - ``ItemListView.js``
+   * - ``ItemListView.tsx``
        
-     - The main "to-do list" app that users interact with after they log
-       in. It queries for ``Item`` objects from Realm and displays them
+     - The main to-do list app that users interact with after they log
+       in. It queries for ``Item`` Realm objects and displays them
        in a list. It also includes the code to create new ``Item``
        objects and store them in Realm.
      
-   * - ``CreateToDoPrompt.js``
+   * - ``CreateToDoPrompt.tsx``
        
      - A UI form that lets us enter data for new ``Item`` objects. The
-       code that actually creates new objects is in ``ItemListView.js``.
+       code that actually creates new objects is in ``ItemListView.tsx``.
      
-   * - ``LogoutButton.js``
+   * - ``LogoutButton.tsx``
        
      - A reusable button that logs out an authenticated user.
 
@@ -298,10 +291,10 @@ are and allow us to focus only on the most important ones.
       priority.
       
       Add the following code directly under the import statements in
-      ``src/ItemSchema.js``:
+      ``src/ItemSchema.tsx``:
       
       .. code-block:: javascript
-         :caption: ItemSchema.js
+         :caption: ItemSchema.tsx
          
          function createEnum(arr) {
            arr.forEach((p, i) => arr[p] = i);
@@ -346,11 +339,11 @@ are and allow us to focus only on the most important ones.
       ``priority`` field. However, we still have to define the
       ``priority`` field in the ``Item`` class.
 
-      Add the following lines to your code in ``src/ItemSchema.js`` to
+      Add the following lines to your code in ``src/ItemSchema.tsx`` to
       add ``priority`` to the model:
       
       .. code-block:: javascript
-         :caption: ItemSchema.js
+         :caption: ItemSchema.tsx
          :emphasize-lines: 6, 11, 21
          
          export class Item {
@@ -443,10 +436,10 @@ are and allow us to focus only on the most important ones.
       Now that the package is fully installed, let's update the new
       to-do creation prompt component to use the picker.
       
-      Add the following imports to the top of ``src/CreateToDoPrompt.js``:
+      Add the following imports to the top of ``src/CreateToDoPrompt.tsx``:
 
       .. code-block:: javascript
-         :caption: CreateToDoPrompt.js
+         :caption: CreateToDoPrompt.tsx
          
          import {Picker} from '@react-native-picker/picker';
          import {Priority} from './ItemSchema';
@@ -458,7 +451,7 @@ are and allow us to focus only on the most important ones.
       - pass ``priority`` to the ``onSubmit()`` handler
 
       .. code-block:: javascript
-         :caption: src/CreateToDoPrompt.js
+         :caption: src/CreateToDoPrompt.tsx
          :emphasize-lines: 4, 12-23, 27
          
          export function CreateToDoPrompt(props) {
@@ -493,11 +486,11 @@ are and allow us to focus only on the most important ones.
            );
          }
       
-      In ``src/ItemListView.js``, modify the ``createItem()`` function
+      In ``src/ItemListView.tsx``, modify the ``createItem()`` function
       to accept and use ``priority``:
 
       .. code-block:: javascript
-         :caption: ItemListView.js
+         :caption: ItemListView.tsx
          :emphasize-lines: 1, 9
          
          const createItem = ({summary, priority}) => {
@@ -518,7 +511,7 @@ are and allow us to focus only on the most important ones.
       ``priority`` level and pass it to ``createItem()``:
 
       .. code-block:: javascript
-         :caption: ItemListView.js
+         :caption: ItemListView.tsx
          :emphasize-lines: 2, 4
          
          <CreateToDoPrompt
@@ -532,7 +525,7 @@ are and allow us to focus only on the most important ones.
       before the ``summary``:
 
       .. code-block:: javascript
-         :caption: ItemListView.js
+         :caption: ItemListView.tsx
          :emphasize-lines: 2
          
          <ListItem key={`${item._id}`} bottomDivider topDivider>
@@ -566,9 +559,6 @@ are and allow us to focus only on the most important ones.
       that you can choose a priority level and that the list displays
       each to-do's priority.
       
-      .. image:: /images/rn-tutorial-priority.png
-         :alt: Screenshots of the priority picker and the to-do list showing each to-do's priority.
-
 Update the Sync Subscription
 ----------------------------
 
@@ -582,7 +572,7 @@ For example, the template app you're using has the following
 built-in subscription to items that the current user owns:
 
 .. code-block:: javascript
-   :caption: ItemListView.js
+   :caption: ItemListView.tsx
    
    await realm.subscriptions.update(mutableSubs => {
      // subscribe to all of the logged in user's to-do items
@@ -608,7 +598,7 @@ only syncs "important" ones with a ``priority`` of High or Severe.
       to keep track of the current mode:
 
       .. code-block:: javascript
-         :caption: ItemListView.js
+         :caption: ItemListView.tsx
 
          const [showImportantOnly, setShowImportantOnly] = useState(false);
 
@@ -616,7 +606,7 @@ only syncs "important" ones with a ``priority`` of High or Severe.
       to-do list:
 
       .. code-block:: javascript
-         :caption: ItemListView.js
+         :caption: ItemListView.tsx
          :emphasize-lines: 6-13
 
          {items.map(item => (
@@ -646,7 +636,7 @@ only syncs "important" ones with a ``priority`` of High or Severe.
       active:
 
       .. code-block:: javascript
-         :caption: ItemListView.js
+         :caption: ItemListView.tsx
          :emphasize-lines: 9-12, 18
 
          useEffect(() => {
@@ -686,9 +676,6 @@ only syncs "important" ones with a ``priority`` of High or Severe.
          Possible Unhandled Promise Rejection (id: 0):
          Error: Client provided query with bad syntax:
          unsupported query for table "Item": key "priority" is not a queryable field
-      
-      .. image:: /images/rn-tutorial-queryable-fields-error.png
-         :alt: Screenshot of a console warning in an iOS simulator
 
    .. step:: Update the Sync Configuration
       
@@ -731,9 +718,6 @@ only syncs "important" ones with a ``priority`` of High or Severe.
       be able to create, complete, and delete to-do items as well as switch
       to and from "important only" mode.
       
-      .. image:: /images/rn-tutorial-finished.png
-         :alt: Screenshots of the finished app in both "show all" and "important only" mode
-
 What's Next?
 ------------
 
