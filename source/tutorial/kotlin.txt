@@ -137,7 +137,7 @@ Set up the Template App
 
          * - AddItemViewModel.kt
            - Located in the ``presentation/tasks`` directory. The view model that contains 
-             business logic and manages states used when adding an item.
+             business logic and manages state when adding an item.
          
          * - SyncRepository.kt
            - Located in the ``data`` directory. Repository used to access Realm Sync and
@@ -211,11 +211,11 @@ Modify the Application
 
    .. step:: Set the Priority when Creating a New Item
 
-      A. Open the ``ui/tasks/AddItem.kt`` file. This file defines
+      A. From the ``ui/tasks`` folder, open the ``/AddItem.kt`` file. This file defines
          the composable functions for the UI that displays when a user clicks 
          the '+' button to add a new todo item. 
       
-      #. Add the following imports: 
+      #. First, add the following imports below the ``package com.mongodb.app``:
       
          .. code-block:: kotlin
 
@@ -227,11 +227,11 @@ Modify the Application
             import androidx.compose.ui.unit.dp
             import com.mongodb.app.domain.PriorityLevel
 
-      #. Now we can add the dropdown menu to the ``AddItemPrompt`` composable function
+      #. Now we can add a dropdown field to the ``AddItemPrompt`` composable function
          that will enable the user to pick a priority level 
-         from a dropdown list using the PriorityLevel enums as available values. 
+         from a list using the PriorityLevel enums as available values. 
        
-         Before the closing tag of the text ``Column``, add the following code for the 
+         Before the closing tag of the ``Column``, add the following code for the 
          new dropdown field to the ``ColumnScope``:
    
          .. code-block:: xml
@@ -269,11 +269,13 @@ Modify the Application
                   }
                }
             }
+
+         Android Studio will identify several errors. We'll correct these in the next steps 
+         by adding the related functions. 
                
-      #. Next, we will define the dropdown field label as a string in the
-         :android:`string resources file <guide/topics/resources/string-resource>`.
+      #. Next, we'll define the dropdown field label as a string resource.
          Open the ``res/values/strings.xml`` file, and add the following before 
-         the closing of the 'resource' element. 
+         the closing of the 'resource' element: 
    
          .. code-block:: xml
 
@@ -282,8 +284,14 @@ Modify the Application
       #. Now within the ``presentation/tasks`` folder, open the ``AddItemViewModel.kt``
          file. Here we will add the business logic related to our new dropdown field.
 
-         Add the following variables to the ``AddItemViewModel`` class to handle the state
-         changes within the dropdown: 
+         First, add the following import below the ``package com.mongodb.app``: 
+
+         .. code-block:: kotlin
+
+            import com.mongodb.app.domain.PriorityLevel
+         
+         Next, add the following variables to the ``AddItemViewModel`` class to handle the state
+         changes within the dropdown:
 
          .. code-block:: kotlin
 
@@ -295,7 +303,7 @@ Modify the Application
             val expanded: State<Boolean>
                get() = _expanded
 
-         Next, add the following related functions: 
+         Then add the following related functions: 
 
          .. code-block:: kotlin
 
@@ -311,7 +319,8 @@ Modify the Application
                _expanded.value = false
             }
 
-         Now update the ``addTask()`` and ``cleanUpAndClose()`` functions:
+         Now update the ``addTask()`` and ``cleanUpAndClose()`` functions to include the new
+         ``taskPriority`` parameter:
 
          .. code-block:: kotlin
             :emphasize-lines: 4, 7
@@ -342,10 +351,17 @@ Modify the Application
                _addItemPopupVisible.value = false
             }
       
-      #. Finally, open the ``data/SyncRepository.kt`` file to reflect the same changes in the
-         ``addTask()`` function, which writes the updates to the . 
+      #. Finally, from the ``data`` folder, open the ``SyncRepository.kt`` file to 
+         reflect the same changes in the ``addTask()`` function, which writes the 
+         Item to the realm. 
 
-         Update the ``addTask()`` to pass the ``taskPriority`` as a parameter: 
+         First, add the following import below the ``package com.mongodb.app``:
+
+         .. code-block:: kotlin
+
+            import com.mongodb.app.domain.PriorityLevel
+
+         Next, update ``addTask()`` to pass the ``taskPriority`` as a parameter: 
 
          .. code-block:: kotlin
 
@@ -353,7 +369,7 @@ Modify the Application
 
          In the ``RealmSyncRepository`` class, update the ``addTask()`` function to pass 
          ``taskPriority`` as a parameter and write the ``priority`` field to the realm 
-         as an integer (through the enum ordinal): 
+         as an integer (using the enum ordinal): 
 
          .. code-block:: kotlin
             :emphasize-lines: 1, 5
@@ -369,8 +385,8 @@ Modify the Application
                }
             }
 
-         Last, in the ``MockRepository`` class, update the ``addTask()`` function to 
-         reflect the same changes: 
+         Finally, in the ``MockRepository`` class, update the ``addTask()`` function to 
+         also pass ``taskPriority`` as a parameter: 
 
          .. code-block:: kotlin
             
@@ -409,7 +425,7 @@ Change the Subscription
 
       Within the ``app/java/com.mongodb.app/data`` folder, open the ``SyncRepository.kt``
       file, where we define the Flexible Sync subscription. The subscription defines
-      which documents we sync with the user's device & account. Find the
+      which documents we sync with the user's device and account. Find the
       ``getQuery()`` function that our
       application calls on start. You can see that
       we are currently subscribing to two subscriptions: 
@@ -434,6 +450,27 @@ Change the Subscription
                   SubscriptionType.MINE -> realm.query("owner_id == $0 AND priority <= ${PriorityLevel.High.ordinal}", currentUser.id)
                   SubscriptionType.ALL -> realm.query()
             }
+      
+      We'll also force the subscription query to recalculate which documents to 
+      sync every time we open the app. 
+
+      To do this, find the ``SyncConfiguration.Builder().initialSubscriptions()`` function 
+      that our application calls on start, and add the ``reRunOnOpen`` set to ``true``: 
+
+      .. code-block:: kotlin
+         :emphasize-lines: 2
+
+         config = SyncConfiguration.Builder(currentUser, setOf(Item::class))
+            .initialSubscriptions (rerunOnOpen = true) { realm ->
+                // Subscribe to the active subscriptionType - first time defaults to MINE
+                val activeSubscriptionType = getActiveSubscriptionType(realm)
+                add(getQuery(realm, activeSubscriptionType), activeSubscriptionType.name)
+            }
+            .errorHandler { session: SyncSession, error: SyncException ->
+                onSyncError.invoke(session, error)
+            }
+            .waitForInitialRemoteData()
+            .build()
 
    .. step:: Run and Test
     
@@ -487,7 +524,8 @@ Change the Subscription
       .. code-block:: sh
          :copyable: false
 
-         ERROR "Client attempted a write that is outside of permissions or query filters; it has been reverted"   
+         ERROR "Client attempted a write that is outside of permissions or query 
+         filters; it has been reverted"   
       
       In this scenario, Realm creates the Item locally, syncs it with the 
       backend, and then reverts the write because it doesn't meet the 
