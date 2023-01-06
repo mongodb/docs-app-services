@@ -159,8 +159,8 @@ Set up the Template App
 
    .. step:: Check the Backend
 
-      Log in to `Atlas App Services <http://cloud.mongodb.com>`_. In the
-      :guilabel:`Atlas` tab, click on :guilabel:`Browse Collections`. In the list
+      Log in to `MongoDB Atlas <http://cloud.mongodb.com>`_. In the
+      :guilabel:`Data Services` tab, click on :guilabel:`Browse Collections`. In the list
       of databases, find and expand the :guilabel:`todo` database, and then the
       :guilabel:`Item` collection. You should see the document you created
       in this collection.
@@ -294,6 +294,8 @@ to only sync Items marked as a High or Severe priority.
       Update the subscription to delete the old subscription and add
       a new one that uses priority:
 
+      TODO: fix highlights
+
       .. include:: /examples/generated/flutter/tutorial/realm_services.snippet.update-subscription-query.dart.rst
 
    .. step:: Run and Test
@@ -362,8 +364,7 @@ to only sync Items marked as a High or Severe priority.
       If you want this Item to be synced,
       you can edit the document in the Atlas UI and add a value for the priority
       field, or you can change your subscription to include documents with null
-      values. You must use the Realm Query Language ``nil`` type to represent the
-      null value in your query.  We will also give the subscription the new name
+      values. We will also give the subscription the new name
       ``"getUserItemsWithHighOrNoPriority"``.
 
       .. include:: /examples/generated/flutter/tutorial/realm_services.snippet.sync-no-priority.dart.rst

@@ -1,5 +1,5 @@
 .. code-block:: dart
-   :emphasize-lines: 46-48, 59-61, 69-71, 91-96
+   :emphasize-lines: 47-49, 60-62, 70-72, 92-98
    :caption: lib/realm/realm_services.dart
 
    // ... imports
