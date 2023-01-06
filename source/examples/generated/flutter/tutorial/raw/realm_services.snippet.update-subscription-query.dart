@@ -1,4 +1,5 @@
 // ... imports
+
 class RealmServices with ChangeNotifier {
   static const String queryAllName = "getAllItemsSubscription";
   static const String queryMyItemsName = "getMyItemsSubscription";

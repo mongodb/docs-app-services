@@ -1,4 +1,5 @@
 // ... imports
+
 class RealmServices with ChangeNotifier {
   static const String queryAllName = "getAllItemsSubscription";
   static const String queryMyItemsName = "getMyItemsSubscription";
@@ -94,3 +95,4 @@ abstract class PriorityLevel {
   static int medium = 2;
   static int low = 3;
 }
+

@@ -1,10 +1,10 @@
-// ... imports
-
 class RealmServices with ChangeNotifier {
   static const String queryAllName = "getAllItemsSubscription";
   static const String queryMyItemsName = "getMyItemsSubscription";
   static const String queryMyHighPriorityItemsName =
       "getMyHighPriorityItemsSubscription";
+  static const String queryMyHighOrNoPriorityItemsName =
+      "getMyHighOrNoPriorityItemsSubscription";
 
   bool showAll = false;
   bool offlineModeOn = false;
@@ -13,17 +13,17 @@ class RealmServices with ChangeNotifier {
   User? currentUser;
   App app;
 
-  // ... RealmServices initializer
   RealmServices(this.app) {
     if (app.currentUser != null || currentUser != app.currentUser) {
       currentUser ??= app.currentUser;
       realm = Realm(Configuration.flexibleSync(currentUser!, [Item.schema]));
       // Check if subscription has been updated
-      final subscriptionChanged =
-          realm.subscriptions.findByName(queryMyHighPriorityItemsName)?.name !=
-                  null
-              ? true
-              : false;
+      final subscriptionChanged = realm.subscriptions
+                  .findByName(queryMyHighOrNoPriorityItemsName)
+                  ?.name !=
+              queryAllName
+          ? true
+          : false;
 
       if (realm.subscriptions.isEmpty || subscriptionChanged) {
         updateSubscriptions();
@@ -39,8 +39,8 @@ class RealmServices with ChangeNotifier {
       } else {
         mutableSubscriptions.add(
             realm.query<Item>(
-              r'owner_id == $0 AND priority <= $1',
-              [currentUser?.id, PriorityLevel.high],
+              r'owner_id == $0 AND priority IN {$1, $2, $3}',
+              [currentUser?.id, PriorityLevel.high, PriorityLevel.severe, null],
             ),
             name: queryMyHighPriorityItemsName);
       }

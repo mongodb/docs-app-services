@@ -1,7 +1,8 @@
 .. code-block:: text
-   :emphasize-lines: 5-6, 20-26, 36-41, 50-55
+   :emphasize-lines: 6-7, 21-30, 40-45, 54-60
 
    // ... imports
+
    class RealmServices with ChangeNotifier {
      static const String queryAllName = "getAllItemsSubscription";
      static const String queryMyItemsName = "getMyItemsSubscription";
@@ -22,7 +23,10 @@
          realm = Realm(Configuration.flexibleSync(currentUser!, [Item.schema]));
          // Check if subscription has been updated
          final subscriptionChanged =
-             realm.subscriptions.findByName(queryAllName) != null ? true : false;
+             realm.subscriptions.findByName(queryMyHighPriorityItemsName)?.name !=
+                     null
+                 ? true
+                 : false;
 
          if (realm.subscriptions.isEmpty || subscriptionChanged) {
            updateSubscriptions();
@@ -56,3 +60,4 @@
      static int medium = 2;
      static int low = 3;
    }
+

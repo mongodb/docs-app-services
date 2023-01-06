@@ -1,4 +1,5 @@
 // ... imports
+
 class RealmServices with ChangeNotifier {
   static const String queryAllName = "getAllItemsSubscription";
   static const String queryMyItemsName = "getMyItemsSubscription";
@@ -19,7 +20,10 @@ class RealmServices with ChangeNotifier {
       realm = Realm(Configuration.flexibleSync(currentUser!, [Item.schema]));
       // Check if subscription has been updated
       final subscriptionChanged =
-          realm.subscriptions.findByName(queryAllName) != null ? true : false;
+          realm.subscriptions.findByName(queryMyHighPriorityItemsName)?.name !=
+                  null
+              ? true
+              : false;
 
       if (realm.subscriptions.isEmpty || subscriptionChanged) {
         updateSubscriptions();
@@ -53,3 +57,4 @@ abstract class PriorityLevel {
   static int medium = 2;
   static int low = 3;
 }
+
