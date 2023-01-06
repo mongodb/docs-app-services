@@ -395,7 +395,7 @@ paths:
       operationId: adminExportApplication
       summary: Export an app as a zip file
       description: |-
-        [Export](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/export-app#std-label-export-realm-app)
+        [Export](https://www.mongodb.com/docs/atlas/app-services/apps/configure/export-app#std-label-export-realm-app)
         an application as a zip file.
       responses:
         "200":
@@ -4514,7 +4514,7 @@ components:
             The short identifier of a cloud provider-specific deployment region.
             Some regions are available for global deployment while others are
             only available for local apps. See [Cloud Deployment
-            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
+            Regions](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           $ref: "#/components/schemas/CloudProviderRegionId"
         location:
           $ref: "#/components/schemas/DeploymentLocation"
@@ -4537,7 +4537,7 @@ components:
               type: string
               description: |-
                 The id of an [App Services template
-                app](https://www.mongodb.com/docs/realm/manage-apps/create/template-apps#std-label-template-apps)
+                app](https://www.mongodb.com/docs/atlas/app-services/apps/create/template-apps/)
                 to use as a base for the new app.
             data_source:
               "$ref": "#/components/schemas/DataSource"
@@ -4591,7 +4591,7 @@ components:
         - "production"
     DeploymentModel:
       type: string
-      description: An application [deployment model](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models).
+      description: An application [deployment model](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#deployment-models).
       enum:
         - "GLOBAL"
         - "LOCAL"
@@ -4638,7 +4638,7 @@ components:
             The short identifier of a cloud provider-specific deployment region.
             Some regions are available for global deployment while others are
             only available for local apps. See [Cloud Deployment
-            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
+            Regions](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           example: "aws-us-east-1"
         name:
           type: string
@@ -4656,7 +4656,7 @@ components:
           type: array
           description: |-
             The [deployment
-            models](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models)
+            models](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#deployment-models)
             that this region supports.
           items:
             $ref: "#/components/schemas/DeploymentModel"
@@ -6870,7 +6870,7 @@ tags:
     description: |
       ## Draft and Deploy a Group of Changes
 
-      You can [deploy](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy#std-label-application-deployment) a
+      You can [deploy](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/) a
       group of application changes together by creating and deploying a draft.
       To create and deploy a set of draft changes:
 
@@ -7042,7 +7042,7 @@ tags:
       application services like Triggers and Device Sync.
   - name: environments
     x-displayName: Environments
-    description: View and manage your app's [environment](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/environments/) and environment values.
+    description: View and manage your app's [environment](https://www.mongodb.com/docs/atlas/app-services/apps/configure/environments/) and environment values.
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
@@ -7130,7 +7130,7 @@ tags:
     description: View and manage your application's [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/).
   - name: security
     x-displayName: Security
-    description: Configure your application's [security](https://www.mongodb.com/docs/realm/manage-apps/secure/).
+    description: Configure your application's [security](https://www.mongodb.com/docs/realm/apps/secure/).
   - name: services
     x-displayName: Data Sources & Services
     description: View and manage your application's [data sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/)
