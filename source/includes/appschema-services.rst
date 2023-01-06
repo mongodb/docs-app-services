@@ -201,7 +201,7 @@ Configuration
    * - | ``disable_arg_logs``
        | Boolean
      - If ``true``, App Services omits the arguments provided to a function
-       from the :doc:`function execution log entry </logs/function>`.
+       from the :ref:`function execution log entry <logs-function>`.
    
    * - | ``run_as_system``
        | Boolean
