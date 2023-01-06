@@ -1,5 +1,5 @@
 const createItem = useCallback(
-  ({summary}: {summary: string}, {priority}: {priority: string}) => {
+  ({summary, priority}: {summary: string, priority: string}) => {
     // if the realm exists, create an Item
     realm.write(() => {
       return new Item(realm, {

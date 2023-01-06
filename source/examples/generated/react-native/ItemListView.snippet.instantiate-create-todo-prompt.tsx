@@ -1,6 +1,6 @@
 <CreateToDoPrompt
-  onSubmit={({summary}, {priority}) => {
+  onSubmit={({summary, priority}) => {
     setShowNewItemOverlay(false);
-    createItem({summary}, {priority});
+    createItem({summary, priority});
   }}
 />

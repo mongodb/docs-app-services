@@ -1,5 +1,5 @@
 type Props = {
-  onSubmit: ({summary}: {summary: string}, {priority}: {priority: string}) => void;
+  onSubmit(args: {summary: string; priority: string;}): void;
 };
 
 export function CreateToDoPrompt(props: Props): React.ReactElement<Props> {
@@ -32,7 +32,7 @@ export function CreateToDoPrompt(props: Props): React.ReactElement<Props> {
       <Button
         title="Save"
         buttonStyle={styles.saveButton}
-        onPress={() => onSubmit({summary}, {priority})}
+        onPress={() => onSubmit({summary, priority})}
       />
     </View>
   );
