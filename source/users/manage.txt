@@ -1,6 +1,6 @@
-=============================================
-Delete or Prevent Users From Accessing an App
-=============================================
+====================
+Manage User Accounts
+====================
 
 .. default-domain:: mongodb
 
@@ -9,6 +9,12 @@ Delete or Prevent Users From Accessing an App
    :backlinks: none
    :depth: 2
    :class: singlecol
+
+Overview
+--------
+
+You can manage your application's user accounts with the App Services UI, 
+App Services CLI, Admin API, or Realm SDKs.
 
 .. _delete-user:
 
@@ -23,6 +29,80 @@ and authentication provider identities.
    If you don't want to delete the user's account, you can :ref:`disable their
    account <disable-user>` to temporarily suspend their access.
 
+Manually Delete a User
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can use the App Services UI, CLI, or Admin API to manually remove a user account.
+
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
+      
+      #. Select :guilabel:`App Users` from the left navigation menu.
+      
+      #. Select either :guilabel:`Confirmed` or :guilabel:`Pending`, depending
+         on the current state of the user you wish to delete.
+      
+      #. Under the :guilabel:`Users` tab, find a user in the list and click on
+         the ellipsis (``...``).
+      
+      #. Click :guilabel:`Delete User` and confirm your choice.
+   
+   .. tab::
+      :tabid: cli
+      
+      To delete a user, call ``realm-cli users delete``. The CLI will prompt you
+      for your App ID and list users in that app for you to select.
+      
+      .. code-block:: bash
+         
+         realm-cli users delete
+      
+      You can also specify the arguments when you call the program:
+      
+      .. code-block:: bash
+         
+         realm-cli users delete \
+           --app=<Your App ID> \
+           --user=<User ID>
+      
+      .. tip::
+         
+         You can delete multiple users with a single command by specifying
+         their ``id`` values as a comma-separated list.
+         
+         .. code-block:: bash
+            
+            realm-cli users delete --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
+
+   .. tab::
+      :tabid: api
+
+      To delete a user, create a ``DELETE`` request 
+      in the following format. You must specify the Group, App, and User ID.
+
+      .. code-block:: sh
+
+         curl --request DELETE \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>
+      
+      If you want to delete a :ref:`pending <confirm-user>`
+      email/password user, create a request in the following format: 
+         
+      .. code-block:: sh
+
+         curl --request DELETE \
+            --header 'Authorization: Bearer <access_token>' \
+            https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/by_email/<email>
+
+      .. seealso::
+      
+        :admin-api-endpoint:`Admin API Documentation <operation/adminDeleteUser>`
+
+.. include:: /includes/note-delete-user.rst
+   
 Delete a User in the SDK
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -73,54 +153,6 @@ application when you use the Realm SDKs to delete users.
       Learn how to :ref:`delete a user with the Realm Web SDK
       <web-delete-user>`.
 
-
-Manually Delete a User
-~~~~~~~~~~~~~~~~~~~~~~
-
-.. tabs-realm-admin-interfaces::
-   
-   .. tab::
-      :tabid: ui
-      
-      #. Select :guilabel:`App Users` from the left navigation menu.
-      
-      #. Select either :guilabel:`Confirmed` or :guilabel:`Pending`, depending
-         on the current state of the user you wish to delete.
-      
-      #. Under the :guilabel:`Users` tab, find a user in the list and click on
-         the ellipsis (``...``).
-      
-      #. Click :guilabel:`Delete User` and confirm your choice.
-   
-   .. tab::
-      :tabid: cli
-      
-      To delete a user, call ``realm-cli users delete``. The CLI will prompt you
-      for your App ID and list users in that app for you to select.
-      
-      .. code-block:: bash
-         
-         realm-cli users delete
-      
-      You can also specify the arguments when you call the program:
-      
-      .. code-block:: bash
-         
-         realm-cli users delete \
-           --app=<Your App ID> \
-           --user=<User ID>
-      
-      .. tip::
-         
-         You can delete multiple users with a single command by specifying
-         their ``id`` values as a comma-separated list.
-         
-         .. code-block:: bash
-            
-            realm-cli users delete --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
-
-.. include:: /includes/note-delete-user.rst
-
 Delete a User with a Custom Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -148,7 +180,7 @@ take any arguments, and deletes the user who calls the function.
    delete pending users, which involves a second endpoint:
 
    - :admin-api-endpoint:`Delete users <operation/adminDeleteUser>`
-   - :admin-api-endpoint:`Delete pending users <operation/adminDeletePendingUser>`
+   - :admin-api-endpoint:`Delete pending users <operation/adminDeletePendingEmailPasswordUser>`
 
 .. code-block:: javascript
 
@@ -238,6 +270,22 @@ invalidates any of the user's existing access and refresh tokens. You can
             
             realm-cli users disable --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
 
+   .. tab::
+      :tabid: api
+
+      To disable a user, create a ``PUT`` request 
+      in the following format. You must specify the Group, App, and User ID.
+
+      .. code-block:: sh
+
+         curl --request PUT \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/disable
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/adminDisableUser>`
+
 .. _enable-user:
 
 Enable a User
@@ -289,6 +337,22 @@ You can enable a :ref:`disabled user <disable-user>` to let them log in again.
             
             realm-cli users enable --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
 
+   .. tab::
+      :tabid: api
+
+      To enable a user, create a ``PUT`` request 
+      in the following format. You must specify the Group, App, and User ID.
+
+      .. code-block:: sh
+
+         curl --request PUT \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/enable
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/adminEnableUser>`
+
 .. _revoke-user-sessions:
 
 Revoke a User's Sessions
@@ -337,3 +401,19 @@ device until they log in again.
          .. code-block:: bash
             
             realm-cli users revoke --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
+
+   .. tab::
+      :tabid: api
+      
+      To revoke all sessions for a user, create a ``PUT`` request 
+      in the following format. You must specify the Group, App, and User ID.
+
+      .. code-block:: sh
+
+         curl --request PUT \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/logout
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/adminUserLogout>`
