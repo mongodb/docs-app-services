@@ -21,14 +21,20 @@ To-do Item List management application. This application enables users to:
 
 - Register their email as a new user account.
 - Sign in to their account with their email and password (and sign out later).
-- Pause and restart device sync.
-- View all users' items or only their to-do items.
-- Create, modify, and delete their to-do items.
+- View, create, modify, and delete their own tasks.
+- View all tasks, even where the user is not the owner.
+
+The template app also provides a toggle that simulates the device being in 
+"Offline Mode." This toggle lets you quickly test Device Sync functionality 
+on the simulator, emulating the user having no internet connection. However,
+you would likely remove this toggle in a production application.
 
 This tutorial adds functionality to the Template App. You will add a new ``Priority`` field 
 to the existing ``Item`` model and update the 
 :ref:`Flexible Sync subscription <queryable-fields>` to only show items within 
-a range of priorities. 
+a range of priorities. This example illustrates how you might adapt the 
+template app for your own needs. You would not necessarily make 
+this change given the current structure of the template app. 
 
 Depending on your experience with Kotlin, this tutorial should take 
 around 30 minutes.
@@ -110,7 +116,7 @@ Set up the Template App
              functionality for registering a user and logging a user in.
 
          * - TemplateApp.kt
-           - Class that initializes the App Services App
+           - Class that initializes the App Services App. 
            
       In this tutorial, you'll be working in the following files:
 
@@ -121,20 +127,21 @@ Set up the Template App
 
          * - File
            - Purpose
-
+  
          * - Item.kt
            - Located in the ``domain`` directory. Defines the Realm object we store in the database.
 
-         * - SyncRepository.kt
-           - Located in the ``data`` directory. Repository used to access Realm Sync.
-
          * - AddItem.kt
            - Located in the ``ui/tasks`` directory. Contains the composable function that 
-             defines the Add Item alert dialog layout.
+             defines the layout used when adding an item.
 
          * - AddItemViewModel.kt
            - Located in the ``presentation/tasks`` directory. The view model that contains 
-             business logic and manages state when adding an item.
+             business logic and manages states used when adding an item.
+         
+         * - SyncRepository.kt
+           - Located in the ``data`` directory. Repository used to access Realm Sync and
+             defines the Flexible Sync subscription.
 
          * - Strings.xml
            - Located in the ``res/values`` directory. Defines the :android:`text string resources <guide/topics/resources/string-resource>`
@@ -167,13 +174,15 @@ Modify the Application
 
 .. procedure::
 
-   .. step:: Add a New Property
+   .. step:: Add a New Property to the Model
 
       Now that you have confirmed everything is working as expected, we can add 
       changes. In this tutorial, we have decided that we want to add a
       "priority" property to each Item so that we can filter Items by their
       priority level. The priority property will be mapped to a PriorityLevel enum
-      to constrain the possible values.
+      to constrain the possible values, and we will use the ordinal of each 
+      enum to correspond to the priority integer so we can query based on a 
+      numeric priority level later.
       
       To do this, follow these steps:
 
@@ -218,10 +227,12 @@ Modify the Application
             import androidx.compose.ui.unit.dp
             import com.mongodb.app.domain.PriorityLevel
 
-      #. Now we can add the dropdown menu to the ``AddItemPrompt`` composable function. 
-         Before the closing tag of the text ``Column``, add the following code 
-         to the ``ColumnScope`` that will enable the user to pick a priority level 
-         from a dropdown list.
+      #. Now we can add the dropdown menu to the ``AddItemPrompt`` composable function
+         that will enable the user to pick a priority level 
+         from a dropdown list using the PriorityLevel enums as available values. 
+       
+         Before the closing tag of the text ``Column``, add the following code for the 
+         new dropdown field to the ``ColumnScope``:
    
          .. code-block:: xml
 
@@ -269,9 +280,10 @@ Modify the Application
             <string name="item_priority">Item Priority</string>
 
       #. Now within the ``presentation/tasks`` folder, open the ``AddItemViewModel.kt``
-         file. Here we will add the business logic related to our new dropdown menu.
+         file. Here we will add the business logic related to our new dropdown field.
 
-         Add the following variables to the ``AddItemViewModel`` class: 
+         Add the following variables to the ``AddItemViewModel`` class to handle the state
+         changes within the dropdown: 
 
          .. code-block:: kotlin
 
@@ -299,8 +311,7 @@ Modify the Application
                _expanded.value = false
             }
 
-         Now update the ``addTask()`` and ``cleanUpAndClose()`` functions to 
-         include the new ``taskPriority`` parameter:
+         Now update the ``addTask()`` and ``cleanUpAndClose()`` functions:
 
          .. code-block:: kotlin
             :emphasize-lines: 4, 7
@@ -332,7 +343,7 @@ Modify the Application
             }
       
       #. Finally, open the ``data/SyncRepository.kt`` file to reflect the same changes in the
-         ``addTask()`` function. 
+         ``addTask()`` function, which writes the updates to the . 
 
          Update the ``addTask()`` to pass the ``taskPriority`` as a parameter: 
 
@@ -467,8 +478,20 @@ Change the Subscription
       
       If you want to test the functionality further, you can create Items of various 
       priorities. If you try to add an Item with a priority lower than High, you will 
-      get a Toast message indicating you do not have permission. This is because the app
-      will not allow you to add an item that does not meet the subscription rules.
+      get a Toast message indicating you do not have permission. 
+      
+      If you check your
+      :android:`logs using Logcat <studio/debug/am-logcat>`, you will see a message 
+      indicating the item was "added successfully", followed by a sync error:      
+
+      .. code-block:: sh
+         :copyable: false
+
+         ERROR "Client attempted a write that is outside of permissions or query filters; it has been reverted"   
+      
+      In this scenario, Realm creates the Item locally, syncs it with the 
+      backend, and then reverts the write because it doesn't meet the 
+      subscription rules.
 
       You'll note, too, that the document you initially created is not synced, 
       because it has a priority of ``null``. If you want this Item to be synced, 
