@@ -14,13 +14,16 @@ Overview
 --------
 
 Realm provides a Kotlin SDK that allows you to create an Android mobile
-application with Kotlin. This tutorial is based on the Kotlin Flexible Sync
+application with Kotlin using :android:`Jetpack Compose </jetpack/compose/documentation>`. 
+This tutorial is based on the Kotlin Flexible Sync
 Template App, named ``kotlin.todo.flex``, which illustrates the creation of a
-Todo Item List management application. This application enables users to: 
+To-do Item List management application. This application enables users to: 
 
 - Register their email as a new user account.
 - Sign in to their account with their email and password (and sign out later).
-- View, create, modify, and delete todo items.
+- Pause and restart device sync.
+- View all users' items or only their to-do items.
+- Create, modify, and delete their to-do items.
 
 This tutorial adds functionality to the Template App. You will add a new ``Priority`` field 
 to the existing ``Item`` model and update the 
@@ -85,9 +88,31 @@ Set up the Template App
 
    .. step:: Explore the App Structure
 
-      Take a few minutes to explore how the project organization while Android
+      Take a few minutes to explore the project organization while Android
       Studio indexes your project. Within the ``app/java/com.mongodb.app``
-      directory, you can see a few files worth noting :
+      directory, you can see a few files worth noting:
+
+      .. cssclass:: config-table
+      .. list-table::
+         :header-rows: 1
+         :widths: 35 65
+
+         * - File
+           - Purpose
+
+         * - ComposeItemActivity.kt
+           - Activity class that defines the layout and provides 
+             functionality for opening a realm, writing Items to the realm, 
+             logging a user out, and closing a realm.
+
+         * - ComposeLoginActivity.kt
+           - Activity class that defines the layout and provides 
+             functionality for registering a user and logging a user in.
+
+         * - TemplateApp.kt
+           - Class that initializes the App Services App
+           
+      In this tutorial, you'll be working in the following files:
 
       .. cssclass:: config-table
       .. list-table::
@@ -98,24 +123,23 @@ Set up the Template App
            - Purpose
 
          * - Item.kt
-           - Defines the Realm object we store in the database.
+           - Located in the ``domain`` directory. Defines the Realm object we store in the database.
 
-         * - ItemActivity.kt
-           - UI-based class that opens a realm, and adds functionality for
-             writing Items to the realm, logging a user out, and closing a realm.
+         * - SyncRepository.kt
+           - Located in the ``data`` directory. Repository used to access Realm Sync.
 
-         * - ItemAdapter.kt
-           - Adapter that displays a list of Items in an Android
-             RecyclerView, allows users to check & uncheck items updating
-             their status, and delete items.
+         * - AddItem.kt
+           - Located in the ``ui/tasks`` directory. Contains the composable function that 
+             defines the Add Item alert dialog layout.
 
-         * - LoginActivity.kt
-           - UI-based class that provides functionality for registering a user
-             and logging a user in.
+         * - AddItemViewModel.kt
+           - Located in the ``presentation/tasks`` directory. The view model that contains 
+             business logic and manages state when adding an item.
 
-         * - TemplateApp.kt
-           - Class that initializes the App Services App
-           
+         * - Strings.xml
+           - Located in the ``res/values`` directory. Defines the :android:`text string resources <guide/topics/resources/string-resource>`
+             used in the app.  
+       
 
    .. step:: Run the App
 
@@ -134,7 +158,7 @@ Set up the Template App
 
       Log in to `Atlas App Services <http://cloud.mongodb.com>`_. In the 
       :guilabel:`Atlas` tab, click on :guilabel:`Browse Collections`. In the list 
-      of databases, find and expand the :guilabel:`todo` database and then the 
+      of databases, find and expand the :guilabel:`todo` database, and then the 
       :guilabel:`Item` collection. You should see the document you created 
       in this collection.
 
@@ -145,127 +169,201 @@ Modify the Application
 
    .. step:: Add a New Property
 
-      We can add changes now that you have confirmed everything is working as
-      expected. In this tutorial, we have decided that we want to add a
-      "Priority" property to each Item so that we can filter Items by their
-      priorities. The Priority property will be mapped to a PriorityLevel enum
+      Now that you have confirmed everything is working as expected, we can add 
+      changes. In this tutorial, we have decided that we want to add a
+      "priority" property to each Item so that we can filter Items by their
+      priority level. The priority property will be mapped to a PriorityLevel enum
       to constrain the possible values.
       
       To do this, follow these steps:
 
       A. Open the ``build.gradle.kts`` file in Android Studio. 
 
-      #. Within the ``app/java/com.mongodb.app`` folder open the ``Item`` class file.
+      #. Within the ``app/java/com.mongodb.app/domain`` folder open the ``Item`` class file.
             
-      #. Also, add a PriorityLevel enum above the ``Item`` class:
+      #. Add a PriorityLevel enum above the ``Item`` class:
          
          .. code-block:: kotlin
 
-            enum class PriorityLevel(val priority: Int) {
-                  Severe(0),
-                  High(1),
-                  Medium(2),
-                  Low(3)
+            enum class PriorityLevel() {
+                  Severe, // priority 0
+                  High,   // priority 1
+                  Medium, // priority 2
+                  Low     // priority 3
             }
 
       #. Add the following property to your Realm Object Schema, before the ``constructor``:
 
          .. code-block:: kotlin
 
-            var priority: Int = PriorityLevel.Low.priority
+            var priority: Int = PriorityLevel.Low.ordinal
 
          This sets the default priority to 3, indicating that it is a low-priority todo item.
 
    .. step:: Set the Priority when Creating a New Item
 
-      A. Open the ``res/layout/create_item_dialog.xml`` file. This file defines
-         the UI element that displays when a user clicks the '+' button to add a
-         new todo item. Before the closing tag of the ``LinearLayout``, add a
-         :android:`Spinner <guide/topics/ui/controls/spinner>` that will enable
-         the user to pick a priority level from a dropdown list.
+      A. Open the ``ui/tasks/AddItem.kt`` file. This file defines
+         the composable functions for the UI that displays when a user clicks 
+         the '+' button to add a new todo item. 
+      
+      #. Add the following imports: 
+      
+         .. code-block:: kotlin
+
+            import androidx.compose.foundation.layout.fillMaxWidth
+            import androidx.compose.foundation.layout.padding
+            import androidx.compose.material3.*
+            import androidx.compose.runtime.*
+            import androidx.compose.ui.Modifier
+            import androidx.compose.ui.unit.dp
+            import com.mongodb.app.domain.PriorityLevel
+
+      #. Now we can add the dropdown menu to the ``AddItemPrompt`` composable function. 
+         Before the closing tag of the text ``Column``, add the following code 
+         to the ``ColumnScope`` that will enable the user to pick a priority level 
+         from a dropdown list.
    
          .. code-block:: xml
 
-            <Spinner
-               android:id="@+id/spinner"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_marginLeft="20dp"
-               android:layout_marginRight="20dp"
-               android:minHeight="48dp"
-               android:paddingLeft="5px"
-               android:paddingRight="5px"
-               tools:ignore="SpeakableTextPresentCheck" />
+            val priorities = PriorityLevel.values()
+
+            ExposedDropdownMenuBox(
+               modifier = Modifier.padding(16.dp),
+               expanded = viewModel.expanded.value,
+               onExpandedChange = { viewModel.open() },
+            ) {
+               TextField(
+                  readOnly = true,
+                  value = viewModel.taskPriority.value.name,
+                  onValueChange = {},
+                  label = { Text(stringResource(R.string.item_priority)) },
+                  trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.expanded.value) },
+                  colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                  modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor()
+               )
+               ExposedDropdownMenu(
+                  expanded = viewModel.expanded.value,
+                  onDismissRequest = { viewModel.close() }
+               ) {
+                  priorities.forEach {
+                        DropdownMenuItem(
+                           text = { Text(it.name) },
+                           onClick = {
+                              viewModel.updateTaskPriority(it)
+                              viewModel.close()
+                           }
+                        )
+                  }
+               }
+            }
                
-      #. Next, we will populate the spinner with user choices. Since the choices
-         for priority levels are predetermined, we will provide them through the
+      #. Next, we will define the dropdown field label as a string in the
          :android:`string resources file <guide/topics/resources/string-resource>`.
-         Open the ``res/values/strings.xml`` file, and add the following string
-         array before the closing of the 'resource' element. 
+         Open the ``res/values/strings.xml`` file, and add the following before 
+         the closing of the 'resource' element. 
    
          .. code-block:: xml
 
-            <string-array name="priorities">
-               <item>Severe</item>
-               <item>High</item>
-               <item>Medium</item>
-               <item>Low</item>
-            </string-array>
+            <string name="item_priority">Item Priority</string>
 
-      #. Now within the ``app/java/com.mongodb.app`` folder, open the
-         ``ItemActivity`` file. Here we will load our string array into an
-         instance of :android:`ArrayAdapter <reference/android/widget/ArrayAdapter>`. First, add the following imports below the ``package com.mongodb.app``:
+      #. Now within the ``presentation/tasks`` folder, open the ``AddItemViewModel.kt``
+         file. Here we will add the business logic related to our new dropdown menu.
+
+         Add the following variables to the ``AddItemViewModel`` class: 
 
          .. code-block:: kotlin
 
-            import android.widget.ArrayAdapter
-            import android.widget.Spinner
+            private val _taskPriority: MutableState<PriorityLevel> = mutableStateOf(PriorityLevel.Low)
+            val taskPriority: State<PriorityLevel>
+               get() = _taskPriority
 
-         Next, add the following code in the ``onFabClicked()`` function, right before we call
-         ``builder.setPositiveButton()``. 
+            private val _expanded: MutableState<Boolean> = mutableStateOf(false)
+            val expanded: State<Boolean>
+               get() = _expanded
 
-         .. code-block:: kotlin
-
-            val spinner = view.findViewById<View>(R.id.spinner) as Spinner
-
-            val adapter = ArrayAdapter.createFromResource(
-                  this,
-                  R.array.priorities,
-                  android.R.layout.simple_spinner_item
-            )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-            
-      #. In the ``builder.setPositiveButton()`` function, we create a new Item
-         and save it to the realm. Where we set the other Item properties, add a
-         line of code to set the new Priority property:
+         Next, add the following related functions: 
 
          .. code-block:: kotlin
-            :emphasize-lines: 2
 
-            val item = Item(realmApp.currentUser!!.identity)
-            item.priority = PriorityLevel.valueOf(spinner.selectedItem.toString()).priority
-            item.summary = itemSummaryInput.text.toString()
-            
-            CoroutineScope(Dispatchers.IO).launch {
-                realm.write {
-                    this.copyToRealm(item)
-                }
+            fun updateTaskPriority(taskPriority: PriorityLevel) {
+               _taskPriority.value = taskPriority
             }
 
-      #. Finally, we will use the :android:`Toast <guide/topics/ui/notifiers/toasts>`
-         feedback to tell the user they have successfully created a new todo item with
-         their summary and priority. Within the ``Toast.makeText()`` method alter the
-         existing text to the following:
+            fun open() {
+               _expanded.value = true
+            }
+
+            fun close() {
+               _expanded.value = false
+            }
+
+         Now update the ``addTask()`` and ``cleanUpAndClose()`` functions to 
+         include the new ``taskPriority`` parameter:
+
+         .. code-block:: kotlin
+            :emphasize-lines: 4, 7
+
+            fun addTask() {
+               CoroutineScope(Dispatchers.IO).launch {
+                     runCatching {
+                        repository.addTask(taskSummary.value, taskPriority.value)
+                     }.onSuccess {
+                        withContext(Dispatchers.Main) {
+                           _addItemEvent.emit(AddItemEvent.Info("Task '$taskSummary' with priority $taskPriority added successfully."))
+                        }
+                     }.onFailure {
+                        withContext(Dispatchers.Main) {
+                           _addItemEvent.emit(AddItemEvent.Error("There was an error while adding the task '$taskSummary'", it))
+                        }
+                     }
+                     cleanUpAndClose()
+               }
+            }
 
          .. code-block:: kotlin
             :emphasize-lines: 3
 
-            Toast.makeText(
-                 this,
-                 "Item created: ${item.summary} with priority: ${item.priority}",
-                 Toast.LENGTH_SHORT
-             ).show()
+            private fun cleanUpAndClose() {
+               _taskSummary.value = ""
+               _taskPriority.value = PriorityLevel.Low
+               _addItemPopupVisible.value = false
+            }
+      
+      #. Finally, open the ``data/SyncRepository.kt`` file to reflect the same changes in the
+         ``addTask()`` function. 
+
+         Update the ``addTask()`` to pass the ``taskPriority`` as a parameter: 
+
+         .. code-block:: kotlin
+
+            suspend fun addTask(taskSummary: String, taskPriority: PriorityLevel)
+
+         In the ``RealmSyncRepository`` class, update the ``addTask()`` function to pass 
+         ``taskPriority`` as a parameter and write the ``priority`` field to the realm 
+         as an integer (through the enum ordinal): 
+
+         .. code-block:: kotlin
+            :emphasize-lines: 1, 5
+
+            override suspend fun addTask(taskSummary: String, taskPriority: PriorityLevel) {
+               val task = Item().apply {
+                     owner_id = currentUser.id
+                     summary = taskSummary
+                     priority = taskPriority.ordinal
+               }
+               realm.write {
+                     copyToRealm(task)
+               }
+            }
+
+         Last, in the ``MockRepository`` class, update the ``addTask()`` function to 
+         reflect the same changes: 
+
+         .. code-block:: kotlin
+            
+            override suspend fun addTask(taskSummary: String, taskPriority: PriorityLevel) = Unit
 
    .. step:: Run and Test
     
@@ -298,41 +396,33 @@ Change the Subscription
 
    .. step:: Update the subscription
 
-      Within the ``app/java/com.mongodb.app`` folder, open the ``ItemActivity``
-      where we define the Flexible Sync subscription. The subscription defines
+      Within the ``app/java/com.mongodb.app/data`` folder, open the ``SyncRepository.kt``
+      file, where we define the Flexible Sync subscription. The subscription defines
       which documents we sync with the user's device & account. Find the
-      ``SyncConfiguration.Builder().initialSubscriptions()`` function that our
-      application calls on start. Within the ``add()`` method, you can see that
-      we are currently subscribing to all documents where the ``OwnerId``
-      property matches the authenticated user. We want to maintain that, but
-      *only* sync Items that are marked as High or Severe priority. 
+      ``getQuery()`` function that our
+      application calls on start. You can see that
+      we are currently subscribing to two subscriptions: 
+      
+      - ``MINE``: All documents where the ``ownerId`` property matches the authenticated user.
+      - ``ALL``: All documents from all users.
+      
+      We want to update the ``MINE`` subscription to *only* sync Items that are marked as High or Severe priority. 
 
-      As you may recall, the Priority field is of type ``int``, where the highest 
+      As you may recall, the ``priority`` field is of type ``int``, where the highest 
       priority ("Severe") has a value of 0, and the lowest priority ("Low") has 
       a value of 3. We can make direct comparisons between an integer and the 
-      Priority property. To do so, edit the RQL statement to include documents 
+      priority property. To do so, edit the RQL statement to include documents 
       where the priority is equal to or *less* than PriorityLevel.High (or 1), as 
       shown here:
 
       .. code-block:: kotlin
-         :emphasize-lines: 4-6
+         :emphasize-lines: 3
 
-         config = SyncConfiguration.Builder(user, setOf(Item::class))
-             .initialSubscriptions (rerunOnOpen = true) { realm ->
-                 add(
-                     realm.query<Item>(
-                         "owner_id == $0 AND priority <= ${PriorityLevel.High.priority.toString()}",
-                         user.identity
-                     ),
-                     "User's Items",
-                     updateExisting = true,
-                 )
-             }
-
-      Notice we've set ``rerunOnOpen`` to true so that the closure is re-run
-      every time the Realm is opened. We've also set ``updateExisting`` to
-      true, so the Realm Kotlin SDK updates the previous query named "User's
-      Item", rather than subscribing to two queries.
+         private fun getQuery(realm: Realm, subscriptionType: SubscriptionType): RealmQuery<Item> =
+            when (subscriptionType) {
+                  SubscriptionType.MINE -> realm.query("owner_id == $0 AND priority <= ${PriorityLevel.High.ordinal}", currentUser.id)
+                  SubscriptionType.ALL -> realm.query()
+            }
 
    .. step:: Run and Test
     
@@ -372,14 +462,13 @@ Change the Subscription
 
       Return to your mobile app. To ensure the subscription is re-run, log out 
       the current user and then log in again. 
-      After an initial moment when Realm resyncs the document collection, you 
+      After an initial moment when Realm re-syncs the document collection, you 
       will see the new Item of High priority that you created.
       
       If you want to test the functionality further, you can create Items of various 
-      priorities. You will see that a new Item with a lower priority briefly
-      appears in the list of Items and then disappears. 
-      Realm creates the Item locally, syncs it with the backend, and then filters 
-      out the Item because it doesn't meet the subscription rules.
+      priorities. If you try to add an Item with a priority lower than High, you will 
+      get a Toast message indicating you do not have permission. This is because the app
+      will not allow you to add an item that does not meet the subscription rules.
 
       You'll note, too, that the document you initially created is not synced, 
       because it has a priority of ``null``. If you want this Item to be synced, 
