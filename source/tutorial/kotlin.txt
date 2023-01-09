@@ -90,7 +90,7 @@ Set up the Template App
 
       Navigate to the directory where the Realm CLI created the Template App. 
       The client code is in a ``frontend/kotlin.todo.flex`` directory.
-      Open the ``build.gradle.kts`` in Android Studio.
+      Open the ``build.gradle.kts`` file in Android Studio.
 
    .. step:: Explore the App Structure
 
@@ -179,7 +179,7 @@ Modify the Application
       Now that you have confirmed everything is working as expected, we can add 
       changes. In this tutorial, we have decided that we want to add a
       "priority" property to each Item so that we can filter Items by their
-      priority level. The priority property will be mapped to a PriorityLevel enum
+      priority level. The priority property will be mapped to a ``PriorityLevel`` enum
       to constrain the possible values, and we will use the ordinal of each 
       enum to correspond to the priority integer so we can query based on a 
       numeric priority level later.
@@ -211,7 +211,7 @@ Modify the Application
 
    .. step:: Set the Priority when Creating a New Item
 
-      A. From the ``ui/tasks`` folder, open the ``/AddItem.kt`` file. This file defines
+      A. From the ``ui/tasks`` folder, open the ``AddItem.kt`` file. This file defines
          the composable functions for the UI that displays when a user clicks 
          the '+' button to add a new todo item. 
       
@@ -460,7 +460,7 @@ Change the Subscription
          :emphasize-lines: 2
 
          config = SyncConfiguration.Builder(currentUser, setOf(Item::class))
-            .initialSubscriptions (rerunOnOpen = true) { realm ->
+            .initialSubscriptions(rerunOnOpen = true) { realm ->
                 // Subscribe to the active subscriptionType - first time defaults to MINE
                 val activeSubscriptionType = getActiveSubscriptionType(realm)
                 add(getQuery(realm, activeSubscriptionType), activeSubscriptionType.name)
