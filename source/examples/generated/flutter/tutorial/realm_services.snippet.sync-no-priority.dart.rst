@@ -1,6 +1,6 @@
 .. code-block:: dart
    :emphasize-lines: 1, 1, 1, 1, 6-7, 20-30, 40-45, 6-7, 20-30, 40-45
-   caption: lib/realm/realm_services.dart
+   :caption: lib/realm/realm_services.dart
 
    class RealmServices with ChangeNotifier {
      static const String queryAllName = "getAllItemsSubscription";
