@@ -1,5 +1,5 @@
 .. code-block:: dart
-   :emphasize-lines: 1, 1, 1, 1, 6-7, 20-30, 40-45, 6-7, 20-30, 40-45
+   :emphasize-lines: 1, 1, 1, 1, 6-7, 20-27, 37-42, 6-7, 20-27, 37-42
    :caption: lib/realm/realm_services.dart
 
    class RealmServices with ChangeNotifier {
@@ -21,15 +21,12 @@
        if (app.currentUser != null || currentUser != app.currentUser) {
          currentUser ??= app.currentUser;
          realm = Realm(Configuration.flexibleSync(currentUser!, [Item.schema]));
-         // Check if subscription has been updated
-         final subscriptionChanged = realm.subscriptions
-                     .findByName(queryMyHighOrNoPriorityItemsName)
-                     ?.name !=
-                 queryAllName
-             ? true
-             : false;
+         // Check if subscription previously exists on the realm
+         final subscriptionDoesNotExists =
+             realm.subscriptions.findByName(queryMyHighOrNoPriorityItemsName) ==
+                 null;
 
-         if (realm.subscriptions.isEmpty || subscriptionChanged) {
+         if (realm.subscriptions.isEmpty || subscriptionDoesNotExists) {
            updateSubscriptions();
          }
        }

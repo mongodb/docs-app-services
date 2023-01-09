@@ -1,5 +1,5 @@
 .. code-block:: text
-   :emphasize-lines: 6-7, 21-30, 40-45
+   :emphasize-lines: 6-7, 21-27, 37-42
 
    // ... imports
 
@@ -21,14 +21,11 @@
        if (app.currentUser != null || currentUser != app.currentUser) {
          currentUser ??= app.currentUser;
          realm = Realm(Configuration.flexibleSync(currentUser!, [Item.schema]));
-         // Check if subscription has been updated
-         final subscriptionChanged =
-             realm.subscriptions.findByName(queryMyHighPriorityItemsName)?.name !=
-                     null
-                 ? true
-                 : false;
+         // Check if subscription previously exists on the realm
+         final subscriptionDoesNotExists =
+             realm.subscriptions.findByName(queryMyHighPriorityItemsName) == null;
 
-         if (realm.subscriptions.isEmpty || subscriptionChanged) {
+         if (realm.subscriptions.isEmpty || subscriptionDoesNotExists) {
            updateSubscriptions();
          }
        }
