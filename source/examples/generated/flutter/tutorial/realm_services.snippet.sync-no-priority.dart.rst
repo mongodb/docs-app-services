@@ -1,5 +1,5 @@
 .. code-block:: dart
-   :emphasize-lines: 1, 1, 1, 1, 6-7, 20-27, 37-42, 6-7, 20-27, 37-42
+   :emphasize-lines: 6-7, 20-27, 37-42, 6-7, 20-27, 37-42
    :caption: lib/realm/realm_services.dart
 
    class RealmServices with ChangeNotifier {

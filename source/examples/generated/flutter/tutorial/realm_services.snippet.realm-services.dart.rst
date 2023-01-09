@@ -1,6 +1,6 @@
 .. code-block:: dart
-   :emphasize-lines: 47-49, 60-62, 70-72, 92-97
    :caption: lib/realm/realm_services.dart
+   :emphasize-lines: 47-49, 60-62, 70-72, 92-98
 
    // ... imports
 
@@ -99,3 +99,4 @@
      static int medium = 2;
      static int low = 3;
    }
+

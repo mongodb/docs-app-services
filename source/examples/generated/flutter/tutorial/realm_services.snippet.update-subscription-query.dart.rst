@@ -1,5 +1,5 @@
 .. code-block:: dart
-   :emphasize-lines: 6-7, 21-27, 37-42
+   :emphasize-lines: 6-7, 22-29, 39-44
    :caption: lib/realm/realm_services.dart
 
    // ... imports
@@ -22,9 +22,11 @@
        if (app.currentUser != null || currentUser != app.currentUser) {
          currentUser ??= app.currentUser;
          realm = Realm(Configuration.flexibleSync(currentUser!, [Item.schema]));
+         showAll = (realm.subscriptions.findByName(queryAllName) != null);
          // Check if subscription previously exists on the realm
          final subscriptionDoesNotExists =
-             realm.subscriptions.findByName(queryMyHighPriorityItemsName) == null;
+             (realm.subscriptions.findByName(queryMyHighPriorityItemsName) ==
+                 null);
 
          if (realm.subscriptions.isEmpty || subscriptionDoesNotExists) {
            updateSubscriptions();
