@@ -55,7 +55,7 @@
      - document
      
      - A document from your application's :doc:`custom user
-       data collection </users/enable-custom-user-data>` that
+       data collection </users/custom-metadata>` that
        specifies the user's ID. You can use the custom user data
        collection to store arbitrary data about your application's
        users. If you set the ``name`` field, App Services populates the 
