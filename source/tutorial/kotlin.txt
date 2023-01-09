@@ -320,7 +320,7 @@ Modify the Application
             }
 
          Now update the ``addTask()`` and ``cleanUpAndClose()`` functions to include the new
-         ``taskPriority`` parameter:
+         ``taskPriority`` parameter and update the message to include the priority information:
 
          .. code-block:: kotlin
             :emphasize-lines: 4, 7
@@ -331,7 +331,7 @@ Modify the Application
                         repository.addTask(taskSummary.value, taskPriority.value)
                      }.onSuccess {
                         withContext(Dispatchers.Main) {
-                           _addItemEvent.emit(AddItemEvent.Info("Task '$taskSummary' with priority $taskPriority added successfully."))
+                           _addItemEvent.emit(AddItemEvent.Info("Task '$taskSummary' with priority '$taskPriority' added successfully."))
                         }
                      }.onFailure {
                         withContext(Dispatchers.Main) {
@@ -426,8 +426,7 @@ Change the Subscription
       Within the ``app/java/com.mongodb.app/data`` folder, open the ``SyncRepository.kt``
       file, where we define the Flexible Sync subscription. The subscription defines
       which documents we sync with the user's device and account. Find the
-      ``getQuery()`` function that our
-      application calls on start. You can see that
+      ``getQuery()`` function. You can see that
       we are currently subscribing to two subscriptions: 
       
       - ``MINE``: All documents where the ``ownerId`` property matches the authenticated user.
@@ -455,7 +454,7 @@ Change the Subscription
       sync every time we open the app. 
 
       To do this, find the ``SyncConfiguration.Builder().initialSubscriptions()`` function 
-      that our application calls on start, and add the ``reRunOnOpen`` set to ``true``: 
+      that our application calls on start, and add the ``reRunOnOpen`` parameter set to ``true``: 
 
       .. code-block:: kotlin
          :emphasize-lines: 2
@@ -476,7 +475,7 @@ Change the Subscription
     
       Run the application again. Log in using the account you created earlier in
       this tutorial. Here, you'll notice an error if you check your
-      :android:`logs using Logcat <studio/debug/am-logcat>`, you will see an
+      :android:`logs using Logcat <studio/debug/am-logcat>`. You will see an
       entry that looks something like this:
 
       .. code-block:: sh
@@ -514,10 +513,8 @@ Change the Subscription
       will see the new Item of High priority that you created.
       
       If you want to test the functionality further, you can create Items of various 
-      priorities. If you try to add an Item with a priority lower than High, you will 
-      get a Toast message indicating you do not have permission. 
-      
-      If you check your
+      priorities. You'll note that if you try to add an Item with a priority lower than High, you will 
+      get a Toast message indicating you do not have permission. And if you check your
       :android:`logs using Logcat <studio/debug/am-logcat>`, you will see a message 
       indicating the item was "added successfully", followed by a sync error:      
 
@@ -527,7 +524,7 @@ Change the Subscription
          ERROR "Client attempted a write that is outside of permissions or query 
          filters; it has been reverted"   
       
-      In this scenario, Realm creates the Item locally, syncs it with the 
+      That's because, in this scenario, Realm creates the Item locally, syncs it with the 
       backend, and then reverts the write because it doesn't meet the 
       subscription rules.
 
