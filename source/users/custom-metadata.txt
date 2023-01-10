@@ -1,5 +1,4 @@
-.. _custom-user-data:
-.. _configure-user-metadata-on-the-backend:
+.. _custom-metadata:
 
 ===========================
 Define Custom User Metadata
@@ -16,7 +15,13 @@ Define Custom User Metadata
 Overview
 --------
 
-Through user accounts, you can store and access metadata and custom data for each user.
+You can define :ref:`custom user data <custom-user-data>` in MongoDB Atlas and 
+configure App Services to store and access each user's data. App Services can also read 
+:ref:`user metadata <configure-user-metadata-on-the-backend>` from authentication 
+providers. You can configure App Services to request and access the metadata that you 
+want from each provider.
+
+.. _custom-user-data:
 
 Enable Custom User Data
 -----------------------
@@ -248,7 +253,6 @@ Procedure
 
                realm-cli push --remote="<Your App ID>"
 
-
 Access Custom User Data from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -302,6 +306,8 @@ Access Custom User Data from a Client Application
          Learn how to :ref:`access Custom User Data from a Flutter
          application <flutter-custom-user-data>`.
 
+.. _configure-user-metadata-on-the-backend:
+
 Enable User Metadata 
 --------------------
 
@@ -323,34 +329,22 @@ the user's account. These metadata fields vary depending on provider.
 
 .. list-table::
    :header-rows: 1
+   :widths: 20 80
+
+   * - Provider
+     - Metadata fields
 
    * - Facebook
-     - Google
-     - Custom JWT
+     - ``name``, ``first_name``, ``last_name``, ``picture``, ``gender``, 
+       ``birthday``, ``min_age``, ``max_age``, ``email``
+   
+   * - Google
+     - ``name``, ``first_name``, ``last_name``, ``picture``, ``email``
 
-   * - - ``name``
-       - ``first_name``
-       - ``last_name``
-       - ``picture``
-       - ``gender``
-       - ``birthday``
-       - ``min_age``
-       - ``max_age``
-       - ``email``
-
-     - - ``name``
-       - ``first_name``
-       - ``last_name``
-       - ``picture``
-       - ``email``
-
-     - - Custom
-
-.. note:: 
-
-   :ref:`JWT authentication <custom-jwt-authentication>` metadata is completely 
-   customizable. You specify JWT authentication metadata to request when you 
-   configure it.
+   * - Custom JWT
+     - Custom. You specify :ref:`JWT authentication metadata
+       <custom-jwt-authentication-configuration-metadata-fields>` to request when 
+       you configure it.
 
 .. _enable-user-metadata-procedure:
 
@@ -510,8 +504,6 @@ Procedure
 
                realm-cli push --remote="<Your App ID>"
 
-
-
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -525,3 +517,18 @@ Access User Metadata from a Client Application
          Learn how to :ref:`read a user's metadata from an iOS
          application <ios-read-user-metadata>`.
 
+   .. tab::
+      :tabid: dotnet
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from a .NET
+         application <dotnet-read-user-metadata>`.
+
+   .. tab::
+      :tabid: flutter
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from a Flutter
+         application <flutter-read-user-metadata>`.
