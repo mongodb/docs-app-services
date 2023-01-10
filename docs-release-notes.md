@@ -1,3 +1,21 @@
+# January 6, 2022
+
+## Device Sync
+- Configure and Update Your Data Model/Create a Data Model: Add a link to the C++ SDK object model page
+- Configure Sync/Pause or Terminate Sync: Add dropping a collection to the list of things that require you to terminate Sync
+
+## Data API
+- Data API Endpoints
+  - Add an "Authorization" section with details about authorization schemes
+  - Add an "Authorize The Request" section detailing authorization configuration options
+- Custom HTTPS Endpoints: Add a section about the ability to define custom authorization schemes and `can_evaluate`, update code examples
+
+## Reference
+- Service Limitations: Updates and clarifications about using Device Sync with time series collections, required MongoDB versions for Device Sync, and performance implications of concurrent writes 
+
+## Other
+- Update some pages to fix monospace in section subheads
+
 # December 30, 2022
 
 - Added examples for valid ISO-8601 start and end query parameters in `adminGetMetrics` endpoint
