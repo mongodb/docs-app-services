@@ -196,7 +196,7 @@ Modify the Application
          indicating that it is a low-priority todo item:
          
          .. code-block:: kotlin
-            :caption: /domain/Item.kt
+            :caption: domain/Item.kt
             :emphasize-lines: 3-8, 16
 
             // ... imports
@@ -229,7 +229,7 @@ Modify the Application
       #. First, add the following imports below the ``package com.mongodb.app``:
       
          .. code-block:: kotlin
-            :caption: /ui/tasks/AddItem.kt
+            :caption: ui/tasks/AddItem.kt
 
             import androidx.compose.foundation.layout.fillMaxWidth
             import androidx.compose.foundation.layout.padding
@@ -241,45 +241,72 @@ Modify the Application
 
       #. Now we can add a dropdown field to the ``AddItemPrompt`` composable function
          that will enable the user to pick a priority level 
-         from a list using the PriorityLevel enums as available values. 
-       
-         Before the closing tag of the ``Column``, add the following code for the 
-         new dropdown field to the ``ColumnScope``:
+         from a list using the PriorityLevel enums as available values:
    
          .. code-block:: kotlin
+            :caption: ui/tasks/AddItem.kt
+            :emphasize-lines: 24-36
 
-            val priorities = PriorityLevel.values()
+            // ... imports 
 
-            ExposedDropdownMenuBox(
-               modifier = Modifier.padding(16.dp),
-               expanded = viewModel.expanded.value,
-               onExpandedChange = { viewModel.open() },
-            ) {
-               TextField(
-                  readOnly = true,
-                  value = viewModel.taskPriority.value.name,
-                  onValueChange = {},
-                  label = { Text(stringResource(R.string.item_priority)) },
-                  trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.expanded.value) },
-                  colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                  modifier = Modifier
-                        .fillMaxWidth()
-                        .menuAnchor()
-               )
-               ExposedDropdownMenu(
-                  expanded = viewModel.expanded.value,
-                  onDismissRequest = { viewModel.close() }
-               ) {
-                  priorities.forEach {
-                        DropdownMenuItem(
-                           text = { Text(it.name) },
-                           onClick = {
-                              viewModel.updateTaskPriority(it)
-                              viewModel.close()
+            @OptIn(ExperimentalMaterial3Api::class)
+            @Composable
+            fun AddItemPrompt(viewModel: AddItemViewModel) {
+               AlertDialog(
+                  containerColor = Color.White,
+                  onDismissRequest = {
+                        viewModel.closeAddTaskDialog()
+                  },
+                  title = { Text(stringResource(R.string.add_item)) },
+                  text = {
+                        Column {
+                           Text(stringResource(R.string.enter_item_name))
+                           TextField(
+                              colors = ExposedDropdownMenuDefaults.textFieldColors(containerColor = Color.White),
+                              value = viewModel.taskSummary.value,
+                              maxLines = 2,
+                              onValueChange = {
+                                    viewModel.updateTaskSummary(it)
+                              },
+                              label = { Text(stringResource(R.string.item_summary)) }
+                           )
+                           val priorities = PriorityLevel.values()
+
+                           ExposedDropdownMenuBox(
+                              modifier = Modifier.padding(16.dp),
+                              expanded = viewModel.expanded.value,
+                              onExpandedChange = { viewModel.open() },
+                           ) {
+                              TextField(
+                                    readOnly = true,
+                                    value = viewModel.taskPriority.value.name,
+                                    onValueChange = {},
+                                    label = { Text(stringResource(R.string.item_priority)) },
+                                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.expanded.value) },
+                                    colors = ExposedDropdownMenuDefaults.textFieldColors(),
+                                    modifier = Modifier
+                                       .fillMaxWidth()
+                                       .menuAnchor()
+                              )
+                              ExposedDropdownMenu(
+                                    expanded = viewModel.expanded.value,
+                                    onDismissRequest = { viewModel.close() }
+                              ) {
+                                    priorities.forEach {
+                                       DropdownMenuItem(
+                                          text = { Text(it.name) },
+                                          onClick = {
+                                                viewModel.updateTaskPriority(it)
+                                                viewModel.close()
+                                          }
+                                       )
+                                    }
+                              }
                            }
-                        )
-                  }
-               }
+                        }
+                  },
+                  // ... buttons
+               )
             }
 
          Android Studio will identify several errors. We'll correct these in the next steps 
@@ -290,27 +317,23 @@ Modify the Application
          the closing of the 'resource' element: 
    
          .. code-block:: xml
-            :caption: /res/values/strings.xml
+            :caption: res/values/strings.xml
 
             <string name="item_priority">Item Priority</string>
 
       #. Now within the ``presentation/tasks`` folder, open the ``AddItemViewModel.kt``
          file. Here we will add the business logic related to our new dropdown field.
 
-         First, add the following import below the ``package com.mongodb.app``: 
+         Add the ``PriorityLevel`` import below the ``package com.mongodb.app``, then
+         add the variables and functions to the ``AddItemViewModel`` class needed 
+         to handle the state changes within the dropdown:
 
          .. code-block:: kotlin
-            :caption: /presentation/tasks/AddItemViewModel.kt
-
-            import com.mongodb.app.domain.PriorityLevel
-         
-         Next, add the following variables to the ``AddItemViewModel`` class to handle the state
-         changes within the dropdown:
-
-         .. code-block:: kotlin
-            :emphasize-lines: 17-23, 41-51
+            :caption: presentation/tasks/AddItemViewModel.kt
+            :emphasize-lines: 2, 18-24, 42-52
 
                // ... imports
+               import com.mongodb.app.domain.PriorityLevel
 
                // ... events
 
@@ -362,7 +385,7 @@ Modify the Application
                      _expanded.value = false
                   }
 
-                  // ... 
+                  // addTask() and cleanUpAndClose() functions 
                }
 
 
@@ -399,21 +422,17 @@ Modify the Application
          reflect the same changes in the ``addTask()`` function, which writes the 
          Item to the realm. 
 
-         First, add the following import below the ``package com.mongodb.app``:
-
-         .. code-block:: kotlin
-            :caption: /data/SyncRepository.kt
-
-            import com.mongodb.app.domain.PriorityLevel
-
-         Next, update the ``addTask()`` functions to pass the ``taskPriority`` 
+         First, add the ``PriorityLevel`` import below the ``package com.mongodb.app``,
+         then update the ``addTask()`` functions to pass the ``taskPriority`` 
          as a parameter and write the ``priority`` field to the realm 
          as an integer (using the enum ordinal): 
 
          .. code-block:: kotlin
-            :emphasize-lines: 7, 20, 24, 47
+            :caption: data/SyncRepository.kt
+            :emphasize-lines: 2, 8, 21, 25, 48
 
             // ... imports
+            import com.mongodb.app.domain.PriorityLevel
 
             interface SyncRepository {
 
@@ -428,7 +447,7 @@ Modify the Application
                onSyncError: (session: SyncSession, error: SyncException) -> Unit
             ) : SyncRepository {
 
-               // ... SyncConfiguration initializer  
+               // ... variables and SyncConfiguration initializer
                
                // ... Sync functions
 
@@ -524,7 +543,7 @@ Change the Subscription
       shown here:
 
       .. code-block:: kotlin
-         :caption: /data/SyncRepository.kt
+         :caption: data/SyncRepository.kt
          :emphasize-lines: 3
 
          private fun getQuery(realm: Realm, subscriptionType: SubscriptionType): RealmQuery<Item> =
