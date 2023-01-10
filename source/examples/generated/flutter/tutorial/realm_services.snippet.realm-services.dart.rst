@@ -1,6 +1,6 @@
 .. code-block:: dart
    :caption: lib/realm/realm_services.dart
-   :emphasize-lines: 47-49, 60-62, 70-72, 92-97
+   :emphasize-lines: 18-20, 31-33, 41-43, 63-69
 
    // ... imports
 
@@ -15,38 +15,8 @@
      User? currentUser;
      App app;
 
-     // ... RealmServices initializer
-
-     Future<void> sessionSwitch() async {
-       offlineModeOn = !offlineModeOn;
-       if (offlineModeOn) {
-         realm.syncSession.pause();
-       } else {
-         try {
-           isWaiting = true;
-           notifyListeners();
-           realm.syncSession.resume();
-           await updateSubscriptions();
-         } finally {
-           isWaiting = false;
-         }
-       }
-       notifyListeners();
-     }
-
-     Future<void> switchSubscription(bool value) async {
-       showAll = value;
-       if (!offlineModeOn) {
-         try {
-           isWaiting = true;
-           notifyListeners();
-           await updateSubscriptions();
-         } finally {
-           isWaiting = false;
-         }
-       }
-       notifyListeners();
-     }
+     // ... RealmServices initializer and updateSubscriptions(),
+     //     sessionSwitch() and switchSubscription() methods
 
      void createItem(String summary, bool isComplete, int? priority) {
        final newItem = Item(ObjectId(), summary, currentUser!.id,
@@ -99,4 +69,3 @@
      static int medium = 2;
      static int low = 3;
    }
-

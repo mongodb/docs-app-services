@@ -1,5 +1,5 @@
 .. code-block:: dart
-   :emphasize-lines: 6-7, 22-29, 39-44
+   :emphasize-lines: 6-7, 21-28, 38-43
    :caption: lib/realm/realm_services.dart
 
    // ... imports
@@ -17,7 +17,6 @@
      User? currentUser;
      App app;
 
-     // ... RealmServices initializer
      RealmServices(this.app) {
        if (app.currentUser != null || currentUser != app.currentUser) {
          currentUser ??= app.currentUser;

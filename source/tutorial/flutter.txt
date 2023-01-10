@@ -42,8 +42,9 @@ this change given the current structure of the template app.
 In this tutorial, you will learn how to:
 
 - Update a Realm object model with a non-breaking change.
-- Update a Device Sync subscription and Add a queryable field to the Device Sync
-  configuration on the server to change which data is synchronized.
+- Update a Device Sync subscription
+- Add a queryable field to the Device Sync configuration on the server
+  to change which data is synchronized.
 
 If you prefer to get started with your own application rather than follow a
 guided tutorial, check out the :ref:`Flutter Quick Start <flutter-quick-start>`.
@@ -270,7 +271,7 @@ to only sync Items marked as a High or Severe priority.
 
    .. step:: Update the subscription
 
-      In the :file:`lib/realm/init_realm.dart` file, we define the Flexible Sync
+      In the :file:`lib/realm/realm_services.dart` file, we define the Flexible Sync
       subscription that defines which documents we sync with the user's device
       and account. Currently, we are syncing all all documents where
       the ``owner`` property matches the authenticated user.
