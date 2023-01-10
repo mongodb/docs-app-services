@@ -18,6 +18,7 @@
      // ... RealmServices initializer and updateSubscriptions(),
      //     sessionSwitch() and switchSubscription() methods
 
+
      void createItem(String summary, bool isComplete, int? priority) {
        final newItem = Item(ObjectId(), summary, currentUser!.id,
            isComplete: isComplete, priority: priority);
@@ -69,3 +70,4 @@
      static int medium = 2;
      static int low = 3;
    }
+
