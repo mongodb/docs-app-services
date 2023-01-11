@@ -1,8 +1,8 @@
-.. _custom-user-data:
+.. _custom-metadata:
 
-=======================
-Enable Custom User Data
-=======================
+===========================
+Define Custom User Metadata
+===========================
 
 .. default-domain:: mongodb
 
@@ -14,6 +14,16 @@ Enable Custom User Data
 
 Overview
 --------
+
+You can configure Atlas App Services to store :ref:`custom user data <custom-user-data>` 
+for the App's user in MongoDB Atlas. You can also configure App Services to store
+:ref:`user metadata <configure-user-metadata-on-the-backend>` from authentication 
+providers. 
+
+.. _custom-user-data:
+
+Enable Custom User Data
+-----------------------
 
 You can store arbitrary data about your application users in a MongoDB
 collection and configure Atlas App Services to automatically expose each user's data
@@ -56,7 +66,7 @@ documents, such as storing the time of their most recent login in the
 .. include:: /includes/custom-data-may-be-stale.rst
 
 Configuration
--------------
+~~~~~~~~~~~~~
 
 App Services stores MongoDB documents that correspond to custom user data
 in a linked MongoDB Atlas cluster. When you
@@ -75,7 +85,7 @@ configure custom user data for your application, you specify:
 .. _custom-user-data-permissions:
 
 Configure Permissions for Custom User Data
-------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Because custom user data belongs to a specific user, it could contain
 personal or private information depending on the needs of your
@@ -101,7 +111,7 @@ models to restrict read and write access to privileged users only:
 .. _enable-custom-user-data-procedure:
 
 Procedure
----------
+~~~~~~~~~
 
 .. tabs-realm-admin-interfaces::
 
@@ -242,10 +252,8 @@ Procedure
 
                realm-cli push --remote="<Your App ID>"
 
-
-
 Access Custom User Data from a Client Application
--------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. tabs-realm-sdks::
    
@@ -296,3 +304,241 @@ Access Custom User Data from a Client Application
 
          Learn how to :ref:`access Custom User Data from a Flutter
          application <flutter-custom-user-data>`.
+
+.. _configure-user-metadata-on-the-backend:
+
+Enable User Metadata 
+--------------------
+
+Atlas App Services can read user metadata from authentication providers. Then, 
+App Services exposes each user's data in a field of their :ref:`user 
+object <user-objects>`. For example, you might want to access a user's name, 
+email, birthday, or gender.
+
+You can configure App Services to request metadata with the access token 
+when users log in. You can access that data from the logged-in user's 
+object with a client SDK.
+
+Configuration
+~~~~~~~~~~~~~
+
+You can define the metadata to request when you configure authentication 
+providers. Specify optional metadata fields that you want to access through 
+the user's account. These metadata fields vary depending on provider.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Provider
+     - Metadata fields
+
+   * - Facebook
+     - - ``name``
+       - ``first_name``
+       - ``last_name``
+       - ``picture``
+       - ``gender``
+       - ``birthday``
+       - ``min_age``
+       - ``max_age``
+       - ``email``
+   
+   * - Google
+     - - ``name``
+       - ``first_name``
+       - ``last_name``
+       - ``picture``
+       - ``email``
+
+   * - Custom JWT
+     - Custom. You specify :ref:`JWT authentication metadata
+       <custom-jwt-authentication-configuration-metadata-fields>` to request when 
+       you configure it.
+
+.. _enable-user-metadata-procedure:
+
+Procedure
+~~~~~~~~~
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+      
+      .. procedure::
+
+         .. step:: Navigate to the Authentication Provider Configuration Screen
+
+            You can configure and enable user metadata in the App Services UI. To
+            get to the configuration page:
+
+            - Click :guilabel:`Authentication` in the left navigation menu.
+            - Select the :guilabel:`Authentication Providers` tab.
+            - Press the :guilabel:`EDIT` button for the provider whose metadata
+              you want to configure.
+
+
+         .. step:: Configure User Metadata
+
+
+            **Google or Facebook**
+
+            Select the checkboxes next to the metadata fields you want to enable.
+
+            .. figure:: /images/configure-user-metadata-google-facebook-realm-ui.png
+               :alt: The checkboxes to enable user metadata fields in the App Services UI
+               :width: 750px
+               :lightbox:
+
+            **Custom JWT Authentication**
+
+            You can specify the metadata fields that your identity provider supports.
+            After you press the :guilabel:`Add Field` button, define:
+
+            - The path
+            - The field name
+            - Whether the field is optional or required
+
+            For more details, see: :ref:`JWT metadata fields
+            <custom-jwt-authentication-configuration-metadata-fields>`.
+
+            .. figure:: /images/configure-user-metadata-custom-jwt-realm-ui.png
+               :alt: Add metadata required/optional, path, and name in the App Services UI
+               :width: 750px
+               :lightbox:
+
+            After you configure the metadata you want to access, press
+            the :guilabel:`Save Draft` button.
+
+
+         .. step:: Deploy the Updated Application
+
+            After you update the metadata configuration, you must deploy your
+            application. To deploy a draft application from the App Services UI:
+
+            1. Click :guilabel:`Deploy` in the left navigation menu.
+
+            2. Find the draft in the deployment history table and then click
+               :guilabel:`Review & Deploy Changes`.
+
+            3. Review the diff of changes and then click :guilabel:`Deploy`.
+
+            Once the application successfully deploys, App Services begins to associate
+            metadata with users. When a user logs in, App Services requests user
+            permission to access the requested metadata. If the user approves,
+            App Services exposes the data in that user's :ref:`user object
+            <user-objects>`.
+
+   
+   .. tab::
+      :tabid: cli
+      
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To update your app with {+cli-bin+}, you need a local copy of its
+            configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the App Services UI. Go to the :guilabel:`Deploy > Export App` screen from
+               the App Dashboard.
+
+
+         .. step:: Configure User Metadata
+
+            You can find authentication provider :ref:`metadata_fields
+            <config-auth-providers>` for your app in ``/auth/providers.json``.
+            Update this array to request user metadata from the authentication provider.
+
+            **Google or Facebook**
+
+            This array resembles:
+
+            .. code-block:: javascript
+               :caption: /auth/providers.json
+
+               { ...other config details...
+                 "metadata_fields": [
+                   {
+                     "required": false,
+                     "name": "name"
+                   },
+                   {
+                     "required": false,
+                     "name": "gender"
+                   }
+                 ]
+               }
+
+            **Custom JWT authentication**
+
+            The metadata_fields array has an additional property, ``field_name``.
+            In custom JWT authentication, ``name`` represents the path to the field.
+            The ``field_name`` represents the name of the field.
+
+            .. code-block:: javascript
+               :caption: /auth/providers.json
+
+               { ...other config details...
+                 "metadata_fields": [
+                   {
+                     "required": true,
+                     "name": "user.name",
+                     "field_name": "name"
+                   },
+                   {
+                     "required": false,
+                     "name": "user.favoriteColor",
+                     "field_name": "favoriteColor"
+                   }
+                 ]
+               }
+
+
+         .. step:: Deploy the Custom User Data Configuration
+
+            Once you've configured custom user data, you can push the updated config to
+            your remote app. {+cli+} immediately deploys the update on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"
+
+Access User Metadata from a Client Application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: ios
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from an iOS
+         application <ios-read-user-metadata>`.
+
+   .. tab::
+      :tabid: dotnet
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from a .NET
+         application <dotnet-read-user-metadata>`.
+
+   .. tab::
+      :tabid: flutter
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from a Flutter
+         application <flutter-read-user-metadata>`.
