@@ -32,19 +32,33 @@ you would likely remove this toggle in a production application.
 This tutorial builds on the Template App. You will add a new ``priority`` field 
 to the existing ``Item`` model and update the 
 :ref:`Flexible Sync subscription <queryable-fields>` to only show items within 
-a range of priorities. This example illustrates how you might adapt the 
-template app for your own needs. You would not necessarily make 
-this change given the current structure of the template app. 
+a range of priorities.
 
 Depending on your experience with SwiftUI, this tutorial should take 
 around 30 minutes.
 
-.. note:: Check Out the Quick Start
-   
+Learning Objectives
+-------------------
+
+This tutorial illustrates how you might adapt the
+template app for your own needs. You would not necessarily make
+this change given the current structure of the template app.
+
+In this tutorial, you will learn how to:
+
+- Update a Realm object model with a non-breaking change.
+- Update a Device Sync subscription.
+- Add a queryable field to the Device Sync configuration on the server
+  to change which data is synchronized.
+
+.. tip::
+
    If you prefer to get started with your own application rather than follow a 
    guided tutorial, check out the :ref:`Swift Quick Start <ios-client-quick-start-with-sync>`. 
    It includes copyable code examples and the essential information that you 
    need to set up an Atlas App Services backend.
+
+   For a SwiftUI-specific get started experience, refer to the :ref:`ios-swiftui-quick-start`.
 
 Prerequisites
 -------------
@@ -195,21 +209,30 @@ Add a New Property
       #. Also add a PriorityLevel ``PersistableEnum`` below the ``Item`` class:
          
          .. code-block:: swift
+            :emphasize-lines: 9-23
+
+            class Item: Object, ObjectKeyIdentifiable {
+               @Persisted(primaryKey: true) var _id: ObjectId
+               @Persisted var isComplete = false
+               @Persisted var summary: String
+               @Persisted var owner_id: String
+               @Persisted var priority: PriorityLevel
+            }
 
             enum PriorityLevel: Int, PersistableEnum, CaseIterable {
-                case severe = 0
-                case high = 1
-                case medium = 2
-                case low = 3
-    
-                var description: String {
-                    switch self {
-                    case .severe: return "Severe"
-                    case .high: return "High"
-                    case .medium: return "Medium"
-                    case .low: return "Low"
-                    }
-                }
+               case severe = 0
+               case high = 1
+               case medium = 2
+               case low = 3
+
+               var description: String {
+                  switch self {
+                  case .severe: return "Severe"
+                  case .high: return "High"
+                  case .medium: return "Medium"
+                  case .low: return "Low"
+                  }
+               }
             }
 
          :ref:`PersistableEnum is the protocol <ios-realm-enum>` that marks 
