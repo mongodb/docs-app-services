@@ -58,28 +58,62 @@ Prerequisites
 
 Start with the Template
 -----------------------
+
 This tutorial is based on the Kotlin SDK Flexible Sync Template App named 
 ``kotlin.todo.flex``. We start with the default app and build new features 
 on it. 
 
-From Realm CLI, you can run the :ref:`realm-cli apps create 
-<realm-cli-apps-create>` command to set up the backend and create the 
-Kotlin base app. The following command creates a new app based on the 
-kotlin.todo.flex template. With the options flags we can pass during creation,
-the command below creates an app:
+To learn more about the Template Apps, see :ref:`template applications <template-apps>`.
 
-- Named "MyTutorialApp"
-- Deployed in the US-VA region
-- With the environment set to "development" (instead of production or QA)
+.. tabs::
 
-.. code-block:: shell
+   .. tab:: App Services UI
+      :tabid: ui
 
-   realm-cli apps create -n MyTutorialApp --template kotlin.todo.flex \
-      --deployment-model global --location us-va --environment development
+      Follow the procedure described in the 
+      :ref:`create-a-realm-app` guide, and select
+      :guilabel:`Create App from Template`. Select the 
+      :guilabel:`Real-time Sync` template. This creates an App Services App
+      pre-configured to use with one of the Device Sync template app clients.
 
-To learn more about the Template Apps and to install the Template App that this
-tutorial uses in the Atlas App Services UI, see :ref:`template applications
-<template-apps>`. 
+      After you create a template app, the UI displays a modal labeled 
+      :guilabel:`Get the Front-end Code for your Template`. This modal 
+      provides instructions for downloading the template app client code 
+      as a ``.zip`` file or using {+cli+} to get the client.
+
+      After selecting the ``.zip`` or {+cli+} method, follow the on-screen
+      instructions to get the client code. For this tutorial, select the 
+      :guilabel:`Kotlin (Android)` client code.
+
+   .. tab:: App Services CLI
+      :tabid: cli
+
+      From Realm CLI, you can run the :ref:`realm-cli apps create 
+      <realm-cli-apps-create>` command to set up the backend and create the 
+      Kotlin base app. The following command creates a new app based on the 
+      ``kotlin.todo.flex`` template. With the options flags we can pass during 
+      creation, the command below creates an app:
+
+      - Named "MyTutorialApp"
+      - Deployed in the US-VA region
+      - With the environment set to "development" (instead of production or QA)
+
+      .. code-block:: shell
+
+         realm-cli apps create -n MyTutorialApp --template kotlin.todo.flex \
+            --deployment-model global --location us-va --environment development
+
+   .. tab:: GitHub Repository
+      :tabid: github
+
+      You can fork and clone a GitHub repository that contains the Device 
+      Sync client code. The Kotlin client code is available at
+      :github:`https://github.com/mongodb/template-app-kotlin-todo <mongodb/template-app-kotlin-todo>`.
+
+      If you use this process to get the client code, you must create a
+      template app to use with the client. Follow the instructions at 
+      :ref:`create-template-app` to use the Atlas App Services UI, {+cli+},
+      or Admin API to create a Device Sync template app.
 
 Set up the Template App
 -----------------------
@@ -88,9 +122,13 @@ Set up the Template App
 
    .. step:: Open the App
 
-      Navigate to the directory where the Realm CLI created the Template App. 
-      The client code is in a ``frontend/kotlin.todo.flex`` directory.
       Open the ``build.gradle.kts`` file in Android Studio.
+
+      If you downloaded the client as a ``.zip`` file or cloned the client 
+      GitHub repository, you must manually insert the App Services App ID 
+      in the appropriate place in your client. Follow the 
+      :guilabel:`Configuration` instructions in the client :file:`README.md` 
+      to learn where to insert your App ID.
 
    .. step:: Explore the App Structure
 
@@ -153,10 +191,6 @@ Set up the Template App
       Without making any changes to the code, you should be able to
       :android:`run the app <studio/run>`  
       on an Android Emulator using Android Studio or on a physical device.
-
-      When you installed the template app, the Realm CLI also set up a new 
-      backend for you and populated the ``realm.xml`` file with the correct app 
-      ID. 
 
       Run the app, register a new user account, and then add a new Item to your 
       todo list.
