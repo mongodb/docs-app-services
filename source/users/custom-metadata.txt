@@ -15,11 +15,10 @@ Define Custom User Metadata
 Overview
 --------
 
-You can define :ref:`custom user data <custom-user-data>` in MongoDB Atlas and 
-configure App Services to store and access each user's data. App Services can also read 
+You can configure Atlas App Services to store :ref:`custom user data <custom-user-data>` 
+in MongoDB Atlas for the App's user. You can also configure App Services to store
 :ref:`user metadata <configure-user-metadata-on-the-backend>` from authentication 
-providers. You can configure App Services to request and access the metadata that you 
-want from each provider.
+providers. 
 
 .. _custom-user-data:
 
@@ -329,17 +328,28 @@ the user's account. These metadata fields vary depending on provider.
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 80
+   :widths: 25 75
 
    * - Provider
      - Metadata fields
 
    * - Facebook
-     - ``name``, ``first_name``, ``last_name``, ``picture``, ``gender``, 
-       ``birthday``, ``min_age``, ``max_age``, ``email``
+     - - ``name``
+       - ``first_name``
+       - ``last_name``
+       - ``picture``
+       - ``gender``
+       - ``birthday``
+       - ``min_age``
+       - ``max_age``
+       - ``email``
    
    * - Google
-     - ``name``, ``first_name``, ``last_name``, ``picture``, ``email``
+     - - ``name``
+       - ``first_name``
+       - ``last_name``
+       - ``picture``
+       - ``email``
 
    * - Custom JWT
      - Custom. You specify :ref:`JWT authentication metadata
