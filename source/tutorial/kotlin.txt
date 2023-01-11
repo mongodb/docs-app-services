@@ -219,6 +219,10 @@ Modify the Application
                   constructor(ownerId: String = "") : this() {
                      owner_id = ownerId
                   }
+            
+            // ... equals() and hashCode() functions
+            
+            } 
 
    .. step:: Set the Priority when Creating a New Item
 
@@ -390,7 +394,7 @@ Modify the Application
 
 
          Now update the ``addTask()`` and ``cleanUpAndClose()`` functions to include the new
-         ``taskPriority`` parameter and update the message to include the priority information:
+         ``taskPriority`` parameter and update the message with the priority information:
 
          .. code-block:: kotlin
             :emphasize-lines: 4, 7, 20
@@ -556,16 +560,17 @@ Change the Subscription
       sync every time we open the app. 
 
       To do this, find the ``SyncConfiguration.Builder().initialSubscriptions()`` function 
-      that our application calls on start, and add the ``reRunOnOpen`` parameter set to ``true``: 
+      that our application calls on start. First add the ``reRunOnOpen`` parameter set to ``true``, 
+      then set ``updateExisting`` to ``true``, which allows the existing query to be updated. 
 
       .. code-block:: kotlin
-         :emphasize-lines: 2
+         :emphasize-lines: 2, 5
 
          config = SyncConfiguration.Builder(currentUser, setOf(Item::class))
             .initialSubscriptions(rerunOnOpen = true) { realm ->
                 // Subscribe to the active subscriptionType - first time defaults to MINE
                 val activeSubscriptionType = getActiveSubscriptionType(realm)
-                add(getQuery(realm, activeSubscriptionType), activeSubscriptionType.name)
+                add(getQuery(realm, activeSubscriptionType), activeSubscriptionType.name, updateExisting = true)
             }
             .errorHandler { session: SyncSession, error: SyncException ->
                 onSyncError.invoke(session, error)
@@ -575,7 +580,8 @@ Change the Subscription
 
    .. step:: Run and Test
     
-      Run the application again. Log in using the account you created earlier in
+      Run the application again. 
+      Log in using the account you created earlier in
       this tutorial. Here, you'll notice an error if you check your
       :android:`logs using Logcat <studio/debug/am-logcat>`. You will see an
       entry that looks something like this:
