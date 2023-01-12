@@ -20,6 +20,17 @@ walks you through how to build your own app that uses Flexible Sync.
 For this tutorial, we'll start with a pre-built TypeScript template application
 to see how everything fits together. 
 
+The app is a pre-built template that includes a working React
+Native application (frontend) and its corresponding App Services App configuration 
+files (backend).
+
+The template app is a basic to-do list application that lets users do various
+things to manage their tasks:
+
+- Create email/password accounts and log in and out of the app.
+- Create, read, update, and delete their own tasks.
+- View all tasks, even if the user is not the owner.
+
 After you've got the template app running, you will add a new ``priority``
 field to the existing ``Item`` model and update the Flexible Sync
 subscription to only show items within a range of priorities. This example 
@@ -56,36 +67,68 @@ Prerequisites
 Start with the Template App
 ---------------------------
 
-To start, you'll create a new app on your computer and get familiar with
-it. The app is a pre-built template that includes a working React
-Native application (frontend) and its corresponding App Services App configuration 
-files (backend).
+This tutorial is based on the React Native SDK Flexible Sync Template App named 
+``react-native.todo.flex``. We start with the default app and build new features 
+on it. 
 
-The template app is a basic to-do list application that lets users do various
-things to manage their tasks:
+To learn more about the Template Apps, see :ref:`template-apps`.
 
-- Create email/password accounts and log in and out of the app.
-- Create, read, update, and delete their own tasks.
-- View all tasks, even if the user is not the owner.
+.. tabs::
+
+   .. tab:: App Services UI
+      :tabid: ui
+
+      Follow the procedure described in the 
+      :ref:`create-a-realm-app` guide, and select
+      :guilabel:`Create App from Template`. Select the 
+      :guilabel:`Real-time Sync` template. This creates an App Services App
+      pre-configured to use with one of the Device Sync template app clients.
+
+      After you create a template app, the UI displays a modal labeled 
+      :guilabel:`Get the Front-end Code for your Template`. This modal 
+      provides instructions for downloading the template app client code 
+      as a ``.zip`` file or using {+cli+} to get the client.
+
+      After selecting the ``.zip`` or {+cli+} method, follow the on-screen
+      instructions to get the client code. For this tutorial, select the 
+      :guilabel:`JavaScript (React Native)` client code.
+
+   .. tab:: App Services CLI
+      :tabid: cli
+
+      From {+cli+}, you can run the :ref:`realm-cli apps create 
+      <realm-cli-apps-create>` command to set up the backend and create the 
+      React Native base app. The following command creates a new app based on the 
+      ``react-native.todo.flex`` template.
+
+      .. code-block:: shell
+
+         npx mongodb-realm-cli apps create \
+           --template react-native.todo.flex \
+           --name realm-sync-tutorial
+
+      The command creates a new folder in your current directory with
+      the same name as the value of the ``--name`` flag.
+
+   .. tab:: GitHub Repository
+      :tabid: github
+
+      You can fork and clone a GitHub repository that contains the Device 
+      Sync client code. The React Native client code is available at
+      :github:`https://github.com/mongodb/template-app-react-native-todo <mongodb/template-app-react-native-todo>`.
+
+      If you use this process to get the client code, you must create a
+      template app to use with the client. Follow the instructions at 
+      :ref:`create-template-app` to use the Atlas App Services UI, {+cli+},
+      or Admin API to create a Device Sync template app.
+
+Set Up the Template App
+-----------------------
 
 Use the following steps to get the template app up and running on your
 computer:
 
 .. procedure::
-
-   .. step:: Create the Template App
-      
-      Run the following command in a terminal to create a new folder
-      with your templated configuration files and React Native app:
-      
-      .. code-block:: shell
-         
-         npx mongodb-realm-cli apps create \
-           --template react-native.todo.flex \
-           --name realm-sync-tutorial
-         
-      The command creates a new folder in your current directory with
-      the same name as the value of the ``--name`` flag.
    
    .. step:: Install Dependencies
 

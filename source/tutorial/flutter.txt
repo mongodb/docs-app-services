@@ -75,23 +75,60 @@ Start with the Template
 -----------------------
 
 This tutorial is based on the Flutter Flexible Sync Template App named
-"flutter.todo.flex". We start with the default app and build new features
+``flutter.todo.flex``. We start with the default app and build new features
 on it.
 
-If you already have the latest Realm CLI installed, you can run the
-:ref:`realm-cli apps create <realm-cli-apps-create>` command to set up the
-backend and create the Flutter base app. The following command creates a new
-app based on the flutter.todo.flex template. The app is created in a
-development environment, is named "MyTutorialApp", and is deployed in the US-VA
-region:
+To learn more about the Template Apps, see :ref:`template-apps`.
 
-.. code-block:: sh
+.. tabs::
 
-   realm-cli apps create -n MyTutorialApp --template flutter.todo.flex \
-      --deployment-model global --location us-va --environment development
+   .. tab:: App Services UI
+      :tabid: ui
 
-To learn more about the Template Apps, and to install the Template App that this
-tutorial uses in the Atlas App Services UI, see :ref:`Template Apps <template-apps>`.
+      Follow the procedure described in the 
+      :ref:`create-a-realm-app` guide, and select
+      :guilabel:`Create App from Template`. Select the 
+      :guilabel:`Real-time Sync` template. This creates an App Services App
+      pre-configured to use with one of the Device Sync template app clients.
+
+      After you create a template app, the UI displays a modal labeled 
+      :guilabel:`Get the Front-end Code for your Template`. This modal 
+      provides instructions for downloading the template app client code 
+      as a ``.zip`` file or using {+cli+} to get the client.
+
+      After selecting the ``.zip`` or {+cli+} method, follow the on-screen
+      instructions to get the client code. For this tutorial, select the 
+      :guilabel:`Dart (Flutter)` client code.
+
+   .. tab:: App Services CLI
+      :tabid: cli
+
+      From {+cli+}, you can run the :ref:`realm-cli apps create 
+      <realm-cli-apps-create>` command to set up the backend and create the 
+      Dart (Flutter) base app. The following command creates a new app based on the 
+      ``flutter.todo.flex`` template. With the options flags we can pass during 
+      creation, the command below creates an app:
+
+      - Named "MyTutorialApp"
+      - Deployed in the US-VA region
+      - With the environment set to "development" (instead of production or QA)
+
+      .. code-block:: shell
+
+         realm-cli apps create -n MyTutorialApp --template flutter.todo.flex \
+            --deployment-model global --location us-va --environment development
+
+   .. tab:: GitHub Repository
+      :tabid: github
+
+      You can fork and clone a GitHub repository that contains the Device 
+      Sync client code. The Flutter client code is available at
+      :github:`https://github.com/mongodb/template-app-dart-flutter-todo <mongodb/template-app-dart-flutter-todo>`.
+
+      If you use this process to get the client code, you must create a
+      template app to use with the client. Follow the instructions at 
+      :ref:`create-template-app` to use the Atlas App Services UI, {+cli+},
+      or Admin API to create a Device Sync template app.
 
 Set up the Template App
 -----------------------
@@ -100,9 +137,13 @@ Set up the Template App
 
    .. step:: Open the App
 
-      Navigate to the :file:`MyTutorialApp/frontend/flutter.todo.flex` directory,
-      which contains the template Realm Flutter app.
       Open the Flutter app with your code editor.
+
+      If you downloaded the client as a ``.zip`` file or cloned the client 
+      GitHub repository, you must manually insert the App Services App ID 
+      in the appropriate place in your client. Follow the 
+      :guilabel:`Configuration` instructions in the client :file:`README.md` 
+      to learn where to insert your App ID.
 
    .. step:: Explore the App Structure
 
@@ -144,9 +185,7 @@ Set up the Template App
 
       Without making any changes to the code, you should be able to run the app
       in either the Android emulator, iOS Simulator, physical mobile device,
-      or desktop emulator. When you installed the template app,
-      the Realm CLI also set up a new backend for you and populated the
-      ``realm.json`` file with the correct App ID.
+      or desktop emulator.
 
       Attach to a device and run the Flutter application.
 
