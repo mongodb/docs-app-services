@@ -1,0 +1,80 @@
+.. _client-data-access:
+
+============================
+Query Atlas from Client Apps
+============================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+TODO: rephrase intro paragraph
+
+You can query data in MongoDB Atlas from client applications using standar
+ MongoDB query language syntax with **MongoDB Data Access** in the Realm SDKs.
+
+The MongoDB Data Access secures data with role-based App Services rules, schemas,
+and filters.
+
+When to Use MongoDB Data Access
+-------------------------------
+
+Some general scenarios when you might want to use MongoDB Data Access in an application:
+
+- You want to use an API like the MongoDB drivers
+- When you want to perform aggregations
+- You want to dynamically construct queries from the client device.
+
+You might want to use MongoDB Data Access **instead of** Atlas Device Sync
+in an application in these scenarios:
+
+- You are querying documents that are not or cannot be modeled in Realm Database.
+- A non-Realm service generates collections that you want to access.
+- You are using the Realm Web SDK, which does not support Realm Database or Device Sync.
+- You do not want to persist data locally.
+
+.. note:: Limited Server-Side Use
+
+You should not use the Realm SDKs' Data Access to support significant
+server-side workloads. In server-side environments, use a MongoDB Driver.
+
+Set Up
+------
+
+.. procedure::
+
+   .. step:: Create App Services App
+
+      TODO: add content
+
+   .. step:: Add Rules to a Collection
+
+      TODO: add content
+
+   .. step:: Add Schema to Collection (optional)
+
+      TODO: add content
+
+   .. step:: Add Authentication Provider
+
+      TODO: add content
+
+
+Query from Client Apps
+----------------------
+
+For documentation on how to query MongoDB from the Realm SDKs,
+refer to the Realm MongoDB Data Access documentation:
+
+- :ref:`java-mongodb-data-access`
+- :ref:`dotnet-mongodb-data-access`
+- :ref:`node-mongodb-data-access`
+- :ref:`react-native-mongodb-data-access`
+- :ref:`ios-mongodb-data-access`
+- :ref:`web-mongodb-data-access`
+
+.. note:: Unsupported Realm SDKs
+
+   The Realm Flutter SDK and Kotlin SDK do not yet support MongoDB Data Access.
