@@ -24,7 +24,7 @@ registering and confirming a user before the user can authenticate.
 Identity
 --------
 
-Upon first login with an authentication provider, App Services creates a 
+When you first log in with an authentication provider, App Services creates a 
 :ref:`user object <user-objects>` that contains a unique identity ID and 
 :ref:`provider-specific metadata <user-metadata>` about the user. 
 
@@ -345,7 +345,7 @@ There is no such specific method to re-run a custom confirmation
 function. Instead, App Services has a method to trigger a re-run of whatever
 the current Email/Password user confirmation workflow happens to be. You
 can manually re-run the currently selected user confirmation flow using
-the the App Services UI or the :doc:`App Services Admin API </admin/api/v3>`:
+the App Services UI or the :doc:`App Services Admin API </admin/api/v3>`:
 
 .. tabs-realm-admin-interfaces::
    
@@ -371,7 +371,7 @@ the the App Services UI or the :doc:`App Services Admin API </admin/api/v3>`:
          admin console should display a confirmation message. The user's
          :guilabel:`User Status` changes from :guilabel:`Pending Confirmation`
          to :guilabel:`Pending User Login`. Once the user logs in, they will
-         move into the active users list automatically.
+         move into the list of active users automatically.
 
       If the re-run fails or the user's tokens expire again, you can re-run
       the confirmation function as many times as necessary.
@@ -396,8 +396,8 @@ the the App Services UI or the :doc:`App Services Admin API </admin/api/v3>`:
 Summary
 -------
 
-- For most providers, App Services automatically creates a user object the first time 
-  a user authenticates.
+- For all providers except for Email/Password authentication,
+  App Services automatically creates a user object the first time a user authenticates.
 
 - You can log in to a single account with more than one provider by using the Realm SDKs
   to link identities.
