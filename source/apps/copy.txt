@@ -14,7 +14,7 @@ Overview
 --------
 
 You can make a copy of an existing App by reusing the App's
-configuration files and manually porting other information like Secrets.
+configuration files and manually porting Secrets.
 
 You might want to copy an application if:
 
@@ -69,10 +69,10 @@ Procedure
 
          .. step:: Create a New App
 
-            Create a new blank App. Choose the same name as the original
-            App and set the deployment model and region to be what you
-            want the copied App to use. For more information, see
-            :ref:`Create an App <create-an-app>`.
+            Create a new blank App. Choose a name and set the deployment
+            model and region to be what you want the copied App to use.
+            For more information, see :ref:`Create an App
+            <create-an-app>`.
 
             .. example::
 
@@ -80,11 +80,9 @@ Procedure
 
                   # Create the new App
                   realm-cli app create \
-                    --name "myapp" \
+                    --name "myapp-copy" \
                     --deployment-model "LOCAL" \
                     --location "US-OR"
-                  # Rename the directory
-                  mv myapp myapp-copy
 
          .. step:: Migrate Secrets to the New App
 
@@ -159,11 +157,11 @@ Procedure
                   # Create the new App. The create command saves the new
                   # App's configiration file directory in the current directory
                   realm-cli app create \
-                    --name "myapp" \
+                    --name "myapp-copy" \
                     --deployment-model "LOCAL" \
                     --location "US-OR"
-                  cp -r myapp/* .
-                  rm -rf myapp
+                  cp -r myapp-copy/* .
+                  rm -rf myapp-copy
                   # Navigate back to the root of the repo
                   cd ..
 
