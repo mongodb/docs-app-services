@@ -10,13 +10,30 @@ Query Atlas from Client Apps
    :depth: 2
    :class: singlecol
 
-TODO: rephrase intro paragraph
-
-You can query data in MongoDB Atlas from client applications using standar
- MongoDB query language syntax with **MongoDB Data Access** in the Realm SDKs.
+You can query data in MongoDB Atlas from client applications using standard
+MongoDB query language syntax with **MongoDB Data Access** in the Realm SDKs.
 
 The MongoDB Data Access secures data with role-based App Services rules, schemas,
-and filters.
+and filters. These features let construct complex client-side queries
+while your data remains secure on the server.
+
+Realm SDK Support
+-----------------
+
+The following Realm SDKs support MongoDB Data Access:
+
+- Java SDK
+- .NET SDK
+- Node.js SDK
+- React Native SDK
+- Swift SDK
+- Web SDK
+
+MongoDB Data Access **is not** supported in these Realm SDKs:
+
+- C++ SDK
+- Flutter SDK
+- Kotlin SDK
 
 When to Use MongoDB Data Access
 -------------------------------
@@ -24,43 +41,61 @@ When to Use MongoDB Data Access
 Some general scenarios when you might want to use MongoDB Data Access in an application:
 
 - You want to use an API like the MongoDB drivers
-- When you want to perform aggregations
+- You want to perform aggregations
 - You want to dynamically construct queries from the client device.
 
-You might want to use MongoDB Data Access **instead of** Atlas Device Sync
+You might want to use MongoDB Data Access **instead of** :ref:`Atlas Device Sync <sync>`
 in an application in these scenarios:
 
 - You are querying documents that are not or cannot be modeled in Realm Database.
 - A non-Realm service generates collections that you want to access.
-- You are using the Realm Web SDK, which does not support Realm Database or Device Sync.
 - You do not want to persist data locally.
+- You are using the Realm Web SDK, which does not support Realm Database or Device Sync.
 
-.. note:: Limited Server-Side Use
+Limited Server-Side Use
+~~~~~~~~~~~~~~~~~~~~~~~
 
-You should not use the Realm SDKs' Data Access to support significant
-server-side workloads. In server-side environments, use a MongoDB Driver.
+MongoDB Data Access is intended for client-side use.
+You should not use the Realm SDKs' Data Access to support significant server-side workloads.
+
+In server-side environments, use the :ref:`Atlas Data API <data-api>` or a MongoDB Driver.
+If you would like to apply App Services Rules to Driver operations,
+you can use the :ref:`App Services Wire Protocol <wire-protocol>`.
 
 Set Up
 ------
+
+To use MongoDB Data Access from a Realm SDK, you must perform the following set up.
 
 .. procedure::
 
    .. step:: Create App Services App
 
-      TODO: add content
-
-   .. step:: Add Rules to a Collection
-
-      TODO: add content
-
-   .. step:: Add Schema to Collection (optional)
-
-      TODO: add content
+      Create an App Services App. To learn more about App creation,
+      refer to :ref:`Create an App <create-a-realm-app>`.
 
    .. step:: Add Authentication Provider
 
-      TODO: add content
+      Add at least one authentication provider to the App. All MongoDB Data Access
+      queries run in the context of an authenticated user. To learn more about
+      enabling user authentication, refer to :ref:`authentication-providers`.
 
+   .. step:: Add Rules to a Collection
+
+      To secure your client-side queries, you must add App Services Rules
+      to any collections that you use with MongoDB Data Access. To learn how to
+      add rules to collections, refer to :ref:`Define Roles & Permissions
+      <define-roles-and-permissions>`.
+
+   .. step:: Add Schema and Filters to Collection (Optional)
+
+      In addition to rules, you can also add a schema and filters to collections
+      that you query with MongoDB Data Access.
+
+      TODO: 1 sentence explanation of both schemas and filters
+
+      While schemas and filters are not necessary to use MongoDB Data Access,
+      you should add them to most production use cases.
 
 Query from Client Apps
 ----------------------
