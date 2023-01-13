@@ -22,12 +22,12 @@ Realm SDK Support
 
 The following Realm SDKs support MongoDB Data Access:
 
-- Java SDK
-- .NET SDK
-- Node.js SDK
-- React Native SDK
-- Swift SDK
-- Web SDK
+- :ref:`Java SDK <java-intro>`
+- :ref:`.NET SDK <dotnet-intro>`
+- :ref:`Node.js SDK <node-intro>`
+- :ref:`React Native SDK <react-native-intro>`
+- :ref:`Swift SDK <swift-intro>`
+- :ref:`Web SDK <web-intro>`
 
 MongoDB Data Access **is not** supported in these Realm SDKs:
 
@@ -92,7 +92,14 @@ To use MongoDB Data Access from a Realm SDK, you must perform the following set 
       In addition to rules, you can also add a schema and filters to collections
       that you query with MongoDB Data Access.
 
-      TODO: 1 sentence explanation of both schemas and filters
+      :ref:`Schemas <schemas>` define your App's data model and validate documents
+      against it. Use filters to ensure that the clients only write data matching
+      the schema to the database.
+
+      :ref:`Filters <filters>` modify MongoDB queries before they are sent to
+      the database so that queries only return a subset of results. For example,
+      you could define a filter that modifies queries so that a user can only
+      access data that they've written.
 
       While schemas and filters are not necessary to use MongoDB Data Access,
       you should add them to most production use cases.
