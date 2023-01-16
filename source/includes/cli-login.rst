@@ -1,4 +1,4 @@
-Use your MongoDB Cloud API Key to log in:
+Use your MongoDB Atlas Admin API Key to log in:
 
 .. code-block:: shell
 
