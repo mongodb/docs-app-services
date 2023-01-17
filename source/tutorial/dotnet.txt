@@ -49,7 +49,7 @@ Prerequisites
       .. tab:: MacOS
          :tabid: vs-mac
 
-         - `Visual Studio for Mac <https://visualstudio.microsoft.com/downloads/>`__ 
+         - `Visual Studio for Mac <https://visualstudio.microsoft.com/downloads/>`_ 
             2019 or newer.
          - `Xcode <https://developer.apple.com/xcode/>`_ 10.0 or newer. Note that 
            Xcode 10 requires macOS High Sierra (10.13) or newer.
@@ -172,9 +172,9 @@ To do this, follow these steps:
          
    .. step:: Set the Priority when Creating or Modifying an Item
 
-      A. The ``EditItemViewModel`` ViewModel is used to create new items and to 
-         modify existing items. In either scenario, we need to add the UI and code 
-         to set the Priority of an item. 
+      A. The ``EditItemViewModel`` ViewModel is used to both create new items and 
+         to modify existing items. When creating or modifying an item, the user needs 
+         the UI (and code) to set the Priority of an item. 
 
       #. Add an ObservableProperty to hold the priority:
 
@@ -183,12 +183,11 @@ To do this, follow these steps:
             [ObservableProperty]
             private int? priority;
 
-         .. note:: [ObservableProperty] and [RelayCommand] Attributes
+         .. note:: [ObservableProperty] Attribute
          
-            The [ObservableProperty] and [RelayCommand] attributes are features 
-            provided by the 
+            The ``[ObservableProperty]`` attribute is a feature provided by the 
             `MVVM Toolkit <https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/relaycommand>`__ 
-            that simplify data binding with the View.
+            to simplify data binding.
          
       #. The ``ApplyQueryAttributes`` method acts as a bit of a "constructor" for 
          this view model, checking to see if an existing item is being passed to 
@@ -200,7 +199,7 @@ To do this, follow these steps:
          ``Priority = InitialItem.Priority;``.
 
          Likewise, if we're creating a new item, set the default priority to "Medium": 
-         ``Priority = (int)PriorityLevel.Medium;``.
+         ``Priority = 2;``.
 
          When complete this method should now look like the following:
 
@@ -225,12 +224,12 @@ To do this, follow these steps:
             }
 
       #. Finally, in the ``SaveItem()`` method, we want to persist the Priority 
-         value. Since we are either changing an existing managed object or creating a 
-         new one, the changes are wrapped in a ``realm.WriteAsync`` call.
+         value. Since we are creating or modifying a managed object, the changes 
+         are wrapped in a ``realm.WriteAsync`` call.
          
-         For the existing item, add ``InitialItem.Priority = Priority;``, 
-         and for a new item, set the property in the ``Add()`` call. Your completed 
-         ``WriteAsync`` block should look like this:
+         For the existing item, set the ``InitialItem.Priority`` on the existing 
+         object, and for a new item, set the property in the ``Add()`` call. Your 
+         completed ``WriteAsync`` block should look like this:
 
          .. code-block:: csharp
             :emphasize-lines: 6,14
@@ -362,8 +361,8 @@ To do this, follow these steps:
             else if (subType == SubscriptionType.MyHighPriority)
             {
                   query = realm.All<Item>()
-                     .Where(i => i.OwnerId == CurrentUser.Id)
-                     .Where(i => i.Priority < 2);
+                    .Where(i => i.OwnerId == CurrentUser.Id &&
+                           i.Priority < 2);
                   queryName = "myHighPri";
             }
             else if (subType == SubscriptionType.All)
@@ -386,15 +385,16 @@ To do this, follow these steps:
                 _ => throw new InvalidOperationException("Unknown subscription type")
             };
 
-      #. Finally, switch to the ``ItemsViewModel`` and find the ``OnIsShowAllTasksChanged`` 
+      #. Finally, open the ``ItemsViewModel`` class and find the ``OnIsShowAllTasksChanged`` 
          method. Rather than change the UI to enable 3 subscriptions, we'll just 
-         use our new one in place of the existing "mine" subscription. Change the 
+         replace the existing "mine" subscription with the new one. Change the 
          ``SetSubscription`` method so it looks like the following:
          
          .. code-block:: csharp
-            :emphasize-lines: 2
+            :emphasize-lines: 3
 
-            await RealmService.SetSubscription(realm, value ? SubscriptionType.All 
+            await RealmService.SetSubscription(realm, value 
+               ? SubscriptionType.All 
                : SubscriptionType.MyHighPriority);
 
    .. step:: Run and Test
@@ -406,14 +406,14 @@ To do this, follow these steps:
 
       .. figure:: /images/no_pri_field.png
          :alt: No field for priority
-         :width: 150
+         :width: 100
 
       Before reading further, consider why we are seeing this error, and how 
       you would go about fixing it.
       
       .. note:: Hint
       
-         You will see a similar error in the logs of you Atlas app Services app: 
+         You will see a similar error in your Atlas app Services app logs: 
          
          .. code-block:: sh
             :copyable: false
