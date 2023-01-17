@@ -1,20 +1,175 @@
-.. _delete-realm-apps:
+.. _delete-an-app:
 
-===========
-Delete Apps
-===========
+=============
+Delete an App
+=============
 
 .. default-domain:: mongodb
 
-.. toctree::
-   :titlesonly:
-   :caption: Delete Apps
-   :hidden:
+Overview
+--------
 
-   App Services UI </apps/delete/delete-with-ui>
-   {+cli+} </apps/delete/delete-with-cli>
-   App Services API </apps/delete/delete-with-api>
+You can delete an App Services App from the App Services UI, CLI, or
+Admin API.
 
-- :doc:`App Services UI </apps/delete/delete-with-ui>`
-- :doc:`{+cli+} </apps/delete/delete-with-cli>`
-- :doc:`App Services API </apps/delete/delete-with-api>`
+Before You Begin
+----------------
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      You will need the following to delete an App in the Atlas UI:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+
+   .. tab::
+      :tabid: cli
+
+      You will need the following to delete an App in the CLI:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+
+      - .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+      - .. include:: /includes/prereqs/app-services-cli.rst
+
+   .. tab::
+      :tabid: api
+
+      You will need the following to delete an App with the Admin API:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+
+      - .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+Procedure
+---------
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. procedure::
+
+         .. step:: Navigate to the App Services Tab
+
+            Go to the Project Dashboard where you want to delete the App.
+            Select the :guilabel:`App Services` tab.
+
+         .. step:: Delete the App
+
+            To delete an app, click the :guilabel:`...` menu at the upper
+            right corner of the tile for the app you want to delete.
+
+            Then, select :guilabel:`Delete App` from the drop-down menu
+            that appears.
+
+            The page prompts you to confirm that you want to delete this
+            app. Click :guilabel:`Delete App` to confirm and delete the
+            App.
+
+            .. figure:: /images/delete-realm-through-ui.png
+               :alt: App tile with Delete App option showing
+               :width: 300px
+
+   .. tab::
+      :tabid: cli
+
+      .. procedure::
+
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/cli-login.rst
+
+         .. step:: (Optional) List All Apps
+
+            Although the ``delete`` command will show you a list of apps available to delete,
+            You may want to use the ``list`` command to see all your apps and find out which
+            you plan to delete before running the ``delete`` command.
+
+            .. code-block:: shell
+
+               realm-cli apps list
+
+            For more details about each app, you can use:
+
+            .. code-block:: shell
+
+               realm-cli apps describe
+
+            .. seealso::
+
+               For more details and additional flags, see the CLI documentation for the
+               :ref:`list <realm-cli-apps-list>`
+               and :ref:`describe <realm-cli-apps-describe>` commands.
+
+         .. step:: Run the App Delete Command
+
+            The CLI can delete one or more apps with the following command:
+
+            .. code-block:: shell
+
+               realm-cli apps delete
+
+            If you have more than one App, you will be prompted to select one or
+            more apps that you would like to delete from a list of all your Apps.
+
+            If you already know the name or id of the app you would like to delete, you can specify it:
+
+            .. code-block:: shell
+
+               realm-cli apps delete --app <name or id>
+
+            .. seealso::
+
+               For more details and additional flags, see the
+               CLI documentation for the :ref:`delete <realm-cli-apps-delete>` command.
+
+   .. tab::
+      :tabid: api
+
+      .. procedure::
+
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/api-authenticate-instructions.rst
+
+         .. step:: Get the Project ID
+
+            Every App Services App belongs to a MongoDB Atlas project.
+
+            To delete an App you need the Project ID (sometimes referred to as
+            the Group ID) of the MongoDB Atlas project that contains the app.
+            You will include this ID in the URL of API requests.
+
+         .. step:: Get the App ID
+
+            To delete an App you will need to find the Application ID of the app.
+
+            .. include:: /includes/api-get-application-id.rst
+
+            Find the app you want to delete and save the ``_id`` field for the last step.
+
+         .. step:: Delete the App
+
+            Send a request to the :admin-api-endpoint:`Delete an App
+            <operation/adminDeleteApplication>` endpoint.
+
+            Your request should include:
+
+            - The ``access_token`` from step 1 in a :mdn:`Bearer token <Web/HTTP/Authentication>` ``Authorization`` header.
+
+            - The :admin-api-endpoint:`Group ID/Project ID <section/Project-and-Application-IDs>` from step 2.
+
+            - The :admin-api-endpoint:`Application ID <section/Get-Authentication-Tokens>` from step 3.
+
+            .. code-block:: shell
+
+               curl --request DELETE 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}' \
+                 --header 'Authorization:  Bearer <access_token>' \
+                 --header 'Content-Type: application/json'
+
+            If your application deletes successfully, App Services returns a ``204`` response.
