@@ -1,23 +1,22 @@
 .. _rules:
 .. _mongodb-rules:
 
-=====
-Rules
-=====
+==============================
+Define Data Access Permissions
+==============================
 
 .. toctree::
    :titlesonly:
    :hidden:
    
    Role-based Permissions </rules/roles>
-   Filters </rules/filters>
-   Expressions </rules/expressions>
-   Examples </rules/examples>
-   Define Roles And Permissions </mongodb/define-roles-and-permissions>
-   Filter Incoming Queries </mongodb/filter-incoming-queries>
-   Configure Advanced Rules </mongodb/configure-advanced-rules>
+   Rule Expressions </rules/expressions>
+   Data Access Role Examples </rules/examples>
 
 .. include:: /includes/non-sync-rules-note.rst
+
+Overview
+--------
 
 In traditional applications, an application server exposes an API to client
 applications and handles database queries on their behalf. To prevent malicious,
@@ -54,7 +53,6 @@ process:
          To learn how to configure a :ref:`filter <filters>` for a collection, see
          :doc:`Filter Incoming Queries </mongodb/filter-incoming-queries>`.
 
-
    .. step:: Evaluate A Role For Each Document
 
       App Services evaluates a **Role** with specific read and write
@@ -73,7 +71,6 @@ process:
          use-case examples, and details on how App Services assigns roles to
          documents.
 
-
    .. step:: Run The Query With The Assigned Roles
 
       Once App Services has evaluated a role for each document, it runs the
@@ -81,7 +78,6 @@ process:
       the document's role allows them. If no role applies to a specific
       document, App Services withholds that document entirely and prevents the
       query from reading or writing any fields.
-
 
    .. step:: Validate The Document Schema
 
@@ -94,7 +90,6 @@ process:
 
          - :ref:`schemas`
          - :ref:`enforce-a-schema`
-
 
 .. _default-rules:
 
