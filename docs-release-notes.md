@@ -1,3 +1,17 @@
+# January 13, 2022
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Users & Authentication Providers: Update Custom User Data config with details about `on_user_creation_function_name`
+
+## Users & Authentication
+- Enable Custom User Data: New section with code example showing how to use a Function to create a user with custom metadata
+
+## App Services Admin API
+- Add Custom User Data endpoint documentation for `GET` and `PATCH` with request details and example response
+
+## Other
+- Internal: Remove over 100 unused files from repository, add CI to check for unused files in PRs
+
 # January 6, 2022
 
 ## Device Sync
