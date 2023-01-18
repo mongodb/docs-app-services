@@ -389,20 +389,59 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
   "/groups/{groupId}/apps/{appId}/export":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - in: query
+        name: deployment
+        required: false
+        description: The `_id` of a specific deployment to export. If not specified, export the latest deployment.
+        example: 6373362f01a569d5cd571c68
+        schema:
+          type: string
+      - in: query
+        name: source_control
+        required: false
+        default: false
+        description: |-
+          If `true`, the exported directory is suitable for automatic
+          deployment from GitHub or other source control.
+
+          Cannot be used with the `template` query parameter.
+        schema:
+          type: boolean
+      - in: query
+        name: template
+        required: false
+        default: false
+        description: |-
+          If `true`, the exported directory does not include any
+          identifiers or other data that would tie the app to a specific
+          deployment instance.
+
+          Cannot be used with the `source_control` query parameter.
+        schema:
+          type: boolean
+      - in: query
+        name: version
+        required: false
+        description: |-
+          The configuration file schema version to export. This value
+          corresponds to `config_version` in `realm_config.json`.
+        example: 20210101
+        schema:
+          type: string
     get:
       tags:
         - apps
       operationId: adminExportApplication
       summary: Export an app as a zip file
       description: |-
-        [Export](https://www.mongodb.com/docs/atlas/app-services/apps/configure/export-app#std-label-export-realm-app)
+        [Export](https://www.mongodb.com/docs/atlas/app-services/apps/export/)
         an application as a zip file.
       responses:
         "200":
           description: The application was successfully exported.
-    parameters:
-      - "$ref": "#/components/parameters/GroupId"
-      - "$ref": "#/components/parameters/AppId"
 
   "/groups/{groupId}/apps/{appId}/event_subscriptions":
     parameters:
