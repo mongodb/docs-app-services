@@ -3,7 +3,6 @@
 ==========================
 Configure Network Security
 ==========================
-.. TODO: Add tabs for Admin API/CLI
 
 .. default-domain:: mongodb
 
@@ -20,7 +19,7 @@ App Services uses a range of network security protocols to prevent
 unauthorized access to your data. You can:
 
 - Configure TLS to secure network requests to and from your application.
-- Define and manage IP addresses from which all outbound requests originate.
+- Define IP addresses from which all outbound requests originate.
 - Define and manage URLs and IP addresses from which inbound requests may originate.
 
 Network Security
@@ -298,51 +297,194 @@ Find Your IP Address
 View IP Access List Entries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Navigate to :guilabel:`App Settings` in the App Services UI, and then click the
-:guilabel:`IP Access List` tab to view the IP Access List settings.
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-.. figure:: /images/ip-access-list-settings-realm-ui.png
-   :alt: IP Access List Settings
-   :figwidth: 750px
+      To view your IP Access List settings, navigate to :guilabel:`App Settings` 
+      in the App Services UI, and then click the :guilabel:`IP Access List` tab.
+    
+      .. figure:: /images/ip-access-list-settings-realm-ui.png
+         :alt: IP Access List Settings
+         :figwidth: 750px
+
+   .. tab::
+      :tabid: cli
+
+      To view your IP access list entries, call ``realm-cli accessList list``.
+      The CLI will then prompt you for your App ID.
+          
+   .. tab::
+      :tabid: api
+
+      To view your IP access list entries, create a ``GET`` request 
+      in the following format. You must specify the Group and App ID.
+
+      .. code-block:: sh
+
+         curl --request GET \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/allowedIPAccessListGet>`
 
 .. _create-ip-access-list-entry:
 
 Create an IP Access List Entry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To add an IP address to the list of enabled entries, click the green
-:guilabel:`Add IP address` button to open the :guilabel:`Add IP Access List Entry` modal.
-This modal allows you to specify your current IP address or use a custom one.
-You can also specify a comment about the entry.
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-.. figure:: /images/add-ip-access-entry-realm-ui.png
-   :alt: Add IP Access List Entry - modal
-   :figwidth: 500px
+      To add an IP address to the list of enabled entries, click the green
+      :guilabel:`Add IP address` button to open the :guilabel:`Add IP Access List Entry` modal.
+      This modal allows you to specify your current IP address or use a custom one.
+      You can also specify a comment about the entry.
+
+      .. figure:: /images/add-ip-access-entry-realm-ui.png
+        :alt: Add IP Access List Entry - modal
+        :figwidth: 500px
+
+   .. tab::
+      :tabid: cli
+
+      To create an IP access list entry, call ``realm-cli accessList create``.
+      The CLI will prompt you to input an IP address and to select an App 
+      from a list of all your Apps.
+
+      Optionally, you can specify any of the following arguments when you call 
+      the program:
+      
+      .. code-block:: bash
+         
+         realm-cli accessList create \
+           --app=<Your App ID> \
+           --ip=<IP Address> \
+           --comment=<Optional Comment> \
+           --use-current \
+           --allow-all
+
+   .. tab::
+      :tabid: api
+
+      To create an IP access list entry, create a ``POST`` request 
+      in the following format. You must specify the IP address in the request
+      body and the Group and App ID in the request URL.
+
+      .. code-block:: sh
+
+         curl --request POST \
+           --header 'Authorization: Bearer <access_token>' \
+           --data '{ "address": "<IP Address>" }' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/allowedIPAccessListCreate>`
 
 .. _edit-ip-access-list-entry:
 
 Edit an IP Access List Entry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To edit an entry, click the :guilabel:`edit` button on the right-hand side of
-the entry, and the :guilabel:`Update IP Access List Entry` modal will open. This
-modal allows you to specify your current IP address or use a custom one. You can
-also specify a comment about the entry.
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-.. figure:: /images/edit-ip-access-entry-realm-ui.png
-   :alt: Edit IP Access List Entry - modal
-   :figwidth: 500px
+      To edit an entry, click the :guilabel:`edit` button on the right-hand side of
+      the entry, and the :guilabel:`Update IP Access List Entry` modal will open. This
+      modal allows you to specify your current IP address or use a custom one. You can
+      also specify a comment about the entry.
+
+      .. figure:: /images/edit-ip-access-entry-realm-ui.png
+        :alt: Edit IP Access List Entry - modal
+        :figwidth: 500px
+
+   .. tab::
+      :tabid: cli
+
+      You can edit an IP access list entry by updating the entry's IP address or by adding 
+      a comment to the entry. To update an entry's IP address, call:
+
+      .. code-block:: sh
+
+         ``realm-cli accessList update --new-ip <IP Address>``
+      
+      To add or update a comment, call:
+      
+      .. code-block:: sh
+
+         ``realm-cli accessList update --comment <Optional Comment>``
+
+      The CLI will then prompt you to select an App from a list of all your Apps
+      and the IP address to update.
+
+   .. tab::
+      :tabid: api
+
+      To update the IP address for an entry, create a ``PATCH`` request 
+      in the following format. You must specify the new IP address in the request
+      body and the Group, App, and IP address ID in the request URL. The IP address 
+      ID refers to the entry that you want to update. To get the ID for an IP address, 
+      :ref:`view your IP access list entries <view-ip-access-list-entries>`.
+
+      .. code-block:: sh
+
+         curl --request PATCH \
+           --header 'Authorization: Bearer <access_token>' \
+           --data '{ "address": "<IP Address>" }' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list/<ipID>
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/allowedIPAccessListUpdate>`
 
 .. _delete-ip-access-list-entry:
 
 Delete an IP Access List Entry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To delete an entry, click the :guilabel:`delete` button on the right-hand side
-of the entry, and a modal will open requesting you to confirm that you want to
-delete the entry. Click the red :guilabel:`delete` button on the modal to
-complete the deletion of the entry.
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-.. figure:: /images/delete-ip-access-entry-realm-ui.png
-   :alt: Edit IP Access List Entry - modal
-   :figwidth: 500px
+      To delete an entry, click the :guilabel:`delete` button on the right-hand side
+      of the entry, and a modal will open requesting you to confirm that you want to
+      delete the entry. Click the red :guilabel:`delete` button on the modal to
+      complete the deletion of the entry.
+
+      .. figure:: /images/delete-ip-access-entry-realm-ui.png
+        :alt: Edit IP Access List Entry - modal
+        :figwidth: 500px
+
+   .. tab::
+      :tabid: cli
+
+      To delete an IP access list entry, call ``realm-cli accessList delete``.
+      The CLI will prompt you to input the App ID and to select which IP address
+      to delete.
+
+   .. tab::
+      :tabid: api
+
+      To delete an IP access list entry, create a ``DELETE`` request 
+      in the following format. You must specify the Group, App, and IP address ID.
+      To get the ID for an IP address, :ref:`view your IP access list entries 
+      <view-ip-access-list-entries>`.
+
+      .. code-block:: sh
+
+         curl --request DELETE \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list/<ipID>
+
+      .. seealso::
+      
+         :admin-api-endpoint:`Admin API Documentation <operation/allowedIPAccessListDelete>`
