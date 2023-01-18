@@ -145,37 +145,18 @@ Procedure
 
       .. procedure::
 
-         .. step:: Log In to MongoDB Cloud
+         .. step:: Authenticate a MongoDB Atlas User
 
-            To configure your app with {+cli-bin+}, you must log in to MongoDB Cloud using
-            an :atlas:`API key </configure-api-access/#programmatic-api-keys>` scoped to the organization or
-            project that contains the app.
-
-            .. code-block:: bash
-
-               realm-cli login --api-key="<MongoDB Cloud Public API Key>" --private-api-key="<MongoDB Cloud Private API Key>"
-
+            .. include:: /includes/cli-login.rst
 
          .. step:: Pull the Latest Version of Your App
 
-            You'll need a local copy of your application's configuration files. To pull a
-            local copy of the latest version of your app, run the following:
-
-            .. code-block:: bash
-
-               realm-cli pull --remote="<Your App ID>"
-
-            .. tip::
-
-               You can also download a copy of your application's configuration files
-               by following the :ref:`documentation to export an App <export-realm-app>`.
-
+            .. include:: /includes/cli-pull-latest.rst
 
          .. step:: Update Your Application
 
             Add, delete, and modify :ref:`configuration files <app-configuration>` for
             your application's various components.
-
 
          .. step:: Deploy the Updated App
 
