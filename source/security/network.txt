@@ -22,13 +22,10 @@ unauthorized access to your data. You can:
 - Define IP addresses from which all outbound requests originate.
 - Define and manage URLs and IP addresses from which inbound requests may originate.
 
-Network Security
-----------------
-
 .. _security-tls:
 
 Transport Layer Security (TLS)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 App Services uses `TLS 1.3 <https://datatracker.ietf.org/doc/html/rfc8446>`__
 to secure all network requests to and from your application, including:
@@ -43,7 +40,7 @@ The TLS certificate is pre-defined and cannot be customized or disabled.
 .. _firewall-configuration:
 
 Firewall Configuration
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 App Services only sends outbound requests from a set list of IP
 addresses. The exact list depends on the cloud provider that the app
@@ -68,7 +65,7 @@ the following sections.
    the server nearest to you, not the region the app is deployed to.
 
 AWS
-```
+~~~
 
 Download AWS IP Addresses: `JSON <https://www.mongodb.com/docs/realm-sdks/mongodb/AtlasAppServicesPublicIPsAWS.json>`__, `CSV <https://www.mongodb.com/docs/realm-sdks/mongodb/AtlasAppServicesPublicIPsAWS.csv>`__
 
@@ -163,7 +160,7 @@ the following IP addresses:
    35.163.245.143
 
 Azure
-`````
+~~~~~
 
 Download Azure IP Addresses: `JSON <https://www.mongodb.com/docs/realm-sdks/mongodb/AtlasAppServicesPublicIPsAzure.json>`__, `CSV <https://www.mongodb.com/docs/realm-sdks/mongodb/AtlasAppServicesPublicIPsAzure.csv>`__
 
@@ -183,7 +180,7 @@ of the following IP addresses:
    52.149.111.83
 
 GCP
-```
+~~~
 
 Download GCP IP Addresses: `JSON <https://www.mongodb.com/docs/realm-sdks/mongodb/AtlasAppServicesPublicIPsGCP.json>`__, `CSV <https://www.mongodb.com/docs/realm-sdks/mongodb/AtlasAppServicesPublicIPsGCP.csv>`__
 
@@ -212,7 +209,7 @@ the following IP addresses:
 .. _security-dns-filtering-sync-client-to-sync-server:
 
 Communicate from the Client to the Sync Server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------------------
 
 When you use Device Sync, you can use DNS filtering to allow connections
 from the Sync client to the Sync server. Using DNS filtering, you can access 
@@ -221,7 +218,7 @@ from the Sync client to the Sync server. Using DNS filtering, you can access
 .. _security-allowed-request-origins:
 
 Allowed Request Origins
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 You can define this :ref:`configuration option <appconfig-app>` in the 
 app-level ``realm_config.json`` file. This field accepts an array of 
@@ -231,47 +228,22 @@ an origin that is not listed.
 
 .. _security-ip-access-list:
 .. _ip-access-list:
+.. _manage-ip-access:
 
 IP Access List
-~~~~~~~~~~~~~~
+--------------
 
 App Services allows client requests from the enabled entries in the app's
 :ref:`IP access list <manage-ip-access>`. Allowed requests will still use 
 App Services's authentication and authorization rules. When you add IP 
 access list entries, App Services blocks any request originating from 
-an IP that is not on the access list.
+an IP that is not on the access list. 
 
 .. important::
 
    By default, any newly-created App allows access from any client IP
    by adding an access list entry for 0.0.0.0/0. If you delete this entry, 
    no client can access your App from any IP address. 
-
-.. _security-api-access-list:
-
-API Access List
-~~~~~~~~~~~~~~~
-
-When you :ref:`create an API key <cli-auth-with-api-token>`, you can specify 
-IP addresses that can use this API key to access your project or organization. 
-If you specify an IP address, App Services blocks any request originating 
-from an IP address that is not on the access list.
-
-.. note:: Backend Encryption
-
-   All internal communication between App Services and Atlas is encrypted with 
-   x509 certificates.
-
-.. _manage-ip-access:
-
-Manage IP Access
-----------------
-
-Atlas App Services allows client requests from the enabled entries in the app's
-IP access list. Allowed requests will still use authentication and authorization rules.
-
-By default, your App allows access from any client. When you add an entry
-to the IP access list, your App *only* allows access from that IP address.
 
 .. _find-ip-address:
 
@@ -488,3 +460,19 @@ Delete an IP Access List Entry
       .. seealso::
       
          :admin-api-endpoint:`Admin API Documentation <operation/allowedIPAccessListDelete>`
+
+.. _security-api-access-list:
+
+API Access List
+---------------
+
+When you :atlas:`create an Atlas API key </configure-api-access/#std-label-atlas-prog-api-key>` 
+for project or organization access from the Realm CLI or the App Services 
+Admin API, you can specify IP addresses that can use this API key. If you specify 
+an IP address, App Services blocks any request originating from an IP address that 
+is not on the access list.
+
+.. note:: Backend Encryption
+
+   All internal communication between App Services and Atlas is encrypted with 
+   x509 certificates.
