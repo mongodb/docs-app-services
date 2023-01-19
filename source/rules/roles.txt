@@ -273,7 +273,7 @@ when expressions are true.
 .. _define-roles-and-permissions:
 .. _define-roles:
 
-Define Roles And Permissions
+Define Roles and Permissions
 ----------------------------
 
 A user can have only one role for each document, so each set of permissions 
@@ -332,7 +332,7 @@ deploying configuration files with {+cli+}:
          .. step:: Configure Roles for a Collection
 
             A. For the linked cluster that you want to define access permissions for,
-               click :guilabel:`(...)` and select :guilabel:`Create a collection`.
+               click the ellipsis :guilabel:`(...)` and select :guilabel:`Create a collection`.
             
             #. In the modal, enter the :guilabel:`Database Name` and 
                :guilabel:`Collection Name` of the MongoDB collection that you want to use.
@@ -401,6 +401,18 @@ deploying configuration files with {+cli+}:
             the ``rules.json`` configuration file within the collection's configuration directory.
             You can also define :ref:`default roles and filters <config-default-rules>` that 
             apply to any unconfigured collection.
+
+            .. tip:: Scaffold the Collection
+
+               If you haven't already defined rules or a schema for the collection, you
+               need to manually create its configuration directory and ``schema.json``:
+
+               .. code-block:: bash
+
+                  # Create the collection's configuration directory
+                  mkdir -p data_sources/<service>/<db>/<collection>
+                  # Create the collection's schema file
+                  echo '{}' >> data_sources/<service>/<db>/<collection>/rules.json
 
             The configuration file should have the following form:
 
