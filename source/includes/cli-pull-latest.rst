@@ -7,4 +7,4 @@ version of your App, run the following command:
 
 You can also export a copy of your application's configuration files
 from the UI or with the Admin API. To learn how, see :ref:`Export an App
-<export-realm-app>`.
+<export-app>`.
