@@ -1,7 +1,5 @@
-To find an App ID, make a request to the Atlas App Services
-:admin-api-endpoint:`GET /groups/{groupid}/apps <operation/adminListApplications>` API endpoint.
-
-This request has the following format, referencing the ``access_token`` and the Group ID:
+To find an App ID, send a request to the :admin-api-endpoint:`List All
+Apps <operation/adminListApplications>` API endpoint.
 
 .. code-block:: sh
 
@@ -9,9 +7,14 @@ This request has the following format, referencing the ``access_token`` and the 
      --header 'Authorization: Bearer <access_token>' \
      https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps
 
-This will return a list of objects describing each App in the provided
-group. For Admin API requests, your Application ID is the ObjectId value in the
-``_id`` field, *not* the ``client_app_id``.
+.. tip::
+
+   Make sure to replace ``<access_token>`` and ``{groupId}`` with your own values.
+
+The endpoint returns a list of Apps associated with the Atlas project.
+Look for the App you're interested in and copy the ``_id`` value. This
+is the value you use for ``{appId}`` in Admin API requests. This is
+*not* the ``client_app_id``, which includes the app name.
 
 .. example::
 
