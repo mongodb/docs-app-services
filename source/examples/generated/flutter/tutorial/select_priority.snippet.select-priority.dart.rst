@@ -2,7 +2,7 @@
    :caption: lib/components/select_priority.dart
 
    import 'package:flutter/material.dart';
-   import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
+   import 'package:flutter_todo/realm/realm_services.dart';
 
    class SelectPriority extends StatefulWidget {
      int priority;
@@ -14,7 +14,7 @@
      @override
      State<SelectPriority> createState() => _SelectPriorityState();
    }
-   
+
    class _SelectPriorityState extends State<SelectPriority> {
      @override
      Widget build(BuildContext context) {
@@ -35,13 +35,13 @@
                value: widget.priority,
                items: [
                  DropdownMenuItem(
-                     child: const Text("Low"), value: PriorityLevel.low),
+                     value: PriorityLevel.low, child: const Text("Low")),
                  DropdownMenuItem(
-                     child: const Text("Medium"), value: PriorityLevel.medium),
+                     value: PriorityLevel.medium, child: const Text("Medium")),
                  DropdownMenuItem(
-                     child: const Text("High"), value: PriorityLevel.high),
+                     value: PriorityLevel.high, child: const Text("High")),
                  DropdownMenuItem(
-                     child: const Text("Severe"), value: PriorityLevel.severe),
+                     value: PriorityLevel.severe, child: const Text("Severe")),
                ],
              ),
            ],
