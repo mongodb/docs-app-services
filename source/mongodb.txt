@@ -35,6 +35,10 @@ multiple data sources if your data is spread across instances. You
 define a unique name for each data source linked to your application and
 use the name to refer to the data source throughout your app.
 
+Requests to data sources are routed through Atlas App Services. Because of this,
+App Services automatically opens and closes database connections. This means you
+don't need to worry about calling ``db.close()`` when using a data source.
+
 Read, Write, and Aggregate Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

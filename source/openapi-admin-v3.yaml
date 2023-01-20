@@ -2762,6 +2762,46 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ApiKeyId"
+  "/groups/{groupId}/apps/{appId}/custom_user_data":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - custom-user-data
+      operationId: adminGetCustomUserDataConfig
+      summary: Get the Custom User Data Configuration
+      description: |-
+        Get the [Custom User
+        Data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/)
+        configuration for an Atlas App Services App.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                description: The current custom user data configuration
+                $ref: "#/components/schemas/CustomUserDataConfig"
+    patch:
+      tags:
+        - custom-user-data
+      operationId: adminSetCustomUserDataConfig
+      summary: Configure Custom User Data
+      description: |-
+        Modify the [Custom User
+        Data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/)
+        configuration for an Atlas App Services App.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: An updated custom user data configuration
+              $ref: "#/components/schemas/CustomUserDataConfig"
+      responses:
+        "204":
+          description: Success
+
   "/groups/{groupId}/apps/{appId}/secrets":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4661,6 +4701,45 @@ components:
           items:
             $ref: "#/components/schemas/DeploymentModel"
           example: ["GLOBAL", "LOCAL"]
+    CustomUserDataConfig:
+      type: object
+      properties:
+        mongo_service_id:
+          type: string
+          description: |-
+            The `_id` value of the linked MongoDB data source that contains
+            custom user data.
+
+            See [Get a Data Source](#operation/adminGetService).
+          example: "63c060ed32043ef4c93c2a9c"
+        database_name:
+          type: string
+          description: |-
+            The name of the database that contains custom user data.
+          example: "myapp"
+        collection_name:
+          type: string
+          description: |-
+            The name of the collection that contains custom user data.
+          example: "users"
+        user_id_field:
+          type: string
+          description: |-
+            The name of a field that appears in every custom user data
+            document and that contains the user account ID of each
+            document's corresponding user.
+          example: "user_account_id"
+        on_user_creation_function_id:
+          type: string
+          description: |-
+            The `_id` value of a [user creation
+            function](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/#std-label-user-creation-function)
+            that runs whenever a new user registers.
+          example: "63c055d8019a6ab879f661d6"
+        enabled:
+          type: boolean
+          description: |-
+            If `true`, custom user data is enabled.
     BasicError:
       type: object
       properties:
@@ -5008,6 +5087,11 @@ components:
             or `"VERIFY_PAYLOAD"`, this is the `name` of the
             [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
             that authorizes requests.
+        can_evaluate:
+          type: object
+          description: |-
+            A JSON expression that evaluates to `true` if an endpoint is
+            allowed to run in response to an incoming request.
     Error:
       type: object
       properties:
@@ -6865,6 +6949,9 @@ tags:
   - name: billing
     x-displayName: Billing
     description: View billed usage of your applications.
+  - name: custom-user-data
+    x-displayName: Custom User Data
+    description: Configure [custom user data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/).
   - name: deploy
     x-displayName: Deployment
     description: |
