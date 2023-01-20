@@ -182,10 +182,6 @@ Procedure
                  -H 'Content-Type: application/json' \
                  --output ./exported-app.zip
 
-            If the request is successful, the endpoint returns a ``200``
-            response that contains a ``.zip`` directory of your
-            application's current configuration files.
-
             You can export the configuration for a specific deployment
             by specifying the deployment ``_id`` as a URL query
             parameter:
@@ -193,6 +189,10 @@ Procedure
             .. code-block:: text
 
                https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/export?deployment={deploymentId}
+
+            If the request is successful, the endpoint returns a ``200``
+            response that contains a ``.zip`` directory of your
+            application's current configuration files.
 
 .. _realm_app_structure:
 
