@@ -1,3 +1,21 @@
+# January 20, 2023
+
+## Get Started
+- Update Device Sync tutorials for Flutter, Kotlin, React Native, and SwiftUI for the new v2 template apps
+- Temporarily remove Xamarin from Device Sync tutorials, to be replaced with Maui tutorial when the corresponding template app is live in the UI
+
+## Device Sync
+- Go to Production with Sync/Compact an Atlas Volume: Remove erroneous info about increasing an Atlas cluster size triggering a rolling resync
+
+## Users & Authentication
+- Enable User Metadata: Update the list of links to SDK documentation pages for accessing user metadata from a client
+
+## MongoDB Data Sources
+- Overview: Add info that App Services automatically handles opening and closing database connections
+
+## Reference
+- Template Apps: Update the list of available template apps and add a new Get a Template App Client section with info about UI ZIP download, Realm CLI, and GitHub repositories
+
 # January 13, 2023
 
 ## Manage & Deploy Apps
