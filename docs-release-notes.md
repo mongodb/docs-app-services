@@ -14,7 +14,7 @@
 - Overview: Add info that App Services automatically handles opening and closing database connections
 
 ## Reference
-- Template Apps: Update the list of available template apps, add a new Get a Template App Client section with info about UI Zip download, Realm CLI, and GitHub repositories
+- Template Apps: Update the list of available template apps and add a new Get a Template App Client section with info about UI ZIP download, Realm CLI, and GitHub repositories
 
 # January 13, 2023
 
