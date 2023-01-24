@@ -35,6 +35,8 @@ Before You Begin
 
       - .. include:: /includes/prereqs/app-services-cli.rst
 
+      - .. include:: /includes/prereqs/app-id.rst
+
    .. tab::
       :tabid: api
 
@@ -43,6 +45,8 @@ Before You Begin
       - .. include:: /includes/prereqs/atlas-account.rst
 
       - .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+      - .. include:: /includes/api-project-app-id.txt
 
 Procedure
 ---------
@@ -84,28 +88,6 @@ Procedure
 
             .. include:: /includes/cli-login.rst
 
-         .. step:: (Optional) List All Apps
-
-            Although the ``delete`` command will show you a list of apps available to delete,
-            You may want to use the ``list`` command to see all your apps and find out which
-            you plan to delete before running the ``delete`` command.
-
-            .. code-block:: shell
-
-               realm-cli apps list
-
-            For more details about each app, you can use:
-
-            .. code-block:: shell
-
-               realm-cli apps describe
-
-            .. seealso::
-
-               For more details and additional flags, see the CLI documentation for the
-               :ref:`list <realm-cli-apps-list>`
-               and :ref:`describe <realm-cli-apps-describe>` commands.
-
          .. step:: Run the App Delete Command
 
             The CLI can delete one or more apps with the following command:
@@ -122,7 +104,7 @@ Procedure
 
             .. code-block:: shell
 
-               realm-cli apps delete --app <name or id>
+               realm-cli apps delete --app <App ID | App Name>
 
             .. seealso::
 
@@ -138,32 +120,14 @@ Procedure
 
             .. include:: /includes/api-authenticate-instructions.rst
 
-         .. step:: Get the Project ID
-
-            Every App Services App belongs to a MongoDB Atlas project.
-
-            To delete an App you need the Project ID (sometimes referred to as
-            the Group ID) of the MongoDB Atlas project that contains the app.
-            You will include this ID in the URL of API requests.
-
-         .. step:: Get the App ID
-
-            To delete an App you need its App ID.
-
-            .. include:: /includes/api-get-application-id.rst
-
          .. step:: Delete the App
 
             Send a request to the :admin-api-endpoint:`Delete an App
             <operation/adminDeleteApplication>` endpoint.
 
-            Your request should include:
-
-            - The ``access_token`` from step 1 in a :mdn:`Bearer token <Web/HTTP/Authentication>` ``Authorization`` header.
-
-            - The :admin-api-endpoint:`Group ID/Project ID <section/Project-and-Application-IDs>` from step 2.
-
-            - The :admin-api-endpoint:`Application ID <section/Get-Authentication-Tokens>` from step 3.
+            Make sure to include your Admin API ``access_token``, the
+            ``groupId`` of the Atlas project containing your App, and
+            the App's internal ``appId`` hex string:
 
             .. code-block:: shell
 
