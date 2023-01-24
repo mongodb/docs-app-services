@@ -39,14 +39,15 @@ option is most convenient for you.
       You can create a template App using the same command as you would
       use to create a blank App. To learn how to create an App Services
       App, see :ref:`Create an App <create-app>` and follow the
-      :guilabel:`Template App` instructions.
+      instructions for a template App.
 
    .. tab::
       :tabid: cli
 
       You can create a template App using the same command as you would
       use to create a blank App. To learn how to create an App Services
-      App, see :ref:`Create an App <create-app>`.
+      App, see :ref:`Create an App <create-app>` and follow the
+      instructions for a template App.
       
       The command must include the ``--template`` flag with a valid
       template App ID value:
@@ -62,25 +63,29 @@ option is most convenient for you.
 
       You can create a template App using the same endpoint as you would
       use to create a blank App. To learn how to create an App Services
-      App, see :ref:`Create an App <create-app>`.
+      App, see :ref:`Create an App <create-app>` and follow the
+      instructions for a template App.
 
       Your Admin API request must include a valid ``template_id`` value
       in the request body.
 
-      .. code-block:: json
-         :emphasize-lines: 3
+      .. code-block:: bash
+         :emphasize-lines: 6
 
-         {
-            "name": "<AppName>",
-            "template_id": "<Chosen Template App ID>",
-            "data_source": {
+         curl -X POST \
+           https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps \
+           -H 'Authorization: Bearer <access_token>' \
+           -d '{
+             "name": "<App Name>",
+             "template_id": "<Template App ID>",
+             "data_source": {
                "name": "mongodb-atlas",
                "type": "mongodb-atlas",
                "config": {
-                  "clusterName": "<Name Of Existing Cluster>"
+                 "clusterName": "<Atlas Cluster Name>"
                }
-            }
-         }
+             }
+           }'
 
 .. _explore-template-app:
 
