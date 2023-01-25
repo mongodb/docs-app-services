@@ -82,6 +82,55 @@ configure custom user data for your application, you specify:
 - the user ID field used to map custom user data documents
   to users (via user ID)
 
+- an optional Atlas Function that runs before new user accounts are created
+
+.. _user-creation-function:
+
+User Creation Function
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can define a Function that runs every time a new user successfully
+registers but before their new user account is created. If the function
+throws or otherwise errors, the user account creation fails. This lets
+you ensure that users always have custom data associated with them once
+created.
+
+The function receives a :ref:`user metadata object <user-objects>` as
+its only argument. You can use this create a new custom user data
+document for the user.
+
+.. code-block:: javascript
+
+   exports = async function onUserCreation(user) {
+     const customUserDataCollection = context.services
+       .get("mongodb-atlas")
+       .db("myapp")
+       .collection("users");
+     try {
+       await customUserDataCollection.insertOne({
+         // Save the user's account ID to your configured user_id_field
+         user_account_id: user.id,
+         // Store any other user data you want
+         favorite_color: "blue",
+       });
+     } catch (e) {
+       console.error(`Failed to create custom user data document for user:${user.id}`);
+       throw e
+     }
+   }
+
+.. tip::
+
+   Once you've configured a user creation function, App Services
+   prevents you from deleting the function. If you want to delete the
+   function, first change your custom user data configuration to use a
+   different user creation function.
+
+.. note::
+
+   You currently cannot define a user creation function in the Admin UI.
+   Instead, use {+cli+} or the Admin API.
+
 .. _custom-user-data-permissions:
 
 Configure Permissions for Custom User Data
@@ -239,7 +288,8 @@ Procedure
                  "mongo_service_name": "<MongoDB Data Source Name>",
                  "database_name": "<Database Name>",
                  "collection_name": "<Collection Name>",
-                 "user_id_field": "<Field Name>"
+                 "user_id_field": "<Field Name>",
+                 "on_user_creation_function_name": "<Function Name>"
                }
 
 

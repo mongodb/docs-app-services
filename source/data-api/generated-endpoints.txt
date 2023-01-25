@@ -141,6 +141,7 @@ deploying configuration files with Realm CLI:
             {
               "disabled": false,
               "versions": ["v1"],
+              "can_evaluate": {},
               "return_type": <"JSON" | "EJSON">
             }
       
@@ -222,9 +223,105 @@ authentication schemes to fit your application's needs.
       .. code-block:: json
          :caption: http_endpoints/data_api_config.json
 
-         {
-           "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
-         }
+         [
+           {
+             ...,
+             "run_as_user_id_script_source": "exports = () => {return \"628e47baf4c2ac2796fc8a91\"}"
+           }
+         ]
+
+.. _data-api-authorization:
+
+Authorization
+~~~~~~~~~~~~~
+
+You can require authenticated users to provide additional authorization
+information in each request. You define the authorization scheme for
+all generated Data API endpoints in your Data API configuration.
+
+Endpoints natively support a set of built-in authorization schemes that
+use a secret string to prove that the request is authorized. You can
+also define a custom authorization scheme that you can use together with
+or instead of the built-in schemes.
+
+Built-In Authorization Schemes
+``````````````````````````````
+
+Endpoints support the following built-in authorization schemes:
+
+.. tabs::
+     
+   .. tab:: No Additional Authorization
+      :tabid: no-authorization
+   
+      All authenticated users are authorized to call the endpoint.
+      Authenticated requests do not need to include authorization
+      information.
+      
+   .. tab:: Secret Parameter
+      :tabid: secret-parameter
+      
+      Authenticated users must prove that they are authorized to call
+      the endpoint by including a specific string as the value of the
+      ``secret`` query parameter.
+      
+      You define the string in a :ref:`secret <app-secret>` and
+      reference the secret by name in the endpoint configuration.
+
+      .. code-block:: json
+         :caption: http_endpoints/data_api_config.json
+         
+         [
+           {
+             ...,
+             "verification_method": "SECRET_AS_QUERY_PARAM",
+             "secret_name": "secret_verification_string"
+           }
+         ]
+
+      To learn how to include the secret in a request, see :ref:`Authorize the Request <data-api-authorize>`.
+   
+   .. tab:: Payload Signature
+      :tabid: payload-signature
+   
+      Authenticated users must prove that they are authorized to call
+      the endpoint by including an ``Endpoint-Signature`` header that
+      contains a hexadecimal-encoded :abbr:`HMAC (Hash-based Message
+      Authentication Code)` SHA-256 hash generated from the request body
+      and a secret string.
+
+      You define the string in a :ref:`secret <app-secret>` and
+      reference the secret by name in the endpoint configuration.
+
+      To learn how to sign your requests, see :ref:`Authorize the Request <data-api-authorize>`.
+
+Custom Authorization Schemes
+````````````````````````````
+
+You can define a custom authorization :ref:`expression <expressions>` to
+determine if an incoming authenticated request is allowed to run. The
+expression is evaluated for each request and must evaluate to ``true``
+to allow the request. If the expression evaluates to ``false``, the
+request is not authorized and fails with an error. Requests that fail
+authorization are not counted toward your App's billed usage.
+
+Authorization expressions can use variables like
+:json-expansion:`%%user` to authorize based on the calling user's data
+or :json-expansion:`%%request` to make decisions based on the specifics
+of each incoming request.
+
+To define a custom authorization scheme, specify the expression in your
+app's Data API configuration:
+
+.. code-block:: json
+   :caption: http_endpoints/data_api_config.json
+   
+   {
+     ...,
+     "can_evaluate": {
+       "%%request.headers.x-secret-key": "my-secret"
+     }
+   }
 
 .. _data-api-response-type:
 
@@ -256,6 +353,7 @@ application understands how to parse and use EJSON.
        :tabid: json
 
        .. code-block:: json
+          :caption: https_endpoints/data_api_config.json
 
           {
              "return_type": "JSON"
@@ -265,6 +363,7 @@ application understands how to parse and use EJSON.
        :tabid: ejson
 
        .. code-block:: json
+          :caption: https_endpoints/data_api_config.json
 
           {
              "return_type": "EJSON"
@@ -529,6 +628,87 @@ authentication providers:
              "database": "learn-data-api",
              "collection": "hello",
            }'
+
+.. _data-api-authorize:
+
+Authorize the Request
+~~~~~~~~~~~~~~~~~~~~~
+
+Depending on your Data API :ref:`authorization configuration
+<data-api-authorization>`, your requests may need to include additional
+authorization information.
+
+.. tabs::
+     
+   .. tab:: No Additional Authorization
+      :tabid: no-authorization
+   
+      All authenticated users are authorized to call the endpoint.
+      Authenticated requests do not need to include authorization
+      information.
+      
+   .. tab:: Secret Parameter
+      :tabid: secret-parameter
+      
+      Authenticated users must prove that they are authorized to call
+      the endpoint by including the endpoint's secret string as the
+      value of the ``secret`` query parameter.
+      
+      .. example::
+         
+         The following ``curl`` request uses secret query parameter
+         validation with the secret string ``"12345"``:
+      
+         .. code-block:: bash
+            :emphasize-lines: 4
+      
+            curl -X POST \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne?secret=12345 \
+              -H "Content-Type: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": { "text": "Do the dishes" }
+              }'
+
+   .. tab:: Payload Signature
+      :tabid: payload-signature
+   
+      Authenticated users must prove that they are authorized to call
+      the endpoint by including an ``Endpoint-Signature`` header that
+      contains a hexadecimal-encoded :abbr:`HMAC (Hash-based Message
+      Authentication Code)` SHA-256 hash generated from the request body
+      and the endpoint's secret string.
+
+      .. code-block:: none
+         
+         Endpoint-Signature::sha256=<hex encoded hash>
+      
+      You could use the following function to generate the payload
+      signature:
+      
+      .. literalinclude:: /data-api/signEndpointRequest.js
+         :language: javascript
+
+      .. example::
+         
+         The following ``curl`` includes a payload signature header
+         signed with the secret value ``12345``:
+
+         .. code-block:: bash
+            :emphasize-lines: 3
+            
+            curl -X POST \
+              https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
+              -H "Content-Type: application/json" \
+              -H "Endpoint-Signature::sha256=769cd86855787f476afc8b0d2cf9837ab0318181fca42f45f34b6dffd086dfc7" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": { "text": "Do the dishes" }
+              }'
 
 Endpoints
 ---------

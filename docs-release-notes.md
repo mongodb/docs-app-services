@@ -1,3 +1,53 @@
+# January 20, 2023
+
+## Get Started
+- Update Device Sync tutorials for Flutter, Kotlin, React Native, and SwiftUI for the new v2 template apps
+- Temporarily remove Xamarin from Device Sync tutorials, to be replaced with Maui tutorial when the corresponding template app is live in the UI
+
+## Device Sync
+- Go to Production with Sync/Compact an Atlas Volume: Remove erroneous info about increasing an Atlas cluster size triggering a rolling resync
+
+## Users & Authentication
+- Enable User Metadata: Update the list of links to SDK documentation pages for accessing user metadata from a client
+
+## MongoDB Data Sources
+- Overview: Add info that App Services automatically handles opening and closing database connections
+
+## Reference
+- Template Apps: Update the list of available template apps and add a new Get a Template App Client section with info about UI ZIP download, Realm CLI, and GitHub repositories
+
+# January 13, 2023
+
+## Manage & Deploy Apps
+- Configure/App Configuration Reference/Users & Authentication Providers: Update Custom User Data config with details about `on_user_creation_function_name`
+
+## Users & Authentication
+- Enable Custom User Data: New section with code example showing how to use a Function to create a user with custom metadata
+
+## App Services Admin API
+- Add Custom User Data endpoint documentation for `GET` and `PATCH` with request details and example response
+
+## Other
+- Internal: Remove over 100 unused files from repository, add CI to check for unused files in PRs
+
+# January 6, 2023
+
+## Device Sync
+- Configure and Update Your Data Model/Create a Data Model: Add a link to the C++ SDK object model page
+- Configure Sync/Pause or Terminate Sync: Add dropping a collection to the list of things that require you to terminate Sync
+
+## Data API
+- Data API Endpoints
+  - Add an "Authorization" section with details about authorization schemes
+  - Add an "Authorize The Request" section detailing authorization configuration options
+- Custom HTTPS Endpoints: Add a section about the ability to define custom authorization schemes and `can_evaluate`, update code examples
+
+## Reference
+- Service Limitations: Updates and clarifications about using Device Sync with time series collections, required MongoDB versions for Device Sync, and performance implications of concurrent writes 
+
+## Other
+- Update some pages to fix monospace in section subheads
+
 # December 30, 2022
 
 - Added examples for valid ISO-8601 start and end query parameters in `adminGetMetrics` endpoint

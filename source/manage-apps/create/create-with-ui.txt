@@ -1,0 +1,95 @@
+.. _create-a-realm-app:
+.. _create-app-ui:
+
+======================================
+Create an App with the App Services UI
+======================================
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+Overview
+--------
+
+The following steps guide you through setting up a generic App. The
+term "App" refers to the central App Services
+backend instance for your mobile or web application.
+
+Prerequisites
+-------------
+
+Before you begin, you must be logged in as a ``Project Owner`` in a 
+`Atlas <https://cloud.mongodb.com/user/register?tck=docs_realm>`_ account.
+You can learn more about creating an Atlas account in the
+:atlas:`Atlas Getting Started </getting-started>`
+documentation.
+
+Procedure
+---------
+
+.. procedure::
+
+   .. step:: Navigate to the App Services Tab
+
+      Go to the Project Dashboard where you want to create the App.
+      Select the :guilabel:`App Services` tab.
+
+
+   .. step:: Create a new App
+
+      If you are creating your first app in this Atlas
+      project, you will be shown all the :ref:`template apps <template-apps>`
+      available for you to start with, and an option to start without a template
+      (:guilabel:`Explore App Services`).
+
+      If you have already created at least one app
+      in this Atlas project, you can choose between two create buttons at
+      the top right of the :guilabel:`App Services` tab.
+
+      .. tabs::
+
+         .. tab:: Create App from Template
+            :tabid: template
+
+            Click the :guilabel:`Create App from Template` button
+            to see a dropdown menu with all the template apps and pick one 
+            that suits your needs. Template apps come pre-configured with
+            different features and permissions to demonstrate different 
+            use cases.
+            
+            For more details about available template apps, refer to 
+            :ref:`template-apps`.
+
+         .. tab:: Create a New App
+            :tabid: blank
+
+            Click the :guilabel:`Create a New App` button to start without a template.
+
+   .. step:: Configure your App
+
+      You will be shown a dialog where you can configure your App, including the:
+
+      - **Application Name**.
+
+        .. include:: /includes/note-app-name-limitations.rst
+
+      - **Linked Atlas cluster**. If you do not have a cluster in this
+        project, App Services creates one for you and automatically creates a
+        linked data source with the name ``mongodb-atlas``.
+
+        .. include:: /includes/mongodb-4.4-required-for-sync-admonition.rst
+
+      - :ref:`Deployment model <realm-deployment-models>`.
+
+      - :ref:`Deployment region <deployment-regions>`.
+
+      Click :guilabel:`Create a New App`.
+
+      Upon creation of your App, you will be redirected to the
+      App Services console. App Services creates your app with a
+      Linked Data Source named :guilabel:`mongodb-atlas`.
