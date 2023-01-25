@@ -155,7 +155,7 @@ paths:
                   refresh_token:
                     type: string
                     description: |
-                      A refresh token you may provide in the `Authorization` header of 
+                      A refresh token you may provide in the `Authorization` header of
                       [POST auth/session](#section/adminCreateSession)
                       to obtain a new `access_token` for the current user session.
                   user_id:
@@ -205,16 +205,16 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - allOf: 
-                    - $ref: "#/components/schemas/Error"
-                    - properties:
-                        error:
-                          const: "invalid refresh token: incorrect token type"
-                      description: |-
-                        The request did not use bearer token
-                        authentication with a valid refresh token. Make
-                        sure the Authorization header contains the
-                        `refresh_token`, not the `access_token`.
+                  - allOf:
+                      - $ref: "#/components/schemas/Error"
+                      - properties:
+                          error:
+                            const: "invalid refresh token: incorrect token type"
+                        description: |-
+                          The request did not use bearer token
+                          authentication with a valid refresh token. Make
+                          sure the Authorization header contains the
+                          `refresh_token`, not the `access_token`.
       security:
         - refreshAuth: []
     delete:
@@ -231,27 +231,27 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - allOf: 
-                    - $ref: "#/components/schemas/Error"
-                    - properties:
-                        error:
-                          const: "invalid refresh token: incorrect token type"
-                      description: |-
-                        The request did not use bearer token
-                        authentication with a valid refresh token. Make
-                        sure the Authorization header contains the
-                        `refresh_token`, not the `access_token`.
-                  - allOf: 
-                    - $ref: "#/components/schemas/Error"
-                    - properties:
-                        error:
-                          const: "invalid session: failed to find refresh token"
-                        error_code:
-                          const: "InvalidSession"
-                      description: |-
-                        The provided refresh token does not match any
-                        current sessions.
-  
+                  - allOf:
+                      - $ref: "#/components/schemas/Error"
+                      - properties:
+                          error:
+                            const: "invalid refresh token: incorrect token type"
+                        description: |-
+                          The request did not use bearer token
+                          authentication with a valid refresh token. Make
+                          sure the Authorization header contains the
+                          `refresh_token`, not the `access_token`.
+                  - allOf:
+                      - $ref: "#/components/schemas/Error"
+                      - properties:
+                          error:
+                            const: "invalid session: failed to find refresh token"
+                          error_code:
+                            const: "InvalidSession"
+                        description: |-
+                          The provided refresh token does not match any
+                          current sessions.
+
   "/provider_regions":
     get:
       tags:
@@ -303,7 +303,7 @@ paths:
             [Atlas Triggers](https://docs.mongodb.com/atlas/triggers) and
             [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/)
             that you can access through the Atlas UI.
-            
+
             You can specify multiple product types as a comma-separated list:
 
             ```
@@ -343,7 +343,7 @@ paths:
             The App's product type. Apps use the `standard` product type
             by default. For most apps, you do not need to specify a
             `product` at all, or should specify `standard`.
-            
+
             The `atlas` and `data-api` product types represent special,
             apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
             and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
@@ -403,7 +403,7 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  
+
   "/groups/{groupId}/apps/{appId}/event_subscriptions":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -411,7 +411,7 @@ paths:
       - name: type
         description: |-
           The type of event subscription to return.
-          
+
           - `DATABASE`: Return Database Triggers
           - `AUTHENTICATION`: Return Authentication Triggers
           - `SCHEDULED`: Return Scheduled Triggers
@@ -468,7 +468,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EventSubscription"
-  
+
   "/groups/{groupId}/apps/{appId}/event_subscriptions/{eventSubscriptionId}/execution":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -883,7 +883,7 @@ paths:
                     Use this to determine which end of a range query to start sampling from.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -1089,7 +1089,7 @@ paths:
       description: Get the current [default roles and filters](https://www.mongodb.com/docs/atlas/app-services/rules/#default-rules).
       responses:
         "200":
-          description: Ok.
+          description: OK
           content:
             application/json:
               schema:
@@ -1454,7 +1454,7 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/MessageId"
-  
+
   "/groups/{groupId}/apps/{appId}/users":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1513,7 +1513,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/User"
-  
+
   "/groups/{groupId}/apps/{appId}/users/verify_token":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1649,7 +1649,7 @@ paths:
               schema:
                 items:
                   type: object
-  
+
   "/groups/{groupId}/apps/{appId}/users/{userId}/logout":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1666,7 +1666,7 @@ paths:
       responses:
         "204":
           description: Successfully revoked.
-  
+
   "/groups/{groupId}/apps/{appId}/users/{userId}/enable":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1681,7 +1681,7 @@ paths:
       responses:
         "204":
           description: Successfully enabled.
-  
+
   "/groups/{groupId}/apps/{appId}/users/{userId}/disable":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1696,7 +1696,7 @@ paths:
       responses:
         "204":
           description: Successfully disabled.
-  
+
   "/groups/{groupId}/apps/{appId}/user_registrations/pending_users":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1742,31 +1742,24 @@ paths:
                           id:
                             type: string
                             description: The pending user's username. For example, this is an email/password user's email address.
-                example: [
-                  {
-                    "_id": "63754f968a605a78ea6939e7",
-                    "domain_id": "60c8f69864c0a72d14bb534c",
-                    "login_ids": [
-                      {
-                        "id_type": "email",
-                        "id": "someone@example.com"
-                      }
-                    ],
-                    "user_id": ""
-                  },
-                  {
-                    "_id": "63754fd83c001970b1e5ea66",
-                    "domain_id": "60c8f69864c0a73e3e11c22b",
-                    "login_ids": [
-                      {
-                        "id_type": "email",
-                        "id": "joe@example.com"
-                      }
-                    ],
-                    "user_id": ""
-                  }
-                ]
-  
+                example:
+                  [
+                    {
+                      "_id": "63754f968a605a78ea6939e7",
+                      "domain_id": "60c8f69864c0a72d14bb534c",
+                      "login_ids":
+                        [{ "id_type": "email", "id": "someone@example.com" }],
+                      "user_id": "",
+                    },
+                    {
+                      "_id": "63754fd83c001970b1e5ea66",
+                      "domain_id": "60c8f69864c0a73e3e11c22b",
+                      "login_ids":
+                        [{ "id_type": "email", "id": "joe@example.com" }],
+                      "user_id": "",
+                    },
+                  ]
+
   "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1781,7 +1774,7 @@ paths:
       responses:
         "204":
           description: Successfully deleted.
-  
+
   "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/send_confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1798,7 +1791,7 @@ paths:
       responses:
         "200":
           description: Successfully sent.
-  
+
   "/groups/{groupId}/apps/{appId}/user_registrations/by_email/{email}/confirm":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1835,7 +1828,7 @@ paths:
             enabled.
         "404":
           description: User does not exist.
-  
+
   "/groups/{groupId}/apps/{appId}/debug/execute_function":
     post:
       tags:
@@ -2257,6 +2250,46 @@ paths:
           description: Deleted
         "404":
           description: No IP addresses or CIDR blocks to delete
+  "/groups/{groupId}/apps/{appId}/security/refresh_token_expiration":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - security
+      operationId: adminGetRefreshTokenExpiration
+      summary: Get User Refresh Token Expiration Time
+      description: |-
+        Get the current expiration time in seconds for user session refresh tokens.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RefreshTokenExpiration"
+        "404":
+          description: Group or App Not Found
+    put:
+      tags:
+        - security
+      operationId: adminSetRefreshTokenExpiration
+      summary: Set User Refresh Token Expiration Time
+      description: |-
+        Set the expiration time in seconds for user session refresh tokens.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenExpiration"
+      responses:
+        "204":
+          description: Expiration time updated
+        "400":
+          description: Invalid expiration time
+        "404":
+          description: Group or App Not Found
   "/groups/{groupId}/apps/{appId}/metrics":
     get:
       tags:
@@ -2264,22 +2297,24 @@ paths:
       operationId: adminGetMetrics
       summary: Retrieve App Services metrics
       description: |-
-        Retrieves a variety of metrics, including: Compute Time, Data
-        Transfer, Sync Minutes, Requests Succeeded, Requests Failed.
+        Retrieves a variety of metrics, including: Compute Time, Data Transfer,
+        Sync Minutes, Requests Succeeded, Requests Failed. For a complete list
+        of available metrics, see [App
+        Services Metrics Reference](https://mongodb.com/docs/atlas/app-services/reference/metrics).
       parameters:
         - "$ref": "#/components/parameters/GroupId"
         - "$ref": "#/components/parameters/AppId"
         - name: start
           in: query
           description: |-
-            The ISO 8601 date and time of the start of the query period.
+            The ISO-8601 date and time of the start of the query period (e.g. "2022-10-27T14:01:01Z").
           schema:
             type: string
           required: true
         - name: end
           in: query
           description: |-
-            The ISO 8601 date and time of the end of the query period.
+            The ISO-8601 date and time of the end of the query period (e.g. "2022-12-27T14:01:01Z").
           schema:
             type: string
           required: true
@@ -2295,6 +2330,76 @@ paths:
       responses:
         "200":
           description: Successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - app_id
+                  - app_name
+                  - end
+                  - granularity
+                  - group_id
+                  - start
+                  - measurements
+                properties:
+                  measurements:
+                    type: array
+                    description: The list of metrics.
+                    items:
+                      type: object
+                      properties:
+                        data_points:
+                          type: array
+                          description: A set of data points for the given metric.
+                          items:
+                            type: object
+                            properties:
+                              timestamp:
+                                type: string
+                                description: |-
+                                  The ISO-8601 date and time of the measurement.
+                              value:
+                                type: number
+                                description: |-
+                                  The value of the measurement in the unit
+                                  specified by the metric's `unit` property.
+                        name:
+                          type: string
+                          description: |-
+                            The name of the metric. For a complete list of
+                            available metrics and their units, see [App Services
+                            Metrics
+                            Reference](https://mongodb.com/docs/atlas/app-services/reference/metrics).
+                        units:
+                          type: string
+                          description: The unit of each data point's `value` property.
+                  app_id:
+                    type: string
+                    description: |-
+                      The app ID sent in the request.
+                  app_name:
+                    type: string
+                    description: |-
+                      The app's human-readable name.
+                  group_id:
+                    type: string
+                    description: |-
+                      The group ID sent in the request.
+                  start:
+                    type: string
+                    example: "2022-10-27T14:01:01Z"
+                    description: |-
+                      The date and time (ISO-8601 format) of the earliest requested measurement.
+                  end:
+                    type: string
+                    example: "2022-12-27T14:01:01Z"
+                    description: |-
+                      The date and time (ISO-8601 format) of the latest requested measurement.
+                  granularity:
+                    type: string
+                    description: |-
+                      The requested granularity of the metrics in [ISO-8601 duration format](https://en.wikipedia.org/wiki/ISO_8601#Durations).
   "/groups/{groupId}/apps/{appId}/logs":
     get:
       tags:
@@ -2470,7 +2575,7 @@ paths:
       summary: "List log forwarders."
       responses:
         200:
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -2506,7 +2611,7 @@ paths:
       summary: "Get a specific log forwarder."
       responses:
         200:
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -2524,7 +2629,7 @@ paths:
               $ref: "#/components/schemas/UpdateLogForwarderRequest"
       responses:
         200:
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -2675,6 +2780,46 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ApiKeyId"
+  "/groups/{groupId}/apps/{appId}/custom_user_data":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - custom-user-data
+      operationId: adminGetCustomUserDataConfig
+      summary: Get the Custom User Data Configuration
+      description: |-
+        Get the [Custom User
+        Data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/)
+        configuration for an Atlas App Services App.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                description: The current custom user data configuration
+                $ref: "#/components/schemas/CustomUserDataConfig"
+    patch:
+      tags:
+        - custom-user-data
+      operationId: adminSetCustomUserDataConfig
+      summary: Configure Custom User Data
+      description: |-
+        Modify the [Custom User
+        Data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/)
+        configuration for an Atlas App Services App.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: An updated custom user data configuration
+              $ref: "#/components/schemas/CustomUserDataConfig"
+      responses:
+        "204":
+          description: Success
+
   "/groups/{groupId}/apps/{appId}/secrets":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -2952,7 +3097,7 @@ paths:
       description: Get information about a recent deployment of the application.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3072,7 +3217,7 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/DraftId"
-  
+
   "/groups/{groupId}/apps/{appId}/environment":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3104,7 +3249,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
+
   "/groups/{groupId}/apps/{appId}/environment_values":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3130,7 +3275,7 @@ paths:
                   $ref: "#/components/schemas/EnvironmentValueDescription"
         "400":
           "$ref": "#/components/responses/BadRequest"
-        
+
     post:
       operationId: adminCreateEnvironmentValue
       summary: Create an Environment Value
@@ -3155,7 +3300,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
+
   "/groups/{groupId}/apps/{appId}/environment_values/{environmentValueId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -3176,7 +3321,7 @@ paths:
                 $ref: "#/components/schemas/EnvironmentValue"
         "404":
           $ref: "#/components/responses/EnvironmentValueNotFound"
-          
+
     put:
       operationId: adminModifyEnvironmentValue
       summary: Modify an Environment Value
@@ -3197,7 +3342,7 @@ paths:
                 $ref: "#/components/schemas/EnvironmentValueDescription"
         "404":
           $ref: "#/components/responses/EnvironmentValueNotFound"
-        
+
     delete:
       operationId: adminDeleteEnvironmentValue
       summary: Delete an Environment Value
@@ -3209,7 +3354,7 @@ paths:
           description: Deleted
         "404":
           $ref: "#/components/responses/EnvironmentValueNotFound"
-  
+
   "/groups/{groupId}/apps/{appId}/hosting/config":
     get:
       tags:
@@ -3217,7 +3362,7 @@ paths:
       operationId: adminGetHostingConfig
       summary: Get Hosting Configuration
       description: |
-        Returns the current hosting configuration. Hosting is active 
+        Returns the current hosting configuration. Hosting is active
         if the response includes `status: "setup_ok"`.
       responses:
         200:
@@ -3232,12 +3377,12 @@ paths:
       operationId: adminEnableDisableHosting
       summary: Enable/Disable Hosting
       description: |
-        Enable or disable App Services Hosting for your app. 
+        Enable or disable App Services Hosting for your app.
         Changes to hosting can take up to 15 minutes to take effect.
-        This endpoint does not notify you when the changes have taken effect, 
+        This endpoint does not notify you when the changes have taken effect,
         only that the change operation was successfully received by the server.
 
-        You can see if the hosting enablement/disablement is complete 
+        You can see if the hosting enablement/disablement is complete
         by calling the [Get Hosting Configuration](#operation/adminGetHostingConfig) endpoint.
 
       requestBody:
@@ -3712,7 +3857,7 @@ paths:
       description: Get a specific [schema](https://www.mongodb.com/docs/realm/schemas) by its `_id` value.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3774,7 +3919,7 @@ paths:
       description: Get all [endpoint](https://www.mongodb.com/docs/realm/endpoints/) configurations.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3817,7 +3962,7 @@ paths:
       description: Get a specific [endpoint](https://www.mongodb.com/docs/realm/endpoints/)'s configuration.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3838,7 +3983,7 @@ paths:
               "$ref": "#/components/schemas/Endpoint"
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3851,7 +3996,7 @@ paths:
       summary: Delete an endpoint
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3869,7 +4014,7 @@ paths:
       description: Get your app's [Data API](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/) configuration.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3923,7 +4068,7 @@ paths:
       description: List all possible Data API versions.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -3974,7 +4119,7 @@ paths:
                   example: AllTasks
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -4023,7 +4168,7 @@ paths:
       description: Get all [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configurations from your app's GraphQL API.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -4063,7 +4208,7 @@ paths:
       description: Get a specific [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -4106,7 +4251,7 @@ paths:
       description: Get the current validation level and action for reads and writes.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -4139,7 +4284,7 @@ paths:
       description: Check if [null type schema validation](https://www.mongodb.com/docs/atlas/app-services/schemas/enforce-a-schema/#validate-null-types) is enabled.
       responses:
         "200":
-          description: Ok
+          description: OK
           content:
             application/json:
               schema:
@@ -4423,7 +4568,11 @@ components:
             hyphens.
           example: "MyApp"
         provider_region:
-          description: The application's cloud deployment region.
+          description: |-
+            The short identifier of a cloud provider-specific deployment region.
+            Some regions are available for global deployment while others are
+            only available for local apps. See [Cloud Deployment
+            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           $ref: "#/components/schemas/CloudProviderRegionId"
         location:
           $ref: "#/components/schemas/DeploymentLocation"
@@ -4505,11 +4654,6 @@ components:
         - "GLOBAL"
         - "LOCAL"
     CloudProviderRegionId:
-      description: |-
-        The ID of a cloud provider-specific deployment region. Some
-        regions are available for global deployment while others are
-        only available for local apps. See [Cloud Deployment
-        Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
       oneOf:
         - $ref: "#/components/schemas/AwsDeploymentRegion"
         - $ref: "#/components/schemas/AzureDeploymentRegion"
@@ -4519,6 +4663,7 @@ components:
       enum:
         - "aws-us-east-1"
         - "aws-us-west-2"
+        - "aws-us-east-2"
         - "aws-eu-central-1"
         - "aws-eu-west-1"
         - "aws-eu-west-2"
@@ -4547,7 +4692,11 @@ components:
       properties:
         id:
           $ref: "#/components/schemas/CloudProviderRegionId"
-          description: The short identifier for the region.
+          description: |-
+            The short identifier of a cloud provider-specific deployment region.
+            Some regions are available for global deployment while others are
+            only available for local apps. See [Cloud Deployment
+            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           example: "aws-us-east-1"
         name:
           type: string
@@ -4570,6 +4719,45 @@ components:
           items:
             $ref: "#/components/schemas/DeploymentModel"
           example: ["GLOBAL", "LOCAL"]
+    CustomUserDataConfig:
+      type: object
+      properties:
+        mongo_service_id:
+          type: string
+          description: |-
+            The `_id` value of the linked MongoDB data source that contains
+            custom user data.
+
+            See [Get a Data Source](#operation/adminGetService).
+          example: "63c060ed32043ef4c93c2a9c"
+        database_name:
+          type: string
+          description: |-
+            The name of the database that contains custom user data.
+          example: "myapp"
+        collection_name:
+          type: string
+          description: |-
+            The name of the collection that contains custom user data.
+          example: "users"
+        user_id_field:
+          type: string
+          description: |-
+            The name of a field that appears in every custom user data
+            document and that contains the user account ID of each
+            document's corresponding user.
+          example: "user_account_id"
+        on_user_creation_function_id:
+          type: string
+          description: |-
+            The `_id` value of a [user creation
+            function](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/#std-label-user-creation-function)
+            that runs whenever a new user registers.
+          example: "63c055d8019a6ab879f661d6"
+        enabled:
+          type: boolean
+          description: |-
+            If `true`, custom user data is enabled.
     BasicError:
       type: object
       properties:
@@ -4791,7 +4979,7 @@ components:
     Endpoint:
       type: object
       required:
-        -  function_id
+        - function_id
       properties:
         route:
           type: string
@@ -4858,8 +5046,8 @@ components:
               description: |-
                 An object that maps environment names to values. The
                 environment value resolves to the current active
-                environment's mapped value. 
-                
+                environment's mapped value.
+
                 If no value is mapped to the current active environment,
                 the environment value resolves to `undefined`.
               properties:
@@ -4917,6 +5105,11 @@ components:
             or `"VERIFY_PAYLOAD"`, this is the `name` of the
             [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
             that authorizes requests.
+        can_evaluate:
+          type: object
+          description: |-
+            A JSON expression that evaluates to `true` if an endpoint is
+            allowed to run in response to an incoming request.
     Error:
       type: object
       properties:
@@ -5111,15 +5304,16 @@ components:
               type: "null"
             last_modified:
               type: number
-          example: {
-            "_id": "636c189a93daaf89c4900a81",
-            "name": "SyncTranslator",
-            "type": "SYNCTRANSLATOR",
-            "function_id": "000000000000000000000000",
-            "disabled": false,
-            "config": null,
-            "last_modified": 1668028570
-          }
+          example:
+            {
+              "_id": "636c189a93daaf89c4900a81",
+              "name": "SyncTranslator",
+              "type": "SYNCTRANSLATOR",
+              "function_id": "000000000000000000000000",
+              "disabled": false,
+              "config": null,
+              "last_modified": 1668028570,
+            }
     Expression:
       description: A [rule expression](https://mongodb.com/docs/atlas/app-services/rules/expressions/).
       oneOf:
@@ -5283,7 +5477,7 @@ components:
         - name
         - function_source
         - respond_result
-    
+
     BaseAuthProvider:
       required:
         - name
@@ -5300,7 +5494,7 @@ components:
         disabled:
           type: boolean
           description: If `true`, the auth provider is disabled. Users cannot log in through the provider until it is enabled.
-    
+
     AuthProvider:
       anyOf:
         - $ref: "#/components/schemas/AnonymousAuthProvider"
@@ -5311,9 +5505,9 @@ components:
         - $ref: "#/components/schemas/AppleAuthProvider"
         - $ref: "#/components/schemas/GoogleAuthProvider"
         - $ref: "#/components/schemas/FacebookAuthProvider"
-    
+
     AnonymousAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5322,14 +5516,14 @@ components:
             type:
               const: anonymous
               description: The name of the authentication provider. For Anonymous authentication, this value is always `anonymous`.
-    
+
     EmailConfirmationAutomatic:
       type: object
       properties:
         autoConfirm:
           const: true
           description: If `true`, automatically confirm new user accounts without additional verification.
-    
+
     EmailConfirmationBuiltIn:
       type: object
       properties:
@@ -5345,7 +5539,7 @@ components:
             The URL included in the email sent to new users as part of
             the built-in confirmation flow. The email also adds a unique
             confirmation `token` and `tokenId` as query parameters.
-            
+
             This URL should handle user confirmation by passing the
             confirmation token to a Realm SDK's `confirmUser` function
             or to the Admin API [Confirm a Pending Email/Password
@@ -5356,7 +5550,7 @@ components:
           description: |-
             The subject line of the email sent to new users as
             part of the built-in confirmation flow.
-    
+
     EmailConfirmationCustomFunction:
       type: object
       properties:
@@ -5377,7 +5571,7 @@ components:
           description: |-
             The name of the custom function that handles the
             confirmation process.
-    
+
     PasswordRefreshBuiltIn:
       type: object
       properties:
@@ -5388,7 +5582,7 @@ components:
             of the built-in password reset flow. The email also
             adds a unique password reset `token` and `tokenId` as
             query parameters.
-            
+
             This URL should handle user confirmation by passing
             the password reset token to a Realm SDK's `resetPassword`
             function.
@@ -5397,7 +5591,7 @@ components:
           description: |-
             The subject line of the email sent to users as
             part of the built-in password reset flow.
-    
+
     PasswordRefreshCustomFunction:
       type: object
       properties:
@@ -5414,7 +5608,7 @@ components:
             reset process.
 
     EmailPasswordAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5426,32 +5620,32 @@ components:
             config:
               oneOf:
                 - allOf:
-                  - title: ConfirmationAutomaticRefreshBuiltIn
-                  - $ref: "#/components/schemas/EmailConfirmationAutomatic"
-                  - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+                    - title: ConfirmationAutomaticRefreshBuiltIn
+                    - $ref: "#/components/schemas/EmailConfirmationAutomatic"
+                    - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
                 - allOf:
-                  - title: ConfirmationAutomaticRefreshCustom
-                  - $ref: "#/components/schemas/EmailConfirmationAutomatic"
-                  - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+                    - title: ConfirmationAutomaticRefreshCustom
+                    - $ref: "#/components/schemas/EmailConfirmationAutomatic"
+                    - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
                 - allOf:
-                  - title: ConfirmationBuiltInRefreshBuiltIn
-                  - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
-                  - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+                    - title: ConfirmationBuiltInRefreshBuiltIn
+                    - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
+                    - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
                 - allOf:
-                  - title: ConfirmationBuiltInRefreshCustom
-                  - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
-                  - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+                    - title: ConfirmationBuiltInRefreshCustom
+                    - $ref: "#/components/schemas/EmailConfirmationBuiltIn"
+                    - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
                 - allOf:
-                  - title: ConfirmationCustomRefreshBuiltIn
-                  - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
-                  - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
+                    - title: ConfirmationCustomRefreshBuiltIn
+                    - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
+                    - $ref: "#/components/schemas/PasswordRefreshBuiltIn"
                 - allOf:
-                  - title: ConfirmationCustomRefreshCustom
-                  - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
-                  - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
-    
+                    - title: ConfirmationCustomRefreshCustom
+                    - $ref: "#/components/schemas/EmailConfirmationCustomFunction"
+                    - $ref: "#/components/schemas/PasswordRefreshCustomFunction"
+
     ApiKeyAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5460,10 +5654,9 @@ components:
             type:
               const: api-key
               description: The name of the authentication provider. For API key authentication, this value is always `api-key`.
-    
 
     CustomJwtAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5503,7 +5696,7 @@ components:
                     The cryptographic method that the external system
                     uses to sign the JWT. Custom JWT authentication supports
                     JWTs signed using any of the following algorithms:
-                    
+
                     - HS256
                     - RS256
                 useJWKURI:
@@ -5542,7 +5735,7 @@ components:
                 user. The value of each metadata field comes from some
                 field included in the JWT from the external
                 authentication system.
-                
+
                 A user's metadata fields refresh whenever they log in.
               type: array
               items:
@@ -5567,10 +5760,9 @@ components:
                     type: string
                     description: |-
                       The name of the field in User object that holds the value.
-    
 
     CustomFunctionAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - properties:
             name:
@@ -5590,7 +5782,7 @@ components:
                     The name of the [custom authentication
                     function](https://www.mongodb.com/docs/atlas/app-services/authentication/custom-function/#the-authentication-function)
                     that handles user logins.
-    
+
     AppleAuthProvider:
       allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
@@ -5630,7 +5822,7 @@ components:
               items:
                 type: string
                 description: A list of URIs that the OAuth flow should allow the user to redirect to.
-    
+
     GoogleAuthProvider:
       allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
@@ -5682,7 +5874,7 @@ components:
                   Metadata fields are additional data that describe each
                   user. The value of each metadata field comes from
                   Google and is included in the authenticated JWT.
-                  
+
                   A user's metadata fields refresh whenever they log in.
                 type: array
                 items:
@@ -5710,7 +5902,7 @@ components:
                   included in this list.
 
     FacebookAuthProvider:
-      allOf: 
+      allOf:
         - $ref: "#/components/schemas/BaseAuthProvider"
         - title: FacebookAuthProvider
           properties:
@@ -5751,7 +5943,7 @@ components:
                   Metadata fields are additional data that describe each
                   user. The value of each metadata field comes from
                   Facebook and is included in the authenticated JWT.
-                  
+
                   A user's metadata fields refresh whenever they log in.
                 type: array
                 items:
@@ -5777,7 +5969,7 @@ components:
                   this is defined, a user must have an email address
                   associated with their OAuth profile that has a domain
                   included in this list.
-    
+
     AdminUser:
       properties:
         user_id:
@@ -5811,7 +6003,7 @@ components:
                 type: string
               group_id:
                 type: string
-    
+
     NewFunction:
       properties:
         can_evaluate:
@@ -5943,7 +6135,7 @@ components:
           type: string
         state:
           "$ref": "#/components/schemas/MessageState"
-    
+
     User:
       properties:
         _id:
@@ -5985,12 +6177,12 @@ components:
             data for all authentication identities associated with the
             user. The exact field names and values depend on which
             authentication providers the user has authenticated with.
-            
+
             For example, if a user has linked an email/password account
             with their Google account, this object might contain their
             `email` as well as metadata fields from Google like `name`
             and `picture`.
-    
+
     UserIdentity:
       type: object
       description: |-
@@ -6004,7 +6196,7 @@ components:
           "$ref": "#/components/schemas/ProviderType"
         provider_id:
           type: string
-    
+
     Partition:
       properties:
         key:
@@ -6061,22 +6253,22 @@ components:
           type: string
           description: |-
             The ID of the function that the trigger calls when it fires.
-            
+
             This value is the same as `event_processors.FUNCTION.function_id`.
             You can either define the value here or in `event_processors.FUNCTION.function_id`.
             The App Services backend duplicates the value to the configuration location where you did not define it.
-            
+
             For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_id`.
         function_name:
           type: string
           description: |-
             The name of the function that the trigger calls when it
             fires, i.e. the function described by `function_id`.
-            
+
             This value is the same as `event_processors.FUNCTION.function_name`.
             You can either define the value here or in `event_processors.FUNCTION.function_name`.
             The App Services backend duplicates the value to the configuration location where you did not define it.
-            
+
             For example, if you define `function_name`, the backend duplicates it to `event_processors.FUNCTION.function_name`.
         event_processors:
           type: object
@@ -6097,22 +6289,22 @@ components:
                       type: string
                       description: |-
                         The ID of the function that the trigger calls when it fires.
-                        
+
                         This value is the same as the root-level `function_id`.
                         You can either define the value here or in `function_id`.
                         The App Services backend duplicates the value to the configuration location where you did not define it.
-                        
+
                         For example, if you define `event_processors.FUNCTION.function_id`, the backend duplicates it to `function_id`.
                     function_name:
                       type: string
                       description: |-
                         The name of the function that the trigger calls when it
                         fires, i.e. the function described by `function_id`.
-                        
+
                         This value is the same as the root-level `function_name`.
                         You can either define the value here or in `function_name`.
                         The App Services backend duplicates the value to the configuration location where you did not define it.
-                        
+
                         For example, if you define `event_processors.FUNCTION.function_name`, the backend duplicates it to `function_name`.
             AWS_EVENTBRIDGE:
               type: object
@@ -6128,6 +6320,7 @@ components:
                       description: An AWS region.
                     extended_json_enabled:
                       type: boolean
+                      default: false
                       description: If `true`, event objects are serialized using EJSON.
     DatabaseTrigger:
       example:
@@ -6135,12 +6328,14 @@ components:
         type: DATABASE
         function_id: 5eea9ca4ca0e356e2c2a148a
         function_name: handleNewEmployeeEvent
-        event_processors: {
-          FUNCTION: {
-            function_id: 5eea9ca4ca0e356e2c2a148a,
-            function_name: handleNewEmployeeEvent
+        event_processors:
+          {
+            FUNCTION:
+              {
+                function_id: 5eea9ca4ca0e356e2c2a148a,
+                function_name: handleNewEmployeeEvent,
+              },
           }
-        }
         config:
           operation_types:
             - INSERT
@@ -6403,6 +6598,21 @@ components:
         hash:
           type: string
           description: The MD5 checksum hash for the hosted asset
+    RefreshTokenExpiration:
+      type: object
+      properties:
+        expiration_time_seconds:
+          type: number
+          minimum: 1800
+          maximum: 15552000
+          default: 5184000
+          description: |-
+            The time in seconds that a user session refresh token is
+            valid for after it is issued. After this time, the token is
+            expired and the user must re-authenticate.
+
+            The expiration time must be between 30 minutes and 180 days,
+            inclusive. The default expiration time is 60 days.
     Relationship:
       type: object
       description: A [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition.
@@ -6730,7 +6940,7 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/Error"
-    
+
     EnvironmentValueNotFound:
       description: Environment value not found
       content:
@@ -6757,6 +6967,9 @@ tags:
   - name: billing
     x-displayName: Billing
     description: View billed usage of your applications.
+  - name: custom-user-data
+    x-displayName: Custom User Data
+    description: Configure [custom user data](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/).
   - name: deploy
     x-displayName: Deployment
     description: |
@@ -6822,13 +7035,110 @@ tags:
       the UI.
   - name: data-api
     x-displayName: Data API
-    description: Manage your app's generated [Data API endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/).
+    description: |-
+      Manage your app's generated [Data API endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/).
+
+      ## Construct a Data API Base URL
+
+      Data API requests use a base URL that's specific to your App and
+      deployment model.
+
+      For a globally deployed app, the base URL has the following format:
+
+      ```
+      https://data.mongodb-api.com/app/{ClientAppID}/endpoint/data/{DataAPIVersion}
+      ```
+
+      A locally deployed app uses a similar base URL also includes the
+      App's deployment region and cloud provider:
+
+      ```
+      https://{Region}.{Cloud}.data.mongodb-api.com/app/{ClientAppID}/endpoint/data/{DataAPIVersion}
+      ```
+
+      You can find an App's `Region`, `Cloud`, and `ClientAppId` in the
+      [App Configuration](#tag/apps/operation/adminGetApplication):
+
+      ```sh
+      curl -X GET https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId} \
+        -h 'Authorization: Bearer <AccessToken>'
+      ```
+
+      You can see a list of all `DataAPIVersion` values supported by an App in
+      the `versions` field of its [Data API
+      Configuration](#tag/data-api/operation/adminGetDataApiConfig):
+
+      ```sh
+      curl -X GET "https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/data_api/config" \
+        -h 'Authorization: Bearer <AccessToken>'
+      ```
+
+      For example, consider an App that has the following configuration:
+
+      ```json
+      {
+        "client_app_id": "myapp-abcde",
+        "deployment_model": "LOCAL",
+        "provider_region": "aws-us-east-1",
+        ...
+      }
+      ```
+
+      This App would use the following base URL for Data API v1 requests:
+
+      ```text
+      https://us-east-1.aws.data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1
+      ```
   - name: dependencies
     x-displayName: Dependencies
     description: Manage your application's [external dependencies](https://www.mongodb.com/docs/atlas/app-services/functions/dependencies/).
   - name: endpoints
     x-displayName: Endpoints
-    description: View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
+    description: |-
+      View and manage your app's custom [HTTPS endpoints](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
+
+      ## Construct a Custom HTTPS Endpoint Base URL
+
+      HTTPS Endpoint requests use a base URL that's specific to your App and
+      deployment model.
+
+      For a globally deployed app, the base URL has the following format:
+
+      ```
+      https://data.mongodb-api.com/app/{ClientAppID}/endpoint
+      ```
+
+      A locally deployed app uses a similar base URL also includes the
+      App's deployment region and cloud provider:
+
+      ```
+      https://{Region}.{Cloud}.data.mongodb-api.com/app/{ClientAppID}/endpoint
+      ```
+
+      You can find an App's `Region`, `Cloud`, and `ClientAppId` by
+      calling the [Get an App](#tag/apps/operation/adminGetApplication) endpoint:
+
+      ```sh
+      curl -X GET https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId} \
+        -h 'Authorization: Bearer <AccessToken>'
+      ```
+
+      For example, consider an App that has the following configuration:
+
+      ```json
+      {
+        "client_app_id": "myapp-abcde",
+        "deployment_model": "LOCAL",
+        "provider_region": "aws-us-east-1",
+        ...
+      }
+      ```
+
+      This App would use the following base URL for incoming custom HTTPS endpoint requests:
+
+      ```text
+      https://us-east-1.aws.data.mongodb-api.com/app/myapp-abcde/endpoint
+      ```
   - name: event-subscriptions
     x-displayName: Event Subscriptions
     description: |-

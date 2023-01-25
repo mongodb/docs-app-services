@@ -1,0 +1,270 @@
+.. _stream-data-from-client-to-atlas:
+
+===================================================
+Stream Data Unidirectionally from a Client to Atlas
+===================================================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+If you have a mobile or client application that produces a large volume of 
+data you'd like to stream to MongoDB Atlas, you can sync data unidirectionally
+using Device Sync. We call the feature that enables this unidirectional sync
+**Asymmetric Sync**.
+
+You might want to sync data unidirectionally in IoT applications, such as 
+a weather sensor sending data to the cloud. Asymmetric sync is also useful 
+for writing other types of immutable data where you do not require conflict 
+resolution, such as creating invoices from a retail app or logging 
+application events.
+
+Asymmetric Sync is optimized to provide performance improvements for heavy 
+client-side *insert-only* workloads. You cannot read this data from the
+realm where you're streaming it.
+
+Follow these high-level steps to get started:
+
+Set up Atlas Access
+-------------------
+
+.. procedure::
+
+   .. step:: Create an Atlas App Services App
+
+      The App Services application is the gateway that enables your client 
+      device to connect to MongoDB Atlas. When you create an App, you name
+      it, link it to an Atlas cluster, and specify the deployment model and
+      deployment region that work best for your application.
+
+      You can create an App Services App via the :ref:`Atlas UI 
+      <create-app-ui>`, the :ref:`Atlas App Services Command Line Interface 
+      <create-app-cli>`, or the :ref:`App Services Admin API <create-app-api>`.
+
+   .. step:: Configure Device Sync and Asymmetric Sync
+
+      Device Sync is the service that synchronizes data to Atlas 
+      and across your client devices. Device Sync, together with the
+      Realm SDKs, automatically manages network connectivity, user 
+      permissions, and conflict resolution. The App Services app provides 
+      the built-in user authentication that Device Sync and the Realm SDKs
+      leverage to secure your data.
+
+      When you configure Device Sync, you specify the data source that the 
+      client devices can access as well as the permissions that determine
+      what data a user can write. 
+
+      You can configure Device Sync via the :ref:`Atlas UI, the Atlas App 
+      Services Command Line Interface, or the App Services Admin API 
+      <enable-flexible-sync>`. The first time you configure Device Sync, 
+      you may find it helpful to use the Atlas UI as it provides links and 
+      information about various settings and options.
+      
+      To enable Asymmetric Sync for one or more collections, you select 
+      the collection or collections in the :guilabel:`Advanced Configuration` 
+      section of your Device Sync configuration. Only collections with 
+      an :ref:`App Services Schema <schemas>` are available to select in 
+      this drop-down.
+      
+      If you have not yet created a schema for the collection that you 
+      want to sync unidirectionally, you can either:
+
+      - Generate an App Services schema from your Realm object model. 
+        Refer to: :ref:`create-schema-from-rom`.
+      - Manually create an App Services Schema. For more information, refer 
+        to: :ref:`enforce-a-schema`.
+
+   .. step:: Enable an Authentication Provider
+
+      Your client devices must authenticate in order to access synced data.
+      App Services provides several authentication providers, such as 
+      email/password or anonymous authentication, to enable your users 
+      to authenticate. Configure one or more of these authentication
+      providers to enable authentication in your client application.
+
+      You can configure authentication providers within the App Services App 
+      UI by selecting :guilabel:`Authentication` in the left navigation menu, 
+      and then click a provider to configure it. You can also configure 
+      authentication providers by editing the App Services configuration 
+      with the :ref:`Atlas App Services Command Line Interface 
+      <appconfig-auth>`, or the `App Services Admin API 
+      <{+base-url+}{+admin-api-page+}tag/authproviders>`__.
+
+Add Sync to the Client Application
+----------------------------------
+
+After this, you've got everything set up that you need on the Atlas side,
+and you can prepare your client application to sync data unidirectionally.
+
+.. procedure::
+
+   .. step:: Connect the client to an App Services backend
+
+      In your client application code, initialize an App client to connect
+      your client to your App Services backend. This lets your client use
+      App Services features like authentication, and enables opening a 
+      synced realm.
+
+      .. tabs-realm-sdks::
+
+         .. tab::
+            :tabid: android
+
+            :ref:`Connect to an Atlas App Services backend - Java SDK <java-init-appclient>`
+
+         .. tab::
+            :tabid: ios
+
+            :ref:`Connect to an Atlas App Services backend - Swift SDK <ios-init-appclient>`
+
+         .. tab::
+            :tabid: node
+
+            :ref:`Connect to an Atlas App Services Backend - Node.js SDK <node-connect-to-mongodb-realm-backend-app>`
+
+         .. tab::
+            :tabid: react-native
+
+            :ref:`Connect to an Atlas App Services Backend - React Native SDK <react-native-connect-to-mongodb-realm-backend-app>`
+
+         .. tab::
+            :tabid: dotnet
+
+            :ref:`Connect to an Atlas App Services Backend - .NET SDK <dotnet-init-appclient>`
+
+         .. tab::
+            :tabid: flutter
+
+            :ref:`Connect to App Services - Flutter SDK <flutter-connect-to-backend>`
+
+         .. tab::
+            :tabid: kotlin
+
+            :ref:`Connect to an Atlas App Services backend - Kotlin SDK <kotlin-connect-to-backend>`
+
+   .. step:: Authenticate a User
+
+      Your client application user must be authenticated with the App Services
+      backend in order to write synchronized data. Add logic to your 
+      client app to register and log in users.
+
+      .. tabs-realm-sdks::
+
+         .. tab::
+            :tabid: android
+
+            :ref:`Authenticate Users - Java SDK <java-authenticate>`
+
+         .. tab::
+            :tabid: ios
+
+            :ref:`Authenticate Users - Swift SDK <ios-authenticate-users>`
+
+         .. tab::
+            :tabid: node
+
+            :ref:`Authenticate Users - Node.js SDK <node-authenticate-users>`
+
+         .. tab::
+            :tabid: react-native
+
+            :ref:`Authenticate Users - React Native SDK <react-native-authenticate-users>`
+
+         .. tab::
+            :tabid: dotnet
+
+            :ref:`Authenticate Users - .NET SDK <dotnet-authenticate>`
+
+         .. tab::
+            :tabid: flutter
+
+            :ref:`Authenticate Users - Flutter SDK <flutter-authenticate>`
+
+         .. tab::
+            :tabid: kotlin
+
+            :ref:`Authenticate Users - Kotlin SDK <kotlin-authenticate>`
+
+   .. step:: Open a Synced Realm
+
+      Once you have an authenticated user, you can open a synced 
+      instance of Realm Database to use for that user. Because Asymmetric
+      Sync is write-only, you cannot define a Flexible Sync query to read 
+      data on the device. This differs from bidirectional Flexible Sync, 
+      where you would create a query subscription to determine what data 
+      to sync to the device.
+
+      .. tabs-realm-sdks::
+
+         .. tab::
+            :tabid: android
+
+            :ref:`Open a Synced Realm - Java SDK <java-synced-realms>`
+
+         .. tab::
+            :tabid: ios
+
+            :ref:`Configure & Open a Synced Realm - Swift SDK <ios-configure-and-open-a-synced-realm>`
+
+         .. tab::
+            :tabid: node
+
+            :ref:`Open a Synced Realm - Node.js SDK <node-open-a-synced-realm>`
+
+         .. tab::
+            :tabid: react-native
+
+            :ref:`Open & Close a Realm - React Native SDK <react-native-open-close-realm>`
+
+         .. tab::
+            :tabid: dotnet
+
+            :ref:`Configure & Open a Synced Realm - .NET SDK <dotnet-configure-and-open-a-synced-realm>`
+
+         .. tab::
+            :tabid: flutter
+
+            :ref:`Open a Synced Realm - Flutter SDK <flutter-open-synced-realm>`
+
+         .. tab::
+            :tabid: kotlin
+
+            :ref:`Open a Synced Realm - Kotlin SDK <kotlin-open-a-synced-realm>`
+
+   .. step:: Create Asymmetric Objects and Write Data
+
+      The Realm SDKs provide a special type of object to use with 
+      Asymmetric Sync: an Asymmetric Object. Refer to the Realm SDK 
+      documentation for details on how to define Asymmetric Objects.
+
+      Create and write Asymmetric Objects to a synced realm, and 
+      the Realm SDKs use Device Sync manage the process of streaming the 
+      data automatically. When the device has a network connection, the 
+      SDKs stream data to the App Services backend and into Atlas. When
+      the device does not have a network connection, the data persists on
+      the device and automatically uploads when the network connection is 
+      restored.
+
+      .. tabs-realm-sdks::
+
+         .. tab::
+            :tabid: ios
+
+            :ref:`Stream Data to Atlas - Swift SDK <swift-stream-data-to-atlas>`
+
+         .. tab::
+            :tabid: node
+
+            :ref:`Define an Asymmetric Object - Node.js SDK <node-define-an-asymmetric-object>`
+
+         .. tab::
+            :tabid: react-native
+
+            :ref:`Define an Asymmetric Object - React Native SDK <react-native-define-an-asymmetric-object>`
+
+         .. tab::
+            :tabid: dotnet
+
+            :ref:`Stream Data to Atlas - .NET SDK <dotnet-asymmetric-sync>`

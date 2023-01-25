@@ -9,24 +9,29 @@
    .. tab::
       :tabid: android
 
-      Learn how to perform a :ref:`Client Reset using the Java SDK <java-client-resets>`.
+      Learn how to perform a :ref:`Client Reset using the Realm Java SDK <java-client-resets>`.
 
    .. tab::
       :tabid: ios
 
-      Learn how to perform a :ref:`Client Reset using the Swift SDK <ios-client-resets>`.
+      Learn how to perform a :ref:`Client Reset using the Realm Swift SDK <ios-client-resets>`.
 
    .. tab::
       :tabid: node
       
-      Learn how to perform a :ref:`Client Reset using the Node SDK <node-client-resets>`.
+      Learn how to perform a :ref:`Client Reset using the Realm Node SDK <node-client-resets>`.
 
    .. tab::
       :tabid: react-native
       
-      Learn how to perform a :ref:`Client Reset using the React Native SDK <react-native-client-resets>`.
+      Learn how to perform a :ref:`Client Reset using the Realm React Native SDK <react-native-client-resets>`.
 
    .. tab::
       :tabid: dotnet
 
-      Learn how to perform a :ref:`Client Reset using the .NET SDK <dotnet-client-resets>`.
+      Learn how to perform a :ref:`Client Reset using the Realm .NET SDK <dotnet-client-resets>`.
+
+   .. tab::
+      :tabid: flutter
+
+      Learn how to perform a :ref:`Client Reset using the Realm Flutter SDK <flutter-client-reset>`.
