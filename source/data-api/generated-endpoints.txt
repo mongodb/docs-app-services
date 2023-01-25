@@ -165,6 +165,9 @@ each request to include credentials for one of your application users,
 like an API key or JWT. You can also configure other custom
 authentication schemes to fit your application's needs.
 
+For examples of how to authenticate requests, see :ref:`Authenticate
+Data API Requests <data-api-authenticate-requests>`.
+
 .. tabs::
 
    .. tab:: Application
@@ -567,12 +570,11 @@ specified in your :ref:`Data API configuration <data-api-response-type>`.
 Authenticate the Request
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-To keep your data secure and correct, generated Data API endpoints
-always run in the context of a specific, registered user and
-automatically enforce your app's :ref:`rules <rules>` and :ref:`schemas
-<schemas>`. Incoming requests must include one or more headers that
-contain valid user credentials for one of the following enabled
-authentication providers:
+Incoming requests must include headers that authenticate the calling
+user.
+
+Requests can authenticate with any of the following authentication
+providers by including user credentials directly in the request headers:
 
 - :ref:`Email/Password <email-password-authentication>`
 - :ref:`API Key <api-key-authentication>`
@@ -629,6 +631,29 @@ authentication providers:
              "collection": "hello",
            }'
 
+Alternatively, you can exchange the user's login credentials for an
+access token that you can then include in a request header. This token
+lets you run multiple requests without re-authenticating the user. It
+also lets you send requests from a browser or other environment that
+enforces :wikipedia:`CORS <Cross-origin_resource_sharing>`.
+
+For more information on how to acquire and use an access token, see
+:ref:`Bearer Token Authentication <data-api-bearer-authentication>`.
+
+.. code-block:: shell
+   :emphasize-lines: 2
+
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
+      --header 'Authorization: Bearer <AccessToken>' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
 .. _data-api-authorize:
 
 Authorize the Request
