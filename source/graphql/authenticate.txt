@@ -21,8 +21,9 @@ Requests must include authentication data in specific request headers.
 App Services uses the following process to authenticate a given request:
 
 1. Check for an ``Authorization`` header. If it's present, the request
-   must use :ref:`Bearer Authentication
-   <graphql-bearer-authentication>` with a valid user access token.
+   must use :ref:`Bearer Authentication <graphql-bearer-authentication>`
+   with a valid user access token. If the token is invalid, the request
+   fails.
 
 2. If the ``Authorization`` header is not present, check for
    :ref:`Credential Headers <graphql-credential-headers>`. The headers
