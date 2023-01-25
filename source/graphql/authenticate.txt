@@ -17,16 +17,17 @@ The GraphQL API requires that incoming requests include authentication
 information for the user making the request. This lets the API enforce
 rules and validate document schemas for each operation.
 
-Users authenticate requests by providing authentication information in
-the request headers. They can either use an authentication access token
-to log in with any authentication provider or directly include login
-credentials from any of the following authentication providers:
+Requests must include authentication data in specific request headers.
+App Services uses the following process to authenticate a given request:
 
-- :ref:`Email/Password <email-password-authentication>`
+1. Check for an ``Authorization`` header. If it's present, the request
+   must use :ref:`Bearer Authentication
+   <graphql-bearer-authentication>` with a valid user access token.
 
-- :ref:`API Key <api-key-authentication>`
-
-- :ref:`Custom JWT <custom-jwt-authentication>`
+2. If the ``Authorization`` header is not present, check for
+   :ref:`Credential Headers <graphql-credential-headers>`. The headers
+   must contain valid Email/Password, API Key, or Custom JWT credentials
+   for an App user.
 
 .. note::
    
