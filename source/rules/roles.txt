@@ -428,3 +428,22 @@ roles remain.
 A user may only have one role per document in a given query. Role order
 determines which role applies in the event that multiple roles' apply
 when expressions are true.
+
+.. _sync-compatible-roles:
+
+Sync-Compatible Roles
+~~~~~~~~~~~~~~~~~~~~~
+
+When Device Sync (Flexible Mode) is enabled, a matched role must be "sync
+compatible". If the role is not sync compatible, others roles are not
+considered; access is denied.
+
+A role is not sync compatible if any of the following conditions are true:
+
+- ``document_filters.read`` or ``document_filters.write`` are undefined.
+- A document filter, insert, or delete expression references: a field that is
+  not a :ref:`queryable field <queryable-fields>`; an expansion other than
+  ``%%true``, ``%%false``, ``%%values``, ``%%environment``, or ``%%user``; or
+  the ``%function`` operator.
+- Field-level permissions are not boolean literals (``true`` or ``false``).
+- Field-level permissions are specified for the top-level ``_id`` field.
