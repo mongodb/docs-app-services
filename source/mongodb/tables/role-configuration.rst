@@ -41,12 +41,18 @@
 
    * - | ``apply_when``
        | Expression
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when
-       this role applies to a user for a specific document.
+     - An :ref:`expression <expressions>` that evaluates to true when
+       this :ref:`role <roles>` applies to a user for a specific document.
 
-       If Device Sync (Flexible Mode) is enabled, the matching role must be
-       :ref:`sync compatible <sync-compatible-roles>`. If the role is not sync
-       compatible, others roles are not considered; access is denied.
+       For a given request on a document, App Services evaluates the
+       ``apply_when`` of each relevant role until one evaluates to true.
+       Relevant roles are any roles specified for the document's collection plus
+       the default role(s). For more information, see :ref:`roles`.
+
+       If Device Sync (Flexible Mode) is enabled, the role must be :ref:`sync
+       compatible <sync-compatible-roles>`. If the role is not sync compatible,
+       but its ``apply_when`` evaluated to true, others roles are not
+       considered; access is denied.
 
    * - | ``document_filters``
        | Document
@@ -91,7 +97,7 @@
    * - | ``read``
        | Expression
        | *Default:* ``undefined``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to read all fields in the document.
        
        If this role is to be :ref:`sync compatible <sync-compatible-roles>`,
@@ -109,7 +115,7 @@
    * - | ``write``
        | Expression
        | *Default:* ``undefined``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to add, modify, or remove all fields in the document.
 
        If this role is to be :ref:`sync compatible <sync-compatible-roles>`,
@@ -147,7 +153,7 @@
    * - | ``delete``
        | Expression
        | *Default:* ``true``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to delete a document from the collection.
 
        App Services only evaluates this expression for delete operations and
@@ -157,7 +163,7 @@
    * - | ``search``
        | Boolean
        | *Default:* ``true``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to search the collection using :atlas:`Atlas Search
        </atlas-search/>`.
 
@@ -198,7 +204,7 @@
    * - | ``fields.<Field Name>.read``
        | Expression
        | *Default:* ``false``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to read the field.
 
        If this role is to be :ref:`sync compatible <sync-compatible-roles>`, the
@@ -207,7 +213,7 @@
    * - | ``fields.<Field Name>.write``
        | Expression
        | *Default:* ``false``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to add, modify, or remove the field.
 
        If this role is to be :ref:`sync compatible <sync-compatible-roles>`, the
@@ -246,7 +252,7 @@
    * - | ``additional_fields.read``
        | Expression
        | *Default:* ``false``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to read any field that does not have a field-level
        permission definition in ``fields``.
 
@@ -256,7 +262,7 @@
    * - | ``additional_fields.write``
        | Expression
        | *Default:* ``false``
-     - An :ref:`expression <expressions>` that evaluates to ``true`` if the
+     - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to add, modify, or remove any field that does not
        have a field-level permission definition in ``fields``.
 

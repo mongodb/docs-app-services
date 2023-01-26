@@ -434,9 +434,9 @@ when expressions are true.
 Sync-Compatible Roles
 ~~~~~~~~~~~~~~~~~~~~~
 
-When Device Sync (Flexible Mode) is enabled, a matched role must be "sync
-compatible". If the role is not sync compatible, others roles are not
-considered; access is denied.
+If Device Sync (Flexible Mode) is enabled, an assigned role must be **sync
+compatible**. If the role is not sync compatible, but its ``apply_when``
+evaluated to true, others roles are not considered; access is denied.
 
 A role is not sync compatible if any of the following conditions are true:
 
