@@ -57,28 +57,24 @@ implement them in your client code. You can also link user accounts with
 client SDKs.
 
 .. _security-data-access:
+.. _security-sync-permissions:
 
 Data Access Permissions
 -----------------------
 
-Use App Services data access rules to grant read and write access to data.
-Apps that use Atlas Device Sync define data access permissions during the process
-of enabling Device Sync. Apps that do not use Device Sync can 
-link an MongoDB Atlas data source, and define permissions to perform CRUD 
+Use App Services data access rules to grant read and write access to data. You
+can link an MongoDB Atlas data source, and define permissions to perform CRUD
 operations on that data source.
 
-MongoDB data access rules prevent operations where users do not have 
-appropriate permissions. Users who do not meet your data access rules
-cannot view or modify data.
+MongoDB data access rules prevent operations where users do not have appropriate
+permissions. Users who do not meet your data access rules cannot view or modify
+data.
 
-.. _security-sync-permissions:
-
-App Services Applications with Sync
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Atlas Device Sync allows you to define data access rules that determine which
-users can read or write which data. To learn how to configure these rules, refer
-to :ref:`sync-permissions`.
+If you are using the older Partition-Based Sync, you define permissions during
+the process of enabling Device Sync. If Partition-Based Sync is enabled, App
+Services uses those permissions instead of the standard permissions. This only
+applies to the older Partition-Based Sync and not to Device Sync (Flexible
+Mode).
 
 .. _security-atlas-permissions:
 
@@ -97,13 +93,6 @@ document associated with a query. You can set roles to have document-level
 or field-level access, and you can give roles read or read and write access. 
 App Services blocks requests from roles that do not have permission to 
 search or read data.
-
-.. note::
-
-   When you access MongoDB Atlas through an App with Atlas Device Sync enabled, the
-   permissions you define for Device Sync apply, instead of the 
-   :ref:`role-based permissions <define-roles-and-permissions>` you define 
-   when you link an MongoDB Atlas data source.
 
 .. _security-developer-access:
 
