@@ -34,9 +34,6 @@ that match the query. With client-side subscriptions, client applications can:
 - React to changes
 - Add, change, or delete queries
 
-Together with rules and permissions, Flexible Sync provides a powerful way to
-configure Sync around your business logic.
-
 .. _development-mode:
 .. _enable-development-mode:
 .. _enable-disable-development-mode:
@@ -181,11 +178,11 @@ should first remove usage of that field on the client-side.
 Permissions
 ~~~~~~~~~~~
 
-Atlas Device Sync enforces data access rules for all requests to a synced
-cluster. Sync rules are dynamic :ref:`JSON expressions <expressions>` that
-specify a given user's ability to view and modify synced data.
+Atlas Device Sync enforces role-based data access rules for all requests to a
+synced cluster. Rules are dynamic :ref:`JSON expressions <expressions>` that
+determine a user's ability to sync, view, and modify data.
 
-For details, refer to :ref:`sync-permissions`.
+For details, see :ref:`sync-permissions`.
 
 .. _asymmetric-sync:
 .. _optimize-asymmetric-sync:
@@ -267,46 +264,15 @@ Sync (recommended). If you are using the older Partition-Based Sync, refer to
      "state": <"enabled" | "disabled">,
      "client_max_offline_days": <Number>,
      "is_recovery_mode_disabled": <Boolean>,
-     "permissions": {
-       "rules": {
-         "<Type Name>": [
-           {
-             "name": <String>,
-             "applyWhen": { <Expression> },
-             "read": <Expression>,
-             "write": <Expression>,
-             "fields": {
-               "<Field Name>": {
-                 "read": <Boolean>,
-                 "write": <Boolean>,
-                 "fields": <Embedded Object Fields>
-               }
-             }
-             "additional_fields": {
-               "read": <Boolean>,
-               "write": <Boolean>
-             }
-           }
-         ]
-       },
-       "defaultRoles": [
-         {
-           "name": <String>,
-           "applyWhen": { <Expression> },
-           "read": <Expression>,
-           "write": <Expression>
-         }
-       ]
-     },
      "queryable_fields_names": [
        <Array of String Field Names>
      ]
    }
 
-Root Object
-~~~~~~~~~~~
-
 .. _flexible-sync-config-object:
+
+Sync Config Object
+~~~~~~~~~~~~~~~~~~
 
 .. list-table::
    :header-rows: 1
@@ -374,27 +340,6 @@ Root Object
        attempt to recover unsynced changes upon performing a client reset.
        Recovery mode is enabled by default.
 
-   * - | ``permissions.rules``
-       | Object
-     
-     - An object where the keys are object type names and the values are arrays
-       of :ref:`Rules Objects <appconfig-sync-type-specific-roles>`.
-
-       .. code-block:: json
-          
-          {
-            "<Type Name>": [ <Role>, ... ]
-          }
-
-   * - | ``permissions.defaultRoles``
-       | Array<Object>
-     
-     - An array of :ref:`Default Roles <appconfig-sync-default-roles>`.
-
-       .. code-block:: json
-          
-          [ <Role>, ... ]
-
    * - | ``queryable_fields_names``
        | Array<String>
      
@@ -407,224 +352,3 @@ Root Object
      - The date and time that sync was last paused or disabled, represented by
        the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
        UTC).
-
-.. _appconfig-sync-type-specific-roles:
-
-Rules Object
-~~~~~~~~~~~~
-
-The ``permissions.rules`` field maps object type names to sets of roles
-that apply specifically to each object type.
-
-For more information, see :ref:`type-specific-roles`.
-
-.. include:: /includes/tip-role-order-config-files.rst
-
-.. list-table::
-   :header-rows: 1
-   :widths: 10 40
-
-   * - | ``name``
-       | String
-       | *Required*
-
-     - The name of the role. You might use a descriptive name, such as
-       ``"adminReadWrite"`` or ``"employeeReadOnly"``, to make it easier
-       to understand the rules.
-
-   * - | ``applyWhen``
-       | Expression
-       | *Required*
-     
-     - An :ref:`expression <expressions>` that evaluates to ``true``
-       when the role applies to the user. 
-       
-       .. example::
-          
-          The following expression defines a role that applies when a
-          :ref:`user's custom data <custom-user-data>` contains a field
-          named ``isGlobalAdmin`` with the value set to ``true``:
-
-          .. code-block:: json
-             
-             {
-               "%%user.custom_data.isGlobalAdmin": true
-             }
-
-   * - | ``read``
-       | Expression
-       | *Optional*
-     
-     - An :ref:`expression <expressions>` that determines whether or not
-       the user can read data. If the expression evaluates to ``true``,
-       the user has permission to read objects of this type. If
-       ``false``, the user cannot read an object or any of its
-       properties. 
-
-       If a user has write permission, they also have read permission, 
-       regardless of the value of this field.
-
-   * - | ``write``
-       | Expression
-       | *Optional*
-     
-     - An :ref:`expression <expressions>` that determines whether or not
-       the user can write data. If the expression evaluates to ``true``,
-       the user has permission to write objects of this type. If
-       ``false``, the user cannot write an object or any of its
-       properties.
-   
-   * - | ``fields``
-       | Object
-       | *Optional*
-     
-     - An object that defines read and write permissions for specific
-       fields. A field-level permission definition has the following
-       form:
-
-       .. code-block:: json
-          
-          "fields": {
-            "<Field Name>": {
-              "read": <Boolean>,
-              "write": <Boolean>,
-              "fields": <Embedded Object Fields>
-            }
-          }
-
-   * - | ``fields.<Field Name>.read``
-       | Boolean
-       | *Required*
-     
-     - If ``true``, the role has permission to read this field. If
-       ``false``, the user cannot read the field.       
-       
-       If a user has write permission, they also have read permission, 
-       regardless of the value of this field.
-
-   * - | ``fields.<Field Name>.write``
-       | Boolean
-       | *Required*
-     
-     - If ``true``, the role has permission to write this field. If
-       ``false``, the user cannot write the field.
-
-   * - | ``fields.<Field Name>.fields``
-       | Object
-       | *Optional*
-     
-     - Nested field-level permissions for an embedded object.
-       
-       .. example::
-          
-          The following role defines read and write permissions for the
-          embedded field ``address.street``:
-
-          .. code-block:: json
-             
-             {
-               "fields": {
-                 "address": {
-                   "fields": {
-                     "street": {
-                       "read": true,
-                       "write": true
-                     }
-                   }
-                 }
-               }
-             }
-   
-   * - | ``additional_fields``
-       | Object
-       | *Optional*
-     
-     - An object that defines read and write permissions for all fields
-       that do not have any permissions defined in ``fields``. A
-       field-level permission definition for generic fields has the
-       following form:
-
-       .. code-block:: json
-          
-          "additional_fields": {
-            "read": <Boolean>,
-            "write": <Boolean>
-          }
-   
-   * - | ``additional_fields.read``
-       | Boolean
-       | *Required*
-     
-     - If ``true``, the role has permission to read any field that
-       isn't defined in ``fields``. If ``false``, the user can only
-       read a field with specific permissions.
-
-       If a user has write permission, they also have read permission, 
-       regardless of the value of this field.
-
-   * - | ``additional_fields.write``
-       | Boolean
-       | *Required*
-     
-     - If ``true``, the role has permission to write any field that
-       isn't defined in ``fields``. If ``false``, the user can only
-       write a field with specific permissions.
-
-.. _appconfig-sync-default-roles:
-
-Default Roles
-~~~~~~~~~~~~~
-
-The ``permissions.defaultRoles`` field contains an array of generic
-roles that apply to all object types. Type-specific roles defined in the
-``rules`` property always take precedence over default roles. A user may
-be assigned a default role when type-specific roles do not apply or are
-not defined.
-       
-For more information, see :ref:`Default Roles <default-roles>`.
-
-.. include:: /includes/tip-role-order-config-files.rst
-
-.. list-table::
-   :header-rows: 1
-   :widths: 10 40
-
-   * - | ``name``
-       | String
-       | *Required*
-
-     - The name of the role in the ``defaultRoles`` array. You might 
-       use a descriptive name to make it easier to parse the roles, such as 
-       "adminReadWrite" or "employeeReadOnly".
-
-   * - | ``applyWhen``
-       | Expression
-       | *Required*
-
-     - An :ref:`expression <expressions>` that evaluates to ``true`` when 
-       the role should be applied. An example might be 
-       ``{"%%user.custom_data.isGlobalAdmin": true}``. This reads the 
-       value of the ``isGlobalAdmin`` bool from the :ref:`user's custom data 
-       <custom-user-data>`, and applies the role when the value of this 
-       bool is ``true``.
-
-   * - | ``read``
-       | Expression
-       | *Optional*
-     
-     - An :ref:`expression <expressions>` that determines whether or not
-       the user can read data. If the expression evaluates to ``true``,
-       the user has permission to read objects. If ``false``, the user
-       cannot read an object or any of its properties.
-
-       If a user has write permission, they also have read permission, 
-       regardless of the value of this field.
-
-   * - | ``write``
-       | Expression
-       | *Optional*
-     
-     - An :ref:`expression <expressions>` that determines whether or not
-       the user can write data. If the expression evaluates to ``true``,
-       the user has permission to write objects. If ``false``, the user
-       cannot write an object or any of its properties.
