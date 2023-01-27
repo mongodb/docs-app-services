@@ -41,23 +41,16 @@ If you are using the older Partition-Based Sync mode, refer to
 Prerequisites
 -------------
 
-While you are configuring Device Sync, you must define the data access patterns
-and rules for your App. If you haven't already decided how you want to
-configure your data model and access Device Sync, see:
+If you haven't already decided how you want to configure your data model, see
+:ref:`sync-schema-overview`.
 
-- :ref:`Configure Your Data Model <sync-schema-overview>`
-- :ref:`Sync Rules and Permissions <sync-permissions>`
+Unless you are using :ref:`Development Mode <development-mode>`, you must
+specify at least one valid :ref:`schema <schemas>` for a collection in the
+synced cluster before enabling Sync. At a minimum, the schema must define
+``_id`` as a primary key. You should also include the field(s) you intend to use
+as your :ref:`queryable fields <queryable-fields>`.
 
-.. important::
-   
-   Before defining sync rules and enabling sync, you must specify at least
-   one valid :ref:`schema <schemas>` for a collection in the synced cluster 
-   unless you are using :ref:`Development Mode <development-mode>`.
-   
-   At a minimum, the schema must define ``_id`` and the field(s)
-   you intend to use as your :ref:`queryable fields <queryable-fields>`.
-   
-   For more details on how to define a schema, see :ref:`enforce-a-schema`.
+For more details on how to define a schema, see :ref:`enforce-a-schema`.
 
 .. _sync-modes:
 .. _enable-flexible-sync:
@@ -76,8 +69,9 @@ Procedure
 
          .. step:: Navigate to the Device Sync Configuration Screen
 
-            To define Device Sync rules and enable Device Sync for your application, navigate to the
-            :guilabel:`Device Sync` configuration screen through the left navigation menu.
+            To enable Device Sync for your application, navigate to the
+            :guilabel:`Device Sync` configuration screen through the left
+            navigation menu.
 
          .. step:: Specify Your Sync Settings
 
@@ -127,37 +121,6 @@ Procedure
                  "state": <"enabled" | "disabled">,
                  "client_max_offline_days": <Number>,
                  "is_recovery_mode_disabled": <Boolean>,
-                 "permissions": {
-                   "rules": {
-                     "<Type Name>": [
-                       {
-                         "name": <String>,
-                         "applyWhen": <Expression>,
-                         "read": <Expression>,
-                         "write": <Expression>,
-                         "fields": {
-                           "<Field Name>": {
-                             "read": <Boolean>,
-                             "write": <Boolean>,
-                             "fields": <Embedded Object Fields>
-                           }
-                         }
-                         "additional_fields": {
-                           "read": <Boolean>,
-                           "write": <Boolean>
-                         }
-                       }
-                     ]
-                   },
-                   "defaultRoles": [
-                     {
-                       "name": <String>,
-                       "applyWhen": { <Expression> },
-                       "read": <Expression>,
-                       "write": <Expression>
-                     }
-                   ]       
-                 },
                  "queryable_fields_names": <Array of String Field Names>
                }
                
@@ -165,8 +128,8 @@ Procedure
 
          .. step:: Deploy the Sync Configuration
 
-            Deploy your changes to start syncing data and enforcing Device Sync
-            rules. Import your app configuration:
+            Deploy your changes to start syncing data. Import your app
+            configuration:
 
             .. code-block:: shell
 
@@ -224,17 +187,6 @@ Procedure
                  "flexible_sync": {
                    "state": "enabled",
                    "database_name": "<Name of Database>",
-                   "permissions": {
-                     "defaultRoles": [
-                       {
-                         "applyWhen": {},
-                         "name": "all",
-                         "read": true,
-                         "write": true
-                       }
-                     ],
-                     "rules": {}
-                   },
                    "queryable_fields_names": <Array of String Field Names>,
                    "client_max_offline_days": <Number>,
                    "is_recovery_mode_disabled": <Boolean>
@@ -246,8 +198,8 @@ Procedure
 
          .. step:: Deploy the Sync Configuration
 
-            To deploy your changes to start syncing data and enforcing Device
-            Sync rules, send an :admin-api-endpoint:`Admin API request
+            To deploy your changes and start syncing data, send an
+            :admin-api-endpoint:`Admin API request
             <operation/adminGetServiceConfig>` that updates the cluster
             configuration with your sync configuration:
 
