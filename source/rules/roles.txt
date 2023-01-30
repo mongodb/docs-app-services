@@ -151,13 +151,10 @@ Why Define a Role?
 ~~~~~~~~~~~~~~~~~~
 
 A role carries a specific set of permissions that you might expose to your app's
-users. A user may play at most one role at a time, so each distinct set of
-permissions that you need requires you to define a named role that encapsulates
-those permissions.
-
-The exact roles and permissions that you define will vary based on your app's
-data and requirements. To determine good roles for a collection, consider your
-data from the perspective of your app's users and what it might mean to them.
+users. The exact roles and permissions that you define will vary based on your
+app's data and requirements. To determine good roles for a collection, consider
+your data from the perspective of your app's users and what it might mean to
+them.
 
 .. example::
    
@@ -309,25 +306,30 @@ deploying configuration files with {+cli+}:
          If no roles are defined yet, you'll be prompted to create a new
          one. Otherwise you'll see an ordered list of existing roles.
          
-      2. To create a new role, click :guilabel:`Add role`. You can
+      #. To create a new role, click :guilabel:`Add role`. You can
          either start from scratch or use a preset role as a starting
          point.
          
-      3. Give the role a name. The name can be anything you want but
+      #. Give the role a name. The name can be anything you want but
          must be unique within a given collection. Consider using names
          that describe the user (e.g. ``Admin``) and/or their
          relationship to the data (e.g. ``Owner``).
       
-      4. Define an :guilabel:`Apply When` expression that determines when
+      #. Define an :guilabel:`Apply When` expression that determines when
          a given user has the role for a given document.
       
-      5. Define :ref:`document-level permissions <document-level-permissions>` for the role.
-      
-      6. Define :ref:`field-level permissions <field-level-permissions>` for the role.
-      
-      7. Save the role.
+      #. Define :ref:`document filters <document-filters-expressions>` for the
+         role.
 
-      8. If a collection has more than one role assigned, you can modify
+      #. Define :ref:`document-level permissions <document-level-permissions>`
+         for the role.
+      
+      #. Define :ref:`field-level permissions <field-level-permissions>` for the
+         role.
+      
+      #. Save the role.
+
+      #. If a collection has more than one role assigned, you can modify
          their :ref:`role order <role-order>` by clicking the arrows on
          each role.
      
@@ -432,8 +434,9 @@ A role's "apply when" expression is a :ref:`rule expression <expressions>` that
 determines whether the role should be assigned.
 
 You can use expression variables to make roles dynamic. For example, you can use
-:json-expansion:`%%user` to refer to the specific user that issued the request.
-This lets you customize your data access permissions on a per-user basis.
+:json-expansion:`%%user` expansion to refer to the specific user that issued the
+request. This lets you customize your data access permissions on a per-user
+basis.
 
 When not using Device Sync, you can refer to the current document for which a
 role is being assigned. For example, you can use :json-expansion:`%%root`. This
@@ -445,8 +448,7 @@ Document Filters
 ~~~~~~~~~~~~~~~~
 
 The role's ``document_filters`` expressions determine whether the role's
-subsequent document- and field-level permissions may be evaluated at all. This
-is an essential part of how Device Sync works.
+subsequent document- and field-level permissions may be evaluated at all.
 
 .. _document-level-permissions:
 
