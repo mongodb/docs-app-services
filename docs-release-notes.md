@@ -6,8 +6,8 @@
 
 ## GraphQL API
 - Authenticate GraphQL Requests
-  - Update the page with more information about Bearer Authentication, Credential Headers, unify the structure so it can paralell a similar page for Data API
-  - Add information getting and refreshing a user access token as a reusable block that can go on this page and the similar Data API page
+  - Update the page with more information about Bearer Authentication, Credential Headers, unify the structure so it parallels a similar page for Data API
+  - Add information about getting and refreshing a user access token as a reusable block that can go on this page and the similar Data API page
 
 ## Data API
 - Data API Endpoints: Update the "Authenticate the Request" section:
