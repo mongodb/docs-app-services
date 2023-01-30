@@ -1,3 +1,26 @@
+# January 27, 2023
+
+## Get Started
+- Device Sync Tutorial - .NET MAUI: Replaces the previous Xamarin tutorial with a tutorial for building on the new MAUI template app
+- Device Sync Tutorial - React Native: Minor tweak telling users where to go to install app dependencies to account for multiple client download options
+
+## GraphQL API
+- Authenticate GraphQL Requests
+  - Update the page with more information about Bearer Authentication, Credential Headers, unify the structure so it parallels a similar page for Data API
+  - Add information about getting and refreshing a user access token as a reusable block that can go on this page and the similar Data API page
+
+## Data API
+- Data API Endpoints: Update the "Authenticate the Request" section:
+  - Add a link to the new Authenticate Data API Requests page
+  - Add information about exchanging the user's login credentials for an access token that you can then include in a request header
+- Authenticate Data API Requests: New page modeled on the updated "Authenticate GraphQL Requests" page
+
+## App Services Admin API
+- Users/Verify valid client access token: Update description, add and clarify details around 200 responses, add possible 400/401 responses
+
+## Reference
+- Remove the "Authenticate HTTP Client Requests" page which is superseded by information in the updated GraphQL/Data API "Authenticate" pages
+
 # January 20, 2023
 
 ## Get Started
