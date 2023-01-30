@@ -13,22 +13,27 @@ Role-based Permissions
    :depth: 2
    :class: singlecol
 
-.. include:: /includes/non-sync-rules-note.rst
-
 Overview
 --------
 
-You secure your App's data by defining roles that are automatically
-assigned to incoming user requests. Each role has fine-grained data
-access permissions and dynamic conditions that determine when the role
+You secure your App's data by defining **roles** that are automatically assigned
+to incoming user requests or Device Sync sessions. Each role has fine-grained
+data access permissions and dynamic conditions that determine when the role
 applies.
+
+For examples of how you might configure permissions for common scenarios with
+Device Sync, see :ref:`flexible-sync-permissions-guide`.
+
+If you're using the older Partition-Based Sync Device Sync mode, rules and roles
+work differently. To configure Partition-Based Sync permissions, see
+:ref:`partition-based-sync-permissions`.
 
 What are Permissions?
 ~~~~~~~~~~~~~~~~~~~~~
 
-A **permission** is a status that Atlas App Services assigns to individual users to control what
-they can and cannot do in your app. App Services uses both document-level and
-field-level permissions:
+A **permission** is a status that Atlas App Services assigns to individual users
+to control what they can and cannot do with your app's data. App Services uses
+both document-level and field-level permissions:
 
 - Document-level permissions control whether a user can insert, delete, modify,
   and search for a specific document in a MongoDB collection. These permissions
@@ -43,25 +48,21 @@ What are Roles?
 ~~~~~~~~~~~~~~~
 
 A **role** is a named set of permissions that a user may have for documents in a
-MongoDB collection. Each role represents a possible relationship between a user
-and an individual document. A user may play at most one role per document in
-a request.
+MongoDB collection. A role has an "apply when" :ref:`expression <expressions>`
+that determines whether App Services should assign the role to a user. Roles
+also have a set of document- and field-level permissions that a user has when
+assigned the role.
 
-You define the roles a user can play for the documents in a collection. App Services
-automatically assigns roles to the user at request time. Each role includes an
-Apply When :ref:`expression <expressions>` that determines when App Services should
-assign the role to a user as well as a set of document-level and field-level
-permissions that apply to the role.
-
-App Services only commits operations that a user is authorized to do based on their
-assigned roles. If a role does not have permission to read a document or some of
-its fields, App Services omits the document or fields from the results.
+App Services only commits operations that a user is authorized to do based on
+their assigned role. If a role does not have permission to read a document or
+some of its fields, App Services omits the document or fields from the results.
 
 .. example::
 
    Consider a collection named ``employees`` where each employee has their own
    document with all of their employment data. This collection might have two
-   roles: **Employee** and **Manager**.
+   roles: **Employee** and **Manager**. We're not using Device Sync, so App
+   Services selects a role on a per-document basis.
 
    - If a user requests their own document, their role is **Employee**. An
      employee can read and write their own data but can't create or delete their
@@ -150,7 +151,7 @@ Why Define a Role?
 ~~~~~~~~~~~~~~~~~~
 
 A role carries a specific set of permissions that you might expose to your app's
-users. A user may play at most one role for each document, so each distinct set of
+users. A user may play at most one role at a time, so each distinct set of
 permissions that you need requires you to define a named role that encapsulates
 those permissions.
 
@@ -185,12 +186,28 @@ data from the perspective of your app's users and what it might mean to them.
 How App Services Assigns Roles
 ------------------------------
 
-App Services dynamically assigns roles for every request. The user
-is assigned a separate role, or no role, for each document that matches
-the incoming query.
+App Services assigns roles differently depending on whether you're using
+:ref:`Device Sync (Flexible Mode) <sync>` or not.
 
-First, your App evaluates and applies :ref:`filters <filters>` and then
-runs the query.
+When using Device Sync, App Services assigns roles at the start of a "sync
+session"; otherwise, App Services assigns roles on a per-document basis. A sync
+session starts when opening a sync connection and ends when closing the sync
+connection.
+
+You can define a set of roles for a collection and default roles for when the
+collection roles don't apply. To assign a role, App Services evaluates each
+role's "apply when" expression. The first role whose "apply when" expression
+evaluates to true becomes the assigned role.
+
+Role Assignment: Device Sync Disabled
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When not using Device Sync, App Services dynamically assigns roles for every
+request. The user is assigned a separate role, or no role, for each document
+that matches the incoming query. 
+
+First, your App evaluates and applies :ref:`filters <filters>` and then runs the
+query.
 
 .. example::
    
@@ -249,6 +266,30 @@ data source's default roles.
               ]
             }
 
+Role Assignment: Device Sync Enabled
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using Device Sync, App Services assigns a role at the beginning of each
+Sync session. The role determines which permissions apply for the duration of a
+Flexible Sync session.
+
+.. seealso::
+
+   For a guide to setting up Flexible Sync with common permissions
+   models, see :ref:`flexible-sync-permissions-guide`.
+
+When a user begins a session by opening a synced realm, roles are evaluated and
+applied to the user for each collection to be synced. App Services assigns at
+most one role per collection. If no session role applies for a collection, the
+user cannot sync (or read or write) any entries in that collection.
+
+A session role stays assigned for the duration of the session. If something
+relevant to a user's session roles changes in the middle of the user's session,
+the user is **not** assigned an updated role until they start a new session. For
+example, if the user's metadata or the role's "apply when" expression changes,
+the user continues to use their existing session role until the next time they
+start a session.
+
 Define Roles & Permissions
 --------------------------
 
@@ -299,10 +340,10 @@ deploying configuration files with {+cli+}:
 
             realm-cli pull --remote="<Your App ID>"
       
-      2. Define :ref:`roles and filters <config-collection-rules>` for
-         one or more collections. You can also define :ref:`default
-         roles and filters <config-default-rules>` that apply to any
-         unconfigured collection.
+      2. Define :ref:`roles and filters <config-collection-rules>` for one or
+         more collections. You can also define :ref:`default roles and filters
+         <config-default-rules>` that apply to any unconfigured collection. See
+         :ref:`rule-config` for details.
 
          .. tabs::
 
@@ -319,6 +360,10 @@ deploying configuration files with {+cli+}:
                       {
                         "name": "<Role Name>",
                         "apply_when": {},
+                        "document_filters": {
+                          "read": { Expression },
+                          "write": { Expression }
+                        },
                         "insert": true,
                         "delete": true,
                         "search": true,
@@ -349,6 +394,10 @@ deploying configuration files with {+cli+}:
                       {
                         "name": "<Role Name>",
                         "apply_when": {},
+                        "document_filters": {
+                          "read": { Expression },
+                          "write": { Expression }
+                        },
                         "insert": true,
                         "delete": true,
                         "search": true,
@@ -379,16 +428,25 @@ deploying configuration files with {+cli+}:
 Apply When Expressions
 ~~~~~~~~~~~~~~~~~~~~~~
 
-A role's :guilabel:`Apply When` expression is a :ref:`rule expression
-<expressions>` that determines when a given user has the role for a
-specific document. The expression is evaluated for each document that an
-incoming query matches.
+A role's "apply when" expression is a :ref:`rule expression <expressions>` that
+determines whether the role should be assigned.
 
-You can use expression variables to make roles dynamic. For example, you
-can use :json-expansion:`%%user` to refer to the specific user that
-issued the request or :json-expansion:`%%root` to reference the current
-document. This lets you customize your data access permissions on a
-per-user, per-document basis.
+You can use expression variables to make roles dynamic. For example, you can use
+:json-expansion:`%%user` to refer to the specific user that issued the request.
+This lets you customize your data access permissions on a per-user basis.
+
+When not using Device Sync, you can refer to the current document for which a
+role is being assigned. For example, you can use :json-expansion:`%%root`. This
+lets you customize your data access permissions on a per-document basis.
+
+.. _document-filters-expressions:
+
+Document Filters
+~~~~~~~~~~~~~~~~
+
+The role's ``document_filters`` expressions determine whether the role's
+subsequent document- and field-level permissions may be evaluated at all. This
+is an essential part of how Device Sync works.
 
 .. _document-level-permissions:
 
@@ -426,8 +484,9 @@ when expression is evaluated in role order until a role applies or no
 roles remain.
 
 A user may only have one role per document in a given query. Role order
-determines which role applies in the event that multiple roles' apply
-when expressions are true.
+determines which role applies in the event that multiple roles' "apply when"
+expressions are true. Therefore, when defining roles, put the most specific
+roles first.
 
 .. _sync-compatible-roles:
 

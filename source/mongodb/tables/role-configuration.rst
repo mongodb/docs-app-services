@@ -6,7 +6,7 @@
       "document_filters": {
         "read": { Expression },
         "write": { Expression }
-      }
+      },
       "read": { Expression },
       "write": { Expression },
       "insert": { Expression },
