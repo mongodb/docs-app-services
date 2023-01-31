@@ -17,22 +17,21 @@ Rule Expressions
 Overview
 --------
 
-A **rule expression** is a JSON object that you write to control data
-access with :ref:`rules <rules>`. Each expression defines the conditions
+A **rule expression** is a JSON object that you write to control data access
+with :ref:`permissions <permissions>`. Each expression defines the conditions
 under which a user can take some action. For example, you can write an
 expression to control whether a user can read or write data in a MongoDB
 document or a synced realm.
 
-When Atlas App Services evaluates a rule, it resolves each expression
-associated with the rule to a boolean value, either ``true`` or
-``false``.
+App Services evaluates a rule expression, usually with a document as input, to
+get a true or false result.
 
 You can define simple, static expressions that use hardcoded values:
 
 .. code-block:: json
-   :caption: A "static" expression that only matches the hardcoded ID
+   :caption: A "static" expression that only evaluates to true if the input document's "id" field matches the given hardcoded ID "aaaabbbbccccddddeeeeffff"
 
-   { "id": "5f6aae9a82989d521a606369" }
+   { "id": "aaaabbbbccccddddeeeeffff" }
 
 You can also write expressions that support arbitrary logic to express
 dynamic requirements and complex or custom workflows. A dynamic
