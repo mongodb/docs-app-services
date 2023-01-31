@@ -183,21 +183,20 @@ them.
 How App Services Assigns Roles
 ------------------------------
 
-App Services assigns roles differently depending on whether you're using
+App Services assigns roles at different times depending on whether you're using
 :ref:`Device Sync (Flexible Mode) <sync>` or not.
 
 When using Device Sync, App Services assigns roles at the start of a Sync
 session; otherwise, App Services assigns roles on a per-document basis. A Sync
-session starts when opening a sync connection and ends when closing the sync
-connection.
+session is the period of time between opening and closing a Sync connection.
 
-You can define a set of roles for a collection and default roles for when the
-collection roles don't apply. To assign a role, App Services evaluates each
-role's "apply when" expression. The first role whose "apply when" expression
-evaluates to true becomes the assigned role.
+Whether using Device Sync or not, you can define a set of roles for a collection
+and default roles for when the collection roles don't apply. To assign a role,
+App Services evaluates each role's "apply when" expression. The first role whose
+"apply when" expression evaluates to true becomes the assigned role.
 
-Role Assignment: Device Sync Disabled
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Without Device Sync
+~~~~~~~~~~~~~~~~~~~
 
 When not using Device Sync, App Services dynamically assigns roles for every
 request. The user is assigned a separate role, or no role, for each document
@@ -220,14 +219,14 @@ query.
 
 For each document returned by the query, your App evaluates possible
 roles in :ref:`role order <role-order>` and assigns the first applicable
-role, if any. A role applies to a given document if its Apply When
+role, if any. A role applies to a given document if its "apply when"
 :ref:`expression <expressions>` evaluates to ``true`` when run against
 the document.
 
 The set of roles that a user may play for a given request depends on the
 collection they're accessing. If the collection has a set of
 collection-level roles defined, then a user may play any of those roles.
-If there are no collection-level rules, the request falls back to the
+If there are no collection-level roles, the request falls back to the
 data source's default roles.
 
 .. example::
@@ -263,8 +262,8 @@ data source's default roles.
               ]
             }
 
-Role Assignment: Device Sync Enabled
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With Device Sync
+~~~~~~~~~~~~~~~~
 
 When using Device Sync, App Services assigns a role at the beginning of each
 Sync session. The role determines which permissions apply for the duration of a
@@ -281,7 +280,7 @@ most one role per collection. If no session role applies for a collection, the
 user cannot sync (or read or write) any entries in that collection.
 
 A session role stays assigned for the duration of the session. If something
-relevant to a user's session roles changes in the middle of the user's session,
+relevant to a user's session role changes in the middle of the user's session,
 the user is **not** assigned an updated role until they start a new session. For
 example, if the user's metadata or the role's "apply when" expression changes,
 the user continues to use their existing session role until the next time they
@@ -315,8 +314,8 @@ deploying configuration files with {+cli+}:
          that describe the user (e.g. ``Admin``) and/or their
          relationship to the data (e.g. ``Owner``).
       
-      #. Define an :guilabel:`Apply When` expression that determines when
-         a given user has the role for a given document.
+      #. Define an "apply when" expression that determines when a given user has
+         the role for a given document.
       
       #. Define :ref:`document filters <document-filters-expressions>` for the
          role.
@@ -363,8 +362,8 @@ deploying configuration files with {+cli+}:
                         "name": "<Role Name>",
                         "apply_when": {},
                         "document_filters": {
-                          "read": { Expression },
-                          "write": { Expression }
+                          "read": { <Expression> },
+                          "write": { <Expression> }
                         },
                         "insert": true,
                         "delete": true,
@@ -496,7 +495,7 @@ Sync-Compatible Roles
 ~~~~~~~~~~~~~~~~~~~~~
 
 If Device Sync (Flexible Mode) is enabled, an assigned role must be **sync
-compatible**. If the role is not sync compatible, but its ``apply_when``
+compatible**. If the role is not sync compatible, but its "apply when"
 evaluated to true, others roles are not considered; access is denied.
 
 A role is not sync compatible if any of the following conditions are true:
