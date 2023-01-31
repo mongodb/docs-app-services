@@ -1563,15 +1563,13 @@ paths:
       operationId: adminVerifyUserAccessToken
       summary: Verify valid client access token
       description: |-
-        Verify a that a user's [client access
-        token](https://www.mongodb.com/docs/realm/reference/authenticate-http-client-requests#std-label-get-client-api-access-token)
-        is valid.
+        Verify a that a user's client access token is valid.
       requestBody:
         required: true
         description: |-
-          The user's client access token. This is distinct from the
-          [API access token](https://www.mongodb.com/docs/realm/reference/authenticate-http-client-requests#std-label-get-client-api-access-token)
-          you need to authenticate to the admin API.
+          The user's client access token. The access token represents a logged in application user. This is not the same as the
+          [``access_token``](https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Get-Authentication-Tokens)
+          that you use to work with the Admin API.
         content:
           application/json:
             schema:
@@ -1589,28 +1587,31 @@ paths:
                 oneOf:
                   - type: string
                     const: "token expired"
-                  - properties:
+                    description: The token is valid but has expired.
+                  - type: object
+                    description: The token is valid and is not expired.
+                    properties:
                       sub:
                         type: string
                         description: User ID.
                       aud:
                         type: string
                         description: |-
-                          Optional; specifies which Resource Servers the JWT is valid for. Omitted
+                          Specifies which Resource Servers the JWT is valid for. Omitted
                           if empty.
                       exp:
                         type: integer
-                        description: Unix timestamp after which the JWT expires.
+                        description: The Unix timestamp when the JWT expires.
                       iat:
                         type: integer
-                        description: Unix timestamp at which the JWT was issued.
+                        description: The Unix timestamp when the JWT was issued.
                       iss:
                         type: string
                         description: The issuer of the JWT.
                       custom_user_data:
                         type: object
                         description: |-
-                          Optional; contains [custom user
+                          Contains [custom user
                           data](https://www.mongodb.com/docs/realm/users/enable-custom-user-data#std-label-custom-user-data)
                           if it exists for the user. Only present if the access token is created
                           after custom user data is enabled and configured. Omitted if empty.
@@ -1623,7 +1624,24 @@ paths:
                           if empty."
                       device_id:
                         type: string
-
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+        "401":
+          description: Invalid Session
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - "$ref": "#/components/schemas/Error"
+                  - properties:
+                      error:
+                        const: "invalid session"
+                      error_code:
+                        const: "InvalidSession"
   "/groups/{groupId}/apps/{appId}/users/{userId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"

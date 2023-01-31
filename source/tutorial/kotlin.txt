@@ -33,11 +33,23 @@ This tutorial adds functionality to the Template App. You will add a new ``Prior
 to the existing ``Item`` model and update the 
 :ref:`Flexible Sync subscription <queryable-fields>` to only show items within 
 a range of priorities. This example illustrates how you might adapt the 
-template app for your own needs. You would not necessarily make 
-this change given the current structure of the template app. 
+template app for your own needs. 
 
 Depending on your experience with Kotlin, this tutorial should take 
 around 30 minutes.
+
+Learning Objectives
+-------------------
+
+This tutorial illustrates how you might adapt the
+template app for your own needs.
+
+In this tutorial, you will learn how to:
+
+- Update a Realm object model with a non-breaking change.
+- Update a Device Sync subscription.
+- Add a queryable field to the Device Sync configuration on the server
+  to change which data is synchronized.
 
 .. note:: Check Out the Quick Start
    
@@ -122,7 +134,8 @@ Set up the Template App
 
    .. step:: Open the App
 
-      Open the ``build.gradle.kts`` file in Android Studio.
+      In Android Studio, open the ``kotlin.todo.flex`` folder located in the
+      ``frontend`` folder of the template app. 
 
       If you downloaded the client as a ``.zip`` file or cloned the client 
       GitHub repository, you must manually insert the App Services App ID 
@@ -220,9 +233,7 @@ Modify the Application
       
       To do this, follow these steps:
 
-      A. Open the ``build.gradle.kts`` file in Android Studio. 
-
-      #. Within the ``app/java/com.mongodb.app/domain`` folder, open the ``Item`` class file.
+      A. Within the ``app/java/com.mongodb.app/domain`` folder, open the ``Item`` class file.
             
       #. Add a ``PriorityLevel`` enum to constrain the possible  
          values. Also add a ``priority``
@@ -428,7 +439,8 @@ Modify the Application
 
 
          Now update the ``addTask()`` and ``cleanUpAndClose()`` functions to include the new
-         ``taskPriority`` parameter and update the message with the priority information:
+         ``taskPriority`` parameter, update the message with the priority information, and 
+         reset the priority field to low once the Add Item view is closed:
 
          .. code-block:: kotlin
             :emphasize-lines: 4, 7, 20
