@@ -13,8 +13,6 @@ Filter Incoming Queries
    :depth: 2
    :class: singlecol
 
-.. include:: /includes/non-sync-rules-note.rst
-
 Overview
 --------
 
@@ -25,40 +23,43 @@ the shape of queried documents and can improve query performance.
 Filters add additional query parameters and omit fields from query results 
 *before* Atlas App Services runs the query. Every filter has three components:
 
-- An Apply When :ref:`expression <expressions>` that determines if
-  the filter applies to an incoming request. You can use variables like
+- An "apply when" :ref:`expression <expressions>` that determines if the filter
+  applies to an incoming request. You can use variables like
   :json-expansion:`%%user` and :json-expansion:`%%request` in this expression.
-  However, you cannot use MongoDB variables like :json-expansion:`%%root`
-  because App Services applies filters before it reads any data.
+  However, you cannot use expansions like :json-expansion:`%%root` because App
+  Services applies filters before reading any data.
 
-- An optional query document, which uses standard MongoDB query
-  syntax and merges with the existing query of any request the filter applies
-  to.
+- An optional query document, which uses standard MongoDB query syntax and
+  merges with the existing query of any request the filter applies to.
 
-- An optional projection document, which uses standard MongoDB projection
-  syntax and merges with the existing projection of any request the filter
-  applies to.
+- An optional projection document, which uses standard MongoDB projection syntax
+  and merges with the existing projection of any request the filter applies to.
 
 .. _filter-enforcement:
 
 How App Services Applies Filters
 --------------------------------
 
-App Services evaluates and applies filters for every MongoDB request where rules apply,
-e.g. an SDK or a function run as a specific user. Multiple filters may apply to
-a single request.
+App Services evaluates and applies filters for every MongoDB request where rules
+apply, such as:
 
-A filter applies to a given request if its Apply When :ref:`expression
-<expressions>` evaluates to ``true`` given that request's context. If a filter
-applies to a request, App Services merges the filter's query or projection into the
-requested operation's existing query and projection.
+- A query on a collection.
+- A write to a document.
+- The start of a Device Sync session.
+
+Multiple filters may apply to a single request.
+
+A filter applies to a given request if its "apply when" :ref:`expression
+<expressions>` evaluates to true given that request's context. If a filter
+applies to a request, App Services merges the filter's query or projection into
+the requested operation's existing query and projection.
 
 App Services applies filters to the request *before* it sends the request to MongoDB.
 
 .. example::
 
    A collection contains several million documents and has one role with
-   the following Apply When expression:
+   the following "apply when" expression:
 
    .. code-block:: json
 
