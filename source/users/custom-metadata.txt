@@ -1,0 +1,594 @@
+.. _custom-metadata:
+
+===========================
+Define Custom User Metadata
+===========================
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Overview
+--------
+
+You can configure Atlas App Services to store :ref:`custom user data <custom-user-data>` 
+for the App's user in MongoDB Atlas. You can also configure App Services to store
+:ref:`user metadata <configure-user-metadata-on-the-backend>` from authentication 
+providers. 
+
+.. _custom-user-data:
+
+Enable Custom User Data
+-----------------------
+
+You can store arbitrary data about your application users in a MongoDB
+collection and configure Atlas App Services to automatically expose each user's data
+in a field of their :ref:`user object <user-objects>`. For example, you
+might store a user's preferred language, date of birth, or their local
+timezone.
+
+App Services automatically finds a user's custom data document and includes it
+in their access token when they log in. You can access the data in the
+``custom_data`` field of the user's object in :ref:`function context
+<context-user>`, the :json-expansion:`%%user` expansion,
+and their client application access token.
+
+.. note::
+
+   Because App Services stores the custom user data in the access token
+   in the HTTP header, you should keep the custom user data payload
+   small (say, less than 16KB). Other services might limit the HTTP
+   header size, which means that large custom user data objects can
+   cause integration issues.
+
+App Services does not manage custom user documents so you are responsible for
+creating and deleting them. The underlying data is a regular MongoDB
+document, so you can use standard CRUD operations through the
+:doc:`MongoDB Atlas service </mongodb>` to define and modify a user's
+custom data. You can also use :doc:`authentication triggers
+</triggers/authentication-triggers>` to dynamically update user
+documents, such as storing the time of their most recent login in the
+``lastLogin`` field.
+
+.. include:: /includes/define-custom-user-data-example.rst
+
+.. important:: Store One Document Per User
+
+   Documents that contain user data must include the user's ID in a
+   specific field. If multiple documents specify
+   the same user's ID, App Services only exposes the data from the
+   document that was inserted first.
+
+.. include:: /includes/custom-data-may-be-stale.rst
+
+Configuration
+~~~~~~~~~~~~~
+
+App Services stores MongoDB documents that correspond to custom user data
+in a linked MongoDB Atlas cluster. When you
+configure custom user data for your application, you specify:
+
+- the custom user data cluster
+
+- the custom user data database
+
+- the custom user data collection in which custom
+  user data documents are stored
+
+- the user ID field used to map custom user data documents
+  to users (via user ID)
+
+- an optional Atlas Function that runs before new user accounts are created
+
+.. _user-creation-function:
+
+User Creation Function
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can define a Function that runs every time a new user successfully
+registers but before their new user account is created. If the function
+throws or otherwise errors, the user account creation fails. This lets
+you ensure that users always have custom data associated with them once
+created.
+
+The function receives a :ref:`user metadata object <user-objects>` as
+its only argument. You can use this create a new custom user data
+document for the user.
+
+.. code-block:: javascript
+
+   exports = async function onUserCreation(user) {
+     const customUserDataCollection = context.services
+       .get("mongodb-atlas")
+       .db("myapp")
+       .collection("users");
+     try {
+       await customUserDataCollection.insertOne({
+         // Save the user's account ID to your configured user_id_field
+         user_account_id: user.id,
+         // Store any other user data you want
+         favorite_color: "blue",
+       });
+     } catch (e) {
+       console.error(`Failed to create custom user data document for user:${user.id}`);
+       throw e
+     }
+   }
+
+.. tip::
+
+   Once you've configured a user creation function, App Services
+   prevents you from deleting the function. If you want to delete the
+   function, first change your custom user data configuration to use a
+   different user creation function.
+
+.. note::
+
+   You currently cannot define a user creation function in the Admin UI.
+   Instead, use {+cli+} or the Admin API.
+
+.. _custom-user-data-permissions:
+
+Configure Permissions for Custom User Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Because custom user data belongs to a specific user, it could contain
+personal or private information depending on the needs of your
+application. If your application stores such information in custom user
+data, you should restrict access to custom user data appropriately.
+While the permissioning model of your custom user data depends on the
+needs of your application, consider using one of the following permission
+models to restrict read and write access to privileged users only: 
+
+- Make your custom user data readable and writable by only the user
+  whose ID matches the user ID field of each custom user data
+  document. In this permissioning model, the user writes custom user
+  data to a :ref:`MongoDB data source <data-sources>` either directly to
+  or through :ref:`Sync <sync>`.
+
+- Make your custom user data readable and writable by only a
+  system user  in a system function. Create
+  a system function that handles edits to custom user data for a user
+  using the ``user.id`` value provided by the :ref:`function context
+  <context-user>`. In this permissioning model, the user writes custom
+  user data using the :ref:`Functions API <functions>`.
+
+.. _enable-custom-user-data-procedure:
+
+Procedure
+~~~~~~~~~
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+      
+      .. procedure::
+
+         .. step:: Navigate to the Custom User Data Configuration Screen
+
+            You can configure and enable custom user data in the App Services UI. To
+            get to the configuration page, click :guilabel:`App Users` in the
+            left navigation menu and then select the :guilabel:`Custom User Data`
+            tab.
+
+
+         .. step:: Enable Custom User Data
+
+            To configure App Services to associate data in a collection with your
+            application's users, set the :guilabel:`Enable Custom User Data`
+            toggle to :guilabel:`On`.
+
+            .. figure:: /images/enable-custom-user-data-toggle-realm-ui.png
+               :alt: The toggle button to enable custom user data in the App Services UI, set to On.
+               :width: 750px
+               :lightbox:
+
+
+         .. step:: Specify the Custom User Data Collection
+
+            You must store the custom data for your application's users in a
+            single collection of a linked MongoDB Atlas cluster. To configure your
+            application to read user data from this collection, you need to
+            specify the following values:
+
+            - :guilabel:`Cluster Name`: The name of a :doc:`linked MongoDB cluster
+              </mongodb>` that contains the custom user data collection.
+
+            - :guilabel:`Database Name`: The name of the MongoDB database that
+              contains the custom user data collection.
+
+            - :guilabel:`Collection Name`: The name of the MongoDB collection that
+              contains custom user data.
+
+            .. figure:: /images/custom-user-data-config-realm-ui.png
+               :alt: Input boxes for the collection and user id field in the App Services UI.
+               :width: 750px
+               :lightbox:
+
+
+         .. step:: Specify the User ID Field
+
+            Every document in the custom user data collection should have a field that
+            maps it to a specific application user. The field must be present in every
+            document that maps to a user and contain the user's ID as a string.
+
+            Specify the name of the field that contains each user's ID in the
+            :guilabel:`User ID Field` input.
+
+            .. note::
+
+               If two documents contain the same user ID, App Services only
+               maps the first matching document to the user.
+
+
+         .. step:: Deploy the Updated Application
+
+            Once you have configured the custom user data collection, you can
+            make custom user data available to client applications by deploying
+            your application. To deploy a draft application from the App Services UI:
+
+            1. Click :guilabel:`Deploy` in the left navigation menu.
+
+            2. Find the draft in the deployment history table and then click
+               :guilabel:`Review & Deploy Changes`.
+
+            3. Review the diff of changes and then click :guilabel:`Deploy`.
+
+            Once the application successfully deploys, App Services begins to associate
+            custom data with users. When a user logs in, App Services automatically
+            queries the custom user data collection for a document where the
+            specified :guilabel:`User ID Field` contains the user's ID. If a
+            document matches, App Services exposes the data in the document in the
+            ``custom_data`` field of that user's :ref:`user object
+            <user-objects>`.
+   
+   .. tab::
+      :tabid: cli
+      
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To define custom user data with {+cli-bin+}, you need a local copy of your
+            application's configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the :guilabel:`Deploy > Export App` screen in the App Services UI.
+
+
+         .. step:: Configure Custom User Data
+
+            You must store the custom data for your application's users in a single
+            collection of a :ref:`linked Atlas cluster <link-a-data-source>`. Every
+            document in the collection should include a specific field that contains the
+            user ID of the App Services user that it describes.
+
+            To configure your application to read user data from this collection, define a
+            :ref:`custom user data configuration document <config-custom-user-data>` in
+            the ``/auth/custom_user_data.json``:
+
+            .. code-block:: javascript
+               :caption: /auth/custom_user_data.json
+
+               {
+                 "enabled": <Boolean>,
+                 "mongo_service_name": "<MongoDB Data Source Name>",
+                 "database_name": "<Database Name>",
+                 "collection_name": "<Collection Name>",
+                 "user_id_field": "<Field Name>",
+                 "on_user_creation_function_name": "<Function Name>"
+               }
+
+
+         .. step:: Deploy the Custom User Data Configuration
+
+            Once you've configured custom user data, you can push the updated config to
+            your remote app. {+cli+} immediately deploys the update on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"
+
+Access Custom User Data from a Client Application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. tabs-realm-sdks::
+   
+   .. tab::
+      :tabid: node
+      
+      .. tip:: Access Custom User Data
+         
+         Learn how to :ref:`access Custom User Data from a Node
+         application <node-access-custom-user-data>`.
+
+   .. tab::
+      :tabid: react-native
+      
+      .. tip:: Access Custom User Data
+         
+         Learn how to :ref:`access Custom User Data from a React Native
+         application <react-native-access-custom-user-data>`.
+
+   .. tab::
+      :tabid: android
+
+      .. tip:: Access Custom User Data
+         
+         Learn how to :ref:`access Custom User Data from an Android
+         application <java-access-custom-user-data>`.
+
+   .. tab::
+      :tabid: ios
+
+      .. tip:: Access Custom User Data
+         
+         Learn how to :ref:`access Custom User Data from an iOS
+         application <ios-custom-user-data>`.
+
+   .. tab::
+      :tabid: dotnet
+
+      .. tip:: Access Custom User Data
+         
+         Learn how to :ref:`access Custom User Data from a .NET
+         application <dotnet-custom-user-data>`.
+
+   .. tab::
+      :tabid: flutter
+
+      .. tip:: Access Custom User Data
+
+         Learn how to :ref:`access Custom User Data from a Flutter
+         application <flutter-custom-user-data>`.
+
+.. _configure-user-metadata-on-the-backend:
+
+Enable User Metadata 
+--------------------
+
+Atlas App Services can read user metadata from authentication providers. Then, 
+App Services exposes each user's data in a field of their :ref:`user 
+object <user-objects>`. For example, you might want to access a user's name, 
+email, birthday, or gender.
+
+You can configure App Services to request metadata with the access token 
+when users log in. You can access that data from the logged-in user's 
+object with a client SDK.
+
+Configuration
+~~~~~~~~~~~~~
+
+You can define the metadata to request when you configure authentication 
+providers. Specify optional metadata fields that you want to access through 
+the user's account. These metadata fields vary depending on provider.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Provider
+     - Metadata fields
+
+   * - Facebook
+     - - ``name``
+       - ``first_name``
+       - ``last_name``
+       - ``picture``
+       - ``gender``
+       - ``birthday``
+       - ``min_age``
+       - ``max_age``
+       - ``email``
+   
+   * - Google
+     - - ``name``
+       - ``first_name``
+       - ``last_name``
+       - ``picture``
+       - ``email``
+
+   * - Custom JWT
+     - Custom. You specify :ref:`JWT authentication metadata
+       <custom-jwt-authentication-configuration-metadata-fields>` to request when 
+       you configure it.
+
+.. _enable-user-metadata-procedure:
+
+Procedure
+~~~~~~~~~
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+      
+      .. procedure::
+
+         .. step:: Navigate to the Authentication Provider Configuration Screen
+
+            You can configure and enable user metadata in the App Services UI. To
+            get to the configuration page:
+
+            - Click :guilabel:`Authentication` in the left navigation menu.
+            - Select the :guilabel:`Authentication Providers` tab.
+            - Press the :guilabel:`EDIT` button for the provider whose metadata
+              you want to configure.
+
+
+         .. step:: Configure User Metadata
+
+
+            **Google or Facebook**
+
+            Select the checkboxes next to the metadata fields you want to enable.
+
+            .. figure:: /images/configure-user-metadata-google-facebook-realm-ui.png
+               :alt: The checkboxes to enable user metadata fields in the App Services UI
+               :width: 750px
+               :lightbox:
+
+            **Custom JWT Authentication**
+
+            You can specify the metadata fields that your identity provider supports.
+            After you press the :guilabel:`Add Field` button, define:
+
+            - The path
+            - The field name
+            - Whether the field is optional or required
+
+            For more details, see: :ref:`JWT metadata fields
+            <custom-jwt-authentication-configuration-metadata-fields>`.
+
+            .. figure:: /images/configure-user-metadata-custom-jwt-realm-ui.png
+               :alt: Add metadata required/optional, path, and name in the App Services UI
+               :width: 750px
+               :lightbox:
+
+            After you configure the metadata you want to access, press
+            the :guilabel:`Save Draft` button.
+
+
+         .. step:: Deploy the Updated Application
+
+            After you update the metadata configuration, you must deploy your
+            application. To deploy a draft application from the App Services UI:
+
+            1. Click :guilabel:`Deploy` in the left navigation menu.
+
+            2. Find the draft in the deployment history table and then click
+               :guilabel:`Review & Deploy Changes`.
+
+            3. Review the diff of changes and then click :guilabel:`Deploy`.
+
+            Once the application successfully deploys, App Services begins to associate
+            metadata with users. When a user logs in, App Services requests user
+            permission to access the requested metadata. If the user approves,
+            App Services exposes the data in that user's :ref:`user object
+            <user-objects>`.
+
+   
+   .. tab::
+      :tabid: cli
+      
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To update your app with {+cli-bin+}, you need a local copy of its
+            configuration files.
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+               realm-cli pull --remote="<Your App ID>"
+
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the App Services UI. Go to the :guilabel:`Deploy > Export App` screen from
+               the App Dashboard.
+
+
+         .. step:: Configure User Metadata
+
+            You can find authentication provider :ref:`metadata_fields
+            <config-auth-providers>` for your app in ``/auth/providers.json``.
+            Update this array to request user metadata from the authentication provider.
+
+            **Google or Facebook**
+
+            This array resembles:
+
+            .. code-block:: javascript
+               :caption: /auth/providers.json
+
+               { ...other config details...
+                 "metadata_fields": [
+                   {
+                     "required": false,
+                     "name": "name"
+                   },
+                   {
+                     "required": false,
+                     "name": "gender"
+                   }
+                 ]
+               }
+
+            **Custom JWT authentication**
+
+            The metadata_fields array has an additional property, ``field_name``.
+            In custom JWT authentication, ``name`` represents the path to the field.
+            The ``field_name`` represents the name of the field.
+
+            .. code-block:: javascript
+               :caption: /auth/providers.json
+
+               { ...other config details...
+                 "metadata_fields": [
+                   {
+                     "required": true,
+                     "name": "user.name",
+                     "field_name": "name"
+                   },
+                   {
+                     "required": false,
+                     "name": "user.favoriteColor",
+                     "field_name": "favoriteColor"
+                   }
+                 ]
+               }
+
+
+         .. step:: Deploy the Custom User Data Configuration
+
+            Once you've configured custom user data, you can push the updated config to
+            your remote app. {+cli+} immediately deploys the update on push.
+
+            .. code-block:: bash
+
+               realm-cli push --remote="<Your App ID>"
+
+Access User Metadata from a Client Application
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. tabs-realm-sdks::
+
+   .. tab::
+      :tabid: ios
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from an iOS
+         application <ios-read-user-metadata>`.
+
+   .. tab::
+      :tabid: dotnet
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from a .NET
+         application <dotnet-read-user-metadata>`.
+
+   .. tab::
+      :tabid: flutter
+
+      .. tip:: Read a User's Metadata
+         
+         Learn how to :ref:`read a user's metadata from a Flutter
+         application <flutter-read-user-metadata>`.

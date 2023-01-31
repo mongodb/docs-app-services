@@ -25,8 +25,8 @@ section lists common errors and describes how to and handle them.
 
 .. _sync-protocol-errors:
 
-Sync Protocol Errors 
----------------------
+Sync Protocol Errors
+--------------------
 
 The following table describes :ref:`Device Sync protocol <sync-protocol>`
 errors and how to handle them. Atlas App Services reports errors in your
@@ -259,6 +259,18 @@ and MongoDB Atlas.
        To resolve this error, :ref:`terminate
        <terminating-realm-sync>` and :ref:`re-enable Sync
        <re-enable-realm-sync>`.
+
+MongoDB Connection Errors
+-------------------------
+
+If you enable Device Sync on a newly-created cluster, the operation may
+fail to parse the cluster URI. This happens because an SRV record for
+the cluster hasn't propagated yet. There are two possible workarounds,
+either:
+
+- Wait five minutes, then enable Atlas Device Sync.
+
+- Unlink and :ref:`re-link the cluster <link-a-data-source>`.
 
 .. _sync-client-errors:
 

@@ -35,17 +35,44 @@ A **permission** is a status that Atlas App Services assigns to individual users
 to control what they can and cannot do with your app's data. App Services uses
 both document-level and field-level permissions:
 
-- Document-level permissions control whether a user can insert, delete, modify,
-  and search for a specific document in a MongoDB collection. These permissions
-  always apply to the entire document regardless of the content.
+- :ref:`Document-level permissions <document-level-permissions>` 
+  control whether a user can insert, delete, modify,
+  and search for a specific document in a MongoDB collection. 
 
-- Field-level permissions control whether a user can read or write the data in
-  specific fields of a document. These permissions only affect the field they
-  apply to, which means that a user may have read or write access to only a
-  subset of the entire document.
+- :ref:`Field-level permissions <field-level-permissions>`
+  control whether a user can read or write the data in
+  specific fields of a document. 
 
-What are Roles?
-~~~~~~~~~~~~~~~
+.. _document-level-permissions:
+
+Document-Level Permissions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A role's document-level permissions determine which actions that affect
+the entire document can be performed. These permissions always apply to the 
+entire document regardless of the content. A role can have the
+following document-level permissions:
+
+- **Insert**: You can insert new documents.
+- **Delete**: You can delete existing documents.
+- **Search**: You can search for the document using :ref:`Atlas Search <fts-top-ref>`.
+
+.. _field-level-permissions:
+
+Field-Level Permissions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A role's field-level permissions determine whether a user can read or
+write fields within the document. These permissions only affect the 
+field they apply to, so a user can have read or write access to only 
+a subset of the entire document.
+
+You can define field-level permissions for specific fields and
+default read/write permissions for any additional fields that you 
+don't explicitly define.
+
+Roles
+-----
 
 A **role** is a named set of permissions that a user may have for documents in a
 MongoDB collection. A role has an "apply when" :ref:`expression <expressions>`
@@ -147,41 +174,8 @@ some of its fields, App Services omits the document or fields from the results.
               ]
             }
 
-Why Define a Role?
-~~~~~~~~~~~~~~~~~~
-
-A role carries a specific set of permissions that you might expose to your app's
-users. The exact roles and permissions that you define will vary based on your
-app's data and requirements. To determine good roles for a collection, consider
-your data from the perspective of your app's users and what it might mean to
-them.
-
-.. example::
-   
-   In addition to **Employee** and **Manager** roles, you might add a
-   **Teammate** role to the ``employees`` collection to represent a user on the
-   same team as the document's employee. Teammates can read each other's data
-   but cannot modify it.
-   
-   .. code-block:: json
-      
-      {
-        "name": "Teammate",
-        "apply_when": { "team": "%%user.data.team" },
-        "insert": false,
-        "delete": false,
-        "read": true,
-        "write": false,
-        "search": true,
-        "fields": {},
-        "additional_fields": {
-          "read": true,
-          "write": false
-        }
-      }
-
 How App Services Assigns Roles
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 App Services assigns roles at different times depending on whether you're using
 :ref:`Device Sync (Flexible Mode) <sync>` or not.
@@ -207,7 +201,7 @@ query.
 
 .. example::
    
-   This request would cause App Services to evaluate a role for every document in the
+   The following request causes App Services to evaluate a role for every document in the
    ``restaurants`` collection where the ``city`` field is set to ``"Chicago"``:
    
    .. code-block:: javascript
@@ -223,7 +217,7 @@ role, if any. A role applies to a given document if its "apply when"
 :ref:`expression <expressions>` evaluates to ``true`` when run against
 the document.
 
-The set of roles that a user may play for a given request depends on the
+The set of roles that a user can use for a given request depends on the
 collection they're accessing. If the collection has a set of
 collection-level roles defined, then a user may play any of those roles.
 If there are no collection-level roles, the request falls back to the
@@ -233,7 +227,7 @@ data source's default roles.
    
    An employee will always be on their own team, so both the **Employee** and
    **Teammate** roles apply to them for their own document. However, they can
-   only one play one role, so we want to use **Employee** because it's more
+   use only one role, so we want to use **Employee** because it's more
    specific.
    
    To configure this, specify **Employee** earlier than **Teammate** in the
@@ -285,6 +279,68 @@ the user is **not** assigned an updated role until they start a new session. For
 example, if the user's metadata or the role's "apply when" expression changes,
 the user continues to use their existing session role until the next time they
 start a session.
+
+.. _apply-when-expressions:
+
+Apply When Expressions
+~~~~~~~~~~~~~~~~~~~~~~
+
+A role's "apply when" expression is a :ref:`rule expression <expressions>` that
+determines whether the role should be assigned.
+
+You can use expression variables to make roles dynamic. For example, you can use the
+:json-expansion:`%%user` expansion to refer to the specific user that issued the
+request. This lets you customize your data access permissions on a per-user
+basis.
+
+When not using Device Sync, you can refer to the current document for which a
+role is being assigned. For example, you can use :json-expansion:`%%root`. This
+lets you customize your data access permissions on a per-document basis.
+
+.. _document-filters-expressions:
+
+Document Filters
+~~~~~~~~~~~~~~~~
+
+The role's ``document_filters`` expressions determine whether the role's
+subsequent document- and field-level permissions may be evaluated at all.
+
+.. _role-order:
+
+Role Order
+~~~~~~~~~~
+
+The roles for a given collection each have a position that determines
+the order in which they are evaluated and applied. Each role's apply
+when expression is evaluated in role order until a role applies or no
+roles remain.
+
+A user may only have one role per document in a given query. Role order
+determines which role applies in the event that multiple roles' "apply when"
+expressions are true. Therefore, when defining roles, put the most specific
+roles first.
+
+.. _sync-compatible-roles:
+
+Sync-Compatible Roles
+~~~~~~~~~~~~~~~~~~~~~
+
+If Device Sync (Flexible Mode) is enabled, an assigned role must be **sync
+compatible**. If the role is not sync compatible, but its "apply when"
+evaluated to true, others roles are not considered; access is denied.
+
+A role is not sync compatible if any of the following conditions are true:
+
+- ``document_filters.read`` or ``document_filters.write`` are undefined.
+- A document filter, insert, or delete expression references: a field that is
+  not a :ref:`queryable field <queryable-fields>`; an expansion other than
+  ``%%true``, ``%%false``, ``%%values``, ``%%environment``, or ``%%user``; or
+  the ``%function`` operator.
+- Field-level permissions are not boolean literals (``true`` or ``false``).
+- Field-level permissions are specified for the top-level ``_id`` field.
+
+.. _define-roles-and-permissions:
+.. _define-roles:
 
 Define Roles & Permissions
 --------------------------
@@ -423,87 +479,3 @@ deploying configuration files with {+cli+}:
          .. code-block:: bash
             
             realm-cli push
-
-.. _apply-when-expressions:
-
-Apply When Expressions
-~~~~~~~~~~~~~~~~~~~~~~
-
-A role's "apply when" expression is a :ref:`rule expression <expressions>` that
-determines whether the role should be assigned.
-
-You can use expression variables to make roles dynamic. For example, you can use the
-:json-expansion:`%%user` expansion to refer to the specific user that issued the
-request. This lets you customize your data access permissions on a per-user
-basis.
-
-When not using Device Sync, you can refer to the current document for which a
-role is being assigned. For example, you can use :json-expansion:`%%root`. This
-lets you customize your data access permissions on a per-document basis.
-
-.. _document-filters-expressions:
-
-Document Filters
-~~~~~~~~~~~~~~~~
-
-The role's ``document_filters`` expressions determine whether the role's
-subsequent document- and field-level permissions may be evaluated at all.
-
-.. _document-level-permissions:
-
-Document-Level Permissions
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A role's document-level permissions determine which actions that affect
-the entire document a user with the role can perform. A role can have
-any of the following document-level permissions:
-
-- **Insert**: The role can insert new documents.
-- **Delete**: The role can delete existing documents.
-- **Search**: The role can find the document in Atlas Search results.
-
-.. _field-level-permissions:
-
-Field-Level Permissions
-~~~~~~~~~~~~~~~~~~~~~~~
-
-A role's field-level permissions determine whether or not a user with
-the role can read or write individual fields within the document.
-
-You can define field-level permissions for specific fields as well as
-default read/write permissions for any additional fields that you don't
-explicity define.
-
-.. _role-order:
-
-Role Order
-~~~~~~~~~~
-
-The roles for a given collection each have a position that determines
-the order in which they are evaluated and applied. Each role's apply
-when expression is evaluated in role order until a role applies or no
-roles remain.
-
-A user may only have one role per document in a given query. Role order
-determines which role applies in the event that multiple roles' "apply when"
-expressions are true. Therefore, when defining roles, put the most specific
-roles first.
-
-.. _sync-compatible-roles:
-
-Sync-Compatible Roles
-~~~~~~~~~~~~~~~~~~~~~
-
-If Device Sync (Flexible Mode) is enabled, an assigned role must be **sync
-compatible**. If the role is not sync compatible, but its "apply when"
-evaluated to true, others roles are not considered; access is denied.
-
-A role is not sync compatible if any of the following conditions are true:
-
-- ``document_filters.read`` or ``document_filters.write`` are undefined.
-- A document filter, insert, or delete expression references: a field that is
-  not a :ref:`queryable field <queryable-fields>`; an expansion other than
-  ``%%true``, ``%%false``, ``%%values``, ``%%environment``, or ``%%user``; or
-  the ``%function`` operator.
-- Field-level permissions are not boolean literals (``true`` or ``false``).
-- Field-level permissions are specified for the top-level ``_id`` field.

@@ -33,11 +33,15 @@
    │   └── files/
    │       └── <files to host>
    ├── http_endpoints/
-   │   └── <service name>/
+   │   ├── config.json
+   │   ├── data_api_config.json
+   │   └── [Deprecated] <service name>/
    │       ├── config.json
    │       └── incoming_webhooks/
    │           ├── config.json
    │           └── source.js
+   ├── log_forwarders/
+   │   └── <name>.json
    ├── sync/
    │   └── config.json
    ├── triggers/
