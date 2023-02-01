@@ -49,6 +49,12 @@ called :ref:`expansions <expansions>`, and can use built-in
      }
    }
 
+Restrictions
+------------
+
+When using Device Sync, expressions have special restrictions. See
+:ref:`sync-compatible-expressions`.
+
 Expression Syntax
 -----------------
 
@@ -167,8 +173,12 @@ and the context at the time of evaluation.
    
    Some expansions, like :json-expansion:`%%user`, are available in all
    expressions. Others are limited to specific contexts, like
-   :json-expansion:`%%root` which is only available in linked collection
-   rule expressions.
+   :json-expansion:`%%root` which is not Sync compatible and is only available in
+   linked collection rule expressions.
+
+   When using Device Sync, expansions have special restrictions. See
+   :ref:`sync-compatible-expansions`.
+
 
 Logical Expansions
 ~~~~~~~~~~~~~~~~~~
