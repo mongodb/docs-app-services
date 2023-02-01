@@ -1,8 +1,8 @@
 .. _flexible-sync-permissions-guide:
 
-===============================
-Flexible Sync Permissions Guide
-===============================
+=============================
+Device Sync Permissions Guide
+=============================
 
 .. default-domain:: mongodb
 
@@ -12,7 +12,7 @@ Flexible Sync Permissions Guide
    :depth: 2
    :class: singlecol
 
-This page shows how to set up your flexible sync app's permissions for the
+This page shows how to set up your Device Sync app's permissions for the
 following common use cases:
 
 - :ref:`read-write-own-data`
@@ -27,7 +27,7 @@ Using the Template Apps
 -----------------------
 
 You can get some of these permissions models up and running quickly with our
-Flexible Sync Permissions Guide template apps. Each template app comes with a
+Device Sync Permissions Guide template apps. Each template app comes with a
 backend and a Node.js demo client. The backend has all functions, permissions,
 and triggers set up as described here. The demo client connects to the backend
 and runs through a simple script to demonstrate how the backend works.
@@ -65,7 +65,7 @@ need collection-specific roles that only apply to some collections and not
 others. In particular, if a rule in the ``defaultRoles`` uses a "queryable
 field" that doesn't exist on objects in a certain collection, you can override
 the rules for that collection by providing a collection-specific role. See
-:ref:`flexible-sync-roles`.
+:ref:`roles`.
 
 .. _read-write-own-data:
 
@@ -83,8 +83,9 @@ To set up the "Read & Write Own Data" strategy, follow the general steps:
 
 .. include:: /includes/use-flex-sync-templates.rst
 
-Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
-use the template dropdown to select the template called "Users can only 
+Now you need to configure the permissions. Navigate to the :guilabel:`Rules`
+page. Click the :guilabel:`Default Roles and Filters` button to edit the default
+roles. Use the template dropdown to select the template called "Users can only
 read and write their own data".
 
 This populates the rule expression box with the following:
@@ -93,24 +94,30 @@ This populates the rule expression box with the following:
     :emphasize-lines: 6-7
 
     {
-      "defaultRoles": [
-        {
-          "name": "owner-read-write", 
-          "applyWhen": {},
-          "read": { "owner_id": "%%user.id" },
-          "write": { "owner_id": "%%user.id" }
-        }
-      ]  
+      "name": "owner-read-write", 
+      "apply_when": {},
+      "document_filters": {
+        "read": { "owner_id": "%%user.id" },
+        "write": { "owner_id": "%%user.id" }
+      },
+      "read": true,
+      "write": true
     }
 
-Note that the "read" and "write" expressions use the ``owner_id`` field we
-marked as "queryable" above. It also uses the ``%%user`` "expansion" to read
-the requesting user's id. Realm replaces (or "expands") the expansion at
-evaluation time with the corresponding value -- in this case, the user object.
+Note that the ``document_filters.read`` and ``document_filters.write``
+expressions use the ``owner_id`` field we marked as "queryable" above. It also
+uses the ``%%user`` :ref:`expansion <expansions>` to read the requesting user's
+id. App Services replaces (or "expands") the expansion at evaluation time with
+the corresponding value -- in this case, the user object.
 
-To finish, skip :guilabel:`Advanced Configuration`, and then click 
-:guilabel:`Save Changes` to enable Sync with these permissions.
-
+When evaluating permissions on a given document, App Services checks
+``document_filters.read`` and ``document_filters.write`` before the
+corresponding top-level ``read`` or ``write`` expressions. For example, if
+``document_filters.write`` evaluates to false, write access is denied; no
+subsequent rules are checked. However, if ``document_filters.write`` evaluates
+to true, App Services checks the top-level ``write`` expression. In this case,
+``write`` is ``true``, so write access is granted on the whole document. For
+more information, see :ref:`device-sync-compatibility`.
 
 .. _write-own-data-read-all-data:
 
@@ -127,9 +134,10 @@ steps:
 
 .. include:: /includes/use-flex-sync-templates.rst
 
-Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
-use the template dropdown to select the template called "Users can read all data 
-but only write their own data".
+Now you need to configure the permissions. Navigate to the :guilabel:`Rules`
+page. Click the :guilabel:`Default Roles and Filters` button to edit the default
+roles. Use the template dropdown to select the template called "Users can read
+all data but only write their own data".
 
 This populates the rule expression box with the following:
 
@@ -137,25 +145,29 @@ This populates the rule expression box with the following:
     :emphasize-lines: 6-7
 
     {
-      "defaultRoles": [
-        {
-          "name": "owner-write", 
-          "applyWhen": {},
-          "read": true,
-          "write": { "owner_id": "%%user.id" }
-        }    
-      ]  
+      "name": "owner-write", 
+      "apply_when": {},
+      "document_filters": {
+        "read": true,
+        "write": { "owner_id": "%%user.id" }
+      },
+      "read": true,
+      "write": true
     }
 
-Note that the "read" expression is set to ``true``, indicating that no matter
-which user is authenticated, they can access all of the data. The "write"
-expression uses the ``owner_id`` field we marked as "queryable" above and uses
-the ``%%user`` "expansion" to match against the requesting user's id. Realm
-replaces (or "expands") the expansion at evaluation time with the
-corresponding value -- in this case, the user object.
+Note that the ``document_filters.read`` expression is set to ``true``,
+indicating that no matter which user is authenticated, they can read all of the
+data. The ``document_filters.write`` expression uses the ``owner_id`` field we
+marked as "queryable" above and uses the ``%%user`` :ref:`expansion
+<expansions>` to match against the requesting user's id. App Services replaces
+("expands") the expansion at evaluation time with the corresponding value -- in
+this case, the user object.
 
-To finish, skip :guilabel:`Advanced Configuration`, and then click 
-:guilabel:`Save Changes` to enable Sync with these permissions.
+If and only if ``document_filters.write`` evaluates to true will App Services
+check the top-level ``write`` expression. When ``document_filters.write``
+evaluates to false, write access is denied regardless of what the top-level
+``write`` expression says. For more information, see
+:ref:`device-sync-compatibility`.
 
 .. _admin-privileges:
 
@@ -213,50 +225,51 @@ strategy. To do so, follow these general steps:
 
 .. include:: /includes/use-flex-sync-templates.rst
 
-Now you need to configure the permissions. Under :guilabel:`Define Permissions`,
-use the template dropdown to select the template called "Users can read and 
-write their own data, admins can read and write all data".
+Now you need to configure the permissions. Navigate to the :guilabel:`Rules`
+page. Click the :guilabel:`Default Roles and Filters` button to edit the default
+roles. Use the template dropdown to select the template called "Users can read
+and write their own data, admins can read and write all data".
 
 This populates the rule expression box with the following:
 
 .. code-block:: json
 
-   {
-     "defaultRoles": [
-       {
-         "name": "admin", 
-         "applyWhen": { 
-            "%%user.custom_data.isGlobalAdmin": true 
-         },
-         "read": true,
-         "write": true
-       },
-       {
-         "name": "user", 
-         "applyWhen": {},
-         "read": { "owner_id": "%%user.id" },
-         "write": { "owner_id": "%%user.id" }
-       }
-     ]  
-   }
+   [
+      {
+        "name": "admin", 
+        "apply_when": { 
+          "%%user.custom_data.isGlobalAdmin": true 
+        },
+        "document_filters": {
+          "read": true,
+          "write": true
+        }
+      },
+      {
+        "name": "user", 
+        "apply_when": {},
+        "document_filters": {
+          "read": { "owner_id": "%%user.id" },
+          "write": { "owner_id": "%%user.id" }
+        },
+        "read": true,
+        "write": true
+      }
+   ]
 
 .. note:: Change the default settings
 
-   The generated expression has two objects in the "defaultRoles" 
-   array. The first defines the permissions for an administrator. Note that the 
-   auto-generated expression assumes there is a boolean field in the custom user 
-   data document named ``isGlobalAdmin``. Depending on how you defined your custom 
-   user data document, you may need to change this. 
+   This configuration has two default roles. The first defines the permissions
+   for an administrator. Note that the auto-generated expression assumes there
+   is a boolean field in the custom user data document named ``isGlobalAdmin``.
+   Depending on how you defined your custom user data document, you might need
+   to change this. 
    
-   The second section of the "defaultRoles" array defines the rules for all other 
-   users. The default is to restrict user access to read and write only their own 
-   data. You can change either or both of these fields to ``true``, enabling 
-   users to read and/or write all data. See the previous sections to learn more 
-   about these strategies.
-
-To finish, skip :guilabel:`Advanced Configuration`, and then click 
-:guilabel:`Save Changes` to enable Sync with these permissions.
-
+   The second default role specifies the rules for all other users. The default
+   is to restrict user access to read and write only their own data. You can
+   change either or both of these fields to ``true``, enabling users to read
+   and/or write all data. See the previous sections to learn more about these
+   strategies.
 
 .. _restricted-news-feed:
 
@@ -354,23 +367,24 @@ general steps:
 
 .. include:: /includes/use-flex-sync-templates.rst
 
-Now you need to configure the permissions. Under :guilabel:`Define Permissions`, 
-use the template dropdown to select the template called "Users can only read 
-and write their own data". This populates the rule expression box with the 
-following, which is not *exactly what we want*, but provides most of the logic 
+Now you need to configure the permissions. Navigate to the :guilabel:`Rules`
+page. Click the :guilabel:`Default Roles and Filters` button to edit the default
+roles. Use the template dropdown to select the template called "Users can only
+read and write their own data". This populates the rule expression box with the
+following, which is not *exactly what we want*, but provides most of the logic
 for us:
 
 .. code-block:: json
 
   {
-    "defaultRoles": [
-      {
-        "name": "owner-read-write", 
-        "applyWhen": {},
-        "read": { "owner_id": "%%user.id" },
-        "write": { "owner_id": "%%user.id" }
-      }
-    ]  
+    "name": "owner-read-write", 
+    "apply_when": {},
+    "document_filters": {
+      "read": { "owner_id": "%%user.id" },
+      "write": { "owner_id": "%%user.id" }
+    },
+    "read": true,
+    "write": true
   }
 
 Note that a user can currently read only their own documents (``"read":
@@ -381,38 +395,36 @@ authors have IDs in the user's "subscribedTo" array. To do so, we use the
 .. code-block:: json
 
   {
-    "defaultRoles": [
-      {
-        "name": "owner-write",
-        "applyWhen": {},
-        "read": {
-          "owner_id": {
-            "$in": "%%user.custom_data.subscribedTo"
-          }
-        },
-        "write": {
-          "owner_id": "%%user.id"
+    "name": "owner-read-write", 
+    "apply_when": {},
+    "document_filters": {
+      "read": {
+        "owner_id": {
+          "$in": "%%user.custom_data.subscribedTo"
         }
-      }
-    ]
+      },
+      "write": { "owner_id": "%%user.id" }
+    },
+    "read": true,
+    "write": true
   }
 
 Update the rule expression box with this new logic and save the changes.
 
-Note: we changed the "read" expression to only mention the authors in the
-subscribedTo array, but users still have "read" access to their own documents
-because of the "write" expression. If "write" applies, "read" permission is
-automatically granted.
+Note: we changed the ``document_filters.read`` expression to only mention the
+authors in the subscribedTo array, but users still have "read" access to their
+own documents because of the ``document_filters.read`` expression. Whenever
+write access is granted, read access is implicitly granted.
 
 Create subscribeToUser Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We now need a function that subscribes one user to another. Our permissions are
-set up to consider a subscriber "subscribed" to an author if the author's user
-ID is in the subscriber's custom user data "subscribedTo" array. The
-"subscribeToUser" function takes a user's email address, finds the corresponding
-user ID in the custom user data collection, and adds the ID to the requesting
-user's "subscribedTo" array.
+We need a function that subscribes one user to another. Our permissions are set
+up to consider a subscriber "subscribed" to an author if the author's user ID is
+in the subscriber's custom user data "subscribedTo" array. The "subscribeToUser"
+function takes a user's email address, finds the corresponding user ID in the
+custom user data collection, and adds the ID to the requesting user's
+"subscribedTo" array.
 
 Note that this function will run under System authentication and writes to the
 custom user data. When using custom user data for permissions, clients must
@@ -514,34 +526,46 @@ following into the rule expression box:
 .. code-block:: json
 
     {
-      "rules": {},
-      "defaultRoles": [
-        {
-          "name": "read-only",
-          "applyWhen": {},
-          "write": {
-            "$or": [
-              {
-                "owner_id": "%%user.id"
-              },
-              {
-                "collaborators": "%%user.id"
-              }
-            ]
-          }
+      "name": "collaborator",
+      "apply_when": {},
+      "document_filters": {
+        "read": {
+          "$or": [
+            {
+              "owner_id": "%%user.id"
+            },
+            {
+              "collaborators": "%%user.id"
+            }
+          ]
+        },
+        "write": {
+          "$or": [
+            {
+              "owner_id": "%%user.id"
+            },
+            {
+              "collaborators": "%%user.id"
+            }
+          ]
         }
-      ]
+      },
+      "read": true,
+      "write": true
     }
   
-Take a look at the "write" expression. ``$or`` takes an array of options. We
-have two possible conditions where a user may write the document:
+The "write" and "read" expressions are identical. Take a look at one of them.
+``$or`` takes an array of options. We have two possible conditions where a user
+may write the document:
 
 - The ``owner_id`` field of the document equals the user's ID
 - The ``collaborators`` array field of the document contains the user's ID.
 
 Generally speaking, when a user is granted write permission, that user
-automatically gets read permission. Therefore, we omitted the "read"
-expression as it would be redundant in this case.
+automatically gets read permission. However, we can't omit the
+``document_filters.read`` expression because App Services requires both
+``document_filters.read`` and ``document_filters.write`` to be defined for the
+role to be :ref:`sync compatible <sync-compatible-roles>`.
 
 
 Adding a Collaborator
@@ -556,13 +580,14 @@ Security
 
 We don't recommend using this model for highly sensitive data.
 
-This model uses the flexible sync permissions system to keep documents private
-between the document creator and the collaborators they add to the document.
-However, if a user has write access to a document, they may write to any field
-of the document. Consequently, this strategy **allows collaborators to add other
+This model uses the permissions system to keep documents private between the
+document creator and the collaborators they add to the document. However, if a
+user has write access to a document, they may write to any field of the
+document. Consequently, this strategy **allows collaborators to add other
 collaborators**. It would also allow a collaborator to edit the ``owner_id``
-field. Field-level permissions are boolean, so we can't limit writes to these
-fields to specific users.
+field. Field-level permissions have to be boolean literals for :ref:`sync
+compatibility <sync-compatible-roles>`, so we can't limit writes to these fields
+to specific users.
 
 User Search
 ~~~~~~~~~~~
@@ -636,8 +661,8 @@ Tiered Privileges
 
    Read the output on your console to see what the demo is doing.
 
-In this permission strategy, we will introduce **roles** as well as rules. Their 
-are two roles: **a team member** and **a team administrator**. The rules are as 
+In this permission strategy, we'll add special **roles** as well as rules. There
+are two roles: **a team member** and **a team administrator**. The rules are as
 follows:
 
 - Each user is a member of a team. 
@@ -652,7 +677,7 @@ To make this work, we need to do the following:
 - Create a trigger function to create a new custom user data object for each 
   new user
 - Create a function to add a user to a team
-- Define the Sync permissions
+- Define the permissions
 
 .. include:: /includes/note-custom-user-data-and-permissions.rst
 
@@ -708,9 +733,10 @@ To create the function, follow these steps:
       };
 
 
-Define Sync Permissions
-~~~~~~~~~~~~~~~~~~~~~~~
-The following Device Sync permissions specify two roles:
+Define Permissions
+~~~~~~~~~~~~~~~~~~
+
+The following permissions specify two roles:
 
 - **teamAdmin** applies only when the user's custom data has 
   ``isTeamAdmin: true``. If so, the user can read and write all documents where 
@@ -721,35 +747,40 @@ The following Device Sync permissions specify two roles:
 
 .. code-block:: json
 
-   {
-      "rules": {},
-      "defaultRoles": [
+   [
       {
-         "name": "admin",
-         "applyWhen": {
-            "%%user.custom_data.isTeamAdmin": true
-         },
-         "read": {
+        "name": "admin",
+        "apply_when": {
+          "%%user.custom_data.isTeamAdmin": true
+        },
+        "document_filter": {
+          "read": {
             "team": "%%user.custom_data.team"
-         },
-         "write": {
+          },
+          "write": {
             "team": "%%user.custom_data.team"
-         }
+          }
+        },
+        "read": true,
+        "write": true
       },
       {
-         "name": "user",
-         "applyWhen": {},
-         "read": {
+        "name": "user",
+        "apply_when": {},
+        "document_filters": {
+          "read": {
             "team": "%%user.custom_data.team"
-         },
-         "write": {
+          },
+          "write": {
             "owner_id": "%%user.id"
-         }
-      }]
-   }
+          }
+        },
+        "read": true,
+        "write": true
+      }
+   ]
 
-
-.. note:: Take it Further
+.. note:: Take It Further
 
    This strategy can be expanded to support a "globalAdmin" role. The global 
    admin would have read & read permissions on any doc created in any team. 
