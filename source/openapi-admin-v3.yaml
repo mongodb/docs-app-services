@@ -1701,6 +1701,18 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+      - in: query
+        name: after
+        required: false
+        schema: 
+          type: string
+        description: |-
+          The unique ``_id`` for a pending user. The pending users API
+          returns a max of 50 documents, or pending users, at a time. The 
+          ``after`` parameter can be used to view additional pending users. 
+          For example, by providing the ``_id`` of the 50th pending user for 
+          the ``after`` parameter, you can view the next 50 pending users. 
+
     get:
       tags:
         - users
