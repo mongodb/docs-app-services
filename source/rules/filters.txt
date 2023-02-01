@@ -25,12 +25,13 @@ Filters add additional query parameters and omit fields from query results
 
 - An "apply when" :ref:`expression <expressions>` that determines if the filter
   applies to an incoming request. You can use variables like
-  :json-expansion:`%%user` and :json-expansion:`%%request` in this expression.
-  However, you cannot use expansions like :json-expansion:`%%root` because App
-  Services applies filters before reading any data.
+  :json-expansion:`%%user` and :json-expansion:`%%request` in the "apply when"
+  expression. However, you cannot use expansions that refer to a document like
+  :json-expansion:`%%root` because App Services evaluates the "apply when"
+  expression before reading any documents.
 
-- An optional query document, which uses standard MongoDB query syntax and
-  merges with the existing query of any request the filter applies to.
+- An optional query :ref:`expression <expressions>`, which merges with the
+  existing query of any request the filter applies to.
 
 - An optional projection document, which uses standard MongoDB projection syntax
   and merges with the existing projection of any request the filter applies to.
