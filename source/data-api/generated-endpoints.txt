@@ -173,23 +173,12 @@ Data API Requests <data-api-authenticate-requests>`.
    .. tab:: Application
       :tabid: auth-credentials
 
-      Application authentication requires users to authenticate each
-      Data API request by providing login credentials for one of the
-      following supported authentication providers:
-      
-      - :ref:`Email/Password <email-password-authentication>`
-      - :ref:`API Key <api-key-authentication>`
-      - :ref:`Custom JWT <custom-jwt-authentication>`
-      
-      To see how to include authentication credentials in Data API
-      requests, see :ref:`data-api-authenticate`.
-      
-      .. note::
-         
-         You must :ref:`enable an authentication provider
-         <authentication-providers>` before users can authenticate with
-         it.
-   
+      Application authentication requires users to log in with an
+      authentication provider that you have enabled for your App.
+      Requests can either include an access token granted by the
+      authentication provider or the credentials the user would log in
+      with (e.g. their email and password).
+
    .. tab:: User ID
       :tabid: auth-userid
 
@@ -570,15 +559,39 @@ specified in your :ref:`Data API configuration <data-api-response-type>`.
 Authenticate the Request
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Incoming requests must include headers that authenticate the calling
-user.
+If an endpoint is configured to use Application Authentication then you
+must include a valid user access token or login credentials with every
+request.
 
-Requests can authenticate with any of the following authentication
-providers by including user credentials directly in the request headers:
+In general, prefer to use an access token over login credentials when
+possible. The token lets you run multiple requests without
+re-authenticating the user. It also lets you send requests from a web
+browser or other environment that enforces :wikipedia:`CORS
+<Cross-origin_resource_sharing>`.
 
-- :ref:`Email/Password <email-password-authentication>`
-- :ref:`API Key <api-key-authentication>`
-- :ref:`Custom JWT <custom-jwt-authentication>`
+To use an access token, authenticate the user through an authentication
+provider and then include the access token in the request's
+Authorization header using a Bearer token scheme. For more information
+on how to acquire and use an access token, see :ref:`Bearer Token
+Authentication <graphql-bearer-authentication>`.
+
+.. code-block:: shell
+   :emphasize-lines: 2
+
+   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
+      --header 'Authorization: Bearer <AccessToken>' \
+      --header 'Content-Type: application/json' \
+      --data-raw '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
+
+Alternatively, you can include valid login credentials for the user in
+the request headers.
 
 .. tabs-realm-auth-providers::
    
@@ -631,29 +644,6 @@ providers by including user credentials directly in the request headers:
              "collection": "hello",
            }'
 
-Alternatively, you can exchange the user's login credentials for an
-access token that you can then include in a request header. This token
-lets you run multiple requests without re-authenticating the user. It
-also lets you send requests from a browser or other environment that
-enforces :wikipedia:`CORS <Cross-origin_resource_sharing>`.
-
-For more information on how to acquire and use an access token, see
-:ref:`Bearer Token Authentication <data-api-bearer-authentication>`.
-
-.. code-block:: shell
-   :emphasize-lines: 2
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'Authorization: Bearer <AccessToken>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
 .. _data-api-authorize:
 
 Authorize the Request

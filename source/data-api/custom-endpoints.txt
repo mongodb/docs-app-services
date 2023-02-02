@@ -208,21 +208,19 @@ each request to include credentials for one of your application users,
 like an API key or JWT. You can also configure other custom
 authentication schemes to fit your application's needs.
 
+For examples of how to authenticate requests, see :ref:`Authenticate
+Data API Requests <data-api-authenticate-requests>`.
+
 .. tabs::
 
    .. tab:: Application
       :tabid: auth-credentials
 
-      Application authentication requires users to authenticate each
-      Data API request by providing login credentials for one of the
-      following supported authentication providers:
-      
-      - :ref:`Email/Password <email-password-authentication>`
-      - :ref:`API Key <api-key-authentication>`
-      - :ref:`Custom JWT <custom-jwt-authentication>`
-      
-      To see how to include authentication credentials in endpoint
-      requests, see :ref:`endpoint-authenticate`.
+      Application authentication requires users to log in with an
+      authentication provider that you have enabled for your App.
+      Requests can either include an access token granted by the
+      authentication provider or the credentials the user would log in
+      with (e.g. their email and password).
       
       .. note::
          
@@ -725,14 +723,32 @@ data format specified in the endpoint configuration.
 Authenticate the Request
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-An endpoint function can require requests to include valid credentials
-for an application user in the request headers. You can authenticate
-requests for users that log in with any of the following enabled
-authentication providers:
+If an endpoint is configured to use Application Authentication then you
+must include a valid user access token or login credentials with every
+request.
 
-- :ref:`Email/Password <email-password-authentication>`
-- :ref:`API Key <api-key-authentication>`
-- :ref:`Custom JWT <custom-jwt-authentication>`
+In general, prefer to use an access token over login credentials when
+possible. The token lets you run multiple requests without
+re-authenticating the user. It also lets you send requests from a web
+browser or other environment that enforces :wikipedia:`CORS
+<Cross-origin_resource_sharing>`.
+
+To use an access token, authenticate the user through an authentication
+provider and then include the access token in the request's
+Authorization header using a Bearer token scheme. For more information
+on how to acquire and use an access token, see :ref:`Bearer Token
+Authentication <data-api-bearer-authentication>`.
+
+.. code-block:: shell
+   :emphasize-lines: 2
+
+   curl -X GET \
+      -H 'Authorization: Bearer <AccessToken>' \
+      -H 'Content-Type: application/json' \
+      https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello
+
+Alternatively, you can include valid login credentials for the user in
+the request headers.
 
 .. tabs-realm-auth-providers::
    
