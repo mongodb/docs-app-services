@@ -1707,18 +1707,17 @@ paths:
         schema: 
           type: string
         description: |-
-          The unique ``_id`` for a pending user. The list pending users API
-          returns a max of 50 documents, or pending users, at a time. The 
-          ``after`` parameter can be used to view additional pending users. 
-          For example, by providing the ``_id`` of the 50th pending user for 
-          the ``after`` parameter, you can view the next 50 pending users. 
+          The unique ``_id`` for a pending user. List pending users can return 50
+          pending users at a time. To view pending users after the 50th, call 
+          list pending users and pass the ``_id`` of the last pending user listed 
+          in the response to the ``after`` parameter. 
 
     get:
       tags:
         - users
       operationId: adminListPendingUsers
       summary: List pending users
-      description: List pending user account registrations
+      description: List pending user account registrations. Returns up to 50 pending users in a call. 
       responses:
         "200":
           description: Success
