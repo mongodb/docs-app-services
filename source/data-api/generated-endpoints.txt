@@ -177,7 +177,7 @@ Data API Requests <data-api-authenticate-requests>`.
       authentication provider that you have enabled for your App.
       Requests can either include an access token granted by the
       authentication provider or the credentials the user would log in
-      with (e.g. their email and password).
+      with (e.g. their API key or email and password).
 
    .. tab:: User ID
       :tabid: auth-userid
@@ -563,17 +563,17 @@ If an endpoint is configured to use Application Authentication then you
 must include a valid user access token or login credentials with every
 request.
 
-In general, prefer to use an access token over login credentials when
+In general, use an access token over login credentials when
 possible. The token lets you run multiple requests without
 re-authenticating the user. It also lets you send requests from a web
-browser or other environment that enforces :wikipedia:`CORS
-<Cross-origin_resource_sharing>`.
+browser that enforces :wikipedia:`CORS <Cross-origin_resource_sharing>`.
 
-To use an access token, authenticate the user through an authentication
-provider and then include the access token in the request's
-Authorization header using a Bearer token scheme. For more information
-on how to acquire and use an access token, see :ref:`Bearer Token
-Authentication <graphql-bearer-authentication>`.
+To use an access token, first authenticate the user through an App
+Services authentication provider. Then, get the access token returned
+from App Services and include it in the request's Authorization header
+using a Bearer token scheme. For more information on how to acquire and
+use an access token, see :ref:`Bearer Token Authentication
+<data-api-bearer-authentication>`.
 
 .. code-block:: shell
    :emphasize-lines: 2
