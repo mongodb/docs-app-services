@@ -15,4 +15,4 @@ mind when working with {+adf+}:
 
 - You cannot create a :ref:`database trigger <database-trigger>` on a {+adf-datasource+}.
 
-- You cannot use a {+adf-datasource+} as your app's :ref:`synced <sync>` cluster.
+- You cannot use a {+adf-datasource+} as your app's :ref:`Device Sync <sync>` cluster.
