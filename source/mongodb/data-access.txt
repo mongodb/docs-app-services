@@ -25,27 +25,34 @@ You might want to use MongoDB Data Access in your application if:
 
 - You want to use an API like the MongoDB drivers
 - You want to write database queries in your client code instead of on a server
-- You want to dynamically construct queries from the client device.
+- You want to construct ad hoc queries from the client device.
 
 You might want to use MongoDB Data Access **instead of** :ref:`Atlas Device Sync <sync>`
 in an application in these scenarios:
 
 - You are querying documents that are not or cannot be modeled in Realm Database.
-- A non-Realm service generates collections that you want to access.
+- You want to access collections that are not synced.
 - You do not want to persist data locally.
 - You are using the Realm Web SDK, which does not support Realm Database or Device Sync.
 
 As an alternative to MongoDB Data Access in **client-side** scenarios,
-you can use the :ref:`Atlas Data API <data-api>` or the :ref:`Atlas GraphQL API <graphql-api>`.
+you can use the following:
+
+- :ref:`Atlas Data API <data-api>`
+- :ref:`Atlas GraphQL API <graphql-api>`.
+
 You can also use these APIs without a Realm SDK for your client app's programming
 language as long as the language has a HTTPS or GraphQL client.
 However, these APIs do not feature the same type-safe MQL syntax
 as the Realm SDKs' MongoDB Data Access.
 
 As alternative to MongoDB Data Access in **server-side** scenarios,
-you can use the Atlas Data API or the Atlas GraphQL API. You can also use
-a standard MongoDB driver. If you would like to apply App Services Rules
-to Driver operations, you can use the :ref:`App Services Wire Protocol <wire-protocol>`.
+you can use the following:
+
+- Atlas Data API
+- Atlas GraphQL API
+- :driver:`MongoDB driver <>`. If you would like to apply App Services Rules
+  to driver operations, you can use the :ref:`App Services Wire Protocol <wire-protocol>`.
 
 Set Up
 ------
