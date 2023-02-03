@@ -1707,10 +1707,10 @@ paths:
         schema: 
           type: string
         description: |-
-          The unique ``_id`` for a pending user. List pending users can return 50
-          pending users at a time. To view pending users after the 50th, call 
-          list pending users and pass the ``_id`` of the last pending user listed 
-          in the response to the ``after`` parameter. 
+          The unique ``_id`` for a pending user. ``List pending users`` can return 50
+          pending users at a time. To view additional results, find the ``_id`` of the
+          last pending user listed in the previous call to ``list pending users``. Call
+          ``list pending users`` again, passing the ``_id`` to the after parameter.
 
     get:
       tags:
