@@ -34,7 +34,7 @@ API is a fully-managed middleware service that sits between your cluster
 and the clients that send requests.
 
 You don't need to install any database drivers or opinionated libraries
-to work with the Data API. Instead, you send standard requests like the
+to work with the Data API. Instead, you send standard HTTPS requests like the
 following:
 
 .. io-code-block::
@@ -73,7 +73,7 @@ The Data API supports two types of endpoints:
   To learn more, including how to set up and call endpoints, see
   :ref:`Data API Endpoints <data-api-endpoints>`.
 
-- **Custom Endpoints** are app-specific API routes handled by functions
+- **Custom Endpoints** are app-specific API routes handled by Atlas Functions
   that you write. You can use custom endpoints to define operations that
   fit your use case specifically. For example, you could create an
   endpoint that runs a pre-defined aggregation or that integrates with
@@ -90,7 +90,7 @@ Data API requests may resemble traditional database operations, like
 to your database. Instead, the Data API adds additional authentication,
 authorization, and correctness checks to ensure that your data is only
 accessed or modified in the ways you allow. This allows you to safely
-access data in Atlas from unsafe clients like web apps.
+access data in Atlas from potentially vulnerable clients like web apps.
 
 For each incoming request, the Data API:
 
@@ -109,7 +109,7 @@ For each incoming request, the Data API:
    For requests that read or write data in Atlas, the Data API also
    enforces the access control rules and document schemas defined in
    your App. This means that users can only access data they're allowed
-   to read and that requests will fail if they include an invalid write
+   to read and write. Requests fail if they include an invalid write
    operation.
 
 4. **Returns an HTTPS response to the caller.** The response includes
