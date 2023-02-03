@@ -14,17 +14,17 @@ You can query data in linked MongoDB Atlas clusters from client applications
 using standard MongoDB query language (MQL) syntax with **MongoDB Data Access**
 in the Realm SDKs.
 
-The MongoDB Data Access secures data with role-based App Services rules, schemas,
-and filters. These features let construct complex client-side queries with MQL
+MongoDB Data Access secures data by enforcing your App's role-based access permissions, query filters, and document schemas.
+These features let you construct complex client-side queries with MQL
 while your data remains secure on the server.
 
 When to Use MongoDB Data Access
 -------------------------------
 
-Some general scenarios when you might want to use MongoDB Data Access in an application:
+You might want to use MongoDB Data Access in your application if:
 
 - You want to use an API like the MongoDB drivers
-- You want to perform aggregations
+- You want to write database queries in your client code instead of on a server
 - You want to dynamically construct queries from the client device.
 
 You might want to use MongoDB Data Access **instead of** :ref:`Atlas Device Sync <sync>`
@@ -35,7 +35,7 @@ in an application in these scenarios:
 - You do not want to persist data locally.
 - You are using the Realm Web SDK, which does not support Realm Database or Device Sync.
 
-As alternative to MongoDB Data Access in **client-side** scenarios,
+As an alternative to MongoDB Data Access in **client-side** scenarios,
 you can use the :ref:`Atlas Data API <data-api>` or the :ref:`Atlas GraphQL API <graphql-api>`.
 You can also use these APIs without a Realm SDK for your client app's programming
 language as long as the language has a HTTPS or GraphQL client.
@@ -54,14 +54,14 @@ To use MongoDB Data Access from a Realm SDK, you must perform the following set 
 
 .. procedure::
 
-   .. step:: Create App Services App
+   .. step:: Create an App Services App
 
       Create an App Services App with a linked MongoDB data source.
 
       To learn more about App creation, refer to :ref:`Create an App <create-a-realm-app>`
       and :ref:`Link a Data Source <link-a-data-source>`.
 
-   .. step:: Add Authentication Provider
+   .. step:: Add an Authentication Provider
 
       Add at least one authentication provider to the App. All MongoDB Data Access
       queries run in the context of an authenticated user. To learn more about
@@ -77,7 +77,7 @@ To use MongoDB Data Access from a Realm SDK, you must perform the following set 
       If you do not add rules to a collection, then every request to it
       from the client will fail.
 
-   .. step:: Add Schema and Filters to Collection (Optional)
+   .. step:: Add a Schema and Filters to Collection (Optional)
 
       In addition to rules, you can also add a schema and filters to collections
       that you query with MongoDB Data Access.
