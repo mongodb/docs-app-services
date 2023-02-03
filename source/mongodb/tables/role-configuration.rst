@@ -61,7 +61,10 @@
        the role's other permissions may be evaluated.
        
        If undefined, and Device Sync is not enabled, the role's other
-       permissions may be evaluated.
+       permissions may be evaluated. If Device Sync is enabled, both
+       ``document_filters.read`` and ``document_filters.write`` **must** be
+       defined for this role to be :ref:`sync compatible
+       <sync-compatible-roles>`.
 
        .. code-block:: json
 
