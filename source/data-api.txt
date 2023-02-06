@@ -27,15 +27,15 @@ You can use the Data API to connect to MongoDB Atlas from any platform
 that supports HTTPS, including:
 
 - Web browsers
-- Servers
+- Web servers
 - CI/CD pipelines
 - Serverless & Edge compute environments
 - Mobile applications
 - Internet-Of-Things devices
 
 You don't need to install any database drivers or opinionated libraries
-to work with the Data API. Instead, you send standard HTTPS requests like the
-following:
+to work with the Data API. Instead, you send standard HTTPS requests
+like the following:
 
 .. io-code-block::
    
@@ -73,11 +73,11 @@ The Data API supports two types of endpoints:
   To learn more, including how to set up and call endpoints, see
   :ref:`Data API Endpoints <data-api-endpoints>`.
 
-- **Custom Endpoints** are app-specific API routes handled by Atlas Functions
-  that you write. You can use custom endpoints to define operations that
-  fit your use case specifically. For example, you could create an
-  endpoint that runs a pre-defined aggregation or that integrates with
-  an external webhook service.
+- **Custom Endpoints** are app-specific API routes handled by Atlas
+  Functions that you write. You can use custom endpoints to define
+  operations that fit your use case specifically. For example, you could
+  create an endpoint that runs a pre-defined aggregation or that
+  integrates with an external webhook service.
 
   To learn more, including how to create and call endpoints, see
   :ref:`Custom HTTPS Endpoints <custom-endpoints>`.
@@ -121,19 +121,13 @@ For each incoming request, the Data API:
 When to Use the Data API
 ------------------------
 
-An operation called through a Data API endpoint will likely take longer
-than the corresponding MongoDB operation called through a connected
-MongoDB Driver. For high-load use-cases and latency sensitive
-applications, we recommend connecting directly to your database with a
-MongoDB driver. To learn more, visit the :driver:`MongoDB Drivers </>`
-documentation.
-
-
-TODO
-
-
-"Using the MongoDB Drivers to build on top of Atlas is still the general recommended approach (especially when connecting from a Server) as it will be more performant and flexible."
-
+For server applications, and especially for high-load and latency
+sensitive use-cases, we recommend connecting directly to Atlas with a
+MongoDB driver. Operations called through a Data API endpoint take
+longer to complete than the corresponding MongoDB operations called
+through a driver. Additionally, the drivers provide more flexibility and
+control over how your operations are executed. To learn more, visit the
+:driver:`MongoDB Drivers </>` documentation.
 
 We recommend using the Data API when:
 
@@ -144,8 +138,9 @@ We recommend using the Data API when:
   environment. For example, some edge compute environments don't support
   database drivers or connection pooling.
 
-- You want to develop a new feature and prefer to work on the client
-  side first before later creating and refining the API layer.
+- You want to develop a new feature and prefer a flexible solution for
+  working on the client side first before later creating and refining
+  the API layer.
 
 - You want to integrate Atlas data access into a federated API gateway.
 
