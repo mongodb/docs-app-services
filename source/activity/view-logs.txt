@@ -1,8 +1,8 @@
-==============================
-Access Logs with the Admin API
-==============================
+.. _view-logs:
 
-.. default-domain:: mongodb
+=====================
+View Application Logs
+=====================
 
 .. contents:: On this page
    :local:
@@ -10,17 +10,132 @@ Access Logs with the Admin API
    :depth: 2
    :class: singlecol
 
-Overview
---------
+App Services UI
+---------------
 
-You can request an application's logs programmatically by accessing the
-logging endpoints of the :doc:`Atlas App Services Admin API </admin/api/v3>`.
+You can view, filter, search, and download an application's logs in the
+App Services UI. To navigate to the logs screen, click :guilabel:`Logs`
+in the left navigation menu.
+
+.. figure:: /images/logs-ui.png
+   :alt: View Logs in the App Services UI
+
+Filter Logs
+~~~~~~~~~~~
+
+Drop-down menus enable filtering by predefined types of log entry, the status
+of entries. You can also specify a date range, filter by user ID, and show
+only entries associated with a specific request ID.
+
+Limit the Number of Log Entries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the text field with the placeholder text :guilabel:`Max # of Logs`, enter
+the maximum number of results you want to display on the page. If there are
+more records beyond your limit, you will see a :guilabel:`Load More` button
+at the bottom of the list of log entries.
+
+Download Logs
+~~~~~~~~~~~~~
+
+Click the download button, to the right of the :guilabel:`Apply` button,
+to download the log entries that meet your filter criteria (or all log
+entries if you haven't specified any filters). When you click this
+button, a dialog appears confirming the filters that will be applied and
+prompting you to (optionally) limit the number of results. The resulting
+collection of log entries is in a .zip file that contains a single JSON
+file.
+
+.. figure:: /images/logs-ui-download.png
+   :alt: Download Logs in the App Services UI
+
+App Services CLI
+----------------
+
+You can access an application's logs in your terminal or a shell script
+with the App Services CLI.
+
+View Recent Logs
+~~~~~~~~~~~~~~~~
+
+To return the 100 most recent log entries for your application, run ``realm-cli
+logs list``.
+
+.. code-block:: shell
+
+   realm-cli logs list
+
+Tail Logs in Real Time
+~~~~~~~~~~~~~~~~~~~~~~
+
+You can use the ``--tail`` flag to open a stream that displays application logs
+as they come in.
+
+.. code-block:: shell
+
+   realm-cli logs list --tail
+
+View Error Logs
+~~~~~~~~~~~~~~~
+
+You can use the ``--errors`` flag to view only error logs. If you don't specify
+the flag, the command returns both error logs and regular logs.
+
+.. code-block:: shell
+
+   realm-cli logs list --errors
+
+Filter Logs by Type
+~~~~~~~~~~~~~~~~~~~
+
+You can use the ``--type`` flag to view logs of one or more specific types. If
+you don't specify a type, the command returns logs of all types.
+
+The following types are valid:
+
+- ``auth``
+- ``function``
+- ``push``
+- ``service``
+- ``trigger``
+- ``graphql``
+- ``sync``
+- ``schema``
+
+.. code-block:: shell
+
+   realm-cli logs list --type=function --type=trigger
+
+.. _cli-view-logs-for-date-range:
+
+View Logs for a Date Range
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can use the ``--start`` and ``--end`` flags to view logs from a range of
+dates. The flags accept ISODate strings and you can use them separately or
+together.
+
+.. code-block:: shell
+
+   realm-cli logs list --start="2021-01-01T00:00:00.000+0000" --end="2021-02-01T00:00:00.000+0000"
+
+App Services API
+----------------
+
+You can access an application's logs over HTTPS by calling the
+:admin-api-endpoint:`Admin API Logs endpoints <tag/logs>`.
+
+To use the Admin API you'll need your Project ID, App ID, and
+authentication credentials. To learn how to find these, see
+:admin-api-endpoint`Project & Application IDs
+<section/Project-and-Application-IDs>` and :admin-api-endpoint:`Get
+Authentication Tokens <section/Get-Authentication-Tokens>`.
 
 The examples in this section use the following helper functions in a
 :doc:`Function </functions>`:
 
 .. code-block:: javascript
-   
+
    async function authenticate(publicApiKey, privateApiKey) {
      const result = await context.http.post({
        url: `${ADMIN_API_BASE_URL}/auth/providers/mongodb-cloud/login`,
@@ -36,34 +151,13 @@ The examples in this section use the following helper functions in a
      })
      return EJSON.parse(result.body.text());
    }
-   
+
    function formatQueryString(queryParams) {
      const params = Object.entries(queryParams);
      return params.length > 0
        ? "?" + params.map(([a, b]) => `${a}=${b}`).join("&")
        : ""
    }
-   
-Application ID
---------------
-   
-In order to request your application's log entries, you'll need the application's 
-object ID. You can find your application ID in the URL when you are accessing 
-your App Services App through `cloud.mongodb.com <https://cloud.mongodb.com?tck=docs_realm>`__.
-You can also get the :admin-api-endpoint:`application ID via curl <section/Get-Authentication-Tokens>`. 
-
-.. example:: 
-  When you access your App Services App, you should have a URL of the 
-  following format:
-  
-  .. code-block:: shell
-    
-    https://realm.mongodb.com/groups/<Atlas Organization ID>/apps/<App ID>/dashboard
-    
-  You will use the App Services App ID in the URL to call the logging 
-  endpoints.
-
-  
 
 Get Recent Logs
 ~~~~~~~~~~~~~~~
@@ -73,7 +167,7 @@ Logging endpoint with no additional parameters:
 
 .. code-block:: javascript
    :emphasize-lines: 20
-   
+
    const ADMIN_API_BASE_URL = "https://realm.mongodb.com/api/admin/v3.0";
    exports = async function() {
      // Get values that you need for requests
@@ -81,10 +175,10 @@ Logging endpoint with no additional parameters:
      const appId = "<App ID>";
      const publicApiKey = "<Atlas Public API Key>";
      const privateApiKey = "<Atlas Private API Key>";
-     
+
      // Authenticate with the Atlas API Key
      const { access_token } = await authenticate(publicApiKey, privateApiKey);
-     
+
      // Get logs for your App
      const logsEndpoint = `${ADMIN_API_BASE_URL}/groups/${projectId}/apps/${appId}/logs`;
      const  request = {
@@ -106,14 +200,14 @@ endpoint with either or both of the ``start_date`` and ``end_date``
 fields:
 
 .. note:: Result Pagination
-   
+
    If the date range that you specify includes more than 100 log
    entries, you will need to :ref:`run paginated queries
    <logging-get-paginated-logs>` to access all of the entries.
 
 .. code-block:: javascript
    :emphasize-lines: 16-17, 23
-   
+
    const ADMIN_API_BASE_URL = "https://realm.mongodb.com/api/admin/v3.0";
    exports = async function() {
      // Get values that you need for requests
@@ -121,10 +215,10 @@ fields:
      const appId = "<App ID>";
      const publicApiKey = "<Atlas Public API Key>";
      const privateApiKey = "<Atlas Private API Key>";
-     
+
      // Authenticate with the Atlas API Key
      const { access_token } = await authenticate(publicApiKey, privateApiKey);
-     
+
      // Get logs for your App
      const logsEndpoint = `${ADMIN_API_BASE_URL}/groups/${projectId}/apps/${appId}/logs`;
      const  request = {
@@ -156,9 +250,9 @@ entries.
 
    A paginated response resembles the following document, where
    ``nextEndDate`` and ``nextSkip`` are optional:
-   
+
    .. code-block:: json
-      
+
       {
         logs: [<Log Entry>, ...],
         nextEndDate: "<End date of the next page>",
@@ -167,7 +261,7 @@ entries.
 
 .. code-block:: javascript
    :emphasize-lines: 13-16, 39
-   
+
    const ADMIN_API_BASE_URL = "https://realm.mongodb.com/api/admin/v3.0";
    exports = async function() {
      // Get values that you need for requests
@@ -175,10 +269,10 @@ entries.
      const appId = "<App ID>";
      const publicApiKey = "<Atlas Public API Key>";
      const privateApiKey = "<Atlas Private API Key>";
-   
+
      // Authenticate with the Atlas API Key
      const { access_token } = await authenticate(publicApiKey, privateApiKey);
-     
+
      // Get logs for your App
      const pager = new LogPager(projectId, appId, access_token);
      const firstPage = await pager.getNextPage();
@@ -186,14 +280,14 @@ entries.
      const thirdPage = await pager.getNextPage(secondPage);
      const allLogs = await pager.getAllLogs();
    }
-   
+
    class LogPager {
      constructor(projectId, appId, access_token, queryParams={}) {
        this.logsEndpoint = `${ADMIN_API_BASE_URL}/groups/${projectId}/apps/${appId}/logs`;
        this.queryParams = queryParams;
        this.authHeaders = { Authorization: [`Bearer ${access_token}`] }
      }
-     
+
      async getNextPage(prevPage) {
        const { nextEndDate, nextSkip } = prevPage || {};
        if(prevPage && !nextEndDate) {
@@ -211,7 +305,7 @@ entries.
        const nextPage = EJSON.parse(result.body.text());
        return nextPage
      }
-     
+
      async getAllLogs() {
        // Note: If your query parameters match too many logs this might time out
        let logs = []
