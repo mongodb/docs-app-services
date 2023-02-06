@@ -1740,12 +1740,23 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+      - in: query
+        name: after
+        required: false
+        schema: 
+          type: string
+        description: |-
+          The unique ``_id`` for a pending user. ``List pending users`` can return 50
+          pending users at a time. To view additional results, find the ``_id`` of the
+          last pending user listed in the previous call to ``list pending users``. Call
+          ``list pending users`` again, passing the ``_id`` to the after parameter.
+
     get:
       tags:
         - users
       operationId: adminListPendingUsers
       summary: List pending users
-      description: List pending user account registrations
+      description: List pending user account registrations. Returns up to 50 pending users in a call. 
       responses:
         "200":
           description: Success

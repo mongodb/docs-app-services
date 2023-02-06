@@ -15,8 +15,9 @@ MongoDB Data Sources
 .. toctree::
    :titlesonly:
    :hidden:
-   
+
    CRUD & Aggregation APIs </mongodb/crud-and-aggregation-apis>
+   Query Atlas from Client Apps </mongodb/data-access>
    Read Preference </mongodb/read-preference>
    Wire Protocol </mongodb/wire-protocol>
    Document Preimages </mongodb/preimages>
@@ -28,7 +29,7 @@ Overview
 A **data source** represents a `MongoDB Atlas
 <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_
 instance in the same project as your app. You use data sources to store
-and retreive your application's data.
+and retrieve your application's data.
 
 Most apps connect to a single data source, but you can configure
 multiple data sources if your data is spread across instances. You
@@ -47,6 +48,7 @@ or connect from a client application. You write queries using standard
 MongoDB query syntax.
 
 .. code-block:: javascript
+   // example Atlas Function
 
    exports = async function() {
       const mongodb = context.services.get("mongodb-atlas");
@@ -56,22 +58,15 @@ MongoDB query syntax.
          .findOne()
    }
 
-To learn how to work with a data source in a function, refer to the
+To learn how to work with a data source in an Atlas Function, refer to the
 following guides:
 
 - :ref:`Read Data from MongoDB Atlas <mongodb-read>`
 - :ref:`Write Data in MongoDB Atlas <mongodb-write>`
 - :ref:`Aggregate Data in MongoDB Atlas <mongodb-aggregate>`
 
-To learn how to work with a data source from a Realm SDK, refer to the
-docs for the SDK:
-
-- :ref:`Query MongoDB - Swift SDK <ios-mongodb-data-access>`
-- :ref:`Query MongoDB - .NET SDK <dotnet-mongodb-data-access>`
-- :ref:`Query MongoDB - Java SDK <java-mongodb-data-access>`
-- :ref:`Query MongoDB - Node.js SDK <node-mongodb-data-access>`
-- :ref:`Query MongoDB - React Native SDK <react-native-mongodb-data-access>`
-- :ref:`Query MongoDB - Web SDK <web-mongodb-data-access>`
+To learn how to work with a data source from a Realm SDK,
+refer to :ref:`client-data-access`.
 
 .. note::
 
@@ -81,7 +76,7 @@ docs for the SDK:
    from schema validation and data access rules. You can bypass some
    limitations by querying MongoDB as the :ref:`system user
    <system-user>` instead.
-   
+
    For more information on which operations are supported, see
    :ref:`CRUD & Aggregation APIs <mongodb-crud-and-aggregation-apis>`.
 
