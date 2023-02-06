@@ -1,3 +1,15 @@
+# February 3, 2023
+
+## Get Started
+- Device Sync Tutorial - Kotlin: Add Learning Objectives, minor clarifications based on feedback
+
+## Data API
+- Data API Endpoints: Update the "Authenticate the Request" section to prefer Bearer authorization with an access token
+- Custom HTTPS Endpoints: Update the "Authenticate the Request" section to prefer Bearer authorization with an access token
+
+## Other
+- Introduction: Minor updates based on feedback
+
 # January 27, 2023
 
 ## Get Started
