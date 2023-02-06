@@ -17,10 +17,14 @@ Atlas Data API
 .. contents:: On this page
    :depth: 2
 
-The Data API is a managed service that lets you securely work with
-data stored in Atlas using standard HTTPS requests. You can use the Data
-API to connect to MongoDB Atlas from any platform that supports HTTPS,
-including:
+The Data API is a managed service that lets you securely work with data
+stored in Atlas using standard HTTPS requests. The Data API is not a
+direct connection to your database. Instead, the API is a fully-managed
+middleware service that sits between your cluster and the clients that
+send requests.
+
+You can use the Data API to connect to MongoDB Atlas from any platform
+that supports HTTPS, including:
 
 - Web browsers
 - Servers
@@ -28,10 +32,6 @@ including:
 - Serverless & Edge compute environments
 - Mobile applications
 - Internet-Of-Things devices
-
-The Data API is not a direct connection to your database. Instead, the
-API is a fully-managed middleware service that sits between your cluster
-and the clients that send requests.
 
 You don't need to install any database drivers or opinionated libraries
 to work with the Data API. Instead, you send standard HTTPS requests like the
@@ -121,6 +121,20 @@ For each incoming request, the Data API:
 When to Use the Data API
 ------------------------
 
+An operation called through a Data API endpoint will likely take longer
+than the corresponding MongoDB operation called through a connected
+MongoDB Driver. For high-load use-cases and latency sensitive
+applications, we recommend connecting directly to your database with a
+MongoDB driver. To learn more, visit the :driver:`MongoDB Drivers </>`
+documentation.
+
+
+TODO
+
+
+"Using the MongoDB Drivers to build on top of Atlas is still the general recommended approach (especially when connecting from a Server) as it will be more performant and flexible."
+
+
 We recommend using the Data API when:
 
 - You want to run MongoDB operations from a web application or other
@@ -130,15 +144,11 @@ We recommend using the Data API when:
   environment. For example, some edge compute environments don't support
   database drivers or connection pooling.
 
+- You want to develop a new feature and prefer to work on the client
+  side first before later creating and refining the API layer.
+
 - You want to integrate Atlas data access into a federated API gateway.
 
 - You want to connect to App Services from an environment not currently
   supported by a Realm SDK and don't want to use a driver to connect
   over the :ref:`wire protocol <wire-protocol>`.
-
-An operation called through a Data API endpoint will likely take longer
-than the corresponding MongoDB operation called through a connected
-MongoDB Driver. For high-load use-cases and latency sensitive
-applications, we recommend connecting directly to your database with a
-MongoDB driver. To learn more, visit the :driver:`MongoDB Drivers
-</data-api-data-formats>` documentation.
