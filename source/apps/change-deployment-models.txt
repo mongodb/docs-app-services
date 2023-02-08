@@ -81,13 +81,13 @@ Procedure
 
       .. procedure::
 
-         .. step:: Navigate to the Deployment screen
+         .. step:: Navigate to the Deployment Screen
 
             Click :guilabel:`App Settings` in the left navigation menu.
             On the settings page, find the :guilabel:`Deployment Region`
             section and click the :guilabel:`Edit` button.
 
-         .. step:: Choose a target deployment model and region
+         .. step:: Choose a Target Deployment Model and Region
 
             You can migrate an App to any valid deployment configuration.
 
@@ -103,7 +103,7 @@ Procedure
             options, see :ref:`Deployment Models & Regions
             <deployment-model>`.
 
-         .. step:: Start the migration
+         .. step:: Start the Migration
 
             Once you've specified your desired deployment configuration,
             click :guilabel:`Continue`. You should see a confirmation
@@ -114,7 +114,7 @@ Procedure
             Once you've reviewed the checklist, being the migration by
             clicking :guilabel:`Change region`.
 
-         .. step:: Monitor the migration status
+         .. step:: Monitor the Migration Status
 
             While the migration is in progress, the UI displays a banner
             at the top of the page with the current migration status.
@@ -124,7 +124,7 @@ Procedure
 
       .. procedure::
 
-         .. step:: Choose a target deployment model and region
+         .. step:: Choose a Target Deployment Model and Region
 
             You can migrate an App to any valid deployment configuration.
 
@@ -154,7 +154,7 @@ Procedure
                  "provider_region": "azure-westus"
                }
 
-         .. step:: Start the migration
+         .. step:: Start the Migration
 
             To start a migration, call the :admin-api-endpoint:`Create a
             Deployment Migration
@@ -173,7 +173,7 @@ Procedure
                    "provider_region": "<RegionID>"
                  }'
 
-         .. step:: Monitor the migration status
+         .. step:: Monitor the Migration Status
 
             To get the current status of a deployment migration, call
             the :admin-api-endpoint:`Get a Deployment Migration
@@ -213,12 +213,16 @@ A deployment migration moves through the following stages in order:
 
    - ``"failed"``: the migration failed
 
+The migration process does not affect any application data stored in a
+MongoDB Atlas cluster.
+
 The migration process migrates the following components of your App:
 
 - User accounts
-- Configuration files
+- App configuration files
 - Triggers
 - API Services
+- Device Sync translators
 
 The migration process **does not** migrate the following data:
 
