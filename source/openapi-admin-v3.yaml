@@ -1740,12 +1740,23 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+      - in: query
+        name: after
+        required: false
+        schema: 
+          type: string
+        description: |-
+          The unique ``_id`` for a pending user. ``List pending users`` can return 50
+          pending users at a time. To view additional results, find the ``_id`` of the
+          last pending user listed in the previous call to ``list pending users``. Call
+          ``list pending users`` again, passing the ``_id`` to the after parameter.
+
     get:
       tags:
         - users
       operationId: adminListPendingUsers
       summary: List pending users
-      description: List pending user account registrations
+      description: List pending user account registrations. Returns up to 50 pending users in a call. 
       responses:
         "200":
           description: Success
@@ -4373,6 +4384,49 @@ paths:
       responses:
         "204":
           description: Updated
+  /groups/{groupId}/apps/{appId}/deployment_migration:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - deploy
+      operationId: adminGetDeploymentMigration
+      summary: Get a Deployment Migration
+      description: Get metadata and status for the current deployment migration, if one exists.
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeploymentMigration"
+        "404":
+          description: App not found
+    put:
+      tags:
+        - deploy
+      operationId: adminCreateDeploymentMigration
+      summary: Create a Deployment Migration
+      description: Start a new deployment migration.
+      requestBody:
+        description: The deployment model and cloud provider region that the App should migrate to.
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/AppDeploymentSettings"
+            example: {
+              "deployment_model": "LOCAL",
+              "provider_region": "aws-us-east-1"
+            }
+      responses:
+        "204":
+          description: Migration started
+        "400":
+          description: Request is invalid, incomplete, or a no-op
+        "404":
+          description: App not found
 
 components:
   parameters:
@@ -4611,6 +4665,41 @@ components:
           type: string
         disabled:
           type: string
+
+    DeploymentMigration:
+      properties:
+        status:
+          title: DeploymentMigrationStatus
+          type: string
+          enum:
+            - "started"
+            - "downtime"
+            - "enabling_event_subscriptions"
+            - "cleanup"
+            - "successful"
+            - "failed"
+        message:
+          type: string
+          description: A description of the current migration status.
+        updated_at:
+          type: string
+          description: A timestamp of the most recent update to the deployment migration.
+        from:
+          description: The App's deployment model and cloud provider region at the start of the migration
+          $ref: "#/components/schemas/AppDeploymentSettings"
+        to:
+          description: |-
+            The migration's target deployment model and cloud provider
+            region. At the end of a successful migration, the App uses
+            these deployment settings instead of the settings described
+            by `from`.
+          $ref: "#/components/schemas/AppDeploymentSettings"
+    AppDeploymentSettings:
+      properties:
+        deployment_model:
+          $ref: "#/components/schemas/DeploymentModel"
+        provider_region:
+          $ref: "#/components/schemas/CloudProviderRegionId"
     DeploymentLocation:
       type: string
       description: |-

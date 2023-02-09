@@ -71,7 +71,7 @@ Simply secure:
 
 Synchronized:
   - Seamlessly sync data across devices with Atlas Device Sync .
-  - Avoid writing complex synchronization logic with the :ref:`Database SDKs <realm-sdks>`.
+  - Avoid writing complex synchronization logic with the :ref:`Realm Database SDKs <realm-sdks>`.
 
 .. _intro-web-users:
 .. _intro-user-authentication:
@@ -147,42 +147,10 @@ If the data is on a server, you need an API to access the data and prevent unaut
 The Realm SDKs provide a secure MongoDB client to interact with data
 in your :ref:`MongoDB data sources <data-sources>`.
 
-App Services's server-side rules ensures that users only read and modify permitted documents. 
+App Services's server-side rules ensures that users only read and modify permitted documents.
 Rules consist of one or more user roles for each collection. A role determines if
 a given user has permission to access and edit a document. App Services determines a role
 for each document in every request. It then enforces the role's permissions before responding.
-
-.. tabs-realm-sdks::
-
-   .. tab::
-      :tabid: android
-
-      :ref:`Query MongoDB - Java SDK <java-mongodb-data-access>`
-
-   .. tab::
-      :tabid: ios
-
-      :ref:`Query MongoDB - Swift SDK <ios-mongodb-data-access>`
-
-   .. tab::
-      :tabid: node
-
-      :ref:`Query MongoDB - Node.js SDK <node-mongodb-data-access>`
-
-   .. tab::
-      :tabid: react-native
-
-      :ref:`Query MongoDB - React Native SDK <react-native-mongodb-data-access>`
-
-   .. tab::
-      :tabid: dotnet
-
-      :ref:`Query MongoDB - .NET SDK <dotnet-mongodb-data-access>`
-
-   .. tab::
-      :tabid: web
-
-      :ref:`Query MongoDB - Web SDK <web-mongodb-data-access>`
 
 .. _intro-web-graphql:
 
@@ -192,16 +160,6 @@ GraphQL for MongoDB
 :graphql:`GraphQL <>` is a standard, open-source API architecture that is an
 alternative to REST and other HTTP APIs. It features a query language that lets you 
 access only the data you need.
-
-
-GraphQL has a couple of primary benefits for web developers:
-
-- **Minimize Bandwidth**: GraphQL queries specify the exact fields to return. 
-  This lets you to avoid fetching unnecessary data.
-
-- **Minimize Roundtrips**: A single GraphQL endpoint handles all requests. 
-  You can group your GraphQL queries into a single request to one endpoint instead of
-  sending requests to multiple endpoints.
 
 App Services generates a GraphQL API for your application based on your :ref:`data model <intro-web-schema>`.
 The API includes a set of CRUD operations that you can access with a GraphQL client
@@ -218,12 +176,20 @@ Traditionally developers query the database on the server and access the server
 from the client through a HTTP API. This requires more developer resources and lacks
 the flexibility of directly querying a database.
 
-App Services includes the :manual:`Query API </tutorial/query-documents>`,
-a powerful API that lets you access MongoDB Atlas data from the client.
-You can query Atlas like you're using a database driver and App Services enforces 
-:ref:`data access rules <intro-web-schema>` rules for all requests.
+App Services and the Realm SDKs include MongoDB Data Access,
+an API that lets you access MongoDB Atlas from the client using
+the :manual:`Query API </tutorial/query-documents>`.
+You can query Atlas like you're using a database driver and App Services enforces
+:ref:`data access rules <intro-web-schema>` for all requests.
 
-To learn more about the built-in MongoDB service, see :ref:`data-sources`.
+The following Realm SDKs let you query Atlas with MongoDB Data Access from client apps:
+
+- :ref:`Query MongoDB - Java SDK <java-mongodb-data-access>`
+- :ref:`Query MongoDB - .NET SDK <dotnet-mongodb-data-access>`
+- :ref:`Query MongoDB - Node.js SDK <node-mongodb-data-access>`
+- :ref:`Query MongoDB - React Native SDK <react-native-mongodb-data-access>`
+- :ref:`Query MongoDB - Swift SDK <ios-mongodb-data-access>`
+- :ref:`Query MongoDB - Web SDK <web-mongodb-data-access>`
 
 .. _intro-device-sync:
 
