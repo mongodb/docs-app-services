@@ -42,17 +42,27 @@
    * - | ``apply_when``
        | Expression
      - An :ref:`expression <expressions>` that evaluates to true when
-       this :ref:`role <roles>` applies to a user for a specific document.
+       this :ref:`role <roles>` applies to a user.
 
-       For a given request on a document, App Services evaluates the
-       ``apply_when`` of each relevant role until one evaluates to true.
-       Relevant roles are any roles specified for the document's collection plus
-       the default role(s). For more information, see :ref:`roles`.
+       When Device Sync (Flexible Mode) is not enabled, App Services assigns a
+       role on a per-document basis. When Device Sync (Flexible Mode) is
+       enabled, App Services assigns roles on a per-collection, per-session
+       basis -- that is, for each synced collection when a client opens a sync
+       connection.
 
-       If Device Sync (Flexible Mode) is enabled, the role must be :ref:`sync
-       compatible <sync-compatible-roles>`. If the role is not sync compatible,
-       but its ``apply_when`` evaluated to true, others roles are not
-       considered; access is denied.
+       To assign a role, App Services evaluates the ``apply_when`` of each
+       relevant role until one evaluates to true. Relevant roles are any roles
+       specified for the given collection plus the default role(s). App Services
+       evaluates collection-specific roles in the order that you specify them in
+       your configuration. If no collection-specific role applies, App Services
+       evaluates the default roles in the order that you specify them in your
+       configuration. If no role matches, then access is denied. For more
+       information, see :ref:`roles`.
+
+       If Device Sync (Flexible Mode) is enabled, the assigned role must be
+       :ref:`sync compatible <sync-compatible-roles>`. If the role is not sync
+       compatible, but its ``apply_when`` evaluated to true, others roles are
+       not considered; access is denied.
 
    * - | ``document_filters``
        | Document

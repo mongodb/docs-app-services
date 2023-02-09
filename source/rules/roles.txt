@@ -311,7 +311,11 @@ Document Filters
 ~~~~~~~~~~~~~~~~
 
 The role's ``document_filters`` expressions determine whether the role's
-subsequent document- and field-level permissions may be evaluated at all.
+subsequent document- and field-level permissions may be evaluated at all. This
+is required for Device Sync.
+
+Note: App Services evaluates document filters on a per-document basis. These are
+not to be confused with the top-level query :ref:`filters <filters>`.
 
 .. _role-order:
 
@@ -368,7 +372,7 @@ deploying configuration files with {+cli+}:
          the role for a given document.
       
       #. Define :ref:`document filters <document-filters-expressions>` for the
-         role.
+         role. This is required for Device Sync (Flexible Mode).
 
       #. Define :ref:`document-level permissions <document-level-permissions>`
          for the role.
