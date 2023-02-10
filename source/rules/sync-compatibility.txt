@@ -26,18 +26,18 @@ Sync-Compatible Roles
 ~~~~~~~~~~~~~~~~~~~~~
 
 If Device Sync (Flexible Mode) is enabled, an assigned :ref:`role <roles>` must
-be **sync compatible**. If the role is not sync compatible, but its "apply when"
+be **Sync compatible**. If the role is not Sync compatible, but its "apply when"
 evaluated to true, other roles are not considered; access is denied.
 
-A role is not sync compatible if any of the following conditions are true:
+A role is not Sync compatible if any of the following conditions are true:
 
 - ``document_filters.read`` or ``document_filters.write`` are undefined.
-- A document filter, insert, or delete expression references: a field that is
-  not a :ref:`queryable field <queryable-fields>`; an expansion other than
-  ``%%true``, ``%%false``, ``%%values``, ``%%environment``, or ``%%user``; or
-  the ``%function`` operator.
-- Field-level permissions are not boolean literals (``true`` or ``false``).
-- Field-level permissions are specified for the top-level ``_id`` field.
+- A document filter, search, insert, or delete expression:
+  - References a field that is not a :ref:`queryable field <queryable-fields>`
+  - Uses an expansion other than ``%%true``, ``%%false``, ``%%values``, ``%%environment``, or ``%%user``
+  - Uses the ``%function`` operator
+- Top-level ``read``, top-level ``write``, or field-level permissions are not boolean literals (``true`` or ``false``).
+- Field-level permissions are specified for the ``_id`` field.
 
 
 .. _sync-compatible-expressions:
@@ -120,7 +120,7 @@ The following table specifies which expansions are Sync compatible in either the
 .. important::
 
    App Services causes a :ref:`client reset <client-resets>` if anything about
-   the session role changed since the previous session.
+   the role changed since the previous session.
 
    At the start of a session, App Services expands all expansions in the "apply
    when", ``document_filters.read``, and ``document_filters.write`` expressions
