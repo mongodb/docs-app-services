@@ -187,19 +187,22 @@ App Services assigns roles at different times depending on whether you're using
 :ref:`Device Sync (Flexible Mode) <sync>` or not.
 
 When using Device Sync, App Services assigns roles at the start of a Sync
-session; otherwise, App Services assigns roles on a per-document basis. A Sync
-session is the period of time between opening and closing a Sync connection.
+session for each collection to be synced; otherwise, App Services assigns roles
+on a per-document basis. A Sync session is the period of time between opening
+and closing a Sync connection.
 
-Whether using Device Sync or not, you can define a set of roles for a collection
-and default roles for when the collection roles don't apply. To assign a role,
-App Services evaluates each role's "apply when" expression. The first role whose
-"apply when" expression evaluates to true becomes the assigned role.
+Whether using Device Sync or not, you can define a set of roles that are
+specific to collections and default roles that apply to any other unspecified
+collection. To assign a role, App Services evaluates each role's "apply when"
+expression in the order that you specified them. The first role whose "apply
+when" expression evaluates to true becomes the assigned role. If no role
+matches, access is denied.
 
 Without Device Sync
 ~~~~~~~~~~~~~~~~~~~
 
 When not using Device Sync, App Services dynamically assigns roles for every
-request. The user is assigned a separate role, or no role, for each document
+document. The user is assigned a separate role, or no role, for each document
 that matches the incoming query. 
 
 First, your App evaluates and applies :ref:`filters <filters>` and then runs the
@@ -265,20 +268,20 @@ roles.
 With Device Sync
 ~~~~~~~~~~~~~~~~
 
-When using Device Sync, App Services assigns a role at the beginning of each
-Flexible Sync session. The role determines which permissions apply for the duration of a
-session.
+When using Device Sync, App Services assigns roles at the beginning of each
+Flexible Sync session for each synced collection. The role determines which
+permissions apply to each collection for the duration of a session.
 
-When a user begins a session by opening a synced realm, roles are evaluated and
-applied to the user for each collection to be synced. App Services assigns at
-most one role per collection. If no session role applies for a collection, the
-user cannot sync (or read or write) any entries in that collection.
+App Services assigns at most one role per collection. If you did not specify
+roles for a given synced collection, App Services uses the default roles
+instead. If no role applies for a collection, the user cannot sync (or read or
+write) any entries in that collection.
 
-A session role stays assigned for the duration of the session. If something
-relevant to a user's session role changes in the middle of the user's session,
-the user is **not** assigned an updated role until they start a new session. For
-example, if the user's metadata or the role's "apply when" expression changes,
-the user continues to use their existing session role until the next time they
+A role stays assigned for the duration of the session. If something relevant to
+a user's session role changes in the middle of the user's session, the user is
+**not** assigned an updated role until they start a new session. For example, if
+the user's metadata or the role's "apply when" expression changes, the user
+continues to use the existing role for that collection until the next time they
 start a session.
 
 There are some special considerations when using Device Sync with regard to the

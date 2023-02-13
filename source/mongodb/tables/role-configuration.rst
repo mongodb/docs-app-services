@@ -50,15 +50,13 @@
        connection.
 
        To assign a role, App Services evaluates the ``apply_when`` of each
-       relevant role until one evaluates to true. Relevant roles are any roles
-       specified for the given collection plus the default role(s). App Services
-       evaluates collection-specific roles in the order that you specify them in
-       your configuration. If no collection-specific role applies, App Services
-       evaluates the default roles in the order that you specify them in your
-       configuration. If no role matches, then access is denied. For more
-       information, see :ref:`roles`.
+       potential role until one evaluates to true. Potential roles are any roles
+       specified for the given collection or, if no roles are specified for the
+       given collection, the default role(s). App Services evaluates roles in
+       the order that you specify them in your configuration. If no role
+       matches, then access is denied. For more information, see :ref:`roles`.
 
-       If Device Sync (Flexible Mode) is enabled, the assigned role must be
+       If Device Sync (Flexible Mode) is enabled, the assigned roles must be
        :ref:`Sync compatible <sync-compatible-roles>`. If the role is not Sync
        compatible, but its ``apply_when`` evaluated to true, others roles are
        not considered; access is denied.
