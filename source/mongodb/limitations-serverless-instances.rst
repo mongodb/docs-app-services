@@ -5,6 +5,6 @@ currently support change streams, so the following features are limited:
 
 - You cannot create a :ref:`database trigger <database-trigger>` on a serverless instance.
 
-- You cannot use a serverless instance as your app's :ref:`synced <sync>` cluster.
+- You cannot use a serverless instance as your app's :ref:`Device Sync <sync>` cluster.
 
 - You cannot watch collections for changes data sources that are serverless MongoDB Atlas instances.

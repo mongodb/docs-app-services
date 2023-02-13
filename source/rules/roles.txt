@@ -19,38 +19,65 @@ Overview
 --------
 
 You secure your App's data by defining roles that are automatically
-assigned to incoming user requests. Each role has fine-grained data
+assigned to incoming user requests. Each role has specific data
 access permissions and dynamic conditions that determine when the role
 applies.
 
-What are Permissions?
-~~~~~~~~~~~~~~~~~~~~~
+Permissions
+-----------
 
-A **permission** is a status that Atlas App Services assigns to individual users to control what
-they can and cannot do in your app. App Services uses both document-level and
-field-level permissions:
+A **permission** is a status that Atlas App Services assigns to users 
+to control what they can and cannot do in your app. App Services uses both 
+document-level and field-level permissions:
 
-- Document-level permissions control whether a user can insert, delete, modify,
-  and search for a specific document in a MongoDB collection. These permissions
-  always apply to the entire document regardless of the content.
+- :ref:`Document-level permissions <document-level-permissions>` 
+  control whether a user can insert, delete, modify,
+  and search for a specific document in a MongoDB collection. 
 
-- Field-level permissions control whether a user can read or write the data in
-  specific fields of a document. These permissions only affect the field they
-  apply to, which means that a user may have read or write access to only a
-  subset of the entire document.
+- :ref:`Field-level permissions <field-level-permissions>`
+  control whether a user can read or write the data in
+  specific fields of a document. 
 
-What are Roles?
-~~~~~~~~~~~~~~~
+.. _document-level-permissions:
 
-A **role** is a named set of permissions that a user may have for documents in a
+Document-Level Permissions
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A role's document-level permissions determine which actions that affect
+the entire document can be performed. These permissions always apply to the 
+entire document regardless of the content. A role can have the
+following document-level permissions:
+
+- **Insert**: You can insert new documents.
+- **Delete**: You can delete existing documents.
+- **Search**: You can search for the document using :ref:`Atlas Search <fts-top-ref>`.
+
+.. _field-level-permissions:
+
+Field-Level Permissions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+A role's field-level permissions determine whether a user can read or
+write fields within the document. These permissions only affect the 
+field they apply to, so a user can have read or write access to only 
+a subset of the entire document.
+
+You can define field-level permissions for specific fields and
+default read/write permissions for any additional fields that you 
+don't explicitly define.
+
+Roles
+-----
+
+A **role** is a named set of permissions that a user can have for documents in a
 MongoDB collection. Each role represents a possible relationship between a user
-and an individual document. A user may play at most one role per document in
+and an individual document. A user can have only one role per document in
 a request.
 
-You define the roles a user can play for the documents in a collection. App Services
+You define the roles a user can have for the documents in a collection. App Services
 automatically assigns roles to the user at request time. Each role includes an
-Apply When :ref:`expression <expressions>` that determines when App Services should
-assign the role to a user as well as a set of document-level and field-level
+:ref:`Apply When expression <apply-when-expressions>` that determines when App Services 
+should assign the role to a user and a set of document-level and field-level
 permissions that apply to the role.
 
 App Services only commits operations that a user is authorized to do based on their
@@ -146,55 +173,19 @@ its fields, App Services omits the document or fields from the results.
               ]
             }
 
-Why Define a Role?
-~~~~~~~~~~~~~~~~~~
-
-A role carries a specific set of permissions that you might expose to your app's
-users. A user may play at most one role for each document, so each distinct set of
-permissions that you need requires you to define a named role that encapsulates
-those permissions.
-
-The exact roles and permissions that you define will vary based on your app's
-data and requirements. To determine good roles for a collection, consider your
-data from the perspective of your app's users and what it might mean to them.
-
-.. example::
-   
-   In addition to **Employee** and **Manager** roles, you might add a
-   **Teammate** role to the ``employees`` collection to represent a user on the
-   same team as the document's employee. Teammates can read each other's data
-   but cannot modify it.
-   
-   .. code-block:: json
-      
-      {
-        "name": "Teammate",
-        "apply_when": { "team": "%%user.data.team" },
-        "insert": false,
-        "delete": false,
-        "read": true,
-        "write": false,
-        "search": true,
-        "fields": {},
-        "additional_fields": {
-          "read": true,
-          "write": false
-        }
-      }
-
 How App Services Assigns Roles
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-App Services dynamically assigns roles for every request. The user
-is assigned a separate role, or no role, for each document that matches
-the incoming query.
+App Services dynamically assigns roles for every request. For each document 
+that matches the incoming query, the user is either assigned a separate role 
+or no role.
 
 First, your App evaluates and applies :ref:`filters <filters>` and then
 runs the query.
 
 .. example::
    
-   This request would cause App Services to evaluate a role for every document in the
+   The following request causes App Services to evaluate a role for every document in the
    ``restaurants`` collection where the ``city`` field is set to ``"Chicago"``:
    
    .. code-block:: javascript
@@ -206,13 +197,13 @@ runs the query.
 
 For each document returned by the query, your App evaluates possible
 roles in :ref:`role order <role-order>` and assigns the first applicable
-role, if any. A role applies to a given document if its Apply When
-:ref:`expression <expressions>` evaluates to ``true`` when run against
+role, if any. A role applies to a given document if its :ref:`Apply When expression 
+<apply-when-expressions>` evaluates to ``true`` when run against
 the document.
 
-The set of roles that a user may play for a given request depends on the
+The set of roles that a user can use for a given request depends on the
 collection they're accessing. If the collection has a set of
-collection-level roles defined, then a user may play any of those roles.
+collection-level roles defined, then a user can use any of those roles.
 If there are no collection-level rules, the request falls back to the
 data source's default roles.
 
@@ -220,7 +211,7 @@ data source's default roles.
    
    An employee will always be on their own team, so both the **Employee** and
    **Teammate** roles apply to them for their own document. However, they can
-   only one play one role, so we want to use **Employee** because it's more
+   use only one role, so we want to use **Employee** because it's more
    specific.
    
    To configure this, specify **Employee** earlier than **Teammate** in the
@@ -249,131 +240,6 @@ data source's default roles.
               ]
             }
 
-Define Roles & Permissions
---------------------------
-
-You can configure your app's data access rules from the App Services UI or by
-deploying configuration files with {+cli+}:
-
-.. tabs-realm-admin-interfaces::
-
-   .. tab::
-      :tabid: ui
-
-      1. Click :guilabel:`Rules` in the left navigation menu and then select a
-         collection from the data source's collection list. You can also
-         select :guilabel:`Default roles and filters` to configure
-         :ref:`default rules <default-rules>` for the entire cluster.
-      
-         If no roles are defined yet, you'll be prompted to create a new
-         one. Otherwise you'll see an ordered list of existing roles.
-         
-      2. To create a new role, click :guilabel:`Add role`. You can
-         either start from scratch or use a preset role as a starting
-         point.
-         
-      3. Give the role a name. The name can be anything you want but
-         must be unique within a given collection. Consider using names
-         that describe the user (e.g. ``Admin``) and/or their
-         relationship to the data (e.g. ``Owner``).
-      
-      4. Define an :guilabel:`Apply When` expression that determines when
-         a given user has the role for a given document.
-      
-      5. Define :ref:`document-level permissions <document-level-permissions>` for the role.
-      
-      6. Define :ref:`field-level permissions <field-level-permissions>` for the role.
-      
-      7. Save the role.
-
-      8. If a collection has more than one role assigned, you can modify
-         their :ref:`role order <role-order>` by clicking the arrows on
-         each role.
-     
-   .. tab::
-      :tabid: cli
-      
-      1. Pull the latest version of your app.
-         
-         .. code-block:: bash
-
-            realm-cli pull --remote="<Your App ID>"
-      
-      2. Define :ref:`roles and filters <config-collection-rules>` for
-         one or more collections. You can also define :ref:`default
-         roles and filters <config-default-rules>` that apply to any
-         unconfigured collection.
-
-         .. tabs::
-
-            .. tab:: Collection Rules
-               :tabid: collection-rules
-
-               .. code-block:: json
-                  :caption: /data_sources/<data source>/<database>/<collection>/rules.json
-                  
-                  {
-                    "database": "<Database Name>",
-                    "collection": "<Collection Name>",
-                    "roles": [
-                      {
-                        "name": "<Role Name>",
-                        "apply_when": {},
-                        "insert": true,
-                        "delete": true,
-                        "search": true,
-                        "fields": {
-                          "myField": { "read": true, "write": true }
-                        },
-                        "additional_fields": { "read": true, "write": true }
-                      }
-                    ],
-                    "filters": [
-                      {
-                        "name": "<Filter Name>",
-                        "apply_when": {},
-                        "query": {},
-                        "projection": {}
-                      }
-                    ]
-                  }
-
-            .. tab:: Default Rules
-               :tabid: default-rules
-               
-               .. code-block:: json
-                  :caption: /data_sources/<data source>/default_rule.json
-                  
-                  {
-                    "roles": [
-                      {
-                        "name": "<Role Name>",
-                        "apply_when": {},
-                        "insert": true,
-                        "delete": true,
-                        "search": true,
-                        "fields": {
-                          "myField": { "read": true, "write": true }
-                        },
-                        "additional_fields": { "read": true, "write": true }
-                     }
-                    ],
-                    "filters": [
-                      {
-                        "name": "<Filter Name>",
-                        "apply_when": {},
-                        "query": {},
-                        "projection": {}
-                      }
-                    ]
-                  }
-      
-      3. Deploy your app.
-         
-         .. code-block:: bash
-            
-            realm-cli push
-
 .. _apply-when-expressions:
 
 Apply When Expressions
@@ -390,31 +256,6 @@ issued the request or :json-expansion:`%%root` to reference the current
 document. This lets you customize your data access permissions on a
 per-user, per-document basis.
 
-.. _document-level-permissions:
-
-Document-Level Permissions
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A role's document-level permissions determine which actions that affect
-the entire document a user with the role can perform. A role can have
-any of the following document-level permissions:
-
-- **Insert**: The role can insert new documents.
-- **Delete**: The role can delete existing documents.
-- **Search**: The role can find the document in Atlas Search results.
-
-.. _field-level-permissions:
-
-Field-Level Permissions
-~~~~~~~~~~~~~~~~~~~~~~~
-
-A role's field-level permissions determine whether or not a user with
-the role can read or write individual fields within the document.
-
-You can define field-level permissions for specific fields as well as
-default read/write permissions for any additional fields that you don't
-explicity define.
-
 .. _role-order:
 
 Role Order
@@ -425,6 +266,232 @@ the order in which they are evaluated and applied. Each role's apply
 when expression is evaluated in role order until a role applies or no
 roles remain.
 
-A user may only have one role per document in a given query. Role order
+A user can only have one role per document in a given query. Role order
 determines which role applies in the event that multiple roles' apply
 when expressions are true.
+
+.. _define-roles-and-permissions:
+.. _define-roles:
+
+Define Roles and Permissions
+----------------------------
+
+A user can have only one role for each document, so each set of permissions 
+requires you to define a named role that carries those permissions. The
+roles and permissions that you define depend on your app's
+data and requirements. To determine the best roles for a collection, consider your
+data from the perspective of your app's users and what it might mean to them.
+
+.. example::
+   
+   In addition to **Employee** and **Manager** roles, you might add a
+   **Teammate** role to the ``employees`` collection to represent a user on the
+   same team as the document's employee. Teammates can read each other's data
+   but cannot modify it.
+   
+   .. code-block:: json
+      
+      {
+        "name": "Teammate",
+        "apply_when": { "team": "%%user.data.team" },
+        "insert": false,
+        "delete": false,
+        "read": true,
+        "write": false,
+        "search": true,
+        "fields": {},
+        "additional_fields": {
+          "read": true,
+          "write": false
+        }
+      }
+
+Procedure
+~~~~~~~~~
+
+You can configure your app's data access rules from the App Services UI or by
+deploying configuration files with {+cli+}:
+
+.. note::
+
+   The following procedure requires a :ref:`linked MongoDB Atlas data source
+   <data-sources>`. Roles and permissions :ref:`do not apply
+   <data-federation-caveats>` to {+adf-datasource+}s.
+
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
+      
+      .. procedure::
+
+         .. step:: Navigate to the Rules Window
+
+            Under :guilabel:`Data Access` in the left navigation menu, click :guilabel:`Rules`. 
+
+         .. step:: Configure Roles for a Collection
+
+            A. For the linked cluster that you want to define access permissions for,
+               click the ellipsis :guilabel:`(...)` and select :guilabel:`Create a collection`.
+            
+            #. In the modal, enter the :guilabel:`Database Name` and 
+               :guilabel:`Collection Name` of the MongoDB collection that you want to use.
+
+            .. note:: 
+
+               Alternatively, you can select :guilabel:`Default roles and filters` under
+               the linked cluster to configure :ref:`default rules <default-rules>` 
+               for the entire cluster.
+
+         .. step:: Create a New Role
+
+            To create a new role, click :guilabel:`Add role`. You can
+            either start from scratch or use a preset role as a starting
+            point.
+
+         .. step:: Configure the Role
+
+            A. Give the role a name. The name can be anything you want but
+               must be unique within a given collection. Consider using names
+               that describe the user (e.g. ``Admin``) and/or their
+               relationship to the data (e.g. ``Owner``).
+
+            #. Define the Role's :guilabel:`Apply When` Condition. 
+               A role's :ref:`Apply when <apply-when-expressions>` condition 
+               determines when a given user has the role for a given document.
+
+            #. Define the role's :guilabel:`Document Permissions`. For more 
+               information, see :ref:`document-level-permissions`. 
+
+            #. Define the role's :guilabel:`Field Permissions`. For more 
+               information, see :ref:`field-level-permissions`. 
+
+         .. step:: Save the Role
+
+            Save the role. Once you have finished defining roles for the collection, 
+            App Services will immediately begin using the roles you
+            defined for all incoming queries on the collection.
+
+            .. note::
+
+               If a collection has more than one role assigned, you can modify their 
+               :ref:`role order <role-order>` by clicking the arrows on each role.
+
+   .. tab::
+      :tabid: cli
+      
+      .. procedure::
+
+         .. step:: Pull the Latest Version of Your App
+
+            To pull a local copy of the latest version of your app, run the following:
+
+            .. code-block:: bash
+
+                realm-cli pull --remote="<Your App ID>"
+    
+            .. tip::
+
+               You can also download a copy of your application's configuration files from
+               the :guilabel:`Deploy > Export App` screen in the App Services UI.
+
+         .. step:: Add a Rule Configuration File
+
+            To define :ref:`roles and filters <config-collection-rules>` for a collection, open 
+            the ``rules.json`` configuration file within the collection's configuration directory.
+            You can also define :ref:`default roles and filters <config-default-rules>` that 
+            apply to any unconfigured collection.
+
+            .. tip:: Scaffold the Collection
+
+               If you haven't already defined rules or a schema for the collection, you
+               need to manually create its configuration directory and ``schema.json``:
+
+               .. code-block:: bash
+
+                  # Create the collection's configuration directory
+                  mkdir -p data_sources/<service>/<db>/<collection>
+                  # Create the collection's schema file
+                  echo '{}' >> data_sources/<service>/<db>/<collection>/rules.json
+
+            The configuration file should have the following form:
+
+            .. tabs::
+
+                .. tab:: Collection Rules
+                  :tabid: collection-rules
+
+                  .. code-block:: json
+                      :caption: /data_sources/<data source>/<database>/<collection>/rules.json
+                      
+                      {
+                        "database": "<Database Name>",
+                        "collection": "<Collection Name>",
+                        "roles": [
+                          {
+                            "name": "<Role Name>",
+                            "apply_when": {},
+                            "insert": true,
+                            "delete": true,
+                            "search": true,
+                            "fields": {
+                              "myField": { "read": true, "write": true }
+                            },
+                            "additional_fields": { "read": true, "write": true }
+                          }
+                        ],
+                        "filters": [
+                          {
+                            "name": "<Filter Name>",
+                            "apply_when": {},
+                            "query": {},
+                            "projection": {}
+                          }
+                        ]
+                      }
+
+                .. tab:: Default Rules
+                  :tabid: default-rules
+                  
+                  .. code-block:: json
+                      :caption: /data_sources/<data source>/default_rule.json
+                      
+                      {
+                        "roles": [
+                          {
+                            "name": "<Role Name>",
+                            "apply_when": {},
+                            "insert": true,
+                            "delete": true,
+                            "search": true,
+                            "fields": {
+                              "myField": { "read": true, "write": true }
+                            },
+                            "additional_fields": { "read": true, "write": true }
+                        }
+                        ],
+                        "filters": [
+                          {
+                            "name": "<Filter Name>",
+                            "apply_when": {},
+                            "query": {},
+                            "projection": {}
+                          }
+                        ]
+                      }
+
+         .. step:: Configure your Roles
+
+            For each document in the ``roles`` array that you want to
+            configure, configure the following fields:
+
+            .. include:: /mongodb/tables/role-configuration.rst
+      
+         .. step:: Deploy your App
+
+            Once you've defined and saved ``rules.json``, deploy your app.
+            Realm CLI immediately deploys the new roles and permissions on push.
+         
+         .. code-block:: bash
+            
+            realm-cli push

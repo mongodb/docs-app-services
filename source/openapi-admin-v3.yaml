@@ -389,20 +389,59 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
   "/groups/{groupId}/apps/{appId}/export":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - in: query
+        name: deployment
+        required: false
+        description: The `_id` of a specific deployment to export. If not specified, export the latest deployment.
+        example: 6373362f01a569d5cd571c68
+        schema:
+          type: string
+      - in: query
+        name: source_control
+        required: false
+        default: false
+        description: |-
+          If `true`, the exported directory is suitable for automatic
+          deployment from GitHub or other source control.
+
+          Cannot be used with the `template` query parameter.
+        schema:
+          type: boolean
+      - in: query
+        name: template
+        required: false
+        default: false
+        description: |-
+          If `true`, the exported directory does not include any
+          identifiers or other data that would tie the app to a specific
+          deployment instance.
+
+          Cannot be used with the `source_control` query parameter.
+        schema:
+          type: boolean
+      - in: query
+        name: version
+        required: false
+        description: |-
+          The configuration file schema version to export. This value
+          corresponds to `config_version` in `realm_config.json`.
+        example: 20210101
+        schema:
+          type: string
     get:
       tags:
         - apps
       operationId: adminExportApplication
       summary: Export an app as a zip file
       description: |-
-        [Export](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/export-app#std-label-export-realm-app)
+        [Export](https://www.mongodb.com/docs/atlas/app-services/apps/export/)
         an application as a zip file.
       responses:
         "200":
           description: The application was successfully exported.
-    parameters:
-      - "$ref": "#/components/parameters/GroupId"
-      - "$ref": "#/components/parameters/AppId"
 
   "/groups/{groupId}/apps/{appId}/event_subscriptions":
     parameters:
@@ -1798,7 +1837,7 @@ paths:
       summary: Send a confirmation email
       description: |-
         Send a [confirmation
-        email](https://www.mongodb.com/docs/realm/authentication/email-password).
+        email](https://www.mongodb.com/docs/realm/authentication/email-password/).
       responses:
         "200":
           description: Successfully sent.
@@ -1972,8 +2011,7 @@ paths:
       operationId: adminListAuthProviders
       summary: List authentication providers in a Atlas App Services App
       description: |-
-        List [authentication
-        providers](https://www.mongodb.com/docs/realm/authentication/providers)
+        List [authentication providers](https://www.mongodb.com/docs/realm/authentication/)
         within a Atlas App Services App.
       responses:
         "200":
@@ -1989,8 +2027,7 @@ paths:
       operationId: adminCreateAuthProvider
       summary: Create an authentication provider
       description: |-
-        Create an [authentication
-        provider](https://www.mongodb.com/docs/realm/authentication/providers).
+        Create an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
       requestBody:
         required: true
         description: ""
@@ -2016,7 +2053,7 @@ paths:
       summary: Retrieve information about authentication provider
       description: |-
         Retrieve information about one of an application's [authentication
-        providers](https://www.mongodb.com/docs/realm/authentication/providers)
+        providers](https://www.mongodb.com/docs/realm/authentication/).
       responses:
         "200":
           description: Successfully retrieved.
@@ -2030,8 +2067,7 @@ paths:
       operationId: adminDeleteAuthProvider
       summary: Delete an authentication provider
       description: |-
-        Delete an [authentication
-        provider](https://www.mongodb.com/docs/realm/authentication/providers).
+        Delete an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
       responses:
         "204":
           description: Successfully deleted.
@@ -2041,8 +2077,7 @@ paths:
       operationId: adminUpdateAuthProvider
       summary: Update an authentication provider
       description: |-
-        Update an [authentication
-        provider](https://www.mongodb.com/docs/realm/authentication/providers).
+        Update an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
       requestBody:
         required: true
         description: ""
@@ -2064,8 +2099,7 @@ paths:
       operationId: adminDisableAuthProvider
       summary: Disable an authentication provider
       description: |-
-        Disable an [authentication
-        provider](https://www.mongodb.com/docs/realm/authentication/providers).
+        Disable an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
       responses:
         "204":
           description: Successfully disabled.
@@ -2080,8 +2114,7 @@ paths:
       operationId: adminEnableAuthProvider
       summary: Enable an authentication provider
       description: |-
-        Enable an [authentication
-        provider](https://www.mongodb.com/docs/realm/authentication/providers).
+        Enable an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
       responses:
         "204":
           description: Successfully enabled.
@@ -2180,6 +2213,21 @@ paths:
       description: |-
         Create an IP address or CIDR block in the Access List for your App Services
         app.
+      requestBody:
+        description: The IP Access List entry to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                address:
+                  type: string
+                  description: The value of the IP address or CIDR block.
+                comment:
+                  type: string
+                  description: An optional comment included in the Access List entry.
+              required:
+                - address
       responses:
         "201":
           description: ""
@@ -2213,6 +2261,21 @@ paths:
       description: |-
         Modify an IP address or CIDR block in the Access List of your App Services
         app
+      requestBody:
+        description: The updated value of the IP Access List entry.
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                address:
+                  type: string
+                  description: The modified value of the IP address or CIDR block.
+                comment:
+                  type: string
+                  description: An optional comment included in the Access List entry.
+              required:
+                - address
       responses:
         "201":
           description: ""
@@ -2683,7 +2746,7 @@ paths:
       operationId: adminListApiKeys
       summary: List API keys
       description: |-
-        List [API keys](https://www.mongodb.com/docs/realm/authentication/api-key)
+        List [API keys](https://www.mongodb.com/docs/realm/authentication/api-key/)
         associated with a Atlas App Services App.
       responses:
         "200":
@@ -2705,8 +2768,7 @@ paths:
       operationId: adminCreateApiKey
       summary: Create a new API key
       description: |-
-        Create a new [API
-        key](https://www.mongodb.com/docs/realm/authentication/api-key).
+        Create a new [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
       requestBody:
         description: The API key to create.
         required: true
@@ -2735,8 +2797,7 @@ paths:
       operationId: adminGetApiKey
       summary: Retrieve information about an API key
       description: |-
-        Retrieve information about an [API
-        key](https://www.mongodb.com/docs/realm/authentication/api-key).
+        Retrieve information about an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
       responses:
         "200":
           description: The API key was successfully retrieved.
@@ -2750,8 +2811,7 @@ paths:
       operationId: adminDeleteApiKey
       summary: Delete an API key
       description: |-
-        Delete an [API
-        key](https://www.mongodb.com/docs/realm/authentication/api-key).
+        Delete an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
       responses:
         "204":
           description: The API key was successfully deleted.
@@ -2766,8 +2826,7 @@ paths:
       operationId: adminEnableApiKey
       summary: Enable an API key
       description: |-
-        Enable an [API
-        key](https://www.mongodb.com/docs/realm/authentication/api-key).
+        Enable an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
       responses:
         "204":
           description: The API key was successfully enabled.
@@ -2782,8 +2841,7 @@ paths:
       operationId: adminDisableApiKey
       summary: Disable an API key
       description: |-
-        Disable an [API
-        key](https://www.mongodb.com/docs/realm/authentication/api-key).
+        Disable an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
       responses:
         "204":
           description: The API key was successfully disabled.
@@ -3085,7 +3143,7 @@ paths:
         - deploy
       operationId: adminListDeployments
       summary: List recent deployments
-      description: Return the 100 most recent application deployments.
+      description: Return the 25 most recent application deployments.
       responses:
         "200":
           description: Successfully listed.
@@ -3122,7 +3180,7 @@ paths:
       tags:
         - deploy
       operationId: adminRedeployDeployment
-      summary: Redeploy a deployment
+      summary: Redeploy a Deployment
       description: Redeploy a previously-deployed version of an App.
       responses:
         "204":
@@ -3145,7 +3203,7 @@ paths:
       tags:
         - deploy
       operationId: adminListDeploymentDrafts
-      summary: Return current deployment draft
+      summary: Get Current Deployment Draft
       description: Return the current application deployment draft, if applicable.
       responses:
         "200":
@@ -3158,7 +3216,7 @@ paths:
       tags:
         - deploy
       operationId: adminCreateDeploymentDraft
-      summary: Create a new deployment draft
+      summary: Create a Deployment Draft
       description: Create a new application deployment draft, if none exists.
       responses:
         "200":
@@ -3945,7 +4003,7 @@ paths:
       summary: Create an endpoint
       description: Create a new [endpoint](https://www.mongodb.com/docs/realm/endpoints/).
       requestBody:
-        description: A valid [configuration object](https://www.mongodb.com/docs/realm/manage-apps/configure/config/http_endpoints/) for the new endpoint.
+        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints/) for the new endpoint.
         required: true
         content:
           application/json:
@@ -3986,7 +4044,7 @@ paths:
       summary: Modify an endpoint
       description: Modify an existing [endpoint](https://www.mongodb.com/docs/realm/endpoints/) configuration.
       requestBody:
-        description: A valid, updated [configuration object](https://www.mongodb.com/docs/realm/manage-apps/configure/config/http_endpoints/) for the endpoint.
+        description: A valid, updated [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints/) for the endpoint.
         required: true
         content:
           application/json:
@@ -4037,7 +4095,7 @@ paths:
       summary: Enable the Data API
       description: Create your app's [Data API](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/) configuration.
       requestBody:
-        description: A valid [configuration object](https://www.mongodb.com/docs/realm/manage-apps/configure/config/http_endpoints#std-label-appconfig-data-api-endpoints) for the endpoint.
+        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints#std-label-appconfig-data-api-endpoints) for the endpoint.
         required: true
         content:
           application/json:
@@ -4057,7 +4115,7 @@ paths:
       summary: Modify the Data API
       description: Update your app's [Data API](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/) configuration.
       requestBody:
-        description: A valid [configuration object](https://www.mongodb.com/docs/realm/manage-apps/configure/config/http_endpoints#std-label-appconfig-data-api-endpoints) for the endpoint.
+        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints#std-label-appconfig-data-api-endpoints) for the endpoint.
         required: true
         content:
           application/json:
@@ -4193,7 +4251,7 @@ paths:
       summary: Create a custom resolver
       description: Create a new [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/).
       requestBody:
-        description: A valid [custom resolver configuration](https://www.mongodb.com/docs/realm/manage-apps/configure/config/graphql#std-label-appconfig-custom-resolver) object.
+        description: A valid [custom resolver configuration](https://www.mongodb.com/docs/atlas/app-services/reference/config/graphql#std-label-appconfig-custom-resolver) object.
         required: true
         content:
           application/json:
@@ -4231,7 +4289,7 @@ paths:
       summary: Modify a custom resolver
       description: Modify an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
       requestBody:
-        description: A valid, updated [custom resolver configuration](https://www.mongodb.com/docs/realm/manage-apps/configure/config/graphql#std-label-appconfig-custom-resolver) object.
+        description: A valid, updated [custom resolver configuration](https://www.mongodb.com/docs/atlas/app-services/reference/config/graphql#std-label-appconfig-custom-resolver) object.
         required: true
         content:
           application/json:
@@ -4430,7 +4488,7 @@ components:
       name: sort
       required: false
       description: |-
-        The field name to sort to sort results by. The only valid value is the
+        The field name to sort results by. The only valid value is the
         default: `_id`.
       in: query
       schema:
@@ -4661,7 +4719,7 @@ components:
             The short identifier of a cloud provider-specific deployment region.
             Some regions are available for global deployment while others are
             only available for local apps. See [Cloud Deployment
-            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
+            Regions](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           $ref: "#/components/schemas/CloudProviderRegionId"
         location:
           $ref: "#/components/schemas/DeploymentLocation"
@@ -4684,7 +4742,7 @@ components:
               type: string
               description: |-
                 The id of an [App Services template
-                app](https://www.mongodb.com/docs/realm/manage-apps/create/template-apps#std-label-template-apps)
+                app](https://www.mongodb.com/docs/atlas/app-services/apps/create/template-apps/)
                 to use as a base for the new app.
             data_source:
               "$ref": "#/components/schemas/DataSource"
@@ -4738,7 +4796,7 @@ components:
         - "production"
     DeploymentModel:
       type: string
-      description: An application [deployment model](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models).
+      description: An application [deployment model](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#deployment-models).
       enum:
         - "GLOBAL"
         - "LOCAL"
@@ -4785,7 +4843,7 @@ components:
             The short identifier of a cloud provider-specific deployment region.
             Some regions are available for global deployment while others are
             only available for local apps. See [Cloud Deployment
-            Regions](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
+            Regions](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#cloud-deployment-regions).
           example: "aws-us-east-1"
         name:
           type: string
@@ -4803,7 +4861,7 @@ components:
           type: array
           description: |-
             The [deployment
-            models](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy/deployment-models-and-regions/#deployment-models)
+            models](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/deployment-models-and-regions/#deployment-models)
             that this region supports.
           items:
             $ref: "#/components/schemas/DeploymentModel"
@@ -5021,8 +5079,8 @@ components:
               type: array
               description: |-
                 The unique ID values of automatic deployment provider
-                installations. For example, the ID of a GitHub app
-                installation.
+                installations. For example, the `id` value of a [GitHub app
+                installation](https://docs.github.com/en/rest/apps/installations).
               items:
                 type: string
         last_modified:
@@ -5422,7 +5480,7 @@ components:
             "$ref": "#/components/schemas/Role"
         filters:
           type: array
-          description: A list of default [query filters](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/config/data_sources/#filters).
+          description: A list of default [query filters](https://www.mongodb.com/docs/atlas/app-services/reference/config/data_sources/#filters).
           items:
             "$ref": "#/components/schemas/Filter"
     Rule:
@@ -7052,7 +7110,7 @@ tags:
     description: View and manage applications in an Atlas project.
   - name: authproviders
     x-displayName: Authentication Providers
-    description: View and manage [authentication providers](https://www.mongodb.com/docs/atlas/app-services/authentication/providers/).
+    description: View and manage [authentication providers](https://www.mongodb.com/docs/atlas/app-services/authentication/).
   - name: billing
     x-displayName: Billing
     description: View billed usage of your applications.
@@ -7064,7 +7122,7 @@ tags:
     description: |
       ## Draft and Deploy a Group of Changes
 
-      You can [deploy](https://www.mongodb.com/docs/atlas/app-services/manage-apps/deploy#std-label-application-deployment) a
+      You can [deploy](https://www.mongodb.com/docs/atlas/app-services/apps/deploy/) a
       group of application changes together by creating and deploying a draft.
       To create and deploy a set of draft changes:
 
@@ -7236,7 +7294,7 @@ tags:
       application services like Triggers and Device Sync.
   - name: environments
     x-displayName: Environments
-    description: View and manage your app's [environment](https://www.mongodb.com/docs/atlas/app-services/manage-apps/configure/environments/) and environment values.
+    description: View and manage your app's [environment](https://www.mongodb.com/docs/atlas/app-services/apps/configure/environments/) and environment values.
   - name: functions
     x-displayName: Functions
     description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
@@ -7309,7 +7367,7 @@ tags:
       For more information, see [GET /groups/{groupId}/apps/{appId}/logs](#section/adminGetLogs).
   - name: log_forwarders
     x-displayName: Log Forwarding
-    description: View and manage your application's [log forwarders](https://www.mongodb.com/docs/realm/logs/forward-logs/).
+    description: View and manage your application's [log forwarders](https://www.mongodb.com/docs/atlas/app-services/logs/forward-logs/).
   - name: metrics
     x-displayName: Metrics
     description: View Atlas App Services metrics.
@@ -7324,7 +7382,7 @@ tags:
     description: View and manage your application's [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/).
   - name: security
     x-displayName: Security
-    description: Configure your application's [security](https://www.mongodb.com/docs/realm/manage-apps/secure/).
+    description: Configure your application's [security](https://www.mongodb.com/docs/realm/apps/secure/).
   - name: services
     x-displayName: Data Sources & Services
     description: View and manage your application's [data sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/)

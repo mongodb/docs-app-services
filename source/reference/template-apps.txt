@@ -17,12 +17,7 @@ Overview
 
 You can get up and running with an Atlas App Services App using one of our premade template apps.
 Template apps bring together many of the building blocks available in Atlas App Services
-and start you off with a prebuilt app that you can customize. You can create 
-an app based on a template using any of the following interfaces:
-
-- :ref:`App Services UI <create-a-realm-app>`
-- :ref:`{+cli+} <create-app-cli>`
-- :ref:`Admin API <create-app-api>`
+and start you off with a prebuilt app that you can customize.
 
 .. button:: Check out the Template Apps
    :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_realm_template_apps
@@ -32,18 +27,19 @@ an app based on a template using any of the following interfaces:
 Create a Template App
 ---------------------
 
-You can create a template app using the UI on the Atlas App Services site, 
-the Realm CLI, or Admin API. Choose the tab for whichever 
+You can create a template app using the UI on the Atlas App Services
+site, the Realm CLI, or the Admin API. Choose the tab for whichever
 option is most convenient for you.
 
-.. tabs::
+.. tabs-realm-admin-interfaces::
    
-   .. tab:: Atlas App Services UI
+   .. tab::
       :tabid: ui
 
-      Follow the procedure described in the 
-      :ref:`create-a-realm-app` guide, and select
-      the :guilabel:`Create App from Template` tab in the :guilabel:`Create a new App` step. 
+      You can create a template App using the same command as you would
+      use to create a blank App. To learn how to create an App Services
+      App, see :ref:`Create an App <create-app>` and follow the
+      instructions for a template App.
 
       .. _explore-template-app:
 
@@ -55,40 +51,53 @@ option is most convenient for you.
 
       - On-screen guides to customize your app.
 
-      - Template app client code you can download as a ``.zip`` file or use {+cli+}.
+      - Template app client code that you can download as a ``.zip`` file.
 
-   .. tab:: {+cli+}
+   .. tab::
       :tabid: cli
 
-      Follow the procedure described in the 
-      :ref:`Create an App with {+cli+} <create-app-cli>` guide and include
-      the ``template`` flag followed by one of the template app IDs: 
+      You can create a template App using the same command as you would
+      use to create a blank App. To learn how to create an App Services
+      App, see :ref:`Create an App <create-app>` and follow the
+      instructions for a template App.
       
+      The command must include the ``--template`` flag with a valid
+      template App ID value:
+
       .. code-block:: shell
          
-         realm-cli apps create -n "<App Name>" --template "<Chosen Template App ID>"
+         realm-cli apps create \
+           --name "<App Name>" \
+           --template "<Template App ID>"
 
-   .. tab:: Admin API
+   .. tab::
       :tabid: api
 
-      Follow the procedure described in the 
-      :ref:`Create an App with App Services API <create-app-api>` guide, and select
-      the :guilabel:`Template` tab in the :guilabel:`Create a new App` step. 
-      When calling the create endpoint you should include a request body that looks like this:
+      You can create a template App using the same endpoint as you would
+      use to create a blank App. To learn how to create an App Services
+      App, see :ref:`Create an App <create-app>` and follow the
+      instructions for a template App.
 
-      .. code-block:: json
-         
-         { 
-            "name": "<AppName>",
-            "template_id": "<Chosen Template App ID>",
-            "data_source": {
+      Your Admin API request must include a valid ``template_id`` value
+      in the request body.
+
+      .. code-block:: bash
+         :emphasize-lines: 6
+
+         curl -X POST \
+           https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps \
+           -H 'Authorization: Bearer <access_token>' \
+           -d '{
+             "name": "<App Name>",
+             "template_id": "<Template App ID>",
+             "data_source": {
                "name": "mongodb-atlas",
                "type": "mongodb-atlas",
                "config": {
-                  "clusterName": "<Name Of Existing Cluster>"
+                 "clusterName": "<Atlas Cluster Name>"
                }
-            }
-         }
+             }
+           }'
 
 .. _get-template-app-client:
 
@@ -106,7 +115,7 @@ the Atlas App Services UI, Realm CLI, or GitHub.
       
       When you download client code through the App Services UI, the client 
       code is not pre-populated with your App Services App ID. To use 
-      one of these clients, you must :ref:`find your App ID <find-your-app-id>` 
+      one of these clients, you must :ref:`find your App ID <app-metadata>`
       to use in the client. Follow the :guilabel:`Configuration` and 
       :guilabel:`Download the Client as a Zip File` instructions in the client 
       :file:`README.md` to learn where to insert your App ID.
@@ -185,7 +194,7 @@ the Atlas App Services UI, Realm CLI, or GitHub.
       If you clone one of these repositories, the client code is not 
       pre-populated with your App Services App ID. To use one of these
       clients, you must :ref:`create a template app <create-template-app>` 
-      and :ref:`find your App ID <find-your-app-id>` to use in the client.
+      and :ref:`find your App ID <app-metadata>` to use in the client.
       Follow the :guilabel:`Configuration` and :guilabel:`Cloning from GitHub` 
       instructions in the client :file:`README.md` to learn where to insert 
       your App ID.

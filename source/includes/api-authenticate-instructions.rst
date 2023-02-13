@@ -1,15 +1,19 @@
-Use your MongoDB Cloud API key pair to call the authentication endpoint:
+Call the admin user authentication endpoint with your MongoDB Atlas API
+key pair:
 
 .. code-block:: shell
-  
-   curl --request POST \
-     --header 'Content-Type: application/json' \
-     --header 'Accept: application/json' \
-     --data '{"username": "<Public API Key>", "apiKey": "<Private API Key>"}' \
-     https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login
 
-If authentication succeeds, Atlas App Services returns an access token as part of
-the JSON response document:
+   curl -X POST \
+     https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login \
+     -H 'Content-Type: application/json' \
+     -H 'Accept: application/json' \
+     -d '{
+       "username": "<Public API Key>",
+       "apiKey": "<Private API Key>"
+     }'
+
+If authentication succeeds, the response body contains a JSON object
+with an ``access_token`` value:
 
 .. code-block:: json
    :emphasize-lines: 2
@@ -21,8 +25,10 @@ the JSON response document:
      "device_id": "<device_id>"
    }
 
-Save the ``access_token``, which you'll use as the Bearer token to authenticate in the upcoming steps.
+The ``access_token`` grants access to the App Services Admin API. You
+must include it as a Bearer token in the ``Authorization`` header for
+all Admin API requests.
 
 .. seealso::
-  
+
    :admin-api-endpoint:`API Authentication Documentation <section/Get-Authentication-Tokens>`

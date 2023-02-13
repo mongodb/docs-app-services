@@ -24,7 +24,7 @@
             - Description
 
           * - "normal"
-            - The user is an :doc:`application user </authentication>` logged in
+            - The user is an :doc:`application user </users>` logged in
               through an authentication provider other than the
               :doc:`API Key </authentication/api-key>` provider.
 
@@ -42,7 +42,7 @@
      - A document that contains metadata that describes the
        user. This field combines the data for all ``identities``
        associated with the user, so the exact field names and values
-       depend on which :doc:`authentication providers </authentication>`
+       depend on which :doc:`authentication providers </users>`
        the user has authenticated with.
 
        .. note:: System Functions Have No User Data
@@ -54,8 +54,8 @@
    * - ``custom_data``
      - document
      
-     - A document from your application's :doc:`custom user
-       data collection </users/enable-custom-user-data>` that
+     - A document from your application's :ref:`custom user
+       data collection <custom-metadata>` that
        specifies the user's ID. You can use the custom user data
        collection to store arbitrary data about your application's
        users. If you set the ``name`` field, App Services populates the 

@@ -254,6 +254,20 @@ the change as two operations:
 Enable Partition-Based Sync
 ---------------------------
 
+Before You Begin
+~~~~~~~~~~~~~~~~
+
+You will need the following to enable Partition-Based Sync:
+
+- An App Services App. To learn how to create an App, see :ref:`Create
+  an App <create-app>`.
+
+- A linked Atlas data source. To learn how to add a data source, see
+  :ref:`Link a Data Source <link-a-data-source>`.
+
+Procedure
+~~~~~~~~~
+
 .. tabs-realm-admin-interfaces::
 
    .. tab::
@@ -347,33 +361,20 @@ Enable Partition-Based Sync
      
    .. tab::
       :tabid: cli
-
-      This procedure assumes you have :ref:`created an App Services App 
-      <create-app-cli>` and have linked a data source.
-
-      If you have not yet linked the cluster to your application, follow the
-      :ref:`link-a-data-source` guide to link it before
-      you continue.
       
       .. procedure::
 
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/cli-login.rst
+
          .. step:: Pull the Latest Version of Your App
 
-            To update your app through the CLI, you need an :ref:`up-to-date application
-            directory <application-directory>`. To pull a local copy of the latest version
-            of your app, run the following:
-
-            .. code-block:: bash
-
-               realm-cli pull --remote="<Your App ID>"
-
+            .. include:: /includes/cli-pull-latest.rst
 
          .. step:: Add a Sync Configuration
 
             You can enable sync for a single linked cluster in your application.
-            If you have not yet linked the cluster to your application, follow the
-            :ref:`link-a-data-source` guide to link it before
-            you continue.
 
             The App Services App has a ``sync`` directory where you can find 
             the :ref:`sync configuration file <appconfig-sync>`. If you have not 
@@ -539,9 +540,6 @@ Enable Partition-Based Sync
          .. step:: Select a Cluster to Sync
 
             You can enable Sync for a single linked cluster in your application.
-            If you have not yet linked the cluster to your application, follow the
-            :ref:`link-a-data-source` guide to link it before
-            you continue.
 
             You'll need the cluster's service configuration file to configure sync. You
             can find the configuration file by :admin-api-endpoint:`listing all services 

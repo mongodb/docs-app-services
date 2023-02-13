@@ -1,237 +1,168 @@
-.. _users-and-authentication:
+.. _authentication-providers:
 
-======================
-Users & Authentication
-======================
+========================
+Authentication Providers
+========================
 
 .. default-domain:: mongodb
 
-.. contents:: On this page
-   :local:
-   :backlinks: none
-   :depth: 2
-   :class: singlecol
+.. toctree::
+   :titlesonly:
+   :hidden:
+   
+   Anonymous Authentication </authentication/anonymous>
+   Email/Password Authentication </authentication/email-password>
+   Custom JWT Authentication </authentication/custom-jwt>
+   Custom Function Authentication </authentication/custom-function>
+   API Key Authentication </authentication/api-key>
+   Facebook Authentication </authentication/facebook>
+   Google Authentication </authentication/google>
+   Apple ID Authentication  </authentication/apple>
 
-Introduction
-------------
+Users log in to your client application using authentication providers.
 
-Atlas App Services manages authentication for your application's end users. 
-App Services:
+Apps provide several authentication provider options:
 
-- Uses role-based :ref:`data access rules <mongodb-rules>` to determine 
-  read & write permissions.
-- Associates every request with an authenticated user
-- Evaluates permissions for every object included the request. 
+- :ref:`Anonymous Authentication <anonymous-authentication>` allows
+  users to view or edit data without creating an account.
 
-Through user accounts, you can store and access metadata and custom 
-data for each user. 
+- The :ref:`Email/Password <email-password-authentication>` and
+  :ref:`API Key <api-key-authentication>` providers let you register new
+  user accounts and API keys that are unique to your App.
 
-Users log in through :ref:`authentication providers 
-<authentication-providers>`. Each provider represents a specific method 
-of authentication. 
+- The OAuth providers for :ref:`Facebook <facebook-authentication>`,
+  :ref:`Google <google-authentication>`, and :ref:`Apple
+  <apple-id-authentication>` allow users to log in with their existing
+  accounts using the OAuth 2.0 standard.
 
-App Services includes built-in providers for common use cases, such as Facebook 
-and Google. Custom providers allow you to integrate any external 
-authentication system.
+- The :ref:`Custom JWT <custom-jwt-authentication>` and :ref:`Custom
+  Function <custom-function-authentication>` providers allow you to
+  integrate with any authentication system using standard JSON Web
+  Tokens or custom code that you write.
 
-Concepts
---------
+Use a single provider when all users authenticate in the same way. For 
+more flexibility, you can enable multiple providers. Link user accounts 
+from one provider to another with client SDKs.
 
-.. _auth-providers:
+.. example::
+
+   A blog or news service app might use multiple authentication providers. 
+   A reader might authenticate anonymously with no need to register. 
+   Journalists would sign in through an account with authorization to 
+   publish content. In this example, an anonymous user might have read-only 
+   access. The journalist with an account would have write access.
+
+.. _auth-provider-list:
 
 Authentication Providers
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
-In App Services, an **authentication provider** is a modular service.
-These services provide identity verification, and maintain information 
-about app users.
+Atlas App Services provides these authentication providers for user login:
 
-Users authenticate themselves by providing a set of credentials to an 
-authentication provider. With valid credentials, the provider returns a 
-unique identity associated with the user. App Services logs them in as 
-the :ref:`active user <active-user>`.
+.. list-table::
+   :header-rows: 1
+   :widths: 6 18
 
-App Services includes built-in authentication providers for common use cases. 
-This includes:
+   * - Authentication Provider
+     - Description
 
-- :ref:`Anonymous users <anonymous-authentication>`
-- :ref:`Email/password combinations <email-password-authentication>`
-- :ref:`API keys <api-key-authentication>`
-- OAuth 2.0 through :ref:`Facebook <facebook-authentication>`, :ref:`Google 
-  <google-authentication>`, and :ref:`Apple ID <apple-id-authentication>`
+   * - | :doc:`Anonymous </authentication/anonymous>`
+       | ``anon-user``
+     - Authenticate without credentials. Allow users to create and interact 
+       with data without creating an identity. This is great for a read-only 
+       user, or one who does not need to persist important data. You can 
+       later link the data from the Anonymous session with a permanent 
+       identity. See the client SDK documentation for details.
 
-You can configure custom providers to integrate external authentication 
-systems. 
+   * - | :doc:`Email/Password </authentication/email-password>`
+       | ``local-userpass``
+     - Authenticate with an email address and password. Client applications 
+       must implement email confirmation and password reset functionality. 
+       Realm SDKs provide methods to simplify or customize this 
+       implementation.
 
-- :ref:`Custom JWT <custom-jwt-authentication>`: provider accepts JSON 
-  web tokens signed by the external system. 
-- :ref:`Custom Function <custom-function-authentication>`: provider allows 
-  you to define custom login logic in an Atlas Function.
+   * - | :doc:`API Key </authentication/api-key>`
+       | ``api-key``
+     - Log in with API keys generated in the App Services admin console 
+       or by your end users.
 
-.. important:: Apps Require User Authentication
+   * - | :doc:`Apple ID </authentication/apple>`
+       | ``oauth2-apple``
+     - Use OAuth2 to log in with an Apple ID.
+
+   * - | :doc:`Google </authentication/google>`
+       | ``oauth2-google``
+     - Use OAuth2 to log in with an
+       `existing Google account <https://developers.google.com/identity/sign-in/web/>`_.
+
+   * - | :doc:`Facebook </authentication/facebook>`
+       | ``oauth2-facebook``
+     - Use OAuth2 to log in with an
+       `existing Facebook account <https://developers.facebook.com/docs/facebook-login/>`_.
+
+   * - | :doc:`Custom JWT </authentication/custom-jwt>`
+       | ``custom-token``
+     - Log in with JWT-based credentials generated by a service external 
+       to App Services.
+
+   * - | :doc:`Custom Function </authentication/custom-function>`
+       | ``custom-function``
+     - Log in with arbitrary credentials according to custom authentication 
+       logic that you define.
+
+.. _user-metadata:
+
+User Metadata
+-------------
+
+Each authentication provider can associate metadata fields with an 
+application user. Some providers, such as Email/Password, always add 
+specific fields. Others allow you to configure the data to associate with 
+each user. Authentication providers include these metadata fields in a 
+user object:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 70
    
-   Every application must have at least one authentication provider 
-   configured and enabled. Without at least one provider, no client 
-   application can connect. To learn how to configure and enable 
-   authentication providers, see: :ref:`Authentication Providers 
-   <authentication-providers>`.
-
-.. _user-accounts:
-
-User Accounts
-~~~~~~~~~~~~~
-
-A **user account** represents a single, distinct user of
-your application. App Services creates the user when an authentication provider 
-validates a unique identity. You can source user metadata, such as email 
-or birthday, from authentication providers. You can associate each user 
-with :ref:`custom data <custom-user-data>`.
-
-.. include:: /includes/apple-account-deletion-requirements.rst
-
-.. _authentication-provider-identities:
-
-Authentication Provider Identities
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-App Services stores login metadata for a user in an
-**authentication provider identity**. App Services uses this metadata to 
-authenticate the user. 
-
-Upon first login with an authentication provider, App Services creates an 
-identity object. Each object contains a unique ID, and 
-:ref:`provider-specific metadata <user-metadata>` about the user. On later 
-logins, App Services refreshes the existing identity data.
-
-A single user account can have more than one identity. Realm SDKs 
-enable you to link identities to existing user accounts. This allows users 
-to log in to a single account with more than one provider. For more 
-information, see the documentation on linking identities for your 
-client SDK.
-
-.. _active-user:
-
-Active User
-~~~~~~~~~~~
-
-In the Realm SDKs, you can log in more than one user, but only one account 
-can be **active** at any given time. The **active user** is a user account 
-associated with an application request. 
-
-App Services executes requests from client applications as the active user.
-App Services replaces dynamic references to the user - e.g. :json-expansion:`%%user` 
-in a JSON expression - with the active user.
-
-You can use a specific active user, or the system user, to execute 
-Functions.
-
-.. _system-user:
-
-System User
-~~~~~~~~~~~
-
-The **system user** is an internal user that has advanced privileges.
-The system user bypasses all rules. You can execute :ref:`functions
-<functions>` as a system user instead of the user making a request.
-Triggers run in the context of the system user.
-
-The system user is useful for administrative tasks. This includes:
-
-- Tasks that need to circumvent rules and queries
-- Tasks that need :ref:`unrestricted access 
-  <mongodb-service-limitations-version-requirements>` to MongoDB CRUD 
-  and aggregation operations
-
-.. important:: Security Warning
-
-   Rules do not apply to the system user. Functions run as the system 
-   user can become a security liability. Ensure that you do not expose 
-   these functions to unauthorized users.
-
-   For example, use :ref:`function context <context-user>` to check if 
-   the active user can call the system function. Define a condition to 
-   determine whether the user has the appropriate permissions, e.g.:
-
-   .. code-block:: javascript
-      
-      exports = function() {
-        const activeUser = context.user
-        const adminUserId = context.values.get("adminUserId");
-        if(activeUser.id == adminUserId) {
-          // The user can only execute code here if they're an admin.
-        } else {
-          throw Error("This user is not allowed to execute the system function")
-        }
-      }
-
-.. _user-sessions:
-
-User Sessions
-~~~~~~~~~~~~~
-
-**User session** describes the period when an authenticated user can access 
-data in your app. Authenticated users can use app data without re-entering 
-a password or re-authenticating.
-
-App Services manages sessions with access tokens and refresh tokens. Client
-SDKs supply the logic to manage tokens, and provide them with requests.
-
-The access token for a session expires after thirty minutes. Clients can 
-use the refresh token to retrieve a new access token and start a new 
-session.
-
-Realm SDKs manage refresh access tokens for you. You don't need 
-to manage this process yourself when implementing client applications.
-
-.. include:: /includes/refresh-token-expiration.rst
-
-You can invalidate a refresh token by calling the ``logout()`` method on the 
-client, which does two things:
-
-- Deletes the local session information by deleting both the access and 
-  refresh tokens.
-- Invalidates the refresh token in the App Services backend.
-
-.. note::
-
-   The ``logout()`` method provided by the SDKs does **NOT** invalidate 
-   any active sessions on the server. If a malicious user gets the access 
-   token, he or she could use the token to continue making requests. These 
-   requests would appear to come from the user who "logged out." This window 
-   would last for up to thirty minutes (that is, until that access token 
-   expires).
-
-You can use revoke all sessions for a specific user. This invalidates all 
-access tokens and refresh tokens for that user. See the :ref:`Revoking User 
-Sessions <revoke-user-sessions>` page for the specific steps.
+   * - Authentication Provider
+     - Details
+   
+   * - :doc:`Anonymous </authentication/anonymous>`
+     - Anonymous users have no metadata.
+   
+   * - :doc:`Email/Password </authentication/email-password>`
+     - Email/Password users always have an ``email`` field. This contains 
+       the user's email address.
+   
+   * - :doc:`API Key (Server & User) </authentication/api-key>`
+     - API Key users always have a ``name`` field. When you create an API 
+       key, you give it a name. When users authenticate with API keys, 
+       the ``name`` field contains the key name.
+   
+   * - OAuth 2.0 (:doc:`Facebook </authentication/facebook>` & :doc:`Google </authentication/google>`)
+     - OAuth 2.0 authentication services can provide user metadata. Specify 
+       the metadata you want to access in the provider's
+       :guilabel:`Metadata Fields` configuration. Each user must grant 
+       your app permission to access the requested data.
+   
+   * - :doc:`Custom Function </authentication/custom-function>`
+     - Custom Function authentication users do not have metadata.
+   
+   * - :doc:`Custom JWT </authentication/custom-jwt>`
+     - You can add metadata to JWT users. This metadata comes from data 
+       in the JWT that the authentication system returns. Use the 
+       :guilabel:`Metadata Fields` configuration to specify the expected 
+       metadata. This configuration maps fields in the JWT to fields in 
+       the user object.
 
 Summary
 -------
 
-- App Services supports authentication and user accounts through a variety of 
-  :ref:`authentication providers <authentication-providers>`. You can 
-  associate users with more than one authentication provider.
+- App Services's **authentication providers** allow users to log in 
+  to your app.
 
-- App Services supports having more than one user logged in at the same
-  time. There is only one **active user** at a time.
+- You can link a specific user across
+  multiple providers.
 
-- The **system user** is a special user that bypasses 
-  all rules.
-
-- Realm SDKs manage the access and refresh tokens that comprise a 
-  **user session**.
-
-
-.. toctree::
-   :titlesonly:
-   :caption: User Management
-   :maxdepth: 2
-   :hidden:
-
-   User Objects </authentication/user-objects>
-   Create a User </users/create>
-   Find and View a User </users/find-and-view>
-   Enable Custom User Data </users/enable-custom-user-data>
-   Enable User Metadata </users/enable-user-metadata>
-   Delete or Prevent Users From Accessing an App </users/delete-or-revoke>
-   Authentication Providers </authentication/providers>
+- Each authentication provider has metadata about a user's identity.
