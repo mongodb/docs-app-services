@@ -169,12 +169,24 @@ When your app evaluates an expression, it replaces each expansion in the
 expression with a specific value determined by your app's configuration
 and the context at the time of evaluation.
 
+.. example::
+
+   The following example uses the ``%%user`` and ``%%root`` expansions in an
+   "apply when" expression:
+
+   .. code-block:: json
+
+      "applyWhen": {
+         "%%user.custom_data.status": "ACTIVE",
+         "%%root.owners": "%%user.id"
+      }
+
 .. note::
    
    Some expansions, like :json-expansion:`%%user`, are available in all
    expressions. Others are limited to specific contexts, like
-   :json-expansion:`%%root` which is not Sync compatible and is only available in
-   linked collection rule expressions.
+   :json-expansion:`%%root` which is not Sync compatible and is only available
+   in expressions that operate on a document.
 
    When using Device Sync, expansions have special restrictions. See
    :ref:`sync-compatible-expansions`.
@@ -315,6 +327,8 @@ User Expansions
             "providerType": "<Auth Provider Name>",
             "id": "<Provider User ID"
           }
+          ...
+        ]
       }
    
    .. json-expansion:: %%user.id
@@ -398,7 +412,6 @@ MongoDB Document Expansions
    | **Type:** ``any``
    | **Usable In:** :ref:`MongoDB Atlas Data Sources <data-sources>`
    
-
    The value of a particular field as it exists at the end of a database operation.
 
 .. json-expansion:: %%prev
