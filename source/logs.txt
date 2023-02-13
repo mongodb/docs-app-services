@@ -1,164 +1,26 @@
-.. _logs:
-
-================
-Application Logs
-================
-
-.. default-domain:: mongodb
-
-.. contents:: On this page
-   :local:
-   :backlinks: none
-   :depth: 2
-   :class: singlecol
+=============
+App Log Types
+=============
 
 .. toctree::
    :titlesonly:
-   :hidden:
-   
-   View Logs in the App Services UI </logs/logs-ui>
-   Access Logs with the Admin API </logs/api>
-   View Logs with {+cli+} </logs/cli>
-   Forward Logs to a Service </logs/forward-logs>
-   Log Types </logs/reference>
 
-Introduction
-------------
+   Authentication Logs </logs/authentication>
+   Change Stream Logs </logs/changestream>
+   Device Sync Logs </logs/sync>
+   Endpoint Logs </logs/endpoint>
+   Function Logs </logs/function>
+   Schema Logs </logs/schema>
+   Service Logs </logs/service>
+   Trigger Logs </logs/trigger>
 
-Atlas App Services logs all incoming requests and application events such as user
-authentication, trigger execution, and service interactions. You
-can access your application's logs from the :guilabel:`Logs` page in the
-App Services UI or request them programmatically through the
-:doc:`App Services Admin API </logs/api>`. App Services saves logs for
-{+log-retention-time+}.
+App Services stores logs for the following types of events:
 
-Concepts
---------
-
-.. _log-entry:
-
-Log Entry
-~~~~~~~~~
-
-A log entry describes a single event within App Services.
-Different events in App Services execute in different ways, requiring
-various permissions, underlying components and services.
-App Services groups log entries based on the type of event or request that
-they record. Each type of log contains fields that describe that
-particular event or request. As a result, your application
-logs may include entries of the following types:
-
-- :ref:`Authentication Requests <logs-authentication>`, including user
-  creation, login, and deletion.
-
-- :ref:`Change Stream <logs-change-stream>`, including any time a user
-  opens or closes a stream of change events.
-
-- :ref:`Endpoint requests <logs-endpoint>`, including any time a request is made
-  to a Data API endpoint.
-
-- :ref:`Functions <logs-function>`, including both Atlas Functions
-  as well as individual queries to linked MongoDB Atlas data sources made using the
-  MongoDB service of the a Realm SDK.
-
-- :ref:`Triggers <logs-trigger>`, including Database Triggers,
-  Authentication Triggers, and Scheduled Triggers.
-
-- :ref:`Service Requests <logs-service>`, including HTTPS endpoints and
-  service action calls issued from the a Realm SDK.
-
-- :ref:`Schema changes <logs-schema>`, including any events related to
-  changes to an application's schema.
-
-- :ref:`Sync events <logs-sync>`, including all events related to
-  data synchronization between client devices and MongoDB Atlas.
-
-Parts of a Log Entry
-~~~~~~~~~~~~~~~~~~~~
-
-.. list-table::
-   :header-rows: 1
-   :widths: 20 80
-
-   * - Section
-     - Description
-
-   * - Metadata
-     - App Services logs contain details like the status, timestamp,
-       elapsed time, unique id, user, name, and type of a given log
-       entry.
-
-   * - Request Info
-     - Log entries can contain several types of request details,
-       including event arguments, service name, function call location,
-       compute resources used, remote IP address, SDK, platform version,
-       and performance metrics. Requesting log entries via the App Services
-       Admin API will expose these as top-level fields in log entry
-       objects. On the App Services UI, clicking on a log entry will expose
-       this information.
-
-   * - Arguments
-     - App Services logs the arguments passed to Functions,
-       including requests made via the MongoDB service. Other log
-       entries do not preserve a record of arguments.
-
-   * - Error Info
-     - When an App Services event exits unsuccessfully, it generates an Error
-       log entry containing debugging information that can help diagnose
-       what caused the issue.
-
-Log Filters
-~~~~~~~~~~~
-
-Because App Services creates log entries for most common kinds of user
-interaction, it can become difficult to find a specific group of logs
-due to the sheer volume of logs an application generates.
-For performance reasons, App Services limits individual queries to a maximum
-of 100 log entries per page. You can filter entries by type, status,
-timestamp, user, and request ID to return only logs that are relevant to
-your query.
-
-Error Logs
-~~~~~~~~~~
-
-All App Services log entries have one of two possible statuses:
-``OK`` and ``Error``. If an event exits successfully, App Services
-generates an ``OK`` log entry based on the event. If an
-event does not exit successfully for any reason, App Services
-creates a log entry with a status of the App Services error that
-caused the problem. You may encounter errors if you:
-
-- Attempt to access data from `MongoDB Atlas <https://www.mongodb.com/realm?tck=docs_realm#atlas-form-container>`_ for which there is no applicable rule
-- Fail to catch an exception or promise rejection in an Atlas Function
-- Call ``context.services.get()`` for a service which does not exist
-- Call a MongoDB Atlas service action with invalid or missing
-  parameters
-
-Constraints
------------
-
-Log Lines
-~~~~~~~~~
-
-Functions can log information using JavaScript's ``console.log()``
-method. App Services stringifies each console log and stores each string
-as a single line. App Services truncates lines to 512 bytes in length.
-For ASCII character sets, this translates to 512 characters; depending
-on the character set you use, you may see truncation at lower character
-counts.
-
-App Services saves only the first 25 log lines for a given log entry.
-
-App Services stores each output as a single string in the log entry's
-``Logs`` field.
-
-Log Retention
-~~~~~~~~~~~~~
-
-App Services retains logs for {+log-retention-time+}, after which they
-are deleted.
-
-If you require logs older than {+log-retention-time+}, you can set up a
-:ref:`log forwarder <forward-logs>` or use the :doc:`admin log API
-</logs/api>` prior to the expiration date of each log to extract and
-externally store your log history.
+- :doc:`Authentication Logs </logs/authentication>`
+- :doc:`Change Stream Logs </logs/changestream>`
+- :doc:`Device Sync Logs </logs/sync>`
+- :doc:`Endpoint Logs </logs/endpoint>`
+- :doc:`Function Logs </logs/function>`
+- :doc:`Schema Logs </logs/schema>`
+- :doc:`Service Logs </logs/service>`
+- :doc:`Trigger Logs </logs/trigger>`
