@@ -73,7 +73,11 @@ raw: ${prefix}/sync/event-library -> ${base}/sync/app-builder/event-library/
 raw: ${prefix}/migrate -> https://mongodb.com/docs/realm/migrate/
 raw: ${prefix}/stitch -> https://mongodb.com/docs/realm/stitch/
 
-# (DOCSP-26941) App Configuration Files Reference
+# API Auth Improvements
+raw: ${prefix}/reference/authenticate-http-client-requests -> ${base}/data-api/authenticate/
+
+# (DOCSP-24017) App Services IA Refresh
+## (DOCSP-26941) App Configuration Files Reference
 raw: ${prefix}/manage-apps/configure/config -> ${base}/reference/config/
 raw: ${prefix}/manage-apps/configure/config/app -> ${base}/reference/config/app/
 raw: ${prefix}/manage-apps/configure/config/auth -> ${base}/reference/config/auth/
@@ -90,22 +94,18 @@ raw: ${prefix}/manage-apps/configure/config/sync -> ${base}/reference/config/syn
 raw: ${prefix}/manage-apps/configure/config/template-expansions -> ${base}/reference/config/template-expansions/
 raw: ${prefix}/manage-apps/configure/config/triggers -> ${base}/reference/config/triggers/
 raw: ${prefix}/manage-apps/configure/config/values -> ${base}/reference/config/values/
-
-# (DOCSP-26916) [Section] Develop & Deploy Apps
+## (DOCSP-26916) [Section] Develop & Deploy Apps
 raw: ${prefix}/manage-apps/configure -> ${base}/apps/
 raw: ${prefix}/manage-apps/deploy -> ${base}/apps/deploy/
 raw: ${prefix}/manage-apps -> ${base}/apps/
-
-# (DOCSP-26917) [Port] Create an App (/apps/create)
+## (DOCSP-26917) [Port] Create an App (/apps/create)
 raw: ${prefix}/manage-apps/create -> ${base}/apps/create/
 raw: ${prefix}/manage-apps/create/create-with-api -> ${base}/apps/create/
 raw: ${prefix}/manage-apps/create/create-with-cli -> ${base}/apps/create/
 raw: ${prefix}/manage-apps/create/create-with-ui -> ${base}/apps/create/
-
-# (DOCSP-26919) [Port] Copy an App (/apps/copy)
+## (DOCSP-26919) [Port] Copy an App (/apps/copy)
 raw: ${prefix}/manage-apps/configure/copy-app -> ${base}/apps/copy/
-
-# (DOCSP-26918) [Port] Update an App (/apps/update)
+## (DOCSP-26918) [Port] Update an App (/apps/update)
 raw: ${prefix}/manage-apps/configure/update-app -> ${base}/apps/update/
 raw: ${prefix}/manage-apps/deploy/deployment-draft -> ${base}/apps/update/
 raw: ${prefix}/manage-apps/deploy/disable-deployment-drafts -> ${base}/apps/update/
@@ -118,54 +118,49 @@ raw: ${prefix}/manage-apps/deploy/automated/sdlc -> ${base}/apps/cicd/
 raw: ${prefix}/manage-apps/deploy/automated/deploy-automatically-with-github -> ${base}/apps/deploy-github/
 raw: ${prefix}/manage-apps/deploy/deployment-models-and-regions -> ${base}/apps/deployment-models-and-regions/
 raw: ${prefix}/manage-apps/deploy/manual/rollback-deployment -> ${base}/apps/rollback/
-
-# (DOCSP-27250) [Port] Delete an App (/apps/delete)
+## (DOCSP-27250) [Port] Delete an App (/apps/delete)
 raw: ${prefix}/manage-apps/delete -> ${base}/apps/delete/
 raw: ${prefix}/manage-apps/delete/delete-with-api -> ${base}/apps/delete/
 raw: ${prefix}/manage-apps/delete/delete-with-cli -> ${base}/apps/delete/
 raw: ${prefix}/manage-apps/delete/delete-with-ui -> ${base}/apps/delete/
-
-# (DOCSP-27447) [Port] Export an App (/apps/export)
+## (DOCSP-27447) [Port] Export an App (/apps/export)
 raw: ${prefix}/manage-apps/configure/export-app -> ${base}/apps/export/
 raw: ${prefix}/manage-apps/configure/export/export-with-api -> ${base}/apps/export/
 raw: ${prefix}/manage-apps/configure/export/export-with-cli -> ${base}/apps/export/
 raw: ${prefix}/manage-apps/configure/export/export-with-ui -> ${base}/apps/export/
-
-# (DOCSP-26923) [Port] Configure an App Environment (/apps/environment)
+## (DOCSP-26923) [Port] Configure an App Environment (/apps/environment)
 raw: ${prefix}/manage-apps/configure/change-environments -> ${base}/apps/environment/
 raw: ${prefix}/manage-apps/configure/environments -> ${base}/apps/environment/
 raw: ${prefix}/values-and-secrets/define-environment-values -> ${base}/apps/environment/
-
-# (DOCSP-27468) [Port] Get App Metadata (/apps/metadata)
+## (DOCSP-27468) [Port] Get App Metadata (/apps/metadata)
 raw: ${prefix}/reference/find-your-project-or-app-id -> ${base}/apps/metadata/
-
-# (DOCSP-26922) [Port] Develop & Deploy Apps (/apps)
+## (DOCSP-26922) [Port] Develop & Deploy Apps (/apps)
 raw: ${prefix}/apps/deploy -> ${base}/apps/
-
-# (DOCSP-26932) [Move] Authentication Providers (/authentication)
+## (DOCSP-26932) [Move] Authentication Providers (/authentication)
 raw: ${prefix}/authentication/providers -> ${base}/authentication/
-
-# (DOCSP-24017) App Services IA Refresh
+## (DOCSP-26927): [Section] Authenticate & Manage Users
 raw: ${prefix}/authentication -> ${base}/users/
 raw: ${prefix}/authentication/user-objects -> ${base}/users/read-metadata/
+## (DOCSP-26929): [Port] Read User Metadata (/users/read-metadata)
 raw: ${prefix}/users/find-and-view -> ${base}/users/read-metadata/
+## (DOCSP-26931): [Port] Manage User Accounts (/users/manage)
 raw: ${prefix}/users/delete-or-revoke -> ${base}/users/manage/
+## (DOCSP-26930): IA Refresh '[Port] Define Custom User Metadata
 raw: ${prefix}/users/enable-custom-user-data -> ${base}/users/custom-metadata/
 raw: ${prefix}/users/enable-user-metadata -> ${base}/users/custom-metadata/
+## (DOCSP-26933): IA refresh '[Section] Secure Your App (/security)
 raw: ${prefix}/apps/secure -> ${base}/security/
+## (DOCSP-26934): IA Refresh '[Port] Define Data Access Permissions (/rules)
 raw: ${prefix}/rules/roles -> ${base}/rules/
 raw: ${prefix}/rules/expressions -> ${base}/rules/
 raw: ${prefix}/rules/examples -> ${base}/rules/
 raw: ${prefix}/mongodb/define-roles-and-permissions -> ${base}/rules/roles/
 raw: ${prefix}/mongodb/filter-incoming-queries -> ${base}/rules/filters/
+## (DOCSP-26936): IA Refresh '[Port] Configure Network Security (/security/network)
 raw: ${prefix}/manage-apps/secure/manage-ip-access -> ${base}/security/network
-
-# (DOCSP-26939) [Section] Monitor App Activity
+## (DOCSP-26939) [Section] Monitor App Activity
 raw: ${prefix}/alerts -> ${base}/activity/alerts/
 raw: ${prefix}/logs/forward-logs -> ${base}/activity/forward-logs/
 raw: ${prefix}/logs/logs-ui -> ${base}/activity/view-logs/
 raw: ${prefix}/logs/cli -> ${base}/activity/view-logs/
 raw: ${prefix}/logs/api -> ${base}/activity/view-logs/
-
-# API Auth Improvements
-raw: ${prefix}/reference/authenticate-http-client-requests -> ${base}/data-api/authenticate/
