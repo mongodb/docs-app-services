@@ -55,6 +55,36 @@ or App Services CLI to find it programmatically.
                :alt: The location of the copy app id button in the UI
 
    .. tab::
+      :tabid: cli
+
+      To find an App ID, run :ref:`realm-cli apps list
+      <realm-cli-apps-list>` and find the App you're interested in the
+      list returned by the command.
+
+      Each entry in the list contains two App ID values you may want:
+
+      - The Client App ID, which is a unique string that includes the
+        App name. Use this value to connect to your App through GraphQL,
+        the Data API, or a Realm SDK.
+
+      - The ``_id`` value, which is an internal ObjectId hex string. Use
+        this value in place of ``{appId}`` in Admin API endpoints.
+
+      .. io-code-block::
+
+         .. input::
+            :language: bash
+
+            realm-cli apps list
+
+         .. output::
+            :language: text
+
+            Found 2 apps
+              myapp-abcde (63ea9328dddad2523e60fb59)
+              myapp-dev-uvxyz (63ea93318d947aff90351070)
+
+   .. tab::
       :tabid: api
 
       To find an App ID, send a request to the :admin-api-endpoint:`List
@@ -86,7 +116,7 @@ or App Services CLI to find it programmatically.
 
             [
               {
-                "_id": "5997529e46224c6e42gb6dd9",
+                "_id": "63ea9328dddad2523e60fb59",
                 "client_app_id": "myapp-abcde",
                 "group_id": "57879f6cc4b32dbe440bb8c5",
                 "domain_id": "5886619e46124e4c42fb5dd8",
