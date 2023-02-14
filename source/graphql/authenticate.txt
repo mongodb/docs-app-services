@@ -61,6 +61,15 @@ For example, the following request uses Bearer Authentication:
         "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
       }'
 
+In general, bearer authentication with an access token has higher
+throughput and is more secure than credential headers. Use an access
+token over credential headers when possible. The token lets you run
+multiple requests without re-authenticating the user. It also lets you
+send requests from a web browser that enforces :wikipedia:`CORS
+<Cross-origin_resource_sharing>`.
+
+.. include:: /includes/dont-use-api-key-in-browsers.rst
+
 .. include:: /includes/api-user-access-token.rst
 
 .. _graphql-credential-headers:
@@ -122,6 +131,8 @@ To authenticate a GraphQL request with an :ref:`API Key
       --data-raw '{
         "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
       }'
+
+.. include:: /includes/dont-use-api-key-in-browsers.rst
 
 Custom JWT
 ~~~~~~~~~~
