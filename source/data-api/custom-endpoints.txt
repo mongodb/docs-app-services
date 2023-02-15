@@ -722,10 +722,7 @@ If an endpoint is configured to use Application Authentication then you
 must include a valid user access token or login credentials with every
 request.
 
-In general, use an access token over login credentials when
-possible. The token lets you run multiple requests without
-re-authenticating the user. It also lets you send requests from a web
-browser that enforces :wikipedia:`CORS <Cross-origin_resource_sharing>`.
+.. include:: /includes/bearer-auth-performance.rst
 
 To use an access token, first authenticate the user through an App
 Services authentication provider. Then, get the access token returned
@@ -780,6 +777,8 @@ the request headers.
             -H 'jwtTokenString: <Custom JSON Web Token>' \
             -H 'Content-Type: application/json' \
             https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello
+
+.. include:: /includes/dont-use-api-key-in-browsers.rst
 
 .. _endpoint-authorize:
 

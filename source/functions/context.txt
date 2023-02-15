@@ -239,18 +239,21 @@ values through the ``context.environment`` interface.
            }
          };
 
-.. method:: context.environment.values
+.. _context-environment-values:
+
+context.environment.values
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An object where each field maps the name of an :ref:`environment value
+<environment-values>` to its value in the current environment.
+
+.. example::
    
-   An object where each field maps the name of an :ref:`environment value
-   <environment-values>` to its value in the current environment.
-   
-   .. example::
+   .. code-block:: javascript
       
-      .. code-block:: javascript
-         
-         exports = async function() {
-           const baseUrl = context.environment.values.baseUrl
-         };
+      exports = async function() {
+        const baseUrl = context.environment.values.baseUrl
+      };
 
 .. _context-services:
 

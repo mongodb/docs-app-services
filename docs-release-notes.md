@@ -1,3 +1,35 @@
+# February 10, 2023
+
+## Manage & Deploy Apps
+- Deploy/Change Deployment Models: New page with information about how to change an App Services App's deployment models
+
+## Device Sync
+- Update SDK links on all the Auth Provider pages, Enable Custom User Data, Functions, and Create a User:
+  - Add new C++ SDK page links
+  - Change SDK links from tabs to a bullet list
+  - Add links to other SDK pages where missing
+
+## MongoDB Data Sources
+- Query Atlas from Client Apps: New page with a setup procedure explaining MongoDB Data Access and how it relates to App Services / Realm SDKs
+
+## Data API
+- Landing Page: Remove BSON info from landing page, refresh information about how the Data API works and when to use it
+- Data Formats: New page with information about BSON, JSON, and EJSON, with a list of Data API-supported BSON types
+
+## Functions
+- Context: Add a subsection with a link target for `context.environment.values` for easy linking from other documentation
+
+## Values & Secrets
+- Landing Page: Add a link to the new Functions / `context.environment.values` link target
+- Access a Value: Add a link to the new Functions / `context.environment.values` link target
+
+## App Services Admin API
+- Deployment: Document new GET and PUT endpoints for getting and creating a deployment migration 
+- Users/List All Pending Users: Add docs for the `after` query parameter to address pagination beyond 50 users
+
+## Reference
+- Service Limitations: Update the Request Traffic limitation from 5,000 concurrent requests to 10,000 concurrent requests
+
 # February 3, 2023
 
 ## Get Started
