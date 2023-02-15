@@ -135,7 +135,7 @@ Configuration
    * - | ``custom_user_data_config``
        | Document
      - A document that contains configuration options for
-       :ref:`custom user data <custom-metadata>`.
+       :ref:`custom user data <custom-user-data>`.
        
        .. code-block:: json
           :copyable: False
