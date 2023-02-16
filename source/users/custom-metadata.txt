@@ -118,7 +118,7 @@ restrict read and write access to privileged users only:
      contained in the document's ``user_id`` field.
 
      .. code-block:: json
-        :caption:
+        :caption: A custom user data collection configuration
 
         {
           "database": "<Database Name>",
@@ -182,7 +182,7 @@ document for the user.
    function, first change your custom user data configuration to use a
    different user creation function.
 
-.. _enable-custom-user-data-procedure:
+.. _enable-custom-user-data:
 
 Enable Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -331,36 +331,36 @@ Enable Custom User Data
    .. tab::
       :tabid: api
 
-         .. step:: Authenticate a MongoDB Atlas User
+      .. step:: Authenticate a MongoDB Atlas User
 
-            .. include:: /includes/api-authenticate-instructions.rst
+         .. include:: /includes/api-authenticate-instructions.rst
 
-         .. step:: Configure Custom User Data
+      .. step:: Configure Custom User Data
 
-            Send a request to the :admin-api-endpoint:`Configure Custom
-            User Data <operation/adminSetCustomUserDataConfig>`
-            endpoint.
+         Send a request to the :admin-api-endpoint:`Configure Custom
+         User Data <operation/adminSetCustomUserDataConfig>`
+         endpoint.
 
-            Make sure to include your Admin API ``access_token``, the
-            ``groupId`` of the Atlas project containing your App, and
-            the App's internal ``appId`` hex string:
+         Make sure to include your Admin API ``access_token``, the
+         ``groupId`` of the Atlas project containing your App, and
+         the App's internal ``appId`` hex string:
 
-            .. code-block:: shell
+         .. code-block:: shell
 
-               curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/custom_user_data' \
-                 --header 'Authorization:  Bearer <access_token>' \
-                 --header 'Content-Type: application/json' \
-                 --data '{
-                   "mongo_service_id": "<MongoDB Data Source ID>",
-                   "database_name": "<Database Name>",
-                   "collection_name": "<Collection Name>",
-                   "user_id_field": "<User ID Field Name>",
-                   "on_user_creation_function_id": "<User Creation Function ID>",
-                   "enabled": true
-                 }'
+            curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/custom_user_data' \
+              --header 'Authorization:  Bearer <access_token>' \
+              --header 'Content-Type: application/json' \
+              --data '{
+                "mongo_service_id": "<MongoDB Data Source ID>",
+                "database_name": "<Database Name>",
+                "collection_name": "<Collection Name>",
+                "user_id_field": "<User ID Field Name>",
+                "on_user_creation_function_id": "<User Creation Function ID>",
+                "enabled": true
+              }'
 
-            If you successfully configure custom user data, App Services
-            returns a ``204`` response.
+         If you successfully configure custom user data, App Services
+         returns a ``204`` response.
 
 Access Custom User Data from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -558,7 +558,7 @@ Configure Authentication Provider Metadata
                the App Dashboard.
 
 
-         .. step:: Configure User Metadata
+         .. step:: Configure Metadata Fields
 
             You can find authentication provider :ref:`metadata_fields
             <config-auth-providers>` for your app in ``/auth/providers.json``.
@@ -608,7 +608,6 @@ Configure Authentication Provider Metadata
                  ]
                }
 
-
          .. step:: Deploy the Custom User Data Configuration
 
             Once you've configured custom user data, you can push the updated config to
@@ -621,128 +620,128 @@ Configure Authentication Provider Metadata
    .. tab::
       :tabid: api
 
-         .. step:: Authenticate a MongoDB Atlas User
+      .. step:: Authenticate a MongoDB Atlas User
 
-            .. include:: /includes/api-authenticate-instructions.rst
+         .. include:: /includes/api-authenticate-instructions.rst
 
-         .. step:: TODO
+      .. step:: Configure Metadata Fields
 
-            Send a request to the :admin-api-endpoint:`Update an
-            authentication provider <operation/adminUpdateAuthProvider>`
-            endpoint. In the request body, define ``metadata_fields``
-            for the provider.
+         Send a request to the :admin-api-endpoint:`Update an
+         authentication provider <operation/adminUpdateAuthProvider>`
+         endpoint. In the request body, define ``metadata_fields``
+         for the provider.
 
-            Make sure to include your Admin API ``access_token``, the
-            ``groupId`` of the Atlas project containing your App, the
-            App's internal ``appId`` hex string, and the ``_id`` value
-            of the authentication provider:
+         Make sure to include your Admin API ``access_token``, the
+         ``groupId`` of the Atlas project containing your App, the
+         App's internal ``appId`` hex string, and the ``_id`` value
+         of the authentication provider:
 
-            .. tabs::
+         .. tabs::
 
-               .. tab:: Facebook OAuth
-                  :tabid: facebook
+            .. tab:: Facebook OAuth
+               :tabid: facebook
 
-                  .. code-block:: shell
-                     :emphasize-lines: 15-25
+               .. code-block:: shell
+                  :emphasize-lines: 15-25
 
-                     curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
-                       --header 'Authorization:  Bearer <access_token>' \
-                       --header 'Content-Type: application/json' \
-                       --data '{
-                         "_id": "<Provider ID>",
-                         "name": "oauth2-facebook",
-                         "type": "oauth2-facebook",
-                         "redirect_uris": ["https://example.com/"],
-                         "config": {
-                            "clientId": "<Facebook Client ID>"
-                         },
-                         "secret_config": {
-                            "clientSecret": "<Facebook Client Secret Name>"
-                         },
-                         "metadata_fields": [
-                           { "required": false, "name": "name" },
-                           { "required": true, "name": "first_name" },
-                           { "required": true, "name": "last_name" },
-                           { "required": false, "name": "picture" },
-                           { "required": false, "name": "gender" },
-                           { "required": false, "name": "birthday" },
-                           { "required": false, "name": "min_age" },
-                           { "required": false, "name": "max_age" },
-                           { "required": false, "name": "email" }
-                         ],
-                         "disabled": false
-                       }'
+                  curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
+                    --header 'Authorization:  Bearer <access_token>' \
+                    --header 'Content-Type: application/json' \
+                    --data '{
+                      "_id": "<Provider ID>",
+                      "name": "oauth2-facebook",
+                      "type": "oauth2-facebook",
+                      "redirect_uris": ["https://example.com/"],
+                      "config": {
+                         "clientId": "<Facebook Client ID>"
+                      },
+                      "secret_config": {
+                         "clientSecret": "<Facebook Client Secret Name>"
+                      },
+                      "metadata_fields": [
+                        { "required": false, "name": "name" },
+                        { "required": true, "name": "first_name" },
+                        { "required": true, "name": "last_name" },
+                        { "required": false, "name": "picture" },
+                        { "required": false, "name": "gender" },
+                        { "required": false, "name": "birthday" },
+                        { "required": false, "name": "min_age" },
+                        { "required": false, "name": "max_age" },
+                        { "required": false, "name": "email" }
+                      ],
+                      "disabled": false
+                    }'
 
-               .. tab:: Google OAuth
-                  :tabid: google
+            .. tab:: Google OAuth
+               :tabid: google
 
-                  .. code-block:: shell
-                     :emphasize-lines: 15-25
+               .. code-block:: shell
+                  :emphasize-lines: 15-25
 
-                     curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
-                       --header 'Authorization:  Bearer <access_token>' \
-                       --header 'Content-Type: application/json' \
-                       --data '{
-                         "_id": "<Provider ID>",
-                         "name": "oauth2-google",
-                         "type": "oauth2-google",
-                         "redirect_uris": ["https://example.com/"],
-                         "config": {
-                            "clientId": "<Google Client ID>"
-                         },
-                         "secret_config": {
-                            "clientSecret": "<Google Client Secret Name>"
-                         },
-                         "metadata_fields": [
-                           { "required": false, "name": "name" },
-                           { "required": true, "name": "first_name" },
-                           { "required": true, "name": "last_name" },
-                           { "required": false, "name": "picture" },
-                           { "required": false, "name": "gender" },
-                           { "required": false, "name": "birthday" },
-                           { "required": false, "name": "min_age" },
-                           { "required": false, "name": "max_age" },
-                           { "required": false, "name": "email" }
-                         ],
-                         "disabled": false
-                       }'
+                  curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
+                    --header 'Authorization:  Bearer <access_token>' \
+                    --header 'Content-Type: application/json' \
+                    --data '{
+                      "_id": "<Provider ID>",
+                      "name": "oauth2-google",
+                      "type": "oauth2-google",
+                      "redirect_uris": ["https://example.com/"],
+                      "config": {
+                         "clientId": "<Google Client ID>"
+                      },
+                      "secret_config": {
+                         "clientSecret": "<Google Client Secret Name>"
+                      },
+                      "metadata_fields": [
+                        { "required": false, "name": "name" },
+                        { "required": true, "name": "first_name" },
+                        { "required": true, "name": "last_name" },
+                        { "required": false, "name": "picture" },
+                        { "required": false, "name": "gender" },
+                        { "required": false, "name": "birthday" },
+                        { "required": false, "name": "min_age" },
+                        { "required": false, "name": "max_age" },
+                        { "required": false, "name": "email" }
+                      ],
+                      "disabled": false
+                    }'
 
-               .. tab:: Custom JWT
-                  :tabid: custom-jwt
+            .. tab:: Custom JWT
+               :tabid: custom-jwt
 
-                  .. code-block:: shell
-                     :emphasize-lines: 8-14
+               .. code-block:: shell
+                  :emphasize-lines: 8-14
 
-                     curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
-                       --header 'Authorization:  Bearer <access_token>' \
-                       --header 'Content-Type: application/json' \
-                       --data '{
-                         "_id": "<Provider ID>",
-	                      "name": "custom-token",
-	                      "type": "custom-token",
-	                      "metadata_fields": [
-	                      	{
-	                      		"required": true,
-	                      		"name": "jwt.field.path",
-	                      		"field_name": "metadataFieldName"
-	                      	}
-	                      ],
-	                      "config": {
-	                      	"audience": [],
-	                      	"requireAnyAudience": false,
-	                      	"signingAlgorithm": "HS256",
-	                      	"useJWKURI": false
-	                      },
-	                      "secret_config": {
-	                      	"signingKeys": [
-	                      		"<JWT Signing Key>"
-	                      	]
-	                      },
-	                      "disabled": true
-                       }'
+                  curl --request PATCH 'https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
+                    --header 'Authorization:  Bearer <access_token>' \
+                    --header 'Content-Type: application/json' \
+                    --data '{
+                      "_id": "<Provider ID>",
+	                   "name": "custom-token",
+	                   "type": "custom-token",
+	                   "metadata_fields": [
+	                   	{
+	                   		"required": true,
+	                   		"name": "jwt.field.path",
+	                   		"field_name": "metadataFieldName"
+	                   	}
+	                   ],
+	                   "config": {
+	                   	"audience": [],
+	                   	"requireAnyAudience": false,
+	                   	"signingAlgorithm": "HS256",
+	                   	"useJWKURI": false
+	                   },
+	                   "secret_config": {
+	                   	"signingKeys": [
+	                   		"<JWT Signing Key>"
+	                   	]
+	                   },
+	                   "disabled": true
+                    }'
 
-            If you successfully configure the provider's metadata
-            fields, App Services returns a ``204`` response.
+         If you successfully configure the provider's metadata
+         fields, App Services returns a ``204`` response.
 
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
