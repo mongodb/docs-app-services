@@ -226,16 +226,6 @@ new access token that's valid for another
 You get the refresh token in the :ref:`same response as the access token
 <get-access-token>` after a successful login.
 
-By default, refresh tokens expire 60 days after they are issued. You can
-configure this time to be anywhere between 30 minutes and 180 days.
-There are two exceptions:
-
-- Anonymous user refresh tokens do not expire, though anonymous user
-  accounts may be deleted after a period of inactivity.
-
-- Custom JWT refresh token expiration is determined by the ``exp`` value
-  of the user's JWT.
-
 Refresh a User Access Token Over HTTPS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -311,6 +301,40 @@ To learn more, refer to the documentation for your Realm SDK:
 - :ref:`Realm Swift SDK <ios-get-a-user-access-token>`
 - :ref:`Web SDK <web-get-user-access-token>`
 
+Configure Refresh Token Expiration
+----------------------------------
+
+By default, refresh tokens expire 60 days after they are issued. You can
+configure this time for your App's refresh tokens to be anywhere between
+30 minutes and 180 days. There are two exceptions:
+
+- Anonymous user refresh tokens do not expire, though anonymous user
+  accounts are deleted after 90 days of inactivity.
+
+- Custom JWT refresh token expiration is determined by the ``exp`` value
+  of the user's JWT.
+
+.. note::
+
+   You can currently only configure refresh token expiration with the
+   Admin API.
+
+Call your App's :admin-api-endpoint:`Set User Refresh Token Expiration
+Time <operation/adminSetRefreshTokenExpiration>` Admin API endpoint with
+the ``expiration_time_seconds`` field of the request body set to your
+desired expiration time.
+
+.. code-block:: bash
+
+   curl -X POST \
+     https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/refresh_token_expiration \
+     --data-raw '{
+       "expiration_time_seconds": 864000
+     }'
+
+If you successfully update the refresh token expiration time, the
+endpoint returns a ``204`` response.
+
 Verify & Decode a User Access Token
 -----------------------------------
 
@@ -318,9 +342,9 @@ You can decode an access token to verify that it is well-formed and has
 a valid signature. The decoded response includes other information like
 when the access token expires.
 
-To decode an access token, call the App's :admin-api-endpoint:`Verify &
-decode an access token <operation/adminVerifyUserAccessToken>` Admin API
-endpoint with the token in the ``token`` field of the request body.
+Call your App's :admin-api-endpoint:`Verify & decode an access token
+<operation/adminVerifyUserAccessToken>` Admin API endpoint with the
+token in the ``token`` field of the request body.
 
 .. io-code-block::
 
