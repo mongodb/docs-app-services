@@ -17,10 +17,10 @@ token to use the session it's associated with for up to
 new access token for a session even if the previous token has already
 expired.
 
-.. note::
-
-   The Realm SDKs automatically manage user access and refresh tokens
-   for you when they connect to App Services.
+The Realm SDKs automatically manage user access and refresh tokens for
+you when they connect to App Services. You may want to manage sessions
+yourself if you're connecting to an API service like the Data API or
+GraphQL.
 
 .. _get-access-token:
 
@@ -28,8 +28,7 @@ Get a User Session Access Token
 -------------------------------
 
 You can authenticate a user and receive a user access token directly
-over HTTPS or through a session managed by a Realm SDK. An access token
-expires
+over HTTPS or through a session managed by a Realm SDK.
 
 Get a User Access Token Over HTTPS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -341,9 +340,9 @@ endpoint returns a ``204`` response.
 Verify & Decode a User Access Token
 -----------------------------------
 
-You can decode an access token to verify that it is well-formed and has
-a valid signature. The decoded response includes other information like
-when the access token expires.
+You can decode an access token to verify that it has the correct format
+and has a valid signature. The decoded response includes other
+information like when the access token expires.
 
 Call your App's :admin-api-endpoint:`Verify & decode an access token
 <operation/adminVerifyUserAccessToken>` Admin API endpoint with the
@@ -372,8 +371,17 @@ token in the ``token`` field of the request body.
       	"device_id": "000000000000000000000000"
       }
 
-If the token is invalid or expired, you'll receive a ``200`` response
-with an error message:
+If the token is valid, you'll receive a ``200`` response.
+
+If the token is valid but expired, the response indicates that the token
+is expired rather than containing the decoded JWT.
+
+.. code-block:: json
+
+   "token expired"
+
+If the token is invalid, you'll receive a ``401`` response that contains
+an error message.
 
 .. code-block:: json
 
@@ -393,15 +401,19 @@ access token and refresh token. This prevents further access to the
 session and requires the user to authenticate and start a new session
 to continue.
 
-The ``User.logOut()`` method in the Realm SDKs deletes local copies of
+Each Realm SDK has a ``User.logOut()`` method that deletes local copies
 of the access token and refresh token and invalidates the refresh token
 so that it can't be used to get a new access token.
 
-.. important::
+If a user account is deleted, either by an administrator or by the user,
+then all of the user's sessions are automatically revoked.
 
-   Deleting and invalidating tokens does **not** end the active session
-   on the server. If a malicious user copied the access token before it
-   was deleted, they could use the token to make requests for up to
+.. important:: Keep Tokens Secure
+
+   Even if you delete and invalidate all copies of a token that you
+   have, that does **not** end the active session on the server. If a
+   malicious user copied the access token before it was deleted, they
+   could use the token to make requests for up to
    {+user-session-expiration-time+} until it expires. These requests
    would appear to come from the user who "logged out".
 
@@ -413,6 +425,9 @@ Revoke a User's Sessions
 You can revoke all of a user's current sessions. This invalidates the
 session access and refresh tokens and prevents the user from making any
 requests on any device until they log in again.
+
+If a user account is deleted, either by an administrator or by the user,
+then all of the user's sessions are automatically revoked.
 
 .. tabs-realm-admin-interfaces::
 
