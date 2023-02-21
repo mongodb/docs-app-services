@@ -43,7 +43,10 @@ Bearer Authentication
 
 The GraphQL API supports Bearer Authentication, which lets you
 authenticate a request by including a valid user access token in the
-``Authorization`` header using the following format:
+``Authorization`` header. To learn how to get and manage an access
+token, see :ref:`Manage User Sessions <manage-user-sessions>`.
+
+The Authorization header uses the following format:
 
 .. code-block:: text
    
@@ -61,7 +64,11 @@ For example, the following request uses Bearer Authentication:
         "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
       }'
 
-.. include:: /includes/api-user-access-token.rst
+.. include:: /includes/bearer-auth-performance.rst
+
+.. include:: /includes/dont-use-api-key-in-browsers.rst
+
+.. include:: /includes/bearer-auth-is-useful.rst
 
 .. _graphql-credential-headers:
 
@@ -122,6 +129,8 @@ To authenticate a GraphQL request with an :ref:`API Key
       --data-raw '{
         "query": "query AllMovies {\n  movies {\n    title\n    year\n  }\n}"
       }'
+
+.. include:: /includes/dont-use-api-key-in-browsers.rst
 
 Custom JWT
 ~~~~~~~~~~
