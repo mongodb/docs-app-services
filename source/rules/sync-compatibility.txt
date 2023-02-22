@@ -167,3 +167,46 @@ A client reset will **not** be triggered in the following cases:
   changes after you deploy the schema will lead to a client reset, since default
   permissions were applied in the initial deployment.
 
+.. _unified-rule-migration:
+
+Migrate to Unified Rules System
+-------------------------------
+
+Prior to February 23, 2023, Device Sync (Flexible Mode) rules existed in the
+``permissions`` field of the :ref:`Sync configuration
+<sync-configuration-reference>`. Now these permissions exist in the same
+configuration files as the non-Sync permissions. A system-wide automated
+migration took place to move existing apps from the old configuration to the
+unified configuration. 
+
+For reference, the following changes should have been made for you:
+
+- Move ``permissions.defaultRoles`` to the ``default_rule.json`` file in the
+  data source configuration directory at ``data_sources/<data-source-name>/``.
+- Move any collection-specific rules to the ``rules.json`` file in the
+  respective collection configuration directories at
+  ``data_sources/<data-source-name>/<database-name>/<collection-name>/``.
+- Rename ``defaultRoles`` to ``roles``.
+- Rename ``applyWhen`` to ``apply_when``.
+- Move sync ``read`` and ``write`` into ``document_filters.read`` and
+  ``document_filters.write``. Ensure both ``document_filters.read`` and
+  ``document_filters.write`` are defined.
+- Add the following to the roles, adjusting for your use case. You can only use
+  ``true`` or ``false``. Generally, you probably want ``true``. The
+  ``document_filters`` will restrict read and write access on a per-document
+  level.
+
+  .. code-block:: json
+
+     "read": true,
+     "write": true,
+     "insert": true,
+     "delete": true,
+     "search": true
+
+
+If you have an exported app with an old configuration, you might need to make
+these changes manually.
+
+This does not apply to apps using Partition-Based Sync. Their permissions
+configuration remains in the Sync configuration.
