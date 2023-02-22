@@ -107,17 +107,21 @@ Development Mode database for every type of synced object.
 Queryable Fields
 ~~~~~~~~~~~~~~~~
 
-When you configure Flexible Sync, you specify up to 10 field names that your
-client application can query. Fields that can be used in a subscription query
-are called **queryable fields**.
+When you configure Flexible Sync, you specify field names that your client
+application can query. Fields that can be used in a subscription query are
+called **queryable fields**.
+
+You can automatically specify queryable fields by enabling :ref:`Development
+Mode <development-mode>`. Development Mode allows App Services to automatically
+mark fields as queryable as they are used.
 
 Queryable fields apply across all collections in an App's Schema. You
 can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` to
 configure more granular access control on individual collections.
 
 The field names you provide are arbitrary strings. If an object type has a field
-whose name matches a field name you provided (and meets other eligibility criteria), that field becomes available to
-Device Sync to query.
+whose name matches a field name you provided (and meets other eligibility
+criteria), that field becomes available to Device Sync to query.
 
 .. example::
 
@@ -150,9 +154,10 @@ Reserved Field Names
 Performance and Storage
 ```````````````````````
 
-Queryable fields use storage on the backing Atlas cluster. The more queryable
-fields you configure, the more storage you use on the backing cluster. You can
-configure up to 10 queryable fields per application for Flexible Sync.
+Each queryable field adds additional metadata storage to your Atlas cluster and
+may lead to degraded write performance. You should have as few queryable fields
+as needed by your application. A good rule of thumb is to have at most 10
+queryable fields.
 
 .. seealso::
 

@@ -328,17 +328,19 @@ directly proportional to the number of queryable fields you have set up.
 Queryable fields use storage on the backing Atlas cluster. The more queryable
 fields you configure, the more storage you use on the backing cluster.
 
-You can configure up to 10 queryable fields per application for Flexible Sync.
 If you have a large number of collections in an App, you may need to use the
-same queryable field across multiple collections. Combine this with
+same queryable field name across multiple collections. Combine this with
 :ref:`permissions <permissions>` for more granular control over who can access
 which collections.
 
 .. example::
 
-   Your App may contain 20 or 30 collections, but you can only configure
-   10 queryable fields. You must re-use queryable fields across collections 
-   in order to sync objects from every collection.
+   Your app may contain 20 or 30 collections, but you want to minimize the
+   number of queryable fields. You can re-use queryable fields across
+   collections in order to sync objects from every collection. For example,
+   "owner_id" might be a field you want to query in multiple collections, but by
+   having the same field name across collections, only one queryable field is
+   used.
 
 For best performance, open a synced realm with a broad query. Then, add 
 more refined queries to expose targeted sets of data in the client 
