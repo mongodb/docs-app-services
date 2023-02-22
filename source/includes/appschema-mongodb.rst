@@ -121,9 +121,9 @@ MongoDB Collection Rules (Non-Sync)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For non-synced clusters, you can define collection-level rules that App Services
-evaluates dynamically for each request. Each collection's rules are stored in
-the ``/rules`` sub-directory in a JSON file with the same name as the collection
-namespace.
+evaluates dynamically for each request. Each collection's rules are stored in a
+``rules.json`` file in that collection's configuration subdirectory, which is
+``data_sources/<data-source-name>/<database-name>/<collection-name>/``.
 
 .. include:: /includes/adf-rules-note.rst
 
