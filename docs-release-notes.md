@@ -1,3 +1,41 @@
+# February 17, 2023
+
+## Get Started
+- Minor CTA updates to all Device Sync Tutorials:
+  - Update the CTA button wording from "Check out the Template Apps" to "Sign-up to Deploy a Template App"
+  - Add an include shared across all tutorials with a link to the "Template Apps" page to learn more, or a sign-up button CTA to sign up for an Atlas account if you don't already have one
+
+## Develop & Deploy Apps
+- Get App Metadata: Add a new tab for finding your App ID with the CLI
+
+## GraphQL API
+- Authenticate GraphQL Requests: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
+
+## Data API
+- Data API Endpoints: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
+- Custom HTTPS Endpoints: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
+- Authenticate Data API Requests: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
+
+## Authenticate & Manage Users
+- Define User Metadata: Add info about user creation function to the UI custom user data procedure, improve page organization, add Admin API procedures across page
+- Authentication Providers/Apple ID Authentication: Add a mobile app Sign-in with Apple procedure; previously docs only covered Sign-in with Apple for a web app
+
+## Reference
+- Template Apps: Update the CTA button wording from "Check out the Template Apps" to "Sign-up to Deploy a Template App"
+
+## Other
+- Update the Table of Contents to have fewer root-level entries by grouping content into use-case based sections, reorganize to better align with organizational priorities
+  - Rename "Manage & Deploy Apps" to "Develop & Deploy Apps", move it down in the Table of Contents, reduce internal nesting and consolidate pages in the section
+  - Rename "Users & Authentication" to "Authenticate & Manage Users", streamline section contents by consolidating and renaming pages
+  - Rename "MongoDB Data Sources" to "Connect to MongoDB Data Sources", combine "Role-based Permissions" with "Define Roles & Permissions" and "Filter Incoming Queries" with "Filters"
+  - Consolidate "Schemas", "Relationships", and "Values & Secrets" in a new "Define a Data Model" section, new landing page focusing on how these relate to data modeling
+  - Rename "Rules" to "Define Data Access Permissions", consolidate pages in section
+  - Consolidate "Logs" and "Activity Feed & Alerts" into a new "Monitor App Activity" section
+  - Move security-related information out of former "Manage & Deploy Apps" section into a root-level "Secure Your App" section with information about configuring network security and managing developer access
+  - Rename "Static Hosting" to "Host Files", move it down in the Table of Contents
+  - Move App Services Admin API and CLI documentation into Reference
+  - Move App Configuration files from former "Manage & Deploy Apps" section into Reference
+
 # February 10, 2023
 
 ## Manage & Deploy Apps

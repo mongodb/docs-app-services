@@ -11,6 +11,7 @@ Authenticate & Manage Users
    Define User Metadata </users/custom-metadata>
    Read User Metadata </users/read-metadata>
    Manage User Accounts </users/manage>
+   Manage User Sessions </users/sessions>
    Authentication Providers </authentication>
 
 .. contents:: On this page
@@ -176,41 +177,14 @@ The system user is useful for administrative tasks. This includes:
 User Sessions
 ~~~~~~~~~~~~~
 
-**User session** describes the period when an authenticated user can access 
-data in your app. Authenticated users can use app data without re-entering 
-a password or re-authenticating.
+A **user session** represents a period of time when an authenticated
+user can interact with your app. User sessions begin when a user logs in
+through an SDK or authenticates over HTTPS. A session ends after
+{+user-session-expiration-time+} unless an SDK or API request refreshes
+the session.
 
-App Services manages sessions with access tokens and refresh tokens. Client
-SDKs supply the logic to manage tokens, and provide them with requests.
-
-The access token for a session expires after thirty minutes. Clients can 
-use the refresh token to retrieve a new access token and start a new 
-session.
-
-Realm SDKs manage refresh access tokens for you. You don't need 
-to manage this process yourself when implementing client applications.
-
-.. include:: /includes/refresh-token-expiration.rst
-
-You can invalidate a refresh token by calling the ``logout()`` method on the 
-client, which does two things:
-
-- Deletes the local session information by deleting both the access and 
-  refresh tokens.
-- Invalidates the refresh token in the App Services backend.
-
-.. note::
-
-   The ``logout()`` method provided by the SDKs does **NOT** invalidate 
-   any active sessions on the server. If a malicious user gets the access 
-   token, he or she could use the token to continue making requests. These 
-   requests would appear to come from the user who "logged out." This window 
-   would last for up to thirty minutes (that is, until that access token 
-   expires).
-
-You can use revoke all sessions for a specific user. This invalidates all 
-access tokens and refresh tokens for that user. See the :ref:`Revoking User 
-Sessions <revoke-user-sessions>` page for the specific steps.
+To learn how to create, work with, and revoke user sessions, see
+:ref:`Manage User Sessions <manage-user-sessions>`.
 
 Summary
 -------
