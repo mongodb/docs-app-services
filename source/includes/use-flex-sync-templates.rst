@@ -15,4 +15,6 @@
 #. :guilabel:`Select Queryable Fields`: type in ``owner_id``. This allows your 
    permissions expressions (which you'll set next) to use the any fields
    called ``owner_id``.
-  
+
+#. Skip :guilabel:`Advanced Configuration`, and then click :guilabel:`Save
+   Changes` to enable Sync.

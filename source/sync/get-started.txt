@@ -118,13 +118,10 @@ Choose a Sync Mode
 ~~~~~~~~~~~~~~~~~~
 
 There are two Sync Modes: Flexible Sync and the older Partition-Based Sync. We
-recommend you use Flexible Sync. When you use Flexible Sync, you must:
+recommend you use Flexible Sync.
 
-- Specify queryable fields
-- Configure data access rules and default roles
-
-Client applications can query the queryable fields you configure to determine
-which objects to sync. Then, App Services applies rules and default roles to 
+Client applications can query the queryable fields of a document to determine
+which objects to sync. Then, App Services applies rules and default roles to
 determine whether users can read or write the objects that match the query.
 
 Define Data Access Rules
@@ -135,15 +132,14 @@ ability to read and write data. Rules are closely linked to your app's data
 model.
 
 With Flexible Sync, you specify which data to sync through queries for matching
-objects in a client application. App Services then evaluates :ref:`session roles
-and rules <flexible-sync-roles>` to determine which of those matching objects a
-user can read and write.
+objects in a client application. App Services then evaluates :ref:`roles and
+rules <flexible-sync-roles>` to determine which of those matching objects a user
+can read and write.
 
-You can define session roles on specific collections. Default roles
-provide read and write permissions when more specific session roles do
-not apply. Default roles apply to all collections an App can
-access, but you can restrict a session role to a specific collection by
-specifying the collection name.
+You can define roles on specific collections. Default roles provide read and
+write permissions when more specific roles do not apply. Default roles apply to
+all collections an App can access, but you can restrict a role to a specific
+collection by specifying the collection name.
 
 Enable Sync
 ~~~~~~~~~~~

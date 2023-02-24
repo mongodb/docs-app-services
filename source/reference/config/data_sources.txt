@@ -232,7 +232,7 @@ source that don't have more specific :ref:`collection-level rules
 <config-collection-rules>` defined.
 
 You define default rules in the data source's ``default_rule.json``
-configuration file.
+configuration file at ``data_sources/<data-source-name>/default_rule.json``.
 
 .. code-block:: json
    :caption: /data_sources/<data source>/default_rule.json
@@ -262,9 +262,9 @@ configuration file.
 Collection Rules
 ~~~~~~~~~~~~~~~~
 
-If the data source is not a :doc:`synced cluster </sync>` or a :ref:`{+adf-datasource+}
-<data-federation-caveats>`, then you can define collection-level rules in a
-collection's ``rules.json`` configuration file.
+If the data source is not a :ref:`{+adf-datasource+} <data-federation-caveats>`,
+then you can define collection-level rules in a collection's ``rules.json``
+configuration file.
 
 .. code-block:: json
    :caption: /data_sources/<data source>/<database>/<collection>/rules.json
@@ -298,6 +298,8 @@ collection's ``rules.json`` configuration file.
    * - | ``filters``
        | Array<Filter>
      - An array of :ref:`Filter <filter-config>` configurations.
+
+.. _rule-config:
 
 Rule Configurations
 -------------------
