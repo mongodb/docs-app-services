@@ -79,75 +79,18 @@ included with the custom function provider credential in the client app.
 The function accepts any value provided from your client app, so the
 actual field names and values depend on your implementation.
 
-.. example::
+For examples of how to create a custom credential ``payload`` object
+using the Realm SDKs, refer to the documentation for a specific SDK:
 
-   The following code examples show how to create a function credential
-   using the Realm SDKs. The credential includes a ``payload`` object
-   that is passed to the authentication function.
-
-   .. tabs-realm-sdks::
-   
-      .. tab::
-         :tabid: javascript
-   
-         .. code-block:: javascript
-         
-            const credentials = Realm.Credentials.function({
-              username: "someUsername",
-              pin: "24601",
-            });
-   
-      .. tab::
-         :tabid: android
-   
-         .. code-block:: java
-            
-            import org.bson.Document;
-            import static java.util.Map.entry;
-   
-            val credentials: Credentials = Credentials.customFunction(
-              Document(
-                Map.ofEntries(
-                  entry("username", "someUsername"),
-                  entry("pin", "24601")
-                )
-              )
-            )
-   
-      .. tab::
-         :tabid: dotnet
-   
-         .. code-block:: csharp
-         
-            var credentials = Credentials.Function(new {
-              username = "someUsername",
-              pin = "24601"
-            })
-   
-      .. tab::
-         :tabid: ios
-   
-         .. code-block:: swift
-         
-            let credentials = Credentials.function(payload: [
-               "username": "someUsername",
-               "pin": "24601"
-            ])
-
-      .. tab::
-         :tabid: flutter
-
-         .. code-block:: dart
-
-            Map<String, String> credentials = {
-               "username": "someUsername",
-               "pin": "24601"
-            };
-            // payload must be a JSON-encoded string
-            String payload = jsonEncode(credentials);
-
-            Credentials customCredentials = Credentials.function(payload);
-            User currentUser = await app.logIn(customCredentials);
+- :ref:`C++ SDK (Alpha) <cpp-login-custom-function>`
+- :ref:`Flutter SDK <flutter-login-custom-function>`
+- :ref:`Java SDK <java-login-custom-function>`
+- :ref:`Kotlin SDK <kotlin-login-custom-function>`
+- :ref:`.NET SDK <dotnet-login-custom-function>`
+- :ref:`Node.js SDK <node-login-custom-function>`
+- :ref:`React Native SDK <react-native-login-custom-function>`
+- :ref:`Swift SDK <ios-login-custom-function>`
+- :ref:`Web SDK <web-login-custom-function>`
 
 Return an Authenticated User ID
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -433,6 +376,7 @@ For examples, refer to the documentation for a specific SDK:
 - :ref:`C++ SDK (Alpha) <cpp-login-custom-function>`
 - :ref:`Flutter SDK <flutter-login-custom-function>`
 - :ref:`Java SDK <java-login-custom-function>`
+- :ref:`Kotlin SDK <kotlin-login-custom-function>`
 - :ref:`.NET SDK <dotnet-login-custom-function>`
 - :ref:`Node.js SDK <node-login-custom-function>`
 - :ref:`React Native SDK <react-native-login-custom-function>`
