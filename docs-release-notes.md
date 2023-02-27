@@ -6,13 +6,13 @@
 
 ## Authenticate & Manage Users
 - Define User Metadata: Add missing ref targets, update links to SDK pages to use bullets instead of tabs
-- Manage User Sessions: New page consisting of moved and new content. Moved get & refresh token and revoke user sessions content, new configure token expiration, verify & decode token, and end user session content.
+- Manage User Sessions: New page consisting of moved and new content. Moved get & refresh token and revoke user sessions content; new configure token expiration, verify & decode token, and end user session content.
 
 ## Define Data Access Permissions
 - Update many pages across Rules documentation for the release of the rules unification project
 
 ## Reference
-- App Configuration Files/MongoDB Data Sources: Remove Device Sync from the info about when you would define collection-level rules in a collection's `rules.json` after release of rules unification project
+- App Configuration Files/MongoDB Data Sources: Remove Device Sync from description of when you would define collection-level rules in a collection's `rules.json` for the release of rules unification project
 
 # February 17, 2023
 
