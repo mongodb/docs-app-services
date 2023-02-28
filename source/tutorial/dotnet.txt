@@ -74,23 +74,62 @@ Prerequisites
 
 Start with the Template
 -----------------------
-This tutorial is based on the .NET Flexible Sync Template App named 
-"maui.todo.flex". We start with the default app and build new features 
-on it. 
 
-If you already have the latest Realm CLI installed, you can run the 
-:ref:`realm-cli apps create <realm-cli-apps-create>` command to set up the 
-backend and create the Xamarin base app. The following command creates a new 
-app based on the xamarin.todo.flex template. The app is created in a 
-development environment, is named "MyTutorialApp", and is deployed in the US-OR 
-region:
-
-.. code-block:: shell
-
-   realm-cli apps create -n MyTutorialApp --template maui.todo.flex \
-      --deployment-model global --location us-or --environment development
+This tutorial is based on the MAUI Flexible Sync Template App named
+``maui.todo.flex``. We start with the default app and build new features
+on it.
 
 .. include:: /includes/tutorial-learn-more-template-app.rst
+
+.. tabs::
+
+   .. tab:: App Services UI
+      :tabid: ui
+
+      Follow the procedure described in the 
+      :ref:`create-app` guide, and select
+      :guilabel:`Create App from Template`. Select the 
+      :guilabel:`Real-time Sync` template. This creates an App Services App
+      pre-configured to use with one of the Device Sync template app clients.
+
+      After you create a template app, the UI displays a modal labeled 
+      :guilabel:`Get the Front-end Code for your Template`. This modal 
+      provides instructions for downloading the template app client code 
+      as a ``.zip`` file or using {+cli+} to get the client.
+
+      After selecting the ``.zip`` or {+cli+} method, follow the on-screen
+      instructions to get the client code. For this tutorial, select the 
+      :guilabel:`C# (.NET MAUI)` client code.
+
+   .. tab:: App Services CLI
+      :tabid: cli
+
+      From {+cli+}, you can run the :ref:`realm-cli apps create 
+      <realm-cli-apps-create>` command to set up the backend and create the 
+      C# (MAUI) base app. The following command creates a new app based on the 
+      ``maui.todo.flex`` template. With the options flags we can pass during 
+      creation, the command below creates an app:
+
+      - Named "MyTutorialApp"
+      - Deployed in the US-VA region
+      - With the environment set to "development" (instead of production or QA)
+
+      .. code-block:: shell
+
+         realm-cli apps create -n MyTutorialApp --template maui.todo.flex \
+            --deployment-model global --location us-va --environment development
+
+   .. tab:: GitHub Repository
+      :tabid: github
+
+      You can fork and clone a GitHub repository that contains the Device 
+      Sync client code. The C# client code is available at
+      :github:`https://github.com/mongodb/template-app-maui-todo <mongodb/template-app-maui-todo>`.
+
+      If you use this process to get the client code, you must create a
+      template app to use with the client. Follow the instructions at 
+      :ref:`create-template-app` to use the Atlas App Services UI, {+cli+},
+      or Admin API to create a Device Sync template app.
 
 Set up the Template App
 -----------------------
