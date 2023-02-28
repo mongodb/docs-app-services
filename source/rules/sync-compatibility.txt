@@ -169,16 +169,17 @@ A client reset will **not** be triggered in the following cases:
 
 .. _unified-rule-migration:
 
-Migrate to Unified Rules System
--------------------------------
+Unified Rules System
+--------------------
 
 Prior to February 23, 2023, Device Sync (Flexible Mode) rules existed in the
 ``permissions`` field of the :ref:`Sync configuration
-<sync-configuration-reference>`. For new apps, these permissions now exist in
-the same configuration files as the non-Sync permissions.
+<sync-configuration-reference>`. For new apps and automatically migrated apps,
+these permissions now exist in the same configuration files as the non-Sync
+permissions.
 
-For reference, the following changes must happen to move from the old system to
-the new system:
+For reference, the following changes take place in the migration (you should not
+have to migrate apps manually):
 
 - Move ``permissions.defaultRoles`` to the ``default_rule.json`` file in the
   data source configuration directory at ``data_sources/<data-source-name>/``.
@@ -202,9 +203,6 @@ the new system:
      "insert": true,
      "delete": true,
      "search": true
-
-If you have an exported app with an old configuration, you might need to make
-these changes manually.
 
 This does not apply to apps using Partition-Based Sync. Their permissions
 configuration remains in the Sync configuration.
