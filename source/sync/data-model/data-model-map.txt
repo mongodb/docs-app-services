@@ -24,6 +24,87 @@ refer to :ref:`Development Mode <development-mode>`.
 To learn more about how Device Sync uses these two schemas,
 refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
 
+.. _database-and-collection-name-mapping:
+
+Databases, Collections, and Objects
+-----------------------------------
+
+When you configure Device Sync, you :ref:`specify the data source 
+<sync-config-data-source>` where you want to store data. This data source 
+may contain multiple databases, and each database may contain multiple 
+collections.
+
+The :ref:`App Services schema <schemas>` maps your Realm Database object 
+names to collections in databases in your Device Sync data source. The 
+``title`` field in an App Services schema maps to the object type name in 
+Realm Database. Because the ``title`` name determines the mapping between 
+client objects and the appropriate Atlas collection, this name must be
+unique among all schemas in your synced data source.
+
+The ``title`` does not need to match the collection name. 
+
+.. example::
+
+   Consider an app with a database named ``Pets``. It may contain multiple 
+   collections, such as ``Canine`` and ``Feline``. The App Services schema
+   for the ``Canine`` collection might resemble :ref:`the example below 
+   <sync-app-services-schema-dog-example>`, where the ``title`` field of 
+   the schema is ``Dog``. That would map a Realm Database object called 
+   ``Dog`` to the ``Canine`` collection in the ``Pets`` database.
+
+   You could not have another schema whose ``title`` was ``Dog`` in the 
+   same cluster. For example, you could not sync an object with a ``title`` 
+   of ``Dog`` to both a ``Debug`` and a ``Test`` database in the 
+   same cluster. If you want to sync the same object to different 
+   collections for app development purposes, you must use different 
+   data sources - one cluster for development and a different cluster
+   for production.
+
+.. _map-realm-to-atlas-with-development-mode:
+
+Mapping with Development Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you :ref:`enable Development Mode <enable-development-mode>` in your 
+Device Sync configuration, App Services can automatically create collections 
+and schemas for Realm Database objects that you sync. It creates those 
+collections in the :ref:`database you specify 
+<sync-config-database-name>` when you enable Development Mode.
+
+With Development Mode enabled, Sync looks for a collection whose App Services 
+schema has a ``title`` that matches the name of your Realm Database object 
+type. This collection could be in any database in your linked data source. 
+It doesn't have to be in the database you add when you configure 
+Development Mode.
+
+If there is no corresponding ``title`` in any App Services schema in your 
+linked data source, App Services creates a new collection for this object 
+type. This collection is created in the database you specify when you enable 
+Development Mode. The collection name matches the object's type, and the 
+corresponding App Services schema has a ``title`` field whose value is the 
+name of the object type. This creates the mapping between your Realm 
+Database object and the new collection.
+
+.. example::
+
+   Consider an Atlas cluster with a database named ``Pets``. It contains a 
+   ``Feline`` collection with existing data. 
+   
+   In your application code, you define a new ``Dog`` object. You enable
+   Development Mode, and specify the ``Pets`` database as the database 
+   in which to create collections for new object types. When you sync your
+   new ``Dog`` object, App Services creates a ``Dog`` collection in the 
+   ``Pets`` database and creates a schema for it. The ``title`` of the 
+   object in the schema is ``Dog``.
+
+   If you later add a new ``Person`` object to your application code and 
+   then sync it, App Services creates a new collection for this 
+   ``Person`` object in the ``Pets`` database. If you wanted to create a 
+   collection for the ``Person`` object in a different database, you 
+   could :ref:`define a schema <enforce-a-schema>` for the ``Person`` object
+   in a different database. Or you could disable and re-enable Development 
+   Mode, and select a different database in which to create new collections.
+
 .. _object-schema:
 .. _property-schema:
 
@@ -407,6 +488,8 @@ Example
 -------
 
 This example shows how to model a ``Dog`` with Device Sync.
+
+.. _sync-app-services-schema-dog-example:
 
 App Services Schema
 ~~~~~~~~~~~~~~~~~~~
