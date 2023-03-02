@@ -22,11 +22,11 @@ Atlas Device Sync uses space in your app's synced Atlas cluster to store utility
 data for sync. This includes a history of changes to each realm. 
 Atlas App Services minimizes this space usage via backend
 compaction or trimming, which runs automatically. This optimization is 
-necessary because it:
+necessary for the following reasons:
 
-- reduces space usage in your Atlas cluster, since your history contains
+- Reduces space usage in your Atlas cluster, since your history contains
   fewer instructions.
-- reduces the time and data usage of sync, since clients can converge
+- Reduces the time and data usage of sync, since clients can converge
   on the same result with fewer instructions.
 
 .. _sync-history:
@@ -57,7 +57,7 @@ Trimming
 ~~~~~~~~
 
 When you set a client maximum offline time in an App that uses :ref:`Flexible
-Sync <flexible-sync>`, **trimming** deletes changes older than the client
+Sync <flexible-sync>`, **trimming** deletes changes older than the client\
 maximum offline time. This reduces storage requirements beyond even the
 optimization of advanced backend compaction.
 
