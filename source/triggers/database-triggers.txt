@@ -600,22 +600,16 @@ each operation on a collection. The additional storage space and compute
 overhead may degrade trigger performance depending on your cluster
 configuration.
 
-Once enabled, your cluster continues to store preimages for a collection
-unless you explicitly disable them at the collection level. This means
-that your cluster will record preimages even if you delete all triggers
-on the collection.
+Once enabled for any trigger on a collection, your cluster stores
+preimages for every operation on the collection. The collection-level
+setting is different than the preimages setting for individual triggers.
+This means that the collection records preimages even if you later
+delete or exclude preimages from all triggers on the collection.
 
-To learn how to fully disable collection-level preimages, see
-:ref:`Disable Preimages for a Collection
+To avoid the storage and compute overhead of preimages, you must disable
+preimages for the entire underlying MongoDB collection. To learn how,
+see :ref:`Disable Preimages for a Collection
 <disable-collection-preimages>`.
-
-.. note::
-
-   To optimize individual trigger executions, you can exclude the preimage
-   from change events on a per-trigger basis. Regardless of your
-   trigger-level settings, a collection's oplog entries will continue to
-   include preimage data unless you explicitly disable preimages for the
-   collection.
 
 .. _database-triggers-match-expression:
 
