@@ -620,16 +620,27 @@ To learn how, see :ref:`Disable Preimages for a Collection
 Use Match Expressions to Limit Trigger Invocations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In the :guilabel:`Match Expression` field, 
-limit the number of Trigger invocations by using Match expressions. The Trigger is only 
-invoked if the document meets the criteria of the 
-:manual:`$match </reference/operator/aggregation/match>` expression. 
+You can limit the number of Trigger invocations specifying a :manual:`$match
+</reference/operator/aggregation/match>` expression in the :guilabel:`Match
+Expression` field. App Services evaluates the match expression against the
+change event document and invokes the Trigger only if the expression evaluates
+to true for the given change event.
+
+The exact shape of the change event document depends on the event that caused
+the trigger to fire. For details, see the reference for each event type:
+
+- :manual:`insert </reference/change-events/insert>`
+- :manual:`update </reference/change-events/update>`
+- :manual:`replace </reference/change-events/replace>`
+- :manual:`delete </reference/change-events/delete>`
 
 .. example::
    
-   The following :guilabel:`Match Expression` configures a trigger to fire only
-   if the change event object specifies that the ``status`` field in a document
-   changed.
+   The following match expression allows the Trigger to fire
+   only if the change event object specifies that the ``status`` field in 
+   a document changed.
+   
+   ``updateDescription`` is a field of the :manual:`update Event object </reference/change-events/update>`.
    
    .. code-block:: javascript
    
@@ -639,8 +650,20 @@ invoked if the document meets the criteria of the
         }
       }
 
-.. _database-triggers-project-expression:
+   The following match expression allows the Trigger to fire only when a
+   document's ``needsTriggerResponse`` field is ``true``. The ``fullDocument``
+   field of the :manual:`insert </reference/change-events/insert>`,
+   :manual:`update </reference/change-events/update>`, and :manual:`replace
+   </reference/change-events/replace>` events represents a document after the
+   given operation.
 
+   .. code-block:: javascript
+     
+      {
+        "fullDocument.needsTriggerResponse": true
+      }
+
+.. _database-triggers-project-expression:
 
 Use Project Expressions to Reduce Input Data Size
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
