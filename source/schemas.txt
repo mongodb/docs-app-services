@@ -191,3 +191,36 @@ to the user without applying any changes in the request.
    reject this write operation even though the user had permission to
    update the document because the write result does not conform to the
    schema.
+
+.. _schema-app-services-vs-built-in:
+
+App Services Schema vs Built-In Schema Validation
+-------------------------------------------------
+
+A schema in App Services is **not the same** as :ref:`MongoDB's built-in
+schema validation <schema-validation-overview>`. Both use the JSON
+schema standard with additional support for BSON types. However, App
+Services does not use your cluster's built-in schema and may interact
+with your cluster in a way that is incompatible with a built-in schema.
+
+If you want to use App Services schemas *and* your cluster's built-in
+schema validation at the same time, consider the following:
+
+- Set your cluster's schema validation level to "warn" initially. Then,
+  monitor activity and address existing warnings. Once you're
+  comfortable that both schema validation layers are compatible, you can
+  upgrade the validation level to "error".
+
+- If you're using :ref:`Device Sync <sync>`, avoid required fields for
+  embedded documents and arrays of embedded documents. The sync protocol
+  may break a valid embedded object write into multiple equivalent
+  writes that do not individually include all required fields.
+
+- If you're using Device Sync, avoid distinguishing between
+  ``undefined``, ``null`, empty arrays, and embedded objects with no
+  fields. The sync protocol treats these values as functional
+  equivalents.
+
+If you need help in working with both schema validation layers
+simultaneously, contact `MongoDB Support
+<https://support.mongodb.com/welcome?tck=docs_realm>`_.
