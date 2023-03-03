@@ -596,19 +596,23 @@ Disable Collection-Level Preimages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Document preimages require your cluster to record additional data about
-each operation on a collection. The additional storage space and compute
-overhead may degrade trigger performance depending on your cluster
-configuration.
+each operation on a collection. Once you enable preimages for any
+trigger on a collection, your cluster stores preimages for every
+operation on the collection.
 
-Once enabled for any trigger on a collection, your cluster stores
-preimages for every operation on the collection. The collection-level
-setting is different than the preimages setting for individual triggers.
-This means that the collection records preimages even if you later
-delete or exclude preimages from all triggers on the collection.
+The additional storage space and compute overhead may degrade trigger
+performance depending on your cluster configuration.
 
 To avoid the storage and compute overhead of preimages, you must disable
-preimages for the entire underlying MongoDB collection. To learn how,
-see :ref:`Disable Preimages for a Collection
+preimages for the entire underlying MongoDB collection. This is a
+separate setting from any individual trigger's preimage setting.
+
+If you disable collection-level preimages, then no active trigger on
+that collection can use preimages. However, if you delete or disable all
+preimage triggers on a collection, then you can also disable
+collection-level preimages.
+
+To learn how, see :ref:`Disable Preimages for a Collection
 <disable-collection-preimages>`.
 
 .. _database-triggers-match-expression:
