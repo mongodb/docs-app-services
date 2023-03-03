@@ -180,8 +180,11 @@ Database Triggers have the following configuration options:
 
        .. tip:: Performance Optimization
 
-          Disable preimages at a collection level to improve performance. 
-          :ref:`Learn more. <database-triggers-disable-collection-level-preimages>`
+          Preimages require additional storage overhead that may affect
+          performance. If you're not using preimages on a collection,
+          you should disable preimages. To learn more, see :ref:`Disable
+          Collection-Level Preimages
+          <database-triggers-disable-collection-level-preimages>`.
 
    * - :guilabel:`Event Ordering`
 
@@ -591,22 +594,26 @@ multiple executions of a Trigger Function occur in event order.
 
 Disable Collection-Level Preimages
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          
-Document preimages use extra information stored in the oplog.
-The extra data may degrade trigger performance.
 
-Once you've enabled document preimages for any trigger on a
-given collection, that collection will include preimage data in
-the oplog and other triggers on the collection can use preimages
-with no additonal overhead.
+Document preimages require your cluster to record additional data about
+each operation on a collection. Once you enable preimages for any
+trigger on a collection, your cluster stores preimages for every
+operation on the collection.
 
-You can disable document preimages on a per-trigger basis to
-exclude the preimage from change events. Regardless of your
-trigger-level settings, a collection's oplog entries will
-continue to include preimage data unless you explicitly disable
-preimages for the collection.
+The additional storage space and compute overhead may degrade trigger
+performance depending on your cluster configuration.
 
-:ref:`Learn how to view and disable collection-level preimages. <preimages>`
+To avoid the storage and compute overhead of preimages, you must disable
+preimages for the entire underlying MongoDB collection. This is a
+separate setting from any individual trigger's preimage setting.
+
+If you disable collection-level preimages, then no active trigger on
+that collection can use preimages. However, if you delete or disable all
+preimage triggers on a collection, then you can also disable
+collection-level preimages.
+
+To learn how, see :ref:`Disable Preimages for a Collection
+<disable-collection-preimages>`.
 
 .. _database-triggers-match-expression:
 
