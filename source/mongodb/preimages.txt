@@ -15,15 +15,10 @@ Document Preimages
 Overview
 --------
 
-Every :ref:`database trigger <database-trigger>` execution has a related 
-change event. You can configure these change events to include 
-**document preimages**. A preimage is a snapshot of a document *before* 
+Every :ref:`database trigger <database-trigger>` execution has a related
+change event. You can configure these change events to include
+**document preimages**. A preimage is a snapshot of a document *before*
 a change.
-
-Atlas App Services stores preimage information in the linked cluster's 
-:manual:`oplog </core/replica-set-oplog>`. This adds storage overhead for 
-each operation on the collection. This may cause performance issues for 
-collections with a high write throughput.
 
 .. example::
    
@@ -60,6 +55,16 @@ collections with a high write throughput.
            "age": 4
         }
 
+Performance
+~~~~~~~~~~~
+
+For clusters running MongoDB version 6.0 and newer, triggers use the
+cluster's built-in :ref:`change stream preimages <changeStreams>`
+feature. Older versions of MongoDB store preimages directly in the
+oplog. Both of these add storage and compute overhead for each operation
+on the collection which may cause performance issues for collections
+with a high write throughput.
+
 Enable Document Preimages
 -------------------------
 
@@ -86,11 +91,14 @@ Enabling preimages for a collection applies to all collections. This
 includes collections tied to triggers in a different App. Collections 
 with no triggers that use preimages also appear here.
 
+.. _disable-collection-preimages:
+
 Disable Preimages for a Collection
 ----------------------------------
 
-You can disable collection-level preimages in the App Services UI. To disable 
-preimages for a collection:
+You can disable collection-level preimages in the App Services UI.
+
+To disable preimages for a collection:
 
 1. (Optional) Disable document preimages for triggers in the collection.
    Triggers with preimages continue to fire after disabling preimages. 
