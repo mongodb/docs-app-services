@@ -1,3 +1,39 @@
+# March 3, 2023
+
+## Get Started
+- Device Sync Tutorial for .NET, Kotlin, SwiftUI: Rename "Atlas" tab in procedure to "Data Services"
+- Device Sync Tutorial - .NET Maui: Add details around the different ways to get the Template App client
+
+## Device Sync
+- Configure and Update Your Data Model
+  - Landing Page: Fix a typo
+  - Create a Data Model: Add a note that object type name cannot exceed 57 UTF-8 characters
+  - Update a Data Model: Update details about which documents resync with additive changes
+  - Data Model Mapping
+    - Add a note that object type name cannot exceed 57 UTF-8 characters
+    - Add a new "Databases, Collections, and Objects" describing how object names map to collections in databases with and without Development Mode enabled
+
+## Functions
+- Landing Page
+  - Add link to relevant Kotlin SDK page
+  - Update Constraints to reflect raised request timeout limit from 180 to 210 seconds
+
+## Triggers
+- Database Triggers: Add documentation for change stream preimages feature available in clusters running MongoDB 6.0 and newer
+
+## Authenticate & Manage Users
+- Authentication Providers/Custom Function Authentication: Add links out to relevant Kotlin SDK page, change SDK links from tabs to bullet list
+
+## Connect to MongoDB Data Sources
+- Document Preimages: Note that triggers use the change stream preimages feature available in clusters running MongoDB 6.0 and newer, while older versions store preimages directly in the oplog
+
+## Define Data Access Permissions
+- Device Sync-Compatible Permissions: Clarify that migration from old rules to new rules does not require manual migration
+
+## Reference
+- Upgrade a Shared Tier Cluster: Rename "Atlas" tab in procedure to "Data Services", update screenshot
+- Third-Party Services/HTTP/http.post(): Add missing `encodeBodyAsJSON` parameter, specify it's required when the payload is an object
+
 # February 24, 2023
 
 ## Device Sync
