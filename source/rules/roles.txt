@@ -75,6 +75,26 @@ You can define field-level permissions for specific fields and
 default read/write permissions for any additional fields that you 
 don't explicitly define.
 
+Read Permissions Flowchart
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following diagram shows how App Services determines whether a user can
+read a given document:
+
+.. figure:: /images/rules-read.png
+   :alt: Read permissions flowchart
+   :lightbox:
+
+Write Permissions Flowchart
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following diagram shows how App Services determines whether a user can
+write a given document:
+
+.. figure:: /images/rules-write.png
+   :alt: Write permissions flowchart
+   :lightbox:
+
 Roles
 -----
 
@@ -195,6 +215,10 @@ collection. To assign a role, App Services evaluates each role's "apply when"
 expression in the order that you specified them. The first role whose "apply
 when" expression evaluates to true becomes the assigned role. If no role
 matches, access is denied.
+
+.. figure:: /images/rules-role-assignment.png
+   :alt: Role Assignment Flowchart
+   :lightbox:
 
 Without Device Sync
 ~~~~~~~~~~~~~~~~~~~
