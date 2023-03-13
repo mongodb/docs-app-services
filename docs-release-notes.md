@@ -1,10 +1,36 @@
+# March 10, 2023
+
+## Device Sync
+
+- Go to Production with Sync/Production Checklist: Add new "Disable or Manage Built-In Schema Validation" section
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Email/Password Authentication: Add information about user confirmation, new flowcharts for login and registration flow
+
+## Define a Data Model
+
+- Schemas Landing Page
+  - Add new "App Services Schema vs. Build-In Schema Validation" section with information and caveats about how to use both App Services schemas _and_ MongoDB's build-in schema validation
+  - Fix a typo
+
+## Define Data Access Permissions
+
+- Role-based Permissions: Add new flowcharts showing permissions evaluation for reading documents, writing documents, and role assignment
+
+## Other
+
+- Internal: Remove unneeded redirect
+
 # March 3, 2023
 
 ## Get Started
+
 - Device Sync Tutorial for .NET, Kotlin, SwiftUI: Rename "Atlas" tab in procedure to "Data Services"
 - Device Sync Tutorial - .NET Maui: Add details around the different ways to get the Template App client
 
 ## Device Sync
+
 - Configure and Update Your Data Model
   - Landing Page: Fix a typo
   - Create a Data Model: Add a note that object type name cannot exceed 57 UTF-8 characters
@@ -14,68 +40,85 @@
     - Add a new "Databases, Collections, and Objects" describing how object names map to collections in databases with and without Development Mode enabled
 
 ## Functions
+
 - Landing Page
   - Add link to relevant Kotlin SDK page
   - Update Constraints to reflect raised request timeout limit from 180 to 210 seconds
 
 ## Triggers
+
 - Database Triggers: Add documentation for change stream preimages feature available in clusters running MongoDB 6.0 and newer
 
 ## Authenticate & Manage Users
+
 - Authentication Providers/Custom Function Authentication: Add links out to relevant Kotlin SDK page, change SDK links from tabs to bullet list
 
 ## Connect to MongoDB Data Sources
+
 - Document Preimages: Note that triggers use the change stream preimages feature available in clusters running MongoDB 6.0 and newer, while older versions store preimages directly in the oplog
 
 ## Define Data Access Permissions
+
 - Device Sync-Compatible Permissions: Clarify that migration from old rules to new rules does not require manual migration
 
 ## Reference
+
 - Upgrade a Shared Tier Cluster: Rename "Atlas" tab in procedure to "Data Services", update screenshot
 - Third-Party Services/HTTP/http.post(): Add missing `encodeBodyAsJSON` parameter, specify it's required when the payload is an object
 
 # February 24, 2023
 
 ## Device Sync
+
 - Configure Sync/Sync Settings: Update list of SDKs that support Asymmetric Sync to include C++ SDK
 - Update many pages across Device Sync documentation for the release of the rules unification project
 
 ## Authenticate & Manage Users
+
 - Define User Metadata: Add missing ref targets, update links to SDK pages to use bullets instead of tabs
 - Manage User Sessions: New page consisting of moved and new content. Moved get & refresh token and revoke user sessions content; new configure token expiration, verify & decode token, and end user session content.
 
 ## Define Data Access Permissions
+
 - Update many pages across Rules documentation for the release of the rules unification project
 
 ## Reference
+
 - App Configuration Files/MongoDB Data Sources: Remove Device Sync from description of when you would define collection-level rules in a collection's `rules.json` for the release of rules unification project
 
 # February 17, 2023
 
 ## Get Started
+
 - Minor CTA updates to all Device Sync Tutorials:
   - Update the CTA button wording from "Check out the Template Apps" to "Sign-up to Deploy a Template App"
   - Add an include shared across all tutorials with a link to the "Template Apps" page to learn more, or a sign-up button CTA to sign up for an Atlas account if you don't already have one
 
 ## Develop & Deploy Apps
+
 - Get App Metadata: Add a new tab for finding your App ID with the CLI
 
 ## GraphQL API
+
 - Authenticate GraphQL Requests: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
 
 ## Data API
+
 - Data API Endpoints: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
 - Custom HTTPS Endpoints: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
 - Authenticate Data API Requests: Add new includes about better bearer auth performance with an access token, not using API keys in user-facing clients
 
 ## Authenticate & Manage Users
+
 - Define User Metadata: Add info about user creation function to the UI custom user data procedure, improve page organization, add Admin API procedures across page
 - Authentication Providers/Apple ID Authentication: Add a mobile app Sign-in with Apple procedure; previously docs only covered Sign-in with Apple for a web app
 
 ## Reference
+
 - Template Apps: Update the CTA button wording from "Check out the Template Apps" to "Sign-up to Deploy a Template App"
 
 ## Other
+
 - Update the Table of Contents to have fewer root-level entries by grouping content into use-case based sections, reorganize to better align with organizational priorities
   - Rename "Manage & Deploy Apps" to "Develop & Deploy Apps", move it down in the Table of Contents, reduce internal nesting and consolidate pages in the section
   - Rename "Users & Authentication" to "Authenticate & Manage Users", streamline section contents by consolidating and renaming pages
@@ -91,118 +134,147 @@
 # February 10, 2023
 
 ## Manage & Deploy Apps
+
 - Deploy/Change Deployment Models: New page with information about how to change an App Services App's deployment models
 
 ## Device Sync
+
 - Update SDK links on all the Auth Provider pages, Enable Custom User Data, Functions, and Create a User:
   - Add new C++ SDK page links
   - Change SDK links from tabs to a bullet list
   - Add links to other SDK pages where missing
 
 ## MongoDB Data Sources
+
 - Query Atlas from Client Apps: New page with a setup procedure explaining MongoDB Data Access and how it relates to App Services / Realm SDKs
 
 ## Data API
+
 - Landing Page: Remove BSON info from landing page, refresh information about how the Data API works and when to use it
 - Data Formats: New page with information about BSON, JSON, and EJSON, with a list of Data API-supported BSON types
 
 ## Functions
+
 - Context: Add a subsection with a link target for `context.environment.values` for easy linking from other documentation
 
 ## Values & Secrets
+
 - Landing Page: Add a link to the new Functions / `context.environment.values` link target
 - Access a Value: Add a link to the new Functions / `context.environment.values` link target
 
 ## App Services Admin API
-- Deployment: Document new GET and PUT endpoints for getting and creating a deployment migration 
+
+- Deployment: Document new GET and PUT endpoints for getting and creating a deployment migration
 - Users/List All Pending Users: Add docs for the `after` query parameter to address pagination beyond 50 users
 
 ## Reference
+
 - Service Limitations: Update the Request Traffic limitation from 5,000 concurrent requests to 10,000 concurrent requests
 
 # February 3, 2023
 
 ## Get Started
+
 - Device Sync Tutorial - Kotlin: Add Learning Objectives, minor clarifications based on feedback
 
 ## Data API
+
 - Data API Endpoints: Update the "Authenticate the Request" section to prefer Bearer authorization with an access token
 - Custom HTTPS Endpoints: Update the "Authenticate the Request" section to prefer Bearer authorization with an access token
 
 ## Other
+
 - Introduction: Minor updates based on feedback
 
 # January 27, 2023
 
 ## Get Started
+
 - Device Sync Tutorial - .NET MAUI: Replaces the previous Xamarin tutorial with a tutorial for building on the new MAUI template app
 - Device Sync Tutorial - React Native: Minor tweak telling users where to go to install app dependencies to account for multiple client download options
 
 ## GraphQL API
+
 - Authenticate GraphQL Requests
   - Update the page with more information about Bearer Authentication, Credential Headers, unify the structure so it parallels a similar page for Data API
   - Add information about getting and refreshing a user access token as a reusable block that can go on this page and the similar Data API page
 
 ## Data API
+
 - Data API Endpoints: Update the "Authenticate the Request" section:
   - Add a link to the new Authenticate Data API Requests page
   - Add information about exchanging the user's login credentials for an access token that you can then include in a request header
 - Authenticate Data API Requests: New page modeled on the updated "Authenticate GraphQL Requests" page
 
 ## App Services Admin API
+
 - Users/Verify valid client access token: Update description, add and clarify details around 200 responses, add possible 400/401 responses
 
 ## Reference
+
 - Remove the "Authenticate HTTP Client Requests" page which is superseded by information in the updated GraphQL/Data API "Authenticate" pages
 
 # January 20, 2023
 
 ## Get Started
+
 - Update Device Sync tutorials for Flutter, Kotlin, React Native, and SwiftUI for the new v2 template apps
 - Temporarily remove Xamarin from Device Sync tutorials, to be replaced with Maui tutorial when the corresponding template app is live in the UI
 
 ## Device Sync
+
 - Go to Production with Sync/Compact an Atlas Volume: Remove erroneous info about increasing an Atlas cluster size triggering a rolling resync
 
 ## Users & Authentication
+
 - Enable User Metadata: Update the list of links to SDK documentation pages for accessing user metadata from a client
 
 ## MongoDB Data Sources
+
 - Overview: Add info that App Services automatically handles opening and closing database connections
 
 ## Reference
+
 - Template Apps: Update the list of available template apps and add a new Get a Template App Client section with info about UI ZIP download, Realm CLI, and GitHub repositories
 
 # January 13, 2023
 
 ## Manage & Deploy Apps
+
 - Configure/App Configuration Reference/Users & Authentication Providers: Update Custom User Data config with details about `on_user_creation_function_name`
 
 ## Users & Authentication
+
 - Enable Custom User Data: New section with code example showing how to use a Function to create a user with custom metadata
 
 ## App Services Admin API
+
 - Add Custom User Data endpoint documentation for `GET` and `PATCH` with request details and example response
 
 ## Other
+
 - Internal: Remove over 100 unused files from repository, add CI to check for unused files in PRs
 
 # January 6, 2023
 
 ## Device Sync
+
 - Configure and Update Your Data Model/Create a Data Model: Add a link to the C++ SDK object model page
 - Configure Sync/Pause or Terminate Sync: Add dropping a collection to the list of things that require you to terminate Sync
 
 ## Data API
+
 - Data API Endpoints
   - Add an "Authorization" section with details about authorization schemes
   - Add an "Authorize The Request" section detailing authorization configuration options
 - Custom HTTPS Endpoints: Add a section about the ability to define custom authorization schemes and `can_evaluate`, update code examples
 
 ## Reference
-- Service Limitations: Updates and clarifications about using Device Sync with time series collections, required MongoDB versions for Device Sync, and performance implications of concurrent writes 
+
+- Service Limitations: Updates and clarifications about using Device Sync with time series collections, required MongoDB versions for Device Sync, and performance implications of concurrent writes
 
 ## Other
+
 - Update some pages to fix monospace in section subheads
 
 # December 30, 2022
