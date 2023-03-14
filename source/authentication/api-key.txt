@@ -129,8 +129,8 @@ You must enable the API key provider before you can create an API key.
       #. Select the :guilabel:`Authentication Providers` button and then select
          the :guilabel:`API Keys` provider.
 
-      #. If the API Key provider is not currently enabled, enable it and then
-         deploy your application.
+      #. If the API Key provider is not currently enabled, you must enable it 
+         and then deploy your changes before you can create a key.
 
       #. Click :guilabel:`Create API Key`.
 
@@ -166,15 +166,15 @@ You must enable the API key provider before you can create an API key.
 User API Keys
 -------------
 
-You can generate user API keys with the Realm SDKs.
-User API keys are generated for specific application users by the Realm
-SDKs in client applications. You can then use the user API to authenticate as that user.
+You can generate user API keys with the Realm SDKs. Each user API Key is associated 
+with a single non-anonymous user. Each user can associate up to 20 user API keys 
+with their account. Once the key is associated with a user account, the user 
+can use the key to authenticate. The following diagram shows how to create, 
+and then use, a User API Key:
 
-You can allow devices or services to communicate with App Services on behalf
-of a user by associating a unique user API key with each device.
-
-User API keys are always associated with a non-anonymous user. Each user can
-associate up to 20 user API keys with their account.
+.. figure:: /images/user-key-flow.png
+    :alt: User API Key flow diagram
+    :width: 350px
 
 To learn how to generate user API keys, refer to the Realm SDK documentation.
 
