@@ -1670,6 +1670,43 @@ paths:
         "204":
           description: Deleted
 
+  "/groups/{groupId}/apps/{appId}/users/{userId}/reset_email":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/UserId"
+    patch:
+      tags:
+        - users
+      operationId: adminResetUserEmail
+      summary: Change a user's email
+      description: Change the email address for an [email/password user](https://www.mongodb.com/docs/atlas/app-services/authentication/email-password/) by ID.
+      requestBody:
+        required: true
+        description: The new email address for the user.
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  description: The new email for the user.
+              required:
+                - email
+            example: { "email": "new_email@example.com" }
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description:
+            oneOf:
+              - Payload is formatted incorrectly.
+              - The email in the payload is not a string.
+              - The email in payload has 0 or greater than 128 characters.
+              - The user does not have a local-userpass identity.
+        "404":
+          description: The appId, groupId, or userId is invalid.
+
   "/groups/{groupId}/apps/{appId}/users/{userId}/devices":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1743,7 +1780,7 @@ paths:
       - in: query
         name: after
         required: false
-        schema: 
+        schema:
           type: string
         description: |-
           The unique ``_id`` for a pending user. ``List pending users`` can return 50
@@ -1756,7 +1793,7 @@ paths:
         - users
       operationId: adminListPendingUsers
       summary: List pending users
-      description: List pending user account registrations. Returns up to 50 pending users in a call. 
+      description: List pending user account registrations. Returns up to 50 pending users in a call.
       responses:
         "200":
           description: Success
@@ -4405,10 +4442,11 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/AppDeploymentSettings"
-            example: {
-              "deployment_model": "LOCAL",
-              "provider_region": "aws-us-east-1"
-            }
+            example:
+              {
+                "deployment_model": "LOCAL",
+                "provider_region": "aws-us-east-1",
+              }
       responses:
         "204":
           description: Migration started
