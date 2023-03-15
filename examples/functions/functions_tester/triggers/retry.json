@@ -1,12 +1,12 @@
 {
-    "name": "materializeTotalSales",
+    "name": "retry",
     "type": "DATABASE",
     "config": {
         "operation_types": [
             "INSERT"
         ],
-        "database": "store",
-        "collection": "sales",
+        "database": "logs",
+        "collection": "failed_execution_logs",
         "service_name": "mongodb-atlas",
         "match": {},
         "project": {},
@@ -20,7 +20,7 @@
     "event_processors": {
         "FUNCTION": {
             "config": {
-                "function_name": "materializeTotalSales"
+                "function_name": "retryOperationDbTrigger"
             }
         }
     }

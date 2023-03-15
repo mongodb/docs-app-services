@@ -16,11 +16,6 @@ describe("Recursive retry integration tests", () => {
     const res = await app.currentUser.callFunction("mightFail", [passVal]);
     expect(res).toBe(true);
   });
-  test("should fail", async () => {
-    let failVal = 6;
-    const res = await app.currentUser.callFunction("mightFail", [failVal]);
-    expect(res).toBe(null);
-  });
 });
 
 jest.setTimeout(20000);
