@@ -121,7 +121,7 @@ value of 30 days.
 .. warning:: Client Maximum Offline Time Causes Permanent Changes to History
 
    Client maximum offline time enables trimming for
-   older history. This kind of compaction permanently changes affected
+   older history. This permanently changes affected
    history, and can cause client resets in the future even after
    disabling the feature.
 
@@ -135,40 +135,6 @@ not sync for a long period of time, trimming can
 alter the history in ways that prevent the client from converging. Since
 synchronization relies on all clients converging on a common result,
 such a client cannot synchronize.
-
-.. example::
-
-   Consider the following example that contains a CREATE and a DELETE for
-   ``table2.object2``:
-
-   .. code-block::
-      :caption: Original History
-
-      CREATE table2.object2
-      CREATE table1.object1
-      DELETE table2.object2
-
-   When this history becomes older than the client maximum offline time,
-   trimming optimizes the backend history into the
-   following:
-
-   .. code-block::
-      :caption: Trimmed History
-
-      CREATE table1.obj1
-
-   However, a client contains this subset of history, containing only
-   the CREATE operation for ``table2.object2``:
-
-   .. code-block::
-      :caption: Partial Client History
-
-      CREATE table2.object2
-      CREATE table1.object1
-
-   Since compaction pruned the DELETE operation for ``table2.object2``, the
-   client will never delete that object. The client cannot converge to the same
-   state as the backend and all other clients.
 
 As a result, the client must complete a client reset before it can
 resume synchronization. In a client reset scenario, the client deletes
@@ -205,7 +171,7 @@ trimming will permanently cause client resets in clients.
 Decreasing client maximum offline time also does not *immediately*
 change the length of time before clients experience a client reset.
 Client resets begin taking place earlier once the regularly scheduled
-compaction job applies trimming to the newly
+trimming job applies trimming to the newly
 eligible history.
 
 Set the Client Maximum Offline Time
@@ -216,23 +182,29 @@ Set the Client Maximum Offline Time
    .. tab::
       :tabid: ui
       
-      1. Select the :guilabel:`Sync` menu in the sidebar.
+      1. Select the :guilabel:`Device Sync` menu in the sidebar.
 
-      2. Click the :guilabel:`Client Maximum Offline Time (Optional)` dropdown
-         in the "Configuration" tab.
+      #. Under :guilabel:`Sync Type`, make sure :guilabel:`Flexible` is selected. 
 
-         .. figure:: /images/client-maximum-offline-time.png
+      #. Scroll down to the :guilabel:`Advanced Configuration (optional)` dropdown.
+         Click the dropdown to open. 
+
+         .. figure:: /images/client-max-offline-time.png
            :width: 750px
            :alt: The client maximum offline time configuration in a disabled state.
 
-      3. Click the :guilabel:`Enable Max Offline Time` toggle.
+      #. Under the :guilabel:`Client Max Offline Time` section, click 
+         the :guilabel:`Enable Max Offline Time` toggle.
 
-      4. Specify a number of days for your application's client maximum
+      #. Specify a number of days for your application's client maximum
          offline time. The default value is 30 days. The minimum value is
          1.
 
-      5. Click the :guilabel:`Update Offline Time` button to confirm your
-         changes.
+      #. Click the :guilabel:`Save Changes` button at the bottom of the screen
+         once you are ready to save.
+      
+      #. In the confirmation window, click the :guilabel:`Save Changes` button again
+         to confirm changes.
    
    .. tab::
       :tabid: cli
