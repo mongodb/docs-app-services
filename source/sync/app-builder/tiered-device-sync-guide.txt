@@ -1,0 +1,375 @@
+:noprevnext:
+:orphan:
+
+.. meta::
+   :robots: noindex, nosnippet
+
+.. _tiered-device-sync-guide:
+
+========================
+Tiered Device Sync Guide
+========================
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Overview
+--------
+
+This guide details how to set up a Tiered Device Sync application while 
+this feature is in pre-alpha. This guide is intentionally not public,
+and is intended for internal MongoDB use.
+
+Create a Device Sync-Enabled App
+--------------------------------
+
+.. procedure::
+
+   .. step:: Create an App Services App
+
+      Create an :ref:`App Services App using the UI, CLI, or Admin API <create-app>`.
+      
+      For a quick proof-of-concept, :ref:`create an app from a 
+      template <create-template-app>`. If you select :guilabel:`Real-time Sync`
+      when you create a template app, this sets up a Device Sync-enabled 
+      task tracker app with a downloadable front-end client. This app comes
+      pre-configured with permissions for the user to write their own Items 
+      to an ``Item`` collection in a ``todo`` database. It also has 
+      :ref:`Development Mode <development-mode>` and 
+      :ref:`email/password authentication <email-password-authentication>` 
+      enabled.
+
+      If you want to define your own permissions and Device Sync settings,
+      create an app that does not use this template. Alternately, create a
+      template app but modify the settings.
+
+   .. step:: Enable Device Sync or Modify the Template Configuration
+
+      If you have not started with a template app, :ref:`enable Device Sync 
+      <enable-sync>` with Flexible Sync. Enable :ref:`Anonymous authentication 
+      <anonymous-authentication>`. Configure :ref:`permissions 
+      <device-sync-compatibility>` to allow anyone to read and write all data.
+
+      If you started with a template app, enable :ref:`Anonymous authentication 
+      <anonymous-authentication>`. Go to :guilabel:`Rules`, and delete the 
+      existing rule for the ``todo`` / ``Item`` collection. Replace it with 
+      ``readAndWriteAll``.
+
+Launch an EC2 Instance
+----------------------
+
+Launch an AWS EC2 instance to serve as the Tiered Device Sync server.
+This layer syncs device data between the devices and the EC2 instance, and then
+syncs data between the EC2 instance and your Atlas App Services app.
+
+.. procedure::
+
+   .. step:: Set Up an Ubuntu 18 Instance
+
+      Launch an EC2 instance running Ubuntu Server 18.x.
+
+   .. step:: Configure Required Network Settings
+
+      Under Network settings, add a rule to allow access via HTTP/Port 80.
+      For added security, restrict to your IP address.
+
+   .. step:: Provision and Launch the Instance
+
+      Select any other additional settings. Free tier settings are sufficient
+      for small PoC projects. Then, launch the instance.
+
+
+Enable Tiered Device Sync Authentication for Your App
+-----------------------------------------------------
+
+.. procedure::
+
+   .. step:: Get an Authorization Token
+
+      Get an authorization token for your App Services App. Log in to your 
+      App Services App, and run the following in your console:
+
+      .. code-block:: shell
+         
+         JSON.parse(localStorage.getItem("_baas.admin._baas_ua")).accessToken
+      
+
+   .. step:: Store the Token as a Variable on Your EC2 Instance
+
+      Store the value you got in the step above as a shell variable in a
+      terminal on your EC2 instance.
+
+      .. code-block:: shell
+         
+         TOKEN="STRING-FROM-PRIOR-STEP"
+
+   .. step:: Use openSSL to Generate a Secret Token
+
+      Generate a secret token.
+
+      .. code-block:: shell
+
+         SECRET=$(openssl rand -hex 16)
+
+      Save the output for use when configuring the Tiered Sync server.
+
+      .. code-block:: shell
+
+         echo "Tiered Sync Configuration Token: " $SECRET
+
+   .. step:: Enable Tiered Sync Authentication
+
+      Use the ``TOKEN`` and ``SECRET`` from the prior steps, as well as 
+      the App Services ``GroupID`` and ``AppID`` for the App you created above, 
+      to enable Tiered Sync Authentication:
+
+      .. code-block:: shell
+
+         curl --request POST --url https://realm.mongodb.com/api/admin/v3.0/groups/<groupID>/apps/<appID>/auth_providers -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --data "{\"Type\": \"tiered-sync-token\", \"Config\": {\"token\": \"$SECRET\""}}
+
+Configure The EC2 Instance to Run the Tiered Sync Server
+--------------------------------------------------------
+
+Set up and run the Tiered Sync server on the EC2 instance.
+
+.. procedure::
+
+   .. step:: Get the Tiered Sync Server Code
+
+      Use ``wget`` to get the Tiered Sync Server code:
+
+      .. code-block:: shell
+
+         wget https://tiered-sync-package.s3.amazonaws.com/d49a2f331f53cc0e6af450a067c4fd9184c3ae63-tiered_sync.tgz
+
+      Unzip the tar to get the files.
+
+      .. code-block:: shell
+
+         tar -xvf *.tgz
+
+      You now have a ``tiered_sync`` directory containing the server files.
+
+   .. step:: Complete the Tiered Sync Configuration Details
+
+      The ``tiered_sync`` directory contains a :file:`config.json` file you 
+      must edit with the appropriate values to configure the server.
+
+      .. code-block:: json
+
+         {
+           "clientAppId": "YOUR-APP-ID",
+           "query": {
+             "YOUR-COLLECTION-NAME": "truepredicate"
+           },
+           "cloudSyncServerAuth": "YOUR-AUTH-TOKEN",
+           "hostname": "YOUR-TIERED-SYNC-SERVER-DOMAIN"
+         }
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Field name
+           - Value
+
+         * - ``clientAppId``
+           - The App ID of the App Services App you created above.
+
+          
+         * - ``YOUR-COLLECTION-NAME``
+           - The name of the collection in your database where the Tiered 
+             Sync server should sync data. If you're using a 
+             template app, this is the ``Item`` collection.
+             Currently, ``truepredicate`` is the only supported query.
+
+         * - ``cloudSyncServerAuth``
+           - This is the Tiered Sync Server authorization token you generated
+             and saved as the ``SECRET`` in a step above.
+
+
+         * - ``hostname``
+           - The public DNS of your EC2 instance. This should resemble something
+             like ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
+
+   .. step:: Install Dependencies
+
+      The Tiered Sync server requires several dependencies, which are listed 
+      in the :file:`README.md` in the ``tiered_sync`` directory. Follow the 
+      instructions to install the required dependencies.
+
+   .. step:: Start the Tiered Sync Server
+
+      To start the server, from the ``tiered_sync`` directory:
+
+      .. code-block:: shell
+
+         sudo make up
+
+      You may get a message similar to ``Couldn't connect to Docker daemon at http+docker://localunixsocket``.
+      If this occurs, you may need to add your user account to the docker group.
+
+      If you have successfully started the Tiered Sync server, you can see
+      the status of the server with:
+
+      .. code-block:: shell
+
+         sudo make status
+
+      Now you can connect clients directly to the Tiered Sync Server.
+
+Connect to the Tiered Sync Server from a Client
+-----------------------------------------------
+
+To connect to the Tiered Sync Server from a client, your app must:
+
+- Use Anonymous Authentication
+- Use HTTP over port 80
+- Set the Sync URL to the public accessible DNS address you set in the 
+  Tiered Sync Server config's ``hostname`` field
+
+For a quick proof of concept using a template app, these are the modifications
+you would need to make to the :github:`Swift template app 
+<mongodb/template-app-swiftui-todo>` to connect to the Tiered Sync server:
+
+.. procedure::
+
+   .. step:: Configure the Atlas Connection
+
+      In the Swift template app's :file:`atlasConfig`, set the values to:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Key
+           - Value
+
+         * - ``baseUrl``
+           - The EC2 public-addressable DNS of your Tiered Sync server. This
+             is ``http://`` followed by the same value you set in your 
+             Tiered Sync Server config's ``hostname`` field.
+          
+         * - ``appId``
+           - The App ID of the App Services App you created above.
+
+   .. step:: Adjust the App Transport Security Settings
+
+      For iOS, Apple disables insecure connections by default. You must add
+      an exception for your EC2 DNS to allow the client app to connect to it.
+
+      Select your App target, and go to the :guilabel:`Signing & Capabilities`
+      tab. Press the :guilabel:`+ Capability` button, and search for 
+      ``App Transport Security Settings``. Add this to your app.
+
+      Add an exception domain for your EC2 public-addressable DNS. This should
+      be just the string domain, similar to: ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
+
+      This creates an :file:`Info.plist` file in your project. Go to this file
+      to make additional adjustments.
+
+      Change this ``String`` key to a ``Dictionary``. Add two more keys for:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Key
+           - Type
+           - Value
+
+         * - ``NSIncludesSubdomains``
+           - Boolean
+           - ``YES``
+          
+         * - ``NSExceptionAllowsInsecureHTTPLoads``
+           - Boolean
+           - ``YES``
+
+      This enables your iOS client to connect to the insecure HTTP DNS.
+
+      Your :file:`Info.plist` file should look similar to:
+
+      .. image:: /images/tiered-sync-info-plist.png
+         :alt: Screenshot of an Info.plist file showing the settings above
+
+   .. step:: Switch to Anonymous Authentication
+
+      Instead of using email/password authentication, switch the client code
+      to use anonymous authentication. Go to the ``Views`` directory, and
+      open the :file:`LoginView`.
+
+      Remove the ``TextField`` and ``SecureField`` elements from the ``VStack``
+      in the View body, as well as their associated ``@State`` variables.
+
+      In the ``Button("Log In")`` element, remove the ``email: email, password: password``
+      from the ``login`` function call. Remove them from the ``login`` function 
+      signature below the view.
+
+      In the ``login`` function, change the user credentials from ``emailPassword``
+      to ``anonymous``. This function should now look like:
+
+      .. code-block:: swift
+
+         func login() async {
+           do {
+             let user = try await app.login(credentials: Credentials.anonymous)
+             print("Successfully logged in user: \(user)")
+           } catch {
+             print("Failed to log in user: \(error.localizedDescription)")
+             errorHandler.error = error
+           }
+         }
+
+      Remove the ``signUp`` function.
+
+      Back in the View body above, remove the ``Button("Create Account")``
+      element and all of its styling.
+
+      This leaves you with a View containing a single ``Log In`` button 
+      that uses anonymous authentication.
+
+   .. step:: Adjust the Sync Log Level, If Desired
+
+      You can optionally adjust the Sync log level if you'd like to get 
+      additional details about the status of communication with the 
+      Tiered Sync Server.
+
+      In the :file:`App` file, the Realm Swift app is initialized in the 
+      ``ErrorHandler`` class that starts in line 29. Add a log level
+      line to this initializer around line 38 to get additional information:
+
+      .. code-block:: swift
+         :emphasize-lines: 10
+
+         final class ErrorHandler: ObservableObject {
+             @Published var error: Swift.Error?
+
+             init(app: RealmSwift.App) {
+                 // Sync Manager listens for sync errors.
+                 app.syncManager.errorHandler = { syncError, syncSession in
+                     self.error = syncError
+                 }
+        
+                 app.syncManager.logLevel = .trace
+             }
+         }
+
+   .. step:: Run the App
+
+      Now you should be able to build and run the app. When you press the 
+      :guilabel:`Log In` button, you should be connected to the Tiered Sync
+      server. When you create new Items, those sync with the Tiered Sync server,
+      and from there to the Atlas App Services App.
+
+      You can check the status of the Tiered Sync Server from your EC2 instance.
+      With the client running, you should see ``"num_local_clients": 1`` in 
+      the Tiered Sync Server Status. You can also see error messages reflected
+      in the sync status.
+
+      In the App Services logs, you should see an ``Authentication -> Login``
+      entry whose ``Name`` is ``tiered-sync-token``. This is the Tiered Sync
+      Server connecting to your App Services App. You should see synced changes 
+      reflected in the linked Atlas collection.
