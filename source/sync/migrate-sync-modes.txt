@@ -1,0 +1,165 @@
+.. _realm-sync-migrate-modes:
+
+=============================================
+Migrate Partition-Based Sync to Flexible Sync
+=============================================
+
+You can automatically migrate App Services Apps that use Partition-Based Sync
+to Flexible Sync. We recommend doing this, as Partition-Based Sync is an older
+mode.
+
+Other than upgrading the SDK version, migrating sync modes doesn't require any 
+changes to your client app code. Your App's backend will automatically translate
+the client's Partition-Based Sync requests into Flexible Sync.
+.. QUESTION: is there a performance hit for the translation?
+
+Migrating results in Partition-Based Sync clients communicating with a
+Flexible Sync App Services App. You cannot reverse this and have Flexible Sync
+clients communicate with a Partition-Based Syn App Services App.
+
+Requirements
+------------
+
+- Your App must currently use Partition-Based Sync
+- Linked Atlas cluster must be running mongodb 5.0+ for Flexible Sync compatibility
+- Linked Atlas cluster must have time-based oplog setting enabled
+- realm-core vTBD+, which means these SDK versions: TBD
+
+.. _realm-sync-migrate-what-to-know:
+
+What to Know Before migrating
+-----------------------------
+
+- How long a migration takes is directly proportional to the amount of data
+  that needs to be migrated.
+- Migrations can be canceled or rolled back within a certain timeframe.
+- As part of migration, sync data is doubled. This may be enough to impact
+  billing.
+- Progress notifications will not work after migration because Flexible Sync does
+  note yet support them.
+
+.. _realm-sync-migrate-stages:
+
+Migration Stages
+~~~~~~~~~~~~~~~~
+
+#. Flushing partition-based sync
+   
+   Clients can connect at this stage, but local writes will not sync.
+	 Clients can receive updates to MongoDB data.
+
+#. Initializing flexible sync
+   
+   Clients cannot connect at this stage. The time this takes is directly
+   proporional to the amount of data in synced collections.
+
+#. Migration completed
+
+   **Manage sync migration** appears on Sync page if the migration hasn't been 
+   committed or rolled back. This button lets admins commit or roll back manually.
+
+Migrate Partition-Based Sync App to Flexible Sync
+-------------------------------------------------
+
+After beginning migration from Partition-Based Sync to Flexible Sync, the process
+is mostly automatic. However, you can control important parts of the migration.
+
+During a migration, you can cancel it. After a migration, you can roll it back 
+or manually commit the migration.
+
+Begin Migration
+~~~~~~~~~~~~~~~
+
+Before you begin a migration, make sure you're aware of the
+:ref:`migration stages <realm-sync-migrate-stages>` and
+:ref:`effects <realm-sync-migrate-what-to-know>`.
+
+During migration, client apps may experience side effects, most of which are similar
+to what happens if you disable and re-enable sync. These are some side effects
+of migration:
+
+- In the App Services UI, the Rules and Schemas pages will be unresponsive.
+- Your App Services Appp will experience a period of read-only sync and then a 
+  period of downtime.
+- If Partition-Based Sync default client max offline time is unset, the new
+  Flexible Sync config will set it to 30 days.
+- Storage in your Atlas cluster used by sync is temporarily doubled. Partition-Based
+  Sync and Flexible Sync must temporarily co-exist. Depending on the size of your
+  synced data, this could affect billing.
+
+.. QUESTION: If someone were to cancel a migration - or roll back a migration,
+   they'd potentially be on the hook for costs associated with subsequent 
+   migration attempts, correct?
+
+To migrate from Partition-Based Sync to Flexible Sync:
+
+#. In the App Services UI, go to your App and select the Sync page.
+#. At the top of the Sync page, select :guilabel:`[button-text]`.
+
+Your App will lose the migration in the following cases:
+
+- Partition-Based Sync is re-enabled
+- You roll back the migration
+
+Migrate permissions
+```````````````````
+
+Your App's sync permissions will be automatically migrated if the Partition-Based
+Sync permissions have direct Flexible Sync equivalents.
+
+Some Partition-Based Sync permission strategies can't translate directly to Flexible 
+Sync. You need to manually migrate permissions in these situations:
+
+- Use of ``%function``
+	- Can't be used in FBS document filters
+	- Most commonly used with the ``%partition`` expansion, which doesn't have an FBS equivalent
+
+- Use of a recursing operator (``%or``, ``%not``, ``%nor``, ``%and``)
+	- Technically works, but could cause issues.
+	- Users should test these and check if they need to make changes to the auto-migrated rules.
+	- Testing new permissions won't work on existing app. Need a new app to test manually-migrated permissions rules.
+
+Refer to the :ref:`Partiton-Based Sync <pbs-rule-migration>` reference for examples
+of how to map these Partition-Based Sync permissions to Flexible Sync permissions.
+
+Commit Migration
+~~~~~~~~~~~~~~~~
+
+After your migration has completed, it is in a non-permanent state. You can manually
+commit the migration to make it permanent or roll back the migration to return your
+App to Partiton-Based Sync.
+
+If you don't commit or roll back the migration, it will automatically commit when
+the PBS translator falls off of the oplog.
+.. QUESTION: What will the oplog show, exactly, for PBS translator
+
+After a migration is committed, the old Partition-Based Sync metadata is deleted
+and you cannot roll back the migration.
+
+Cancel Migration
+~~~~~~~~~~~~~~~~
+
+You can cancel a migration at any time while it is in progress. This will return
+your App the Partition-Based Sync, with all settings as they were before the
+migration started.
+
+If you cancel a migration, you need to start over from the beginning with future
+migration attempts.
+
+Roll Back Migration
+~~~~~~~~~~~~~~~~~~~
+
+You can roll back a migration after it has completed and before it has been committed.
+
+Completed migrations are automatically committed when the PBS translator falls 
+off of the oplog.
+.. QUESTION: What will the oplog show, exactly, for PBS translator
+
+You can increase or decrease the migration roll back window by adjusting
+oplog retentention.
+.. TODO: Add link to oplog retention docs
+
+You cannot roll back a migration that has been committed.
+
+Similar to cancelling a migration, if you roll back a migration, you need to 
+start over from the beginning with future migration attempts.
