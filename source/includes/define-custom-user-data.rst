@@ -2,8 +2,7 @@ To enable Custom User Data in the App Services UI, follow these steps:
 
 1. Click :guilabel:`App Users` in the left hand panel.
 
-#. Select the :guilabel:`User Settings` tab and find the
-   :guilabel:`Custom User Data` section.
+#. Select the :guilabel:`Custom User Data` tab.
 
 #. Set the :guilabel:`Enable Custom User Data` toggle to :guilabel:`On`.
 

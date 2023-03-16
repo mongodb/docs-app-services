@@ -303,8 +303,6 @@ To learn more, refer to the documentation for your Realm SDK:
 - :ref:`Realm Swift SDK <ios-get-a-user-access-token>`
 - :ref:`Web SDK <web-get-user-access-token>`
 
-.. _refresh-token-expiration:
-
 Configure Refresh Token Expiration
 ----------------------------------
 
@@ -318,35 +316,15 @@ configure this time for your App's refresh tokens to be anywhere between
 - Custom JWT refresh token expiration is determined by the ``exp`` value
   of the user's JWT.
 
-You can configure the refresh token expiration time for all sessions in
-an App from the Admin UI or Admin API.
+.. note::
 
-Set the Refresh Token Expiration In the Admin UI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   You can currently only configure refresh token expiration with the
+   Admin API.
 
-To set the refresh token expiration time for all sessions in an App from
-the Admin UI:
-
-1. Click :guilabel:`App Users` in the left navigation menu.
-
-2. Select the :guilabel:`User Settings` tab.
-
-3. Find the :guilabel:`Refresh Token Expiration` option and click the
-   :guilabel:`Edit` button.
-
-4. Enter a time value in the text input and choose the appropriate time
-   unit (e.g. "minutes" or "days") from the dropdown menu.
-
-5. Click :guilabel:`Save`.
-
-Set the Refresh Token Expiration Over HTTPS
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-To set the refresh token expiration time for all sessions in an App from
-the Admin API, call your App's :admin-api-endpoint:`Set User Refresh
-Token Expiration Time <operation/adminSetRefreshTokenExpiration>`
-endpoint with the ``expiration_time_seconds`` field of the request body
-set to your desired expiration time.
+Call your App's :admin-api-endpoint:`Set User Refresh Token Expiration
+Time <operation/adminSetRefreshTokenExpiration>` Admin API endpoint with
+the ``expiration_time_seconds`` field of the request body set to your
+desired expiration time.
 
 .. code-block:: bash
 
