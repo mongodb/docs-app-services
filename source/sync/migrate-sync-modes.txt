@@ -27,7 +27,7 @@ Requirements
 
 Your App Services App:
 
-- Your App must currently use Partition-Based Sync
+- Must currently use Partition-Based Sync
 
 Linked Atlas Cluster:
 
@@ -132,27 +132,30 @@ with your App's Flexible Sync backend. You can disable and re-enable Flexible Sy
 but if you re-enable Partitition-Based Sync you will need to do another migration
 to enable Flexible Sync later on.
 
-Migrate permissions
-```````````````````
+Migrate Permissions and Rules
+`````````````````````````````
 
-Your App's sync permissions will be automatically migrated if the Partition-Based
-Sync permissions have direct Flexible Sync equivalents. This will override
+Your App's permissions and rules will be automatically migrated if the Partition-Based
+Sync rules have direct App Services Rules equivalents. This will override
 previously-defined App Services Rules.
 
-Some Partition-Based Sync permission strategies can't translate directly to Flexible 
-Sync. You need to manually migrate permissions in these situations:
+Some Partition-Based Sync rule strategies can't translate directly to App Services
+Rules. You may need to manually migrate rules with these characteristics:
 
-- Use of ``%function``
-	- Can't be used in FBS document filters
-	- Most commonly used with the ``%partition`` expansion, which doesn't have an FBS equivalent
+- Rules that include :json-expansion:`%%partition`. 
+  
+  App Services Rules do not have an equivalent expansion.
+  :ref:`Function rules <pbs-function-rules>` used with :json-expansion:`%%partition`
+  cannot be migrated.
 
-- Use of a recursing operator (``%or``, ``%not``, ``%nor``, ``%and``)
-	- Technically works, but could cause issues.
-	- Users should test these and check if they need to make changes to the auto-migrated rules.
-	- Testing new permissions won't work on existing app. Need a new app to test manually-migrated permissions rules.
+- Rules that include recursing operators (``%or``, ``%not``, ``%nor``, ``%and``).
+
+  These rules may work, but there is enough nuance that you should test them
+  to ensure expected behavior. Testing new rules won't work on the App
+  you are migrating. You'll need a new app to test manually-migrated rules.
 
 Refer to the :ref:`Partiton-Based Sync <pbs-rule-migration>` reference for examples
-of how to map these Partition-Based Sync permissions to App Services rules.
+of how to map Partition-Based Sync rules to App Services rules.
 
 Commit Migration
 ~~~~~~~~~~~~~~~~
@@ -201,11 +204,9 @@ You can roll back a migration after it has completed and before it has been comm
 
 Completed migrations are automatically committed when the PBS translator falls 
 off of the oplog.
-.. QUESTION: What will the oplog show, exactly, for PBS translator
 
-You can increase or decrease the migration roll back window by adjusting
-oplog retentention.
-.. TODO: Add link to oplog retention docs
+You can increase or decrease the migration roll back window by adjusting the
+:atlas:`minimum oplog window </atlas/cluster-additional-settings/#set-minimum-oplog-window>`.
 
 You cannot roll back a migration that has been committed.
 
