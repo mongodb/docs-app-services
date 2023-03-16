@@ -283,5 +283,5 @@ Summary
 - Device Sync uses space in your synced Atlas cluster to store change history.
 - Backend compaction reduces the space usage of this history for Partition Based Sync apps.
 - Trimming reduces the space usage for Flexible Sync apps, but can cause client resets for clients who have not connected to the backend in more than the client maximum offline time (in days).
-- Flexible Sync apps that do not specify a client maximum offline time do not apply trimming, so clients of any age can sync without experiencing a client reset.
+- Flexible Sync apps that have disabled a client maximum offline time do not apply trimming, so clients of any age can sync without experiencing a client reset.
 - Adding additional queryable fields to a flexible sync configuration will increase storage consumed on an Atlas Cluster. Using broad queries and selecting fewer fields that support broad queries decreases storage consumed.
