@@ -149,6 +149,42 @@ protocol <wire-protocol>`. For a list of supported commands, see
 :ref:`Database Commands
 <mongodb-crud-and-aggregation-apis-database-commands>`.
 
+.. _mongodb-service-limitations-device-sync:
+
+Device Sync
+-----------
+
+.. _mongodb-service-limitations-concurrent-workloads:
+
+Concurrent Workloads
+~~~~~~~~~~~~~~~~~~~~
+
+Writing:
+  For improved performance, you may want to limit the number of concurrent writes
+  to a single MongoDB document. App Services has no hard limit to the number of 
+  users concurrently writing data to a MongoDB document. However, with more than 
+  30 concurrent writers, you may see delays in syncing or conflict resolution.
+
+Reading:
+  Frontend clients reading from a global realm can scale past tens
+  of thousands of concurrent users.
+
+.. _scalability:
+
+.. tip:: Scalability
+   
+   When you intend to have many concurrent writers, have each writer
+   work on a separate document. 
+
+.. _mongodb-service-limitations-sync-inactive-pause:
+
+Pause Due to Inactivity
+~~~~~~~~~~~~~~~~~~~~~~~
+
+After {+sync-inactive-app-pause-time+} with no activity, Device Sync
+pauses. Refer to :ref:`resume-sync` for information about how to re-enable
+Device Sync.
+
 .. _mongodb-service-limitations-version-requirements:
 
 MongoDB Version Requirements
@@ -215,25 +251,3 @@ Static Hosting
 
 App Services enforces a 25MB maximum file size constraint on
 :doc:`static hosting </hosting/>`.
-
-.. _mongodb-service-limitations-concurrent-workloads:
-
-Sync - Concurrent Workloads
----------------------------
-
-Writing:
-  For improved performance, you may want to limit the number of concurrent writes
-  to a single MongoDB document. App Services has no hard limit to the number of 
-  users concurrently writing data to a MongoDB document. However, with more than 
-  30 concurrent writers, you may see delays in syncing or conflict resolution.
-
-Reading:
-  Frontend clients reading from a global realm can scale past tens
-  of thousands of concurrent users.
-
-.. _scalability:
-
-.. tip:: Scalability
-   
-   When you intend to have many concurrent writers, have each writer
-   work on a separate document. 
