@@ -1,8 +1,8 @@
 .. _realm-sync-migrate-modes:
 
-=============================================
-Migrate Partition-Based Sync to Flexible Sync
-=============================================
+=========================
+Migrate Device Sync Modes
+=========================
 
 .. contents:: On this page
    :local:
@@ -10,54 +10,79 @@ Migrate Partition-Based Sync to Flexible Sync
    :depth: 3
    :class: singlecol
 
-You can automatically migrate App Services Apps that use Partition-Based Sync
-to Flexible Sync. We recommend doing this, as Partition-Based Sync is an older
-mode.
+Atlas App Services Apps can have one of two Device Sync modes: Partition-Based Sync
+and Flexible Sync. Partition-Based Sync is an older mode and you should consider
+migrating to Flexible Sync.
 
-Other than upgrading the SDK version, migrating sync modes doesn't require any 
-changes to your client app code. Your App's backend will automatically translate
+Migrating an App that uses Partition-Based Sync to Flexible Sync is an automatic
+process. Other than upgrading the SDK version, migrating sync modes doesn't require 
+any changes to your client app code. Your App's backend will automatically translate
 the client's Partition-Based Sync requests into Flexible Sync.
-.. QUESTION: is there a performance hit for the translation?
 
 Migrating results in Partition-Based Sync clients communicating with a
-Flexible Sync App Services App. You cannot reverse this and have Flexible Sync
-clients communicate with a Partition-Based Syn App Services App.
+Flexible Sync Atlas App Services App.
 
 Requirements
 ------------
 
+Your App Services App:
+
 - Your App must currently use Partition-Based Sync
-- Linked Atlas cluster must be running mongodb 5.0+ for Flexible Sync compatibility
-- Linked Atlas cluster must have time-based oplog setting enabled
-- realm-core vTBD+, which means these SDK versions: TBD
+
+Linked Atlas Cluster:
+
+- Must be running mongodb 5.0+ for Flexible Sync compatibility
+- Must have storage auto-scaling enabled
+- Must be M10+ to access this setting
+- Must have time-based oplog setting enabled
+
+Client Apps:
+
+- ``realm-core`` vTBD+, which means these SDK versions: TBD
 
 .. _realm-sync-migrate-what-to-know:
 
 What to Know Before migrating
 -----------------------------
 
-- How long a migration takes is directly proportional to the amount of data
-  that needs to be migrated.
-- Migrations can be canceled or rolled back within a certain timeframe.
-- As part of migration, sync data is doubled. This may be enough to impact
-  billing.
-- Progress notifications will not work after migration because Flexible Sync does
-  note yet support them.
+Migrating your App's Sync mode involves changes that affect both client apps and
+your App's backend. You should be aware of the side effects and plan ahead.
+
+How long a migration takes is directly proportional to the amount of data that
+needs to be migrated. The more data, the longer it will take to migrate.
+
+Migrations are not permenant immediately after completion. They can be canceled
+during the migration or rolled back within a certain timeframe after the migration
+is finished.
+
+Progress notifications will not work after migration because Flexible Sync does
+not yet support them.
+
+Client apps that use an SDK with with a realm-core version lower than TBD will
+experience a client reset after migration. You should use a 
+:ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
 
 .. _realm-sync-migrate-stages:
 
 Migration Stages
 ~~~~~~~~~~~~~~~~
 
-#. Flushing partition-based sync
-   
-   Clients can connect at this stage, but local writes will not sync.
-	 Clients can receive updates to MongoDB data.
+There are three stages to a Sync mode migration. You can see your migration's
+stage in the App Services UI.
 
-#. Initializing flexible sync
+#. Disabling Partition-Based Sync
+   
+   At this stage, client apps can connect to your App's backend, but local writes 
+   will not sync. These writes will be lost if you don't have a 
+   :ref:`client reset handler <handle-a-client-reset>` to recover unsynced changes.
+	 
+   Clients can also receive updates to MongoDB data, but they won't
+   be able to recieve upload acknowledgements.
+
+#. Initializing Flexible Sync
    
    Clients cannot connect at this stage. The time this takes is directly
-   proporional to the amount of data in synced collections.
+   proportional to the amount of data in synced collections.
 
 #. Migration completed
 
@@ -81,8 +106,8 @@ Before you begin a migration, make sure you're aware of the
 :ref:`effects <realm-sync-migrate-what-to-know>`.
 
 During migration, client apps may experience side effects, most of which are similar
-to what happens if you disable and re-enable sync. These are some side effects
-of migration:
+to what happens if you disable and re-enable sync. These are some additional
+side effects of migration:
 
 - In the App Services UI, the Rules and Schemas pages will be unresponsive.
 - Your App Services Appp will experience a period of read-only sync and then a 
@@ -102,16 +127,17 @@ To migrate from Partition-Based Sync to Flexible Sync:
 #. In the App Services UI, go to your App and select the Sync page.
 #. At the top of the Sync page, select :guilabel:`[button-text]`.
 
-Your App will lose the migration in the following cases:
-
-- Partition-Based Sync is re-enabled
-- You roll back the migration
+After a migration is completed, Partition-Based Sync client apps can communicate
+with your App's Flexible Sync backend. You can disable and re-enable Flexible Sync,
+but if you re-enable Partitition-Based Sync you will need to do another migration
+to enable Flexible Sync later on.
 
 Migrate permissions
 ```````````````````
 
 Your App's sync permissions will be automatically migrated if the Partition-Based
-Sync permissions have direct Flexible Sync equivalents.
+Sync permissions have direct Flexible Sync equivalents. This will override
+previously-defined App Services Rules.
 
 Some Partition-Based Sync permission strategies can't translate directly to Flexible 
 Sync. You need to manually migrate permissions in these situations:
@@ -126,18 +152,20 @@ Sync. You need to manually migrate permissions in these situations:
 	- Testing new permissions won't work on existing app. Need a new app to test manually-migrated permissions rules.
 
 Refer to the :ref:`Partiton-Based Sync <pbs-rule-migration>` reference for examples
-of how to map these Partition-Based Sync permissions to Flexible Sync permissions.
+of how to map these Partition-Based Sync permissions to App Services rules.
 
 Commit Migration
 ~~~~~~~~~~~~~~~~
 
-After your migration has completed, it is in a non-permanent state. You can manually
+After your migration has completed, it is in an evaluation state. You can manually
 commit the migration to make it permanent or roll back the migration to return your
 App to Partiton-Based Sync.
 
-If you don't commit or roll back the migration, it will automatically commit when
-the PBS translator falls off of the oplog.
-.. QUESTION: What will the oplog show, exactly, for PBS translator
+If you don't commit or roll back the migration, it will automatically commit
+according to your 
+:atlas:`minimum oplog window </atlas/cluster-additional-settings/#set-minimum-oplog-window>`. 
+For example, if your minimum oplog window is 48 hours, you will 48 hours to
+roll back your migration.
 
 After a migration is committed, the old Partition-Based Sync metadata is deleted
 and you cannot roll back the migration.
