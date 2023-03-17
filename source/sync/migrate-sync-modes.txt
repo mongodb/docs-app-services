@@ -116,16 +116,20 @@ side effects of migration:
   Flexible Sync config will set it to 30 days.
 - Storage in your Atlas cluster used by sync is temporarily doubled. Partition-Based
   Sync and Flexible Sync must temporarily co-exist. Depending on the size of your
-  synced data, this could affect billing.
-
-.. QUESTION: If someone were to cancel a migration - or roll back a migration,
-   they'd potentially be on the hook for costs associated with subsequent 
-   migration attempts, correct?
+  synced data, this could affect billing every time you migrate.
 
 To migrate from Partition-Based Sync to Flexible Sync:
 
-#. In the App Services UI, go to your App and select the Sync page.
-#. At the top of the Sync page, select :guilabel:`[button-text]`.
+#. In the App Services UI, go to your App and select the Device Sync page.
+#. At the top of the page, select :guilabel:`[Migrate to Flexible Sync]`.
+#. Read the information about migrating, then select 
+   :guilabel:`[Next: Migration Requirements]`.
+#. Ensure you meet the migration requirements, the select 
+   :guilabel:`[Start Migration]`.
+
+   .. image:: /images/begin-migration.png
+      :alt: Begin a migration
+
 
 After a migration is completed, Partition-Based Sync client apps can communicate
 with your App's Flexible Sync backend. You can disable and re-enable Flexible Sync,
@@ -157,6 +161,27 @@ Rules. You may need to manually migrate rules with these characteristics:
 Refer to the :ref:`Partiton-Based Sync <pbs-rule-migration>` reference for examples
 of how to map Partition-Based Sync rules to App Services rules.
 
+Cancel Migration
+~~~~~~~~~~~~~~~~
+
+You can cancel a migration at any time while it is in progress. This will return
+your App the Partition-Based Sync, with all settings as they were before the
+migration started.
+
+If you cancel a migration, you need to start over from the beginning with future
+migration attempts.
+
+To cancel a migration:
+
+#. In the App Services UI, go to your App and select the Device Sync page.
+#. At the top of the page, in the notification banner, select
+   :guilabel:`[Stop Migration]`.
+   This will cancel your migration. You will need to migrate again if you want to
+   enable Flexible Sync in the future.
+   
+   .. image:: /images/cancel-migration.png
+      :alt: Cancel a migration
+
 Commit Migration
 ~~~~~~~~~~~~~~~~
 
@@ -173,29 +198,18 @@ roll back your migration.
 After a migration is committed, the old Partition-Based Sync metadata is deleted
 and you cannot roll back the migration.
 
-.. TODO: Make this more specific
-
 To manually commit a migration:
 
-#. In the App Services UI, go to your App and select the Sync page.
-#. At the top of the Sync page, select :guilabel:`[button-text]`.
+#. In the App Services UI, go to your App and select the Device Sync page.
+#. At the top of the page, select the three dots next to 
+   :guilabel:`[Manage Sync Migration]`.
+#. From the list of options, select 
+   :guilabel:`[Delete Partition-Based Sync metadata]`.
+   This will commit your migration and you will not be able to recover your
+   Partition-Based Sync Metadata.
 
-Cancel Migration
-~~~~~~~~~~~~~~~~
-
-You can cancel a migration at any time while it is in progress. This will return
-your App the Partition-Based Sync, with all settings as they were before the
-migration started.
-
-If you cancel a migration, you need to start over from the beginning with future
-migration attempts.
-
-.. TODO: Make this more specific
-
-To cancel a migration:
-
-#. In the App Services UI, go to your App and select the Sync page.
-#. At the top of the Sync page, select :guilabel:`[button-text]`.
+   .. image:: /images/commit-migration.png
+      :alt: Commit a migration
 
 Roll Back Migration
 ~~~~~~~~~~~~~~~~~~~
@@ -213,9 +227,15 @@ You cannot roll back a migration that has been committed.
 Similar to cancelling a migration, if you roll back a migration, you need to 
 start over from the beginning with future migration attempts.
 
-.. TODO: Make this more specific
-
 To roll back a migration:
 
-#. In the App Services UI, go to your App and select the Sync page.
-#. At the top of the Sync page, select :guilabel:`[button-text]`.
+#. In the App Services UI, go to your App and select the Device Sync page.
+#. At the top of the page, select the three dots next to 
+   :guilabel:`[Manage Sync Migration]`.
+#. From the list of options, select 
+   :guilabel:`[Revert back to Partition-Based Sync]`.
+   This will roll back your migration. You will need to migrate again if you 
+   want to enable Flexible Sync in the future.
+
+   .. image:: /images/roll-back-migration.png
+      :alt: Roll back a migration
