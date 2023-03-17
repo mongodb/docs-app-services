@@ -16,16 +16,15 @@ migrating to Flexible Sync.
 
 Migrating an App that uses Partition-Based Sync to Flexible Sync is an automatic
 process. Other than upgrading the SDK version, migrating sync modes doesn't require 
-any changes to your client app code. Your App's backend will automatically translate
-the client's Partition-Based Sync requests into Flexible Sync.
+any changes to your client app code.
 
 Migrating results in Partition-Based Sync clients communicating with a
-Flexible Sync Atlas App Services App.
+Flexible Sync backend.
 
 Requirements
 ------------
 
-Your App Services App:
+App Services App:
 
 - Must currently use Partition-Based Sync
 
@@ -36,7 +35,7 @@ Linked Atlas Cluster:
 - Must be M10+ to access this setting
 - Must have time-based oplog setting enabled
 
-Client Apps:
+Client apps:
 
 - ``realm-core`` vTBD+, which means these SDK versions: TBD
 
@@ -48,19 +47,16 @@ What to Know Before migrating
 Migrating your App's Sync mode involves changes that affect both client apps and
 your App's backend. You should be aware of the side effects and plan ahead.
 
-How long a migration takes is directly proportional to the amount of data that
-needs to be migrated. The more data, the longer it will take to migrate.
-
-Migrations are not permenant immediately after completion. They can be canceled
-during the migration or rolled back within a certain timeframe after the migration
-is finished.
-
-Progress notifications will not work after migration because Flexible Sync does
-not yet support them.
-
-Client apps that use an SDK with with a realm-core version lower than TBD will
-experience a client reset after migration. You should use a 
-:ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
+- How long a migration takes is directly proportional to the amount of data that
+  needs to be migrated. The more data, the longer it will take to migrate.
+- Migrations can be :ref:`canceled <realm-sync-migrate-cancel>` during the 
+  migration or :ref:`reverted <realm-sync-migrate-revert>` within a certain 
+  timeframe after the migration is finished.
+- Progress notifications will not work after migration because Flexible Sync does
+  not yet support them.
+- Client apps that use an SDK with with a realm-core version lower than TBD will
+  experience a client reset after migration. You should use a 
+  :ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
 
 .. _realm-sync-migrate-stages:
 
@@ -70,32 +66,32 @@ Migration Stages
 There are three stages to a Sync mode migration. You can see your migration's
 stage in the App Services UI.
 
-#. Disabling Partition-Based Sync
+#. Syncing Partition-Based Sync metadata
    
    At this stage, client apps can connect to your App's backend, but local writes 
    will not sync. These writes will be lost if you don't have a 
    :ref:`client reset handler <handle-a-client-reset>` to recover unsynced changes.
 	 
-   Clients can also receive updates to MongoDB data, but they won't
-   be able to recieve upload acknowledgements.
+   Clients can also receive updates to synced collections, but they won't
+   be able to receive upload acknowledgements.
 
-#. Initializing Flexible Sync
+#. Building Flexible Sync metadata
    
-   Clients cannot connect at this stage. The time this takes is directly
+   Clients cannot connect at this stage. The duration of this stage is directly
    proportional to the amount of data in synced collections.
 
-#. Migration completed
+#. Completed migration
 
-   **Manage sync migration** appears on Sync page if the migration hasn't been 
-   committed or rolled back. This button lets admins commit or roll back manually.
+   :guilabel:`Manage Sync Migration` appears on the Device Sync page if the 
+   migration hasn't been committed or reverted.
 
-Migrate Partition-Based Sync App to Flexible Sync
--------------------------------------------------
+Migrate Partition-Based Sync to Flexible Sync
+---------------------------------------------
 
 After beginning migration from Partition-Based Sync to Flexible Sync, the process
 is mostly automatic. However, you can control important parts of the migration.
 
-During a migration, you can cancel it. After a migration, you can roll it back 
+During a migration, you can cancel it. After a migration, you can revert it 
 or manually commit the migration.
 
 Begin Migration
@@ -106,17 +102,18 @@ Before you begin a migration, make sure you're aware of the
 :ref:`effects <realm-sync-migrate-what-to-know>`.
 
 During migration, client apps may experience side effects, most of which are similar
-to what happens if you disable and re-enable sync. These are some additional
-side effects of migration:
+to what happens if you :ref:`terminate <terminating-realm-sync>` and re-enable
+Device Sync. These are some additional side effects of migration:
 
 - In the App Services UI, the Rules and Schemas pages will be unresponsive.
-- Your App Services Appp will experience a period of read-only sync and then a 
+- Your App will experience a period of read-only sync and then a 
   period of downtime.
-- If Partition-Based Sync default client max offline time is unset, the new
-  Flexible Sync config will set it to 30 days.
-- Storage in your Atlas cluster used by sync is temporarily doubled. Partition-Based
-  Sync and Flexible Sync must temporarily co-exist. Depending on the size of your
-  synced data, this could affect billing every time you migrate.
+- If Partition-Based Sync :ref:`client max offline time <client-maximum-offline-time>`
+  is unset, the new Flexible Sync configuration will set it to 30 days.
+- Storage in your Atlas cluster used by Device Sync metadata is temporarily doubled.
+  Partition-Based Sync metadata and Flexible Sync metadata must temporarily co-exist. 
+  Depending on the size of your synced data, this could affect billing every time you
+  migrate.
 
 To migrate from Partition-Based Sync to Flexible Sync:
 
@@ -127,9 +124,9 @@ To migrate from Partition-Based Sync to Flexible Sync:
       :alt: Begin a migration
    
 #. Read the information about migrating, then select 
-   :guilabel:`[Next: Migration Requirements]`.
+   :guilabel:`Next: Migration Requirements`.
 #. Ensure you meet the migration requirements, the select 
-   :guilabel:`[Start Migration]`.
+   :guilabel:`Start Migration`.
 
 
 After a migration is completed, Partition-Based Sync client apps can communicate
@@ -162,6 +159,8 @@ Rules. You may need to manually migrate rules with these characteristics:
 Refer to the :ref:`Partiton-Based Sync <pbs-rule-migration>` reference for examples
 of how to map Partition-Based Sync rules to App Services rules.
 
+.. _realm-sync-migrate-cancel:
+
 Cancel Migration
 ~~~~~~~~~~~~~~~~
 
@@ -176,7 +175,7 @@ To cancel a migration:
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, in the notification banner, select
-   :guilabel:`[Stop Migration]`.
+   :guilabel:`Stop Migration`.
    
    .. image:: /images/cancel-migration.png
       :alt: Cancel a migration
@@ -184,29 +183,31 @@ To cancel a migration:
    This will cancel your migration. You will need to migrate again if you want to
    enable Flexible Sync in the future.
 
+.. _realm-sync-migrate-commit:
+
 Commit Migration
 ~~~~~~~~~~~~~~~~
 
 After your migration has completed, it is in an evaluation state. You can manually
-commit the migration to make it permanent or roll back the migration to return your
+commit the migration to make it permanent or revert the migration to return your
 App to Partiton-Based Sync.
 
-If you don't commit or roll back the migration, it will automatically commit
+If you don't commit or revert the migration, it will automatically commit
 according to your 
 :atlas:`minimum oplog window </atlas/cluster-additional-settings/#set-minimum-oplog-window>`. 
-For example, if your minimum oplog window is 48 hours, you will 48 hours to
-roll back your migration.
+For example, if your minimum oplog window is 48 hours, you will have 48 hours to
+revert your migration.
 
 After a migration is committed, the old Partition-Based Sync metadata is deleted
-and you cannot roll back the migration.
+and you cannot revert the migration.
 
 To manually commit a migration:
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, select the three dots next to 
-   :guilabel:`[Manage Sync Migration]`.
+   :guilabel:`Manage Sync Migration`.
 #. From the list of options, select 
-   :guilabel:`[Delete Partition-Based Sync metadata]`.
+   :guilabel:`Delete Partition-Based Sync metadata`.
    
    .. image:: /images/commit-migration.png
       :alt: Commit a migration
@@ -214,32 +215,35 @@ To manually commit a migration:
    This will commit your migration and you will not be able to recover your
    Partition-Based Sync Metadata.
 
-Roll Back Migration
-~~~~~~~~~~~~~~~~~~~
+.. _realm-sync-migrate-revert:
 
-You can roll back a migration after it has completed and before it has been committed.
+Revert Migration
+~~~~~~~~~~~~~~~~
+
+You can revert a migration after it has completed and before it has been committed.
 
 Completed migrations are automatically committed when the PBS translator falls 
 off of the oplog.
 
-You can increase or decrease the migration roll back window by adjusting the
+You can increase or decrease the amount of time you have to revert a migration 
+by adjusting the
 :atlas:`minimum oplog window </atlas/cluster-additional-settings/#set-minimum-oplog-window>`.
 
-You cannot roll back a migration that has been committed.
+You cannot revert a migration that has been committed.
 
-Similar to cancelling a migration, if you roll back a migration, you need to 
+Similar to canceling a migration, if you revert a migration, you need to 
 start over from the beginning with future migration attempts.
 
-To roll back a migration:
+To revert a migration:
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, select the three dots next to 
-   :guilabel:`[Manage Sync Migration]`.
+   :guilabel:`Manage Sync Migration`.
 #. From the list of options, select 
-   :guilabel:`[Revert back to Partition-Based Sync]`.
+   :guilabel:`Revert back to Partition-Based Sync`.
    
    .. image:: /images/roll-back-migration.png
-      :alt: Roll back a migration
+      :alt: Revert a migration
    
-   This will roll back your migration. You will need to migrate again if you 
+   This will revert your migration. You will need to migrate again if you 
    want to enable Flexible Sync in the future.
