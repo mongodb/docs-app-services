@@ -18,12 +18,11 @@ Tiered Device Sync Guide
    :depth: 2
    :class: singlecol
 
-Overview
---------
-
 This guide details how to set up a Tiered Device Sync application while 
 this feature is in pre-alpha. This guide is intentionally not public,
 and is intended for internal MongoDB use.
+
+.. _tiered-sync-create-device-sync-app:
 
 Create a Device Sync-Enabled App
 --------------------------------
@@ -44,10 +43,6 @@ Create a Device Sync-Enabled App
       :ref:`email/password authentication <email-password-authentication>` 
       enabled.
 
-      If you want to define your own permissions and Device Sync settings,
-      create an app that does not use this template. Alternately, create a
-      template app but modify the settings.
-
    .. step:: Enable Device Sync or Modify the Template Configuration
 
       If you have not started with a template app, :ref:`enable Device Sync 
@@ -59,6 +54,8 @@ Create a Device Sync-Enabled App
       <anonymous-authentication>`. Go to :guilabel:`Rules`, and delete the 
       existing rule for the ``todo`` / ``Item`` collection. Replace it with 
       ``readAndWriteAll``.
+
+.. _tiered-sync-launch-ec2-instance:
 
 Launch an EC2 Instance
 ----------------------
@@ -83,6 +80,7 @@ syncs data between the EC2 instance and your Atlas App Services app.
       Select any other additional settings. Free tier settings are sufficient
       for small PoC projects. Then, launch the instance.
 
+.. _tiered-sync-enable-tiered-sync-auth:
 
 Enable Tiered Device Sync Authentication for Your App
 -----------------------------------------------------
@@ -92,7 +90,14 @@ Enable Tiered Device Sync Authentication for Your App
    .. step:: Get an Authorization Token
 
       Get an authorization token for your App Services App. Log in to your 
-      App Services App, and run the following in your console:
+      App Services App, and access your browser's JavaScript console. If 
+      you're using Chrome, you can access this console from:
+      
+      1. Go to the browser's :guilabel:`View` menu
+      #. Enter the :guilabel:`Developer` menu
+      #. Select :guilabel:`JavaScript console`
+
+      In the JavaScript console, run this command:
 
       .. code-block:: shell
          
@@ -131,6 +136,8 @@ Enable Tiered Device Sync Authentication for Your App
       .. code-block:: shell
 
          curl --request POST --url https://realm.mongodb.com/api/admin/v3.0/groups/<groupID>/apps/<appID>/auth_providers -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --data "{\"Type\": \"tiered-sync-token\", \"Config\": {\"token\": \"$SECRET\""}}
+
+.. _tiered-sync-configure-and-start-server:
 
 Configure The EC2 Instance to Run the Tiered Sync Server
 --------------------------------------------------------
@@ -212,7 +219,13 @@ Set up and run the Tiered Sync server on the EC2 instance.
 
          sudo make up
 
-      You may get a message similar to ``Couldn't connect to Docker daemon at http+docker://localunixsocket``.
+      You may get a message similar to this:
+      
+      .. code-block:: console
+         :copyable: false
+      
+         Couldn't connect to Docker daemon at http+docker://localunixsocket
+      
       If this occurs, you may need to add your user account to the docker group.
 
       If you have successfully started the Tiered Sync server, you can see
@@ -225,6 +238,8 @@ Set up and run the Tiered Sync server on the EC2 instance.
       Now you can connect clients directly to the Tiered Sync Server.
 
       .. include:: /includes/important-stop-tiered-sync-server.rst
+
+.. _tiered-sync-connect-from-client:
 
 Connect to the Tiered Sync Server from a Client
 -----------------------------------------------
