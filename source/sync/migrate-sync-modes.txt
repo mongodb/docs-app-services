@@ -15,7 +15,7 @@ and Flexible Sync. Partition-Based Sync is an older mode and you should consider
 migrating to Flexible Sync.
 
 Migrating an App that uses Partition-Based Sync to Flexible Sync is an automatic
-process. Other than upgrading the SDK version, migrating sync modes doesn't require 
+process. Other than upgrading the SDK version, migrating Sync modes doesn't require 
 any changes to your client app code.
 
 Migration results in Partition-Based Sync clients communicating with a
@@ -26,22 +26,22 @@ Requirements
 
 App Services App:
 
-- Must currently use Partition-Based Sync
+- Currently use Partition-Based Sync
 
 Linked Atlas Cluster:
 
-- Must be running MongoDB 5.0+ for Flexible Sync compatibility
-- Must have storage auto-scaling enabled
-- Must be M10+ to access this setting
-- Must have time-based oplog setting enabled
+- Use MongoDB 5.0 or later for Flexible Sync compatibility
+- Have storage auto-scaling enabled
+- Be an M10+ Cluster Tier
+- Have time-based oplog setting enabled
 
 Client apps:
 
-- ``realm-core`` vTBD+, which means these SDK versions: TBD
+- Use ``realm-core`` vTBD+, which means these SDK versions: TBD
 
 .. _realm-sync-migrate-what-to-know:
 
-What to Know Before migrating
+What to Know Before Migrating
 -----------------------------
 
 Migrating your App's Sync mode involves changes that affect both client apps and
@@ -106,7 +106,7 @@ to what happens if you :ref:`terminate <terminating-realm-sync>` and re-enable
 Device Sync. These are some additional side effects of migration:
 
 - In the App Services UI, the Rules and Schema pages will be read-only.
-- Your App will experience a period of read-only sync and then a 
+- Your App will experience a period of read-only Sync and then a 
   period of downtime.
 - If Partition-Based Sync :ref:`client max offline time <client-maximum-offline-time>`
   is unset, the new Flexible Sync configuration will set it to 30 days.
@@ -227,10 +227,8 @@ Revert Migration
 You can revert a migration after it has completed and before it has been committed.
 
 Completed migrations are automatically committed when the PBS translator falls 
-off of the oplog.
-
-You can increase or decrease the amount of time you have to revert a migration 
-by adjusting the
+off of the oplog. You can increase or decrease the amount of time you have to 
+revert a migration by adjusting the
 :atlas:`minimum oplog window </atlas/cluster-additional-settings/#set-minimum-oplog-window>`.
 
 You cannot revert a migration that has been committed.
