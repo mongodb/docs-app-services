@@ -100,6 +100,8 @@ on it.
       instructions to get the client code. For this tutorial, select the 
       :guilabel:`Dart (Flutter)` client code.
 
+      Unzip the downloaded app, and you will see the Flutter app.
+
    .. tab:: App Services CLI
       :tabid: cli
 
@@ -118,6 +120,8 @@ on it.
          realm-cli apps create -n MyTutorialApp --template flutter.todo.flex \
             --deployment-model global --location us-va --environment development
 
+      You can find the downloaded Flutter app in the directory :file:`frontend/flutter.todo.flex`.
+
    .. tab:: GitHub Repository
       :tabid: github
 
@@ -128,7 +132,10 @@ on it.
       If you use this process to get the client code, you must create a
       template app to use with the client. Follow the instructions at 
       :ref:`create-template-app` to use the Atlas App Services UI, {+cli+},
-      or Admin API to create a Device Sync template app.
+      or Admin API to create a Device Sync backend template app.
+
+      Clone the repo and follow the instructions in the :file:`README` to add
+      the backend App ID to the Flutter app.
 
 Set up the Template App
 -----------------------
@@ -187,7 +194,13 @@ Set up the Template App
       in either the Android emulator, iOS Simulator, physical mobile device,
       or desktop emulator.
 
-      Attach to a device and run the Flutter application.
+      First, install all dependencies by running the following in your terminal:
+
+      .. code-block:: sh
+
+         flutter pub get
+
+      Then, attach to a device and run the Flutter application.
 
       Once the app is running, register a new user account,
       and then add a new Item to your todo list.
