@@ -2,7 +2,7 @@
 
 ## Get Started
 
-- Device Sync Tutorial - Flutter: Small clarifications and improved instructions.
+- Device Sync Tutorial - Flutter: Small clarifications and improved instructions
 
 ## Device Sync
 
