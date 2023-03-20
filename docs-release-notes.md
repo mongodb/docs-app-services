@@ -1,3 +1,38 @@
+# March 17, 2023
+
+## Get Started
+
+- Device Sync Tutorial - Flutter: Small clarifications and improved instructions.
+
+## Device Sync
+
+- Configure Sync
+  - Enable Atlas Device Sync: Add a Tip callout about the new behavior that Sync pauses after 30d of inactivity
+  - Pause or Terminate Sync: Add a line about the new behavior that Sync pauses after 30d of inactivity
+- Go to Production with Sync/Optimize Sync Atlas Usage: Clarify language around trimming vs. backend compaction, remove unnecessary content
+
+## Triggers
+
+- Database Triggers: Clarify `$match` example, add test, set up GitHub Workflow to run Function tests when we add or change tests
+
+## Authenticate & Manage Users
+
+- Define Custom User Metadata: Update the App Services UI procedure with minor UI label changes
+- Manage User Sessions: Add an App Services UI procedure to configure user session refresh token expiration
+
+## Secure Your App
+
+- Configure Network Security: Rename "Communicate from the Client to the Sync Server" section to "DNS Filtering" and improve the description
+
+## Reference
+
+- App Metrics: Update GraphQL metric naming to a consistent naming convention: `GRAPHQL_<METRIC>`
+- App Services Admin API: Document the new endpoint to change an email/password user's email address
+- Billing: Add a line about the new behavior that Sync pauses after 30d of inactivity
+- Service Limitations
+  - Move the existing info about concurrent Sync workloads into a new "Device Sync" section of the page
+  - Add a section about Sync pausing due to inactivity, with a link to how to resume it
+
 # March 10, 2023
 
 ## Device Sync
