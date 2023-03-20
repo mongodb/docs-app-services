@@ -18,7 +18,7 @@ Migrating an App that uses Partition-Based Sync to Flexible Sync is an automatic
 process. Other than upgrading the SDK version, migrating sync modes doesn't require 
 any changes to your client app code.
 
-Migrating results in Partition-Based Sync clients communicating with a
+Migration results in Partition-Based Sync clients communicating with a
 Flexible Sync backend.
 
 Requirements
@@ -30,7 +30,7 @@ App Services App:
 
 Linked Atlas Cluster:
 
-- Must be running mongodb 5.0+ for Flexible Sync compatibility
+- Must be running MongoDB 5.0+ for Flexible Sync compatibility
 - Must have storage auto-scaling enabled
 - Must be M10+ to access this setting
 - Must have time-based oplog setting enabled
@@ -53,7 +53,7 @@ your App's backend. You should be aware of the side effects and plan ahead.
   migration or :ref:`reverted <realm-sync-migrate-revert>` within a certain 
   timeframe after the migration is finished.
 - Progress notifications will not work after migration because Flexible Sync does
-  not yet support them.
+  not support them.
 - Client apps that use an SDK with with a realm-core version lower than TBD will
   experience a client reset after migration. You should use a 
   :ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
@@ -66,7 +66,7 @@ Migration Stages
 There are three stages to a Sync mode migration. You can see your migration's
 stage in the App Services UI.
 
-#. Syncing Partition-Based Sync metadata
+#. **Syncing Partition-Based Sync metadata** 
    
    At this stage, client apps can connect to your App's backend, but local writes 
    will not sync. These writes will be lost if you don't have a 
@@ -75,12 +75,12 @@ stage in the App Services UI.
    Clients can also receive updates to synced collections, but they won't
    be able to receive upload acknowledgements.
 
-#. Building Flexible Sync metadata
+#. **Building Flexible Sync metadata** 
    
    Clients cannot connect at this stage. The duration of this stage is directly
    proportional to the amount of data in synced collections.
 
-#. Completed migration
+#. **Completed migration** 
 
    :guilabel:`Manage Sync Migration` appears on the Device Sync page if the 
    migration hasn't been committed or reverted.
@@ -105,7 +105,7 @@ During migration, client apps may experience side effects, most of which are sim
 to what happens if you :ref:`terminate <terminating-realm-sync>` and re-enable
 Device Sync. These are some additional side effects of migration:
 
-- In the App Services UI, the Rules and Schemas pages will be unresponsive.
+- In the App Services UI, the Rules and Schema pages will be read-only.
 - Your App will experience a period of read-only sync and then a 
   period of downtime.
 - If Partition-Based Sync :ref:`client max offline time <client-maximum-offline-time>`
@@ -115,7 +115,7 @@ Device Sync. These are some additional side effects of migration:
   Depending on the size of your synced data, this could affect billing every time you
   migrate.
 
-To migrate from Partition-Based Sync to Flexible Sync:
+**To migrate from Partition-Based Sync to Flexible Sync:** 
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, select :guilabel:`[Migrate to Flexible Sync]`.
@@ -175,7 +175,7 @@ migration started.
 If you cancel a migration, you need to start over from the beginning with future
 migration attempts.
 
-To cancel a migration:
+**To cancel a migration:** 
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, in the notification banner, select
@@ -205,7 +205,7 @@ revert your migration.
 After a migration is committed, the old Partition-Based Sync metadata is deleted
 and you cannot revert the migration.
 
-To manually commit a migration:
+**To manually commit a migration:** 
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, select the three dots next to 
@@ -238,7 +238,7 @@ You cannot revert a migration that has been committed.
 Similar to canceling a migration, if you revert a migration, you need to 
 start over from the beginning with future migration attempts.
 
-To revert a migration:
+**To revert a migration:** 
 
 #. In the App Services UI, go to your App and select the Device Sync page.
 #. At the top of the page, select the three dots next to 
