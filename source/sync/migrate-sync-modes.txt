@@ -142,7 +142,7 @@ Sync rules have direct App Services Rules equivalents. This will override
 previously-defined App Services Rules.
 
 Some Partition-Based Sync rule strategies can't translate directly to App Services
-Rules. You may need to manually migrate rules with these characteristics:
+Rules. You may need to manually migrate rules with these expansions:
 
 - Rules that include :json-expansion:`%%partition`. 
   
@@ -150,14 +150,18 @@ Rules. You may need to manually migrate rules with these characteristics:
   :ref:`Function rules <pbs-function-rules>` used with :json-expansion:`%%partition`
   cannot be migrated.
 
-- Rules that include recursing operators (``%or``, ``%not``, ``%nor``, ``%and``).
+- Rules that include the expansions ``%or``, ``%not``, ``%nor``, ``%and``.
 
   These rules may work, but there is enough nuance that you should test them
   to ensure expected behavior. Testing new rules won't work on the App
   you are migrating. You'll need a new app to test manually-migrated rules.
 
-Refer to the :ref:`Partiton-Based Sync <pbs-rule-migration>` reference for examples
-of how to map Partition-Based Sync rules to App Services rules.
+See the list of :ref:`Flexible Sync-compatible expansions <sync-compatible-expansions>`
+for all supported expansions.
+
+You should also check out the 
+:ref:`Device Sync Permissions Guide <flexible-sync-permissions-guide>` for more
+information about how to work with permissions.
 
 .. _realm-sync-migrate-cancel:
 
