@@ -117,7 +117,7 @@ Set up and run the Tiered Sync server on the EC2 instance.
          {
            "clientAppId": "YOUR-APP-ID",
            "query": {
-             "YOUR-COLLECTION-NAME": "truepredicate"
+             "YOUR-COLLECTION-NAME": "YOUR-QUERY"
            },
            "cloudSyncServerAuth": "YOUR-AUTH-TOKEN",
            "hostname": "YOUR-TIERED-SYNC-SERVER-DOMAIN"
@@ -137,7 +137,9 @@ Set up and run the Tiered Sync server on the EC2 instance.
            - The name of the collection in your database where the Tiered 
              Sync server should sync data. If you're using a 
              template app, this is the ``Item`` collection.
-             Currently, ``truepredicate`` is the only supported query.
+             You can use :ref:`Realm Query Language <rql>` to define this
+             query, with the same caveats around :ref:`Flexible Sync RQL 
+             Limitations <flexible-sync-rql-limitations>`.
 
          * - ``cloudSyncServerAuth``
            - Give your :ref:`App Services App ID <find-app-id>` to your 
