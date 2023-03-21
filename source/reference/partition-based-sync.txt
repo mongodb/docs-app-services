@@ -1031,15 +1031,19 @@ If you migrate your Partition-Based Sync App to Flexible Sync, your data access
 rules also need to migrate. 
 
 Some Partition-Based Sync rule strategies can't translate directly to App Services
-Rules. You may need to manually migrate rules with these expansions:
+Rules. You may need to manually migrate rules that include:
 
-- Rules that include :json-expansion:`%%partition`. 
-  
-  App Services Rules do not have an equivalent expansion.
-  :ref:`Function rules <pbs-function-rules>` used with :json-expansion:`%%partition`
-  cannot be migrated.
+- :json-operator:`%function` operator.
 
-- Rules that include the expansions ``%or``, ``%not``, ``%nor``, ``%and``.
+  :ref:`Function rules <pbs-function-rules>` are not compatible with Flexible Sync 
+  and cannot be migrated.
+
+- :json-expansion:`%%partition` expansion.
+
+  App Services Rules do not have an equivalent expansion for  
+  :json-expansion:`%%partition`, so it cannot be migrated.
+
+- ``%or``, ``%not``, ``%nor``, ``%and`` expansions.
 
   These rules may work, but there is enough nuance that you should test them
   to ensure expected behavior. Testing new rules won't work on the App
