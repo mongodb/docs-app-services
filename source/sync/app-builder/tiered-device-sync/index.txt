@@ -80,63 +80,6 @@ syncs data between the EC2 instance and your Atlas App Services app.
       Select any other additional settings. Free tier settings are sufficient
       for small PoC projects. Then, launch the instance.
 
-.. _tiered-sync-enable-tiered-sync-auth:
-
-Enable Tiered Device Sync Authentication for Your App
------------------------------------------------------
-
-.. procedure::
-
-   .. step:: Get an Authorization Token
-
-      Get an authorization token for your App Services App. Log in to your 
-      App Services App, and access your browser's JavaScript console. If 
-      you're using Chrome, you can access this console from:
-      
-      1. Go to the browser's :guilabel:`View` menu
-      #. Enter the :guilabel:`Developer` menu
-      #. Select :guilabel:`JavaScript console`
-
-      In the JavaScript console, run this command:
-
-      .. code-block:: shell
-         
-         JSON.parse(localStorage.getItem("_baas.admin._baas_ua")).accessToken
-      
-
-   .. step:: Store the Token as a Variable on Your EC2 Instance
-
-      Store the value you got in the step above as a shell variable in a
-      terminal on your EC2 instance.
-
-      .. code-block:: shell
-         
-         TOKEN="STRING-FROM-PRIOR-STEP"
-
-   .. step:: Use OpenSSL to Generate a Secret Token
-
-      Still on the EC2 instance, generate a secret token.
-
-      .. code-block:: shell
-
-         SECRET=$(openssl rand -hex 16)
-
-      Save the output for use when configuring the Tiered Sync server.
-
-      .. code-block:: shell
-
-         echo "Tiered Sync Configuration Token: " $SECRET
-
-   .. step:: Enable Tiered Sync Authentication
-
-      Use the ``TOKEN`` and ``SECRET`` from the prior steps, as well as 
-      the App Services ``GroupID`` and ``AppID`` for the App you created above, 
-      to enable Tiered Sync Authentication:
-
-      .. code-block:: shell
-
-         curl --request POST --url https://realm.mongodb.com/api/admin/v3.0/groups/<groupID>/apps/<appID>/auth_providers -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" --data "{\"Type\": \"tiered-sync-token\", \"Config\": {\"token\": \"$SECRET\""}}
-
 .. _tiered-sync-configure-and-start-server:
 
 Configure the EC2 Instance to Run the Tiered Sync Server
@@ -197,9 +140,9 @@ Set up and run the Tiered Sync server on the EC2 instance.
              Currently, ``truepredicate`` is the only supported query.
 
          * - ``cloudSyncServerAuth``
-           - This is the Tiered Sync Server authorization token you generated
-             and saved as the ``SECRET`` in a step above.
-
+           - Give your :ref:`App Services App ID <find-app-id>` to your 
+             Product or Account Representative. They will generate an
+             authorization token for your App.
 
          * - ``hostname``
            - The public DNS of your EC2 instance. This should resemble something
