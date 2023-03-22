@@ -48,17 +48,21 @@ What to Know Before Migrating
 Migrating your App's Sync mode involves changes that affect both client apps and
 your App's backend. You should be aware of the side effects and plan ahead.
 
+- Client apps that use an SDK with with a realm-core version lower than TBD will
+  not be able to sync after migration.
 - How long a migration takes is directly proportional to the amount of data that
   needs to be migrated. The more data, the longer it will take to migrate.
 - Migrations can be :ref:`canceled <realm-sync-migrate-cancel>` during the 
   migration or :ref:`reverted <realm-sync-migrate-revert>` within a certain 
   timeframe after the migration is finished.
 - Progress notifications will not work after migration because Flexible Sync does
-  not support them.
-- Client apps that use an SDK with with a realm-core version lower than TBD will
-  experience a client reset after migration. You should use a 
-  :ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
-- :ref:`Development Mode <development-mode>` is not supported during a migration.
+  not support them.  
+- Client apps that were connected to the Partition-Based Sync backend will 
+  experience a client reset after the backend is migrated to Flexible Sync. You 
+  should use a :ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
+- Creating new tables in a migrated Flexible Sync backend using 
+  :ref:`Development Mode <development-mode>` from a Partition-Based Sync client
+  may lead to unexpected behavior.
 
 .. _realm-sync-migrate-stages:
 
@@ -155,7 +159,7 @@ migrated. On the :guilabel:`Review Migration Process` step in the App Services U
 look for :guilabel:`Rules & Permisssions`.
 
 Some Partition-Based Sync rule strategies can't translate directly to App Services
-Rules. You may need to manually migrate rules that include:
+Rules. You may need to manually migrate permissions that include:
 
 - :json-operator:`%function` operator.
 
@@ -169,9 +173,9 @@ Rules. You may need to manually migrate rules that include:
 
 - ``%or``, ``%not``, ``%nor``, ``%and`` expansions.
 
-  These rules may work, but there is enough nuance that you should test them
-  to ensure expected behavior. Testing new rules won't work on the App
-  you are migrating. You'll need a new app to test manually-migrated rules.
+  These permissions may work, but there is enough nuance that you should test them
+  to ensure expected behavior. Testing new permissions won't work on the App
+  you are migrating. You'll need a new app to test manually-migrated permissions.
 
 See the list of :ref:`Flexible Sync-compatible expansions <sync-compatible-expansions>`
 for all supported expansions.
