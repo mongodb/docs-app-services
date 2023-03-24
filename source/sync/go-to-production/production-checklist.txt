@@ -25,6 +25,17 @@ Avoid breaking changes
   breaking change you need to terminate and re-enable sync with the updated
   data models.
 
+Use a Dedicated Atlas Cluster
+  Production Apps should use, at minimum, an ``M10`` dedicated cluster.
+  Depending on your use case, you may need to upgrade to a higher tier
+  for optimal performance.
+
+  If you use a shared cluster, like an ``M0``, ``M2``, or ``M5``, you
+  may experience performance issues due to limited resources and
+  contention with other users. If you upgrade from a shared tier to a
+  dedicated tier after you go to production, you will need to terminate
+  Device Sync and reset or re-install all client applications.
+
 Define a client reset handler
   To recover from a serious error conditions where the client and server
   histories diverge, you should define a :ref:`client reset <client-resets>`
