@@ -4030,7 +4030,11 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/Endpoint"
+                  allOf:
+                    - "$ref": "#/components/schemas/Endpoint"
+                    - properties:
+                        function_name:
+                          type: string
 
     post:
       tags:
@@ -4051,7 +4055,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Endpoint"
+                allOf:
+                  - "$ref": "#/components/schemas/Endpoint"
+                  - properties:
+                      function_name:
+                        type: string
 
   "/groups/{groupId}/apps/{appId}/endpoints/{endpointId}":
     parameters:
@@ -4071,7 +4079,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Endpoint"
+                allOf:
+                  - "$ref": "#/components/schemas/Endpoint"
+                  - properties:
+                      function_name:
+                        type: string
 
     put:
       tags:
@@ -4092,7 +4104,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Endpoint"
+                allOf:
+                  - "$ref": "#/components/schemas/Endpoint"
+                  - properties:
+                      function_name:
+                        type: string
 
     delete:
       tags:
