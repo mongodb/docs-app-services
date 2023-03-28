@@ -10,13 +10,13 @@
 
 ## Authenticate & Manage Users
 
-- Landing Page: Add a diagram showing the interaction between client app, App Services App and authentication providers when authenticating users
+- Landing Page: Add a diagram showing the interaction between client app, App Services App, and authentication providers when authenticating users
 - Authentication Providers
   - Email/Password Authentication
     - Add diagrams for email/password login flow, registering an email/password user, and password reset flow
     - Expand and clarify password reset details
   - Custom Function Authentication: Add a diagram for custom function login flow
-  - API Key Authentication: Add a diagram for API key login flow, clarify details, add 20 API key limit per user to page
+  - API Key Authentication: Add a diagram for API key login flow, clarify details, add information about the 20 API key limit per user
   - Facebook Authentication: Add a diagram for OAuth login flow
   - Google Authentication: Add a diagram for OAuth login flow
   - Apple ID Authentication: Add a diagram for OAuth login flow
