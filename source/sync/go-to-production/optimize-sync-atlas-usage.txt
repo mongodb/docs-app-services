@@ -21,8 +21,7 @@ Overview
 Atlas Device Sync uses space in your app's synced Atlas cluster to store 
 metadata for sync. This includes a history of changes to each realm. 
 Atlas App Services minimizes this space usage in your Atlas cluster via 
-:ref:`trimming <trimming>` for Flexible Sync apps or 
-:ref:`backend compaction <backend-compaction>` for Partition Based Sync apps.
+:ref:`trimming <trimming>` for Flexible Sync apps.
 Minimizing metadata is necessary to reduce the time and data needed for sync.
 
 .. _sync-history:
@@ -35,15 +34,6 @@ underlying data <changesets>` for each realm, similar to the
 :manual:`MongoDB oplog </core/replica-set-oplog/>`. App Services
 uses this history to synchronize data between the backend and clients.
 App Services stores history in your synced Atlas cluster.
-
-Optimization Methods
---------------------
-
-There are two methods for optimizing utility data synced in your cluster
-depending on whether your App uses Flexible or Partition-Based Sync:
-
-1. **Trimming**: Used for :ref:`Flexible Sync <flexible-sync>` apps.
-#. **Backend Compaction**: Used for :ref:`Partition Based Sync <partition-based-sync>` apps.
 
 .. _trimming:
 
@@ -58,46 +48,6 @@ maximum offline time.
 
    Flexible Sync uses :ref:`trimming <trimming>` instead of 
    :ref:`backend compaction <backend-compaction>`.
-
-.. _backend-compaction:
-
-Backend Compaction
-~~~~~~~~~~~~~~~~~~
-
-**Backend compaction** is a maintenance process that automatically
-runs for all apps using :ref:`Partition Based Sync <partition-based-sync>`.
-Apps using Partition Based Sync store the entire history of data changes.
-Using compaction, the backend optimizes a
-realm's history by removing unneeded changesets. The process
-removes any instruction whose effect is later overwritten by a newer
-instruction.
-
-.. example::
-
-   Consider the following realm history:
-
-   .. code-block::
-      :caption: Original History
-
-      CREATE table1.object1
-      UPDATE table1.object1.x = 4
-      UPDATE table1.object1.x = 10
-      UPDATE table1.object1.x = 42
-
-   The following history would also converge to the same state, but
-   without unneeded interim changes:
-
-   .. code-block::
-      :caption: Compacted History
-
-      CREATE table1.object1
-      UPDATE table1.object1.x = 42
-
-.. note:: 
-   
-   :ref:`Partition Based Sync <partition-based-sync>` uses backend compaction rather 
-   than :ref:`trimming <trimming>` and 
-   :ref:`client maximum offline time <client-maximum-offline-time>`.
 
 .. _client-maximum-offline-time:
 
@@ -281,7 +231,6 @@ Summary
 -------
 
 - Device Sync uses space in your synced Atlas cluster to store change history.
-- Backend compaction reduces the space usage of this history for Partition Based Sync apps.
 - Trimming reduces the space usage for Flexible Sync apps, but can cause client resets for clients who have not connected to the backend in more than the client maximum offline time (in days).
 - Flexible Sync apps that have disabled a client maximum offline time do not apply trimming, so clients of any age can sync without experiencing a client reset.
 - Adding additional queryable fields to a flexible sync configuration will increase storage consumed on an Atlas Cluster. Using broad queries and selecting fewer fields that support broad queries decreases storage consumed.

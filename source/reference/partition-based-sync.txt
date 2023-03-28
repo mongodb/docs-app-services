@@ -1650,3 +1650,43 @@ Permissions. Making changes to your Device Sync configuration while
 terminating and re-enabling Device Sync will trigger a client reset. To learn
 more about handling client resets, read the :ref:`client reset <client-resets>`
 documentation.
+
+.. _backend-compaction:
+
+Backend Compaction
+------------------
+
+**Backend compaction** is a maintenance process that automatically
+runs for all apps using :ref:`Partition Based Sync <partition-based-sync>`.
+Apps using Partition Based Sync store the entire history of data changes.
+Using compaction, the backend optimizes a
+realm's history by removing unneeded changesets. The process
+removes any instruction whose effect is later overwritten by a newer
+instruction.
+
+.. example::
+
+   Consider the following realm history:
+
+   .. code-block::
+      :caption: Original History
+
+      CREATE table1.object1
+      UPDATE table1.object1.x = 4
+      UPDATE table1.object1.x = 10
+      UPDATE table1.object1.x = 42
+
+   The following history would also converge to the same state, but
+   without unneeded interim changes:
+
+   .. code-block::
+      :caption: Compacted History
+
+      CREATE table1.object1
+      UPDATE table1.object1.x = 42
+
+.. note:: 
+   
+   :ref:`Partition Based Sync <partition-based-sync>` uses backend compaction rather 
+   than :ref:`trimming <trimming>` and 
+   :ref:`client maximum offline time <client-maximum-offline-time>`.
