@@ -1,3 +1,34 @@
+# March 24, 2023
+
+## Device Sync
+
+- Tiered Device Sync Guide: New unlisted page with information on running Tiered Sync, and details about connecting to a Tiered Sync server from a client
+
+## GraphQL API
+
+- GraphQL Types, Resolvers, and Operators: Add a section with code blocks showing how to implement pagination with `query`, `limit`, and `sortBy` operators
+
+## Authenticate & Manage Users
+
+- Landing Page: Add a diagram showing the interaction between client app, App Services App, and authentication providers when authenticating users
+- Authentication Providers
+  - Email/Password Authentication
+    - Add diagrams for email/password login flow, registering an email/password user, and password reset flow
+    - Expand and clarify password reset details
+  - Custom Function Authentication: Add a diagram for custom function login flow
+  - API Key Authentication: Add a diagram for API key login flow, clarify details, add information about the 20 API key limit per user
+  - Facebook Authentication: Add a diagram for OAuth login flow
+  - Google Authentication: Add a diagram for OAuth login flow
+  - Apple ID Authentication: Add a diagram for OAuth login flow
+
+## Reference
+
+- Partition-Based Sync Mode: Remove unnecessary (malformed) link
+
+## Other
+
+- Pages throughout the docs set: Where the Realm SDKs are listed as tabs, change them to a list of bullets to address formatting issues
+
 # March 17, 2023
 
 ## Get Started
