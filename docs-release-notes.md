@@ -1,3 +1,29 @@
+# March 31, 2023
+
+## Device Sync
+
+- Configure and Update Your Data Model/Update a Data Model: Remove inapplicable SDK schema migration info from page
+- Go to Production with Sync
+  - Production Checklist: Recommend minimum `M10` dedicated cluster
+  - Optimize Sync Atlas Usage: Remove Partition-Based Sync Backend Compaction details from page
+- Tiered Device Sync Guide:
+  - Update the Tiered Sync package URL
+  - Rewrite procedures for a more generic context
+
+## Functions
+
+- External Dependencies: Update `--include-dependencies` flag to `--include-node-modules`
+
+## Reference
+
+- App Services Admin API
+  - Endpoints: Remove `function_name` from the Endpoint request body schema
+  - Logs: Add schemas with descriptions for all of the App Services Logs types
+- Realm CLI: Remove Realm CLI v1 Reference from Table of Contents, add a redirect to a new orphaned page for legacy v1 users
+- Service Limitations: Raise request timeout from 210 to 240 seconds
+- Template Apps: Rename `Xamarin` to `MAUI` in the lists of template apps, add details about `realm-cli` to the IDs list
+- Partition-Based Sync: Move Backend Compaction details from "Optimize Sync Atlas Usage" page
+
 # March 24, 2023
 
 ## Device Sync
