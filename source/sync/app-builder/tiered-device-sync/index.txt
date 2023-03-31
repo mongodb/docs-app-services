@@ -46,46 +46,66 @@ Create a Device Sync-Enabled App
    .. step:: Enable Device Sync or Modify the Template Configuration
 
       If you have not started with a template app, :ref:`enable Device Sync 
-      <enable-sync>` with Flexible Sync. Enable :ref:`Anonymous authentication 
-      <anonymous-authentication>`. Configure :ref:`permissions 
+      <enable-sync>` with Flexible Sync. Configure :ref:`permissions 
       <device-sync-compatibility>` to allow anyone to read and write all data.
 
-      If you started with a template app, enable :ref:`Anonymous authentication 
-      <anonymous-authentication>`. Go to :guilabel:`Rules`, and delete the 
-      existing rule for the ``todo`` / ``Item`` collection. Replace it with 
+      The Tiered Sync server uses :ref:`Anonymous Authentication 
+      <anonymous-authentication>` to connect to the App Services App. When 
+      you configure Tiered Sync for your app, this automatically enables 
+      Anonymous Authentication.
+
+      If you started with a template app, go to :guilabel:`Rules`, and delete 
+      the existing rule for the ``todo`` / ``Item`` collection. Replace it with 
       ``readAndWriteAll``.
 
-.. _tiered-sync-launch-ec2-instance:
+.. _tiered-sync-configure-host:
 
-Launch an EC2 Instance
-----------------------
+Configure the Host
+------------------
 
-Launch an AWS EC2 instance to serve as the Tiered Device Sync server.
-This layer syncs device data between the devices and the EC2 instance, and then
-syncs data between the EC2 instance and your Atlas App Services app.
+Configure the host to run the Tiered Device Sync server. This may be
+an EC2 instance or other cloud server, or hardware that you provision on-site.
 
-.. procedure::
+.. tip::
 
-   .. step:: Set Up an Ubuntu 18 Instance
+   For proof-of-concept testing, you can launch an EC2 instance running 
+   Ubuntu Server 18.x. Under Network settings, add a rule to allow access 
+   via HTTP/Port 80. Free tier settings are sufficient for small PoC projects.
 
-      Launch an EC2 instance running Ubuntu Server 18.x.
+.. _tiered-sync-required-network-access:
 
-   .. step:: Configure Required Network Settings
+Required Network Access
+~~~~~~~~~~~~~~~~~~~~~~~
 
-      Under Network settings, add a rule to allow access via HTTP/Port 80.
-      For added security, restrict to your IP address.
+The host that runs the Tiered Sync server must allow access to port 80 via HTTP 
+to the general internet. 
 
-   .. step:: Provision and Launch the Instance
+.. _tiered-sync-os-support:
 
-      Select any other additional settings. Free tier settings are sufficient
-      for small PoC projects. Then, launch the instance.
+OS Compatibility
+~~~~~~~~~~~~~~~~
+
+The Tiered Sync server has been verified with the following operating systems:
+
+- Ubuntu Server 18+
+- macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
+
+Other operating systems may be possible, but have not yet been verified.
+
+.. _tiered-sync-hardware-requirements:
+
+Hardware Requirements
+~~~~~~~~~~~~~~~~~~~~~
+
+Tiered Sync benchmarking is not yet complete, so minimum required hardware
+is not yet available. 
 
 .. _tiered-sync-configure-and-start-server:
 
-Configure the EC2 Instance to Run the Tiered Sync Server
---------------------------------------------------------
+Install and Configure the Tiered Sync Server
+--------------------------------------------
 
-Set up and run the Tiered Sync server on the EC2 instance.
+Set up and run the Tiered Sync server on the host.
 
 .. include:: /includes/important-stop-tiered-sync-server.rst
 
@@ -93,7 +113,7 @@ Set up and run the Tiered Sync server on the EC2 instance.
 
    .. step:: Get the Tiered Sync Server Code
 
-      Use ``wget`` to get the Tiered Sync Server code:
+      Use ``wget`` to get the Tiered Sync server code:
 
       .. code-block:: shell
 
@@ -132,11 +152,20 @@ Set up and run the Tiered Sync server on the EC2 instance.
          * - ``clientAppId``
            - The App ID of the App Services App you created above.
 
-          
+         * - ``query``
+           - An object containing one or more collections and queries that 
+             define the collections and documents the Tiered Sync server can 
+             sync.
+
          * - ``YOUR-COLLECTION-NAME``
            - The name of the collection in your database where the Tiered 
              Sync server should sync data. If you're using a 
              template app, this is the ``Item`` collection.
+            
+         * - ``YOUR-QUERY``
+           - This query determines what documents the Tiered Sync server
+             can sync with the collection. For example, ``truepredicate``
+             means the Tiered Sync server syncs all documents with the collection.
              You can use :ref:`Realm Query Language <rql>` to define this
              query, with the same caveats around :ref:`Flexible Sync RQL 
              Limitations <flexible-sync-rql-limitations>`.
@@ -147,8 +176,43 @@ Set up and run the Tiered Sync server on the EC2 instance.
              authorization token for your App.
 
          * - ``hostname``
-           - The public DNS of your EC2 instance. This should resemble something
+           - The public DNS of your host. This should resemble something
              like ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
+
+      .. example::
+
+         An example Tiered Sync configuration file for a template app running
+         on an EC2 instance might look similar to:
+
+         .. code-block:: json
+            :copyable: false
+
+            {
+               "clientAppId": "sync-template-app-zkiee",
+               "query": {
+                  "Item": "truepredicate"
+               },
+               "cloudSyncServerAuth": "3814f3fb7befe2eef66ee01781ae245a",
+               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com"
+            }
+
+         The "query" could include multiple collection names, similar to:
+
+         .. code-block:: json
+            :copyable: false
+
+            {
+               "clientAppId": "sync-template-app-zkiee",
+               "query": {
+                  "Item": "truepredicate",
+                  "Project": "truepredicate"
+               },
+               "cloudSyncServerAuth": "3814f3fb7befe2eef66ee01781ae245a",
+               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com"
+            }
+
+         For more details on what you could include in a query, refer to 
+         :ref:`Realm Query Language <rql>`.
 
    .. step:: Install Dependencies
 
@@ -162,39 +226,67 @@ Set up and run the Tiered Sync server on the EC2 instance.
 
       .. code-block:: shell
 
-         sudo make up
+         make up
 
-      You may get a message similar to this:
-      
-      .. code-block:: console
-         :copyable: false
-      
-         Couldn't connect to Docker daemon at http+docker://localunixsocket
-      
-      If this occurs, you may need to add your user account to the docker group.
+      .. note::
 
-      If you have successfully started the Tiered Sync server, you can see
-      the status of the server with:
+         You don't have to run the Docker commands as root. However, if you 
+         don't, you may get a message similar to this:
+         
+         .. code-block:: console
+            :copyable: false
+         
+            Couldn't connect to Docker daemon at http+docker://localunixsocket
+      
+         If this occurs, you can switch to the root user with ``sudo su``.
+
+      Now you can connect clients directly to the Tiered Sync server.
+
+      In the App Services logs, you should see an ``Authentication -> Login``
+      entry whose ``Name`` is ``tiered-sync-token``. This is the Tiered Sync
+      server connecting to your App Services App.
+
+      .. include:: /includes/important-stop-tiered-sync-server.rst
+
+   .. step:: Check the Status of the Tiered Sync Server
+
+      When the Tiered Sync server is running, you can see the status of the 
+      Tiered Sync server with:
 
       .. code-block:: shell
 
-         sudo make status
+         make status
 
-      Now you can connect clients directly to the Tiered Sync Server.
+      This gives you information about the number of clients connected to the 
+      server, as well as errors that may have occurred.
 
-      .. include:: /includes/important-stop-tiered-sync-server.rst
+      .. example::
+
+         The status object of a Tiered Sync server may look similar to:
+
+         .. code-block:: json
+            :copyable: false
+
+            {
+               "status": "ACTIVE",
+               "cloud_connected": true,
+               "num_local_clients": 1,
+               "query": {
+                  "Item": "truepredicate"
+               }
+            }
 
 .. _tiered-sync-connect-from-client:
 
 Connect to the Tiered Sync Server from a Client
 -----------------------------------------------
 
-To connect to the Tiered Sync Server from a client, your app must:
+To connect to the Tiered Sync server from a client, your app must:
 
 - Use Anonymous Authentication
 - Use HTTP over port 80
 - Set the Sync URL to the public accessible DNS address you set in the 
-  Tiered Sync Server config's ``hostname`` field
+  Tiered Sync server config's ``hostname`` field
 
 For a quick proof of concept using a template app, these are the modifications
 you would need to make to the :github:`Swift template app 
@@ -202,7 +294,7 @@ you would need to make to the :github:`Swift template app
 
 .. procedure::
 
-   .. step:: Configure the Atlas Connection
+   .. step:: Configure the Server Connection
 
       In the Swift template app's :file:`atlasConfig`, set the values to:
 
@@ -213,9 +305,9 @@ you would need to make to the :github:`Swift template app
            - Value
 
          * - ``baseUrl``
-           - The EC2 public-addressable DNS of your Tiered Sync server. This
-             is ``http://`` followed by the same value you set in your 
-             Tiered Sync Server config's ``hostname`` field.
+           - The public-addressable DNS of your Tiered Sync server's host. 
+             This is ``http://`` followed by the same value you set in your 
+             Tiered Sync server config's ``hostname`` field.
           
          * - ``appId``
            - The App ID of the App Services App you created above.
@@ -223,13 +315,14 @@ you would need to make to the :github:`Swift template app
    .. step:: Adjust the App Transport Security Settings
 
       For iOS, Apple disables insecure connections by default. You must add
-      an exception for your EC2 DNS to allow the client app to connect to it.
+      an exception for your public-addressable DNS to allow the client app 
+      to connect to it.
 
       Select your App target, and go to the :guilabel:`Signing & Capabilities`
       tab. Press the :guilabel:`+ Capability` button, and search for 
       ``App Transport Security Settings``. Add this to your app.
 
-      Add an exception domain for your EC2 public-addressable DNS. This should
+      Add an exception domain for your public-addressable DNS. This should
       be just the string domain, similar to: ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
 
       This creates an :file:`Info.plist` file in your project. Go to this file
@@ -299,7 +392,7 @@ you would need to make to the :github:`Swift template app
 
       You can optionally adjust the Sync log level if you'd like to get 
       additional details about the status of communication with the 
-      Tiered Sync Server.
+      Tiered Sync server.
 
       In the :file:`App` file, the Realm Swift app is initialized in the 
       ``ErrorHandler`` class that starts in line 29. Add a log level
@@ -328,12 +421,21 @@ you would need to make to the :github:`Swift template app
       server. When you create new Items, those sync with the Tiered Sync server,
       and from there to the Atlas App Services App.
 
-      You can check the status of the Tiered Sync Server from your EC2 instance.
+      You can check the status of the Tiered Sync server from your host.
       With the client running, you should see ``"num_local_clients": 1`` in 
-      the Tiered Sync Server Status. You can also see error messages reflected
+      the Tiered Sync server status. You can also see error messages reflected
       in the sync status.
 
-      In the App Services logs, you should see an ``Authentication -> Login``
-      entry whose ``Name`` is ``tiered-sync-token``. This is the Tiered Sync
-      Server connecting to your App Services App. You should see synced changes 
-      reflected in the linked Atlas collection.
+      After the next time the Tiered Sync server syncs with your App Services App,
+      you should see synced changes reflected in the linked Atlas collection.
+
+      .. important::
+
+         If you have previously connected directly from the client to your 
+         App Services App with Device Sync, you may need to clear state on the 
+         simulator or device. Resetting your cache enables your client to 
+         connect to the Tiered Sync server.
+
+         In a console app, delete the ``mongodb-realm`` directory. If you're
+         using an iOS or Android simulator or device, uninstall and reinstall
+         the app.
