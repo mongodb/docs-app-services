@@ -28,13 +28,13 @@ Create a Scheduled Trigger
       
       To create a scheduled Trigger in the Atlas App Services UI:
       
-      1. Click :guilabel:`Triggers` under :guilabel:`MongoDB Cluster` in the
+      1. Click :guilabel:`Triggers` under :guilabel:`Build` in the
          left navigation menu.
       
-      2. Select :guilabel:`Scheduled Triggers` from the Trigger type dropdown
-         menu.
+      2. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
       
-      3. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
+      3. Select :guilabel:`Scheduled Triggers` from the :guilabel:`Trigger Type` 
+         options.
       
       4. Enter :ref:`configuration values <scheduled-trigger-configuration>` for
          the Trigger. You can configure two types of Trigger schedules:
@@ -47,8 +47,11 @@ Create a Scheduled Trigger
          - An :guilabel:`Advanced` schedule executes the Trigger based on a
            custom :ref:`CRON expression <CRON-expressions>` that you
            define.
+
+      5. Under the :guilabel:`Function` section, select the :guilabel:`Event Type` 
+         for your function and configure the event options.
       
-      5. Click :guilabel:`Save`.
+      6. Click :guilabel:`Save`.
       
       .. figure:: /images/trigger-example-scheduled.png
          :figwidth: 750px
@@ -113,10 +116,33 @@ Scheduled Triggers have the following configuration options:
        
        For scheduled Triggers, this value should be set to ``SCHEDULED``.
 
-   * - | :guilabel:`Trigger Name`
+   * - | :guilabel:`Name`
        | ``name: <string>``
 
      - Required. The name of the Trigger.
+
+   * - | :guilabel:`Enabled`
+       | ``name: <string>``
+
+     - Enabled by default. Used to enable trigger. 
+   
+   * - | :guilabel:`Skip Events on Re-Enable`
+       | ``name: <string>``
+
+     - Disabled by default. When option is enabled, missed trigger events 
+       while trigger is disabled are skipped when trigger is re-enabled. 
+
+   * - | :guilabel:`Schedule Type`
+       | ``config.schedule: <string>``
+
+     - Required. The :ref:`CRON expression <CRON-expressions>`
+       that Atlas App Services uses to determine when to fire the Trigger.
+
+   * - | :guilabel:`Event Type`
+       | ``config.schedule: <string>``
+
+     - Required. Choose whether event is controlled by a :guilabel:`Function` 
+       or :guilabel:`EventBridge` event. 
 
    * - | :guilabel:`Linked Function`
        | ``function_name: <string>``
@@ -128,12 +154,6 @@ Scheduled Triggers have the following configuration options:
 
           A scheduled Trigger does not pass any arguments to its linked
           Function.
-
-   * - | :guilabel:`Schedule`
-       | ``config.schedule: <string>``
-
-     - Required. The :ref:`CRON expression <CRON-expressions>`
-       that Atlas App Services uses to determine when to fire the Trigger.
 
 .. _CRON-expressions:
 
