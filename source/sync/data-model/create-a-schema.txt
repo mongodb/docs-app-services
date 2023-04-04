@@ -55,7 +55,12 @@ Create an App Services Schema from a Realm Object Model
       Changes to your Realm Object Schema are only allowed when
       :guilabel:`Development Mode` is on in the App Services UI. App Services will
       reflect these changes to your Realm Object Schema in your App Services Schema used for
-      Atlas.
+      Atlas. To enable Development Mode, click the slider to the right of 
+      :guilabel:`Development Mode`.
+
+      .. figure:: /images/turn-on-dev-mode.png
+         :alt: The UI to enable Development Mode
+         :lightbox:
 
 
    .. step:: Edit Your Realm Object Schema
@@ -117,34 +122,24 @@ Create an App Services Schema from a Realm Object Model
 
    .. step:: Update Your App Services Schema with the Realm Object Schema Changes
 
-
       While :guilabel:`Development Mode` is on, App Services doesn't validate
       writes against your data model, allowing you to freely update your Realm
       Object Model. When you turn off :guilabel:`Development Mode`, MongoDB
-      App Services automatically updates your App Services Schema and starts to enforce data
-      validation for your Atlas cluster based on it.
+      App Services automatically updates your App Services Schema and starts to 
+      enforce data validation for your Atlas cluster based on it.
 
-      Click the "Turn Dev Mode Off" button on the top banner or in the
-      :guilabel:`Sync` screen to turn off :guilabel:`Development Mode`. Once you
-      turn off :guilabel:`Development Mode`, the "Development Mode is OFF" modal
-      will appear. The modal indicates that App Services has stopped accepting new
-      data model changes from clients. Click the "View My Schema" button on
-      the modal to view your updated App Services Schema.
+      In the :guilabel:`Sync` screen, turn off :guilabel:`Development Mode` by 
+      clicking the slider next to :guilabel:`Development Mode`. The UI indicates 
+      that Development Mode has been turned off.
+
+      .. figure:: /images/turn-off-dev-mode.png
+         :alt: The UI that shows Development Mode is disabled
+         :lightbox:
 
       .. note::
 
         To make future data model updates from your mobile client code, you
         can follow this procedure again.
-
-      .. figure:: /images/turn-off-dev-mode.png
-         :alt: The banner in the UI that shows Development Mode is enabled
-         :width: 750px
-         :lightbox:
-
-      .. figure:: /images/view-my-json-schema.png
-         :alt: The modal that confirms turning off Development Mode in the UI
-         :width: 461px
-         :lightbox:
 
 .. _create-rom-from-schema:
 
@@ -188,7 +183,8 @@ Create a Realm Object Schema from an App Services Schema
 
       The Realm Object Schema defines and validates your data in your mobile
       client application. To view your Realm Object Schema, navigate to the
-      :guilabel:`SDKs` page, where you can view your App Services Schema as a
+      :guilabel:`Realm SDKs` page and then click the :guilabel:`Realm Object Models` 
+      tab. On this page, you can view your App Services Schema as a
       generated Realm Object Schema in your language of choice.
 
       .. figure:: /images/translate-jsonschema-into-realm-data-model.png
@@ -196,22 +192,7 @@ Create a Realm Object Schema from an App Services Schema
          :width: 750px
          :lightbox:
 
-   .. step:: View and Fix Schema Errors
-
-      App Services may fail to generate some or all of your Realm Object Schema based on your
-      App Services Schema. You can view a list of the errors in your App Services Schema that
-      prevented App Services from generating the Realm Object Schema on the :guilabel:`SDKs`
-      page of the App Services UI.
-
-      Common errors include mismatched types, and differences in the way
-      relationships are represented in the two respective models. For each
-      error or warning, modify your App Services Schema to fix the specified issue.
-
-      .. figure:: /images/schema-translation-errors-warnings.png
-         :alt: A detailed list in the UI of warnings and errors that occurred during model
-         :width: 750px
-         :lightbox:
-
+   
    .. step:: Open a Realm with the Realm Object Schema
 
       You can use the generated Realm Object Schema in your
