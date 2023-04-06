@@ -13,19 +13,19 @@ Stream Data Unidirectionally from a Client to Atlas
 If you have a mobile or client application that produces a large volume of 
 data you'd like to stream to MongoDB Atlas, you can sync data unidirectionally
 using Device Sync. We call the feature that enables this unidirectional sync
-**Asymmetric Sync**.
+**Data Ingest**.
 
 You might want to sync data unidirectionally in IoT applications, such as 
-a weather sensor sending data to the cloud. Asymmetric sync is also useful 
+a weather sensor sending data to the cloud. Data Ingest is also useful 
 for writing other types of immutable data where you do not require conflict 
 resolution, such as creating invoices from a retail app or logging 
 application events.
 
-Asymmetric Sync is optimized to provide performance improvements for heavy 
+Data Ingest is optimized to provide performance improvements for heavy 
 client-side *insert-only* workloads. You cannot read this data from the
 realm where you're streaming it.
 
-Currently Asymmetric Sync is only available for the following Realm SDKs:
+Currently Data Ingest is only available for the following Realm SDKs:
 
 - .NET SDK
 - Node.js SDK
@@ -49,7 +49,7 @@ Set up Atlas Access
       To learn how to create an App Services App, see :ref:`Create an
       App <create-app>`.
 
-   .. step:: Configure Device Sync and Asymmetric Sync
+   .. step:: Configure Device Sync and Data Ingest
 
       Device Sync is the service that synchronizes data to Atlas 
       and across your client devices. Device Sync, together with the
@@ -68,7 +68,7 @@ Set up Atlas Access
       you may find it helpful to use the Atlas UI as it provides links and 
       information about various settings and options.
       
-      To enable Asymmetric Sync for one or more collections, you select 
+      To enable Data Ingest for one or more collections, you select 
       the collection or collections in the :guilabel:`Advanced Configuration` 
       section of your Device Sync configuration. Only collections with 
       an :ref:`App Services Schema <schemas>` are available to select in 
@@ -146,7 +146,7 @@ and you can prepare your client application to sync data unidirectionally.
    .. step:: Create Asymmetric Objects and Write Data
 
       The Realm SDKs provide a special type of object to use with 
-      Asymmetric Sync: an Asymmetric Object. Refer to the Realm SDK 
+      Data Ingest: an Asymmetric Object. Refer to the Realm SDK 
       documentation for details on how to define Asymmetric Objects.
 
       Create and write Asymmetric Objects to a synced realm, and 
@@ -157,7 +157,7 @@ and you can prepare your client application to sync data unidirectionally.
       the device and automatically uploads when the network connection is 
       restored.
 
-      - :ref:`Stream Data to Atlas - .NET SDK <dotnet-asymmetric-sync>`
+      - :ref:`Stream Data to Atlas - .NET SDK <dotnet-data-ingest>`
       - :ref:`Define an Asymmetric Object - Node.js SDK <node-define-an-asymmetric-object>`
       - :ref:`Define an Asymmetric Object - React Native SDK <react-native-define-an-asymmetric-object>`
       - :ref:`Stream Data to Atlas - Swift SDK <swift-stream-data-to-atlas>`
