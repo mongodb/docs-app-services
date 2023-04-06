@@ -33,7 +33,7 @@ Create a Scheduled Trigger
       
       2. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
       
-      3. Select :guilabel:`Scheduled Triggers` from the :guilabel:`Trigger Type` 
+      3. Select :guilabel:`Scheduled` from the :guilabel:`Trigger Type` 
          options.
       
       4. Enter :ref:`configuration values <scheduled-trigger-configuration>` for
@@ -48,7 +48,7 @@ Create a Scheduled Trigger
            custom :ref:`CRON expression <CRON-expressions>` that you
            define.
 
-      5. Under the :guilabel:`Function` section, select the :guilabel:`Event Type` 
+      5. In the :guilabel:`Function` section, select the :guilabel:`Event Type` 
          for your function and configure the event options.
       
       6. Click :guilabel:`Save`.
@@ -112,14 +112,14 @@ Scheduled Triggers have the following configuration options:
    * - | :guilabel:`Trigger Type`
        | ``type: <string>``
 
-     - Required. The type of the Trigger.
+     - Required. The type of the trigger.
        
-       For scheduled Triggers, this value should be set to ``SCHEDULED``.
+       For Scheduled Triggers, this value should be set to ``SCHEDULED``.
 
    * - | :guilabel:`Name`
        | ``name: <string>``
 
-     - Required. The name of the Trigger.
+     - Required. The name of the trigger.
 
    * - | :guilabel:`Enabled`
        | ``disabled: <boolean>``
@@ -136,7 +136,7 @@ Scheduled Triggers have the following configuration options:
        | ``config.schedule: <string>``
 
      - Required. The :ref:`CRON expression <CRON-expressions>`
-       that Atlas App Services uses to determine when to fire the Trigger.
+       that Atlas App Services uses to determine when to fire the trigger.
 
    * - | :guilabel:`Event Type`
        | 
@@ -147,12 +147,12 @@ Scheduled Triggers have the following configuration options:
    * - | :guilabel:`Linked Function`
        | ``function_name: <string>``
 
-     - Required. The name of the Function that the Trigger
+     - Required. The name of the function that the trigger
        executes whenever it fires.
 
        .. note::
 
-          A scheduled Trigger does not pass any arguments to its linked
+          A Scheduled Trigger does not pass any arguments to its linked
           Function.
 
 .. _CRON-expressions:
