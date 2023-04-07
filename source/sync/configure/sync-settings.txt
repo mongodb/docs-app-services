@@ -191,37 +191,37 @@ determine a user's ability to sync, view, and modify data.
 For details, see :ref:`sync-permissions`.
 
 .. _asymmetric-sync:
-.. _optimize-asymmetric-sync:
+.. _optimize-data-ingest:
 
-Asymmetric Sync
-~~~~~~~~~~~~~~~
+Data Ingest
+~~~~~~~~~~~
 
-Asymmetric Sync is a sync strategy for applications with heavy client-side
+Data Ingest is a sync strategy for applications with heavy client-side
 insert-only workloads. You can enable it for one or more collections. It
 supports writing to any collection type, including an Atlas time-series
 collection.
 
 For example, an IoT app that frequently logs sensor data has a significant write
 workload and no read workload. The device may also be offline for extended
-periods of time. Asymmetric Sync bypasses some of the processing required for
+periods of time. Data Ingest bypasses some of the processing required for
 bi-directional sync, significantly improving write speed to an Atlas collection.
 
 Other use cases include writing immutable data, such as invoices from a retail
 app, or logging application events, neither of which requires conflict
 resolution.
 
-You can apply Asymmetric Sync to individual collections. This means your app can
-use Asymmetric Sync to write some data, but bi-directional Flexible Sync on
+You can apply Data Ingest to individual collections. This means your app can
+use Data Ingest to write some data, but bi-directional Flexible Sync on
 other collections.
 
-Asymmetric Sync collections are only for writing data. You cannot use Flexible
+Data Ingest collections are only for writing data. You cannot use Flexible
 Sync queries against these collections. Instead, use :ref:`data-sources`.
 
-After you have enabled Asymmetric Sync, you implement it in the client app via
-the client SDKs. Currently, the following Realm SDKs support Asymmetric Sync:
+After you have enabled Data Ingest, you implement it in the client app via
+the client SDKs. Currently, the following Realm SDKs support Data Ingest:
 
 - C++ SDK: :ref:`cpp-stream-data-to-atlas`
-- .NET SDK: :ref:`dotnet-asymmetric-sync`
+- .NET SDK: :ref:`dotnet-data-ingest`
 - Node.js SDK: :ref:`node-define-an-asymmetric-object`
 - React Native SDK: :ref:`react-native-define-an-asymmetric-object`
 - Swift SDK: :ref:`swift-stream-data-to-atlas`
