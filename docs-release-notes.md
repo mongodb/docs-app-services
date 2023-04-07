@@ -1,3 +1,32 @@
+# April 07, 2023
+
+## Device Sync
+
+- Pause or Terminate Sync: Add link to Flutter SDK Re-Enable Sync section.
+
+## Authentication
+
+- Email/Password Authentication: Document additional default parameter for password reset functions.
+
+## Data API
+
+- Atlas Data API: Add unit-tested Data API examples
+  - Add a GitHub Action to automatically run the tests and `bluehawk check`
+
+## Users
+
+- Define Custom User Metadata: Add a link to the new Kotlin SDK Custom User Data page.
+
+## Triggers
+
+- Scheduled Triggers: Update Scheduled Triggers documentation to add information
+  about skip events.
+
+## Other
+
+- Pages throughout the docs set: Review all images and update those that were outdated.
+- Pages throughout the docs set: Rename Asymmetric Sync to Data Ingest.
+
 # March 31, 2023
 
 ## Device Sync
