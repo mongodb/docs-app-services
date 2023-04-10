@@ -33,30 +33,12 @@ Create a Scheduled Trigger
       
       2. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
       
-      3. Select :guilabel:`Scheduled` from the :guilabel:`Trigger Type` 
-         options.
-      
-      4. Enter :ref:`configuration values <scheduled-trigger-configuration>` for
-         the Trigger. You can configure two types of Trigger schedules:
-         :guilabel:`Basic` or :guilabel:`Advanced`.
-      
-         - A :guilabel:`Basic` schedule executes the Trigger periodically based
-           on a single unit of time and an interval, such as "every five
-           minutes" or "every Monday".
-      
-         - An :guilabel:`Advanced` schedule executes the Trigger based on a
-           custom :ref:`CRON expression <CRON-expressions>` that you
-           define.
-
-      5. In the :guilabel:`Function` section, select the :guilabel:`Event Type` 
-         for your function and configure the event options.
-      
-      6. Click :guilabel:`Save`.
+      3. Select :guilabel:`Scheduled` for the :guilabel:`Trigger Type`.
       
       .. figure:: /images/trigger-example-scheduled.png
          :figwidth: 750px
          :alt: Creating a Trigger in the App Services UI.
-   
+
    .. tab::
       :tabid: cli
       
@@ -112,43 +94,39 @@ Scheduled Triggers have the following configuration options:
    * - | :guilabel:`Trigger Type`
        | ``type: <string>``
 
-     - Required. The type of the trigger.
-       
-       For Scheduled Triggers, this value should be set to ``SCHEDULED``.
+     - Select :guilabel:`Scheduled`.
 
    * - | :guilabel:`Name`
        | ``name: <string>``
 
-     - Required. The name of the trigger.
+     - The name of the trigger.
 
    * - | :guilabel:`Enabled`
        | ``disabled: <boolean>``
 
-     - Enabled by default. Used to enable trigger. 
+     - Enabled by default. Used to enable or disable the trigger. 
    
    * - | :guilabel:`Skip Events on Re-Enable`
        | ``skip_catchup_event: <boolean>``
 
-     - Disabled by default. When option is enabled, missed trigger events 
-       while trigger is disabled are skipped when trigger is re-enabled. 
+     - Disabled by default. If enabled, any change events that occurred while 
+       this trigger was disabled will not be processed.
 
    * - | :guilabel:`Schedule Type`
        | ``config.schedule: <string>``
 
-     - Required. The :ref:`CRON expression <CRON-expressions>`
-       that Atlas App Services uses to determine when to fire the trigger.
+     - Required. You can select :guilabel:`Basic` or :guilabel:`Advanced`. A Basic 
+       schedule executes the Trigger periodically based on the interval you set, 
+       such as "every five minutes" or "every Monday".
 
-   * - | :guilabel:`Event Type`
-       | 
+       An Advanced schedule runs the Trigger based on the custom 
+       :ref:`CRON expression <CRON-expressions>` that you define. 
 
-     - Required. Choose whether event is controlled by a :guilabel:`Function` 
-       or :guilabel:`EventBridge` event. 
+   * - :guilabel:`Function`
 
-   * - | :guilabel:`Linked Function`
-       | ``function_name: <string>``
-
-     - Required. The name of the function that the trigger
-       executes whenever it fires.
+     - Within the :guilabel:`Function` section, you choose what action is taken when 
+       the trigger fires. You can choose to run a :ref:`function <functions>` or use 
+       :ref:`AWS EventBridge <aws-eventbridge>`. 
 
        .. note::
 
