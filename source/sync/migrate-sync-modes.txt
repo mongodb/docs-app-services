@@ -273,3 +273,28 @@ start over from the beginning with future migration attempts.
    
    This will revert your migration. You will need to migrate again if you 
    want to enable Flexible Sync in the future.
+
+Migrate Client App to Flexible Sync
+-----------------------------------
+
+After your app's backend has been migrated to Flexible Sync, we recommend
+that you also migrate your client app to Flexible Sync.
+
+We recommend removing all sync subscriptions and then creating new subscriptions
+for your data. This is the clearest way to sync data after a migration.
+
+.. TODO: Add links to SDKs for adding and removing subscriptions
+
+If you don't remove all subscriptions, the automatically-created subscriptions
+will remain, but you won't see them in your client code. This makes it harder
+to understand what data is available to your client app.
+
+.. Before migrating client app, but after backend is migrated
+
+Some things you need to be aware of when both of these states are true:
+- App backend has been migrated to Flexible Sync.
+- Client app still uses a Partition-Based Sync configuration.
+
+The client app automatically creates subscriptions for each Realm object model
+in your app's data model. These subscriptions are necessary for the
+Partition-Based client to sync with the Flexible Sync backend.
