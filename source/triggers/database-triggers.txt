@@ -136,13 +136,6 @@ Database Triggers have the following configuration options:
        many events occur at the same time.
 
        .. include:: /includes/trigger-event-ordering.rst
-  
-   * - :guilabel:`Linked Function`
-
-     - The name of the Atlas Function that the Trigger
-       executes whenever it fires. The Trigger passes the
-       :ref:`database event object <database-events>` that
-       caused it to fire as the only argument to this Function.
 
 Within the :guilabel:`Trigger Source Details` section, the following configuration 
 options are available:
@@ -184,7 +177,7 @@ options are available:
 
    * - :guilabel:`Full Document`
 
-     - If enabled, Update change events include the latest
+     - If enabled, **Update** change events include the latest
        :manual:`majority-committed </reference/read-concern-majority/>`
        version of the modified document *after* the change was applied in
        the ``fullDocument`` field.
@@ -203,7 +196,9 @@ options are available:
      - If enabled, change events include a copy of the modified document
        from immediately *before* the change was applied in the
        ``fullDocumentBeforeChange`` field. All change events except for
-       **Insert** events include the document preimage.
+       **Insert** events include the document preimage. Document preimages are 
+       only supported on Atlas clusters running MongoDB 4.4+ on a non-sharded 
+       cluster.
 
        .. tip:: Performance Optimization
 
@@ -268,11 +263,12 @@ following operation types:
    * - **Update**
      - Represents a change to an existing document in the collection.
 
+   * - **Delete**
+     - Represents a document deleted from the collection.
+
    * - **Replace**
      - Represents a new document that replaced a document in the collection.
 
-   * - **Delete**
-     - Represents a document deleted from the collection.
 
 Database change event objects have the following general form:
 
@@ -483,7 +479,7 @@ database, and when the Trigger finishes responding to that event. If
 latency is consistently large, you can reduce it with the following
 mitigations:
 
-- Optimize the Trigger's Linked Function to speed up execution.
+- Optimize the Trigger's linked Function to speed up execution.
 
 - If your Trigger uses Event Ordering, consider switching ordering off
   to reduce latency.
