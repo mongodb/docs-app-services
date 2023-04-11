@@ -15,8 +15,8 @@ Device Sync Production Checklist
 Best Practices
 --------------
 
-We recommend following these best
-practices to ensure optimal performance and a smooth user experience:
+We recommend following these best practices to ensure optimal
+performance and a smooth user experience:
 
 Avoid breaking changes
   Once you've enabled sync, there are limitations on how you can modify your
@@ -24,6 +24,18 @@ Avoid breaking changes
   object types such as changing a given property's type. If you want to make a
   breaking change you need to terminate and re-enable sync with the updated
   data models.
+
+Use a dedicated Atlas cluster
+  Production Apps should use, at minimum, an ``M10`` dedicated cluster.
+  Depending on your use case, you may need to upgrade to a higher tier
+  for optimal performance.
+
+  If you use a shared cluster, like an ``M0``, ``M2``, or ``M5``, you
+  may experience performance issues due to limited resources and
+  contention with other users. If you upgrade from a shared tier to a
+  dedicated tier after you go to production, you will need to
+  :ref:`terminate Device Sync <pause-or-terminate-sync>` and reset or
+  re-install all client applications.
 
 Define a client reset handler
   To recover from a serious error conditions where the client and server
@@ -48,13 +60,13 @@ Atlas oplog
   your synced cluster. For best results, keep 48 hours of oplog for a cluster
   using Device Sync.
 
-App Services Schema Data Consistency
+App Services schema data consistency
   If you create or modify Device Sync documents using another tool, such as the
   :binary:`~bin.mongo` shell or MongoDB Compass, be sure the documents validate 
   against the App Services Schema for the collection. For more information, see 
   :ref:`Unsynced Documents <unsynced-documents>`.
 
-Disable or Manage Built-In Schema Validation
+Disable or manage built-in schema validation
   A schema in App Services is **not the same** as :ref:`MongoDB's
   built-in schema validation <schema-validation-overview>`. Device Sync
   may interact with your cluster in a way that is incompatible with a
@@ -66,11 +78,11 @@ Disable or Manage Built-In Schema Validation
   see :ref:`App Services Schema vs Built-In Schema Validation
   <schema-app-services-vs-built-in>`.
 
-Production Load Testing
+Production load testing
   Measure performance and identify issues in a scaled-up production
   deployment with :ref:`sync-production-load-testing`.
 
-Write Transaction Size
+Write transaction size
   When writing large amounts of data, consider using multiple small
   write transactions instead of a single larger transaction. Depending
   on your Atlas cluster version and configuration, write transactions

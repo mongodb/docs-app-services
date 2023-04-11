@@ -2519,7 +2519,7 @@ paths:
       parameters:
         - name: co_id
           in: query
-          description: Return only log messages associated with the given request ID.
+          description: Return only log messages associated with the given request Correlation ID.
           schema:
             type: string
           required: false
@@ -2622,39 +2622,7 @@ paths:
                     maxItems: 100
                     description: At most 100 results per request.
                     items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        co_id:
-                          type: string
-                        domain_id:
-                          type: string
-                        app_id:
-                          type: string
-                          description: |-
-                            The ObjectID of your application.
-                            [The App Services API Project and Application IDs section](#section/Project-and-Application-IDs) demonstrates how to find this
-                            value.
-                        group_id:
-                          type: string
-                          description: |-
-                            An Atlas [Project/Group
-                            ID](https://docs.atlas.mongodb.com/tutorial/manage-projects/).
-                        request_url:
-                          type: string
-                        request_method:
-                          type: string
-                        started:
-                          type: string
-                        completed:
-                          type: string
-                        error:
-                          type: string
-                        error_code:
-                          type: string
-                        status:
-                          type: integer
+                      $ref: "#/components/schemas/AppLog"
                   nextEndDate:
                     type: string
                     description: |-
@@ -4030,7 +3998,11 @@ paths:
               schema:
                 type: array
                 items:
-                  "$ref": "#/components/schemas/Endpoint"
+                  allOf:
+                    - "$ref": "#/components/schemas/Endpoint"
+                    - properties:
+                        function_name:
+                          type: string
 
     post:
       tags:
@@ -4051,7 +4023,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Endpoint"
+                allOf:
+                  - "$ref": "#/components/schemas/Endpoint"
+                  - properties:
+                      function_name:
+                        type: string
 
   "/groups/{groupId}/apps/{appId}/endpoints/{endpointId}":
     parameters:
@@ -4071,7 +4047,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Endpoint"
+                allOf:
+                  - "$ref": "#/components/schemas/Endpoint"
+                  - properties:
+                      function_name:
+                        type: string
 
     put:
       tags:
@@ -4092,7 +4072,11 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Endpoint"
+                allOf:
+                  - "$ref": "#/components/schemas/Endpoint"
+                  - properties:
+                      function_name:
+                        type: string
 
     delete:
       tags:
@@ -5177,8 +5161,6 @@ components:
             - "DELETE"
             - "*"
         function_id:
-          type: string
-        function_name:
           type: string
         validation_method:
           type: string
@@ -7102,6 +7084,590 @@ components:
       type: string
       const: "condition_else"
       description: A value is not valid when a conditional expression evaluates to `false`.
+    AppLog:
+      oneOf:
+        - $ref: "#/components/schemas/Logs/API"
+        - $ref: "#/components/schemas/Logs/APIKey"
+        - $ref: "#/components/schemas/Logs/TriggerFailure"
+        - $ref: "#/components/schemas/Logs/DBEventTrigger"
+        - $ref: "#/components/schemas/Logs/AuthEventTrigger"
+        - $ref: "#/components/schemas/Logs/ScheduledEventTrigger"
+        - $ref: "#/components/schemas/Logs/Function"
+        - $ref: "#/components/schemas/Logs/ServiceFunction"
+        - $ref: "#/components/schemas/Logs/StreamFunction"
+        - $ref: "#/components/schemas/Logs/ServiceStreamFunction"
+        - $ref: "#/components/schemas/Logs/Auth"
+        - $ref: "#/components/schemas/Logs/IncomingWebhook"
+        - $ref: "#/components/schemas/Logs/Endpoint"
+        - $ref: "#/components/schemas/Logs/Push"
+        - $ref: "#/components/schemas/Logs/GraphQL"
+        - $ref: "#/components/schemas/Logs/SyncConnectionStart"
+        - $ref: "#/components/schemas/Logs/SyncConnectionEnd"
+        - $ref: "#/components/schemas/Logs/SyncSessionStart"
+        - $ref: "#/components/schemas/Logs/SyncSessionEnd"
+        - $ref: "#/components/schemas/Logs/SyncClientWrite"
+        - $ref: "#/components/schemas/Logs/SyncError"
+        - $ref: "#/components/schemas/Logs/SyncOther"
+        - $ref: "#/components/schemas/Logs/SchemaAdditiveChange"
+        - $ref: "#/components/schemas/Logs/SchemaGeneration"
+        - $ref: "#/components/schemas/Logs/SchemaValidation"
+        - $ref: "#/components/schemas/Logs/LogForwarder"
+    Logs:
+      Parts:
+        # Log parts are sets of fields that are re-used between multiple log types.
+        Messages:
+          properties:
+            messages:
+              type: array
+              description: |
+                A list of logs or other messages associated with the operation.
+              items:
+                type: string
+        RuleMetrics:
+          properties:
+            rule_metrics:
+              type: object
+              example: {
+                "namespaces_metrics": {
+                  "chat.messages": {
+                    "roles": {
+                      "sender": {
+                        "matching_documents": 12,
+                        "evaluated_fields": 4,
+                        "discarded_fields": 0
+                      }
+                    },
+                    "no_matching_role": 0
+                  }
+                }
+              }
+              properties:
+                namespaces_metrics:
+                  type: object
+                  additionalProperties:
+                    description: Metrics for a specific `database.collection` namespace.
+                    type: object
+                    properties:
+                      roles:
+                        type: object
+                        additionalProperties:
+                          type: object
+                          description: Metrics for a specific role.
+                          properties:
+                            matching_documents:
+                              type: number
+                            evaluated_fields:
+                              type: number
+                            discarded_fields:
+                              type: number
+                      no_matching_role:
+                        type: number
+        BilledMemory:
+          properties:
+            mem_time_usage:
+              type: number
+              description: |
+                The total billable memory used by the request.
+        SyncSession:
+          properties:
+            sync_query:
+              type: object
+              example: {
+                "Item": "(owner_id == \"641cb3d99e425c794ef69315\")"
+              }
+              description: |
+                The current subscription queries for this Device Sync
+                session. This object maps object type names to the query for
+                that type.
+            sync_session_metrics:
+              type: object
+              example: {
+                "uploads": 2,
+                "downloads": 6,
+                "downloaded_changesets": 4,
+                "downloaded_changesets_size": 5352,
+                "changesets": 2
+              }
+              description: |
+                Usage metrics for the current Device Sync session.
+        FunctionCall:
+          properties:
+            function_call_location:
+              type: string
+              example: "US-VA"
+              description: |
+                The global region where the function was executed.
+            function_call_provider_region:
+              type: string
+              example: "aws-us-east-1"
+              description: |
+                The cloud provider deployment region where the function was
+                executed.
+            function_call:
+              type: object
+              example: { "name": "data/v1/insertOne", "arguments": null }
+            function_id:
+              type: string
+              example: "63866254a4e9d232454e6334"
+            function_name:
+              type: string
+              example: "myFunction"
+        BaseLog:
+          type: object
+          description: Common fields shared by all log types.
+          properties:
+            _id:
+              type: string
+              example: "63922bf071bdce7b19e14e76"
+              description: |
+                A unique ID for the log entry.
+            co_id:
+              type: string
+              example: "63922bf071bdce7b19e14e75"
+              description: |
+                A correlation ID for the request that issued the logged
+                operation.
+            domain_id:
+              type: string
+              example: "60c8f69884b0a73d14bb634b"
+              description: |
+                The domain ID.
+            app_id:
+              type: string
+              example: "60c8f69884b0a73d14bb634a"
+              description: |
+                The App's internal client ID value.
+            group_id:
+              type: string
+              example: "5b2ec426970199272441a214"
+              description: |
+                The App's Atlas Project ID value.
+            request_url:
+              type: string
+              example: "/api/client/v2.0/app/test-for-now-vbwlr/auth/providers/anon-user/login"
+              description: |
+                The URL that the incoming request was sent to.
+            request_method:
+              type: string
+              example: "POST"
+              description: |
+                The HTTP method used by the incoming request.
+            started:
+              type: string
+              example: "2022-12-08T18:24:48.409Z"
+              description: |
+                An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) timestamp for the start of the logged operation.
+            completed:
+              type: string
+              example: "2022-12-08T18:24:48.41Z"
+              description: |
+                An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) timestamp for the completion of the logged operation.
+        TriggerLog:
+          allOf:
+            - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+            - $ref: "#/components/schemas/Logs/Parts/BilledMemory"
+            - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+            - $ref: "#/components/schemas/Logs/Parts/Messages"
+            - properties:
+                event_subscription_id:
+                  type: string
+                  example: "641ca0709e425c794edc7c6d"
+                  description: |
+                    The trigger's unique objectId hex.
+                event_subscription_name:
+                  type: string
+                  example: "myDatabaseTrigger"
+                  description: |
+                    The trigger's name.
+        ClientLog:
+          properties:
+            user_id:
+              type: string
+              example: "63922890d508542b5ae1f7fa"
+              description: |
+                The user account ID of the user that initiated the logged operation.
+            remote_ip_address:
+              type: string
+              example: "66.232.252.246"
+              description: |
+                The IP address that the logged operation originated from.
+            status:
+              type: number
+              example: 200
+              description: |
+                The HTTP status code returned in the operation response.
+            error:
+              type: string
+              example: "invalid API key"
+              description: |
+                If a runtime error occurred in the logged operation,
+                this is a message that describes the issue.
+            error_code:
+              type: string
+              example: "AuthError"
+              description: |
+                If a runtime error occurred in the logged operation,
+                this is the error's short code.
+            platform:
+              type: string
+              example: "chrome"
+              description: |
+                The name of the platform that the client was running on.
+            platform_version:
+              example: "111.0.0"
+              description: |
+                The version of the platform that the client was running on.
+            sdk_name:
+              example: "Realm Swift"
+              description: |
+                The name of the Realm SDK used to make the request.
+            sdk_version:
+              example: "2.0.0"
+              description: |
+                The version number of the Realm SDK used to make the request.
+      API:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - title: API
+            properties:
+              type:
+                const:  "API"
+      APIKey:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - title: API_KEY
+            properties:
+              type:
+                const:  "API_KEY"
+      TriggerFailure:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - title: "TRIGGER_FAILURE"
+            properties:
+              type:
+                const: "TRIGGER_FAILURE"
+              event_subscription_id:
+                example: "641ca0b87649edd250f7536c"
+              event_subscription_name:
+                example: "myScheduledTrigger"
+              error:
+                type: string
+                description: An error message that describes the failure.
+      DBEventTrigger:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/TriggerLog"
+          - title: "DB_TRIGGER"
+            properties:
+              type:
+                const: "DB_TRIGGER"
+      AuthEventTrigger:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/TriggerLog"
+          - title: "AUTH_TRIGGER"
+            properties:
+              type:
+                const: "AUTH_TRIGGER"
+      ScheduledEventTrigger:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/TriggerLog"
+          - title: "SCHEDULED_TRIGGER"
+            properties:
+              type:
+                const: "SCHEDULED_TRIGGER"
+      Function:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/BilledMemory"
+          - title: "FUNCTION"
+            properties:
+              type:
+                const: "FUNCTION"
+      ServiceFunction:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - title: "SERVICE_FUNCTION"
+            properties:
+              type:
+                const: "SERVICE_FUNCTION"
+      StreamFunction:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - title: "STREAM_FUNCTION"
+            properties:
+              type:
+                const: "STREAM_FUNCTION"
+      ServiceStreamFunction:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - title: "SERVICE_STREAM_FUNCTION"
+            properties:
+              type:
+                const: "SERVICE_STREAM_FUNCTION"
+      Auth:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - title: AUTH
+            properties:
+              type:
+                const: "AUTH"
+              auth_event:
+                type: object
+                example: { "type": "login", "provider": "api-key" }
+                properties:
+                  type:
+                    type: string
+                    example: login
+                    description: The requested authentication operation.
+                  provider:
+                    allOf:
+                      - $ref: "#/components/schemas/ProviderType"
+                      - description: The authentication provider used for the authentication operation.
+                        example: api-key
+      IncomingWebhook:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/BilledMemory"
+          - title: "WEBHOOK"
+            properties:
+              type:
+                const: "WEBHOOK"
+      Endpoint:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/BilledMemory"
+          - title: "ENDPOINT"
+            properties:
+              type:
+                const: "ENDPOINT"
+              endpoint_id:
+                type: string
+                example: "63866254a4e9d232454f6485"
+                description: |
+                  The endpoint's unique objectId hex.
+              endpoint_route:
+                type: string
+                example: "/data/v1/action/insertOne"
+                description: |
+                  The endpoint route. Append this to your App's Data API base
+                  URL to construct the endpoint URL.
+              endpoint_args:
+                type: string
+                description: |
+                  The endpoint request's HTTP headers, parameters, and body serialized to EJSON.
+                example: {
+                  "query": {},
+                  "headers": {
+                    "Accept": ["application/json"],
+                    "Api-key": [
+                      "NmYQlv7Eisqe9RjrkqFiBjgSii3wGLXWedDz4drbkQpzGkA93ZZcIMTUEIOqwCNN"
+                    ]
+                  },
+                  "body": {
+                      "$binary": {
+                          "base64": "eyJjb2xsZWN0aW9uIjoiSXRlbSIsImRhdGFTb3VyY2UiOiJtb25nb2RiLWF0bGFzIiwiZGF0YWJhc2UiOiJ0b2RvIiwiZmlsdGVyIjp7Il9pZCI6eyIkb2lkIjoiNjQxMTQ1OTgzYjAwN2RjYWJjZTkxNWFmIn19fQ==",
+                          "subType": "00"
+                      }
+                  }
+                }
+      Push:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - title: "PUSH"
+            properties:
+              type:
+                const: "PUSH"
+      GraphQL:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/BilledMemory"
+          - $ref: "#/components/schemas/Logs/Parts/RuleMetrics"
+          - title: "GRAPHQL"
+            properties:
+              type:
+                const: "GRAPHQL"
+              graphql_query:
+                type: string
+                example: "query FetchAllItems {\n  items {\n    _id\n    owner_id\n    isComplete\n    summary\n    __typename\n  }\n}"
+                description: |
+                  The raw requested GraphQL query or mutation.
+      SyncConnectionStart:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - title: "SYNC_CONNECTION_START"
+            properties:
+              type:
+                const: "SYNC_CONNECTION_START"
+      SyncConnectionEnd:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - title: "SYNC_CONNECTION_END"
+            properties:
+              type:
+                const: "SYNC_CONNECTION_END"
+      SyncSessionStart:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/SyncSession"
+          - title: "SYNC_SESSION_START"
+            properties:
+              type:
+                const: "SYNC_SESSION_START"
+      SyncSessionEnd:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - $ref: "#/components/schemas/Logs/Parts/SyncSession"
+          - title: "SYNC_SESSION_END"
+            properties:
+              type:
+                const: "SYNC_SESSION_END"
+      SyncClientWrite:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - $ref: "#/components/schemas/Logs/Parts/SyncSession"
+          - title: "SYNC_CLIENT_WRITE"
+            properties:
+              type:
+                const: "SYNC_CLIENT_WRITE"
+      SyncError:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - title: "SYNC_ERROR"
+            properties:
+              type:
+                const: "SYNC_ERROR"
+      SyncOther:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - $ref: "#/components/schemas/Logs/Parts/SyncSession"
+          - title: "SYNC_OTHER"
+            properties:
+              type:
+                const: "SYNC_OTHER"
+      SchemaAdditiveChange:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - $ref: "#/components/schemas/Logs/Parts/RuleMetrics"
+          - title: "SCHEMA_ADDITIVE_CHANGE"
+            properties:
+              type:
+                const: "SCHEMA_ADDITIVE_CHANGE"
+      SchemaGeneration:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/RuleMetrics"
+          - title: "SCHEMA_GENERATION"
+            properties:
+              type:
+                const: "SCHEMA_GENERATION"
+              service_id:
+                type: string
+                example: "63ee5785bbfa4b9457f8509e"
+                description: |
+                  The ID of the data source that the schema was generated from.
+      SchemaValidation:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/ClientLog"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - $ref: "#/components/schemas/Logs/Parts/RuleMetrics"
+          - title: "SCHEMA_VALIDATION"
+            properties:
+              type:
+                const: "SCHEMA_VALIDATION"
+              service_id:
+                type: string
+                example: "63ee5785bbfa4b9457f8509e"
+                description: |
+                  The ID of the data source that was validated against the schema.
+      LogForwarder:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/BaseLog"
+          - $ref: "#/components/schemas/Logs/Parts/FunctionCall"
+          - $ref: "#/components/schemas/Logs/Parts/Messages"
+          - $ref: "#/components/schemas/Logs/Parts/BilledMemory"
+          - title: "LOG_FORWARDER"
+            properties:
+              type:
+                const: "LOG_FORWARDER"
+              event_subscription_id:
+                type: string
+                example: "641caa28ce889d60d32b9fe2"
+                description: |
+                  The underlying log event subscription's unique objectId hex.
+              event_subscription_name:
+                type: string
+                example: "toMongo_event_subscription"
+                description: |
+                  The underlying log event subscription's name.
+              log_forwarder_id:
+                type: string
+                example: "641caa28ce889d60d32b9fe2"
+                description: |
+                  The log forwarder's unique objectId hex.
+              log_forwarder_name:
+                type: string
+                example: "toMongo"
+                description: |
+                  The log forwarder's name.
+              failed_to_forward_log_ids:
+                type: array
+                items:
+                  type: string
+                description: |
+                  An array of log ``_id`` values for any logs that were not successfully forwarded.
+              data_source_id:
+                type: string
+                example: "63ee5785bbfa4b9457f8509e"
+                description: |
+                  The ID of the forwarded log data source.
+              data_source_name:
+                type: string
+                example: "mongodb-atlas"
+                description: |
+                  The name of the forwarded log data source.
+              data_source_namespace:
+                type: string
+                example: "myApp.logs"
+                description: |
+                  The `database.collection` namespace of the forwarded log collection.
+
+
   securitySchemes:
     tokenAuth:
       type: http

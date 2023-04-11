@@ -22,22 +22,8 @@ document in a linked cluster by calling the ``insertOne`` endpoint:
 
 .. io-code-block::
    
-   .. input::
+   .. input:: /data-api/snippets/generated-endpoints.snippet.hello-world.sh
       :language: bash
-      
-      curl --request POST \
-        'https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne' \
-        --header 'Content-Type: application/json' \
-        --header 'Accept: application/json' \
-        --header 'apiKey: TpqAKQgvhZE4r6AOzpVydJ9a3tB1BLMrgDzLlBLbihKNDzSJWTAHMVbsMoIOpnM6' \
-        --data-raw '{
-            "dataSource": "mongodb-atlas",
-            "database": "learn-data-api",
-            "collection": "hello",
-            "document": {
-              "text": "Hello from the Data API!",
-            }
-        }'
    
    .. output::
       :language: json
@@ -742,20 +728,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/findOne' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": {
-           "text": "Do the dishes"
-         }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.findOne.sh
 
 Request Body
 ````````````
@@ -828,22 +801,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/find' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": {
-           "status": "complete"
-         },
-         "sort": { "completedAt": 1 },
-         "limit": 10
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.find.sh
 
 Request Body
 ````````````
@@ -953,21 +911,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "document": {
-           "status": "open",
-           "text": "Do the dishes"
-         }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.insertOne.sh
 
 Request Body
 ````````````
@@ -1031,21 +975,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertMany' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "documents": [
-           { "status": "open", "text": "Mop the floor" },
-           { "status": "open", "text": "Clean the windows" }
-         ]
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.insertMany.sh
 
 Request Body
 ````````````
@@ -1097,24 +1027,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/updateOne' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": { "_id": { "$oid": "6193ebd53821e5ec5b4f6c3b" } },
-         "update": {
-             "$set": {
-                 "status": "complete",
-                 "completedAt": { "$date": { "$numberLong": "1637083942954" } }
-             }
-         }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.updateOne.sh
 
 Request Body
 ````````````
@@ -1195,24 +1108,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/updateMany' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": { "status": "open" },
-         "update": {
-             "$set": {
-                 "status": "complete",
-                 "completedAt": { "$date": { "$numberLong": "1637083942954" } }
-             }
-         }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.updateMany.sh
 
 Request Body
 ````````````
@@ -1293,22 +1189,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/replaceOne' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": { "text": "Call Jessica" },
-         "replacement": {
-           "status": "open",
-           "text": "Call Amy"
-         }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.replaceOne.sh
 
 Request Body
 ````````````
@@ -1388,18 +1269,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/deleteOne' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": { "_id": { "$oid": "6193ebd53821e5ec5b4f6c3b" } }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.deleteOne.sh
 
 Request Body
 ````````````
@@ -1452,18 +1322,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/deleteMany' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "filter": { "status": "complete" }
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.deleteMany.sh
 
 Request Body
 ````````````
@@ -1516,27 +1375,7 @@ Endpoint
 Example
 ```````
 
-.. code-block:: sh
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/aggregate' \
-     --header 'Content-Type: application/json' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "mongodb-atlas",
-         "database": "learn-data-api",
-         "collection": "tasks",
-         "pipeline": [
-           {
-             "$group": {
-               "_id": "$status",
-               "count": { "$sum": 1 },
-               "text": { "$push": "$text" }
-             }
-           },
-           { "$sort": { "count": 1 } }
-         ]
-     }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.aggregate.sh
 
 Request Body
 ````````````

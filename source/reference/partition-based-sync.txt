@@ -120,10 +120,8 @@ At a high level:
 .. figure:: /images/partitioning.png
    :alt: A diagram that explains partitioning using groups of shapes and colors. MongoDB collections group by shape (equivalent to object types) while realms group by color (equivalent to partition value).
    
-   Partitions shape data in an Atlas
-   <https://www.mongodb.com/realm?tck=realm-docs#atlas-form-container>`_
-   cluster. Each shape represents an object type. Partitions are determined by
-   each shape's ``color``: red, green, or blue.
+   Partitions shape data in an Atlas cluster. Each shape represents an object type. 
+   Partitions are determined by each shape's ``color``: red, green, or blue.
 
 
 .. _partition-key:
@@ -278,7 +276,7 @@ Procedure
          .. step:: Navigate to the Sync Configuration Screen
 
             To define Device Sync rules and enable Device Sync for your application, navigate to the
-            :guilabel:`Sync` configuration screen through the left navigation menu.
+            :guilabel:`Device Sync` configuration screen through the left navigation menu.
 
             .. note:: Sync Rules Cannot Change
 
@@ -333,10 +331,6 @@ Procedure
             Once you've determined how to decide a user's read and write permissions for a
             given partition, define the corresponding JSON expressions in the
             :guilabel:`Read` and :guilabel:`Write` inputs.
-
-            .. figure:: /images/define-sync-rules-permissions.png
-               :width: 750px
-               :alt: The partition read and write expression inputs
 
          .. step:: Check Default Advanced Configuration Behaviors
 
@@ -1538,13 +1532,11 @@ out of their bucket range.
 
 
 
-Asymmetric Sync?
-----------------
+Data Ingest
+-----------
 
-:ref:`Asymmetric Sync <optimize-asymmetric-sync>` is a feature of Flexible Sync
+:ref:`Data Ingest <optimize-data-ingest>` is a feature of Flexible Sync
 and cannot be enabled on apps that use Partition-Based Sync.
-
-
 
 .. _partition-based-sync-config-object:
 
@@ -1686,3 +1678,48 @@ Permissions. Making changes to your Device Sync configuration while
 terminating and re-enabling Device Sync will trigger a client reset. To learn
 more about handling client resets, read the :ref:`client reset <client-resets>`
 documentation.
+
+.. _backend-compaction:
+
+Backend Compaction
+------------------
+
+Atlas Device Sync uses space in your app's synced Atlas cluster to store metadata
+for synchronization. This includes a history of changes to each realm.
+Atlas App Services minimizes this space usage in your Atlas cluster.
+Minimizing metadata is necessary to reduce the time and data needed for sync.
+
+Apps using Partition-Based Sync perform **backend compaction** to reduce the amount
+of metadata stored in an Atlas Cluster. Backend compaction is an  maintenance process
+that automatically runs for all Apps using Partition-Based Sync.
+Using compaction, the backend optimizes a realm's history by removing unneeded
+changeset metadata. The process removes any instruction whose effect is later
+overwritten by a newer instruction.
+
+.. example::
+
+   Consider the following realm history:
+
+   .. code-block::
+      :caption: Original History
+
+      CREATE table1.object1
+      UPDATE table1.object1.x = 4
+      UPDATE table1.object1.x = 10
+      UPDATE table1.object1.x = 42
+
+   The following history would also converge to the same state, but
+   without unneeded interim changes:
+
+   .. code-block::
+      :caption: Compacted History
+
+      CREATE table1.object1
+      UPDATE table1.object1.x = 42
+
+.. note::
+
+   :ref:`Partition Based Sync <partition-based-sync>` uses backend compaction
+   to reduce Device Sync history stored in Atlas.
+   Flexible Sync achieves this with :ref:`trimming <trimming>` and 
+   :ref:`client maximum offline time <client-maximum-offline-time>`.

@@ -40,6 +40,12 @@ out:
    
    An iOS app that uses Apple ID authentication must target iOS 13 or newer.
 
+The following diagram shows the OAuth logic flow:
+
+.. figure:: /images/auth-oauth-flow.png
+    :alt: OAuth flow diagram
+    :width: 350px
+
 .. _apple-auth-prerequisites:
 
 What You'll Need
@@ -127,9 +133,6 @@ To use Sign in with Apple exclusively with either a web or a mobile application,
                app as the :guilabel:`Primary App ID` and then click
                :guilabel:`Save`.
 
-               .. figure:: /images/apple-auth-configure-key.png
-                  :alt: The Configure Key page in the Apple Developer Portal
-
             #. Click :guilabel:`Continue` to review your key configuration. When
                you're sure that you've configured the key correctly, click
                :guilabel:`Register`.
@@ -156,13 +159,10 @@ To use Sign in with Apple exclusively with either a web or a mobile application,
               as the ``client_id`` in the script below.
 
             - The :guilabel:`Key ID` of the key that you created and the ``.p8``
-               file that contains the key.
+              file that contains the key.
 
             - Your Apple Team ID. You can find this in the top right of the Apple
-               Developer Portal.
-
-            .. figure:: /images/apple-team-id.png
-               :alt: An Apple team ID in the Apple Developer Portal
+              Developer Portal.
 
             Once you've confirmed that you have all the required information, you can use
             a script to generate the JWT. You may define your own script or use the

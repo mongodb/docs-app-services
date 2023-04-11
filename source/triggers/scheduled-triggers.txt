@@ -28,32 +28,17 @@ Create a Scheduled Trigger
       
       To create a scheduled Trigger in the Atlas App Services UI:
       
-      1. Click :guilabel:`Triggers` under :guilabel:`MongoDB Cluster` in the
+      1. Click :guilabel:`Triggers` under :guilabel:`Build` in the
          left navigation menu.
       
-      2. Select :guilabel:`Scheduled Triggers` from the Trigger type dropdown
-         menu.
+      2. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
       
-      3. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
-      
-      4. Enter :ref:`configuration values <scheduled-trigger-configuration>` for
-         the Trigger. You can configure two types of Trigger schedules:
-         :guilabel:`Basic` or :guilabel:`Advanced`.
-      
-         - A :guilabel:`Basic` schedule executes the Trigger periodically based
-           on a single unit of time and an interval, such as "every five
-           minutes" or "every Monday".
-      
-         - An :guilabel:`Advanced` schedule executes the Trigger based on a
-           custom :ref:`CRON expression <CRON-expressions>` that you
-           define.
-      
-      5. Click :guilabel:`Save`.
+      3. Select :guilabel:`Scheduled` for the :guilabel:`Trigger Type`.
       
       .. figure:: /images/trigger-example-scheduled.png
          :figwidth: 750px
          :alt: Creating a Trigger in the App Services UI.
-   
+
    .. tab::
       :tabid: cli
       
@@ -109,31 +94,45 @@ Scheduled Triggers have the following configuration options:
    * - | :guilabel:`Trigger Type`
        | ``type: <string>``
 
-     - Required. The type of the Trigger.
-       
-       For scheduled Triggers, this value should be set to ``SCHEDULED``.
+     - Select :guilabel:`Scheduled`.
 
-   * - | :guilabel:`Trigger Name`
+   * - | :guilabel:`Name`
        | ``name: <string>``
 
-     - Required. The name of the Trigger.
+     - The name of the trigger.
 
-   * - | :guilabel:`Linked Function`
+   * - | :guilabel:`Enabled`
+       | ``disabled: <boolean>``
+
+     - Enabled by default. Used to enable or disable the trigger. 
+   
+   * - | :guilabel:`Skip Events on Re-Enable`
+       | ``skip_catchup_event: <boolean>``
+
+     - Disabled by default. If enabled, any change events that occurred while 
+       this trigger was disabled will not be processed.
+
+   * - | :guilabel:`Schedule Type`
+       | ``config.schedule: <string>``
+
+     - Required. You can select :guilabel:`Basic` or :guilabel:`Advanced`. A Basic 
+       schedule executes the Trigger periodically based on the interval you set, 
+       such as "every five minutes" or "every Monday".
+
+       An Advanced schedule runs the Trigger based on the custom 
+       :ref:`CRON expression <CRON-expressions>` that you define. 
+
+   * - | :guilabel:`Function`
        | ``function_name: <string>``
 
-     - Required. The name of the Function that the Trigger
-       executes whenever it fires.
+     - Within the :guilabel:`Function` section, you choose what action is taken when 
+       the trigger fires. You can choose to run a :ref:`function <functions>` or use 
+       :ref:`AWS EventBridge <aws-eventbridge>`. 
 
        .. note::
 
-          A scheduled Trigger does not pass any arguments to its linked
+          A Scheduled Trigger does not pass any arguments to its linked
           Function.
-
-   * - | :guilabel:`Schedule`
-       | ``config.schedule: <string>``
-
-     - Required. The :ref:`CRON expression <CRON-expressions>`
-       that Atlas App Services uses to determine when to fire the Trigger.
 
 .. _CRON-expressions:
 

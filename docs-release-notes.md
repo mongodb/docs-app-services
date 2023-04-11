@@ -1,3 +1,124 @@
+# April 07, 2023
+
+## Device Sync
+
+- Pause or Terminate Sync: Add link to Flutter SDK Re-Enable Sync section.
+
+## Authentication
+
+- Email/Password Authentication: Document additional default parameter for password reset functions.
+
+## Data API
+
+- Atlas Data API: Add unit-tested Data API examples
+  - Add a GitHub Action to automatically run the tests and `bluehawk check`
+
+## Users
+
+- Define Custom User Metadata: Add a link to the new Kotlin SDK Custom User Data page.
+
+## Triggers
+
+- Scheduled Triggers: Update Scheduled Triggers documentation to add information
+  about skip events.
+
+## Other
+
+- Pages throughout the docs set: Review all images and update those that were outdated.
+- Pages throughout the docs set: Rename Asymmetric Sync to Data Ingest.
+
+# March 31, 2023
+
+## Device Sync
+
+- Configure and Update Your Data Model/Update a Data Model: Remove inapplicable SDK schema migration info from page
+- Go to Production with Sync
+  - Production Checklist: Recommend minimum `M10` dedicated cluster
+  - Optimize Sync Atlas Usage: Remove Partition-Based Sync Backend Compaction details from page
+- Tiered Device Sync Guide:
+  - Update the Tiered Sync package URL
+  - Rewrite procedures for a more generic context
+
+## Functions
+
+- External Dependencies: Update `--include-dependencies` flag to `--include-node-modules`
+
+## Reference
+
+- App Services Admin API
+  - Endpoints: Remove `function_name` from the Endpoint request body schema
+  - Logs: Add schemas with descriptions for all of the App Services Logs types
+- Realm CLI: Remove Realm CLI v1 Reference from Table of Contents, add a redirect to a new orphaned page for legacy v1 users
+- Service Limitations: Raise request timeout from 210 to 240 seconds
+- Template Apps: Rename `Xamarin` to `MAUI` in the lists of template apps, add details about `realm-cli` to the IDs list
+- Partition-Based Sync: Move Backend Compaction details from "Optimize Sync Atlas Usage" page
+
+# March 24, 2023
+
+## Device Sync
+
+- Tiered Device Sync Guide: New unlisted page with information on running Tiered Sync, and details about connecting to a Tiered Sync server from a client
+
+## GraphQL API
+
+- GraphQL Types, Resolvers, and Operators: Add a section with code blocks showing how to implement pagination with `query`, `limit`, and `sortBy` operators
+
+## Authenticate & Manage Users
+
+- Landing Page: Add a diagram showing the interaction between client app, App Services App, and authentication providers when authenticating users
+- Authentication Providers
+  - Email/Password Authentication
+    - Add diagrams for email/password login flow, registering an email/password user, and password reset flow
+    - Expand and clarify password reset details
+  - Custom Function Authentication: Add a diagram for custom function login flow
+  - API Key Authentication: Add a diagram for API key login flow, clarify details, add information about the 20 API key limit per user
+  - Facebook Authentication: Add a diagram for OAuth login flow
+  - Google Authentication: Add a diagram for OAuth login flow
+  - Apple ID Authentication: Add a diagram for OAuth login flow
+
+## Reference
+
+- Partition-Based Sync Mode: Remove unnecessary (malformed) link
+
+## Other
+
+- Pages throughout the docs set: Where the Realm SDKs are listed as tabs, change them to a list of bullets to address formatting issues
+
+# March 17, 2023
+
+## Get Started
+
+- Device Sync Tutorial - Flutter: Small clarifications and improved instructions
+
+## Device Sync
+
+- Configure Sync
+  - Enable Atlas Device Sync: Add a Tip callout about the new behavior that Sync pauses after 30d of inactivity
+  - Pause or Terminate Sync: Add a line about the new behavior that Sync pauses after 30d of inactivity
+- Go to Production with Sync/Optimize Sync Atlas Usage: Clarify language around trimming vs. backend compaction, remove unnecessary content
+
+## Triggers
+
+- Database Triggers: Clarify `$match` example, add test, set up GitHub Workflow to run Function tests when we add or change tests
+
+## Authenticate & Manage Users
+
+- Define Custom User Metadata: Update the App Services UI procedure with minor UI label changes
+- Manage User Sessions: Add an App Services UI procedure to configure user session refresh token expiration
+
+## Secure Your App
+
+- Configure Network Security: Rename "Communicate from the Client to the Sync Server" section to "DNS Filtering" and improve the description
+
+## Reference
+
+- App Metrics: Update GraphQL metric naming to a consistent naming convention: `GRAPHQL_<METRIC>`
+- App Services Admin API: Document the new endpoint to change an email/password user's email address
+- Billing: Add a line about the new behavior that Sync pauses after 30d of inactivity
+- Service Limitations
+  - Move the existing info about concurrent Sync workloads into a new "Device Sync" section of the page
+  - Add a section about Sync pausing due to inactivity, with a link to how to resume it
+
 # March 10, 2023
 
 ## Device Sync
