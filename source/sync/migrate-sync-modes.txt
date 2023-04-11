@@ -91,10 +91,11 @@ stage in the App Services UI.
    :guilabel:`Manage Sync Migration` appears on the Device Sync page if the 
    migration hasn't been committed or reverted.
 
-After your backend is migrated to Flexible Sync, your app's backend
-automatically injects a ``partitionKey`` field into every document the
-Partition-Based Sync client creates and sets its value to your sync
-configuration's ``partitionValue``.
+After your backend is migrated to Flexible Sync, the backend automatically
+injects a ``partitionKey`` field into every document the Partition-Based Sync
+client creates and sets its value to your sync configuration's
+``partitionValue``. The injected ``partitionKey`` field does not sync back to
+client devices. This means that clients won't be able to read this field.
 
 The Partition-Based Sync client automatically creates sync subscriptions for 
 each document where ``partitionKey == partitionValue``. This will continue
@@ -325,9 +326,3 @@ subscriptions.
 If you don't remove all subscriptions, the automatically-created subscriptions
 will remain, but you won't see them in your client code. This makes it harder
 to understand what data is available to your client app.
-
-Important Changes After Migrating Your Client
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-- The client-injected ``partitionKey`` field does not sync back to client devices.
-  This means that clients won't be able to read this field.
