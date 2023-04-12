@@ -677,7 +677,7 @@ components:
         A registered email/password user's email address. Must be used
         in conjunction with the ``password`` header.
 
-        **Example:** `Email: someone@example.com`
+        **Example:** `email: someone@example.com`
     Password:
       type: apiKey
       in: header
@@ -686,21 +686,23 @@ components:
         A registered email/password user's password. Must be used in
         conjunction with the ``email`` header.
 
-        **Example:** `Password: Pa55w0rd!`
+        **Example:** `password: Pa55w0rd!`
     ApiKey:
       type: apiKey
       in: header
-      name: api-key
+      name: apiKey
       description: |-
         A server or user API key.
 
-        **Example:** `Api-Key: `
+        **Example:** `apiKey: A1g70fN7oKMNCnDRNeyou20Wd24rD6QNmXWYMPwz0SnDRQRQSYwGPdC3y44aJN3H`
     CustomJwt:
       type: apiKey
       in: header
       name: jwtTokenString
       description: |-
         A custom JSON web token string that the App is configured to support.
+
+        **Example:** `jwtTokenString: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteWFwcC1hYmNkZSIsInN1YiI6IjY0MzZlMDZiZGU1YzQ2ZGQ5MTQwZWFlOSIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.Y_6JR4ocrqoCEY3yOZlEqhxtAsSpvlzrXc9uvTSJA0k`
   responses:
     BadRequestError:
       description: The request was malformed or incomplete.
