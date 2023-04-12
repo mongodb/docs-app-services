@@ -3,10 +3,8 @@ info:
   version: 1.0.0
   title: MongoDB Atlas Data API
   description: An API to read, write, and aggregate data in MongoDB Atlas
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
 security:
+  - AccessToken: []
   - Email: []
     Password: []
   - ApiKey: []
@@ -324,9 +322,15 @@ paths:
                 dataSource: "mongodb-atlas"
                 database: "todo"
                 collection: "tasks"
-                filter: {} # todo
-                update: {} # todo
-                upsert: true
+                filter: {
+                  "_id": { "$oid":"642f1bb5cee4111898828bf6" }
+                }
+                update: {
+                  "$set": {
+                    "status": "complete"
+                  }
+                }
+                upsert: false
           application/ejson:
             schema:
               allOf:
@@ -335,9 +339,15 @@ paths:
                 dataSource: "mongodb-atlas"
                 database: "todo"
                 collection: "tasks"
-                filter: {} # todo
-                update: {} # todo
-                upsert: true
+                filter: {
+                  "_id": { "$oid":"642f1bb5cee4111898828bf6" }
+                }
+                update: {
+                  "$set": {
+                    "status": "complete"
+                  }
+                }
+                upsert: false
       responses:
         '200':
           description: Updated
@@ -372,7 +382,7 @@ paths:
         '401':
           description: Unauthorized
           $ref: "#/components/responses/UnauthorizedRequestError"
-  
+
   /action/updateMany:
     post:
       operationId: updateMany
@@ -384,24 +394,34 @@ paths:
             schema:
               allOf:
                 - $ref: "#/components/schemas/UpdateRequestBody"
-              example: {
-                dataSource: "mongodb-atlas",
-                database: "todo",
-                collection: "tasks",
-                filter: {}, # todo
-                update: {} # todo
-              }
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {
+                  "status": "open"
+                }
+                update: {
+                  "$set": {
+                    "status": "complete"
+                  }
+                }
           application/ejson:
             schema:
               allOf:
                 - $ref: "#/components/schemas/UpdateRequestBody"
-              example: {
-                dataSource: "mongodb-atlas",
-                database: "todo",
-                collection: "tasks",
-                filter: {}, # todo
-                update: {} # todo
-              }
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {
+                  "status": "open"
+                }
+                update: {
+                  "$set": {
+                    "status": "complete"
+                  }
+                }
       responses:
         '200':
           description: Updated
@@ -436,35 +456,37 @@ paths:
         '401':
           description: Unauthorized
           $ref: "#/components/responses/UnauthorizedRequestError"
-  
+
   /action/deleteOne:
     post:
       operationId: deleteOne
       summary: Delete One Document
       description: Delete a single document that matches a query.
-      requestBody: 
+      requestBody:
         content:
           application/json:
             schema:
               allOf:
                 - $ref: "#/components/schemas/DeleteRequestBody"
-              example: {
-                dataSource: "mongodb-atlas",
-                database: "todo",
-                collection: "tasks",
-                filter: {}, # todo
-              }
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {
+                  "text": "Do the dishes"
+                }
           application/ejson:
             schema:
               allOf:
                 - $ref: "#/components/schemas/DeleteRequestBody"
-              example: {
-                dataSource: "mongodb-atlas",
-                database: "todo",
-                collection: "tasks",
-                filter: {}, # todo
-              }
-      responses: 
+              example:
+                dataSource: "mongodb-atlas"
+                database: "todo"
+                collection: "tasks"
+                filter: {
+                  "text": "Do the dishes"
+                }
+      responses:
         "200":
           description: Deleted
           content:
@@ -498,7 +520,7 @@ paths:
       operationId: deleteMany
       summary: Delete Documents
       description: Delete multiple documents that match a query.
-      requestBody: 
+      requestBody:
         content:
           application/json:
             schema:
@@ -508,7 +530,9 @@ paths:
                 dataSource: "mongodb-atlas",
                 database: "todo",
                 collection: "tasks",
-                filter: {}, # todo
+                filter: {
+                  "status": "complete"
+                }
               }
           application/ejson:
             schema:
@@ -518,9 +542,11 @@ paths:
                 dataSource: "mongodb-atlas",
                 database: "todo",
                 collection: "tasks",
-                filter: {}, # todo
+                filter: {
+                  "status": "complete"
+                }
               }
-      responses: 
+      responses:
         "200":
           description: Deleted
           content:
@@ -553,37 +579,77 @@ paths:
     post:
       operationId: aggregate
       summary: Aggregate Documents
-      description: todo
-      requestBody: 
+      description: Run an aggregation pipeline.
+      requestBody:
         content:
           application/json:
-            schema: 
-              allOf: 
+            schema:
+              allOf:
                 - "$ref": "#/components/schemas/AggregateRequestBody"
-              example:
-                foo: todo
+              example: [
+                {
+                  $groupBy: {
+                    "_id": "$status",
+                    "count": { $sum: 1 },
+                    "tasks": { $push: "$text" }
+                  }
+                },
+                {
+                  $sort: { "count": 1 }
+                }
+              ]
           application/ejson:
-            schema: 
-              allOf: 
+            schema:
+              allOf:
                 - "$ref": "#/components/schemas/AggregateRequestBody"
-              example:
-                foo: todo
-      responses: 
-        "200": 
+              example: [
+                {
+                  $groupBy: {
+                    "_id": "$status",
+                    "count": { $sum: 1 },
+                    "tasks": { $push: "$text" }
+                  }
+                },
+                {
+                  $sort: { "count": 1 }
+                }
+              ]
+      responses:
+        "200":
           description: Success
           content:
             application/json:
-              schema: 
-                allOf: 
+              schema:
+                allOf:
                   - "$ref": "#/components/schemas/AggregateResponseBody"
-                example:
-                  foo: todo
+                example: [
+                  {
+                    $groupBy: {
+                      "_id": "$status",
+                      "count": { $sum: 1 },
+                      "tasks": { $push: "$text" }
+                    }
+                  },
+                  {
+                    $sort: { "count": 1 }
+                  }
+                ]
             application/ejson:
-              schema: 
-                allOf: 
+              schema:
+                allOf:
                   - "$ref": "#/components/schemas/AggregateResponseBody"
-                example:
-                  foo: todo
+                example: [
+                  {
+                    $groupBy: {
+                      "_id": "$status",
+                      "count": { $sum: 1 },
+                      "tasks": { $push: "$text" }
+                    }
+                  },
+                  {
+                    $sort: { "count": 1 }
+                  }
+                ]
         '400':
           description: Bad Request
           $ref: "#/components/responses/BadRequestError"
@@ -593,36 +659,49 @@ paths:
 
 components:
   securitySchemes:
+    AccessToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |-
+        A [user access
+        token](https://www.mongodb.com/docs/atlas/app-services/users/sessions/)
+        specified as a Bearer token in the Authorization header.
+
+        **Example:** `Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
     Email:
       type: apiKey
       in: header
       name: email
       description: |-
-        NEEDS_DESCRIPTION # todo
-    
+        A registered email/password user's email address. Must be used
+        in conjunction with the ``password`` header.
+
+        **Example:** `Email: someone@example.com`
     Password:
       type: apiKey
       in: header
       name: password
       description: |-
-        NEEDS_DESCRIPTION # todo
-    
+        A registered email/password user's password. Must be used in
+        conjunction with the ``email`` header.
+
+        **Example:** `Password: Pa55w0rd!`
     ApiKey:
       type: apiKey
       in: header
       name: api-key
       description: |-
-        NEEDS_DESCRIPTION # todo
-    
+        A server or user API key.
+
+        **Example:** `Api-Key: `
     CustomJwt:
       type: apiKey
       in: header
       name: jwtTokenString
       description: |-
-        NEEDS_DESCRIPTION # todo
-  
+        A custom JSON web token string that the App is configured to support.
   responses:
-
     BadRequestError:
       description: The request was malformed or incomplete.
       content:
@@ -630,17 +709,17 @@ components:
           schema:
             oneOf:
               - $ref: "#/components/schemas/ErrorNoAuthenticationSpecified"
-              - $ref: "#/components/schemas/ErrorMissingAuthenticationParameter"          
-    
+              - $ref: "#/components/schemas/ErrorMissingAuthenticationParameter"
+
     UnauthorizedRequestError:
       description: The authenticated user does not have permission to access this endpoint.
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/ErrorUserNotFound"
-        
+
   schemas:
-    
+
     # Query Operations
     Namespace:
       type: object
@@ -655,14 +734,14 @@ components:
         collection:
           type: string
           description: The name of a collection in the specified database.
-    
+
     Filter:
       type: object
       properties:
         filter:
           type: object
           description: A MongoDB query filter that matches documents.
-    
+
     Projection:
       type: object
       properties:
@@ -672,32 +751,32 @@ components:
             type: number
             enum: [0, 1]
           description: A MongoDB projection for matched documents returned by the operation.
-    
+
     Sort:
       type: object
       properties:
         sort:
           type: object
           description: A MongoDB sort expression that indicates sorted field names and directions.
-    
+
     Limit:
       type: object
       properties:
         limit:
           type: number
           description: The maximum number of matching documents to include the in the response.
-    
+
     Skip:
       type: object
       properties:
         skip:
           type: number
           description: The number of matching documents to omit from the response.
-    
+
     # Request Bodies
     AggregateRequestBody:
       title: AggregateRequestBody
-      required: 
+      required:
         - pipeline
       allOf:
         - $ref: "#/components/schemas/Namespace"
@@ -708,10 +787,10 @@ components:
               items:
                 type: object
                 description: An aggregation stage.
-    
+
     AggregateResponseBody:
       title: AggregateResponseBody
-      required: 
+      required:
         -  documents
       properties:
         documents:
@@ -720,19 +799,19 @@ components:
           items:
             type: object
             description: A document included in the result set of the aggregation.
-    
+
     FindOneRequestBody:
       title: FindOneRequestBody
-      required: 
+      required:
         - filter
       allOf:
         - $ref: "#/components/schemas/Namespace"
         - $ref: "#/components/schemas/Filter"
         - $ref: "#/components/schemas/Projection"
-    
+
     FindManyRequestBody:
       title: FindManyRequestBody
-      required: 
+      required:
         - filter
       allOf:
         - $ref: "#/components/schemas/Namespace"
@@ -741,7 +820,7 @@ components:
         - $ref: "#/components/schemas/Sort"
         - $ref: "#/components/schemas/Limit"
         - $ref: "#/components/schemas/Skip"
-    
+
     InsertOneRequestBody:
       title: InsertOneRequestBody
       allOf:
@@ -752,7 +831,7 @@ components:
             document:
               type: object
               description: A document to insert into the collection.
-    
+
     InsertManyRequestBody:
       title: InsertManyRequestBody
       allOf:
@@ -780,8 +859,10 @@ components:
             upsert:
               type: boolean
               default: false
-              description: NEEDS_DESCRIPTION # todo
-    
+              description: |
+                When `true`, if the update filter does not match any
+                existing documents, then insert a new document based on
+                the filter and the specified update operation.
     DeleteRequestBody:
       title: DeleteRequestBody
       allOf:
@@ -797,7 +878,7 @@ components:
         document:
           type: ["object", "null"]
           description: A document that matches the specified filter. If no documents match, this is `null`.
-    
+
     FindManyResponseBody:
       title: FindManyResponseBody
       type: object
@@ -808,7 +889,7 @@ components:
           items:
             type: object
           description: A list of documents that match the specified filter.
-    
+
     InsertOneResponseBody:
       title: InsertOneResponseBody
       description: The result of an insertOne operation.
@@ -817,7 +898,7 @@ components:
         insertedId:
           type: ["string", "object"]
           description: The `_id` value of the inserted document.
-    
+
     InsertManyResponseBody:
       title: InsertManyResponseBody
       description: The result of an insertMany operation.
@@ -828,11 +909,11 @@ components:
           items:
             type: ["string", "object"]
           description: A list of the `_id` values of the inserted documents.
-    
+
     UpdateResponseBody:
       title: UpdateResponseBody
       type: object
-      required: 
+      required:
         - matchedCount
         - modifiedCount
       properties:
@@ -845,17 +926,17 @@ components:
         upsertedId:
           type: string
           description: The `_id` value of the upserted document.
-    
+
     DeleteResponseBody:
       title: DeleteResponseBody
       type: object
-      required: 
+      required:
         - deletedCount
       properties:
         deletedCount:
           type: ["number", "object"]
           description: The number of documents that were deleted.
-    
+
     # Errors
     Error:
       type: object
@@ -869,7 +950,7 @@ components:
         link:
           type: string
           description: A link to a log entry for the failed operation.
-    
+
     ErrorNoAuthenticationSpecified:
       description: |-
         Indicates that the request did not include any authentication
@@ -881,7 +962,7 @@ components:
               const: "no authentication methods were specified"
             error_code:
               const: "InvalidParameter"
-    
+
     ErrorMissingAuthenticationParameter:
       description: |-
         Indicates that an authentication parameter is missing from the
@@ -894,7 +975,7 @@ components:
               const: "must specify some form of authentication (either email+password, api-key, or jwt) in the request header or body"
             error_code:
               const: "MissingParameter"
-    
+
     ErrorUserNotFound:
       description: |-
         Indicates that no user matched the provided authentication
