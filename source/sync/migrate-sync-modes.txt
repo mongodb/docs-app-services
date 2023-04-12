@@ -19,8 +19,9 @@ process. Other than upgrading the SDK version, migrating Sync modes doesn't requ
 any changes to your client app code.
 
 Migration results in Partition-Based Sync clients communicating with a
-Flexible Sync backend. We recommend eventually migrating your client apps to also
-use Flexible Sync instead of Partition-Based Sync.
+Flexible Sync backend. We recommend eventually :ref:`migrating your client app 
+<realm-sync-migrate-client>` to also use Flexible Sync instead of
+Partition-Based Sync.
 
 Requirements
 ------------
@@ -91,16 +92,9 @@ stage in the App Services UI.
    :guilabel:`Manage Sync Migration` appears on the Device Sync page if the 
    migration hasn't been committed or reverted.
 
-After your backend is migrated to Flexible Sync, the backend automatically
-injects a ``partitionKey`` field into every document the Partition-Based Sync
-client creates and sets its value to your sync configuration's
-``partitionValue``. The injected ``partitionKey`` field does not sync back to
-client devices. This means that clients won't be able to read this field.
-
-The Partition-Based Sync client automatically creates sync subscriptions for 
-each document where ``partitionKey == partitionValue``. This will continue
-until your :ref:`migrate your client app <realm-sync-migrate-client>` to
-Flexible Sync.
+After the migration has finished, check out the :ref:`After Migration
+<realm-sync-migrate-after>` section for more information about how
+Partition-Based Sync clients interact with the Flexible Sync backend.
 
 Migrate Partition-Based Sync to Flexible Sync
 ---------------------------------------------
@@ -285,6 +279,31 @@ start over from the beginning with future migration attempts.
    This will revert your migration. You will need to migrate again if you 
    want to enable Flexible Sync in the future.
 
+.. _realm-sync-migrate-after:
+
+After Backend Migration
+-----------------------
+
+Your migrated backend uses a partition key field in your Realm object models
+to map the Partition-Based Sync client objects to Flexible Sync equivalents on
+the backend. If your object models don't have a partition key field, the
+backend automatically injects one into every table the Partition-Based Sync
+client creates.
+
+The injected field follows this structure: ``<yourPartitionKey> == 
+<yourPartitionValue>``. Both the field key and value are derived from your 
+Partition-Based Sync client configuration.
+
+There are some other characteristics of the injected field you should be aware of:
+
+- The injected field does not sync back to the client that created the table.
+  This means the originating client won't be able to read the injected
+  ``partitionKey`` field.
+- The Partition-Based Sync client automatically creates sync subscriptions for 
+  each table where ``partitionKey == partitionValue``. This will continue
+  until your :ref:`migrate your client app <realm-sync-migrate-client>` to
+  Flexible Sync.
+
 .. _realm-sync-migrate-client:
 
 Migrate Client App to Flexible Sync
@@ -296,7 +315,8 @@ client app to Flexible Sync, the client will stop automatically creating
 sync subscriptions for each Realm object model in your app's data model.
 
 We also recommend removing all sync subscriptions and then creating new subscriptions
-for your data. This is the clearest way to sync data after a migration.
+for your data. This is the clearest way to control what data is synced after a
+migration.
 
 You can keep these subscriptions if you don't want to remove and recreate
 subscriptions. See the SDK documentation for details about adding and removing
