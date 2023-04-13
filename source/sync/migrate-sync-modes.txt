@@ -14,9 +14,9 @@ Atlas App Services Apps can have one of two Device Sync modes: Partition-Based S
 and Flexible Sync. Partition-Based Sync is an older mode and you should consider
 migrating to Flexible Sync.
 
-Migrating an App that uses Partition-Based Sync to Flexible Sync is an automatic
-process. Other than upgrading the SDK version, migrating Sync modes doesn't require 
-any changes to your client app code.
+Migrating an App Services App that uses Partition-Based Sync to Flexible Sync is
+an automatic process. Other than upgrading the SDK version, migrating Sync modes
+doesn't require any changes to your client app code.
 
 Migration results in Partition-Based Sync clients communicating with a
 Flexible Sync backend. We recommend eventually :ref:`migrating your client app 
@@ -47,9 +47,9 @@ What to Know Before Migrating
 -----------------------------
 
 Migrating your App's Sync mode involves changes that affect both client apps and
-your App's backend. You should be aware of the side effects and plan ahead.
+your App's backend. You should be aware of the effects and plan ahead.
 
-- Client apps that use an SDK with with a realm-core version lower than TBD will
+- Client apps that use an SDK with with a ``realm-core`` version lower than TBD will
   not be able to sync after migration.
 - How long a migration takes is directly proportional to the amount of data that
   needs to be migrated. The more data, the longer it will take to migrate.
@@ -70,8 +70,8 @@ your App's backend. You should be aware of the side effects and plan ahead.
 Migration Stages
 ~~~~~~~~~~~~~~~~
 
-There are three stages to a Sync mode migration. You can see your migration's
-stage in the App Services UI.
+You can see your migration's stage in the App Services UI. There are three stages
+to a Sync mode migration:
 
 #. **Syncing Partition-Based Sync metadata** 
    
@@ -112,9 +112,8 @@ Before you begin a migration, make sure you're aware of the
 :ref:`migration stages <realm-sync-migrate-stages>` and
 :ref:`effects <realm-sync-migrate-what-to-know>`.
 
-During migration, client apps may experience side effects, most of which are similar
-to what happens if you :ref:`terminate <terminating-realm-sync>` and re-enable
-Device Sync. These are some additional side effects of migration:
+Migration generally has similar effects as :ref:`terminating <terminating-realm-sync>` 
+and re-enabling Device Sync. There are some additional effects of migration:
 
 - In the App Services UI, the Rules and Schema pages will be read-only.
 - Your App will experience a period of read-only Sync and then a 
@@ -290,19 +289,21 @@ the backend. If your object models don't have a partition key field, the
 backend automatically injects one into every object the Partition-Based Sync
 client creates.
 
-The injected field follows this structure: ``<yourPartitionKey> == 
-<yourPartitionValue>``. Both the field key and value are derived from your 
-Partition-Based Sync client configuration.
+These are some other characteristics of the injected field you should be aware
+of:
 
-There are some other characteristics of the injected field you should be aware of:
-
+- The injected field follows this structure: ``<yourPartitionKey> == 
+  <yourPartitionValue>``. Both the field key is derived from your old
+  Partition-Based Sync  **backend**  configuration. The value is derived from
+  your current Partition-Based Sync  **client**  configuration.
 - The injected field does not sync back to the client that created the object.
   This means the originating client won't be able to read the injected
   ``partitionKey`` field.
-- The Partition-Based Sync client automatically creates sync subscriptions for 
-  each table where ``partitionKey == partitionValue``. This will continue
-  until your :ref:`migrate your client app <realm-sync-migrate-client>` to
-  Flexible Sync.
+
+The Partition-Based Sync client automatically creates sync subscriptions for 
+each table where ``partitionKey == partitionValue``. This will continue
+until you :ref:`migrate your client app <realm-sync-migrate-client>` to
+Flexible Sync.
 
 .. _realm-sync-migrate-client:
 
