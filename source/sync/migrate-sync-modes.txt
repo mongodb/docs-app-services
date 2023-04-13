@@ -287,7 +287,7 @@ After Backend Migration
 Your migrated backend uses a partition key field in your Realm object models
 to map the Partition-Based Sync client objects to Flexible Sync equivalents on
 the backend. If your object models don't have a partition key field, the
-backend automatically injects one into every table the Partition-Based Sync
+backend automatically injects one into every object the Partition-Based Sync
 client creates.
 
 The injected field follows this structure: ``<yourPartitionKey> == 
@@ -296,7 +296,7 @@ Partition-Based Sync client configuration.
 
 There are some other characteristics of the injected field you should be aware of:
 
-- The injected field does not sync back to the client that created the table.
+- The injected field does not sync back to the client that created the object.
   This means the originating client won't be able to read the injected
   ``partitionKey`` field.
 - The Partition-Based Sync client automatically creates sync subscriptions for 
