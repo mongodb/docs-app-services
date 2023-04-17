@@ -1,3 +1,14 @@
+# April 14, 2023
+
+## Triggers
+
+- Database Triggers: Update Create/Configure steps to match new UI
+- Scheduled Triggers: Update Create/Configure steps to match new UI
+
+## Define Data Access Permissions
+
+- Device Sync-Compatible Permissions: Fix a list formatting issue
+
 # April 07, 2023
 
 ## Device Sync
