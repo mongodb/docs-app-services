@@ -382,42 +382,7 @@ Change the Subscription
    .. step:: Run and Test
     
       Run the application again. Log in using the account you created earlier 
-      in this tutorial. You would expect the list to change, since we added the
-      ``reRunOnOpen`` to force the subscription query to recalculate which 
-      documents to sync. If you check the console logs, you will see an entry 
-      that looks something like this:
-
-      .. code-block:: sh
-         :copyable: false
-         
-         2022-08-08 17:54:24.128249-0400 App[17920:237672] Sync: Connection[2]: 
-         Session[2]: Received QUERY_ERROR "Client provided query with bad syntax: 
-         unsupported query for table "Item": key "priority" is not a queryable 
-         field" (error_code=300, query_version=3)
-
-      This message tells us that we have added a field to our subscription without 
-      configuring Flexible Sync to use that field. 
-   
-   .. step:: Update Flexible Sync on the Server
-
-      A. Switch back to the Atlas page in your browser. Select the 
-         :guilabel:`Atlas App Services` tab and open the app you are using.
-
-      #. In the left-hand navigation, choose :guilabel:`Device Sync`, and then 
-         click **OK** in the dialog box about Development Mode being enabled.
-      
-      #. Scroll down to the :guilabel:`Select Queryable Fields` section. In the 
-         dropdown labeled **Select or create a queryable field**, choose 
-         "priority". The priority field will be added to the fields shown:
-
-         .. figure:: /images/dotnet-tutorial-priority-subscribed.png
-            :alt:  Priority field is now queryable.
-
-      #. Save your changes.
-   
-   .. step:: Test the changes
-
-      Return to your mobile app. Because we added ``reRunOnOpen``, the app
+      in this tutorial. Because we added ``reRunOnOpen``, the app
       should re-sync only the documents that match the Flexible Sync query.
       After an initial moment when Realm resyncs the document collection, you 
       will only see the new Item of High priority that you created.
@@ -449,10 +414,7 @@ Conclusion
 ----------
 
 Adding a property to an existing Realm object is a non-breaking change, and 
-Development Mode ensures that the schema change is reflected server-side. If 
-you add or change a subscription to use an additional field, whether newly 
-added or previously existent, you need to modify the Flexible Sync settings to 
-enable querying against that field.
+Development Mode ensures that the schema change is reflected server-side.
 
 What's Next?
 ------------
