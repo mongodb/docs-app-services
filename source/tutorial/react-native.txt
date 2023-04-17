@@ -538,53 +538,7 @@ only syncs important ones with a ``priority`` of High or Severe.
    .. step:: Test the App
 
       Your app is now set up to modify its sync subscription based on
-      the current mode. However, if you run the app and switch to
-      only showing important items, you'll see that the list doesn't change and
-      a warning appears in the console:
-
-      .. code-block:: text
-         :copyable: false
-         
-         Possible Unhandled Promise Rejection (id: 0):
-         Error: Client provided query with bad syntax:
-         unsupported query for table "Item": key "priority" is not a queryable field
-
-   .. step:: Update the Sync Configuration
-      
-      We're getting a warning because a sync client can only filter a
-      subscription based on a given field if that field is specifically
-      listed as a queryable field in the Device Sync configuration of
-      your App Services App.
-
-      To get everything working, we need to add ``priority`` as a
-      queryable field in the App's sync configuration.
-      
-      First, find the template app's ``backend`` directory and modify
-      ``sync/config.json``:
-
-      .. code-block:: json
-         :emphasize-lines: 6
-
-         {
-             ...,
-             "queryable_fields_names": [
-                 "_id",
-                 "owner_id",
-                 "priority"
-             ]
-         }
-      
-      Then, run the following terminal command from within the
-      ``backend`` directory to deploy the updated sync configuration:
-
-      .. code-block:: bash
-
-         npx mongodb-realm-cli push
-
-   .. step:: Run the Completed App
-      
-      Once your updated sync configuration is deployed, your app is
-      complete and fully functional. Congratulations!
+      the current mode. 
       
       Rebuild and run the app to make sure everything works. You should
       be able to create, complete, and delete to-do items as well as toggle
