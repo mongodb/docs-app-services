@@ -114,26 +114,25 @@ the limitations for each cluster size:
      - 1000
 
    * - Standard Clusters (``M50`` - ``M90``)
-     - 2500
+     - 1000
 
    * - High-Power Clusters (``M100+``)
-     - 2500
+     - 1000
 
 .. note::
 
    App Services opens a single change stream on each collection that is
-   associated with a :ref:`Database Trigger <database-trigger>`, :ref:`Device Sync
-   <sync>`, or ``watch()`` operation.
+   associated with a :ref:`Database Trigger <database-trigger>` or 
+   :ref:`Device Sync <sync>` operation.
 
 .. important:: Usage Recommendation
 
    To minimize the number of open change streams:
 
-   - Start Watch and Sync operations only when necessary. Close any open
-     Watch and Sync streams immediately when they're no longer
-     necessary.
+   - Start Sync operations only when necessary. Close any open
+     Sync streams immediately when they're no longer necessary.
 
-   - Avoid data models that require you to Watch or Sync an unbounded
+   - Avoid data models that require you to Sync an unbounded
      number of collections.
 
 .. _mongodb-service-limitations-database-commmands:
