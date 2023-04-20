@@ -643,6 +643,10 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
 
+We recommend only using match expressions when the volume of Trigger events
+measurably becomes a performance issue. Until then, receive all events and
+implement the logic to ignore certain events in the Trigger Function.
+
 .. example::
    
    The following match expression allows the Trigger to fire
@@ -671,6 +675,33 @@ the trigger to fire. For details, see the reference for each event type:
       {
         "fullDocument.needsTriggerResponse": true
       }
+
+Testing Match Expressions
+`````````````````````````
+
+The following procedure shows one way to test whether your match expression
+works as expected:
+
+1. Download `the MongoDB Shell (mongosh)
+   <https://www.mongodb.com/docs/mongodb-shell/>`__ and use it to
+   :atlas:`connect to your cluster </mongo-shell-connection/>`.
+#. Replacing ``DB_NAME`` with your database name, ``COLLECTION_NAME`` with your
+   collection name, and ``YOUR_MATCH_EXPRESSION`` with the match expression you
+   want to test, paste the following into mongosh to open a change stream on an
+   existing collection:
+
+   .. code-block:: js
+ 
+      db.getSiblingDB(DB_NAME).COLLECTION_NAME.watch([{$match: YOUR_MATCH_EXPRESSION}])
+      while (!watchCursor.isClosed()){
+        if (watchCursor.hasNext()){
+            print(tojson(watchCursor.next()));
+        }
+      }
+
+#. In another terminal window, use mongosh to make changes to some test
+   documents in the collection.
+#. Observe what the change stream filters in and out.
 
 .. _database-triggers-project-expression:
 
