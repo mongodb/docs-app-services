@@ -175,12 +175,16 @@ Unified Rules System
 
 Prior to February 23, 2023, Device Sync (Flexible Mode) rules existed in the
 ``permissions`` field of the :ref:`Sync configuration
-<sync-configuration-reference>`. For new apps and automatically migrated apps,
-these permissions now exist in the same configuration files as the non-Sync
-permissions.
+<sync-configuration-reference>`. These permissions now exist in the same
+configuration files as the non-Sync permissions.
 
-For reference, the following changes take place in the migration (you should not
-have to migrate apps manually):
+When importing an app configured for the older permissions system, App Services
+automatically migrates the permissions to the new unified rules system. You
+should not have to migrate apps manually. If you have an old app configuration,
+you can import and then :ref:`re-export <export-app>` the migrated
+configuration.
+
+For reference, the following changes take place in the migration:
 
 - Move ``permissions.defaultRoles`` to the ``default_rule.json`` file in the
   data source configuration directory at ``data_sources/<data-source-name>/``.
