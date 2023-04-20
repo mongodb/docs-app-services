@@ -1,7 +1,11 @@
+export function ItemListView() {
+  const realm = useRealm();
+  const items = useQuery(Item).sorted('_id');
+  const user = useUser();
 
-// addAlert() takes in an alert term and inserts the term into a collection in Atlas
-const addAlert = async (term: string) => {
-  const mongodb = user?.mongoClient("mongodb-atlas");
-  const alertTerms = mongodb?.db("todo").collection("alerts");
-  await alertTerms?.insertOne({ text: term.toLowerCase() });
-};
+  // addAlert() takes a string input and inserts it as a document in the todo.alerts collection
+  const addAlert = async (text: string) => {
+    const mongodb = user?.mongoClient("mongodb-atlas");
+    const alertTerms = mongodb?.db("todo").collection("alerts");
+    await alertTerms?.insertOne({ term: text.toLowerCase() });
+  };

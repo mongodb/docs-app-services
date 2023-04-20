@@ -104,7 +104,7 @@ might appear in your important or time-sensitive tasks.
 
       .. code-block:: javascript
       
-         import {AlertBox} from './AlertBox'
+         import {AlertBox} from './AlertBox';
 
       Then, add the following lines to your code to render a button that 
       displays the alert box when clicked:
@@ -119,7 +119,7 @@ might appear in your important or time-sensitive tasks.
          :caption: src/ItemListView.tsx
          :emphasize-lines: 19-41
 
-      To change the color of the button, add the following lines to your code:
+      To change the size and color of the button, add the following lines to your code:
 
       .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertButtonStyle.tsx
          :language: javascript
@@ -137,13 +137,13 @@ and keep track of your alert terms in Atlas.
 
    .. step:: Create a New Collection
 
-      Create a collection that will store the terms that are entered in the app.
+      Create a collection that will store the terms that users enter in the app.
       In the Atlas UI: 
 
       A. Click the :guilabel:`Data Services` tab.
       
       #. For the deployment that's synced to the template app, 
-         click :guilabel:`Browse Collections` 
+         click :guilabel:`Browse Collections`.
       
       #. In the left navigation, click the :guilabel:`+` icon next to the ``todo`` 
          database to add a new collection.
@@ -175,14 +175,15 @@ and keep track of your alert terms in Atlas.
       takes a string input and uses the :ref:`React Native SDK <react-native-mongodb-data-access>` 
       to connect to Atlas and insert the specified alert term as a document to your collection.  
 
-      Add the following lines directly under the import statements in ``src/ItemSchema.tsx``:
+      Add the following lines to your code in ``src/ItemSchema.tsx``:
 
       .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.addAlert.tsx
          :language: javascript
          :caption: src/ItemListView.tsx
+         :emphasize-lines: 6-11
 
-      Then, add the following line to your code in ``src/ItemSchema.tsx`` to call ``addAlert()``
-      when a user submits an alert term in the app:
+      Then, add the following line to call ``addAlert()`` when a user submits an 
+      alert term in the app:
 
       .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertOverlayUpdated.tsx
          :language: javascript
@@ -211,7 +212,7 @@ In this section, you create a :ref:`database trigger <database-trigger>`
 that runs whenever a user creates a new task. In the trigger's 
 function, you define:
 
-- The message that displays in your application's logs.
+- The message that displays in your application logs.
 
 - The database logic, so that the trigger returns the message only when the 
   document contains an alert term.
@@ -234,35 +235,40 @@ function, you define:
    
    .. step:: Add a Database Trigger
    
-      To open the database trigger configuration page in the App Services UI, 
-      click :guilabel:`Triggers` in the left navigation menu, select the
-      :guilabel:`Database Triggers` tab, and then click :guilabel:`Add a
-      Trigger`.
+      To open the database trigger configuration page in the App Services UI:
 
-      Then, configure the trigger to listen only for new task documents 
-      inserted into the ``todo.Item`` collection:
+      A. Click the :guilabel:`App Services` tab and select the tile for your 
+         template app.
+
+      #. In the left navigation menu, click :guilabel:`Triggers`.
       
-      - Name the trigger ``sendAlerts``.
+      #. Click :guilabel:`Add a Trigger` and leave the Trigger type 
+         set to :guilabel:`Database`. 
+         
+      #. Name the trigger ``sendAlerts``.
 
-      - For the :guilabel:`Cluster Name`, select 
-        the deployment that's synced to the template app. 
+      #. Configure the trigger to listen only for new task documents 
+         inserted into the ``todo.Item`` collection:
 
-      - For the :guilabel:`Database Name` and :guilabel:`Collection Name`, 
-        select the ``todo`` database and ``Item`` collection.
+         - For the :guilabel:`Cluster Name`, select 
+           the deployment that's synced to the template app. 
 
-      - For the :guilabel:`Operation Type`, select :guilabel:`Insert`.
+         - For the :guilabel:`Database Name` and :guilabel:`Collection Name`, 
+           select the ``todo`` database and ``Item`` collection.
 
-      - Enable :guilabel:`Full Document` to include each new report document
-        in the change event passed to the trigger function.
+         - For the :guilabel:`Operation Type`, select :guilabel:`Insert`.
 
-   .. step:: Create an Atlas function
+         - Enable :guilabel:`Full Document` to include each new report document
+           in the change event passed to the trigger function.
+
+   .. step:: Define an Atlas function
 
       To define a new function, navigate to the :guilabel:`Function` section of the 
-      configuration page and select :guilabel:`+ New Function` from the dropdown. 
+      configuration page and select :guilabel:`+ New Function` from the drop-down menu. 
       Name the function ``triggers/sendAlerts``.
       
-      The following JavaScript function returns a message in your application's
-      logs whenever a user enters a task that contains a term stored in the 
+      The following JavaScript function returns a message in your application
+      logs when a user enters a task that contains a term stored in the 
       ``todo.alerts`` collection. 
 
       The function also includes an Atlas Search query to find other task documents 
@@ -301,27 +307,28 @@ function, you define:
       Atlas is now set up to alert you when a user creates a task in the app
       that contains an alert term.
 
-      Rebuild and run the app to make sure everything works. Enter a few new 
+      Rebuild and run the app to make sure everything works. Enter a few 
       tasks that contain an alert term you've previously entered. Then, 
-      :ref:`view your trigger logs <logs-trigger>` to see the output from 
-      the trigger.
-      
+      :ref:`view your logs <view-logs>` to see the output from 
+      the trigger. You can filter for your :ref:`trigger logs <logs-trigger>`
+      by selecting the :guilabel:`Triggers` type from the drop-down 
+      menu.
+            
       For example, if one of your alert terms is ``important``, 
-      your log output for a new task that contains the term might 
-      resemble the following:
+      the log output for a new task might resemble the following:
 
       .. code-block:: none
 
+         Logs:
          [ 
-            "The following task has been added to a To-Do list: complete important tutorial.
-            You have been notified because it contains the notification term, important.
-            Related incomplete tasks: 
-            
+            "The following task has been added to a to-do list: Complete important tutorial.
+            You've been alerted because it contains the term, important.",
+            "Related incomplete tasks: [
             {"summary": "Important: Create template app"}, 
-            {"summary": "Add important tasks"}
-            {"summary": "Make sure to read documentation. This is important."}"
+            {"summary": "Add important tasks"},
+            {"summary": "Make sure to read the documentation. This is important."}]"
          ]
-         
+                  
 What's Next?
 ------------
 
