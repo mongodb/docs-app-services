@@ -693,9 +693,9 @@ works as expected:
    .. code-block:: js
  
       db.getSiblingDB(DB_NAME).COLLECTION_NAME.watch([{$match: YOUR_MATCH_EXPRESSION}])
-      while (!watchCursor.isClosed()){
-        if (watchCursor.hasNext()){
-            print(tojson(watchCursor.next()));
+      while (!watchCursor.isClosed()) {
+        if (watchCursor.hasNext()) {
+          print(tojson(watchCursor.next()));
         }
       }
 
