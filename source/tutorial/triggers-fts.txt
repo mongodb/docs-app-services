@@ -175,7 +175,7 @@ and keep track of your alert terms in Atlas.
       takes a string input and uses the :ref:`React Native SDK <react-native-mongodb-data-access>` 
       to connect to Atlas and insert the specified alert term as a document to your collection.  
 
-      Add the following lines to your code in ``src/ItemSchema.tsx``:
+      Add the following lines to your code in ``src/ItemListView.tsx``:
 
       .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.addAlert.tsx
          :language: javascript
@@ -242,7 +242,7 @@ function, you define:
 
       #. In the left navigation menu, click :guilabel:`Triggers`.
       
-      #. Click :guilabel:`Add a Trigger` and leave the Trigger type 
+      #. Click :guilabel:`Add a Trigger` and leave the :guilabel:`Trigger type`
          set to :guilabel:`Database`. 
          
       #. Name the trigger ``sendAlerts``.
@@ -263,9 +263,9 @@ function, you define:
 
    .. step:: Define an Atlas function
 
-      To define a new function, navigate to the :guilabel:`Function` section of the 
-      configuration page and select :guilabel:`+ New Function` from the drop-down menu. 
-      Name the function ``triggers/sendAlerts``.
+      To define the trigger's function, navigate to the :guilabel:`Function` 
+      section of the configuration page and select :guilabel:`+ New Function` 
+      from the drop-down menu. Name the function ``triggers/sendAlerts``.
       
       The following JavaScript function returns a message in your application
       logs when a user enters a task that contains a term stored in the 
