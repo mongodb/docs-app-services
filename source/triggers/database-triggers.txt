@@ -635,6 +635,10 @@ Expression` field. App Services evaluates the match expression against the
 change event document and invokes the Trigger only if the expression evaluates
 to true for the given change event.
 
+We recommend only using match expressions when the volume of Trigger events
+measurably becomes a performance issue. Until then, receive all events and
+implement the logic to ignore certain events in the Trigger Function.
+
 The exact shape of the change event document depends on the event that caused
 the trigger to fire. For details, see the reference for each event type:
 
@@ -642,10 +646,6 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`update </reference/change-events/update>`
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
-
-We recommend only using match expressions when the volume of Trigger events
-measurably becomes a performance issue. Until then, receive all events and
-implement the logic to ignore certain events in the Trigger Function.
 
 .. example::
    
