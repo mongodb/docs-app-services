@@ -41,16 +41,18 @@ servers:
     url: https://{region}.mongodb-api.com/app/{appId}/endpoint/data/v1
     variables:
       appId:
+        description: Your App's Client App ID.
         default: "your-app-id"
       region:
+        description: The sub-domain for the cloud region where your App is deployed.
         default: "data"
         enum:
           # Global Deployment
           - "data"
           # AWS Local Deployment
           - "us-east-1.aws.data"
-          - "us-west-2.aws.data"
           - "us-east-2.aws.data"
+          - "us-west-2.aws.data"
           - "eu-central-1.aws.data"
           - "eu-west-1.aws.data"
           - "eu-west-2.aws.data"
