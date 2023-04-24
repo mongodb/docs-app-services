@@ -37,41 +37,50 @@ security:
   - ApiKey: []
   - CustomJwt: []
 servers:
-  - description: Data API Base URL
-    url: https://{region}.mongodb-api.com/app/{appId}/endpoint/data/v1
+  - description: Global App
+    url: https://data.mongodb-api.com/app/{appId}/endpoint/data/v1
+    variables:
+      appId:
+        description: Your App's Client App ID.
+        default: "your-app-id"
+  - description: Local App
+    url: https://{region}.data.mongodb-api.com/app/{appId}/endpoint/data/v1
     variables:
       appId:
         description: Your App's Client App ID.
         default: "your-app-id"
       region:
-        description: The sub-domain for the cloud region where your App is deployed.
-        default: "data"
+        description: |
+          The sub-domain for the cloud region where your App is
+          deployed. Uses the format `<region>.<cloud>`. For example,
+          `us-east-1.aws` or `eastus2.azure`. To learn more about
+          deployment regions, see [Deployment Models &
+          Regions](https://www.mongodb.com/docs/atlas/app-services/apps/deployment-models-and-regions/).
+        default: "us-east-1.aws"
         enum:
-          # Global Deployment
-          - "data"
           # AWS Local Deployment
-          - "us-east-1.aws.data"
-          - "us-east-2.aws.data"
-          - "us-west-2.aws.data"
-          - "eu-central-1.aws.data"
-          - "eu-west-1.aws.data"
-          - "eu-west-2.aws.data"
-          - "ap-southeast-1.aws.data"
-          - "ap-southeast-2.aws.data"
-          - "ap-south-1.aws.data"
-          - "sa-east-1.aws.data"
+          - "us-east-1.aws"
+          - "us-east-2.aws"
+          - "us-west-2.aws"
+          - "eu-central-1.aws"
+          - "eu-west-1.aws"
+          - "eu-west-2.aws"
+          - "ap-southeast-1.aws"
+          - "ap-southeast-2.aws"
+          - "ap-south-1.aws"
+          - "sa-east-1.aws"
           # Azure Local Deployment
-          - "eastus2.azure.data"
-          - "westus.azure.data"
-          - "westeurope.azure.data"
-          - "eastasia.azure.data"
-          - "southeastasia.azure.data"
+          - "eastus2.azure"
+          - "westus.azure"
+          - "westeurope.azure"
+          - "eastasia.azure"
+          - "southeastasia.azure"
           # GCP Local Deployment
-          - "us-central1.gcp.data"
-          - "us-east4.gcp.data"
-          - "us-west1.gcp.data"
-          - "europe-west1.gcp.data"
-          - "asia-south1.gcp.data"
+          - "us-central1.gcp"
+          - "us-east4.gcp"
+          - "us-west1.gcp"
+          - "europe-west1.gcp"
+          - "asia-south1.gcp"
 paths:
   /action/findOne:
     post:
