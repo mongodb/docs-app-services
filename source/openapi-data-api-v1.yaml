@@ -742,7 +742,7 @@ components:
       properties:
         filter:
           type: object
-          description: A MongoDB query filter that matches documents.
+          description: A MongoDB query filter that matches documents. For a list of all query operators that the Data API supports, see [Query Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#query-operators).
 
     Projection:
       type: object
@@ -752,14 +752,14 @@ components:
           additionalProperties:
             type: number
             enum: [0, 1]
-          description: A MongoDB projection for matched documents returned by the operation.
+          description: A [MongoDB projection](https://www.mongodb.com/docs/manual/tutorial/project-fields-from-query-results/) for matched documents returned by the operation.
 
     Sort:
       type: object
       properties:
         sort:
           type: object
-          description: A MongoDB sort expression that indicates sorted field names and directions.
+          description: A [MongoDB sort expression](https://www.mongodb.com/docs/manual/reference/method/cursor.sort/) that indicates sorted field names and directions.
 
     Limit:
       type: object
@@ -788,7 +788,7 @@ components:
               description: An array of aggregation stages.
               items:
                 type: object
-                description: An aggregation stage.
+                description: A MongoDB aggregation stage. For a list of all aggregation stages that the Data API supports, see [Aggregation Pipeline Stage Availability](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#aggregation).
 
     AggregateResponseBody:
       title: AggregateResponseBody
@@ -857,7 +857,7 @@ components:
           properties:
             update:
               type: object
-              description: A MongoDB update expression to apply to matching documents.
+              description: A MongoDB update expression to apply to matching documents. For a list of all update operators that the Data API supports, see [Update Operators](https://www.mongodb.com/docs/atlas/app-services/mongodb/crud-and-aggregation-apis/#update-operators).
             upsert:
               type: boolean
               default: false
@@ -951,7 +951,7 @@ components:
           description: The error type.
         link:
           type: string
-          description: A link to a log entry for the failed operation.
+          description: A link to a [log entry](https://www.mongodb.com/docs/atlas/app-services/logs/endpoint/) for the failed operation.
 
     ErrorNoAuthenticationSpecified:
       description: |-
