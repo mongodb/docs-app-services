@@ -1,3 +1,35 @@
+# April 21, 2023
+
+## Get Started
+
+- SwiftUI Device Sync tutorial: Fix outdated `realmApp` naming
+- Updates across all Device Sync tutorials: Remove steps related to updating queryable fields
+
+## Device Sync
+
+- Configure Sync/Pause or Terminate Sync: Note if using deployment drafts, you must deploy the draft to terminate Sync
+
+## Define Data Access Permissions
+
+- Device Sync-Compatible Permissions: Add a follow-up note about exporting a migrated configuration
+
+## Reference
+
+- App Services Admin API
+  - Security: Add VPC Private Endpoint endpoints & examples for GET a list of private endpoints, GET a specific endpoint, GET a list of Private Endpoint services, POST create endpoint, PUT update endpoint, DELETE delete endpoint
+- Service Limitations: Change maximum number of change streams for M50 and larger to 1000, remove `watch()` limitations
+
+# April 14, 2023
+
+## Triggers
+
+- Database Triggers: Update Create/Configure steps to match new UI
+- Scheduled Triggers: Update Create/Configure steps to match new UI
+
+## Define Data Access Permissions
+
+- Device Sync-Compatible Permissions: Fix a list formatting issue
+
 # April 07, 2023
 
 ## Device Sync

@@ -7,7 +7,7 @@ Flutter Tutorial
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 3
    :class: singlecol
 
 The Realm Flutter SDK allows you to create a multi-platform
@@ -221,9 +221,12 @@ Set up the Template App
 Modify the Application
 ----------------------
 
+Add a New Property
+~~~~~~~~~~~~~~~~~~
+
 .. procedure::
 
-   .. step:: Add a New Property
+   .. step:: Add a New Property to the Model
 
       Now that you have confirmed everything is working as expected, we can
       add changes. In this tutorial, we have decided that we want to add a
@@ -316,6 +319,9 @@ Modify the Application
          are reflected in the server-side schema. For more information, see
          :ref:`<development-mode>` and :ref:`<additive-changes-synced-schema>`.
 
+Change the Subscription
+~~~~~~~~~~~~~~~~~~~~~~~
+
 Now that we added the priority field, we want to update the Device Sync subscription
 to only sync Items marked as a High or Severe priority.
 
@@ -352,41 +358,7 @@ to only sync Items marked as a High or Severe priority.
    .. step:: Run and Test
 
       Run the application again. Log in using the account you created earlier
-      in this tutorial. You would expect to **not** see the first Item created,
-      since doesn't have a priority. But it is in the list.
-      If you check your application logs in the terminal,
-      you will see an entry that looks something like this:
-
-      .. code-block:: sh
-         :copyable: false
-
-         "Client provided query with bad syntax: unsupported query for table "Item":
-            key "priority" is not a queryable field" (error_code=300, query_version=1)
-
-      This message tells us that we have added a field to our subscription without
-      configuring Flexible Sync to use that field.
-
-   .. step:: Update Flexible Sync on the Server
-
-      A. Switch back to the Atlas page in your browser. Select the
-         :guilabel:`Atlas App Services` tab and open the app you are using.
-
-      #. In the left-hand navigation, choose :guilabel:`Device Sync`, and then
-         click **OK** in the dialog box about Development Mode being enabled.
-
-      #. Scroll down to the :guilabel:`Select Queryable Fields` section. In the
-         dropdown labeled **Select or create a queryable field**, choose
-         "priority". The priority field will be added to the fields shown:
-
-         .. figure:: /images/dotnet-tutorial-priority-subscribed.png
-            :alt:  Priority field is now queryable.
-
-      #. Save your changes.
-
-   .. step:: Test the changes
-
-      Return to your Flutter app. To ensure the subscription is re-run, log out
-      the current user, and then log in again.
+      in this tutorial.
 
       After an initial moment when Realm resyncs the document collection, you
       *might* see an error message resembling the following:
@@ -427,10 +399,7 @@ Conclusion
 ----------
 
 Adding a property to an existing Realm object is a non-breaking change, and
-Development Mode ensures that the schema change is reflected server-side. If
-you add or change a subscription to use an additional field, whether newly
-added or previously existent, you need to modify the Flexible Sync settings to
-enable querying against that field.
+Development Mode ensures that the schema change is reflected server-side. 
 
 What's Next?
 ------------

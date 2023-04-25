@@ -7,7 +7,7 @@ MAUI Tutorial
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 3
    :class: singlecol
 
 Overview
@@ -181,6 +181,9 @@ Set up the Template App
 Modify the Application
 ----------------------
 
+Add a New Property
+~~~~~~~~~~~~~~~~~~
+
 Now that you have confirmed everything is working as expected, we can 
 add changes. In this tutorial, we have decided that we want to add a 
 "Priority" property to each Item so that we can filter Items by their 
@@ -348,6 +351,9 @@ To do this, follow these steps:
          are reflected in the server-side schema. For more information, see 
          :ref:`<development-mode>` and :ref:`<additive-changes-synced-schema>`.
 
+Change the Subscription
+~~~~~~~~~~~~~~~~~~~~~~~
+
 .. procedure:: Change the Subscription
 
    .. step:: Update the subscription
@@ -438,54 +444,6 @@ To do this, follow these steps:
     
       Run the application again. If prompted to do so, log in in using the
       account you created earlier in this tutorial. 
-      
-      You will see the following dialog:
-
-      .. figure:: /images/no_pri_field.png
-         :alt: No field for priority
-         :width: 100
-
-      Before reading further, consider why we are seeing this error, and how 
-      you would go about fixing it.
-      
-      .. note:: Hint
-      
-         You will see a similar error in your Atlas App Services app logs: 
-         
-         .. code-block:: sh
-            :copyable: false
-         
-            "query from client: "{\"Item\":\"(owner_id == \\\"...\\\" 
-            and priority < 2)\"}" could not be parsed: 
-            unsupported query for table "Item": key "priority" is not a 
-            queryable field (ProtocolErrorCode=300)
-      
-     
-   .. step:: Update Flexible Sync on the Server
-
-      As you may have figured out, we're trying to query on a field that has not 
-      been configured in the Flexible Sync settings in your Atlas app. Let's 
-      fix that.
-
-      A. Switch back to the Atlas page in your browser. Select the 
-         :guilabel:`Atlas App Services` tab and open the app you are using.
-
-      #. In the left-hand navigation, choose :guilabel:`Device Sync`, and then 
-         click **OK** in the dialog box about Development Mode being enabled.
-      
-      #. Scroll down to the :guilabel:`Select Queryable Fields` section. In the 
-         dropdown labeled **Select or create a queryable field**, choose 
-         "priority". The priority field will be added to the fields shown:
-
-         .. figure:: /images/dotnet-tutorial-priority-subscribed.png
-            :alt:  Priority field is now queryable.
-
-      #. Save your changes.
-
-
-   .. step:: Test the changes
-
-      Restart the app. 
 
       You should expect to see any Items you have created that have a priority 
       of "High" (1) or "Severe" (0). If you toggle the "Show all tasks" switch, 
@@ -495,10 +453,7 @@ To do this, follow these steps:
 Conclusion
 ----------
 Adding a property to an existing Realm object is a non-breaking change, and 
-Development Mode ensures that the schema change is reflected server-side. If 
-you add or change a subscription to use an additional field, whether newly-
-added or previously existent, you need to modify the Flexible Sync settings to 
-enable querying against that field.
+Development Mode ensures that the schema change is reflected server-side. 
 
 What's Next?
 ------------
