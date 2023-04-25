@@ -1,7 +1,7 @@
 .. _triggers-fts-tutorial:
 
 ====================================================
-Build an Application using Triggers and Atlas Search
+Build an Application Using Triggers and Atlas Search
 ====================================================
 
 .. contents:: On this page
@@ -58,7 +58,7 @@ Before you begin:
 
 .. include:: /includes/tutorial-template-prerequisite.rst 
 
-- To run Atlas Search queries, ensure that your Atlas account runs MongoDB 
+- To run Atlas Search queries, ensure that your Atlas cluster runs MongoDB 
   version 4.2 or higher.
 
 Create a New Template App
@@ -130,14 +130,14 @@ Store Alert Terms in Atlas
 --------------------------
 
 Now that you've created the frontend component for the alert box, 
-configure the application's backend operations so that you can store 
-and keep track of your alert terms in Atlas.
+configure the application's backend to store and keep track of your 
+alert terms in Atlas.
 
 .. procedure::
 
    .. step:: Create a New Collection
 
-      Create a collection that will store the terms that users enter in the app.
+      Create a collection to store the terms that users enter in the app.
       In the Atlas UI: 
 
       A. Click the :guilabel:`Data Services` tab.
@@ -158,7 +158,7 @@ and keep track of your alert terms in Atlas.
 
       A. Click the :guilabel:`App Services` tab.
       
-      #. Click the tile for your template app.
+      #. Click the tile for your app.
 
       #. In the left navigation under :guilabel:`Data Access`, click :guilabel:`Rules`.
 
@@ -171,7 +171,7 @@ and keep track of your alert terms in Atlas.
    .. step:: Write to the Collection
 
       Now that you've configured write access to the ``todo.alerts`` collection, 
-      create a function to write to the collection. The following TypeScript function 
+      create a helper function to write to the collection. The following TypeScript function 
       takes a string input and uses the :ref:`React Native SDK <react-native-mongodb-data-access>` 
       to connect to Atlas and insert the specified alert term as a document to your collection.  
 
@@ -238,7 +238,7 @@ function, you define:
       To open the database trigger configuration page in the App Services UI:
 
       A. Click the :guilabel:`App Services` tab and select the tile for your 
-         template app.
+         app.
 
       #. In the left navigation menu, click :guilabel:`Triggers`.
       
