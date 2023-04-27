@@ -23,7 +23,7 @@ App Services App configuration files (backend). This template app is a basic
 to-do list application that lets users do various things to manage their tasks.
 To learn more about the template app, see :ref:`react-native-tutorial`.
 
-After you've got the template app running, you add a new feature that alerts you 
+After you've got the template app running, you will add a new feature that alerts you 
 when a user creates a task that contains a specific word or phrase. The feature 
 includes:
 
@@ -80,8 +80,8 @@ steps described in the React Native tutorial:
 Add an Alert Box 
 ----------------
 
-After you've set up and explored the template app, write some code to 
-implement a new feature.
+Once you've set up and explored the template app, it's time to write some code to 
+implement the new alerting feature.
 
 In this section, you add an alert box that lets you enter terms that
 might appear in your important or time-sensitive tasks.
@@ -100,31 +100,39 @@ might appear in your important or time-sensitive tasks.
 
    .. step:: Update the Main View
 
-      In ``src/ItemListView.tsx``, add the following import to the top of the file:
-
+      In ``src/ItemListView.tsx``, import the alert box you just defined 
+      by adding the following line to the top of the file:
+      
       .. code-block:: javascript
       
          import {AlertBox} from './AlertBox';
 
-      Then, add the following lines to your code to render a button that 
-      displays the alert box when clicked:
+      Then, add the following code to render a button that displays the 
+      alert box when clicked:
 
-      .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.showAlertBox.tsx
-         :language: javascript
-         :caption: src/ItemListView.tsx
-         :emphasize-lines: 2
+      - At the top of the ``ItemListView`` function block, add a ``useState()`` hook 
+        to keep track of the alert box view:
 
-      .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertOverlayButton.tsx
-         :language: javascript
-         :caption: src/ItemListView.tsx
-         :emphasize-lines: 19-41
+        .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.showAlertBox.tsx
+           :language: javascript
+           :caption: src/ItemListView.tsx
+           :emphasize-lines: 7
 
-      To change the size and color of the button, add the following lines to your code:
+      - After the ``Add To-Do`` button in the main view, add an ``Alerts`` button that 
+        toggles the alert box overlay:
 
-      .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertButtonStyle.tsx
-         :language: javascript
-         :caption: src/ItemListView.tsx
-         :emphasize-lines: 7-11
+        .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertOverlayButton.tsx
+           :language: javascript
+           :caption: src/ItemListView.tsx
+           :emphasize-lines: 19-41
+
+      - To change the size and color of the button, add the following lines 
+        to the ``styles`` block at the bottom of the file:
+
+        .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertButtonStyle.tsx
+           :language: javascript
+           :caption: src/ItemListView.tsx
+           :emphasize-lines: 7-11
 
 Store Alert Terms in Atlas
 --------------------------
@@ -167,23 +175,30 @@ alert terms in Atlas.
       #. In the right dialog box, select the :guilabel:`readAndWriteAll` preset role.
       
       #. Click :guilabel:`Add preset role` to confirm your selection.
-      
+
+      #. By default, your application enables deployment drafts. To 
+         :ref:`manually deploy <deploy-ui>` your changes, click 
+         :guilabel:`Review Draft & Deploy` and then :guilabel:`Deploy`.
+         
    .. step:: Write to the Collection
 
-      Now that you've configured write access to the ``todo.alerts`` collection, 
-      create a helper function to write to the collection. The following TypeScript function 
-      takes a string input and uses the :ref:`React Native SDK <react-native-mongodb-data-access>` 
-      to connect to Atlas and insert the specified alert term as a document to your collection.  
+      Once you've configured write access to the ``todo.alerts`` collection, return
+      to your application code.
 
-      Add the following lines to your code in ``src/ItemListView.tsx``:
+      In ``src/ItemListView.tsx``, add the following lines to the top of tbe function block
+      to create a helper function that writes to the collection:
 
       .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.addAlert.tsx
          :language: javascript
          :caption: src/ItemListView.tsx
          :emphasize-lines: 6-11
 
-      Then, add the following line to call ``addAlert()`` when a user submits an 
-      alert term in the app:
+      The ``addAlert()`` function takes a string input and uses the :ref:`React Native SDK 
+      <react-native-mongodb-data-access>` to connect to Atlas and insert the specified alert term 
+      as a document to your collection.  
+
+      Then, add the following line to the alert box submission handler to call ``addAlert()`` 
+      when a user submits an alert term in the app:
 
       .. literalinclude:: /tutorial/backend-examples/ItemListView.snippet.alertOverlayUpdated.tsx
          :language: javascript
@@ -203,10 +218,11 @@ alert terms in Atlas.
 Add a Trigger
 -------------
 
-After fully configuring the alert box, create an :ref:`Atlas trigger <triggers>` 
-that alerts you when a new task contains one of your alert terms. Triggers can execute 
-application and database logic in response to a change event. Each trigger links to an 
-:ref:`Atlas Function <functions>` that defines the trigger's behavior.
+Now that you've created the alert box and set up its backing collection, create an 
+:ref:`Atlas Trigger <triggers>` that alerts you when a new task contains one of your 
+alert terms. Triggers can execute application and database logic in response to a 
+change event. Each trigger links to an :ref:`Atlas Function <functions>` that defines 
+the trigger's behavior.
 
 In this section, you create a :ref:`database trigger <database-trigger>` 
 that runs whenever a user creates a new task. In the trigger's 
@@ -263,44 +279,46 @@ function, you define:
 
    .. step:: Define an Atlas function
 
-      To define the trigger's function, navigate to the :guilabel:`Function` 
-      section of the configuration page and select :guilabel:`+ New Function` 
-      from the drop-down menu. Name the function ``triggers/sendAlerts``.
+      Navigate to the :guilabel:`Function` 
+      section of the trigger configuration page and select :guilabel:`+ New Function` 
+      from the drop-down menu. Then, define the trigger's function:
       
-      The following JavaScript function returns a message in your application
-      logs when a user enters a task that contains a term stored in the 
-      ``todo.alerts`` collection. 
+      A. Name the function ``triggers/sendAlerts``.
 
-      The function also includes an Atlas Search query to find other task documents 
-      in the ``todo.Item`` collection that contain the same alert term. The query uses:
-
-      - The :atlas:`$search </atlas-search/query-syntax/>` pipeline stage to query the 
-        collection.
-
-      - The following :atlas:`compound </atlas-search/compound/>` operator clauses:
-
-        - The ``must`` clause and :atlas:`phrase </atlas-search/phrase/>` operator 
-          to query for any tasks with a ``summary`` that contains the alert term.
-        - The ``mustNot`` clause and :atlas:`equals </atlas-search/equals/>` operator to
-          exclude completed tasks.
-
-      - The :manual:`$limit </reference/operator/aggregation/limit>` stage to limit 
-        the output to 5 results.
-      - The :manual:`$project </reference/operator/aggregation/project>` stage to exclude
-        all fields except ``summary``.
-      
-      .. note:: 
-
-         To learn more, see :atlas:`Create and Run Atlas Search Queries 
-         </atlas-search/searching/>`.
-
-      Copy the following code into the function body:
+      #. Copy the following code into the function body:
                
-      .. literalinclude:: /tutorial/backend-examples/sendAlerts.js
-         :language: javascript
-         :caption: functions/triggers/sendAlerts.js
+         .. literalinclude:: /tutorial/backend-examples/sendAlerts.js
+            :language: javascript
+            :caption: functions/triggers/sendAlerts.js
+
+         This JavaScript function returns a message in your application
+         logs when a user enters a task that contains a term stored in the 
+         ``todo.alerts`` collection. 
+
+         The function also includes an Atlas Search query to find other task documents 
+         in the ``todo.Item`` collection that contain the same alert term. The query uses:
+
+         - The :atlas:`$search </atlas-search/query-syntax/>` pipeline stage to query the 
+           collection.
+
+         - The following :atlas:`compound </atlas-search/compound/>` operator clauses:
+
+           - The ``must`` clause and :atlas:`phrase </atlas-search/phrase/>` operator 
+             to query for any tasks with a ``summary`` that contains the alert term.
+           - The ``mustNot`` clause and :atlas:`equals </atlas-search/equals/>` operator to
+             exclude completed tasks.
+
+         - The :manual:`$limit </reference/operator/aggregation/limit>` stage to limit 
+           the output to 5 results.
+         - The :manual:`$project </reference/operator/aggregation/project>` stage to exclude
+           all fields except ``summary``.
+         
+         .. note:: 
+
+            To learn more, see :atlas:`Create and Run Atlas Search Queries 
+            </atlas-search/searching/>`.
       
-      When you're finished, click :guilabel:`Save` and deploy the trigger.
+      #. When you're finished, click :guilabel:`Save` and deploy the trigger.
 
    .. step:: Run and Test the App
 
@@ -332,6 +350,9 @@ function, you define:
 What's Next?
 ------------
 
+- Extend the alert function to call an external service that can send you a text 
+  or an email instead of simply logging. To learn more, see :ref:`external-dependencies`.
+
 - Read our :atlas:`Atlas Search documentation </atlas-search/>` to learn more about 
   indexing and querying your Atlas data.
 
@@ -339,7 +360,6 @@ What's Next?
   :ref:`scheduled triggers <config-scheduled-trigger>`.
 
 - Define :ref:`custom HTTPS Endpoints <custom-endpoints>` to create app-specific 
-  API routes or webhooks. You can use HTTPS endpoints to configure your triggers 
-  to send you alerts through SMS or email.
+  API routes or webhooks.
 
 .. include:: /includes/tutorial-request-for-feedback-note.rst

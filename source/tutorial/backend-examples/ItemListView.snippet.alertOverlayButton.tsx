@@ -16,15 +16,6 @@ return (
           />
         }
       />
-      <Overlay
-        isVisible={showAlertBox}
-        onBackdropPress={() => setShowAlertBox(false)}>
-        <AlertBox
-          onSubmit={({term}) => {
-            setShowAlertBox(false);
-          }}
-        />
-      </Overlay>
       <Button
         title="Alerts"
         buttonStyle={styles.alertButton}
@@ -39,6 +30,15 @@ return (
           />
         }
       />
+      <Overlay
+        isVisible={showAlertBox}
+        onBackdropPress={() => setShowAlertBox(false)}>
+        <AlertBox
+          onSubmit={({term}) => {
+            setShowAlertBox(false);
+          }}
+        />
+      </Overlay>
     </View>
   </SafeAreaProvider>
 );
