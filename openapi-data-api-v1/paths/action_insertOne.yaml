@@ -6,7 +6,7 @@ post:
     - lang: 'cURL'
       label: 'cURL'
       source:
-        $ref: "../../data-api/snippets/generated-endpoints.snippet.insertOne.sh"
+        $ref: "../../source/data-api/snippets/generated-endpoints.snippet.insertOne.sh"
   requestBody:
     content:
       application/json:
@@ -18,7 +18,7 @@ post:
             database: todo
             collection: tasks
             document:
-              status: open
+              status: open${{ env.BUNDLED_SPEC_FILEPATH }}
               text: Do the dishes
       application/ejson:
         schema:

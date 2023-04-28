@@ -1,12 +1,12 @@
 post:
-  operationId: deleteMany
-  summary: Delete Documents
-  description: Delete multiple documents that match a query.
+  operationId: deleteOne
+  summary: Delete One Document
+  description: Delete a single document that matches a query.
   x-codeSamples:
     - lang: 'cURL'
       label: 'cURL'
       source:
-        $ref: "../../data-api/snippets/generated-endpoints.snippet.deleteMany.sh"
+        $ref: "../../source/data-api/snippets/generated-endpoints.snippet.deleteOne.sh"
   requestBody:
     content:
       application/json:
@@ -18,7 +18,7 @@ post:
             database: todo
             collection: tasks
             filter:
-              status: complete
+              text: Do the dishes
       application/ejson:
         schema:
           allOf:
@@ -28,7 +28,7 @@ post:
             database: todo
             collection: tasks
             filter:
-              status: complete
+              text: Do the dishes
   responses:
     '200':
       description: Deleted
@@ -41,7 +41,7 @@ post:
                   deletedCount:
                     type: number
             example:
-              deletedCount: 12
+              deletedCount: 1
         application/ejson:
           schema:
             allOf:
@@ -51,7 +51,7 @@ post:
                     type: object
             example:
               deletedCount:
-                $numberInt: 12
+                $numberInt: 1
     '400':
       description: Bad Request
       $ref: ../components/responses/BadRequestError.yaml
