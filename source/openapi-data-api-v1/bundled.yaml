@@ -84,6 +84,23 @@ paths:
       operationId: findOne
       summary: Find One Document
       description: Find a single document that matches a query.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": {
+                  "text": "Do the dishes"
+                }
+              }'
       requestBody:
         content:
           application/json:
@@ -144,6 +161,25 @@ paths:
       operationId: find
       summary: Find Documents
       description: Find multiple documents that match a query.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/find \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": {
+                  "status": "complete"
+                },
+                "sort": { "completedAt": 1 },
+                "limit": 10
+              }'
       requestBody:
         content:
           application/json:
@@ -221,6 +257,24 @@ paths:
       operationId: insertOne
       summary: Insert One Document
       description: Insert a single document into a collection.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "document": {
+                  "status": "open",
+                  "text": "Do the dishes"
+                }
+              }'
       requestBody:
         content:
           application/json:
@@ -279,6 +333,30 @@ paths:
       operationId: insertMany
       summary: Insert Documents
       description: Insert multiple documents into a collection.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "documents": [
+                  {
+                    "status": "open",
+                    "text": "Mop the floor"
+                  },
+                  {
+                    "status": "open",
+                    "text": "Clean the windows"
+                  }
+                ]
+              }'
       requestBody:
         content:
           application/json:
@@ -348,6 +426,29 @@ paths:
       operationId: updateOne
       summary: Update One Document
       description: Update a single document in a collection.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateOne \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": {
+                  "_id": { "$oid": "64224f4d089104f1766116a5" }
+                },
+                "update": {
+                  "$set": {
+                    "status": "complete",
+                    "completedAt": { "$date": { "$numberLong": "1680105272788" } }
+                  }
+                }
+              }'
       requestBody:
         content:
           application/json:
@@ -421,6 +522,29 @@ paths:
       operationId: updateMany
       summary: Update Documents
       description: Update multiple documents in a collection.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateMany \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": {
+                  "status": "open"
+                },
+                "update": {
+                  "$set": {
+                    "status": "complete",
+                    "completedAt": { "$date": { "$numberLong": "1680105287069" } }
+                  }
+                }
+              }'
       requestBody:
         content:
           application/json:
@@ -490,6 +614,23 @@ paths:
       operationId: deleteOne
       summary: Delete One Document
       description: Delete a single document that matches a query.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": {
+                  "_id": { "$oid": "64224f3cd79f54ad342dd9b2" }
+                }
+              }'
       requestBody:
         content:
           application/json:
@@ -546,6 +687,23 @@ paths:
       operationId: deleteMany
       summary: Delete Documents
       description: Delete multiple documents that match a query.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "filter": {
+                  "status": "complete"
+                }
+              }'
       requestBody:
         content:
           application/json:
@@ -602,6 +760,35 @@ paths:
       operationId: aggregate
       summary: Aggregate Documents
       description: Run an aggregation pipeline.
+      x-codeSamples:
+        - lang: cURL
+          label: cURL
+          source: |
+            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/aggregate \
+              -X POST \
+              -H "apiKey: $API_KEY" \
+              -H 'Content-Type: application/ejson' \
+              -H "Accept: application/json" \
+              -d '{
+                "dataSource": "mongodb-atlas",
+                "database": "learn-data-api",
+                "collection": "tasks",
+                "pipeline": [
+                  {
+                    "$match": { "status": "complete" }
+                  },
+                  {
+                    "$group": {
+                      "_id": "$status",
+                      "count": { "$sum": 1 },
+                      "tasks": { "$push": "$text" }
+                    }
+                  },
+                  {
+                    "$sort": { "count": -1 }
+                  }
+                ]
+              }'
       requestBody:
         content:
           application/json:
