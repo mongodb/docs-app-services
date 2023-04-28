@@ -54,7 +54,36 @@ publishing.
      ...
    ```
 
-4. Bundle the Spec
+4. You can define
+   [components](https://swagger.io/docs/specification/components/) in the
+   `components` directory:
+
+   ```yaml
+   # components/schemas/MyReusableSchema.yaml
+   type: object
+   properties:
+     someField:
+       type: string
+       description: |
+         A field in a reusable schema component
+   ```
+
+   and reference them across your schema files:
+
+   ```yaml
+   # paths/action_doSomething.yaml
+   post:
+     operationId: doSomething
+     summary: Do Something
+     description: Do something with your data in Atlas
+     requestBody:
+       content:
+         application/json:
+           schema:
+             $ref: "../components/schemas/MyReusableSchema.yaml"
+   ```
+
+5. Bundle the Spec
 
    ```sh
    ./bundle.sh
