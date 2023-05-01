@@ -20,6 +20,15 @@ this file is almost all `$ref` references to components defined in separate yaml
 files. We compile the development version into a single bundled file for
 publishing.
 
+### Setup
+
+The bundle and preview commands use Redocly's OpenAPI CLI. Make sure to install
+the CLI and other dependencies for this project by running:
+
+```
+npm install
+```
+
 ### Add (or modify) an Endpoint
 
 *Note: If you're editing an existing endpoint, you can skip to editing the file in step 3. Make sure to bundle when you're done!*
@@ -86,7 +95,7 @@ publishing.
 5. Bundle the Spec
 
    ```sh
-   ./bundle.sh
+   npm run bundle
    ```
 
 ### Preview Changes
@@ -100,11 +109,11 @@ There are two commands you can run.
 One to preview the development spec while you're working on it:
 
 ```sh
-./preview-dev.sh
+npm run preview-dev
 ```
 
 And another to preview the bundled spec:
 
 ```sh
-./preview-bundled.sh
+npm run preview-bundled
 ```
