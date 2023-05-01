@@ -58,11 +58,6 @@ to open a realm, or the appearance of data loss when server-side documents
 are unable to sync to client-side applications. They prevent applications from 
 automatically recovering from a :ref:`client reset <handle-a-client-reset>`.
 
-.. important::
-  
-   We do not recommend making breaking server-side schema changes if they can 
-   be avoided.
-
 A non-breaking change is a change that you can make in your server-side
 schema or your object model without requiring additional handling in your
 app. Also known as additive changes, they apply automatically to synced realms.
@@ -105,26 +100,26 @@ non-breaking change.
    * - :ref:`Remove an object type <schema-update-remove-object-type>`
      - Breaking
      - Non-breaking
-   * - :ref:`Remove an optional or required required property <schema-update-remove-property>`
+   * - :ref:`Remove an optional or required property <schema-update-remove-property>`
      - Breaking
      - Non-breaking
    * - :ref:`Change an object type name <schema-update-change-object-type-name>`
-     - Breaking
-     - Breaking
+     - Breaking*
+     - Breaking*
    * - :ref:`Change a property name <schema-update-change-property-name>`
      - Breaking*
      - Breaking*
    * - :ref:`Change property type but keep the name <schema-update-change-property-type-but-keep-name>`
      - Breaking
      - Breaking
-   * - :ref:`Change property's status between from optional nd required <schema-update-change-property-status>`
+   * - :ref:`Change property's status between from optional and required <schema-update-change-property-status>`
      - Breaking
      - Breaking
 
 .. tip:: Rename a property
 
-   While renaming a property is a breaking change, some of the Realm SDKs
-   offer a workaround to remap the property name. See 
+   While renaming a property or object is a breaking change, some of the Realm 
+   SDKs offer a workaround to remap the property name. See 
    :ref:`schema-update-change-property-name` for more details.
 
 .. _schema-update-add-object-type:
@@ -164,11 +159,11 @@ Modify Existing Atlas Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you add a new required property, you must update existing documents with 
-the new property or they will not sync to the client. This may give client 
+the new property or they do not sync to the client. This may give client 
 users the impression that the data has been lost. Resolve this issue by
 adding the new property to each impacted document and populating it with a 
-default value. After you've updated the documents, they will sync to the client 
-application.
+default value. After you update the documents to match the client schema, they 
+sync to the client application.
 
 When you add a new required property, App Services retrieves the documents for 
 the collection that have new values per the updated schema. App Services iterates 
@@ -237,7 +232,11 @@ Change an Object's Name
 ------------------------
 
 Changing an object's name is a breaking change to both the server-side 
-schema and the client-side object model.
+schema and the client-side object model. However, some SDKs do offer an API to map
+a new object name to an existing internal name. This allows
+you to avoid renaming a property and triggering migrations; instead, you  
+map the existing property name to something new to match your code. Object name 
+mapping is currently supported in the Kotlin and Java SDKs. 
 
 Instead of changing an object's name, consider implementing the 
 :ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
@@ -245,9 +244,11 @@ you keep the existing collection and schema, and create a new collection
 with the new schema. 
 
 If you choose to change the object's name instead of using the partner collection 
-strategy, you will need to terminate sync, manually update the schema, 
+strategy, you must terminate sync, manually update the schema, 
 and re-enable sync. In addition, your client 
-application must perform a :ref:`manual client reset <manual-client-reset>`.
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
 
 .. note::
 
@@ -281,15 +282,17 @@ can use this API in these SDKs:
    to the client. This may give client users the impression that the data 
    has been lost.
 
-Instead of changing an property's name, consider implementing the 
+Instead of changing a property's name, consider implementing the 
 :ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
 you keep the existing collection and schema, and create a new collection 
 with the new schema. 
 
 If you choose to change the property's name instead of using the partner collection 
-strategy, you will need to terminate sync, manually update the schema, 
+strategy, you must terminate sync, manually update the schema, 
 and re-enable sync. In addition, your client 
-application must perform a :ref:`manual client reset <manual-client-reset>`.
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
 
 When you terminate and re-enable sync, you must also update existing Atlas 
 documents to enable them to Sync with your client applications. 
@@ -301,8 +304,8 @@ in two ways:
 - Add a new field to each document with a name that matches the new schema, 
   and copy the value from the old field into it
 
-After you've made these changes, the appropriate documents will 
-sync to the client application.
+After you've made these changes, the appropriate documents sync to the client 
+application.
 
 .. _schema-update-change-property-type-but-keep-name:
 
@@ -319,15 +322,17 @@ schema and the client-side object model.
    to the client. This may give client users the impression that the data 
    has been lost.
 
-Instead of changing an property's type, consider implementing the 
+Instead of changing a property's type, consider implementing the 
 :ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
 you keep the existing collection and schema, and create a new collection 
 with the new schema. 
 
 If you choose to change the property's type instead of using the partner collection 
-strategy, you will need to terminate sync, manually update the schema, 
+strategy, you must terminate sync, manually update the schema, 
 and re-enable sync. In addition, your client 
-application must perform a :ref:`manual client reset <manual-client-reset>`.
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
 
 .. note::
 
@@ -362,15 +367,17 @@ is a breaking change to both the server-side schema and the client-side object m
    to the client. This may give client users the impression that the data 
    has been lost.
 
-Instead of changing an property's status, consider implementing the 
+Instead of changing a property's status, consider implementing the 
 :ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
 you keep the existing collection and schema, and create a new collection 
 with the new schema. 
 
 If you choose to change the property's status instead of using the partner collection 
-strategy, you will need to terminate sync, manually update the schema, 
+strategy, you must terminate sync, manually update the schema, 
 and re-enable sync. In addition, your client 
-application must perform a :ref:`manual client reset <manual-client-reset>`.
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
 
 .. note::
 
