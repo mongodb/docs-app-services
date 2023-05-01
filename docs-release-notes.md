@@ -1,3 +1,24 @@
+# April 28, 2023
+
+## Device Sync
+
+- App Builder's Resources/Event Library: Add a note that Partition-based Sync is required to record events
+- Add/update missing links to Realm SDKs across App Services docs to reflect new documentation/new feature support
+
+## Data API
+
+- Data API Endpoints: Remove "Endpoints" section, add a link to the Open API Reference to view all endpoints
+- Data API Examples: New "Create, Read, Update, and Delete (CRUD) Operations" section with generated code snippets formerly on the "Endpoints" page
+- Data API Open API Reference: New Open API spec documenting Data API endpoints
+
+## Functions
+
+- Landing Page: Raise the request timeout limit from 240 seconds to 270 seconds
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Email/Password Authentication: Typo fix
+
 # April 21, 2023
 
 ## Get Started
