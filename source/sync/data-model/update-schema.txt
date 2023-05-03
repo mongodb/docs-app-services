@@ -112,7 +112,7 @@ non-breaking change.
    * - :ref:`Change property type but keep the name <schema-update-change-property-type-but-keep-name>`
      - Breaking
      - Breaking
-   * - :ref:`Change property's status between from optional and required <schema-update-change-property-status>`
+   * - :ref:`Change property's status between optional and required <schema-update-change-property-status>`
      - Breaking
      - Breaking
 
@@ -231,14 +231,19 @@ integer values, or an empty string for string values.
 Change an Object's Name
 ------------------------
 
-Changing an object's name is a breaking change to both the server-side 
-schema and the client-side object model. However, some SDKs do offer an API to map
-a new object name to an existing internal name. This allows
-you to avoid renaming a property and triggering migrations; instead, you  
-map the existing property name to something new to match your code. Object name 
-mapping is currently supported in the Kotlin and Java SDKs. 
+Changing an object's name on both the server-side schema and the client-side 
+object model is a breaking change. However, some SDKs offer an API to 
+map a new object name to an existing name in the schema. This allows you to 
+rename an object on the client but not change the object name on the server. 
+In this way, you avoid triggering a migration. Object name 
+mapping is supported in the following SDKs:
 
-Instead of changing an object's name, consider implementing the 
+- Kotlin
+- Java
+- .NET
+- Flutter
+
+If name mapping is not an option, consider implementing a  
 :ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
 you keep the existing collection and schema, and create a new collection 
 with the new schema. 
@@ -260,12 +265,12 @@ unsynced changes before resetting.
 Change a Property Name
 ----------------------
 
-Changing a property name may be a breaking change to both the server-side 
-schema and the client-side object model. However, some SDKs do offer an API to map
-the name defined in a model class to a different internal name. This allows
-you to avoid renaming a property and triggering migrations; instead, you  
-map the existing property name to something new to match your code. You
-can use this API in these SDKs:
+Changing a property's name on both the server-side schema and the client-side 
+object model is a breaking change. However, some SDKs offer an API to 
+map a new property name to an existing name in the schema. This allows you to 
+rename a property on the client but not change the property name on the server. 
+In this way, you avoid triggering a migration. Property name 
+mapping is supported in the following SDKs:
 
 - :ref:`Flutter: Remap a Property <flutter-map-property>`
 - :ref:`Java: Rename a Field <java-rename-field>`
@@ -282,7 +287,7 @@ can use this API in these SDKs:
    to the client. This may give client users the impression that the data 
    has been lost.
 
-Instead of changing a property's name, consider implementing the 
+If name mapping is not an option, consider implementing a  
 :ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
 you keep the existing collection and schema, and create a new collection 
 with the new schema. 
