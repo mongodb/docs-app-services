@@ -1,7 +1,6 @@
 # MongoDB Atlas Data API - OpenAPI Spec
 
-This directory contains the OpenAPI source files and final bundled spec file for
-the Data API. We use Redocly CLI's
+This directory contains the OpenAPI source files for the Data API. We use Redocly CLI's
 [bundle](https://redocly.com/docs/cli/commands/bundle/) functionality to combine
 the separated source files into one combined file that we use in production.
 
