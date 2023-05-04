@@ -9,26 +9,12 @@ if [[ -z "$ATLAS_PUBLIC_API_KEY" ]] || [[ -z "$ATLAS_PRIVATE_API_KEY" ]]; then
     exit 1
 fi
 
-APP_NAME="data-api-tests"
-
-deleteAllDocuments() {
-  local database=$1
-  local collection=$2
-  local result=$(
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany \
-      -X POST \
-      -H "apiKey: $API_KEY" \
-      -H 'Content-Type: application/ejson' \
-      -H "Accept: application/json" \
-      -d '{"dataSource":"mongodb-atlas","database":"'"$database"'","collection":"'"$collection"'","filter":{}}'
-  )
-  echo "Deleted $(jq -r ".deletedCount" <<< $result) documents from $database.$collection"
-}
+APP_NAME="test-data-api-generated-endpoints"
 
 oneTimeSetUp() {
   # Create a new App Services App for this test run
   echo "Creating a new App Services App..."
-  npx -y mongodb-realm-cli login --profile $APP_NAME --api-key $ATLAS_PUBLIC_API_KEY --private-api-key $ATLAS_PRIVATE_API_KEY
+  # npx -y mongodb-realm-cli login --profile $APP_NAME --api-key $ATLAS_PUBLIC_API_KEY --private-api-key $ATLAS_PRIVATE_API_KEY
   npx mongodb-realm-cli app create --profile $APP_NAME --name $APP_NAME --cluster $CLUSTER_NAME --cluster-service-name "mongodb-atlas" --location "US-VA" --deployment-model "GLOBAL"
   cd $APP_NAME
 
