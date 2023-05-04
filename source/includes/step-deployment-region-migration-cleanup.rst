@@ -6,6 +6,7 @@
    functionality:
 
    .. list-table::
+      :header-rows: 1
 
       * - Feature
         - Clean Up Steps
