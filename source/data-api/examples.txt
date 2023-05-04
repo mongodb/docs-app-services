@@ -174,12 +174,12 @@ component:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "createdAt": { "$date": "2021-12-03T17:08:30.749Z" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "createdAt": { "$date": "2021-12-03T17:08:30.749Z" }
+       }
      }'
 
 Decimal128
@@ -197,12 +197,12 @@ value as a string:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "accountBalance": { "$numberDecimal": "128452.420523" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "accountBalance": { "$numberDecimal": "128452.420523" }
+       }
      }'
 
 Double
@@ -221,12 +221,12 @@ a string:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "temperatureCelsius": { "$numberDouble": "23.847" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "temperatureCelsius": { "$numberDouble": "23.847" }
+       }
      }'
 
 **Relaxed EJSON**
@@ -243,12 +243,12 @@ is automatically cast to a ``$numberDouble`` object:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "temperatureCelsius": 23.847
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "temperatureCelsius": 23.847
+       }
      }'
 
 
@@ -267,12 +267,12 @@ object with the integer value as a string:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "coins": { "$numberInt": "2147483647" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "coins": { "$numberInt": "2147483647" }
+       }
      }'
 
 **Relaxed EJSON**
@@ -289,12 +289,12 @@ point is automatically cast to a ``$numberInt`` object:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "coins": 2147483647
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "coins": 2147483647
+       }
      }'
 
 Int64
@@ -312,12 +312,12 @@ integer value as a string:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "population": { "$numberLong": "8047923148" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "population": { "$numberLong": "8047923148" }
+       }
      }'
 
 ObjectId
@@ -334,12 +334,12 @@ To specify an ObjectId value, use ``$oid`` with the ID as a byte string:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "_id": { "$oid": "61f02ea3af3561e283d06b91" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "document": {
+         "_id": { "$oid": "61f02ea3af3561e283d06b91" }
+       }
      }'
 
 .. _data-api-query-examples:
@@ -364,10 +364,10 @@ To match all documents in a collection, use an empty query object:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "filter": {}
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "filter": {}
      }'
 
 Find a Document by ID
@@ -386,12 +386,12 @@ ObjectID field, including a document using an EJSON ``$oid`` object:
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "filter": {
-           "_id": { "$oid": "630e51b3f4cd7d9e606caab6" }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "filter": {
+         "_id": { "$oid": "630e51b3f4cd7d9e606caab6" }
+       }
      }'
 
 Find By Date
@@ -409,12 +409,12 @@ You can match documents on a specific date by matching an EJSON
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "filter": {
-           "createdAt": { "$date": { "$numberLong": "1661881925033" } }
-         }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "filter": {
+         "createdAt": { "$date": "2022-08-30T17:52:05.033Z" }
+       }
      }'
 
 You can query a range of dates with ``$gt``, ``$gte``, ``$lt``, and
@@ -429,15 +429,15 @@ You can query a range of dates with ``$gt``, ``$gte``, ``$lt``, and
      --header 'Content-Type: application/ejson' \
      --header 'apiKey: <API Key>' \
      --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "filter": {
-           "createdAt": {
-             "$gte": { "$date": { "$numberLong": "1640995200000" } },
-             "$lt": { "$date": { "$numberLong": "1672531200000" } }
-           }
+       "dataSource": "<cluster name>",
+       "database": "<database name>",
+       "collection": "<collection name>",
+       "filter": {
+         "createdAt": {
+           "$gte": { "$date": "2022-01-01T00:00:00.000Z" },
+           "$lt": { "$date": "2023-01-01T00:00:00.000Z" }
          }
+       }
      }'
 
 Data Access Permissions
@@ -475,14 +475,14 @@ expression to match the API key's account ID:
      "collection": "<collection>",
      "roles": [
        {
-          "name": "SpecificUser",
-          "apply_when": {
-            "%%user.id": "61f9a5e69cd3c0199dc1bb88"
-          },
-          "insert": true,
-          "delete": true,
-          "read": true,
-          "write": true
+         "name": "SpecificUser",
+         "apply_when": {
+           "%%user.id": "61f9a5e69cd3c0199dc1bb88"
+         },
+         "insert": true,
+         "delete": true,
+         "read": true,
+         "write": true
        }
      ],
      "filters": []
@@ -500,19 +500,19 @@ expression to match an array of API key account IDs:
      "collection": "<collection>",
      "roles": [
        {
-          "name": "MultipleUsers",
-          "apply_when": {
-            "%%user.id": {
-               "$in": [
-                 "61f9a5e69cd3c0199dc1bb88",
-                 "61f9a5e69cd3c0199dc1bb89"
-               ]
-            }
-          },
-          "insert": true,
-          "delete": true,
-          "read": true,
-          "write": true
+         "name": "MultipleUsers",
+         "apply_when": {
+           "%%user.id": {
+             "$in": [
+               "61f9a5e69cd3c0199dc1bb88",
+               "61f9a5e69cd3c0199dc1bb89"
+             ]
+           }
+         },
+         "insert": true,
+         "delete": true,
+         "read": true,
+         "write": true
        }
      ],
      "filters": []
@@ -553,22 +553,22 @@ with the :json-operator:`%function` operator:
      "collection": "<collection>",
      "roles": [
        {
-          "name": "SomeCustomRole",
-          "apply_when": {
-            "%%true": {
-              "%function": {
-                "name": "hasRole",
-                "arguments": [{
-                  "userId": "%%user.id",
-                  "roleName": "SomeCustomRole"
-                }]
-              }
-            }
-          },
-          "insert": true,
-          "delete": true,
-          "read": true,
-          "write": true
+         "name": "SomeCustomRole",
+         "apply_when": {
+           "%%true": {
+             "%function": {
+               "name": "hasRole",
+               "arguments": [{
+                 "userId": "%%user.id",
+                 "roleName": "SomeCustomRole"
+               }]
+             }
+           }
+         },
+         "insert": true,
+         "delete": true,
+         "read": true,
+         "write": true
        }
      ],
      "filters": []
@@ -598,12 +598,12 @@ configurations <role-config>`:
      "collection": "<collection>",
      "roles": [
        {
-          "name": "IsOwner",
-          "apply_when": { "owner_id": "%%user.id" },
-          "insert": false,
-          "delete": false,
-          "read": true,
-          "write": true
+         "name": "IsOwner",
+         "apply_when": { "owner_id": "%%user.id" },
+         "insert": false,
+         "delete": false,
+         "read": true,
+         "write": true
        }
      ],
      "filters": []
