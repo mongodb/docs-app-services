@@ -635,9 +635,12 @@ Expression` field. App Services evaluates the match expression against the
 change event document and invokes the Trigger only if the expression evaluates
 to true for the given change event.
 
+The match expression is a JSON document that specifies the query conditions
+using the :manual:`MongoDB read query syntax </reference/operator/query/>`.
+
 We recommend only using match expressions when the volume of Trigger events
 measurably becomes a performance issue. Until then, receive all events and
-implement the logic to ignore certain events in the Trigger Function.
+handle them individually in the Trigger function code.
 
 The exact shape of the change event document depends on the event that caused
 the trigger to fire. For details, see the reference for each event type:
@@ -646,6 +649,8 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`update </reference/change-events/update>`
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
+
+
 
 .. example::
    
@@ -668,13 +673,15 @@ the trigger to fire. For details, see the reference for each event type:
    field of the :manual:`insert </reference/change-events/insert>`,
    :manual:`update </reference/change-events/update>`, and :manual:`replace
    </reference/change-events/replace>` events represents a document after the
-   given operation.
+   given operation. To receive the ``fullDocument`` field, you must enable
+   :guilabel:`Full Document` in your Trigger configuration.
 
    .. code-block:: javascript
      
       {
         "fullDocument.needsTriggerResponse": true
       }
+
 
 Testing Match Expressions
 `````````````````````````
