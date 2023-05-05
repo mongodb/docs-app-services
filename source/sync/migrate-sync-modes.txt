@@ -132,7 +132,8 @@ and re-enabling Device Sync. There are some additional effects of migration:
 - Storage in your Atlas cluster used by Device Sync metadata is temporarily doubled.
   Partition-Based Sync metadata and Flexible Sync metadata must temporarily co-exist. 
   Depending on the size of your synced data, this could affect billing every time you
-  migrate.
+  migrate. The doplicated metadata is removed after the migration is rolled back
+  or committed.
 
 **To migrate from Partition-Based Sync to Flexible Sync:** 
 
@@ -179,11 +180,6 @@ Rules. You may need to manually migrate permissions that include:
 
   :ref:`Function rules <pbs-function-rules>` are not compatible with Flexible Sync 
   and cannot be migrated.
-
-- :json-expansion:`%%partition` expansion.
-
-  App Services Rules do not have an equivalent expansion for  
-  :json-expansion:`%%partition`, so it cannot be migrated.
 
 - ``%or``, ``%not``, ``%nor``, ``%and`` expansions.
 
@@ -317,20 +313,30 @@ each table where ``partitionKey == partitionValue``. This will continue
 until you :ref:`migrate your client app <realm-sync-migrate-client>` to
 Flexible Sync.
 
+After migrating your client app to Flexible Sync, the backend will stop injecting
+the partition key field. This means objects created after migrating your client
+app to Flexible Sync may not be available in clients that haven't yet been
+updated to Flexible Sync.
+
 .. _realm-sync-migrate-client:
 
 Migrate Client App to Flexible Sync
 -----------------------------------
 
 After your app's backend has been migrated to Flexible Sync, we recommend
-that you also migrate your client app to Flexible Sync. When you migrate your
+that you migrate your client app to Flexible Sync. When you migrate your
 client app to Flexible Sync, the client will stop automatically creating
 sync subscriptions for each Realm object model in your app's data model.
 
 We also recommend removing all sync subscriptions and then creating new subscriptions
 for your data. This is the clearest way to control what data is synced after a
-migration. Refer to the SDK documentation for details about adding and removing
-subscriptions.
+migration. If you want to remove individual subscriptions, the automatically
+generated subscriptions use this naming format: ``flx_migrated_<objecModelName>``.
+For example, a subscription for the ``Person`` collection would be named
+``flx_migrated_Person``.
+
+Refer to the SDK documentation for details about adding and removing
+subscriptions:
 
 - Java SDK
    :ref:`Flexible Sync - Java SDK <java-flexible-sync>`
