@@ -27,8 +27,8 @@ Requirements
 ------------
 
 Currently, the Kotlin and Swift SDKs can migrate from Partition-Based Sync to
-Flexible Sync. The C++, Flutter, Java, .NET, Node.js, and React Native SDKs
-cannot perform the migration.
+Flexible Sync. The Java, .NET, Node.js, and React Native SDKs cannot perform
+the migration.
 
 App Services App:
 
@@ -37,16 +37,18 @@ App Services App:
 Linked Atlas Cluster:
 
 - Use MongoDB 5.0 or later for Flexible Sync compatibility
-- Have storage auto-scaling enabled
+- Enable :atlas:`storage auto-scaling </cluster-autoscaling/#configure-auto-scaling-options>`
 - Be an M10+ Cluster Tier
-- Have time-based oplog setting enabled
+- Have time-based :manual:`oplog </core/replica-set-oplog/>` setting enabled
 
 Client apps:
 
-- ``realm-core`` v13.10.0 or later, which is included in these SDK versions:
+- Minimum SDK version:
 
   - Realm Kotlin SDK v1.8.0
   - Realm Swift SDK v10.39.0
+- Have a :ref:`Client Reset Handler <client-resets>` configured.
+- Remove any code in a client app that relies on progress notifications because Flexible Sync does not support them
 
 .. _realm-sync-migrate-what-to-know:
 
@@ -56,8 +58,8 @@ What to Know Before Migrating
 Migrating your App's Sync mode involves changes that affect both client apps and
 your App's backend. You should be aware of the effects and plan ahead.
 
-- Client apps that use an SDK with with a ``realm-core`` version earlier than
-  v13.10.0 will not be able to sync after migration.
+- Client apps that don't meet the minimum SDK version requirement will not be
+  able to sync after migration.
 - How long a migration takes is directly proportional to the amount of data that
   needs to be migrated. The more data, the longer it will take to migrate.
 - Migrations can be :ref:`canceled <realm-sync-migrate-cancel>` during the 
@@ -150,9 +152,10 @@ and re-enabling Device Sync. There are some additional effects of migration:
    Clients will not be able to sync their local writes until the migration has
    completed.
 
-After a migration is completed, Partition-Based Sync client apps can communicate
-with your App's Flexible Sync backend. You can disable and re-enable Flexible Sync
-and client apps will still communicate with your backend.
+After a migration is completed, Partition-Based Sync client apps will go through
+a client reset. Then, they can communicate with your App's Flexible Sync backend.
+You can disable and re-enable Flexible Sync and client apps will still
+communicate with your backend.
 
 If you re-enable Partitition-Based Sync you will lose the "migrated" status.
 This means you'll need to to another migration if you want to use Flexible Sync
@@ -186,7 +189,9 @@ Rules. You may need to manually migrate permissions that include:
 
   These permissions may work, but there is enough nuance that you should test them
   to ensure expected behavior. Testing new permissions won't work on the App
-  you are migrating. You'll need a new app to test manually-migrated permissions.
+  you are migrating. Instead, create a new Flexible Sync app to test your
+  manually-migrated permissions. Then apply the tested permissions to the app
+  you are migrating.
 
 See the list of :ref:`Flexible Sync-compatible expansions <sync-compatible-expansions>`
 for all supported expansions.
@@ -230,7 +235,7 @@ App to Partiton-Based Sync.
 
 If you don't commit or revert the migration, it will automatically commit
 according to your 
-:atlas:`minimum oplog window </atlas/cluster-additional-settings/#set-minimum-oplog-window>`. 
+:atlas:`minimum oplog window </cluster-additional-settings/#set-minimum-oplog-window>`. 
 For example, if your minimum oplog window is 48 hours, you will have 48 hours to
 revert your migration.
 
@@ -300,7 +305,7 @@ These are some other characteristics of the injected field you should be aware
 of:
 
 - The injected field follows this structure: ``<yourPartitionKey> == 
-  <yourPartitionValue>``. Both the field key is derived from your old
+  <yourPartitionValue>``. The field key is derived from your old
   Partition-Based Sync  **backend**  configuration. The value is derived from
   your current Partition-Based Sync  **client**  configuration.
 - The injected field does not sync back to the client that created the object.
@@ -324,14 +329,8 @@ sync subscriptions for each Realm object model in your app's data model.
 
 We also recommend removing all sync subscriptions and then creating new subscriptions
 for your data. This is the clearest way to control what data is synced after a
-migration.
-
-You can keep these subscriptions if you don't want to remove and recreate
-subscriptions. See the SDK documentation for details about adding and removing
+migration. Refer to the SDK documentation for details about adding and removing
 subscriptions.
-
-- Flutter SDK
-   :ref:`Manage Flexible Sync Subscriptions - Flutter SDK <flutter-flexible-sync-manage-subscriptions>`
 
 - Java SDK
    :ref:`Flexible Sync - Java SDK <java-flexible-sync>`
@@ -351,6 +350,7 @@ subscriptions.
 - Swift SDK
    :ref:`Manage Flexible Sync Subscriptions - Swift SDK <swift-manage-flexible-sync-subscriptions>`
 
-If you don't remove all subscriptions, the automatically-created subscriptions
-will remain, but you won't see them in your client code. This makes it harder
-to understand what data is available to your client app.
+You can keep the automatically-generated subscriptions if you don't want to
+remove and recreate them. But you should consider that because these 
+subscriptions aren't created in your client code, they may make it harder to
+maintain and extend client code.
