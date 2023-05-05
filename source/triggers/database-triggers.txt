@@ -113,51 +113,71 @@ Database Triggers have the following configuration options:
 
    * - :guilabel:`Trigger Type`
 
-     - Required. The type of the Trigger. Set this value to ``DATABASE`` for database Triggers
+     - The type of the Trigger. Set this value to :guilabel:`Database` for 
+       database Triggers
 
    * - :guilabel:`Name`
 
-     - Required. The name of the Trigger.
+     - The name of the Trigger.
+      
+   * - | :guilabel:`Enabled`
 
-   * - :guilabel:`Linked Function`
+     - Enabled by default. Used to enable or disable the trigger. 
+  
+   * - :guilabel:`Skip Events On Re-Enable`
+     
+     - Disabled by default. If enabled, any change events that occurred while this 
+       trigger was disabled will not be processed.
 
-     - Required. The name of the Atlas Function that the Trigger
-       executes whenever it fires. The Trigger passes the
-       :ref:`database event object <database-events>` that
-       caused it to fire as the only argument to this Function.
+   * - :guilabel:`Event Ordering`
+     
+     - If enabled, trigger events are processed in the order in which they occur. 
+       If disabled, events can be processed in parallel, which is faster when 
+       many events occur at the same time.
 
-   * - :guilabel:`Cluster`
+       .. include:: /includes/trigger-event-ordering.rst
 
-     - Required. The name of the MongoDB Service that the Trigger is
+Within the :guilabel:`Trigger Source Details` section, the following configuration 
+options are available:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30
+
+   * - Field
+     - Description
+
+   * - :guilabel:`Cluster Name`
+
+     - The name of the MongoDB Service that the Trigger is
        associated with.
 
    * - :guilabel:`Database Name`
 
-     - Required. The MongoDB database that contains the watched
+     - The MongoDB database that contains the watched
        collection.
 
    * - :guilabel:`Collection Name`
 
-     - Required. The name of the collection that the Trigger watches for
+     - The name of the collection that the Trigger watches for
        change events.
 
-   * - :guilabel:`Operation Types`
+   * - :guilabel:`Operation Type`
 
-     - Required. A list of one or more :ref:`database operation
-       types <database-event-operation-types>` that cause the Trigger to
-       fire. Format each operation type as an uppercase string, e.g.,
-       ``"INSERT"``.
+     - Checkboxes of :ref:`database operation types <database-event-operation-types>` 
+       that cause the Trigger to fire. Select the operation types you want the 
+       trigger to respond to.
 
        .. warning::
 
           Update operations executed from MongoDB Compass or the MongoDB Atlas
           Data Explorer fully replace the previous document. As a result,
-          update operations from these clients will generate ``REPLACE``
-          change events rather than ``UPDATE`` events.
+          update operations from these clients will generate **Replace**
+          change events rather than **Update** events.
 
    * - :guilabel:`Full Document`
 
-     - If enabled, ``UPDATE`` change events include the latest
+     - If enabled, **Update** change events include the latest
        :manual:`majority-committed </reference/read-concern-majority/>`
        version of the modified document *after* the change was applied in
        the ``fullDocument`` field.
@@ -166,17 +186,19 @@ Database Triggers have the following configuration options:
 
           Regardless of this setting:
           
-          - ``INSERT`` and ``REPLACE`` events always include the
+          - **Insert** and **Replace** events always include the
             ``fullDocument`` field.
           
-          - ``DELETE`` events never include the ``fullDocument`` field.
+          - **Delete** events never include the ``fullDocument`` field.
 
    * - :guilabel:`Document Preimage`
 
      - If enabled, change events include a copy of the modified document
        from immediately *before* the change was applied in the
        ``fullDocumentBeforeChange`` field. All change events except for
-       ``INSERT`` events include the document preimage.
+       **Insert** events include the document preimage. Document preimages are 
+       only supported on Atlas clusters running MongoDB 4.4+ on a non-sharded 
+       cluster.
 
        .. tip:: Performance Optimization
 
@@ -186,46 +208,32 @@ Database Triggers have the following configuration options:
           Collection-Level Preimages
           <database-triggers-disable-collection-level-preimages>`.
 
-   * - :guilabel:`Event Ordering`
+Within the :guilabel:`Function` section, you choose what action is taken when 
+the trigger fires. You can choose to run a :ref:`function <functions>` or use 
+:ref:`AWS EventBridge <aws-eventbridge>`. 
 
-     - 
-       .. tabs-realm-admin-interfaces::
-          :hidden: true
-          
-          .. tab::
-             :tabid: ui
-                 
-             Default: Enabled.
-                 
-             Indicates whether event ordering is enabled for this Trigger.
-                 
-          .. tab::
-             :tabid: cli
-                 
-             Optional. Default: ``false``.
-                 
-             If ``true``, indicates that event ordering is disabled for
-             this trigger.
-          
-       .. include:: /includes/trigger-event-ordering.rst
+
+Within the :guilabel:`Advanced` section, the following **optional** configuration 
+options are available:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 15 30
+
+   * - Field
+     - Description
 
    * - :guilabel:`Match Expression`
 
-     - Optional.
-       
-       .. include:: /includes/trigger-match-expression.rst
+     - .. include:: /includes/trigger-match-expression.rst
 
    * - :guilabel:`Project Expression`
 
-     - Optional.
-
-       .. include:: /includes/trigger-project-expression.rst
+     - .. include:: /includes/trigger-project-expression.rst
 
    * - :guilabel:`Auto-Resume Triggers`
 
-     - Optional.
-
-       .. include:: /includes/trigger-auto-resume.rst
+     - .. include:: /includes/trigger-auto-resume.rst
 
 .. _database-events:
 
@@ -249,17 +257,18 @@ following operation types:
    * - Operation Type
      - Description
 
-   * - ``INSERT``
+   * - **Insert**
      - Represents a new document added to the collection.
 
-   * - ``UPDATE``
+   * - **Update**
      - Represents a change to an existing document in the collection.
 
-   * - ``REPLACE``
+   * - **Delete**
+     - Represents a document deleted from the collection.
+
+   * - **Replace**
      - Represents a new document that replaced a document in the collection.
 
-   * - ``DELETE``
-     - Represents a document deleted from the collection.
 
 Database change event objects have the following general form:
 
@@ -470,7 +479,7 @@ database, and when the Trigger finishes responding to that event. If
 latency is consistently large, you can reduce it with the following
 mitigations:
 
-- Optimize the Trigger's Linked Function to speed up execution.
+- Optimize the Trigger's linked Function to speed up execution.
 
 - If your Trigger uses Event Ordering, consider switching ordering off
   to reduce latency.
@@ -500,8 +509,8 @@ collection as a document that resembles the following:
    }
 
 To automate this process, the store creates a database Trigger that
-listens for ``UPDATE`` change events in the ``store.orders`` collection.
-When the trigger observes an ``UPDATE`` event, it passes the
+listens for **Update** change events in the ``store.orders`` collection.
+When the trigger observes an **Update** event, it passes the
 :ref:`change event object <database-events>` to its associated Function,
 ``textShippingUpdate``. The Function checks the change event for any
 changes to the ``shippingLocation`` field and, if it was updated, sends
@@ -626,6 +635,13 @@ Expression` field. App Services evaluates the match expression against the
 change event document and invokes the Trigger only if the expression evaluates
 to true for the given change event.
 
+The match expression is a JSON document that specifies the query conditions
+using the :manual:`MongoDB read query syntax </reference/operator/query/>`.
+
+We recommend only using match expressions when the volume of Trigger events
+measurably becomes a performance issue. Until then, receive all events and
+handle them individually in the Trigger function code.
+
 The exact shape of the change event document depends on the event that caused
 the trigger to fire. For details, see the reference for each event type:
 
@@ -633,6 +649,8 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`update </reference/change-events/update>`
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
+
+
 
 .. example::
    
@@ -655,13 +673,42 @@ the trigger to fire. For details, see the reference for each event type:
    field of the :manual:`insert </reference/change-events/insert>`,
    :manual:`update </reference/change-events/update>`, and :manual:`replace
    </reference/change-events/replace>` events represents a document after the
-   given operation.
+   given operation. To receive the ``fullDocument`` field, you must enable
+   :guilabel:`Full Document` in your Trigger configuration.
 
    .. code-block:: javascript
      
       {
         "fullDocument.needsTriggerResponse": true
       }
+
+
+Testing Match Expressions
+`````````````````````````
+
+The following procedure shows one way to test whether your match expression
+works as expected:
+
+1. Download `the MongoDB Shell (mongosh)
+   <https://www.mongodb.com/docs/mongodb-shell/>`__ and use it to
+   :atlas:`connect to your cluster </mongo-shell-connection/>`.
+#. Replacing ``DB_NAME`` with your database name, ``COLLECTION_NAME`` with your
+   collection name, and ``YOUR_MATCH_EXPRESSION`` with the match expression you
+   want to test, paste the following into mongosh to open a change stream on an
+   existing collection:
+
+   .. code-block:: js
+ 
+      db.getSiblingDB(DB_NAME).COLLECTION_NAME.watch([{$match: YOUR_MATCH_EXPRESSION}])
+      while (!watchCursor.isClosed()) {
+        if (watchCursor.hasNext()) {
+          print(tojson(watchCursor.next()));
+        }
+      }
+
+#. In another terminal window, use mongosh to make changes to some test
+   documents in the collection.
+#. Observe what the change stream filters in and out.
 
 .. _database-triggers-project-expression:
 

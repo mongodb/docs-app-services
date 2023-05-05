@@ -11,6 +11,85 @@ Data API Examples
 The following examples demonstrate how to send requests to the Atlas
 Data API.
 
+Create, Read, Update, and Delete (CRUD) Operations
+--------------------------------------------------
+
+The following examples demonstrate how to perform CRUD operations using
+the Atlas Data API.
+
+.. _data-api-findOne:
+
+Find a Single Document
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.findOne.sh
+
+.. _data-api-find:
+
+Find Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.find.sh
+
+.. _data-api-insertOne:
+
+Insert a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.insertOne.sh
+
+.. _data-api-insertMany:
+
+Insert Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.insertMany.sh
+
+.. _data-api-updateOne:
+
+Update a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.updateOne.sh
+
+
+.. _data-api-updateMany:
+
+Update Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.updateMany.sh
+
+
+.. _data-api-replaceOne:
+
+Replace a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.replaceOne.sh
+
+.. _data-api-deleteOne:
+
+Delete a Single Document
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.deleteOne.sh
+
+.. _data-api-deleteMany:
+
+Delete Multiple Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.deleteMany.sh
+
+.. _data-api-aggregate:
+
+Run an Aggregation Pipeline
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.aggregate.sh
+
+
 Specify BSON Types in Requests
 ------------------------------
 
@@ -219,8 +298,8 @@ To match all documents in a collection, use an empty query object:
          "filter": {}
      }'
 
-Find Document by ID
-~~~~~~~~~~~~~~~~~~~
+Find a Document by ID
+~~~~~~~~~~~~~~~~~~~~~
 
 MongoDB stores each document with a unique identifier in the ``_id``
 field. For most apps, this is a BSON ObjectID value. You can match any
