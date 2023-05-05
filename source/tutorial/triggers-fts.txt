@@ -23,9 +23,9 @@ App Services App configuration files (backend). This template app is a basic
 to-do list application that lets users do various things to manage their tasks.
 To learn more about the template app, see :ref:`react-native-tutorial`.
 
-After you've got the template app running, you will add a new feature that alerts you 
-when a user creates a task that contains a specific word or phrase. The feature 
-includes:
+After you've got the template app running, you'll add a new feature that alerts
+you when a user creates a task that contains a specific word or phrase. The 
+feature includes:
 
 - An alert box using the :ref:`Realm React SDK <react-native-intro>` and 
   :npm:`@realm/react <package/@realm/react>` that:
@@ -40,7 +40,12 @@ includes:
   - Aggregates and returns related tasks by using an 
     :atlas:`Atlas Search query </atlas-search/searching/>`.
 
-This example illustrates how you might use built-in features in Atlas  
+For example, if you want to know when users submit a time-sensitive task, 
+you might enter a term such as ``urgent``. Then, when a user adds a task that 
+contains the term, such as ``Urgent: complete this task``, you'll be alerted 
+right away.
+
+This tutorial illustrates how you might use built-in features in Atlas  
 to add to your App Services application. You would not necessarily 
 make this change given the current structure of the template app.
 
@@ -84,7 +89,7 @@ Once you've set up and explored the template app, it's time to write some code t
 implement the new alerting feature.
 
 In this section, you add an alert box that lets you enter terms that
-might appear in your important or time-sensitive tasks.
+might appear in specific, important, or time-sensitive tasks.
 
 .. procedure::
 
@@ -145,10 +150,10 @@ alert terms in Atlas.
 
    .. step:: Create a New Collection
 
-      Create a collection to store the terms that users enter in the app.
-      In the Atlas UI: 
+      In the Atlas UI, create a collection to store the terms that users enter in the app:
 
-      A. Click the :guilabel:`Data Services` tab.
+      A. If you're not already at the :guilabel:`Database Deployments` page, click the 
+         :guilabel:`Data Services` tab.
       
       #. For the deployment that's synced to the template app, 
          click :guilabel:`Browse Collections`.
@@ -238,16 +243,42 @@ function, you define:
 
 .. procedure::
 
-   .. step:: Create a Search Index
+   .. step:: Create an Atlas Search Index
 
       In order to run Atlas Search queries on your data, you must first create
       an :atlas:`Atlas Search index </atlas-search/create-index/>` to map the fields
-      in your collection.
+      in your collection. In the Atlas UI, create a search index on the ``todo.Item``
+      collection:
 
-      Create a search index on the ``todo.Item`` collection by following the procedure 
-      described in :atlas:`Create an Atlas Search Index </atlas-search/create-index/#procedure>`.
-      When creating your index, leave the :guilabel:`Index Name` as ``default`` and proceed
-      with the default index configuration settings.
+      A. Return to the :guilabel:`Database Deployments` page 
+         by clicking the :guilabel:`Data Services` tab.
+
+      #. Click the name of the deployment that's synced to the template app,
+         then click the :guilabel:`Search` tab.
+
+      #. To create your first Atlas Search index, click :guilabel:`Create Search Index`.
+
+      #. In the :guilabel:`Configuration Method` page, select :guilabel:`Visual Editor` 
+         and click :guilabel:`Next`.
+
+      #. Leave the :guilabel:`Index Name` set to ``default``.
+
+      #. In the :guilabel:`Database and Collection` section, find the 
+         ``todo`` database and select the ``Item`` collection.
+
+      #. Click :guilabel:`Next`, then click :guilabel:`Create Search Index`
+         after you've reviewed your index.
+
+      #. Wait for the index to finish building. 
+         
+         The index should take about one minute to build.
+         When it's finished building, the
+         :guilabel:`Status` column reads ``Active``.
+
+      .. note:: 
+
+         To learn more about Atlas Search indexes, see 
+         :atlas:`Create an Atlas Search Index </atlas-search/create-index/>`.
    
    .. step:: Add a Database Trigger
    
