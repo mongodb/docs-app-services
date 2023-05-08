@@ -1,3 +1,36 @@
+# May 5, 2023
+
+## Device Sync
+
+- Configure and Update Your Data Model/Update a Data Model: Add a diagram, substantial rewrites to reduce page length
+
+## Data API
+
+- Data API OpenAPI Reference: Use an OpenAPI bundler to include examples in Data API spec
+
+## Functions
+
+- JavaScript Support: Add a Note callout about axios support for sending HTTP requests
+
+## Triggers
+
+- Database Triggers: Clarify details around match expression
+
+## Authenticate & Manage Users
+
+- Manage User Sessions: Remove incorrect information about custom JWT expiration, clarify anonymous user account deletion
+- Authentication Providers
+  - Custom JWT Authentication: Update `exp` details to remove incorrect expiration info, clarify valid/invalid JWT details
+  - API Key Authentication: Add links to SDK docs showing how to log in with an API key and create an API key
+
+## Reference
+
+- Service Limitations: Clarify max concurrent Device Sync connections vs. max concurrent requests
+
+## Other
+
+- Add a redirect for a subset of 404s related to URLs with spaces per the SEO team
+
 # April 28, 2023
 
 ## Device Sync
