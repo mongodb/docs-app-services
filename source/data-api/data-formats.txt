@@ -86,15 +86,17 @@ There are two variants of EJSON:
 
 - **Canonical EJSON** uses a verbose structure that emphasizes type
   preservation at the expense of readability and interoperability. It
-  fully represents BSON types.
+  fully represents BSON types but you may need to use a library or
+  custom code to work with it.
 
 - **Relaxed EJSON** uses a more compact structure that is easier to read
   and work with but may lose type information for some BSON types. For
-  example, a field with a number may be inferred a different numeric
-  BSON type than you expect.
+  example, a number field in an inserted document may be inferred as a
+  different numeric BSON type than you expect.
 
-Data API endpoints that are configured to return EJSON always return Canonical
-EJSON. You can use either Canonical or Relaxed EJSON in request bodies.
+You can use either Canonical or Relaxed EJSON in request bodies. Data
+API endpoints that are configured to return EJSON always return
+Canonical EJSON.
 
 BSON Types
 ----------
