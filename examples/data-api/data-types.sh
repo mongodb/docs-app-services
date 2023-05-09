@@ -5,7 +5,7 @@ fi
 
 . ./utils.sh
 
-app_name="test-data-api-data-types"
+app_name="test-data-types"
 
 oneTimeSetUp() {
   create_data_api_app "$app_name" "$CLUSTER_NAME"
@@ -78,7 +78,7 @@ testDate() {
     #       " \"_id\": { \"$oid\": \"64540a2ec3a295cbcce82163\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -107,7 +107,7 @@ testDate() {
     #       " \"_id\": { \"$oid\": \"64540a585ed1111e93d02a6d\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -138,7 +138,7 @@ testDecimal128() {
     #       " \"_id\": { \"$oid\": \"64540b2936fd7d4d69bf7faf\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -169,7 +169,7 @@ testDouble() {
     #       " \"_id\": { \"$oid\": \"645422189a49b0668a3d02c8\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -198,7 +198,7 @@ testDouble() {
     #       " \"_id\": { \"$oid\": \"6454220b8962b2a4728da6c2\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -229,7 +229,7 @@ testInt32() {
     #       " \"_id\": { \"$oid\": \"645421b3d5068899e28a489d\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -258,7 +258,7 @@ testInt32() {
     #       " \"_id\": { \"$oid\": \"645421df8fd5ee797aa1d2a9\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -289,7 +289,7 @@ testInt64() {
     #       " \"_id\": { \"$oid\": \"645421504f95e28eeb2a8dba\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -319,7 +319,7 @@ testObjectId() {
     #       "data-types": "<collection name>"
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
