@@ -10,9 +10,10 @@ Migrate Device Sync Modes
    :depth: 3
    :class: singlecol
 
-Atlas App Services Apps can have one of two Device Sync modes: Partition-Based Sync
-and Flexible Sync. Partition-Based Sync is an older mode and you should consider
-migrating to Flexible Sync.
+Atlas App Services Apps can have one of two Device Sync modes: 
+:ref:`Partition-Based Sync <partition-based-sync>` and :ref:`Flexible Sync <sync>`.
+Partition-Based Sync is an older mode and you should consider migrating to
+Flexible Sync.
 
 Migrating an App Services App that uses Partition-Based Sync to Flexible Sync is
 an automatic process. Other than upgrading the SDK version, migrating Sync modes
@@ -69,7 +70,8 @@ your App's backend. You should be aware of the effects and plan ahead.
   not support them.
 - Client apps that were connected to the Partition-Based Sync backend will 
   experience a client reset after the backend is migrated to Flexible Sync. You 
-  should use a :ref:`client reset <handle-a-client-reset>` handler with recovery enabled.
+  should use a :ref:`client reset <handle-a-client-reset>` handler with recovery
+  enabled so you don't lose any pending changes from before the client reset.
 - Creating new tables in a migrated Flexible Sync backend using 
   :ref:`Development Mode <development-mode>` from a Partition-Based Sync client
   may lead to unexpected behavior.
@@ -326,17 +328,19 @@ to clients using older versions of your client app code.
 Migrate Client App to Flexible Sync
 -----------------------------------
 
-After your app's backend has been migrated to Flexible Sync, we recommend
+After your App's backend has been migrated to Flexible Sync, we recommend
 that you migrate your client app to Flexible Sync. When you migrate your
 client app to Flexible Sync, the client will stop automatically creating
 sync subscriptions for each Realm object model in your app's data model.
 
 We also recommend removing all sync subscriptions and then creating new subscriptions
 for your data. This is the clearest way to control what data is synced after a
-migration. If you want to remove individual subscriptions, the automatically
-generated subscriptions use this naming format: ``flx_migrated_<objecModelName>``.
-For example, a subscription for the ``Person`` collection would be named
-``flx_migrated_Person``.
+migration. 
+
+If you want to remove individual subscriptions, the automatically
+generated subscriptions use a specific naming format: ``flx_migrated_`` + your 
+object model's name. For example, a ``Person`` object model's subscription
+name would be ``flx_migrated_Person``.
 
 Refer to the SDK documentation for details about adding and removing
 subscriptions:
@@ -362,4 +366,7 @@ subscriptions:
 You can keep the automatically-generated subscriptions if you don't want to
 remove and recreate them. But you should consider that because these 
 subscriptions aren't created in your client code, they may make it harder to
-maintain and extend client code.
+maintain and extend client code. 
+
+Automatically-generated subscriptions will not exist on clients that never
+connect to your App after it has been migrated to Flexible Sync.
