@@ -19,8 +19,6 @@ oneTimeSetUp() {
 
   # Delete any existing data in the test collections, e.g. from other failed test runs
   echo "Preparing test collections..."
-  # delete_all_documents "$app_name" "learn-data-api" "hello"
-  # delete_all_documents "$app_name" "learn-data-api" "tasks"
   delete_all_documents "$app_name" "learn-data-api" "data-types"
   echo "Successfully prepared test collections"
 }
