@@ -1,3 +1,78 @@
+# May 5, 2023
+
+## Device Sync
+
+- Configure and Update Your Data Model/Update a Data Model: Add a diagram, substantial rewrites to reduce page length
+
+## Data API
+
+- Data API OpenAPI Reference: Use an OpenAPI bundler to include examples in Data API spec
+
+## Functions
+
+- JavaScript Support: Add a Note callout about axios support for sending HTTP requests
+
+## Triggers
+
+- Database Triggers: Clarify details around match expression
+
+## Authenticate & Manage Users
+
+- Manage User Sessions: Remove incorrect information about custom JWT expiration, clarify anonymous user account deletion
+- Authentication Providers
+  - Custom JWT Authentication: Update `exp` details to remove incorrect expiration info, clarify valid/invalid JWT details
+  - API Key Authentication: Add links to SDK docs showing how to log in with an API key and create an API key
+
+## Reference
+
+- Service Limitations: Clarify max concurrent Device Sync connections vs. max concurrent requests
+
+## Other
+
+- Add a redirect for a subset of 404s related to URLs with spaces per the SEO team
+
+# April 28, 2023
+
+## Device Sync
+
+- App Builder's Resources/Event Library: Add a note that Partition-based Sync is required to record events
+- Add/update missing links to Realm SDKs across App Services docs to reflect new documentation/new feature support
+
+## Data API
+
+- Data API Endpoints: Remove "Endpoints" section, add a link to the Open API Reference to view all endpoints
+- Data API Examples: New "Create, Read, Update, and Delete (CRUD) Operations" section with generated code snippets formerly on the "Endpoints" page
+- Data API Open API Reference: New Open API spec documenting Data API endpoints
+
+## Functions
+
+- Landing Page: Raise the request timeout limit from 240 seconds to 270 seconds
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Email/Password Authentication: Typo fix
+
+# April 21, 2023
+
+## Get Started
+
+- SwiftUI Device Sync tutorial: Fix outdated `realmApp` naming
+- Updates across all Device Sync tutorials: Remove steps related to updating queryable fields
+
+## Device Sync
+
+- Configure Sync/Pause or Terminate Sync: Note if using deployment drafts, you must deploy the draft to terminate Sync
+
+## Define Data Access Permissions
+
+- Device Sync-Compatible Permissions: Add a follow-up note about exporting a migrated configuration
+
+## Reference
+
+- App Services Admin API
+  - Security: Add VPC Private Endpoint endpoints & examples for GET a list of private endpoints, GET a specific endpoint, GET a list of Private Endpoint services, POST create endpoint, PUT update endpoint, DELETE delete endpoint
+- Service Limitations: Change maximum number of change streams for M50 and larger to 1000, remove `watch()` limitations
+
 # April 14, 2023
 
 ## Triggers

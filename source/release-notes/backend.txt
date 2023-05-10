@@ -13,12 +13,37 @@ Atlas App Services Changelog
 2023 Releases
 -------------
 
+.. _backend_20230426:
+
+26 April 2023 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for ``axios@^1.3.6`` in Functions.
+- Increased function :ref:`execution timeout <function-constraints>`
+  from 240 seconds to 270 seconds.
+- Updated the Scheduled Trigger configuration UI to use the timezone and
+  date format specified in the user's Atlas preferences.
+- Updated the Realm SDK model generator to output C# models based on
+  source generators with nullable type annotations.
+- Removed the permissions section from the Device Sync configuration UI.
+  Instead, define permissions from the unified :guilabel:`Rules` screen.
+
+.. _backend_20230412:
+
+12 April 2023 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- The GraphQL API will now emit a warning if multiple schemas use the
+  same ``title`` value.
+- Renamed "Asymmetric Sync" to "Data Ingest" in the UI
+
 .. _backend_20230329:
 
 29 March 2023 Release
 ~~~~~~~~~~~~~~~~~~~~~
 
-- Increased function :ref:`execution timeout <function-constraints>` from 210 seconds to 240 seconds.
+- Increased function :ref:`execution timeout <function-constraints>`
+  from 210 seconds to 240 seconds.
 - Remove ``function_name`` in endpoint request body when
   :admin-api-endpoint:`fetching, creating, and modifying HTTPS Endpoints from the Admin API <tag/endpoints>`.
 
@@ -345,4 +370,3 @@ Atlas App Services Changelog
 - Improves performance of client requests to app servers.
 - Fixes an issue where aggregation pipelines did not support the ``$set`` operator.
 - Reduces "Invalid Session" logs.
-

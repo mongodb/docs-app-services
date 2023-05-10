@@ -888,12 +888,15 @@ table explains each field and the value expected:
      - <your name>
    
    * - ``iat``
-     - "Issued At" is a Unix epoch timestamp of when the token was issued. 
-     - The current date-time in seconds since Unix epoch. 
+     - "Issued At" is a Unix epoch timestamp of when the token was issued.
+     - The current date-time in seconds since Unix epoch.
    
    * - ``exp``
-     - The date-time when this token will expire. 
-     - A future date-time (in seconds since Unix epoch) for when you want the token to expire. Depending on your business needs, this can be any duration.
+     - The date-time when this token expires.
+     - A specific time defined in seconds since January 1, 1970 (i.e.
+       the Unix epoch). Before this time, the JWT is valid. After this
+       time, the JWT is expired. The Custom JWT provider rejects any
+       login attempt that includes an expired JWT.
    
    * - ``aud``
      - The audience (consumer) of the token.
