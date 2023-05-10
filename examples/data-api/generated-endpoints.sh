@@ -3,7 +3,7 @@ if [ -z "$CLUSTER_NAME" ]; then
   exit 1
 fi
 
-. ./utils.sh
+source ./utils.sh
 
 app_name="test-generated-endpoints"
 
