@@ -1,91 +1,32 @@
-# #! /bin/bash
-
-if [[ -z "$CLUSTER_NAME" ]]; then
-    echo "Please provide your CLUSTER_NAME as an environment variable" 1>&2
-    exit 1
-fi
-if [[ -z "$ATLAS_PUBLIC_API_KEY" ]] || [[ -z "$ATLAS_PRIVATE_API_KEY" ]]; then
-    echo "Please provide your ATLAS_PUBLIC_API_KEY and ATLAS_PRIVATE_API_KEY as environment variables" 1>&2
-    exit 1
+if [ -z "$CLUSTER_NAME" ]; then
+  echo "You must specify your Atlas Cluster Name as the env variable CLUSTER_NAME"
+  exit 1
 fi
 
-APP_NAME="data-api-tests"
+source ./utils.sh
 
-deleteAllDocuments() {
-  local database=$1
-  local collection=$2
-  local result=$(
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany \
-      -X POST \
-      -H "apiKey: $API_KEY" \
-      -H 'Content-Type: application/ejson' \
-      -H "Accept: application/json" \
-      -d '{"dataSource":"mongodb-atlas","database":"'"$database"'","collection":"'"$collection"'","filter":{}}'
-  )
-  echo "Deleted $(jq -r ".deletedCount" <<< $result) documents from $database.$collection"
-}
+app_name="test-generated-endpoints"
 
 oneTimeSetUp() {
-  # Create a new App Services App for this test run
-  echo "Creating a new App Services App..."
-  npx -y mongodb-realm-cli login --profile $APP_NAME --api-key $ATLAS_PUBLIC_API_KEY --private-api-key $ATLAS_PRIVATE_API_KEY
-  npx mongodb-realm-cli app create --profile $APP_NAME --name $APP_NAME --cluster $CLUSTER_NAME --cluster-service-name "mongodb-atlas" --location "US-VA" --deployment-model "GLOBAL"
-  cd $APP_NAME
-
-  # Save the App ID as a global variable for use in the tests
-  CLIENT_APP_ID=$(jq -r ".app_id" ./realm_config.json)
-
-  # Configure the App
-  echo "Configuring the App..."
-  ## Configure Data API
-  local DataApiConfig='{"disabled":false,"versions":["v1"],"return_type":"EJSON"}'
-  echo $DataApiConfig > http_endpoints/data_api_config.json
-  ## Configure Auth Providers
-  local ApiKeyConfig='{"name":"api-key","type": "api-key","disabled":false}'
-  local EmailPasswordConfig='{"name":"local-userpass","type":"local-userpass","config":{"autoConfirm":true,"resetPasswordUrl":"https://www.example.com/reset-password","resetPasswordSubject":"Fake Reset Your Password (If you got this email it was a mistake!)"},"disabled":false}'
-  local AuthProvidersConfig='{"api-key":'$ApiKeyConfig',"local-userpass":'$EmailPasswordConfig'}'
-  echo $AuthProvidersConfig > auth/providers.json
-  # Configure rules
-  local DefaultRulesConfig='{"roles":[{"name":"readAndWriteAll","apply_when":{},"document_filters":{"write":true,"read":true},"read":true,"write":true,"insert":true,"delete":true,"search":true}],"filters":[]}'
-  echo $DefaultRulesConfig > data_sources/mongodb-atlas/default_rule.json
-  ## Deploy the updates
-  npx mongodb-realm-cli push --profile $APP_NAME --yes
-  echo "Successfully configured the App"
-  cd ..
-
-  # Create users for the tests. Store credentials as global variables for use in the tests.
+  create_data_api_app "$app_name" "$CLUSTER_NAME"
+  CLIENT_APP_ID=$(get_app_id "$app_name")
   echo "Creating test users..."
   local now=$(date +%s)
-  ## Create an email/password user
-  EMAIL="data-api-test-$now"
-  PASSWORD="Passw0rd!"
-  local emailPasswordResult=$(
-    npx mongodb-realm-cli users create --profile $APP_NAME --app $CLIENT_APP_ID --type email --email $EMAIL --password $PASSWORD
-  )
-  echo "Successfully created email/password user: $EMAIL"
-  ## Create an API Key user
-  local apiKeyResult=$(
-    npx mongodb-realm-cli users create --profile $APP_NAME --app $CLIENT_APP_ID --type api-key --name $EMAIL -f json
-  )
-  API_KEY=$(jq -r ".doc.key" <<< $apiKeyResult)
-  echo "Successfully created API key user: $EMAIL"
+  local username="test-user-$now"
+  local password="Passw0rd!"
+  create_email_password_user "$app_name" "$username" "$password"
+  API_KEY=$(create_api_key_user "$app_name" "$username")
 
   # Delete any existing data in the test collections, e.g. from other failed test runs
   echo "Preparing test collections..."
-  deleteAllDocuments "learn-data-api" "hello"
-  deleteAllDocuments "learn-data-api" "tasks"
+  delete_all_documents "$app_name" "learn-data-api" "hello"
+  delete_all_documents "$app_name" "learn-data-api" "tasks"
   echo "Successfully prepared test collections"
 }
 
 oneTimeTearDown() {
   [[ "${_shunit_name_}" = 'EXIT' ]] && return 0 # need this to suppress tearDown on script EXIT because apparently "one time" does not mean "only once"...
-  # Nuke the App from orbit. It's the only way to be sure. https://www.youtube.com/watch?v=aCbfMkh940Q
-  ## Delete all of our test data
-  deleteAllDocuments "learn-data-api" "hello"
-  deleteAllDocuments "learn-data-api" "tasks"
-  ## Delete the App
-  npx mongodb-realm-cli app delete --profile $APP_NAME --app $CLIENT_APP_ID
-  rm -rf $APP_NAME
+  delete_data_api_app "$app_name"
 }
 
 testHelloWorld() {
@@ -98,7 +39,7 @@ testHelloWorld() {
     #       " \"_id\": { \"$oid\": \"64224f3cd79f54ad342dd9b1\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "Content-Type: application/ejson" \
       -H "Accept: application/json" \
@@ -126,7 +67,7 @@ testInsertOne() {
     #       " \"_id\": { \"$oid\": \"64224f3cd79f54ad342dd9b2\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -156,7 +97,7 @@ testInsertMany() {
     #       " \"_id\": { \"$oid\": \"64224f57f56e634f459586f0\" },": ""
     #    }
     # }
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -186,7 +127,7 @@ testInsertMany() {
 testUpdateOne() {
   result=$(
     # :snippet-start: updateOne
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -216,7 +157,7 @@ testUpdateOne() {
 testUpdateMany() {
   result=$(
     # :snippet-start: updateMany
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateMany \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateMany" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -246,7 +187,7 @@ testUpdateMany() {
 testFindOne() {
   result=$(
     # :snippet-start: findOne
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -268,7 +209,7 @@ testFindOne() {
 testFindMany() {
   result=$(
     # :snippet-start: find
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/find \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/find" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -292,7 +233,7 @@ testFindMany() {
 testAggregate() {
   result=$(
     # :snippet-start: aggregate
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/aggregate \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/aggregate" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -326,7 +267,7 @@ testAggregate() {
 testReplaceOne() {
   result=$(
     # :snippet-start: replaceOne
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/replaceOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/replaceOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -354,7 +295,7 @@ testReplaceOne() {
 testDeleteOne() {
   result=$(
     # :snippet-start: deleteOne
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \
@@ -376,7 +317,7 @@ testDeleteOne() {
 testDeleteMany() {
   result=$(
     # :snippet-start: deleteMany
-    curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany \
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany" \
       -X POST \
       -H "apiKey: $API_KEY" \
       -H 'Content-Type: application/ejson' \

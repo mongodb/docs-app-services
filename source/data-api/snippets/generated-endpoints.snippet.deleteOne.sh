@@ -1,4 +1,4 @@
-curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne \
+curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne" \
   -X POST \
   -H "apiKey: $API_KEY" \
   -H 'Content-Type: application/ejson' \

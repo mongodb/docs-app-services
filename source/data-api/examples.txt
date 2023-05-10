@@ -52,14 +52,12 @@ Update a Single Document
 
 .. literalinclude:: /data-api/snippets/generated-endpoints.snippet.updateOne.sh
 
-
 .. _data-api-updateMany:
 
 Update Multiple Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: /data-api/snippets/generated-endpoints.snippet.updateMany.sh
-
 
 .. _data-api-replaceOne:
 
@@ -110,27 +108,9 @@ To specify a binary value, use ``$binary`` with the value encoded in
 Base64 and a `BSON subtype <https://bsonspec.org/spec.html>`_ encoded as
 a two-character hexadecimal string:
 
-.. code-block:: bash
-   :emphasize-lines: 10-15
-   :copyable: false
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "data": {
-             "$binary": {
-               "base64": "46d989eaf0bde5258029534bc2dc2089",
-               "subType": "05"
-             }
-           }
-         }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Binary.sh
+   :language: bash
+   :emphasize-lines: 11-16
 
 Date
 ~~~~
@@ -143,44 +123,18 @@ EJSON format you want to use.
 The value is a `UNIX timestamp in milliseconds
 <https://currentmillis.com/>`_ as a 64-bit integer:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-         "dataSource": "<cluster name>",
-         "database": "<database name>",
-         "collection": "<collection name>",
-         "document": {
-           "createdAt": { "$date": { "$numberLong": "1638551310749" } }
-         }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Date-Canonical.sh
+   :language: bash
+   :emphasize-lines: 11
 
 **Relaxed EJSON**
 
 The value is an :wikipedia:`ISO 8601 <ISO_8601>` date string with a time
 component:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "createdAt": { "$date": "2021-12-03T17:08:30.749Z" }
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Date-Relaxed.sh
+   :language: bash
+   :emphasize-lines: 11
 
 Decimal128
 ~~~~~~~~~~
@@ -188,22 +142,9 @@ Decimal128
 To specify a 128-bit decimal, use ``$numberDecimal`` with the decimal
 value as a string:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "accountBalance": { "$numberDecimal": "128452.420523" }
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Decimal128.sh
+   :language: bash
+   :emphasize-lines: 11
 
 Double
 ~~~~~~
@@ -212,45 +153,18 @@ To specify a 64-bit signed floating point value (commonly referred to as
 a "double"), use a canonical ``$numberDouble`` with the integer value as
 a string:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "temperatureCelsius": { "$numberDouble": "23.847" }
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Double-Canonical.sh
+   :language: bash
+   :emphasize-lines: 11
 
 **Relaxed EJSON**
 
 An EJSON value that contains a raw JSON ``number`` with a decimal point
 is automatically cast to a ``$numberDouble`` object:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "temperatureCelsius": 23.847
-       }
-     }'
-
+.. literalinclude:: /data-api/snippets/data-types.snippet.Double-Relaxed.sh
+   :language: bash
+   :emphasize-lines: 11
 
 Int32
 ~~~~~
@@ -258,44 +172,18 @@ Int32
 To specify a 32-bit signed integer value, use a canonical ``$numberInt``
 object with the integer value as a string:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "coins": { "$numberInt": "2147483647" }
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Int32-Canonical.sh
+   :language: bash
+   :emphasize-lines: 11
 
 **Relaxed EJSON**
 
 An EJSON value that contains a raw JSON ``number`` without a decimal
 point is automatically cast to a ``$numberInt`` object:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "coins": 2147483647
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Int32-Relaxed.sh
+   :language: bash
+   :emphasize-lines: 11
 
 Int64
 ~~~~~
@@ -303,44 +191,18 @@ Int64
 To specify a 64-bit signed integer value, use ``$numberLong`` with the
 integer value as a string:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "population": { "$numberLong": "8047923148" }
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.Int64.sh
+   :language: bash
+   :emphasize-lines: 11
 
 ObjectId
 ~~~~~~~~
 
 To specify an ObjectId value, use ``$oid`` with the ID as a byte string:
 
-.. code-block:: bash
-   :emphasize-lines: 10
-   :copyable: false
-   
-   curl --request POST \
-     'https://data.mongodb-api.com/app/<App ID>/endpoint/data/v1/action/insertOne' \
-     --header 'Content-Type: application/ejson' \
-     --header 'apiKey: <API Key>' \
-     --data-raw '{
-       "dataSource": "<cluster name>",
-       "database": "<database name>",
-       "collection": "<collection name>",
-       "document": {
-         "_id": { "$oid": "61f02ea3af3561e283d06b91" }
-       }
-     }'
+.. literalinclude:: /data-api/snippets/data-types.snippet.ObjectId.sh
+   :language: bash
+   :emphasize-lines: 11
 
 .. _data-api-query-examples:
 
