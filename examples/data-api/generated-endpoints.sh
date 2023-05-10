@@ -13,8 +13,6 @@ oneTimeSetUp() {
   echo "Creating test users..."
   local now=$(date +%s)
   local username="test-user-$now"
-  local password="Passw0rd!"
-  create_email_password_user "$app_name" "$username" "$password"
   API_KEY=$(create_api_key_user "$app_name" "$username")
 
   # Delete any existing data in the test collections, e.g. from other failed test runs

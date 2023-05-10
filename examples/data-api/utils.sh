@@ -20,6 +20,14 @@ delete_all_documents() {
   echo "Deleted $(jq -r ".deletedCount" <<< $result) documents from $database.$collection"
 }
 
+add_secret () {
+  local app_name="$1"
+  local app_id=$(get_app_id "$app_name")
+  local secret_name="$2"
+  local secret_value="$3"
+  npx mongodb-realm-cli secrets create --profile "$app_name" --app "$app_id" --name "$secret_name" --value "$secret_value"
+}
+
 create_data_api_app () {
   if [ -z "$ATLAS_PUBLIC_API_KEY" ]; then
     echo "You must specify your Atlas Public API Key as the env variable ATLAS_PUBLIC_API_KEY"
@@ -32,20 +40,28 @@ create_data_api_app () {
   local app_name="$1"
   local cluster_name="$2"
 
-  # Create a new App Services App for this test run
-  echo "Creating a new App Services App..."
+  # Create a new base App Services App for this test run
   npx -y mongodb-realm-cli login --profile "$app_name" --api-key $ATLAS_PUBLIC_API_KEY --private-api-key $ATLAS_PRIVATE_API_KEY
+  echo "Creating a new App Services App..."
   npx mongodb-realm-cli app create --profile "$app_name" --name $app_name --cluster $cluster_name --cluster-service-name "mongodb-atlas" --location "US-VA" --deployment-model "GLOBAL"
   local app_id=$(get_app_id "$app_name")
 
+  # Add App secrets
+  echo "Adding App secrets..."
+  add_secret "$app_name" "secret_password" "Super5ecr3tPa55w0rd"
+  add_secret "$app_name" "jwt_signing_key" "7A4VvateM9s86tbkfisoLoChjGBjuJnZ"
+
   # Configure the App
   echo "Configuring the App..."
-  ## Configure Data API
-  cp ./backend/http_endpoints/data_api_config.json "./$app_name/http_endpoints/data_api_config.json"
-  ## Configure Auth Providers
-  cp ./backend/auth/providers.json "./$app_name/auth/providers.json"
-  ## Configure rules
-  cp ./backend/data_sources/mongodb-atlas/default_rule.json "./$app_name/data_sources/mongodb-atlas/default_rule.json"
+  ## Rename the base App config file directory. We'll copy a few of these files and throw away the rest.
+  mv "$app_name" "$app_name-tmp"
+  ## Copy the template App config files that we use for this test.
+  cp -r ./backend "$app_name"
+  ## Replace the App & Cluster configs with the values from the new App.
+  mv "$app_name-tmp/realm_config.json" "$app_name/realm_config.json"
+  mv "$app_name-tmp/data_sources/mongodb-atlas/config.json" "$app_name/data_sources/mongodb-atlas/config.json"
+  ## Throw away the rest of the base App config files.
+  rm -rf "$app_name-tmp"
 
   # Deploy the updates
   cd "$app_name"
