@@ -28,8 +28,8 @@ applies.
 For examples of how you might configure permissions for common scenarios with
 Device Sync, see the :ref:`flexible-sync-permissions-guide`.
 
-If you're using the older Partition-Based Device Sync, rules and roles
-work differently. To configure Partition-Based Sync permissions, see
+If you're using the older Partition-Based Device Sync, roles work differently.
+To configure Partition-Based Sync permissions, see
 :ref:`partition-based-sync-permissions`.
 
 What are Permissions?
@@ -205,9 +205,11 @@ App Services assigns roles at different times depending on whether you're using
 :ref:`Device Sync (Flexible Mode) <sync>` or not.
 
 When using Device Sync, App Services assigns roles at the start of a Sync
-session for each collection to be synced; otherwise, App Services assigns roles
-on a per-document basis. A Sync session is the period of time between opening
-and closing a Sync connection.
+session for each collection to be synced. A Sync session is the period of time
+between opening and closing a Sync connection.
+
+When not using Device Sync, App Services assigns roles on a per-document,
+per-request basis.
 
 Whether using Device Sync or not, you can define a set of roles that are
 specific to collections and default roles that apply to any other unspecified
@@ -215,6 +217,16 @@ collection. To assign a role, App Services evaluates each role's "apply when"
 expression in the order that you specified them. The first role whose "apply
 when" expression evaluates to true becomes the assigned role. If no role
 matches, access is denied.
+
+The set of evaluated roles for a given request or Sync session depends on the
+collection the user is accessing. If you defined any collection-level roles for
+the collection, the collection-level roles are evaluated. Otherwise, the data
+source's default roles, if any, are evaluated.
+
+App Services does not "fall back" to default roles if no collection-level role
+applies. If any collection-level role is defined, only collection-level roles
+are evaluated. Default roles are evaluated if and only if no collection-level
+roles were defined.
 
 .. figure:: /images/rules-role-assignment.png
    :alt: Role Assignment Flowchart
@@ -247,12 +259,6 @@ roles in :ref:`role order <role-order>` and assigns the first applicable
 role, if any. A role applies to a given document if its "apply when"
 :ref:`expression <expressions>` evaluates to ``true`` when run against
 the document.
-
-The set of roles that a user can use for a given request depends on the
-collection they're accessing. If the collection has a set of collection-level
-roles defined, then a user may have any of those roles. If there are no
-collection-level roles, the request falls back to the data source's default
-roles.
 
 .. example::
    
@@ -385,8 +391,9 @@ deploying configuration files with {+cli+}:
          If no roles are defined yet, you'll be prompted to create a new
          one. Otherwise you'll see an ordered list of existing roles.
          
-      #. Click :guilabel:`Add role` to define a new role or or use a 
-         preset role as a starting point.
+      #. Click :guilabel:`Add role` to define a new role. You can use a preset
+         role as a starting point or click :guilabel:`Skip (start from
+         scratch)`.
          
       #. Give the role a name. The name can be anything you want but
          must be unique within a given collection. Consider using names
@@ -395,15 +402,21 @@ deploying configuration files with {+cli+}:
       
       #. Define an "apply when" expression that determines when a given user has
          the role for a given document.
-      
-      #. Define :ref:`document filters <document-filters-expressions>` for the
-         role. This is required for Device Sync (Flexible Mode).
 
       #. Define :ref:`document-level permissions <document-level-permissions>`
          for the role.
-      
-      #. Define :ref:`field-level permissions <field-level-permissions>` for the
-         role.
+            
+      #. Define :ref:`document filters <document-filters-expressions>` for the
+         role. This is required for Device Sync (Flexible Mode).
+
+      #. Use the drop-down to select :ref:`field-level permissions
+         <field-level-permissions>` for the role. If you select
+         :guilabel:`Specify field-level permissions`, enter the field names you
+         wish to define permissions for. 
+         
+         For each field you name and for :guilabel:`Additional Fields`, specify
+         permissions by selecting either :guilabel:`None`, :guilabel:`Read`, or
+         :guilabel:`Read & Write`.
       
       #. Save the role.
 
