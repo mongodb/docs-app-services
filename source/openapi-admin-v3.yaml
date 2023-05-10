@@ -2382,7 +2382,7 @@ paths:
         404:
           description: Not Found
     post:
-      operationId: adminCreatePrivateEndpoints
+      operationId: adminCreatePrivateEndpoint
       tags:
         - security
       summary: Create a VPC Private Endpoint
@@ -2456,7 +2456,7 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
     get:
-      operationId: adminGetPrivateEndpointServices
+      operationId: adminListPrivateEndpointServices
       tags:
         - security
       summary: List VPC Private Endpoint Services
@@ -7804,16 +7804,16 @@ components:
       properties:
         cloud_provider_region:
           type: string
-        environment:
-          type: string
+          example: "aws-us-east-1"
         name:
           type: string
+          example: eps_baas-pl-prod_us-east-1_cloud
         dns:
           type: string
           example: "*.aws.realm.mongodb.com"
         service_name:
           type: string
-          example: com.amazonaws.vpce.us-east-1.vpce-svc-0f12ab34cd56ef789
+          example: com.amazonaws.vpce.us-east-1.vpce-svc-0f24fc6e6de007e5e
 
   securitySchemes:
     tokenAuth:
