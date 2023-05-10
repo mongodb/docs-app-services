@@ -42,7 +42,20 @@ You can also run the tests through GitHub Actions by either:
   [mongodb/docs-app-services](https://github.com/mongodb/docs-app-services) and
   then opening a pull request from that branch.
 
-- running the actions locally with [act](https://github.com/nektos/act):
+- running the actions locally with [act](https://github.com/nektos/act).
+
+  You can run the entire workflow file with `-W`:
+
+  ```sh
+  act \
+    -W .github/workflows/test-data-api.yml \
+    -s ATLAS_PUBLIC_API_KEY="abcdefgh" \
+    -s ATLAS_PRIVATE_API_KEY="c1d23a21-b6da-4914-aba2-c429aee135d9" \
+    --env CLUSTER_NAME="Cluster0" \
+    --container-architecture linux/amd64
+  ```
+
+  Or run a specific job with `-j`:
 
   ```sh
   act \
