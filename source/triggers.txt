@@ -90,6 +90,13 @@ To increase the throughput of a Trigger, you can try to:
   filter. For the best performance, we recommend limiting the size of
   each change event to 2KB or less.
 
+- Use a match filter to reduce the number of events that the Trigger
+  processes. For example, you might want to do something only if a
+  specific field changed. Instead of matching every update event and
+  checking if the field changed in your Function code, you can use the
+  Trigger's match filter to fire only if the field is included in the
+  event's ``updateDescription.updatedFields`` object.
+
 Number of Triggers Cannot Exceed Available Change Streams
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
