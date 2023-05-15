@@ -1,3 +1,45 @@
+# May 12, 2023
+
+## Device Sync
+
+- Go to Production with Sync/Compact an Atlas Volume: Update `compact()` article link to public support link with info to contact Support for access
+
+## Data API
+
+- Data API Endpoints: Convert manual cURL examples to use an automated testing framework and extract them for docs with Bluehawk annotations
+- Custom HTTPS Endpoints: Convert manual cURL examples to use an automated testing framework and extract them for docs with Bluehawk annotations
+- Data API Examples
+  - Update examples for Canonical vs. Relaxed EJSON
+  - Convert manual cURL examples to use an automated testing framework and extract them for docs with Bluehawk annotations
+- Data Formats: Add details and update examples for Canonical vs. Relaxed EJSON
+- Data API OpenAPI Reference: Removes overspecified base types that were causing build warnings
+
+## Triggers
+
+- Landing Page: Rename "Maximum Executions Per Second" section to "Event Processing Throughput", add suggestions to increase Trigger throughput
+
+## Develop & Deploy Apps
+
+- Change Deployment Models: Add information about cleaning up after a migration, note VPC Private Endpoints are region-specific
+
+## Define a Data Model
+
+- Relationships: Fix invalid ref value in example
+
+## Define Data Access Permissions
+
+- Landing Page, Role-Based Permissions page, and Rule Expressions page: Clarifications and corrections related to the rules unification project
+
+## Secure Your App
+
+- Use a VPC Private Endpoint: New page with information about using a Private Endpoint to access Atlas App Services from within an AWS VPC via AWS PrivateLink
+
+## Reference
+
+- App Services Admin API/Security: Update VPC Private Endpoint `operationId`s for Create and List & update List example
+- Billing: Note that trigger execution requests detailed in pricing include EventBridge forwarding
+- Service Limitations: Add details about limitations for Private Endpoints
+
 # May 5, 2023
 
 ## Device Sync
