@@ -1,4 +1,4 @@
-curl https://realm.mongodb.com/api/admin/v3.0/groups/$PROJECT_ID/apps/$APP_ID/auth_providers \
+curl "https://realm.mongodb.com/api/admin/v3.0/groups/$PROJECT_ID/apps/$APP_ID/auth_providers" \
   -X "POST" \
   -H "Authorization: Bearer $ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
