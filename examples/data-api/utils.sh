@@ -1,3 +1,72 @@
+client_api_login() {
+  local app_id="$1"
+  local provider="$2"
+  local client_api_base_url="https://realm.mongodb.com/api/client/v2.0/app/$app_id"
+  local client_api_login_url="$client_api_base_url/auth/providers/$provider/login"
+  case $provider in
+    "anon-user")
+      local result=$(
+        curl -s "$client_api_login_url" \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -H "Accept: application/json"
+      )
+      ;;
+    "local-userpass")
+      local username="$3"
+      local password="$4"
+      local result=$(
+        curl -s "$client_api_login_url" \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -H "Accept: application/json" \
+          -d '{
+            "username": "'"$username"'",
+            "password": "'"$password"'"
+          }'
+      )
+      ;;
+    "api-key")
+      local API_KEY="$3"
+      local result=$(
+        curl -s "$client_api_login_url" \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -H "Accept: application/json" \
+          -d '{ "key": "'"$API_KEY"'" }'
+      )
+      ;;
+    "custom-token")
+      local JWT="$3"
+      local result=$(
+        curl -s "$client_api_login_url" \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -H "Accept: application/json" \
+          -d '{ "key": "'"$JWT"'" }'
+      )
+      ;;
+    "custom-function")
+      local result=$(
+        curl -s "$client_api_login_url" \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -H "Accept: application/json" \
+          -d '{
+            "someCustomFunctionArg": "<Login Info>"
+          }'
+      )
+      ;;
+    *)
+      echo "Unknown provider: $provider"
+      exit 1
+      ;;
+  esac
+  # echo "$result"
+  local access_token=$(jq -r ".access_token" <<< $result)
+  echo "$access_token"
+}
+
 get_app_id() {
   local app_name="$1"
   local app_id=$(jq -r ".app_id" "$app_name/realm_config.json")
@@ -87,6 +156,20 @@ create_api_key_user () {
   )
   local api_key=$(jq -r ".doc.key" <<< $result)
   echo "$api_key"
+}
+
+create_jwt () {
+  local app_name="$1"
+  local app_id=$(get_app_id "$app_name")
+  local user_id="$2"
+  local jwt=$(
+    npx -y jsonwebtokencli@latest \
+      --encode \
+      --algorithm HS256 \
+      --secret "7A4VvateM9s86tbkfisoLoChjGBjuJnZ" \
+      "{\"aud\":\"$app_id\",\"sub\":\"$user_id\",\"exp\":2145916800,\"iat\":1516239022}"
+  )
+  echo $jwt
 }
 
 delete_data_api_app () {
