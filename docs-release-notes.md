@@ -1,3 +1,25 @@
+# May 19, 2023
+
+## Get Started
+
+- Triggers and Atlas Search Tutorial: New page showing how to add a Trigger, Function, and Atlas Search query on top of the React Native template app
+
+## Device Sync
+
+- Tiered Device Sync Guide: Add `localhost` instructions, change `make down` to `make stop`
+- Configure and Update Your Data Model/Data Model Mapping: Clarify the link title for the Kotlin dictionary docs
+
+## Authenticate & Manage Users
+
+- Authentication Providers
+  - Custom JWT: Remove the Firebase instructions to a dedicated page
+  - Firebase (Custom JWT): New page moving the Firebase Custom JWT guide to its own page, adding instructions for the Admin API, and improving UI/CLI instructions
+
+## Define Data Access Permissions
+
+- Filter Incoming Queries: Update Filter procedures and screenshots for UI updates
+- Configure Advanced Rules: Update "Convert to Advanced Mode" procedure and screenshot for UI updates
+
 # May 12, 2023
 
 ## Device Sync
