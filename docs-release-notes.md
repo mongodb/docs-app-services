@@ -12,7 +12,7 @@
 ## Authenticate & Manage Users
 
 - Authentication Providers
-  - Custom JWT: Remove the Firebase instructions to a dedicated page
+  - Custom JWT: Move the Firebase instructions to a dedicated page
   - Firebase (Custom JWT): New page moving the Firebase Custom JWT guide to its own page, adding instructions for the Admin API, and improving UI/CLI instructions
 
 ## Define Data Access Permissions
