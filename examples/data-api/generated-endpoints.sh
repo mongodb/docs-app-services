@@ -12,8 +12,11 @@ oneTimeSetUp() {
   CLIENT_APP_ID=$(get_app_id "$app_name")
   echo "Creating test users..."
   local now=$(date +%s)
-  local username="test-user-$now"
-  API_KEY=$(create_api_key_user "$app_name" "$username")
+  USERNAME="test-user-$now"
+  PASSWORD="Passw0rd!"
+  create_email_password_user "$app_name" "$USERNAME" "$PASSWORD"
+  API_KEY=$(create_api_key_user "$app_name" "$USERNAME")
+  JWT=$(create_jwt "$app_name" "$USERNAME")
 
   # Delete any existing data in the test collections, e.g. from other failed test runs
   echo "Preparing test collections..."
@@ -55,6 +58,121 @@ testHelloWorld() {
   )
   local insertedId=$(jq -r ".insertedId" <<< "$result")
   assertEquals "64224f3cd79f54ad342dd9b1" "$insertedId"
+}
+
+testApiKeyAuthHeader() {
+  local result=$(
+    # :snippet-start: auth-apiKey
+    # :replace-start: {
+    #    "terms": {
+    #       "$CLIENT_APP_ID": "myapp-abcde",
+    #       "$API_KEY": "TpqAKQgvhZE4r6AOzpVydJ9a3tB1BLMrgDzLlBLbihKNDzSJWTAHMVbsMoIOpnM6"
+    #    }
+    # }
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne" \
+      -X POST \
+      -H "Accept: application/json" \
+      -H "apiKey: $API_KEY" \
+      -d '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
+    # :replace-end:
+    # :snippet-end:
+  )
+  local title=$(jq -r ".document.title" <<< "$result")
+  assertEquals "The Matrix" "$title"
+}
+
+testEmailPasswordAuthHeader() {
+  local result=$(
+    # :snippet-start: auth-emailPassword
+    # :replace-start: {
+    #    "terms": {
+    #       "$CLIENT_APP_ID": "myapp-abcde",
+    #       "$USERNAME": "bob@example",
+    #       "$PASSWORD": "Pa55w0rd!"
+    #    }
+    # }
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne" \
+      -X POST \
+      -H "Accept: application/json" \
+      -H "email: $USERNAME" \
+      -H "password: $PASSWORD" \
+      -d '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
+    # :replace-end:
+    # :snippet-end:
+  )
+  local title=$(jq -r ".document.title" <<< "$result")
+  assertEquals "The Matrix" "$title"
+}
+
+testJWTAuthHeader() {
+  local result=$(
+    # :snippet-start: auth-jwtTokenString
+    # :replace-start: {
+    #    "terms": {
+    #       "$CLIENT_APP_ID": "myapp-abcde",
+    #       "$JWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteWFwcC1hYmNkZSIsInN1YiI6IjEyMzQ1Njc4OTAiLCJuYW1lIjoiSm9obiBEb2UiLCJleHAiOjIxNDU5MTY4MDB9.E4fSNtYc0t5XCTv3S8W89P9PKLftC4POLRZdN2zOICI"
+    #    }
+    # }
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne" \
+      -X POST \
+      -H "Accept: application/json" \
+      -H "jwtTokenString: $JWT" \
+      -d '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
+    # :replace-end:
+    # :snippet-end:
+  )
+  local title=$(jq -r ".document.title" <<< "$result")
+  assertEquals "The Matrix" "$title"
+}
+
+testBearerAuthHeader() {
+  local ACCESS_TOKEN=$(client_api_login "$CLIENT_APP_ID" "api-key" "$API_KEY")
+  local result=$(
+    # :snippet-start: auth-bearer
+    # :replace-start: {
+    #    "terms": {
+    #       "$CLIENT_APP_ID": "myapp-abcde",
+    #       "$JWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteWFwcC1hYmNkZSIsInN1YiI6IjEyMzQ1Njc4OTAiLCJuYW1lIjoiSm9obiBEb2UiLCJleHAiOjIxNDU5MTY4MDB9.E4fSNtYc0t5XCTv3S8W89P9PKLftC4POLRZdN2zOICI"
+    #    }
+    # }
+    curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne" \
+      -X POST \
+      -H "Accept: application/json" \
+      -H "Authorization: Bearer $ACCESS_TOKEN" \
+      -d '{
+        "dataSource": "mongodb-atlas",
+        "database": "sample_mflix",
+        "collection": "movies",
+        "filter": {
+          "title": "The Matrix"
+        }
+      }'
+    # :replace-end:
+    # :snippet-end:
+  )
+  local title=$(jq -r ".document.title" <<< "$result")
+  assertEquals "The Matrix" "$title"
 }
 
 testInsertOne() {

@@ -16,13 +16,7 @@ oneTimeSetUp() {
   PASSWORD="Passw0rd!"
   create_email_password_user "$app_name" "$USERNAME" "$PASSWORD"
   API_KEY=$(create_api_key_user "$app_name" "$USERNAME")
-  JWT=$(
-    npx -y jsonwebtokencli@latest \
-      --encode \
-      --algorithm HS256 \
-      --secret "7A4VvateM9s86tbkfisoLoChjGBjuJnZ" \
-      "{\"aud\":\"$CLIENT_APP_ID\",\"sub\":\"1234567890\",\"name\":\"John Doe\",\"exp\":2145916800,\"iat\":1516239022}"
-  )
+  JWT=$(create_jwt "$app_name" "$USERNAME")
 }
 
 oneTimeTearDown() {
