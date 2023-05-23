@@ -2360,6 +2360,116 @@ paths:
           description: Deleted
         "404":
           description: No IP addresses or CIDR blocks to delete
+  "/groups/{groupId}/apps/{appId}/security/private_endpoints":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      operationId: adminGetPrivateEndpoints
+      tags:
+        - security
+      summary: List VPC Private Endpoints
+      description: |
+        Get a list of all private endpoints configured for the App.
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PrivateEndpoint"
+        404:
+          description: Not Found
+    post:
+      operationId: adminCreatePrivateEndpoint
+      tags:
+        - security
+      summary: Create a VPC Private Endpoint
+      description: |
+        Configure a new private endpoint for the App.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrivateEndpoint"
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+  "/groups/{groupId}/apps/{appId}/security/private_endpoints/{privateEndpointId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/PrivateEndpointId"
+    get:
+      operationId: adminGetPrivateEndpoint
+      tags:
+        - security
+      summary: Get a VPC Private Endpoint
+      description: |
+        Get a specific private endpoint configuration.
+      responses:
+        200:
+          description: Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrivateEndpoint"
+        404:
+          description: Not Found
+    put:
+      operationId: adminUpdatePrivateEndpoint
+      tags:
+        - security
+      summary: Modify a VPC Private Endpoint
+      description: |
+        Update the configuration of a private endpoint.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrivateEndpoint"
+      responses:
+        200:
+          description: Updated
+          $ref: "#/components/schemas/PrivateEndpoint"
+        404:
+          description: Not Found
+    delete:
+      operationId: adminDeletePrivateEndpoint
+      tags:
+        - security
+      summary: Delete a VPC Private Endpoint
+      description: |
+        Delete a private endpoint.
+      responses:
+        204:
+          description: Deleted
+        404:
+          description: Not Found
+  "/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      operationId: adminListPrivateEndpointServices
+      tags:
+        - security
+      summary: List VPC Private Endpoint Services
+      description: |
+        Get a list of all private endpoint services configured for the App.
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PrivateEndpointServiceInfo"
   "/groups/{groupId}/apps/{appId}/security/refresh_token_expiration":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4494,6 +4604,13 @@ components:
     ForwarderId:
       name: "forwarderId"
       description: The _id ObjectID of a log forwarder.
+      in: "path"
+      required: true
+      schema:
+        type: string
+    PrivateEndpointId:
+      name: "privateEndpointId"
+      description: The _id ObjectID of a VPC private endpoint.
       in: "path"
       required: true
       schema:
@@ -7666,7 +7783,37 @@ components:
                 example: "myApp.logs"
                 description: |
                   The `database.collection` namespace of the forwarded log collection.
-
+    PrivateEndpoint:
+      type: object
+      properties:
+        _id:
+          type: string
+        cloud_provider_region:
+          type: string
+          example: aws-us-east-1
+          description: The cloud provider region that hosts the private endpoint.
+        cloud_provider_endpoint_id:
+          type: string
+          example: vpce-12345678
+          description: The private endpoint ID from the cloud provider.
+        comment:
+          type: string
+          description: An optional comment that describes the endpoint.
+    PrivateEndpointServiceInfo:
+      type: object
+      properties:
+        cloud_provider_region:
+          type: string
+          example: "aws-us-east-1"
+        name:
+          type: string
+          example: eps_baas-pl-prod_us-east-1_cloud
+        dns:
+          type: string
+          example: "*.aws.realm.mongodb.com"
+        service_name:
+          type: string
+          example: com.amazonaws.vpce.us-east-1.vpce-svc-0f24fc6e6de007e5e
 
   securitySchemes:
     tokenAuth:

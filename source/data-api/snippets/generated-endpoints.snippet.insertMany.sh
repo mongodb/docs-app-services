@@ -1,4 +1,4 @@
-curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany \
+curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany" \
   -X POST \
   -H "apiKey: $API_KEY" \
   -H 'Content-Type: application/ejson' \

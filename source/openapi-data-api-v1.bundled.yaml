@@ -30,12 +30,6 @@ info:
 
     To learn more, see [Authenticate Data API
     Requests](https://www.mongodb.com/docs/atlas/app-services/data-api/authenticate/).
-security:
-  - AccessToken: []
-  - Email: []
-    Password: []
-  - ApiKey: []
-  - CustomJwt: []
 servers:
   - description: Global App
     url: https://data.mongodb-api.com/app/{appId}/endpoint/data/v1
@@ -78,6 +72,12 @@ servers:
           - us-west1.gcp
           - europe-west1.gcp
           - asia-south1.gcp
+security:
+  - AccessToken: []
+  - Email: []
+    Password: []
+  - ApiKey: []
+  - CustomJwt: []
 paths:
   /action/findOne:
     post:
@@ -88,7 +88,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/findOne" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -165,7 +165,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/find \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/find" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -261,7 +261,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertOne" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -337,7 +337,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/insertMany" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -430,7 +430,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateOne \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateOne" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -526,7 +526,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateMany \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/updateMany" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -618,7 +618,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteOne" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -691,7 +691,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/deleteMany" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -764,7 +764,7 @@ paths:
         - lang: cURL
           label: cURL
           source: |
-            curl -s https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/aggregate \
+            curl -s "https://data.mongodb-api.com/app/$CLIENT_APP_ID/endpoint/data/v1/action/aggregate" \
               -X POST \
               -H "apiKey: $API_KEY" \
               -H 'Content-Type: application/ejson' \
@@ -1057,9 +1057,6 @@ components:
       type: object
       properties:
         insertedId:
-          type:
-            - string
-            - object
           description: The `_id` value of the inserted document.
     InsertManyRequestBody:
       title: InsertManyRequestBody
@@ -1081,10 +1078,6 @@ components:
       properties:
         insertedIds:
           type: array
-          items:
-            type:
-              - string
-              - object
           description: A list of the `_id` values of the inserted documents.
     UpdateRequestBody:
       title: UpdateRequestBody
@@ -1114,14 +1107,8 @@ components:
         - modifiedCount
       properties:
         matchedCount:
-          type:
-            - number
-            - object
           description: The number of documents matched by the query filter.
         modifiedCount:
-          type:
-            - number
-            - object
           description: The number of matched documents that were modified.
         upsertedId:
           type: string
@@ -1138,9 +1125,6 @@ components:
         - deletedCount
       properties:
         deletedCount:
-          type:
-            - number
-            - object
           description: The number of documents that were deleted.
     AggregateRequestBody:
       title: AggregateRequestBody
