@@ -561,20 +561,9 @@ using a Bearer token scheme. For more information on how to acquire and
 use an access token, see :ref:`Bearer Token Authentication
 <data-api-bearer-authentication>`.
 
-.. code-block:: shell
-   :emphasize-lines: 2
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'Authorization: Bearer <AccessToken>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-bearer.sh
+   :language: bash
+   :emphasize-lines: 4
 
 Alternatively, you can include valid login credentials for the user in
 the request headers.
@@ -584,51 +573,23 @@ the request headers.
    .. tab::
       :tabid: local-userpass
 
-      .. code-block:: bash
-         :emphasize-lines: 3-4
-         
-         curl -X POST \
-           https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
-           -H 'email: <Email Address>' \
-           -H 'password: <Password>' \
-           -H 'Content-Type: application/json' \
-           --data-raw '{
-             "dataSource": "mongodb-atlas",
-             "database": "learn-data-api",
-             "collection": "hello",
-           }'
+      .. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-emailPassword.sh
+         :language: bash
+         :emphasize-lines: 4-5
    
    .. tab::
       :tabid: api-key
 
-      .. code-block:: bash
-         :emphasize-lines: 3
-         
-         curl -X POST \
-           https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
-           -H 'apiKey: <API Key>' \
-           -H 'Content-Type: application/json' \
-           --data-raw '{
-             "dataSource": "mongodb-atlas",
-             "database": "learn-data-api",
-             "collection": "hello",
-           }'
+      .. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-apiKey.sh
+         :language: bash
+         :emphasize-lines: 4
    
    .. tab::
       :tabid: custom-token
 
-      .. code-block:: bash
-         :emphasize-lines: 3
-         
-         curl -X POST \
-           https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
-           -H 'jwtTokenString: <Custom JSON Web Token>' \
-           -H 'Content-Type: application/json' \
-           --data-raw '{
-             "dataSource": "mongodb-atlas",
-             "database": "learn-data-api",
-             "collection": "hello",
-           }'
+      .. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-jwtTokenString.sh
+         :language: bash
+         :emphasize-lines: 4
 
 .. include:: /includes/dont-use-api-key-in-browsers.rst
 
@@ -686,7 +647,7 @@ authorization information.
 
       .. code-block:: none
          
-         Endpoint-Signature::sha256=<hex encoded hash>
+         Endpoint-Signature: sha256=<hex encoded hash>
       
       You could use the following function to generate the payload
       signature:
@@ -705,7 +666,7 @@ authorization information.
             curl -X POST \
               https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/findOne \
               -H "Content-Type: application/json" \
-              -H "Endpoint-Signature::sha256=769cd86855787f476afc8b0d2cf9837ab0318181fca42f45f34b6dffd086dfc7" \
+              -H "Endpoint-Signature: sha256=769cd86855787f476afc8b0d2cf9837ab0318181fca42f45f34b6dffd086dfc7" \
               -d '{
                 "dataSource": "mongodb-atlas",
                 "database": "learn-data-api",

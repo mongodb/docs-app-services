@@ -55,20 +55,9 @@ The Authorization header uses the following format:
 
 For example, the following request uses Bearer Authentication:
 
-.. code-block:: shell
-   :emphasize-lines: 2
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'Authorization: Bearer <AccessToken>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-bearer.sh
+   :language: bash
+   :emphasize-lines: 4
 
 .. include:: /includes/bearer-auth-performance.rst
 
@@ -108,21 +97,9 @@ To authenticate a Data API request as an :ref:`email/password
 <email-password-authentication>` user, include the user's credentials in
 the request's ``email`` and ``password`` headers.
 
-.. code-block:: shell
-   :emphasize-lines: 2-3
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'email: <EmailAddress>' \
-      --header 'password: <Password>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-emailPassword.sh
+   :language: bash
+   :emphasize-lines: 4-5
 
 API Key
 ~~~~~~~
@@ -131,20 +108,9 @@ To authenticate a Data API request with an :ref:`API Key
 <api-key-authentication>`, include the API key in the request's
 ``apiKey`` header.
 
-.. code-block:: shell
-   :emphasize-lines: 2
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'apiKey: <APIKey>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-apiKey.sh
+   :language: bash
+   :emphasize-lines: 4
 
 .. include:: /includes/dont-use-api-key-in-browsers.rst
 
@@ -155,17 +121,6 @@ To authenticate a Data API request as a :ref:`Custom JWT
 <custom-jwt-authentication>` user, include the JWT string in the
 request's ``jwtTokenString`` header.
 
-.. code-block:: shell
-   :emphasize-lines: 2
-
-   curl -X POST 'https://data.mongodb-api.com/app/<AppID>/endpoint/data/v1/action/find' \
-      --header 'jwtTokenString: <JWT>' \
-      --header 'Content-Type: application/json' \
-      --data-raw '{
-        "dataSource": "mongodb-atlas",
-        "database": "sample_mflix",
-        "collection": "movies",
-        "filter": {
-          "title": "The Matrix"
-        }
-      }'
+.. literalinclude:: /data-api/snippets/generated-endpoints.snippet.auth-jwtTokenString.sh
+   :language: bash
+   :emphasize-lines: 4

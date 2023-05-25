@@ -1,4 +1,4 @@
-curl -s https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne \
+curl -s "https://data.mongodb-api.com/app/myapp-abcde/endpoint/data/v1/action/insertOne" \
   -X POST \
   -H "Content-Type: application/ejson" \
   -H "Accept: application/json" \

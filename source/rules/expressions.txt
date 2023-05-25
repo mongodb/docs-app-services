@@ -33,11 +33,14 @@ You can define simple, static expressions that use hardcoded values:
 
    { "id": "aaaabbbbccccddddeeeeffff" }
 
-You can also write expressions that support arbitrary logic to express
-dynamic requirements and complex or custom workflows. A dynamic
-expression can include variables that reflect the current context,
-called :ref:`expansions <expansions>`, and can use built-in
-:ref:`operators <operators>` to transform data:
+You can also write expressions that support arbitrary logic to express dynamic
+requirements and complex or custom workflows. A dynamic expression can include
+variables that reflect the current context, called :ref:`expansions
+<expansions>`, and can use built-in :ref:`operators <operators>` to transform
+data. The following example evaluates to true if the input document's ``owner``
+field equals the user's ``id`` and the remote IP address of the request can be
+found in an array of allowed IP addresses that is stored as a :ref:`value
+<values-and-secrets>`:
 
 .. code-block:: json
    :caption: A "dynamic" expression that varies based on the requesting user and their IP location
@@ -65,7 +68,7 @@ Expression object field names can be a value, an :ref:`expansion
 <expansions>`, or an :ref:`operator <operators>`. Each field must
 contain one of a value, an expansion, or a nested expression.
 
-Expression object have the following format:
+Expression objects have the following format:
 
 .. code-block:: javascript
 
@@ -81,9 +84,9 @@ Embedded Expressions
 
 You can embed multiple expression documents in the fields of another expression
 document to handle complex evaluation logic. App Services evaluates expressions
-*depth-first, post-order*, i.e. it starts at the bottom of the expression tree
-and works back to the root-level fields by evaluating each expression after all
-of its embedded expressions.
+*depth-first, post-order*: that is, it starts at the bottom of the expression
+tree and works back to the root-level fields by evaluating each expression after
+all of its embedded expressions.
 
 .. example::
 
@@ -125,11 +128,11 @@ operation.
 Expression Evaluation
 ---------------------
 
-App Services evaluates expressions by first replacing expansions with
-their runtime values and then evaluating each field of the expanded
-expression document to a boolean expression. If all fields in an
-expression evaluate to ``true``, the expression also evaluates to
-``true``.
+App Services evaluates expressions by first replacing expansions with their
+runtime values and then evaluating each field of the expanded expression
+document to a boolean expression. If all fields in an expression evaluate to
+``true``, the expression also evaluates to ``true``. An empty expression
+(``{}``) evaluates to ``true``.
 
 Expression fields evaluate based on the following rules:
 
