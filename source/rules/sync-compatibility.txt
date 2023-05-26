@@ -110,7 +110,7 @@ The following table specifies which expansions are Sync compatible in either the
    
    * - :json-operator:`$in`, :json-operator:`$nin`
      - Yes
-     - Yes. However, note that you cannot currently have an array field as a queryable field on a document.
+     - Yes.
    
    * - :json-operator:`$eq`, :json-operator:`$ne`, :json-operator:`$gt`, :json-operator:`$gte`, :json-operator:`$lt`, :json-operator:`$lte`  
      - Yes
@@ -138,7 +138,9 @@ The following table specifies which expansions are Sync compatible in either the
      write rules. Functions would not operate on a per-document basis.
    
    - You cannot store permissions information (such as "which document
-     IDs may this user access?") in the user object.
+     IDs may this user access?") in the user object. Changes would not be
+     re-evaluated until the next user session, and updates would cause a 
+     client reset.
 
 
 .. _flexible-sync-permission-changes:
