@@ -970,6 +970,8 @@ other data from an authentication provider.
        partition if the partition value is listed in the
        ``data.writePartitions`` field of their user object.
 
+.. _pbs-function-rules:
+
 Function Rules
 ``````````````
 
@@ -1014,7 +1016,39 @@ cannot express solely in JSON expressions.
        collection and then returns a boolean that indicates if the user can read
        data in the requested partition.
 
+.. _pbs-rule-migration:
 
+Migrate Partition-Based Sync Rules to App Services Rules
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you migrate your Partition-Based Sync App to Flexible Sync, your data access
+rules also need to migrate. 
+
+Some Partition-Based Sync rule strategies can't translate directly to App Services
+Rules. You may need to manually migrate permissions that include:
+
+- :json-operator:`%function` operator.
+
+  :ref:`Function rules <pbs-function-rules>` are not compatible with Flexible Sync 
+  and cannot be migrated.
+
+- :json-expansion:`%%partition` expansion.
+
+  App Services Rules do not have an equivalent expansion for  
+  :json-expansion:`%%partition`, so it cannot be migrated.
+
+- ``%or``, ``%not``, ``%nor``, ``%and`` expansions.
+
+  These permissions  *may*  work, but there is enough nuance that you should test them
+  to ensure expected behavior. Testing new permissions won't work on the App
+  you are migrating. You'll need a new app to test manually-migrated permissions.
+
+See the list of :ref:`Flexible Sync-compatible expansions <sync-compatible-expansions>`
+for all supported expansions.
+
+You should also check out the 
+:ref:`Device Sync Permissions Guide <flexible-sync-permissions-guide>` for more
+information about how to work with permissions.
 
 .. _partition-strategy:
 .. _partition-strategies:
