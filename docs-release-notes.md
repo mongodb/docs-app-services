@@ -1,3 +1,43 @@
+# May 26, 2023
+
+## Get Started
+
+- Device Sync Tutorial - Flutter: Change `flutter pub run realm generate` to `dart run realm generate`
+- Triggers and Atlas Search Tutorial: Change page name to "Build Reverse Search Into Your Application" and add details about the reverse search use case
+
+## Device Sync
+
+- Configure Sync/Pause or Terminate Sync: Add link to Kotlin SDK client reset docs
+- Handle Errors/Client Reset: Add link to Kotlin SDK client reset docs
+- Migrate Sync Modes: New page showing how to automatically migrate an App Services App from Partition-Based Sync to Flexible Sync
+
+## Data API
+
+- Data API Endpoints: Replace authentication code examples with tested, Bluehawked examples for Bearer Token, Email/Password, API Key, and Custom JWT
+- Authenticate Data API Requests: Replace authentication code examples with tested, Bluehawked examples for Bearer Token, Email/Password, API Key, and Custom JWT
+
+## Functions
+
+- Landing Page
+  - Reduce "On This Page" depth to avoid confusing users with "missing" sections for headings from tabs
+  - Raise the request timeout limit from 270 to 300 seconds
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Okta (Custom JWT): New page with information about configuring Okta JWT Authentication using the Custom JWT authentication provider
+
+## Define Data Access Permissions
+
+- Device Sync-Compatible Permissions: Remove outdated array queryable field limitation, clarify custom user data implications
+
+## Reference
+
+- Template Apps: Add the Atlas Data API + React template app to the list of available template apps
+
+## Other
+
+- Internal: Remove deprecated directives per DOP
+
 # May 19, 2023
 
 ## Get Started
