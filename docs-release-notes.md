@@ -1,3 +1,21 @@
+# June 2, 2023
+
+## Device Sync
+
+- Get Started: Change "C++ SDK (Alpha)" name to "C++ SDK" for consistency with other references in App Services docs that omit the alpha/beta designation
+- Tiered Device Sync Guide: Update `cloudSyncServerAuth` field name to `cloudSyncServerAuthSecret`
+- Migrate Sync Modes: Add Realm Swift SDK v10.40.0 & Java SDK v10.16.0 as client SDKs that support Sync mode migration
+
+## Authenticate & Manage Users
+
+- Authentication Providers
+  - Custom Function: Change "C++ SDK (Alpha)" name to "C++ SDK" for consistency with other references in App Services docs that omit the alpha/beta designation
+  - Custom JWT: Clarify and add Custom JWT details, refresh page organization and content
+
+## Other
+
+- Internal: Add a missing redirect
+
 # May 26, 2023
 
 ## Get Started
