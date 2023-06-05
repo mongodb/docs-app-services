@@ -1,5 +1,5 @@
 You can link a `serverless instance
-<https://www.mongodb.com/cloud/atlas/serverless?tck=docs_realm>`__ to
+<https://www.mongodb.com/docs/atlas/manage-serverless-instances/`__ to
 your app as a MongoDB data source. However, serverless instances do not
 currently support change streams, so the following features are limited:
 
