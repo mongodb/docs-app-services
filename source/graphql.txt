@@ -216,6 +216,16 @@ Limitations
   {+max-graphql-relationship-depth+} resolvers, the entire operation
   fails with the error message ``"max relationship depth exceeded"``.
 
+- The GraphQL API expects collection schemas to have unique titles and
+  raises a warning if your data model contains duplicate titles.
+
+  You can safely ignore this warning if:
+
+  - The title conflicts only involve embedded objects.
+
+  - Every schema with a given title uses an identical definition,
+    including relationships.
+
 - The GraphQL API does not currently support relationships for fields
   inside arrays of embedded objects. You can use a :ref:`custom resolver
   <graphql-custom-resolvers>` to manually look up and resolve embedded
