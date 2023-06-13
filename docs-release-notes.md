@@ -1,3 +1,12 @@
+# June 8, 2023
+
+## GraphQL
+
+- Landing Page: Note in Limitation section about when you can safely ignore schema title warnings
+
+## Other
+- Internal: Fixed broken links on various pages
+
 # June 2, 2023
 
 ## Device Sync
