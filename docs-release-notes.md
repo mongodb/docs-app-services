@@ -2,7 +2,7 @@
 
 ## GraphQL
 
-- Atlas GraphQL API: Note in Limitation section about when you can safely ignore schema title warnings
+- Landing Page: Note in Limitation section about when you can safely ignore schema title warnings
 
 ## Other
 - Internal: Fixed broken links on various pages
