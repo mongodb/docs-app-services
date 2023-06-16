@@ -1,3 +1,10 @@
+# June 16, 2023
+
+## Device Sync
+
+- App Builder/Tiered Device Sync: Clarify the opening Tip about starting a PoC with a Template App to get an App pre-configured for Device Sync
+- Migrate Sync Modes: Add the Node.js SDK and React Native SDK versions that support backend sync mode migration
+
 # June 8, 2023
 
 ## GraphQL
@@ -5,6 +12,7 @@
 - Landing Page: Note in Limitation section about when you can safely ignore schema title warnings
 
 ## Other
+
 - Internal: Fixed broken links on various pages
 
 # June 2, 2023
