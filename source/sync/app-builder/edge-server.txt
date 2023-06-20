@@ -1,16 +1,8 @@
-:noprevnext:
-:orphan:
+.. _edge-server:
 
-.. meta::
-   :robots: noindex, nosnippet
-
-.. _tiered-device-sync-guide:
-
-========================
-Tiered Device Sync Guide
-========================
-
-.. default-domain:: mongodb
+==============================
+Atlas Device Sync: Edge Server
+==============================
 
 .. contents:: On this page
    :local:
@@ -18,11 +10,16 @@ Tiered Device Sync Guide
    :depth: 2
    :class: singlecol
 
-This guide details how to set up a Tiered Device Sync application while 
-this feature is in pre-alpha. This guide is intentionally not public,
-and is intended for internal MongoDB use.
+This guide details how to set up and connect to an Atlas Device Sync Edge 
+Server. Edge Server is currently in Private Preview.
 
-.. _tiered-sync-create-device-sync-app:
+If you are interested in previewing the Atlas Device Sync Edge Server, 
+complete this form to let us know.
+
+.. button:: I'm interested!
+   :uri: https://forms.gle/3TgGK9cUGenTAQYH7
+
+.. _edge-server-create-device-sync-app:
 
 Create a Device Sync-Enabled App
 --------------------------------
@@ -35,12 +32,12 @@ Create a Device Sync-Enabled App
       
       .. tip:: Get started quickly with a template app
 
-         You can use Tiered Device Sync with any Flexible Sync-enabled 
+         You can use an Edge Server with any Flexible Sync-enabled 
          App Services App. For a quick proof-of-concept, you can 
          :ref:`create an app from a template <create-template-app>`. 
          Any of the starter templates whose name includes 
          :guilabel:`Atlas Device Sync Starter` can quick-start your 
-         Tiered Sync proof-of-concept. If you create a template app from 
+         Edge Server proof-of-concept. If you create a template app from 
          the Atlas UI, choose :guilabel:`Real-time Sync`.
          
          These templates set up a Device Sync-enabled task tracker app with a 
@@ -51,9 +48,8 @@ Create a Device Sync-Enabled App
          :ref:`email/password authentication <email-password-authentication>` 
          enabled.
 
-         In the :ref:`tiered-sync-connect-from-client` section below, you
-         can learn how to modify the client to connect to the Tiered Sync 
-         server.
+         In the :ref:`edge-server-connect-from-client` section below, you
+         can learn how to modify the client to connect to the Edge Server.
 
    .. step:: Enable Device Sync or Modify the Template Configuration
 
@@ -61,21 +57,21 @@ Create a Device Sync-Enabled App
       <enable-sync>` with Flexible Sync. Configure :ref:`permissions 
       <device-sync-compatibility>` to allow anyone to read and write all data.
 
-      The Tiered Sync server uses :ref:`Anonymous Authentication 
+      The Edge Server uses :ref:`Anonymous Authentication 
       <anonymous-authentication>` to connect to the App Services App. When 
-      you configure Tiered Sync for your app, this automatically enables 
+      you configure the Edge Server for your app, this automatically enables 
       Anonymous Authentication.
 
       If you started with a template app, go to :guilabel:`Rules`, and delete 
       the existing rule for the ``todo`` / ``Item`` collection. Replace it with 
       ``readAndWriteAll``.
 
-.. _tiered-sync-configure-host:
+.. _edge-server-configure-host:
 
 Configure the Host
 ------------------
 
-Configure the host to run the Tiered Device Sync server. This may be
+Configure the host to run the Edge Serer. This may be
 an EC2 instance or other cloud server, or hardware that you provision on-site.
 
 .. tip::
@@ -84,48 +80,48 @@ an EC2 instance or other cloud server, or hardware that you provision on-site.
    Ubuntu Server 18.x. Under Network settings, add a rule to allow access 
    via HTTP/Port 80. Free tier settings are sufficient for small PoC projects.
 
-.. _tiered-sync-required-network-access:
+.. _edge-server-required-network-access:
 
 Required Network Access
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-The host that runs the Tiered Sync server must allow access to port 80 via HTTP 
+The host that runs the Edge Server must allow access to port 80 via HTTP 
 to the general internet. 
 
-.. _tiered-sync-os-support:
+.. _edge-server-os-support:
 
 OS Compatibility
 ~~~~~~~~~~~~~~~~
 
-The Tiered Sync server has been verified with the following operating systems:
+The Edge Server has been verified with the following operating systems:
 
 - Ubuntu Server 18+
 - macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
 
 Other operating systems may be possible, but have not yet been verified.
 
-.. _tiered-sync-hardware-requirements:
+.. _edge-server-hardware-requirements:
 
 Hardware Requirements
 ~~~~~~~~~~~~~~~~~~~~~
 
-Tiered Sync benchmarking is not yet complete, so minimum required hardware
+Edge Server benchmarking is not yet complete, so minimum required hardware
 is not yet available. 
 
-.. _tiered-sync-configure-and-start-server:
+.. _edge-server-configure-and-start-server:
 
-Install and Configure the Tiered Sync Server
---------------------------------------------
+Install and Configure the Edge Server
+-------------------------------------
 
-Set up and run the Tiered Sync server on the host.
+Set up and run the Edge Server on the host.
 
 .. include:: /includes/important-stop-tiered-sync-server.rst
 
 .. procedure::
 
-   .. step:: Get the Tiered Sync Server Code
+   .. step:: Get the Edge Server Code
 
-      Use ``wget`` to get the current Tiered Sync server code as a ``.tar`` file:
+      Use ``wget`` to get the current Edge Server code as a ``.tar`` file:
 
       .. code-block:: shell
 
@@ -139,7 +135,7 @@ Set up and run the Tiered Sync server on the host.
 
       You now have a ``tiered_sync`` directory containing the server files.
 
-   .. step:: Complete the Tiered Sync Configuration Details
+   .. step:: Complete the Edge Server Configuration Details
 
       The ``tiered_sync`` directory contains a :file:`config.json` file you 
       must edit with the appropriate values to configure the server.
@@ -152,7 +148,7 @@ Set up and run the Tiered Sync server on the host.
              "YOUR-COLLECTION-NAME": "YOUR-QUERY"
            },
            "cloudSyncServerAuthSecret": "YOUR-AUTH-SECRET",
-           "hostname": "YOUR-TIERED-SYNC-SERVER-DOMAIN"
+           "hostname": "YOUR-EDGE-SERVER-DOMAIN"
          }
 
       .. list-table::
@@ -166,18 +162,18 @@ Set up and run the Tiered Sync server on the host.
 
          * - ``query``
            - An object containing one or more collections and queries that 
-             define the collections and documents the Tiered Sync server can 
+             define the collections and documents the Edge Server can 
              sync.
 
          * - ``YOUR-COLLECTION-NAME``
-           - The name of the collection in your database where the Tiered 
-             Sync server should sync data. If you're using a 
+           - The name of the collection in your database where the Edge 
+             Server should sync data. If you're using a 
              template app, this is the ``Item`` collection.
             
          * - ``YOUR-QUERY``
-           - This query determines what documents the Tiered Sync server
+           - This query determines what documents the Edge Server
              can sync with the collection. For example, ``truepredicate``
-             means the Tiered Sync server syncs all documents with the collection.
+             means the Edge Server syncs all documents with the collection.
              You can use :ref:`Realm Query Language <rql>` to define this
              query, with the same caveats around :ref:`Flexible Sync RQL 
              Limitations <flexible-sync-rql-limitations>`.
@@ -194,7 +190,7 @@ Set up and run the Tiered Sync server on the host.
 
       .. example::
 
-         An example Tiered Sync configuration file for a template app running
+         An example Edge Server configuration file for a template app running
          on an EC2 instance might look similar to:
 
          .. code-block:: json
@@ -229,11 +225,11 @@ Set up and run the Tiered Sync server on the host.
 
    .. step:: Install Dependencies
 
-      The Tiered Sync server requires several dependencies, which are listed 
+      The Edge Server requires several dependencies, which are listed 
       in the :file:`README.md` in the ``tiered_sync`` directory. Follow the 
       instructions to install the required dependencies.
 
-   .. step:: Start the Tiered Sync Server
+   .. step:: Start the Edge Server
 
       To start the server, from the ``tiered_sync`` directory:
 
@@ -253,18 +249,18 @@ Set up and run the Tiered Sync server on the host.
       
          If this occurs, you can switch to the root user with ``sudo su``.
 
-      Now you can connect clients directly to the Tiered Sync server.
+      Now you can connect clients directly to the Edge Server.
 
       In the App Services logs, you should see an ``Authentication -> Login``
-      entry whose ``Name`` is ``tiered-sync-token``. This is the Tiered Sync
-      server connecting to your App Services App.
+      entry whose ``Name`` is ``tiered-sync-token``. This is the Edge Server
+      connecting to your App Services App.
 
       .. include:: /includes/important-stop-tiered-sync-server.rst
 
-   .. step:: Check the Status of the Tiered Sync Server
+   .. step:: Check the Status of the Edge Server
 
-      When the Tiered Sync server is running, you can see the status of the 
-      Tiered Sync server with:
+      When the Edge Server is running, you can see the status of the 
+      Edge Server with:
 
       .. code-block:: shell
 
@@ -275,7 +271,7 @@ Set up and run the Tiered Sync server on the host.
 
       .. example::
 
-         The status object of a Tiered Sync server may look similar to:
+         The status object of an Edge Server may look similar to:
 
          .. code-block:: json
             :copyable: false
@@ -289,21 +285,21 @@ Set up and run the Tiered Sync server on the host.
                }
             }
 
-.. _tiered-sync-connect-from-client:
+.. _edge-server-connect-from-client:
 
-Connect to the Tiered Sync Server from a Client
------------------------------------------------
+Connect to the Edge Server from a Client
+----------------------------------------
 
-To connect to the Tiered Sync server from a client, your app must:
+To connect to the Edge Server from a client, your app must:
 
 - Use Anonymous Authentication
 - Use HTTP over port 80
 - Set the Sync URL to the public accessible DNS address you set in the 
-  Tiered Sync server config's ``hostname`` field
+  Edge Server config's ``hostname`` field
 
 For a quick proof of concept using a template app, these are the modifications
 you would need to make to the :github:`Swift template app 
-<mongodb/template-app-swiftui-todo>` to connect to the Tiered Sync server:
+<mongodb/template-app-swiftui-todo>` to connect to the Edge Server:
 
 .. procedure::
 
@@ -318,9 +314,9 @@ you would need to make to the :github:`Swift template app
            - Value
 
          * - ``baseUrl``
-           - The public-addressable DNS of your Tiered Sync server's host. 
+           - The public-addressable DNS of your Edge Server's host. 
              This is ``http://`` followed by the same value you set in your 
-             Tiered Sync server config's ``hostname`` field.
+             Edge Server config's ``hostname`` field.
           
          * - ``appId``
            - The App ID of the App Services App you created above.
@@ -405,7 +401,7 @@ you would need to make to the :github:`Swift template app
 
       You can optionally adjust the Sync log level if you'd like to get 
       additional details about the status of communication with the 
-      Tiered Sync server.
+      Edge Server.
 
       In the :file:`App` file, the Realm Swift app is initialized in the 
       ``ErrorHandler`` class that starts in line 29. Add a log level
@@ -430,16 +426,16 @@ you would need to make to the :github:`Swift template app
    .. step:: Run the App
 
       Now you should be able to build and run the app. When you press the 
-      :guilabel:`Log In` button, you should be connected to the Tiered Sync
-      server. When you create new Items, those sync with the Tiered Sync server,
+      :guilabel:`Log In` button, you should be connected to the Edge Server.
+      When you create new Items, those sync with the Edge Server,
       and from there to the Atlas App Services App.
 
-      You can check the status of the Tiered Sync server from your host.
+      You can check the status of the Edge Server from your host.
       With the client running, you should see ``"num_local_clients": 1`` in 
-      the Tiered Sync server status. You can also see error messages reflected
+      the Edge Server status. You can also see error messages reflected
       in the sync status.
 
-      After the next time the Tiered Sync server syncs with your App Services App,
+      After the next time the Edge Server syncs with your App Services App,
       you should see synced changes reflected in the linked Atlas collection.
 
       .. important::
@@ -447,7 +443,7 @@ you would need to make to the :github:`Swift template app
          If you have previously connected directly from the client to your 
          App Services App with Device Sync, you may need to clear state on the 
          simulator or device. Resetting your cache enables your client to 
-         connect to the Tiered Sync server.
+         connect to the Edge Server.
 
          In a console app, delete the ``mongodb-realm`` directory. If you're
          using an iOS or Android simulator or device, uninstall and reinstall
