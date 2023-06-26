@@ -534,9 +534,38 @@ and JSON representations:
            }
          }
 
+.. json-operator:: %stringToUuid
+
+   Converts a string to an EJSON ``UUID`` object.
+
+   .. example::
+      
+      .. code-block:: json
+            
+         {
+           "_id": {
+             "%stringToUuid": "%%user.id"
+           }
+         }
+
+.. json-operator:: uuidToString
+
+   Converts an EJSON ``UUID`` object to a string.
+
+   .. example::
+   
+      .. code-block:: json
+         
+         {
+           "string_id": {
+             "%uuidToString": "%%root._id"
+           }
+         }
+
 .. important:: No Inner Operations
    
-   :json-operator:`%stringToOid` and :json-operator:`%oidToString` do not
+   :json-operator:`%stringToUuid`, :json-operator:`uuidToString`, 
+   :json-operator:`%stringToOid`, and :json-operator:`%oidToString` do not
    evaluate JSON operators. You must provide either a literal string/EJSON
    object or an expansion that evaluates to one.
 
