@@ -3369,6 +3369,19 @@ paths:
       operationId: adminDeployDraft
       summary: Deploy a deployment draft
       description: Deploy the specified application deployment draft.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: |
+                    The name of the deployment. To deploy a draft
+                    without a name, use an empty string.
       responses:
         "201":
           description: The draft was successfully deployed.
