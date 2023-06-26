@@ -6,7 +6,7 @@
 
 ## Device Sync
 
-- App Builder/Configure & Connect to an Edge Server: Rename to "Edge Server" from "Tiered Device Sync" and make the page public
+- App Builder/Configure & Connect to an Edge Server: Rename "Tiered Device Sync" to "Edge Server" and make the page public
 - Migrate Sync Modes: Add .NET SDK v11.1.0 as a minimum SDK version that supports Partition-Based Sync to Flexible Sync migration
 
 ## Other
