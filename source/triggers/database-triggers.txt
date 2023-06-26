@@ -567,7 +567,7 @@ a text message to the customer with the new location of the order.
        const customers = mongodb.db("store").collection("customers");
 
        const { location } = shippingLocation.pop();
-       const customer = await customers.findOne({ _id: customer_id })
+       const customer = await customers.findOne({ _id: customerId })
        twilio.send({
          to: customer.phoneNumber,
          from: context.values.get("ourPhoneNumber"),
