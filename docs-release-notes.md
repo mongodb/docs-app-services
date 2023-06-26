@@ -1,3 +1,18 @@
+# June 23, 2023
+
+## Get Started
+
+- Device Sync Tutorial - React Native: Fix the highlighting in a code example
+
+## Device Sync
+
+- App Builder/Configure & Connect to an Edge Server: Rename "Tiered Device Sync" to "Edge Server" and make the page public
+- Migrate Sync Modes: Add .NET SDK v11.1.0 as a minimum SDK version that supports Partition-Based Sync to Flexible Sync migration
+
+## Other
+
+- Fix broken links across 15 files
+
 # June 16, 2023
 
 ## Device Sync
