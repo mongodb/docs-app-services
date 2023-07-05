@@ -1,3 +1,17 @@
+# June 30, 2023
+
+## Triggers
+
+- Database Triggers: Correct a variable misnaming (from `customer_id` to `customerId`) in a code example based on user feedback
+
+## Define Data Access Permissions
+
+- Rule Expressions: Add new expressions operators, `%stringToUuid` and `%uuidToString`, to convert EJSON values to JSON 
+
+## Reference
+
+- App Services Admin API/Deployment/Deploy a Deployment Draft: Add missing payload for `adminDeployDraft` call
+
 # June 23, 2023
 
 ## Get Started
