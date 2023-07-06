@@ -463,29 +463,28 @@ importing an application directory with {+cli-bin+}.
 
 .. _last-cluster-time-processed:
 
-Last Cluster Time Processed
----------------------------
+Trigger Time Reporting
+----------------------
+
+The list of Triggers in the Atlas App Services UI shows three timestamps:
+
+**Last Modified**
+
+This is the time the Trigger was created or most recently changed.
+
+**Latest Heartbeat**,
 
 Atlas App Services keeps track of the last time a trigger was run. If the trigger 
 is not sending any events, the server sends a heartbeat to ensure the trigger's 
 resume token stays fresh. Whichever event is most recent is shown as the 
-:guilabel:`Latest Heartbeat` in the App Services UI. Database Triggers also 
-keep track of the :guilabel:`Last Cluster Time Processed`, which is the last time 
-the change stream backing that Trigger emitted an event. You can access these 
-timestamps in the list of Triggers that displays when you first navigate to the
-:guilabel:`Triggers` section from the sidebar.
+:guilabel:`Latest Heartbeat`.
 
-The difference between the latest heartbeat and the last cluster time
-processed represents the latency between when an event occurs in your
-database, and when the Trigger finishes responding to that event. If
-latency is consistently large, you can reduce it with the following:
+**Last Cluster Time Processed**
 
-- Optimize the Trigger's linked Function to speed up execution.
-
-- If your Trigger uses Event Ordering, consider switching ordering off
-  to reduce latency.
-
-- Add resources by upgrading your MongoDB Atlas cluster.
+Atlas App Services also keeps track of the :guilabel:`Last Cluster Time Processed`, 
+which is the last time the change stream backing a Trigger emitted an event. It 
+will be older than the :guilabel:`Latest Heartbeat` if there have been no events 
+since the most recent heartbeat.
 
 Example
 -------
