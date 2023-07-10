@@ -1,3 +1,9 @@
+# July 3, 2023
+
+## Triggers
+
+- Database Triggers: Update text and images to match the UI changes for the `Last Execution` to `Last Heartbeat` term change
+
 # June 30, 2023
 
 ## Triggers
