@@ -57,11 +57,6 @@ Create a Device Sync-Enabled App
       <enable-sync>` with Flexible Sync. Configure :ref:`permissions 
       <device-sync-compatibility>` to allow anyone to read and write all data.
 
-      The Edge Server uses :ref:`Anonymous Authentication 
-      <anonymous-authentication>` to connect to the App Services App. When 
-      you configure the Edge Server for your app, this automatically enables 
-      Anonymous Authentication.
-
       If you started with a template app, go to :guilabel:`Rules`, and delete 
       the existing rule for the ``todo`` / ``Item`` collection. Replace it with 
       ``readAndWriteAll``.
@@ -133,11 +128,11 @@ Set up and run the Edge Server on the host.
 
          tar -xvf *.tgz
 
-      You now have a ``tiered_sync`` directory containing the server files.
+      You now have a ``edge_server`` directory containing the server files.
 
    .. step:: Complete the Edge Server Configuration Details
 
-      The ``tiered_sync`` directory contains a :file:`config.json` file you 
+      The ``edge_server`` directory contains a :file:`config.json` file you 
       must edit with the appropriate values to configure the server.
 
       .. code-block:: json
@@ -226,12 +221,12 @@ Set up and run the Edge Server on the host.
    .. step:: Install Dependencies
 
       The Edge Server requires several dependencies, which are listed 
-      in the :file:`README.md` in the ``tiered_sync`` directory. Follow the 
+      in the :file:`README.md` in the ``edge_server`` directory. Follow the 
       instructions to install the required dependencies.
 
    .. step:: Start the Edge Server
 
-      To start the server, from the ``tiered_sync`` directory:
+      To start the server, from the ``edge_server`` directory:
 
       .. code-block:: shell
 
@@ -285,6 +280,23 @@ Set up and run the Edge Server on the host.
                }
             }
 
+.. _edge-server-configure-authentication:
+
+Configure an Authentication Provider
+------------------------------------
+
+Edge Server supports these authentication providers:
+
+- :ref:`Anonymous Authentication <anonymous-authentication>`
+- :ref:`Email/Password Authentication <email-password-authentication>`
+- :ref:`Custom JWT Authentication <custom-jwt-authentication>`
+- :ref:`API Key Authentication <api-key-authentication>`
+
+Enable an authentication provider for clients to connect to the Edge Server.
+
+If you created a :ref:`template app <template-apps>`, email/password 
+authentication is already enabled in the template app configuration.
+
 .. _edge-server-connect-from-client:
 
 Connect to the Edge Server from a Client
@@ -292,7 +304,6 @@ Connect to the Edge Server from a Client
 
 To connect to the Edge Server from a client, your app must:
 
-- Use Anonymous Authentication
 - Use HTTP over port 80
 - Set the Sync URL to the public accessible DNS address you set in the 
   Edge Server config's ``hostname`` field
@@ -361,42 +372,6 @@ you would need to make to the :github:`Swift template app
       .. image:: /images/tiered-sync-info-plist.png
          :alt: Screenshot of an Info.plist file showing the settings above
 
-   .. step:: Switch to Anonymous Authentication
-
-      Instead of using email/password authentication, switch the client code
-      to use anonymous authentication. Go to the ``Views`` directory, and
-      open the :file:`LoginView`.
-
-      Remove the ``TextField`` and ``SecureField`` elements from the ``VStack``
-      in the View body, as well as their associated ``@State`` variables.
-
-      In the ``Button("Log In")`` element, remove the ``email: email, password: password``
-      from the ``login`` function call. Remove them from the ``login`` function 
-      signature below the view.
-
-      In the ``login`` function, change the user credentials from ``emailPassword``
-      to ``anonymous``. This function should now look like:
-
-      .. code-block:: swift
-
-         func login() async {
-           do {
-             let user = try await app.login(credentials: Credentials.anonymous)
-             print("Successfully logged in user: \(user)")
-           } catch {
-             print("Failed to log in user: \(error.localizedDescription)")
-             errorHandler.error = error
-           }
-         }
-
-      Remove the ``signUp`` function.
-
-      Back in the View body above, remove the ``Button("Create Account")``
-      element and all of its styling.
-
-      This leaves you with a View containing a single ``Log In`` button 
-      that uses anonymous authentication.
-
    .. step:: Adjust the Sync Log Level, If Desired
 
       You can optionally adjust the Sync log level if you'd like to get 
@@ -425,10 +400,10 @@ you would need to make to the :github:`Swift template app
 
    .. step:: Run the App
 
-      Now you should be able to build and run the app. When you press the 
-      :guilabel:`Log In` button, you should be connected to the Edge Server.
-      When you create new Items, those sync with the Edge Server,
-      and from there to the Atlas App Services App.
+      Now you should be able to build and run the app. When you log in, 
+      you should be connected to the Edge Server. When you create new Items, 
+      those sync with the Edge Server, and from there to the Atlas App 
+      Services App.
 
       You can check the status of the Edge Server from your host.
       With the client running, you should see ``"num_local_clients": 1`` in 
