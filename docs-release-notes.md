@@ -1,3 +1,9 @@
+# July 14, 2023
+
+## Device Sync
+
+- Edge Server: Update `tiered_sync` naming to `edge_server` based on engineering updates, add more supported auth providers, clarify websocket connection details
+
 # July 3, 2023
 
 ## Triggers
@@ -12,7 +18,7 @@
 
 ## Define Data Access Permissions
 
-- Rule Expressions: Add new expressions operators, `%stringToUuid` and `%uuidToString`, to convert EJSON values to JSON 
+- Rule Expressions: Add new expressions operators, `%stringToUuid` and `%uuidToString`, to convert EJSON values to JSON
 
 ## Reference
 
