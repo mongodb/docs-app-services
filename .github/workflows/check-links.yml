@@ -11,10 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: MongoCaleb/checker@latest
-
-steps:
-  - uses: actions/checkout@v3
-  - uses: actions/setup-go@v4
-    with:
-      go-version: '1.20.4' # The Go version to download (if necessary) and use.
-  - run: go run ./... 
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.20.4' # The Go version to download (if necessary) and use.
+      - run: go run ./... 
