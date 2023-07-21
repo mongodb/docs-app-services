@@ -41,19 +41,18 @@ Filters add additional query parameters and omit fields from query results
 How App Services Applies Filters
 --------------------------------
 
-App Services evaluates and applies filters for every MongoDB request where rules
-apply, such as:
+App Services evaluates and applies filters for all MongoDB requests where rules
+apply except Device Sync requests. Examples of filterable MongoDB requests include:
 
 - A query on a collection.
 - A write to a document.
-- The start of a Device Sync session.
-
-Multiple filters may apply to a single request.
 
 A filter applies to a given request if its "apply when" :ref:`expression
 <expressions>` evaluates to true given that request's context. If a filter
 applies to a request, App Services merges the filter's query or projection into
 the requested operation's existing query and projection.
+
+Multiple filters may apply to a single request.
 
 App Services applies filters to the request *before* it sends the request to MongoDB.
 
