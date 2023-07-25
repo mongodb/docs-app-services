@@ -1,3 +1,26 @@
+# July 21, 2023
+
+## Device Sync
+
+- App Builder's Resources/Stream Data from Client to Atlas: Add Kotlin to list of SDKs that support Data Ingest
+- Configure Sync/Sync Settings: Add Kotlin to list of SDKs that support Data Ingest
+
+## Functions
+
+- Landing Page: Warn that nested functions are not allowed with auto GH deploy
+
+## Define a Data Model
+
+- Schemas/Enforce a Schema: Fix the depth of TOC on the page
+
+## Define Data Access Permissions
+
+- Filter Incoming Queries:  Note that filters are not supported in Device Sync
+
+## Release Notes
+
+- Add 12 July 2023 and 28 June 2023 release notes
+
 # July 14, 2023
 
 ## Device Sync
