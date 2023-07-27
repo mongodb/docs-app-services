@@ -151,11 +151,11 @@ the model and the schema.
 Add a Default Value on a Property
 ---------------------------------
 
-You can add a default value on an object's required property. When an Atlas document 
-missing this required property is inserted into the collection, the default 
-value is added when the document is processed by Sync. Because of this, Realm
-clients will see the default value, but the Atlas document will not have the 
-default value for the property.
+You can add a default value on an object's required property. When you 
+insert an Atlas document missing this required property into the 
+collection, the Realm clients set the property to the default value. However, 
+the same property on the Atlas document remains empty until a client makes 
+a changes to the property or updates the document directly in Atlas.
 
 For more information on how default values are helpful when modifying 
 existing Atlas documents, see :ref:`<schema-update-add-required-property>`.
