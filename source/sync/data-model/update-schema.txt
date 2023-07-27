@@ -91,6 +91,9 @@ non-breaking change.
    * - :ref:`Add an object type <schema-update-add-object-type>`
      - Non-breaking
      - Non-breaking
+   * - :ref:`Add a default value on a property <schema-update-add-a-default-value>`
+     - Non-breaking
+     - Non-breaking
    * - :ref:`Add a required property <schema-update-add-required-property>`
      - Non-breaking
      - Non-breaking
@@ -142,6 +145,26 @@ the model and the schema.
    collection and re-insert them into App Services to get the new values. This
    is expected behavior, but it does cause a temporary halt to propagating 
    changes while this process is underway.
+
+.. _schema-update-add-a-default-value:
+
+Add a Default Value on a Property
+---------------------------------
+
+You can add a default value on an object's required property. When an Atlas document 
+missing this required property is inserted into the collection, the default 
+value is added when the document is processed by Sync. Because of this, Realm
+clients will see the default value, but the Atlas document will not have the 
+default value for the property.
+
+For more information on how default values are helpful when modifying 
+existing Atlas documents, see :ref:`<schema-update-add-required-property>`.
+
+.. warning:: Ensure the default value type and property's type are the same
+
+   The default field does not have type validation. If the default field's type
+   and the property's type are not the same, the error will indicate that
+   the documents is missing a required field. 
 
 .. _schema-update-add-required-property:
 
