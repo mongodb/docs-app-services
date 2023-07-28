@@ -20,15 +20,16 @@ list of all available options, see :ref:`Deployment Models & Regions
 To move an existing App, you begin a  **Deployment Migration** that
 automatically moves your App's data and configuration to the new
 configuration. The migration process is designed to be as seamless as
-possible but requires up to 30 minutes of downtime. You can
-monitor the migration status but no requests will be processed until the
+possible but requires 5 to 30 minutes of downtime. You can
+monitor the migration status, but no requests will be processed until the
 migration is complete. For more information, see :ref:`Deployment
 Migration Process <deployment-migration-process>`.
 
 If you connect to your App from a Realm SDK, you must update your SDK to
-a version that supports changing deployment models. If you change
-deployment models before upgrading, the SDK will not be able to connect
-and requests will fail.
+a version that supports changing deployment models. If your App's SDK
+version does not support changing deployment models, you'll need to reinstall
+your app. If you change deployment models before upgrading, the SDK will
+not be able to connect and requests will fail.
 
 .. todo sync with ENG post https://jira.mongodb.org/browse/RCORE-1346 to determine minimum versions. Until then, users have to talk to support.
 
@@ -70,6 +71,11 @@ Before You Begin
       - .. include:: /includes/prereqs/atlas-admin-api-key.rst
 
       - .. include:: /includes/prereqs/api-project-app-id.rst
+
+.. note:: Deployment Migration is Permanent
+
+         Changing your deployment model is not a draft action, and therefore
+         cannot be reversed after it is saved.
 
 Procedure
 ~~~~~~~~~
@@ -216,6 +222,9 @@ A deployment migration moves through the following stages in order:
    - ``"successful"``: the migration completed successfully
 
    - ``"failed"``: the migration failed
+
+Data Affected
+~~~~~~~~~~~~~
 
 The migration process does not affect any application data stored in a
 MongoDB Atlas cluster.
