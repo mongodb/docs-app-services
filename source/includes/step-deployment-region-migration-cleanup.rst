@@ -20,3 +20,6 @@
           You cannot use VPC Private Endpoints if you migrated
           to a global deployment or to a local region in Azure
           or GCP.
+      * - Sending Requests
+        - Once migration is complete, you must send requests
+          using new URLs, if applicable. 
