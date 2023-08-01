@@ -25,12 +25,6 @@ monitor the migration status, but no requests will be processed until the
 migration is complete. For more information, see :ref:`Deployment
 Migration Process <deployment-migration-process>`.
 
-If you connect to your App from a Realm SDK, you must update your SDK to
-a version that supports changing deployment models. If your App's SDK
-version does not support changing deployment models, you'll need to reinstall
-your app. If you change deployment models before upgrading, the SDK will
-not be able to connect and requests will fail.
-
 .. todo sync with ENG post https://jira.mongodb.org/browse/RCORE-1346 to determine minimum versions. Until then, users have to talk to support.
 
 .. important:: Contact MongoDB Support
@@ -47,19 +41,26 @@ You can begin a deployment migration at any time. Only one migration may
 be in progress at a time for a single App. If you try to start a migration while another
 is in progress, the new migration does not run and fails with an error.
 
+If you connect to your App from a Realm SDK, you must update your SDK to
+a version that supports changing deployment models. If your App's SDK
+version does not support changing deployment models, you'll need to reinstall
+your app. If you change deployment models before upgrading, the SDK will
+not be able to connect and requests will fail.
+
 Before You Begin
 ~~~~~~~~~~~~~~~~
 
 Before changing deployment models, please note the following: 
 
+- All logs and drafts will be lost.
 - Suspended Triggers will restart.
 - Any existing Private Endpoints will need to be recreated for the new region.
 - The oplog replication window associated with any running Triggers is large 
   enough to sustain Triggers and Device Sync being paused for the duration of the migration.
 
-.. note:: Deployment Migration is Permanent
+.. important:: Deployment Migration is Permanent
 
-         Changing your deployment model is not a draft action and therefore
+         Changing your deployment model is not a draft. This change
          cannot be reversed after it is saved.
 
 .. tabs-realm-admin-interfaces::
