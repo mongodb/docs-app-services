@@ -1,3 +1,22 @@
+# July 28, 2023
+
+## Device Sync
+
+- Go to Production with Sync: Rename "Optimize Sync Atlas Usage" page to "Optimize Sync Storage in Atlas" to better reflect the page contents
+
+## Secure Your App
+
+- Use a VPC Private Endpoint: Note that you cannot use public internet connections if you have a Private Endpoint enabled
+
+## Reference
+
+- Third Party Services [Deprecated]: Extend the HTTP/third-party service deprecation date from August 1, 2023 to November 1, 2024
+
+## Internal
+
+- Add a GitHub Action to check for broken links in the docs
+- Add a GitHub Action to check for broken redirects
+
 # July 21, 2023
 
 ## Device Sync
