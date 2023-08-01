@@ -73,15 +73,15 @@ For more information about modifying synced object schemas, see:
 Breaking Changes
 ~~~~~~~~~~~~~~~~
 
-.. versionadded:: TODO: Add date of release
+.. versionadded:: After August 9th, 2023
 
-App Services Apps in Development Mode that were created after <TODO: Add date of release>
+App Services Apps in Development Mode that were created after August 9th, 2023
 can make :ref:`breaking changes <breaking-change-quick-reference>` to synced
 object schemas from their client code.
 
-.. note:: Apps created before <TODO: Add date of release>
+.. note:: Apps created before August 9th, 2023
    
-   For Apps created before <TODO: Add date of release>, you need to update your
+   For Apps created before August 9th, 2023, you need to update your
    object schema in the App Services UI. For details, see
    :ref:`<synced-schema-overview>`
 
@@ -91,23 +91,29 @@ To make a breaking change from client code:
 #. Delete your local realm and data.
 #. Open a new realm with your updated object model.
 
-Refer to the Realm SDK-specific documentation to delete a realm file.
+To delete a Realm file use the Realm SDK-specific methods:
 
 .. list-table::
   :header-rows: 1
 
   * - SDK
     - API
+
   * - Realm Flutter SDK
     - ``Realm.deleteRealm(path)``
+
   * - Realm Kotlin SDK
     - ``Realm.deleteRealm(config)``
+
   * - Realm .NET SDK
     - ``Realm.DeleteRealm(config)``
+
   * - Realm Node.js SDK
     - ``Realm.deleteFile(config)``
+
   * - Realm React Native SDK
     - ``Realm.deleteFile(config)``
+
   * - Realm Swift SDK
     - ``Realm.deleteFiles(config)``
 
