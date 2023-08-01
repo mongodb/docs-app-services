@@ -48,7 +48,7 @@ streamlines development, but should not be used in production.
 Development Mode speeds up development by allowing you to design :ref:`schemas
 <configure-your-data-model>` directly in client application code.
 
-When you sync a realm file, Atlas App Services maps every synced object type
+When you sync a realm, Atlas App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`. If you update the object model on the client
 side, App Services updates the collection schema to match. This lets you update
@@ -61,14 +61,56 @@ update the backend schema by changing the client model.
 To learn more about how the Realm Object Schemas map to the App Services Schemas
 when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
 
-For more information about modifying synced object schemas, including how to
-handle breaking changes, see: :ref:`<synced-schema-overview>`.
+For more information about modifying synced object schemas, see:
+:ref:`<synced-schema-overview>`.
 
 .. important:: Disable Development Mode for Production Apps
    
    Development mode is a development utility that is not suitable for 
    production use. Make sure that you turn off Development Mode before you 
    make your app accessible in a production environment.
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+.. versionadded:: TODO: Add date of release
+
+App Services Apps in Development Mode that were created after <TODO: Add date of release>
+can make :ref:`breaking changes <breaking-change-quick-reference>` to synced
+object schemas from their client code.
+
+.. important:: Apps created before <TODO: Add date of release>
+   
+   For Apps created before <TODO: Add date of release>, you need to update your
+    object schema in the App Services UI. For details, see
+    :ref:`<synced-schema-overview>`
+
+To make a breaking change from client code:
+
+#. Change your local object model and let it sync to your App.
+#. Delete your local realm and data.
+#. Open a new realm with your updated object model.
+
+Refer to the Realm SDK-specific documentation to delete a realm file.
+
+.. list-table::
+  :header-rows: 1
+
+  * - SDK
+  * - Realm Flutter SDK
+  * - Realm Kotlin SDK
+  * - Realm .NET SDK
+  * - Realm Node.js SDK
+  * - Realm React Native SDK
+  * - Realm Swift SDK
+
+  * - API
+  * - ``Realm.deleteRealm(path)``
+  * - ``Realm.deleteRealm(config)``
+  * - ``Realm.DeleteRealm(config)``
+  * - ``Realm.deleteFile(config)``
+  * - ``Realm.deleteFile(config)``
+  * - ``Realm.deleteFiles(config)``
 
 .. _sync-config-data-source:
 
