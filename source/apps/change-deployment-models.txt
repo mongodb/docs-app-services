@@ -25,10 +25,6 @@ monitor the migration status, but no requests will be processed until the
 migration is complete. For more information, see :ref:`Deployment
 Migration Process <deployment-migration-process>`.
 
-You can begin a deployment migration at any time. Only one migration may
-be in progress at a time for a single App. If you try to start a migration while another
-is in progress, the new migration does not run and fails with an error.
-
 .. todo sync with ENG post https://jira.mongodb.org/browse/RCORE-1346 to determine minimum versions. Until then, users have to talk to support.
 
 .. important:: Contact MongoDB Support
@@ -61,30 +57,16 @@ Minimum SDK version:
 - Realm React Native SDK v12.0.0 (pending release)
 - Realm Swift SDK v10.40.0
 
-.. todo sync with ENG post https://jira.mongodb.org/browse/RCORE-1346 to determine minimum versions. Until then, users have to talk to support.
-
-.. important:: Contact MongoDB Support
-
-   We recommend that you contact MongoDB technical support if you are
-   planning to change your deployment model for a production App. To
-   learn how, visit the `MongoDB Support
-   <https://www.mongodb.com/support>`_ portal.
-
-Run a Deployment Migration
---------------------------
-
 Before You Begin
 ~~~~~~~~~~~~~~~~
 
 Before changing deployment models, please note the following: 
 
 - All logs and drafts will be lost.
-- All logs and drafts will be lost.
 - Suspended Triggers will restart.
 - Any existing Private Endpoints will need to be recreated for the new region.
 - Triggers and Device Sync operations will be paused during the migration.
 
-.. important:: Deployment Migration is Permanent
 .. important:: Deployment Migration is Permanent
 
          Changing your deployment model is not a draft. This change
@@ -112,11 +94,6 @@ Before changing deployment models, please note the following:
       - .. include:: /includes/prereqs/atlas-admin-api-key.rst
 
       - .. include:: /includes/prereqs/api-project-app-id.rst
-
-.. note:: Deployment Migration is Permanent
-
-         Changing your deployment model is not a draft action, and therefore
-         cannot be reversed after it is saved.
 
 Procedure
 ~~~~~~~~~
