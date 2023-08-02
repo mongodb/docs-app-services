@@ -178,6 +178,12 @@ required property to both the client model and the Atlas schema.
 However, you should consider making the property optional to avoid the need to 
 modify existing Atlas documents. 
 
+.. note:: Objects missing a required property will default to a zero value
+
+   Clients are allowed to create and Sync objects missing a required property. 
+   The server will populate the missing required field with a zero or blank value
+   (like 0, "", or 0.0) depending on the property type.
+
 Modify Existing Atlas Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
