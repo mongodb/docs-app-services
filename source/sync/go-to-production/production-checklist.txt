@@ -47,6 +47,18 @@ NVMe Minimum MongoDB Version
   it must use MongoDB version 6.0 or later for Device Sync production 
   applications.
 
+Disable or manage built-in schema validation
+  A schema in App Services is **not the same** as :ref:`MongoDB's
+  built-in schema validation <schema-validation-overview>`. Device Sync
+  may interact with your cluster in a way that is incompatible with a
+  built-in schema.
+
+  If you use schema validation on your cluster, you should either
+  disable it in favor of App Services schemas or manage the two schema
+  validation layers so that they're compatible. For more information,
+  see :ref:`App Services Schema vs Built-In Schema Validation
+  <schema-app-services-vs-built-in>`.
+
 App Services Configuration
 --------------------------
 
@@ -86,18 +98,6 @@ App Services schema data consistency
   `mongosh shell <https://www.mongodb.com/docs/mongodb-shell/>`__ or MongoDB Compass, 
   be sure the documents validate against the App Services Schema for the collection. 
   For more information, see :ref:`Unsynced Documents <unsynced-documents>`.
-
-Disable or manage built-in schema validation
-  A schema in App Services is **not the same** as :ref:`MongoDB's
-  built-in schema validation <schema-validation-overview>`. Device Sync
-  may interact with your cluster in a way that is incompatible with a
-  built-in schema.
-
-  If you use schema validation on your cluster, you should either
-  disable it in favor of App Services schemas or manage the two schema
-  validation layers so that they're compatible. For more information,
-  see :ref:`App Services Schema vs Built-In Schema Validation
-  <schema-app-services-vs-built-in>`.
 
 Performance Best Practices
 ---------------------------
