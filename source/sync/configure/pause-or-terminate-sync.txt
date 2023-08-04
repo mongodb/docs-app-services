@@ -10,11 +10,8 @@ Pause or Terminate Sync
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 1
    :class: singlecol
-
-Overview
---------
 
 If you want to disable Atlas Device Sync for your app, you can temporarily pause or 
 permanently terminate it. You can also re-enable Device Sync after 
@@ -51,22 +48,154 @@ Pausing Device Sync rejects any incoming client connections. This
 means that pausing Device Sync for your App stops syncing changes for
 all clients.
 
-To pause Device Sync from the client side, using logic
-that situationally pauses Device Sync during a session, see your
-preferred SDK:
+.. tabs::
 
-- :ref:`Pause or resume a Device Sync session - Flutter SDK
-  <flutter-pause-resume-sync>`
-- :ref:`Pause or resume a Device Sync session - Java SDK
-  <java-pause-or-resume-a-sync-session>`
-- :ref:`Pause or resume a Device Sync session - .Net SDK
-  <dotnet-pause-or-resume-a-sync-session>`
-- :ref:`Pause or resume a Device Sync session - Node SDK
-  <node-pause-or-resume-a-sync-session>`
-- :ref:`Pause or resume a Device Sync session - React Native SDK
-  <react-native-pause-or-resume-a-sync-session>`
-- :ref:`Pause or resume a Device Sync session - Swift SDK
-  <ios-suspend-or-resume-a-sync-session>`
+   .. tab:: UI
+      :tabid: ui
+
+      .. procedure::
+
+        .. step:: Press the Pause Sync Button
+
+            In the :guilabel:`Device Sync` tab of the App Services UI, press the
+            :guilabel:`Pause Sync` button, and then confirm that you want to pause 
+            sync. 
+
+            .. figure:: /images/press-pause-sync-button.png
+               :alt: the pause sync button
+
+            The Device Sync title will now show "Paused":
+
+            .. figure:: /images/pause-sync-confirm.png
+               :alt: "Review & Deploy" notification
+
+   .. tab:: API
+      :tabid: api
+
+      You can use the App Services API to programmatically terminate 
+      Device Sync. 
+      
+      .. procedure::
+
+         .. step:: Get an Authentication Token
+
+            Every request to the App Services Admin API must include a valid 
+            and current authorization token from the MongoDB Cloud API as a 
+            bearer token in the ``Authorization`` header.
+
+            For details on how to get an authentication token, refer to
+            `Get Authentication Tokens
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Get-Authentication-Tokens>`__.
+
+         .. step:: Get Group, App, and Service IDs
+
+            - Get the `Group and App ID 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Project-and-Application-IDs>`__ 
+              for your app.
+            - Get the Service ID for your Sync service. You can programmatically
+              get all services using the `adminListServices 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminListServices>`__
+              endpoint. 
+              
+            Alternately, you can extract Group, App, and Service IDs from 
+            the URL when you view the UI.
+
+            1. Go to the App Services App where Device Sync is configured.
+            #. Select :guilabel:`Linked Data Sources` in the sidebar under 
+               :guilabel:`Manage`.
+            #. Select the :guilabel:`mongodb-atlas CLUSTER`.
+            
+            The URL in your browser's toolbar should now resemble:
+
+            ``https://realm.mongodb.com/groups/$GROUP_ID/apps/$APP_ID/services/$SERVICE_ID/config``
+
+         .. step:: Get the Sync Service Configuration
+
+            Send a GET request to the 
+            `adminGetServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminGetServiceConfig>`__ 
+            endpoint to get the Device Sync service configuration. This returns
+            a Service configuration object similar to:
+
+            .. code-block:: json
+
+                {
+                  "clusterId": "<MY-CLUSTER-ID>",
+                  "clusterName": "Cluster0",
+                  "clusterType": "atlas",
+                  "flexible_sync": {
+                    "state": "enabled",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  },
+                  "groupName": "<MY-GROUP-NAME>",
+                  "orgName": "<MY-ORG-NAME>",
+                  "readPreference": "primary",
+                  "wireProtocolEnabled": false
+                }
+
+            For details about the Sync configuration returned by this endpoint,
+            refer to :ref:`sync-configuration-reference`.
+
+         .. step:: Edit the Sync Service Configuration
+
+            Remove just the ``flexible_sync`` part of the configuration to
+            a new JSON object. This configuration contains a ``state`` field 
+            that reflects the current state of the Sync protocol for the 
+            application. Set this value to ``disabled``. This should
+            now resemble a JSON blob similar to:
+
+            .. code-block:: json
+               :emphasize-lines: 3
+
+                {
+                  "flexible_sync": {
+                    "state": "disabled",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  }
+                }
+
+         .. step:: Update the Configuration on Atlas
+
+            Send the updated Sync Service configuration as a payload in a 
+            PATCH request to the `adminUpdateServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminUpdateServiceConfig>`__ 
+            endpoint.
+
+   .. tab:: Realm SDKs
+      :tabid: sdk
+
+      To pause Device Sync from the client side, using logic
+      that situationally pauses Device Sync during a session, see your
+      preferred SDK:
+
+      - :ref:`Pause or resume a Device Sync session - Flutter SDK
+        <flutter-pause-resume-sync>`
+      - :ref:`Pause or resume a Device Sync session - Kotlin SDK 
+        <kotlin-pause-resume-sync>`
+      - :ref:`Pause or resume a Device Sync session - Java SDK
+        <java-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - .Net SDK
+        <dotnet-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - Node SDK
+        <node-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - React Native SDK
+        <react-native-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - Swift SDK
+        <ios-suspend-or-resume-a-sync-session>`
 
 After pausing Device Sync, you can :ref:`re-enable it <resume-sync>`. 
 Pausing Device Sync maintains the configuration settings and all of the 
@@ -74,26 +203,6 @@ Device Sync metadata, which contains the sync history. When you re-enable
 paused Device Sync, your clients can reconnect normally.
 
 .. include:: /includes/warn-cannot-renable-paused-sync.rst
-
-Procedure
-~~~~~~~~~
-
-.. procedure::
-
-   .. step:: Press the Pause Sync Button
-
-      In the :guilabel:`Device Sync` tab of the App Services UI, press the
-      :guilabel:`Pause Sync` button, and then confirm that you want to pause 
-      sync. 
-
-      .. figure:: /images/press-pause-sync-button.png
-         :alt: the pause sync button
-
-      The Device Sync title will now show "Paused":
-
-      .. figure:: /images/pause-sync-confirm.png
-       :alt: "Review & Deploy" notification
-
 
 .. _resume-sync:
 
@@ -105,17 +214,147 @@ all clients.
 
 .. include:: /includes/warn-cannot-renable-paused-sync.rst
 
-Procedure
-~~~~~~~~~
+.. tabs::
 
-The process to resume Device Sync is the same as the process to re-enable 
-Device Sync. However, when you pause Device Sync, App Services preserves 
-your configuration settings and Device Sync metadata.  
+   .. tab:: UI
+      :tabid: ui
 
-To re-enable Device Sync, follow the steps in the :ref:`enable-sync` guide. You can skip the **Configure Sync**
-step. 
+      The process to resume Device Sync is the same as the process to re-enable 
+      Device Sync. However, when you pause Device Sync, App Services preserves 
+      your configuration settings and Device Sync metadata.  
 
-Clients do not need to perform a client reset when reconnecting after a pause.
+      To re-enable Device Sync, follow the steps in the :ref:`enable-sync` guide. You can skip the **Configure Sync**
+      step. 
+
+      Clients do not need to perform a client reset when reconnecting after a pause.
+
+   .. tab:: API
+      :tabid: api
+
+      You can use the App Services API to programmatically terminate 
+      Device Sync. 
+      
+      .. procedure::
+
+         .. step:: Get an Authentication Token
+
+            Every request to the App Services Admin API must include a valid 
+            and current authorization token from the MongoDB Cloud API as a 
+            bearer token in the ``Authorization`` header.
+
+            For details on how to get an authentication token, refer to
+            `Get Authentication Tokens
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Get-Authentication-Tokens>`__.
+
+         .. step:: Get Group, App, and Service IDs
+
+            - Get the `Group and App ID 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Project-and-Application-IDs>`__ 
+              for your app.
+            - Get the Service ID for your Sync service. You can programmatically
+              get all services using the `adminListServices 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminListServices>`__
+              endpoint.
+
+            Alternately, you can extract Group, App, and Service IDs from 
+            the URL when you view the UI.
+
+            1. Go to the App Services App where Device Sync is configured.
+            #. Select :guilabel:`Linked Data Sources` in the sidebar under 
+               :guilabel:`Manage`.
+            #. Select the :guilabel:`mongodb-atlas CLUSTER`.
+            
+            The URL in your browser's toolbar should now resemble:
+
+            ``https://realm.mongodb.com/groups/$GROUP_ID/apps/$APP_ID/services/$SERVICE_ID/config``
+
+         .. step:: Get the Sync Service Configuration
+
+            Send a GET request to the 
+            `adminGetServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminGetServiceConfig>`__ 
+            endpoint to get the Device Sync service configuration. This returns
+            a Service configuration object similar to:
+
+            .. code-block:: json
+
+                {
+                  "clusterId": "<MY-CLUSTER-ID>",
+                  "clusterName": "Cluster0",
+                  "clusterType": "atlas",
+                  "flexible_sync": {
+                    "state": "disabled",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  },
+                  "groupName": "<MY-GROUP-NAME>",
+                  "orgName": "<MY-ORG-NAME>",
+                  "readPreference": "primary",
+                  "wireProtocolEnabled": false
+                }
+
+            For details about the Sync configuration returned by this endpoint,
+            refer to :ref:`sync-configuration-reference`.
+
+         .. step:: Edit the Sync Service Configuration
+
+            Remove just the ``flexible_sync`` part of the configuration to
+            a new JSON object. This configuration contains a ``state`` field 
+            that reflects the current state of the Sync protocol for the 
+            application. Set this value to ``enabled``. This should
+            now resemble a JSON blob similar to:
+
+            .. code-block:: json
+               :emphasize-lines: 3
+
+                {
+                  "flexible_sync": {
+                    "state": "enabled",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  }
+                }
+
+         .. step:: Update the Configuration on Atlas
+
+            Send the updated Sync Service configuration as a payload in a 
+            PATCH request to the `adminUpdateServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminUpdateServiceConfig>`__ 
+            endpoint.
+
+   .. tab:: Realm SDKs
+      :tabid: sdk
+
+      To resume Device Sync from the client side, using logic
+      that situationally pauses and resumes Device Sync during a session, 
+      see your preferred SDK:
+
+      - :ref:`Pause or resume a Device Sync session - Flutter SDK
+        <flutter-pause-resume-sync>`
+      - :ref:`Pause or resume a Device Sync session - Kotlin SDK 
+        <kotlin-pause-resume-sync>`
+      - :ref:`Pause or resume a Device Sync session - Java SDK
+        <java-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - .Net SDK
+        <dotnet-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - Node SDK
+        <node-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - React Native SDK
+        <react-native-pause-or-resume-a-sync-session>`
+      - :ref:`Pause or resume a Device Sync session - Swift SDK
+        <ios-suspend-or-resume-a-sync-session>`
 
 .. _terminating-realm-sync:
 
@@ -139,32 +378,138 @@ terminate and re-enable Device Sync under a few different circumstances:
 
 .. include:: /includes/warn-terminate-sync-client-reset.rst
 
-Procedure
-~~~~~~~~~
+.. tabs::
 
-Terminate Device Sync in your App to stop syncing data across
-devices. 
+   .. tab:: UI
+      :tabid: ui
 
-.. procedure::
+      Terminate Device Sync in your App to stop syncing data across
+      devices. 
 
-   .. step:: Press the Terminate Sync Button
+      .. procedure::
 
-      In the :guilabel:`Sync` tab of the App Services UI, click the red
-      :guilabel:`Terminate Sync` button.
+         .. step:: Press the Terminate Sync Button
 
+            In the :guilabel:`Sync` tab of the App Services UI, click the red
+            :guilabel:`Terminate Sync` button.
 
-   .. step:: Confirm That You Want to Terminate Sync
+         .. step:: Confirm That You Want to Terminate Sync
 
-      In the modal that appears, type "Terminate Sync" in the text
-      entry, and then click the  :guilabel:`Terminate Sync` button.
+            In the modal that appears, type "Terminate Sync" in the text
+            entry, and then click the  :guilabel:`Terminate Sync` button.
 
-      .. figure:: /images/terminate-sync-modal.png
-       :alt: the terminate sync model
+            .. figure:: /images/terminate-sync-modal.png
+               :alt: the terminate sync model
 
-      If you are using :ref:`UI deployment drafts <deployment-draft>`
-      then you must deploy the draft to actually terminate Sync.
+            If you are using :ref:`UI deployment drafts <deployment-draft>`
+            then you must deploy the draft to actually terminate Sync.
 
-      You have now terminated Device Sync.
+            You have now terminated Device Sync.
+
+   .. tab:: API
+      :tabid: api
+
+      You can use the App Services API to programmatically terminate 
+      Device Sync. 
+      
+      .. procedure::
+
+         .. step:: Get an Authentication Token
+
+            Every request to the App Services Admin API must include a valid 
+            and current authorization token from the MongoDB Cloud API as a 
+            bearer token in the ``Authorization`` header.
+
+            For details on how to get an authentication token, refer to
+            `Get Authentication Tokens
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Get-Authentication-Tokens>`__.
+
+         .. step:: Get Group, App, and Service IDs
+
+            - Get the `Group and App ID 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Project-and-Application-IDs>`__ 
+              for your app.
+            - Get the Service ID for your Sync service. You can programmatically
+              get all services using the `adminListServices 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminListServices>`__
+              endpoint.
+
+            Alternately, you can extract Group, App, and Service IDs from 
+            the URL when you view the UI.
+
+            1. Go to the App Services App where Device Sync is configured.
+            #. Select :guilabel:`Linked Data Sources` in the sidebar under 
+               :guilabel:`Manage`.
+            #. Select the :guilabel:`mongodb-atlas CLUSTER`.
+            
+            The URL in your browser's toolbar should now resemble:
+
+            ``https://realm.mongodb.com/groups/$GROUP_ID/apps/$APP_ID/services/$SERVICE_ID/config``
+
+         .. step:: Get the Sync Service Configuration
+
+            Send a GET request to the 
+            `adminGetServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminGetServiceConfig>`__ 
+            endpoint to get the Device Sync service configuration. This returns
+            a Service configuration object similar to:
+
+            .. code-block:: json
+
+                {
+                  "clusterId": "<MY-CLUSTER-ID>",
+                  "clusterName": "Cluster0",
+                  "clusterType": "atlas",
+                  "flexible_sync": {
+                    "state": "enabled",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  },
+                  "groupName": "<MY-GROUP-NAME>",
+                  "orgName": "<MY-ORG-NAME>",
+                  "readPreference": "primary",
+                  "wireProtocolEnabled": false
+                }
+
+            For details about the Sync configuration returned by this endpoint,
+            refer to :ref:`sync-configuration-reference`.
+
+         .. step:: Edit the Sync Service Configuration
+
+            This configuration contains a ``state`` field that reflects the current
+            state of the Sync protocol for the application. Set this value to 
+            an empty string ``""``. This should now resemble a JSON blob 
+            similar to:
+
+            .. code-block:: json
+               :emphasize-lines: 3
+
+                {
+                  "flexible_sync": {
+                    "state": "",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  }
+                }
+
+         .. step:: Update the Configuration on Atlas
+
+            Send the updated Sync Service configuration as a payload in a 
+            PATCH request to the `adminUpdateServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminUpdateServiceConfig>`__ 
+            endpoint.
 
 .. _re-enable-realm-sync:
 
@@ -176,21 +521,7 @@ Device Sync enables your App to begin syncing changes to Atlas again.
 After you re-enable Device Sync, your App begins accepting incoming
 client connections again. However, if a client had previously connected to
 your App before you terminated Device Sync, you must perform a client
-reset for that client to enable it to connect to App Services again.
-
-Procedure
-~~~~~~~~~
-
-When you pause Device Sync, App Services preserves your configuration
-settings, and you can skip the **Configure Sync** step. 
-When you terminate Device Sync, or when the :manual:`oplog 
-</core/replica-set-oplog/>` rolls past the time that you paused Device Sync, 
-you must specify the configuration settings again.
-
-To re-enable Device Sync, follow the steps in the :ref:`enable-sync` guide.
-
-If you are re-enabling Device Sync after you have terminated it, you must 
-perform a client reset in your client applications:
+reset for that client to enable it to connect to App Services again:
 
 - :ref:`Perform a client reset - Flutter SDK <flutter-client-reset>`
 - :ref:`Perform a client reset - Java SDK <java-client-resets>`
@@ -199,4 +530,72 @@ perform a client reset in your client applications:
 - :ref:`Perform a client reset - Node SDK <node-client-resets>`
 - :ref:`Perform a client reset - React Native SDK <react-native-client-resets>`
 - :ref:`Perform a client reset - Swift SDK <ios-client-resets>`
- 
+
+.. tabs::
+
+   .. tab:: UI
+      :tabid: ui
+
+      When you pause Device Sync, App Services preserves your configuration
+      settings, and you can skip the **Configure Sync** step. 
+      When you terminate Device Sync, or when the :manual:`oplog 
+      </core/replica-set-oplog/>` rolls past the time that you paused Device Sync, 
+      you must specify the configuration settings again.
+
+      To re-enable Device Sync, follow the steps in the :ref:`enable-sync` guide.
+
+   .. tab:: API
+      :tabid: api
+
+      You can use the App Services API to programmatically terminate 
+      Device Sync. This procedure assumes you already have a Sync
+      configuration for your cluster that you can use to re-enable Sync
+      with the same settings.
+      
+      .. procedure::
+
+         .. step:: Get an Authentication Token
+
+            Every request to the App Services Admin API must include a valid 
+            and current authorization token from the MongoDB Cloud API as a 
+            bearer token in the ``Authorization`` header.
+
+            For details on how to get an authentication token, refer to
+            `Get Authentication Tokens
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Get-Authentication-Tokens>`__.
+
+         .. step:: Get Group and App IDs
+
+            - Get the `Group and App ID 
+              <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#section/Project-and-Application-IDs>`__ 
+              for your app.
+
+         .. step:: Edit the Sync Service Configuration
+
+            This configuration contains a ``state`` field that reflects the current
+            state of the Sync protocol for the application. Set this value to 
+            ``enabled``. This should now resemble a JSON blob similar to:
+
+            .. code-block:: json
+               :emphasize-lines: 3
+
+                {
+                  "flexible_sync": {
+                    "state": "enabled",
+                    "database_name": "todo",
+                    "queryable_fields_version": 1,
+                    "permissions": {
+                      "rules": {},
+                      "defaultRoles": []
+                    },
+                    "client_max_offline_days": 30,
+                    "is_recovery_mode_disabled": false
+                  }
+                }
+
+         .. step:: Update the Configuration on Atlas
+
+            Send the updated Sync Service configuration as a payload in a 
+            PATCH request to the `adminUpdateServiceConfig 
+            <https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#tag/services/operation/adminUpdateServiceConfig>`__ 
+            endpoint.
