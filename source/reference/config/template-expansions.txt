@@ -19,12 +19,50 @@ that include expansions (either with :ref:`{+cli+} <deploy-cli>` or through
 :ref:`GitHub <deploy-github>`), App Services automatically resolves the expansions and
 uses the resolved configuration files to create the app.
 
+Configuration files that use the replacement operator are *templates*.
+Once you create an app from a template, the app uses a copy of the
+configuration files that reflect the resolved values at the time the app
+was created. You can use the same template to create multiple apps with
+different configurations.
+
 .. important::
-   
-   Configuration files that use the replacement operator are *templates*. App Services
-   does not resolve the expansions after it creates the app. Instead, it uses a
-   copy of the configuration files that reflect the resolved values at the time
-   the app was created.
+
+   The replacement operator is currently only supported for
+   configuration fields with string values. You cannot use expansions
+   for boolean, number, object, or array values.
+
+   For example, you can use expansions to template the ``clusterName`` field:
+
+   .. code-block:: json
+      :caption: Valid Template Data Source Configuration
+      :emphasize-lines: 5
+
+      {
+        "name": "mongodb-atlas",
+        "type": "mongodb-atlas",
+        "config": {
+          "clusterName": "%(%%environment.values.clusterName)",
+          "readPreference": "primaryPreferred",
+          "wireProtocolEnabled": false
+        }
+      }
+
+   But you cannot use expansions to template the ``wireProtocolEnabled``
+   field because it has a boolean value:
+
+   .. code-block:: json
+      :caption: Invalid Template Data Source Configuration
+      :emphasize-lines: 7
+
+      {
+        "name": "mongodb-atlas",
+        "type": "mongodb-atlas",
+        "config": {
+          "clusterName": "Cluster0",
+          "readPreference": "primaryPreferred",
+          "wireProtocolEnabled": %(%%environment.values.wireProtocolEnabled)
+         }
+      }
 
 Define a Template
 -----------------
