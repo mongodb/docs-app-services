@@ -178,12 +178,12 @@ required property to both the client model and the Atlas schema.
 However, you should consider making the property optional to avoid the need to 
 modify existing Atlas documents. 
 
-.. note:: Required Properties Missing in a Schema Subset Will Default to Zero 
+.. note:: Required Properties Missing in a Schema Subset Will Default to Zero for New Documents
 
    Clients can open the Realm with a subset of a schema that doesn't 
-   include a required property. In this case, the server populates the 
+   include a required property. For new documents, the server populates the 
    missing required value field with a zero or blank value
-   (like 0, "", or 0.0), depending on the property type.
+   (like 0, "", or 0.0 depending on the property type) when the document syncs.
 
 Modify Existing Atlas Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
