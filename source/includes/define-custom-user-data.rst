@@ -39,6 +39,5 @@ To enable Custom User Data in the App Services UI, follow these steps:
     The sync server caches custom user data for the duration of the session.
     As a result, you must restart the sync session after updating custom user data
     to avoid a :ref:`compensating write error <flexible-sync-errors>`. 
-    To do so, :ref:`pause <pause-sync>` and :ref:`resume <resume-sync>` sync 
-    to restart the sync session.
+    To restart the sync session, :ref:`pause <pause-sync>` and :ref:`resume <resume-sync>` sync.
     
