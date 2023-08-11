@@ -178,6 +178,11 @@ You can configure the following constraints for a given property:
        value for a defined property, the object uses the default value
        instead.
 
+       If you open a Realm in the client with a schema subset that doesn't 
+       include a required property, the server will automatically
+       populate the value of the required property with a zero or blank
+       default value.
+
        When you attempt to create an object that is missing a value
        for a required field, it fails validation and does not persist
        to the realm.
