@@ -40,4 +40,20 @@ To enable Custom User Data in the App Services UI, follow these steps:
     As a result, you must restart the sync session after updating custom user data
     to avoid a :ref:`compensating write error <flexible-sync-errors>`. 
     To restart the sync session, :ref:`pause <pause-sync>` and :ref:`resume <resume-sync>` sync.
-    
+    For more information on pausing and resuming sync from the client SDKs, see your preferred SDK:
+
+   - :ref:`Pause or resume a Device Sync session - Flutter SDK
+     <flutter-pause-resume-sync>`
+   - :ref:`Pause or resume a Device Sync session - Kotlin SDK 
+     <kotlin-pause-resume-sync>`
+   - :ref:`Pause or resume a Device Sync session - Java SDK
+     <java-pause-or-resume-a-sync-session>`
+   - :ref:`Pause or resume a Device Sync session - .Net SDK
+     <dotnet-pause-or-resume-a-sync-session>`
+   - :ref:`Pause or resume a Device Sync session - Node SDK
+     <node-pause-or-resume-a-sync-session>`
+   - :ref:`Pause or resume a Device Sync session - React Native SDK
+     <react-native-pause-or-resume-a-sync-session>`
+   - :ref:`Pause or resume a Device Sync session - Swift SDK
+     <ios-suspend-or-resume-a-sync-session>`
+       
