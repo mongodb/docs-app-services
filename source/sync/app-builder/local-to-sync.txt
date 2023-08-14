@@ -24,6 +24,10 @@ to this new backend app.
    Once you configure sync and open the realm, your existing 
    code continues to work in the same way it did before migrating.
 
+.. figure:: /images/local-to-sync.png
+   :alt: An image showing a mobile app with local data only and then with sync.
+
+
 Create an App Services App
 --------------------------
 
@@ -84,12 +88,10 @@ an easy process for step. For details, see:
 - :ref:`Open Existing Realm with Different Configuration - Node.js SDK <node-open-existing-realm-different-configuration>`
 - :ref:`Open Existing Realm with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
 
-For SDKs that do not provide an API for copying the data, follow these steps:
+For SDKs that do not provide an API for copying the data, follow these steps and 
+refer to the diagram:
 
-.. figure:: /images/local_to_sync.png
-   :alt: Flow chart showing the steps to convert from local to sync
-
-#. Check if a synced realm already exists.
+1. Check if a synced realm already exists.
 
 #. If not, create one. Open a connection to it and to the local realm.
 
@@ -105,3 +107,6 @@ For SDKs that do not provide an API for copying the data, follow these steps:
 
 #. On each subsequent app load, check if the local realm has been
    deleted.
+
+.. figure:: /images/local-to-sync-data-copy.png
+   :alt: Flow chart showing the steps to convert from local to sync
