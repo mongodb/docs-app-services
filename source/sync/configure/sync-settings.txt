@@ -89,9 +89,12 @@ object schemas from client code.
 
 To make a breaking change from client code:
 
-#. Change your local object model.
 #. Delete your local realm and data.
-#. Open a new realm with your updated object model.
+   This will not affect data synced to the backend. Local changes that have not
+   been synced will be removed and are unrecoverable.
+#. Change your local object model.
+#. Open a realm with your updated object model.
+#. Run your client app to sync your changes to the backend.
 
 To delete a Realm file use the Realm SDK-specific methods:
 
