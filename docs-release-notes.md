@@ -9,7 +9,7 @@
 
 ## Reference
 
-- App Configuration Files/ Create Template Configurations with Expansions: Note that template configuration expansions only support string values
+- App Configuration Files/ Create Template Configurations with Expansions: Note that template configuration expansions only support string values.
 
 # August 4, 2023
 
