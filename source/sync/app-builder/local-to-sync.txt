@@ -17,16 +17,19 @@ convert the app to use Sync, there are two main tasks: create and configure
 an :ref:`App Services App <deploy>`, and then modify your client code to point 
 to this new backend app.
 
-.. note::
-
-   When it comes to reading and writing to a realm database, there is no difference 
-   between working with a local realm and a synced realm. 
-   Once you configure sync and open the realm, your existing 
-   code continues to work in the same way it did before migrating.
+When it comes to reading and writing to a realm database, there is no difference 
+between working with a local realm and a synced realm. Once you configure sync 
+and open the realm, your existing code continues to work in the same way it did 
+before migrating.
 
 .. figure:: /images/local-to-sync.png
    :alt: An image showing a mobile app with local data only and then with sync.
 
+.. note::
+
+   An app can have multiple realms, and you can migrate any number of them to 
+   use Sync. For example, your app can continue to use a local-only for 
+   device-specific information while also using a synced realm for other data.
 
 Create an App Services App
 --------------------------
@@ -110,3 +113,10 @@ refer to the diagram:
 
 .. figure:: /images/local-to-sync-data-copy.png
    :alt: Flow chart showing the steps to convert from local to sync
+
+.. note::
+
+   If you run into errors while configuring Sync or copying data, check the 
+   App Services App logs. The logs provide details about sync 
+   errors. In many cases, performing a :ref:`client reset <client-resets>` is 
+   helpful in solving Sync migration issues. 
