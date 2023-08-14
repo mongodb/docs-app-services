@@ -1,8 +1,8 @@
 .. _realm-sync-local-to-sync:
 
-============================
-Add Sync to a Local-Only App
-============================
+==============================================
+Migrate a Local-Only App to a Sync-Enabled App
+==============================================
 
 .. default-domain:: mongodb
 
@@ -12,34 +12,23 @@ Add Sync to a Local-Only App
    :depth: 2
    :class: singlecol
 
-Overview
---------
-
 If you have a mobile app that uses a local realm and you want to 
-convert the app to use Sync, there are a few steps you 
-need to follow. You first need to set up an App
-backend. Then, make code changes in your client applications.
+convert the app to use Sync, there are two main tasks: create and configure 
+an :ref:`App Services App <deploy>`, and then modify your client code to point 
+to this new backend app.
 
-In the following sections, you will learn to do the following on the backend:
+.. note::
 
-#. Create a new App in MongoDB Atlas,
-#. Configure at least one authentication provider
-#. Choose a Sync type.
+   When it comes to reading and writing to a realm database, there is no difference 
+   between working with a local realm and a synced realm. 
+   Once you configure sync and open the realm, your existing 
+   code continues to work in the same way it did before migrating.
 
-And then, in your client app, you will:
+Create an App Services App
+--------------------------
 
-#. Update your Realm object models,
-#. Connect to the new synced realm with a sync configuration file,
-#. Authenticate the user.
-
-Finally, if needed, you will also need to copy your local data to the new
-synced realm.
-
-Create an App
-~~~~~~~~~~~~~
-
-To sync your data between devices and MongoDB Atlas, you first need to create
-an App. This App provides a gateway to the data and data security
+To sync your data between devices and MongoDB Atlas, you first create
+an App Services App. This app provides a gateway to the data with security
 in the form of user authentication, data encryption, and access control.
 
 To get started creating the backend app, follow the steps in
@@ -50,31 +39,31 @@ Enable Authentication
 
 Atlas Device Sync requires authenticated users. Atlas App Services provides
 many different :ref:`Authentication Providers <authentication-providers>` such
-as email/password and OAuth; once you have configured one or more providers,
-you can then control exactly who has access to which data.
+as email/password and OAuth. Once you have enabled and configured authentication,
+you have full control over who has access to which data.
 
-To set up an authentication provider, choose one of the
-providers and follow the configuration steps for the provider(s)
-of your choice.
+To learn more and get started, see 
+:ref:`Authentication Providers <authentication-providers>`.
 
-Choose a Sync Mode
-~~~~~~~~~~~~~~~~~~
+Enable Sync
+~~~~~~~~~~~
 
-There are two Sync Modes: Flexible Sync and the older :ref:`Partition-Based Sync
-<partition-based-sync>`. We recommend using Flexible Sync.
+In your App Services App, configuring sync is the final step. When you set up 
+sync, you enable authenticated users to have online access to their most-recent  
+data available while also ensuring it is available to them when their devices 
+are offline. 
 
 With Flexible Sync, clients synchronize subsets of data based on queries to
-**queryable fields**. When configuring Flexible Sync, you decide which fields
-clients can query upon. Development Mode allows App Services to deduce the
-queryable fields based on your queries. To learn more, follow the steps in
+queryable fields. When configuring Flexible Sync, you decide which fields
+clients can query on. To enable Flexible Sync, follow the steps in
 :ref:`<enable-flexible-sync>`.
 
 Update the Client App
 ---------------------
 
 Now that you have the backend set up for Device Sync, you need to make a few 
-changes in your client app. Follow the steps in the Quick Start for your 
-language/platform:
+changes to your client app code. Follow the steps to set up Flexible Sync in the 
+Quick Start for the language/platform you are using:
 
 - :ref:`<java-client-quick-start-sync>`
 - :ref:`<ios-client-quick-start-with-sync>`
@@ -86,25 +75,16 @@ language/platform:
 
 Copy Existing Data
 ------------------
+At this point, your data still only exists in the local database. You need to 
+perform an initial copy before Realm will sync the data. Most of the SDKs provide 
+an easy process for step. For details, see:
 
-.. note:: Alternate SDK Implementations
+- :ref:`Open Non-Synced Realm as a Synced Realm - Swift SDK <ios-open-non-synced-as-synced-realm>`
+- :ref:`Convert Between Non-Synced Realms and Synced Realms - .NET SDK<dotnet-convert-to-sync>`
+- :ref:`Open Existing Realm with Different Configuration - Node.js SDK <node-open-existing-realm-different-configuration>`
+- :ref:`Open Existing Realm with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
 
-   Some SDKs support an easier implementation for adding sync to a
-   local-only realm than the steps outlined on this section.
-
-   - :ref:`Open Non-Synced Realm as a Synced Realm - Swift SDK <ios-open-non-synced-as-synced-realm>`
-   - :ref:`Open Existing Realm with Different Configuration - Node.js SDK <node-open-existing-realm-different-configuration>`
-   - :ref:`Open Existing Realm with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
-
-None of the data in your local realm automatically transfers to a
-new synced realm [#f1]_. You must copy the data you want to preserve
-to the new realm. The following diagram and steps outline the process for
-copying all of the data from a local realm to a synced realm.
-
-.. [#f1] With the exception of apps migrated from local to synced realms using the easier implementations outlined in "Alternate SDK Implementations".
-
-App Logic
-~~~~~~~~~
+For SDKs that do not provide an API for copying the data, follow these steps:
 
 .. figure:: /images/local_to_sync.png
    :alt: Flow chart showing the steps to convert from local to sync
