@@ -1,3 +1,22 @@
+# August 4, 2023
+
+## Device Sync
+
+- Configure and Update Your Data Model/Update a Data Model: New "Add a Default Value on a Property" section with details about new default value behavior
+- Go to Production/Production Checklist: Organize items into categories, add recommendations for MongoDB version and NVMe minimum MongoDB version
+- Migrate Sync Modes: Add links to new SDK documentation about updating the client codebase after migrating sync modes
+
+## Develop & Deploy Apps
+
+- Get App Metadata: Temporarily remove App ID CLI procedure pending a CLI bug fix
+- Change Deployment Models
+  - List minimum supported SDK versions for deployment model change
+  - Add details about the consequences of changing deployment models
+
+## Reference
+
+- App Configuration Files/Create Template Configurations with Expansions: Clarify that template config expansions only support string values
+
 # July 28, 2023
 
 ## Device Sync
@@ -34,7 +53,7 @@
 
 ## Define Data Access Permissions
 
-- Filter Incoming Queries:  Note that filters are not supported in Device Sync
+- Filter Incoming Queries: Note that filters are not supported in Device Sync
 
 ## Release Notes
 
