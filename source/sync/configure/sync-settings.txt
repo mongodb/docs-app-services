@@ -70,6 +70,21 @@ handle breaking changes, see: :ref:`<synced-schema-overview>`.
    production use. Make sure that you turn off Development Mode before you 
    make your app accessible in a production environment.
 
+Side Effects of Enabling Development Mode
+`````````````````````````````````````````
+
+Enabling Development Mode has two side effects:
+
+- *Enabling* :ref:`anonymous authentication <anonymous-authentication>`.
+- *Disabling* :ref:`deployment drafts <deployment-draft>`.
+
+If your app does not need anonymous authentication, you may want to 
+disable it after enabling Development Mode.
+
+You cannot re-enable deployment drafts in the UI until Development Mode 
+is disabled. However, you can still manually create deployment drafts 
+through the CLI or the Admin API.
+
 .. _sync-config-data-source:
 
 Cluster to Sync
