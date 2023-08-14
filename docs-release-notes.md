@@ -1,3 +1,16 @@
+# August 11, 2023
+
+## Device Sync
+
+- Configure and Update Your Data Model/ Update a Data Model: Note that required properties missing in a schema subset default to zero.
+- Configure and Update your Data Model/ Data Model Mapping: Update default property type description with information on default zero values for missing required properties on a client's schema subset.
+- Configure Sync/ Pause or Terminate Sync: Add procedures to pause and resume sync via the API.
+- Go to Production with Sync/ Production Checklist: Update and organize production checklist with new recommendations for oplog usage and recommended versions.
+
+## Reference
+
+- App Configuration Files/ Create Template Configurations with Expansions: Note that template configuration expansions only support string values
+
 # August 4, 2023
 
 ## Device Sync
