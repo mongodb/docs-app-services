@@ -13,9 +13,11 @@ Migrate a Local-Only App to a Sync-Enabled App
    :class: singlecol
 
 If you have a mobile app that uses a local realm and you want to 
-convert the app to use Sync, there are two main tasks: create and configure 
-an :ref:`App Services App <deploy>`, and then modify your client code to point 
-to this new backend app.
+convert the app to use Sync, there are three primary tasks: 
+
+- Create and configure an :ref:`App Services App <deploy>`
+- Modify your client code to point to this new backend app
+- Copy the local data to the new synced realm
 
 When it comes to reading and writing to a realm database, there is no difference 
 between working with a local realm and a synced realm. Once you configure sync 
@@ -28,7 +30,7 @@ before migrating.
 .. note::
 
    An app can have multiple realms, and you can migrate any number of them to 
-   use Sync. For example, your app can continue to use a local-only for 
+   use Sync. For example, your app can continue to use a local-only realm for 
    device-specific information while also using a synced realm for other data.
 
 Create an App Services App
@@ -44,7 +46,7 @@ To get started creating the backend app, follow the steps in
 Enable Authentication
 ~~~~~~~~~~~~~~~~~~~~~
 
-Atlas Device Sync requires authenticated users. Atlas App Services provides
+Device Sync requires authenticated users. Atlas App Services provides
 many different :ref:`Authentication Providers <authentication-providers>` such
 as email/password and OAuth. Once you have enabled and configured authentication,
 you have full control over who has access to which data.
@@ -55,10 +57,10 @@ To learn more and get started, see
 Enable Sync
 ~~~~~~~~~~~
 
-In your App Services App, configuring sync is the final step. When you set up 
-sync, you enable authenticated users to have online access to their most-recent  
-data available while also ensuring it is available to them when their devices 
-are offline. 
+In your App Services App, configuring Sync is the final step. When you set up 
+Sync, you enable authenticated users to have online access to their current data.
+While offline, users can work with the most-recent data, but their changes
+won't sync until they're back online.
 
 With Flexible Sync, clients synchronize subsets of data based on queries to
 queryable fields. When configuring Flexible Sync, you decide which fields
@@ -83,13 +85,11 @@ Quick Start for the language/platform you are using:
 Copy Existing Data
 ------------------
 At this point, your data still only exists in the local database. You need to 
-perform an initial copy before Realm will sync the data. Most of the SDKs provide 
-an easy process for step. For details, see:
+perform an initial copy before Realm will sync the data. The Swift SDK and .NET 
+SDK provide an easy process for this step. For details, see:
 
 - :ref:`Open Non-Synced Realm as a Synced Realm - Swift SDK <ios-open-non-synced-as-synced-realm>`
 - :ref:`Convert Between Non-Synced Realms and Synced Realms - .NET SDK<dotnet-convert-to-sync>`
-- :ref:`Open Existing Realm with Different Configuration - Node.js SDK <node-open-existing-realm-different-configuration>`
-- :ref:`Open Existing Realm with Different Configuration - React Native SDK <react-native-open-existing-realm-different-configuration>`
 
 For SDKs that do not provide an API for copying the data, follow these steps and 
 refer to the diagram:
