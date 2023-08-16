@@ -39,7 +39,7 @@ To enable Custom User Data in the App Services UI, follow these steps:
     The sync server caches custom user data for the duration of the session.
     As a result, you must restart the sync session after updating custom user data
     to avoid a :ref:`compensating write error <flexible-sync-errors>`. 
-    To restart the sync session, :ref:`pause <pause-sync>` and :ref:`resume <resume-sync>` sync.
+    To restart the sync session, pause and resume all open Sync Sessions in the client application.
     For more information on pausing and resuming sync from the client SDKs, see your preferred SDK:
 
     - :ref:`Pause or resume a Device Sync session - Flutter SDK
