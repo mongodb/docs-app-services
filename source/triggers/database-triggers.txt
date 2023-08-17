@@ -365,20 +365,24 @@ a text message to the customer with the new location of the order.
      // If the location changed, text the customer the updated location.
      if (isNewLocation) {
        const { customerId, shippingLocation } = fullDocument;
-       const twilio = context.services.get("myTwilioService");
        const mongodb = context.services.get("mongodb-atlas");
        const customers = mongodb.db("store").collection("customers");
-
        const { location } = shippingLocation.pop();
-       const customer = await customers.findOne({ _id: customerId })
-       twilio.send({
-         to: customer.phoneNumber,
-         from: context.values.get("ourPhoneNumber"),
-         body: `Your order has moved! The new location is ${location}.`
-       });
+       const customer = await customers.findOne({ _id: customerId });
+
+       const twilio = require('twilio')(
+         // Your Account SID and Auth Token from the Twilio console:
+         context.values.get("TwilioAccountSID"),
+         context.values.get("TwilioAuthToken"),
+       );
+
+       await twilio.messages.create({
+         To: customer.phoneNumber,
+         From: context.values.get("ourPhoneNumber"),
+         Body: `Your order has moved! The new location is ${location}.`
+       })
      }
    };
-
 
 .. _suspended_triggers:
 .. _resume-a-suspended-trigger:
