@@ -42,12 +42,14 @@ Service Configuration
 
    * - | ``use_natural_pluralization``
        | Boolean
-     - If ``true``, Atlas App Services uses the common English pluralization of a
-       type name whenever possible.
+     - ``true`` by default on new apps. If ``true``, Atlas App Services uses the common 
+       English pluralization of a type name whenever possible.
        
-       If ``false``, or if App Services cannot determine a natural
-       pluralization, the default plural type is the singular type with an
-       ``"s"`` appended to the end.
+       Can set to ``false`` only when you :admin-api-endpoint:`create a new app with the Admin
+       API endpoint <operation/adminCreateApplication>`. Pass the property into the body of the 
+       request and set its value to ``false``. If ``false``, or if App Services cannot determine 
+       a natural pluralization, the default plural type is the singular 
+       type with an ``"s"`` appended to the end.
        
        .. example::
           
