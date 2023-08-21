@@ -1,3 +1,38 @@
+# August 18, 2023
+
+## Get Started
+
+- Landing Page: Add a link to the "Using Template Apps in the Atlas UI" Learning Byte.
+
+## Device Sync
+
+- Landing Page: Add a link to the "Intro to Atlas Device Sync" Learning Byte.
+- App Builder's Resources/Device Sync Permissions Guides: Add information to permissions templates that require custom user data about pausing and resuming Sync in the client SDK to trigger permissions updates.
+- Configure Sync/Sync Settings: Note the side effects of enabling Development Mode (enabling anonymous authentication, disabling deployment drafts).
+- Migrate a Local-Only App to a Sync-Enabled App: Move the page up in the Table of Contents, update existing diagram and add a new one, clarify wording and add details.
+
+## Data API
+
+- Authenticate Data API Requests: Add a note about how to find Bearer Authentication error information in the Application Logs.
+
+## Functions
+
+- Query MongoDB Atlas/Write: Add information and links to `findOneAndUpdate()`, `findOneAndReplace()`, and `findOneAndDelete()`.
+
+## Triggers
+
+- Database Triggers: Update the Twilio code example to use npm dependencies instead of 3rd party services.
+
+## Authenticate & Manage Users
+
+- Define User Metadata
+  - Add `ObjectId` as a valid type for custom user data mapping to User ID.
+  - Add a link to the new Kotlin SDK docs User Metadata page.
+
+## Other
+
+- Introduction: Add a link to the "Overview of App Services" Learning Byte.
+
 # August 11, 2023
 
 ## Device Sync
