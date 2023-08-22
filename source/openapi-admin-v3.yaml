@@ -2,31 +2,51 @@
 openapi: 3.1.0
 info:
   description: |-
-    App Services provides an API for programmatically performing
-    administrative tasks outside of the App Services UI. This includes tasks such
-    as modifying authentication providers, creating rules, and defining
-    functions. Client applications should not use the admin API. Instead,
-    use one of the Client SDKs for tasks like authenticating users, calling
-    functions, and interacting with services.
+    The App Services Admin API lets you programmatically perform
+    administrative tasks over HTTPS. This includes defining &
+    configuring things like:
+
+    - App Deployment & Security
+    - APIs & Endpoints
+    - Authentication & User Management
+    - Data Sources
+    - Device Sync
+    - Environments
+    - Functions
+    - Logs
+    - Rules
+    - Schemas
+    - Static Hosting
+    - Triggers
+    - Usage & Billing Metrics
+    - Values & Secrets
+
+    The Admin API is for application development, configuration, and
+    deployment. To actually use the features you configure with the
+    Admin API, client applications connect with a [Realm
+    SDK](https://mongodb.com/docs/realm/) or over an HTTPS API specific
+    to your App.
 
     ## Project & Application IDs
 
     **Note**: The terms _Project ID_ and _Group ID_ are interchangeable.
 
-    App Services APIs frequently require two parameters: your Atlas _Project/Group
-    ID_, and your App Services _Application ID_.
+    Atlas App Services Admin API endpoints frequently require you to include two parameters in the URL:
+
+    - Your Atlas _Project ID_ (also sometimes called a _Group ID_)
+    - Your App Services _Application ID_
 
     ### Project ID
 
-    You can find your Project ID from the MongoDB Atlas dashboard or CLI.
+    You can find your Project ID from the MongoDB Atlas dashboard or with the MongoDB Atlas CLI.
 
     ### Application ID
 
-    To find an Application ID, make a request to the App Services [GET /groups/{groupid}/apps](#operation/adminListApplications)
-    API endpoint.
-
-    This request has the following format, referencing the `access_token`
-    and the Group ID:
+    To find an Application ID, make a request to the [List
+    Apps](#operation/adminListApplications) endpoint for your project.
+    You'll need an `access_token` to make this request. To learn how to
+    get one, see [Get an Admin API Session Access
+    Token](#get-an-admin-api-session-access-token).
 
     ```sh
     curl --request GET \
@@ -34,9 +54,10 @@ info:
       https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps
     ```
 
-    This will return a list of objects describing each Atlas App Services App in the
-    provided group. For Admin API requests, your Application ID is the
-    ObjectId value in the `_id` field, _not_ the `client_app_id`.
+    This will return a list of objects describing each App Services App
+    in the provided project/group. For Admin API requests, your
+    Application ID is the ObjectId value in the `_id` field, _not_ the
+    `client_app_id`.
 
     ```json
     [
@@ -56,12 +77,16 @@ info:
     ]
     ```
 
-    ## Get Authentication Tokens
+    ## Get an Admin API Session Access Token
 
-    Every request to the App Services Admin API must include a valid and current
-    authorization token from the MongoDB Cloud API as a bearer token in the
-    `Authorization` header. You will need a valid [programmatic API key](https://docs.atlas.mongodb.com/configure-api-access)
-    for MongoDB Atlas to get a token.
+    Every request to the App Services Admin API must include a valid,
+    unexpired access token issued by the MongoDB Cloud API. You include
+    this token in the `Authorization` header of each request using the
+    bearer auth scheme.
+
+    You need a valid [MongoDB Atlas programmatic API
+    key](https://docs.atlas.mongodb.com/configure-api-access) for
+    MongoDB Atlas to get a token.
 
     Once you have an API key pair, call the authentication endpoint:
 
@@ -94,6 +119,35 @@ info:
     Authorization: Bearer <access_token>
     ```
 
+    ## Refresh an Admin API Session Access Token
+
+    Session access tokens expire 30 minutes after they are issued. When
+    you login, the response also includes a `refresh_token` that you can
+    use to get a new access token. This is useful because you only need
+    to log in with credentials one time. After that you can use the
+    refresh token to re-authenticate for as long as its valid.
+
+    Refresh tokens expire 60 days after being issued.
+
+    To refresh your authentication and get a new `access_token`, call
+    the auth session endpoint with your `refresh_token` in the
+    `Authorization` header:
+
+    ```shell
+    curl --request POST \
+      --header 'Authorization: Bearer <refresh_token>' \
+      https://realm.mongodb.com/api/admin/v3.0/auth/session
+    ```
+
+    If the refresh token is valid, the response body includes a new
+    `access_token` that's valid for the next 30 minutes:
+
+    ```json
+    {
+      "access_token": "<access_token>"
+    }
+    ```
+
   version: "3.0"
   title: MongoDB Atlas App Services Admin API
 servers:
@@ -105,7 +159,7 @@ paths:
       tags:
         - admin
       operationId: getAdminAuthProviders
-      summary: Enumerate available App Services administration authentication providers
+      summary: List App Services Admin Auth Providers
       responses:
         "200":
           description: Successfully enumerated available authentication providers.
@@ -124,9 +178,9 @@ paths:
       operationId: adminLogin
       summary: Authenticate as an App Services administrator
       description: |
-        Authenticate as an App Services administrator. Use [GET
-        /auth/providers](#section/adminGetLogs) to list the available
-        authentication providers.
+        Authenticate as an App Services administrator using an Atlas
+        programmatic API key pair. To learn more, see [Get An Admin API
+        Session Access Token](#get-an-admin-api-session-access-token).
       requestBody:
         required: true
         content:
@@ -7833,16 +7887,18 @@ components:
       type: http
       scheme: bearer
       description: |-
-        The authorization token provided in the `access_token` field of the
-        [POST /auth/providers/{provider}/login](#section/adminLogin)
-        and  [POST /auth/session](#section/adminDeleteSession) API endpoints.
+        An `access_token` issued by the App Services Admin API. You can
+        get this value either by [authenticating with
+        credentials](#get-an-admin-api-session-access-token) or by
+        [refreshing an existing access
+        token](#refresh-an-admin-api-session-access-token).
     refreshAuth:
       type: http
       scheme: bearer
       description: |-
-        The authorization token provided in the `refresh_token` field of the
-        [POST /auth/providers/{provider}/login](#section/adminLogin)
-        API endpoint.
+        A `refresh_token` issed by the App Services Admin API when you
+        authenticated. Use this to [refresh an existing access
+        token](#refresh-an-admin-api-session-access-token).
   responses:
     BadRequest:
       description: There is an error in the request.
