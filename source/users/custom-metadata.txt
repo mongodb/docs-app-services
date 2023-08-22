@@ -237,17 +237,19 @@ Enable Custom User Data
 
          .. step:: Specify the User ID Field
 
-            Every document in the custom user data collection should have a field that
-            maps it to a specific application user. The field must be present in every
-            document that maps to a user and contain the user's ID as a string.
+            Every document in the custom user data collection has a field that
+            maps it to a specific application user. The field must be of type 
+            ``ObjectID`` or a ``string`` type that represents that ObjectID. 
+            This field must be present in every document that maps to a user.
 
             Specify the name of the field that contains each user's ID in the
             :guilabel:`User ID Field` input.
 
             .. note::
 
-               If two documents contain the same user ID, App Services only
-               maps the first matching document to the user.
+               If two documents contain the same user ID, one stored as a string 
+               and the other as an ObjectID, App Services 
+               maps the document with the string type to the user.
 
          .. step:: Define a User Creation Function (Optional)
 
@@ -710,6 +712,7 @@ Configure Authentication Provider Metadata
          If you successfully configure the provider's metadata
          fields, App Services returns a ``204`` response.
 
+
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -719,5 +722,6 @@ SDKs:
 
 - :ref:`Flutter SDK <flutter-user-metadata>`
 - :ref:`.NET SDK <dotnet-user-metadata>`
+- :ref:`Kotlin SDK <kotlin-user-metadata>`
 - :ref:`Node SDK <node-user-metadata>`
 - :ref:`Swift SDK <ios-user-metadata>`
