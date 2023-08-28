@@ -1,3 +1,25 @@
+# August 25, 2023
+
+## Get Started
+
+- Landing Page: Change Xamarin to MAUI on C# template app card.
+- Add link to Realm Example Projects page to "What's Next" section of each of the SDK Device Sync Tutorials.
+
+## Device Sync
+
+- App Builder's Resources/Example Projects: Add TOC Page for an external link to the Example Projects page on the Realm SDK site.
+
+## Reference
+
+- App Configuration Files/GraphQL: Add that `use_natural_pluralization` cannot be changed to false using realm-cli but can be when creating a new app with Admin API.
+- App Services Admin API: Improve authentication documentation in the Admin API for the following sections: 
+  - Project & Application IDs
+  - Get an Admin API Session Access Token
+  - Refresh an Admin API Session Access Token
+  - Administrator
+    - List App Services Admin Auth Providers
+    - Authenticate as an App Services administrator
+
 # August 18, 2023
 
 ## Get Started
