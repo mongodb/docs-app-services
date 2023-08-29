@@ -718,10 +718,10 @@ paths:
                 disable_token:
                   type: boolean
                   description: |-
-                    If `true`, attempts to resume the trigger from the
-                    first change event after it failed by using a resume
-                    token. Otherwise, resumes the trigger without
-                    processing missed events.
+                    If `true`, resumes the trigger without
+                    processing missed events. Otherwise, attempts to resume the 
+                    trigger from the first change event after it failed by using 
+                    a resume token.
       responses:
         "204":
           description: Successfully resumed the trigger.
@@ -6693,6 +6693,7 @@ components:
           collection: employees
           service_id: 5adeb649b8b998486770ae7c
           match: {}
+          project: {}
           full_document: true
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
@@ -6711,7 +6712,6 @@ components:
                 - full_document_before_change
                 - unordered
                 - match
-                - project
               properties:
                 service_id:
                   type: string
@@ -6745,6 +6745,12 @@ components:
                     expression filters change events. The trigger will only
                     fire if the expression evaluates to true for a given
                     change event.
+                project: 
+                  type: object
+                  description: |-
+                    A [$project](https://www.mongodb.com/docs/manual/reference/operator/aggregation/project/) 
+                    expression returns only the specified fields. You can include 
+                    or exclude specific fields, or include newly-computed fields.
                 full_document:
                   type: boolean
                   default: false
