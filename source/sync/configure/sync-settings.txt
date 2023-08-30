@@ -405,6 +405,10 @@ Sync (recommended). If you are using the older Partition-Based Sync, refer to
      "queryable_fields_names": [
        <Array of String Field Names>
      ],
+     "indexed_queryable_fields_names": [
+      <Array of String Field Names>
+     ],
+     "collection_queryable_fields_names": <Map[String][]String>
      "permissions": "<Deprecated, Do Not Use>"
    }
 
@@ -487,8 +491,28 @@ Sync Config Object
    * - | ``queryable_fields_names``
        | Array<String>
      
-     - The :ref:`names of the fields <queryable-fields>` that your client 
-       application can query to determine which data to synchronize.
+     - The :ref:`names of the global queryable fields <queryable-fields>` 
+       that your client application can query to determine which data to 
+       synchronize. These fields are queryable across all synced collections.
+
+   * - | ``indexed_queryable_fields_names``
+       | Array<String>
+     
+     - The :ref:`names of the indexed queryable fields <fs-indexed-queryable-fields>` 
+       that your client application can query to determine which data to 
+       synchronize. Your app can have one indexed queryable field, and it
+       must be present and be the same 
+       :ref:`eligible field type <flexible-sync-eligible-field-types>`
+       in every collection.
+
+   * - | ``collection_queryable_fields_names``
+       | <Map[String][]String>
+     
+     - The :ref:`names of the collection queryable fields <queryable-field-scopes>` 
+       that your client application can query to determine which data to 
+       synchronize. Collection queryable fields are scoped to the specified
+       collection. Scoping a queryable field to a specific collection reduces
+       the amount of backing Atlas storage required to store Sync metadata.
 
    * - | ``last_disabled``
        | Number
