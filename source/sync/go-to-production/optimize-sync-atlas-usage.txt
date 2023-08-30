@@ -204,11 +204,26 @@ which collections.
 .. example::
 
    Your app may contain 20 or 30 collections, but you want to minimize the
-   number of queryable fields. You can re-use queryable fields across
-   collections in order to sync objects from every collection. For example,
-   "owner_id" might be a field you want to query in multiple collections, but by
-   having the same field name across collections, only one queryable field is
-   used.
+   number of queryable fields. You can re-use **global queryable fields** 
+   across collections in order to sync objects from every collection. 
+   For example, ``owner_id`` might be a field you want to query in multiple 
+   collections. By making this a **global queryable field** across 
+   collections, only one queryable field is used.
+
+   Alternately, you may have ``owner_id`` in multiple collections, but only
+   need to query on it in one collection. In this case, you might make 
+   ``owner_id`` a **collection queryable field**. This means Sync only has to
+   maintain metadata about this field for one collection, instead of storing
+   metadata for all of the collections where you're not querying on this 
+   field.
+
+   Finally, for simple equality queries, such as ``owner_id == user.id``,
+   you may want to designate the field an **indexed queryable field**. You 
+   can have one indexed queryable field per App. This is a special type
+   of **global queryable field** that can be queried more efficiently.
+
+   For more information, refer to :ref:`queryable-field-scopes` and 
+   :ref:`fs-indexed-queryable-fields`.
 
 For best performance, open a synced realm with a broad query. Then, add 
 more refined queries to expose targeted sets of data in the client 

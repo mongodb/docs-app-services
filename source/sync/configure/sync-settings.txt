@@ -133,6 +133,8 @@ used in a subscription query are called **queryable fields**.
    as queryable fields. On the client side, you can then query for tasks 
    whose ``assignee`` or ``owner`` matches the logged-in user. 
 
+.. _queryable-field-scopes:
+
 Queryable Field Scopes
 ``````````````````````
 
@@ -151,9 +153,9 @@ Configure Queryable Fields
 ``````````````````````````
 
 You can automatically specify queryable fields by enabling :ref:`Development
-Mode <development-mode>`. Development Mode allows App Services to automatically
-mark fields as queryable as they are used. Queryable fields that you add
-through Development Mode become **collection queryable fields**.
+Mode <development-mode>`. Fields that appear in client queries while using 
+Development mode are automatically added as **collection queryable fields** 
+for the collection being queried.
 
 The field names you provide are arbitrary strings. If an object type has a field
 whose name matches a field name you provided (and meets other eligibility
@@ -200,10 +202,27 @@ Performance and Storage
 
 Each queryable field adds additional metadata storage to your Atlas cluster and
 may lead to degraded write performance. You should have as few queryable fields
-as needed by your application. A good rule of thumb is to have at most 10
-queryable fields. If you need to reduce storage usage or improve performance, 
-you can remove unneeded queryable fields from your App. However, be aware
-of the consequences of adding or removing queryable fields detailed below.
+as needed by your application, and scope them to the minimum number of 
+collections required.
+
+Many apps find a good balance between storage usage and query flexibility 
+with at most 10 queryable fields applying to any single collection. 
+For example, if you have 3 *global queryable fields* and 7 
+*collection queryable fields*, you have 10 queryable fields that apply to the 
+collection.
+
+If you have a field that you only want to query in one collection, but it 
+is configured as a *global queryable field*, this unnecessarily consumes 
+Atlas storage space. For example, if you have a ``user`` field in every 
+collection, but you only use it for Sync queries in one collection, scoping 
+that as a *collection queryable field* reduces storage requirements. Reducing
+the scope means that Sync does not have to maintain metadata for that field
+for the other collections where you are not querying on the ``user`` field.
+
+If you need to reduce storage usage or improve performance, you can remove 
+unneeded queryable fields from your App. However, be aware of the consequences 
+of adding or removing queryable fields. For more information, refer to 
+:ref:`consequences-of-adding-removing-queryable-fields`.
 
 For additional considerations, refer to :ref:`optimizing performance and 
 storage when using Flexible Sync <optimizing-performance-and-storage-flexible-sync>`.
@@ -215,7 +234,7 @@ Indexed Queryable Fields
 
 You can improve performance for certain types of workloads by adding an
 indexed queryable field. An **indexed queryable field** is a 
-**global queryable field** that is indexed in the history store, providing
+**global queryable field** that can be queried on more efficiently, providing
 improved Sync performance. You can designate *one* global queryable field
 as an indexed queryable field.
 
@@ -223,14 +242,28 @@ Indexing a queryable field improves performance for simple queries on a
 single field, such as ``{“store_id”: 1}`` or  
 ``{“user_id”: “641374b03725038381d2e1fb”}``.
 
+The indexed queryable field *must* appear in the schemas of all of your 
+Sync collections, and it must use the same valid data type. For example,
+if your indexed queryable field is ``store_id``, it must appear in all of
+the collections you sync, and it must be the same valid type in all the
+collections. For more information about eligible field types, refer to
+:ref:`flexible-sync-eligible-field-types`.
+
 **You Can't Change Indexed Queryable Field Values on the Client**
 
 After you configure an indexed queryable field, client devices **cannot**
 update an existing object's indexed queryable field value. For example,
 if your indexed queryable field is ``store_id``, the client cannot change 
-this value directly. You can still change this directly in the Atlas database.
-Changing it from the client is not supported because it may conflict with 
-other updates made to the object in the same timeframe.
+this value directly. Changing it from the client is not supported because 
+it may conflict with other updates made to the object in the same timeframe. 
+
+You can still change this value directly in the Atlas database. 
+
+.. warning::
+
+   Avoid changing an object's indexed queryable field value when 
+   possible. It may result in dropping other updates on the same 
+   object.
 
 .. _fs-indexed-queryable-fields-valid-client-side-queries:
 
@@ -244,7 +277,7 @@ example, ``user_id == 641374b03725038381d2e1fb`` or ``store_id IN {1,2,3}``.
 You can optionally include an ``AND`` comparison as long as the indexed
 queryable field is directly compared against a constant using ``==`` or ``IN``
 at least once. For example, ``store_id IN {1,2,3} AND region=="Northeast"``
-or ``store_id IN {1,2,3} AND store_id > 2``.
+or ``store_id == 1 AND active_promotions < 5``.
 
 *Invalid* Flexible Sync queries on an indexed queryable field include queries 
 where:
@@ -259,6 +292,8 @@ where:
 - The query is missing the indexed queryable field entirely. For example, 
   ``region=="Northeast`` or ``truepredicate`` are invalid because they do
   not contain the indexed queryable field.
+
+.. _consequences-of-adding-removing-queryable-fields:
 
 Consequences of Adding or Removing Queryable Fields
 ```````````````````````````````````````````````````
