@@ -4421,7 +4421,41 @@ paths:
                                 type: integer
                               column:
                                 type: integer
-
+  /groups/{groupId}/apps/{appId}/graphql/config:
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - graphql
+      operationId: adminGetGraphQLConfig
+      summary: Get GraphQL API Configuration
+      description: Get your app's [GraphQL API](https://www.mongodb.com/docs/atlas/app-services/graphql/) configuration.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GraphQLConfig"
+    put:
+      tags:
+        - graphql
+      operationId: adminUpdateGraphQLConfig
+      summary: Update GraphQL API Configuration
+      description: Update your app's [GraphQL API](https://www.mongodb.com/docs/atlas/app-services/graphql/) configuration.
+      requestBody:
+        description: A valid [GraphQL API configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/graphql#std-label-appconfig-graphql).
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GraphQLConfig"
+      responses:
+        "204":
+          description: Updated
+        "400":
+          description: Cannot Set `use_natural_pluralization` to `false`
   /groups/{groupId}/apps/{appId}/graphql/custom_resolvers:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -6999,6 +7033,27 @@ components:
         collection:
           type: string
           description: The collection name.
+    GraphQLConfig:
+      type: object
+      properties:
+        use_natural_pluralization:
+          type: boolean
+          description: |-
+            If `true`, generated schema type names use common English
+            pluralization whenever possible.
+
+            If `false`, or if a natural pluralization cannot be
+            determined, then plural types use the singular type
+            name with an `"s"` appended to the end.
+
+            **You cannot change this value after you create your App.
+            This value is `true` for all new Apps.**
+        disable_schema_introspection:
+          type: boolean
+          description:
+            If `true`, the GraphQL API blocks [introspection
+            queries](https://graphql.org/learn/introspection/) from
+            clients.
     CustomResolver:
       type: object
       required:

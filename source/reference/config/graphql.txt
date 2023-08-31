@@ -30,7 +30,8 @@ Service Configuration
    :caption: graphql/config.json
    
    {
-     "use_natural_pluralization": <Boolean>
+     "use_natural_pluralization": <Boolean>,
+     "disable_schema_introspection": <Boolean>
    }
 
 .. list-table::
@@ -48,10 +49,12 @@ Service Configuration
        and pass the property into the body of the request. The value 
        cannot be changed to ``false`` once the app is created.
 
-       If ``true``, Atlas App Services uses the common English pluralization of a type name whenever possible. 
-       
-       If ``false``, or if App Services cannot determine a natural pluralization, the default plural type is the 
-       singular type with an ``"s"`` appended to the end.
+       If ``true``, generated schema type names use common English
+       pluralization whenever possible.
+
+       If ``false``, or if a natural pluralization cannot be determined,
+       then plural types use the singular type name with an ``"s"``
+       appended to the end.
        
        .. example::
           
@@ -60,6 +63,18 @@ Service Configuration
 
           - Natural: "mice"
           - Default: "mouses"
+
+   * - | ``disable_schema_introspection``
+       | Boolean
+     - This value is ``false`` by default for new apps.
+
+       If ``true``, the GraphQL API blocks :graphql:`introspection
+       queries <learn/introspection/>` from clients.
+
+       This setting is useful for production Apps that do not want to
+       expose their GraphQL schema to the public. When introspection is
+       disabled, clients like GraphiQL cannot show docs for the API
+       schema or autocomplete queries and mutations.
 
 .. _appconfig-custom-resolver:
 
