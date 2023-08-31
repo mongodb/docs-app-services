@@ -261,9 +261,8 @@ You can still change this value directly in the Atlas database.
 
 .. warning::
 
-   Avoid changing an object's indexed queryable field value when 
-   possible. It may result in dropping other updates on the same 
-   object.
+   Changing an object's indexed queryable field value through Atlas may 
+   overwrite concurrent client updates to the object.
 
 .. _fs-indexed-queryable-fields-valid-client-side-queries:
 
@@ -298,8 +297,9 @@ where:
 Consequences of Adding or Removing Queryable Fields
 ```````````````````````````````````````````````````
 
-You can :ref:`update your Sync configuration <alter-your-sync-configuration>` to
-add or remove queryable field names, but be aware of the following:
+You can :ref:`update your Sync configuration <alter-your-sync-configuration>` 
+to add or remove queryable field names while Sync is enabled, but be aware 
+of the following:
 
 When you add a queryable field, devices can only sync on that field once the
 device has caught up to the point in time in :ref:`Device Sync History
@@ -310,6 +310,11 @@ their Device Sync session dropped and must perform a :ref:`client reset
 <client-resets>`. Clients not using the removed field won't receive any errors.
 To avoid triggering a client reset when you remove the queryable field, you
 should first remove usage of that field on the client-side.
+
+If you :ref:`terminate Sync <terminating-realm-sync>` before adding or 
+removing queryable fields, these considerations do not apply. However, 
+terminating Sync does trigger a :ref:`client reset <client-resets>` for
+any client that has Synced with your App.
 
 Permissions
 ~~~~~~~~~~~
@@ -498,12 +503,13 @@ Sync Config Object
    * - | ``indexed_queryable_fields_names``
        | Array<String>
      
-     - The :ref:`names of the indexed queryable fields <fs-indexed-queryable-fields>` 
+     - The :ref:`name of the indexed queryable field <fs-indexed-queryable-fields>` 
        that your client application can query to determine which data to 
-       synchronize. Your app can have one indexed queryable field, and it
-       must be present and be the same 
-       :ref:`eligible field type <flexible-sync-eligible-field-types>`
-       in every collection.
+       synchronize. While this property is an array, we currently support
+       only one one indexed queryable field. This array may contain only one 
+       element. The indexed queryable field must be present in the schema 
+       and be the same :ref:`eligible field type <flexible-sync-eligible-field-types>`
+       in every collection you sync.
 
    * - | ``collection_queryable_fields_names``
        | <Map[String][]String>
