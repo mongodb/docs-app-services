@@ -6414,6 +6414,20 @@ components:
           description: |-
             If `true`, the function executes with full privileges, bypassing rules
             on all services.
+        run_as_user_id: 
+          type: string 
+          description: |-
+            An application user's account ID. If defined, endpoints will always 
+            run as the specified user. Cannot be used with 
+            `run_as_user_id_script_source`.
+        run_as_user_id_script_source:
+          type: string 
+          description: |-
+            The stringified source code for a 
+            [function](https://www.mongodb.com/docs/atlas/app-services/functions/#std-label-functions)
+            that returns an application user's account ID. If defined, endpoints 
+            execute the function on every request and run as the user with the 
+            ID returned from the function. Cannot be used with `run_as_user_id`.
       required:
         - name
         - private
