@@ -1,0 +1,215 @@
+.. _private-endpoints:
+
+====================================
+Use a VPC Private Endpoint (Preview)
+====================================
+
+.. contents:: On this page
+   :depth: 2
+
+You can use a Private Endpoint to access Atlas App Services from within
+your Virtual Private Cloud (VPC). This is a private connection to Atlas
+App Services that does not go over the public internet.
+
+Private Endpoints are only available for Atlas App Services Apps
+deployed locally to a region in AWS. They connect to your AWS VPC using
+AWS PrivateLink. To learn more, see `What is AWS PrivateLink?
+<https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html>`__
+in the AWS documentation.
+
+Private Endpoint Limitations
+----------------------------
+
+- You cannot use Private Endpoints with globally deployed Apps or local
+  Apps deployed to Azure or GCP.
+
+- You cannot use public internet connections to access your App if you
+  have a Private Endpoint enabled. All requests must come through the
+  Private Endpoint.
+
+- If you :ref:`change your deployment model <change-deployment-models>`
+  then your existing Private Endpoints will not continue to work. You
+  will have to create new Private Endpoints for the App's new region.
+
+- You cannot simultaneously use Private Endpoints and :ref:`allow
+  connections over the MongoDB wire protocol <wire-protocol>`. If one is
+  enabled, you cannot enable the other.
+
+Set Up a Private Endpoint
+-------------------------
+
+To configure a Private Endpoint connection you need to have the
+following information:
+
+- Your **VPC ID**, which you can find in the AWS VPC dashboard or
+  by running the :aws:`describe-vpcs
+  </cli/latest/reference/ec2/describe-vpcs>` command in the AWS
+  CLI.
+
+- Your **Subnet IDs**, which you can find in the AWS VPC dashboard
+  or by running the :aws:`describe-subnets
+  </cli/latest/reference/ec2/describe-subnets>` command in the AWS
+  CLI.
+
+- The App Services **Endpoint Service Name** for your region. If
+  you're using the App Services UI, this value will be provided to
+  you. If you're using the Admin API, you can find this value by
+  calling the :admin-api-endpoint:`List VPC Private Endpoint Services
+  <operation/adminListPrivateEndpointServiceInfo>` endpoint and
+  then locating the entry for your App's deployment region in the
+  response.
+
+  .. io-code-block::
+
+      .. input::
+        :language: sh
+
+        curl https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos \
+          -H "Authorization: Bearer <access_token>"
+
+      .. output::
+        :language: json
+        :emphasize-lines: 6
+
+        [
+          {
+            "cloud_provider_region": "aws-us-east-1",
+            "name": "eps_baas-pl-prod_us-east-1_cloud",
+            "dns": "*.aws.realm.mongodb.com",
+            "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0f12ab34cd56ef789"
+          },
+          ...
+        ]
+
+Once you have this information, you can set up the Private Endpoint
+connection using either the App Services UI or the Admin API.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. procedure::
+
+         .. step:: Create an Interface Endpoint in Your VPC
+
+            To use a Private Endpoint, you must first create a VPC
+            interface endpoint in AWS. You can do this using the
+            :aws:`create-vpc-endpoint
+            </cli/latest/reference/ec2/create-vpc-endpoint>` command in the
+            AWS CLI. The UI will walk you through creating this command.
+
+            a. In the left navigation, click :guilabel:`App Settings`.
+
+            #. Click the :guilabel:`Private Endpoints` tab.
+
+            #. Click the :guilabel:`Add Private Endpoint` button.
+
+            #. Enter your **VPC ID** in the input box.
+
+            #. Enter your **Subnet IDs** as a comma-separated list in the input box.
+
+            #. Optionally, enter a comment that describes the purpose of the
+               endpoint.
+
+            Once you've entered this information, the fully constructed
+            AWS CLI command is displayed in the UI. Copy the command and
+            run it in your terminal. It should resemble the following:
+
+            .. code-block:: sh
+
+               aws ec2 create-vpc-endpoint \
+                 --vpc-endpoint-type Interface
+                 --service-name <App Services Endpoint Service Name> \
+                 --vpc-id <your-vpc-id> \
+                 --region <your-aws-deployment-region> \
+                 --subnet-ids <your-subnet-ids>
+
+            After you run the command, click :guilabel:`Next`.
+
+         .. step:: Add the Private Endpoint to Your App
+
+            Now that you've created the interface endpoint in your VPC, you
+            need to add it to your App. Find the **VPC Endpoint ID**, either
+            in the output of the CLI command you ran in the previous step or
+            on the endpoint details screen of the AWS VPC dashboard. This
+            value starts with ``vpce-``.
+
+            Once you have the **VPC Endpoint ID**, enter it in the input box.
+            Then, click :guilabel:`Next`.
+
+         .. step:: Modify Your VPC Private DNS
+
+            Use the AWS CLI to modify your VPC private DNS settings. This
+            ensures that your App can resolve the private endpoint's DNS name
+            to the correct IP address.
+
+            .. code-block:: sh
+
+               aws ec2 modify-vpc-endpoint \
+                 --region <your-aws-deployment-region> \
+                 --vpc-endpoint-id <your-vpc-endpoint-id> \
+                 --private-dns-enabled
+
+   .. tab::
+      :tabid: api
+
+      .. procedure::
+
+         .. step:: Create an Interface Endpoint in Your VPC
+
+            To use a Private Endpoint, you must first create a VPC
+            interface endpoint in AWS. You can do this using the
+            :aws:`create-vpc-endpoint
+            </cli/latest/reference/ec2/create-vpc-endpoint>` command in the
+            AWS CLI.
+
+            Modify the following command template with your private
+            endpoint information. Then, copy the command and run it in
+            your terminal:
+
+            .. code-block:: sh
+
+               aws ec2 create-vpc-endpoint \
+                 --vpc-endpoint-type Interface
+                 --service-name <App Services Endpoint Service Name> \
+                 --vpc-id <your-vpc-id> \
+                 --region <your-aws-deployment-region> \
+                 --subnet-ids <your-subnet-ids>
+
+         .. step:: Add the Private Endpoint to Your App
+
+            Now that you've created the interface endpoint in your VPC, you
+            need to add it to your App. Find the **VPC Endpoint ID**, either
+            in the output of the CLI command you ran in the previous step or
+            on the endpoint details screen of the AWS VPC dashboard. This
+            value starts with ``vpce-``.
+
+            Once you have the **VPC Endpoint ID**, call
+            :admin-api-endpoint:`Create a VPC Private Endpoint
+            <operation/adminCreatePrivateEndpoint>` with the Endpoint
+            ID and cloud deployment region (e.g. ``aws-us-east-1``):
+
+            .. code-block:: sh
+
+               curl https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoints \
+                 -X POST \
+                 -H "Authorization: Bearer <accessToken>" \
+                 -H "Content-Type: application/json" \
+                 -d '{
+                   "cloud_provider_region": "<your-cloud-deployment-region>",
+                   "cloud_provider_endpoint_id": "<your-vpc-endpoint-id>"
+                 }'
+
+         .. step:: Modify Your VPC Private DNS
+
+            Use the AWS CLI to modify your VPC private DNS settings. This
+            ensures that your App can resolve the private endpoint's DNS name
+            to the correct IP address.
+
+            .. code-block:: sh
+
+               aws ec2 modify-vpc-endpoint \
+                 --region <your-aws-deployment-region> \
+                 --vpc-endpoint-id <your-vpc-endpoint-id> \
+                 --private-dns-enabled

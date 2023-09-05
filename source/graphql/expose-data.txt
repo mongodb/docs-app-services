@@ -26,15 +26,15 @@ Procedure
 1. Configure Roles for the Collection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} enforces :ref:`collection rules <mongodb-rules>` for all incoming
-GraphQL requests, so you need to define at least one :doc:`collection
-role </mongodb/define-roles-and-permissions>` with the permissions that
+App Services enforces :ref:`collection rules <mongodb-rules>` for all incoming
+GraphQL requests, so you need to define at least one :ref:`collection
+role <define-roles-and-permissions>` with the permissions that
 your application requires.
 
 All GraphQL requests include an authentication token that identifies the
-logged in {+service-short+} user that sent the request. {+service-short+} evaluates a role for
+logged in App Services user that sent the request. App Services evaluates a role for
 every document included in a GraphQL operation and only returns fields
-and documents that the user has permission to see. If {+service-short+} omits a
+and documents that the user has permission to see. If App Services omits a
 field, the field has a ``null`` value in the returned document.
 
 2. Define a Schema for Documents in the Collection
@@ -42,7 +42,7 @@ field, the field has a ``null`` value in the returned document.
 
 GraphQL requires that all data conforms to a well-defined type, so you
 must :ref:`define a schema <enforce-a-schema>` for
-documents in the collection. {+service-short+} automatically generates
+documents in the collection. App Services automatically generates
 :doc:`GraphQL types and resolvers
 </graphql/types-and-resolvers>` for documents in the collection
 based on the collection schema and regenerates new types whenever the
@@ -50,7 +50,7 @@ schema changes.
 
 .. note:: Automatically Generate a Schema
 
-   {+service-short+} can generate a collection schema for you based on a sample of
+   App Services can generate a collection schema for you based on a sample of
    existing documents in the collection. If you don't have existing
    data, you can insert a new document that has a mock implementation of
    the fields you want to include in your schema and then generate a
@@ -89,7 +89,7 @@ children from the same ``people`` collection:
 4. Name the Data Type
 ~~~~~~~~~~~~~~~~~~~~~
 
-{+service-short+} names the GraphQL types that it generates based on the data type
+App Services names the GraphQL types that it generates based on the data type
 that documents in the collection conform to. You can configure the name
 of the GraphQL types by setting the ``title`` field in a schema to the
 name of the data type that the schema defines.
@@ -98,13 +98,13 @@ There are three situations where you can set the ``title`` field:
 
 - You can define the type name for each document in a collection by
   setting ``title`` at the root level of the schema. If you don't
-  specify a title, {+service-short+} uses the name of the collection instead.
+  specify a title, App Services uses the name of the collection instead.
 
 - You can define the type name for an embedded object by setting
   ``title`` in the embedded object schema.
 
 - You can define the type name for a field that has a defined
-  relationship by setting ``title`` in the field schema. {+service-short+} uses the
+  relationship by setting ``title`` in the field schema. App Services uses the
   ``title`` instead of the defined field name when it resolves
   relationships in GraphQL.
 
@@ -123,18 +123,18 @@ There are three situations where you can set the ``title`` field:
 
 .. note:: Singular and Plural Types
 
-   {+service-short+} generates two :ref:`GraphQL queries
+   App Services generates two :ref:`GraphQL queries
    <graphql-query-resolvers>` for each collection:
    
    - A **singular** query that finds a specific document in the collection. The
      query uses the same name as the schema's ``title``. If the schema's
-     ``title`` is a plural noun, {+service-short+} attempts to use its singular
+     ``title`` is a plural noun, App Services attempts to use its singular
      form as determined by the `Rails ActiveSupport inflection rules
      <https://github.com/rails/rails/blob/master/activesupport/lib/active_support/inflections.rb>`__.
    
    - A **plural** query that finds a subset of all documents in the collection.
      If possible, the query uses the plural form of the singular query name. If
-     {+service-short+} is unable to pluralize the name or if the pluralized name
+     App Services is unable to pluralize the name or if the pluralized name
      is the same as the singular name, the plural query uses the same name as
      the singular query with an additional ``"s"`` appended to the end.
 
@@ -155,7 +155,7 @@ There are three situations where you can set the ``title`` field:
            }
          }
       
-      {+service-short+} generates two queries, ``mouse`` (singular) and ``mice``
+      App Services generates two queries, ``mouse`` (singular) and ``mice``
       (plural), based on the schema:
 
       .. code-block:: graphql
@@ -174,7 +174,7 @@ There are three situations where you can set the ``title`` field:
 Next Steps
 ----------
 
-Once you have defined a schema for the collection, {+service-short+} automatically exposes
+Once you have defined a schema for the collection, App Services automatically exposes
 the documents in the collection through the GraphQL API. You can now connect
 from a client application and execute queries and mutations.
 

@@ -8,7 +8,7 @@
    <https-endpoints>` with no change in behavior. You should
    :ref:`migrate <convert-webhooks-to-endpoints>` existing Webhooks.
 
-   Existing services will continue to work until **1 Aug 2023**.
+   Existing services will continue to work until **November 1, 2024**.
 
    Because third party services and push notifications are now deprecated, they have
    been removed by default from the App Services UI. If you need to manage an existing third party
@@ -21,4 +21,3 @@
    - Enable the toggle switch next to 
      :guilabel:`Temporarily Re-Enable 3rd Party Services`, and then save your 
      changes.
-

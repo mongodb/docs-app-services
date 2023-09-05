@@ -1142,3 +1142,71 @@ accepts the following parameters:
        deletedCount
      }
    }
+
+.. _graphql-paginate:
+
+Paginate Data
+-------------
+
+You can paginate data in your queries with the types provided by the GraphQL API's
+generated schema.
+
+The Atlas GraphQL API **does not** have an ``offset`` operator, like the
+:graphql:`GraphQL documentation recommends for pagination <learn/pagination/#pagination-and-edges>`.
+
+Instead you can use the generated schema's :ref:`find multiple documents query resolvers
+<graphql-findMany>`
+with ``query``, ``limit``, and ``sortBy`` operators to paginate data.
+
+To paginate data in **ascending** order:
+
+.. code-block:: graphql
+
+   query PaginateAscending(
+     # Do not include `previousTitle` for the first query
+     # in a pagination sequence.
+     $previousTitle: String,
+     $limit: Int!,
+   ) {
+     movies(
+       query: { title_gt: $previousTitle  }
+       limit: $limit
+       sortBy: TITLE_ASC
+     ) {
+       title
+       year
+       runtime
+       director
+     }
+   }
+
+To paginate data in **descending** order:
+
+.. code-block:: graphql
+
+   query PaginateAscending(
+     # Do not include `nextTitle` for the first query
+     # in a pagination sequence.
+     $nextTitle: String,
+     $limit: Int!,
+   ) {
+     movies(
+       query: { title_lt: $nextTitle  }
+       limit: $limit
+       sortBy: TITLE_DESC
+     ) {
+       title
+       year
+       runtime
+       director
+     }
+   }
+
+For a example of this pagination pattern implemented in a client application,
+refer to :ref:`Paginate Data <graphql-apollo-paginate>` in the Realm Web SDK documentation.
+
+.. note::
+
+   This approach to pagination is similar to range queries for MongoDB drivers,
+   as described in the :manual:`MongoDB Server documentation
+   </reference/method/cursor.skip/#using-range-queries>`.

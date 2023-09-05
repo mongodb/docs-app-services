@@ -17,28 +17,30 @@ Rule Expressions
 Overview
 --------
 
-A **rule expression** is a JSON object that you write to control data
-access with :ref:`rules <rules>`. Each expression defines the conditions
+A **rule expression** is a JSON object that you write to control data access
+with :ref:`permissions <permissions>`. Each expression defines the conditions
 under which a user can take some action. For example, you can write an
 expression to control whether a user can read or write data in a MongoDB
 document or a synced realm.
 
-When Atlas App Services evaluates a rule, it resolves each expression
-associated with the rule to a boolean value, either ``true`` or
-``false``.
+App Services evaluates a rule expression, usually with a document as input, to
+get a true or false result.
 
 You can define simple, static expressions that use hardcoded values:
 
 .. code-block:: json
-   :caption: A "static" expression that only matches the hardcoded ID
+   :caption: A "static" expression that only evaluates to true if the input document's "id" field matches the given hardcoded ID "aaaabbbbccccddddeeeeffff"
 
-   { "id": "5f6aae9a82989d521a606369" }
+   { "id": "aaaabbbbccccddddeeeeffff" }
 
-You can also write expressions that support arbitrary logic to express
-dynamic requirements and complex or custom workflows. A dynamic
-expression can include variables that reflect the current context,
-called :ref:`expansions <expansions>`, and can use built-in
-:ref:`operators <operators>` to transform data:
+You can also write expressions that support arbitrary logic to express dynamic
+requirements and complex or custom workflows. A dynamic expression can include
+variables that reflect the current context, called :ref:`expansions
+<expansions>`, and can use built-in :ref:`operators <operators>` to transform
+data. The following example evaluates to true if the input document's ``owner``
+field equals the user's ``id`` and the remote IP address of the request can be
+found in an array of allowed IP addresses that is stored as a :ref:`value
+<values-and-secrets>`:
 
 .. code-block:: json
    :caption: A "dynamic" expression that varies based on the requesting user and their IP location
@@ -50,6 +52,12 @@ called :ref:`expansions <expansions>`, and can use built-in
      }
    }
 
+Restrictions
+------------
+
+When using Device Sync, expressions have special restrictions. See
+:ref:`sync-compatible-expressions`.
+
 Expression Syntax
 -----------------
 
@@ -60,7 +68,7 @@ Expression object field names can be a value, an :ref:`expansion
 <expansions>`, or an :ref:`operator <operators>`. Each field must
 contain one of a value, an expansion, or a nested expression.
 
-Expression object have the following format:
+Expression objects have the following format:
 
 .. code-block:: javascript
 
@@ -76,9 +84,9 @@ Embedded Expressions
 
 You can embed multiple expression documents in the fields of another expression
 document to handle complex evaluation logic. App Services evaluates expressions
-*depth-first, post-order*, i.e. it starts at the bottom of the expression tree
-and works back to the root-level fields by evaluating each expression after all
-of its embedded expressions.
+*depth-first, post-order*: that is, it starts at the bottom of the expression
+tree and works back to the root-level fields by evaluating each expression after
+all of its embedded expressions.
 
 .. example::
 
@@ -120,11 +128,11 @@ operation.
 Expression Evaluation
 ---------------------
 
-App Services evaluates expressions by first replacing expansions with
-their runtime values and then evaluating each field of the expanded
-expression document to a boolean expression. If all fields in an
-expression evaluate to ``true``, the expression also evaluates to
-``true``.
+App Services evaluates expressions by first replacing expansions with their
+runtime values and then evaluating each field of the expanded expression
+document to a boolean expression. If all fields in an expression evaluate to
+``true``, the expression also evaluates to ``true``. An empty expression
+(``{}``) evaluates to ``true``.
 
 Expression fields evaluate based on the following rules:
 
@@ -150,26 +158,42 @@ Expansions
 
 An expansion is a variable that represents a dynamic value in an
 expression. Expansions are denoted by two percent signs followed by the
-expansion name. They can represent:
+expansion name. They are:
 
-- the data in a MongoDB document (:json-expansion:`%%root`)
-- a user interacting with your app (:json-expansion:`%%user`)
-- an incoming request (:json-expansion:`%%request`)
-- a static value (:json-expansion:`%%partition`)
-- your app's environment (:json-expansion:`%%environment`)
-- the partition key of a synced realm partition (:json-expansion:`%%partition`)
-- the arguments that were passed to a service action (:json-expansion:`%%args`)
+- :json-expansion:`%%root`, which represents the data in a MongoDB document.
+- :json-expansion:`%%user`, which represents a user interacting with your app. 
+- :json-expansion:`%%request`, which represents an incoming request.
+- :json-expansion:`%%values`, which represents a static value. 
+- :json-expansion:`%%environment`, which represents your app's environment. 
+- :json-expansion:`%%args`, which represents the arguments that were passed to 
+  a service action.
 
 When your app evaluates an expression, it replaces each expansion in the
 expression with a specific value determined by your app's configuration
 and the context at the time of evaluation.
 
+.. example::
+
+   The following example uses the ``%%user`` and ``%%root`` expansions in an
+   "apply when" expression:
+
+   .. code-block:: json
+
+      "applyWhen": {
+         "%%user.custom_data.status": "ACTIVE",
+         "%%root.owners": "%%user.id"
+      }
+
 .. note::
    
    Some expansions, like :json-expansion:`%%user`, are available in all
    expressions. Others are limited to specific contexts, like
-   :json-expansion:`%%root` which is only available in linked collection
-   rule expressions.
+   :json-expansion:`%%root` which is not Sync compatible and is only available
+   in expressions that operate on a document.
+
+   When using Device Sync, expansions have special restrictions. See
+   :ref:`sync-compatible-expansions`.
+
 
 Logical Expansions
 ~~~~~~~~~~~~~~~~~~
@@ -221,7 +245,7 @@ Environment Expansions
    | **Type:** ``object``
    | **Usable In:** Any Expression
 
-   Represents the current :ref:`environment <realm-app-environments>`.
+   Represents the current :ref:`App environment <app-environment>`.
    You can read the environment name (``tag``) and access environment
    values.
    
@@ -306,6 +330,8 @@ User Expansions
             "providerType": "<Auth Provider Name>",
             "id": "<Provider User ID"
           }
+          ...
+        ]
       }
    
    .. json-expansion:: %%user.id
@@ -389,7 +415,6 @@ MongoDB Document Expansions
    | **Type:** ``any``
    | **Usable In:** :ref:`MongoDB Atlas Data Sources <data-sources>`
    
-
    The value of a particular field as it exists at the end of a database operation.
 
 .. json-expansion:: %%prev
@@ -459,7 +484,7 @@ Service Expansions
    | **Type:** ``string | number | BSON.ObjectId``
    | **Usable In:** :ref:`Partion-based Sync <sync-rules>`
    
-   The partition key value of the current partition being evaluated.
+   (:ref:`Partition-Based Sync <partition-based-sync>` only.) The partition key value of the current partition being evaluated.
 
 .. _operators:
 
@@ -478,7 +503,7 @@ in any expression.
 Convert EJSON Values
 ~~~~~~~~~~~~~~~~~~~~
 
-The following operators allow you to convert values between BSON/EJSON
+The following operators allow you to convert values between EJSON
 and JSON representations:
 
 .. json-operator:: %stringToOid
@@ -509,9 +534,38 @@ and JSON representations:
            }
          }
 
+.. json-operator:: %stringToUuid
+
+   Converts a 36-byte string to an EJSON ``UUID`` object.
+
+   .. example::
+      
+      .. code-block:: json
+            
+         {
+           "_id": {
+             "%stringToUuid": "%%user.id"
+           }
+         }
+
+.. json-operator:: %uuidToString
+
+   Converts an EJSON ``UUID`` object to a string.
+
+   .. example::
+   
+      .. code-block:: json
+         
+         {
+           "string_id": {
+             "%uuidToString": "%%root._id"
+           }
+         }
+
 .. important:: No Inner Operations
    
-   :json-operator:`%stringToOid` and :json-operator:`%oidToString` do not
+   :json-operator:`%stringToUuid`, :json-operator:`%uuidToString`, 
+   :json-operator:`%stringToOid`, and :json-operator:`%oidToString` do not
    evaluate JSON operators. You must provide either a literal string/EJSON
    object or an expansion that evaluates to one.
 

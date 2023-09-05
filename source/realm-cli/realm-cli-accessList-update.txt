@@ -12,10 +12,11 @@ realm-cli accessList update
    :depth: 1
    :class: singlecol
 
-Modify an IP address or CIDR block in the Access List of your {+app+}
+Modify an IP address or CIDR block in the Access List of your App
 
-Changes an existing entry from the Access List of your {+app+}. You will be
-prompted to select an IP address or CIDR block to update if neither is
+Changes an existing entry from the Access List of your App. You must
+specify either the ``--new-ip`` or ``--comment`` option. You will 
+be prompted to select an IP address or CIDR block to update if neither is
 specified.
 
 Syntax
@@ -30,28 +31,28 @@ Options
 
 .. list-table::
    :header-rows: 1
-   :widths: 20 10 10 60
+   :widths: 20 10 15 55
 
    * - Name
      - Type
      - Required
      - Description
+   * - --new-ip
+     - string
+     - true if ``--comment`` is not specified
+     - Specify the new IP address or CIDR block that will replace the existing entry
+   * - --comment
+     - string
+     - true if ``--new-ip`` is not specified
+     - Add or edit a comment to the IP address or CIDR block that is being modified
    * - -a, --app
      - string
      - false
-     - Specify the name or ID of an {+app+} to modify an entry in its Access List
+     - Specify the name or ID of an App to modify an entry in its Access List
    * - --ip
      - string
      - false
      - Specify the existing IP address or CIDR block that you would like to modify
-   * - --new-ip
-     - string
-     - false
-     - Specify the new IP address or CIDR block that will replace the existing entry
-   * - --comment
-     - string
-     - false
-     - Add or edit a comment to the IP address or CIDR block that is being modified
    * - -h, --help
      - 
      - false

@@ -15,7 +15,7 @@ Billing
 Overview
 --------
 
-Atlas App Services applications are billed according to how much they're used on a
+Atlas App Services Apps are billed according to how much they're used on a
 monthly basis. There are four independently-measured usage types that determine
 how much you pay each month:
 
@@ -42,7 +42,7 @@ how much you pay each month:
 Monthly Free Tier
 ~~~~~~~~~~~~~~~~~
 
-All App Services apps in a MongoDB Atlas project share a single monthly free
+All App Services Apps in a MongoDB Atlas project share a single monthly free
 tier. All usage below the free tier thresholds in a given month is not billed.
 As soon as a project exceeds any monthly free tier threshold, App Services starts 
 billing for additional usage of any kind for that project.
@@ -92,7 +92,7 @@ There are several types of requests:
   event, a scheduled trigger is configured to fire, or an authentication
   trigger responds to a user login. The request resulting from a trigger
   execution also includes all operations invoked by the trigger, including
-  functions.
+  functions and EventBridge forwarding.
 
 - **GraphQL Requests**, such as when a client application issues a
   GraphQL query operation or calls a custom resolver.
@@ -202,6 +202,9 @@ millisecond of sync runtime per user.
 hours of :ref:`compute <billing-compute>` or 10,000 hours of :ref:`sync
 <billing-sync>` runtime (whichever occurs first)
 
+Device Sync pauses automatically after {+sync-inactive-app-pause-time+} 
+of inactivity.
+
 .. example:: Estimate Your Usage
    
    Consider answering the following questions to help estimate the amount of
@@ -227,10 +230,10 @@ set rate for each gigabyte of data egress.
 
 **Free Tier Threshold:** 10GB
 
-.. note:: {+atlas+} Data Transfer
+.. note:: MongoDB Atlas Data Transfer
 
-  Data transfer from a linked {+atlas+} data source to App Services is billed as
-  an {+atlas-short+} Data Egress charge. To learn more about {+atlas-short+}
+  Data transfer from a linked MongoDB Atlas data source to App Services is billed as
+  an Atlas Data Egress charge. To learn more about Atlas
   egress rates, read the :atlas:`Data Transfer </billing/data-transfer-costs/>`
   billing documentation.
 

@@ -9,7 +9,7 @@ Atlas Functions
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 1
    :class: singlecol
 
 .. toctree::
@@ -33,7 +33,7 @@ app's functions directly from a client app or define services that
 integrate and call functions automatically.
 
 Functions can call other functions and include a built-in client for
-working with data in {+atlas+} clusters. They also include helpful
+working with data in MongoDB Atlas clusters. They also include helpful
 global utilities, support common Node.js built-in modules, and can
 import and use external packages from the npm registry.
 
@@ -220,7 +220,7 @@ or by importing the function configuration and source code with
 
             To define a new server-side function from the App Services UI:
 
-            A. Click :guilabel:`Functions` in the {+leftnav+}.
+            A. Click :guilabel:`Functions` in the left navigation menu.
 
             #. Click :guilabel:`New Function` in the top right of the :guilabel:`Functions` page.
 
@@ -236,6 +236,7 @@ or by importing the function configuration and source code with
                You can define functions inside of nested folders. Function names
                are slash-separated paths, so a function named ``utils/add`` maps
                to ``functions/utils/add.js`` in the app's configuration files.
+               Nested functions are *not* currently supported if you are using GitHub deployment.
 
 
          .. step:: Configure User Authentication
@@ -284,15 +285,9 @@ or by importing the function configuration and source code with
          .. step:: Configure Function Execution Logs
 
             By default, App Services includes the arguments that a function received in
-            the :doc:`log entry </logs/function>` for each execution of the
+            the :ref:`log entry <logs-function>` for each execution of the
             function. If you want to prevent App Services from logging the arguments,
             disable :guilabel:`Log Function Arguments`.
-
-            .. figure:: /images/log-function-arguments-realm-ui.png
-               :alt: The log function arguments toggle in the UI
-               :width: 750px
-               :lightbox:
-
 
          .. step:: Specify an Authorization Expression
 
@@ -387,6 +382,7 @@ or by importing the function configuration and source code with
                You can define functions inside of nested folders in the
                ``functions`` directory. Use slashes in a function name to indicate
                its directory path.
+               Nested functions are *not* currently supported if you are using GitHub deployment.
 
             Once you've created the function's ``.js`` file, write the function source code, e.g.:
 
@@ -480,7 +476,7 @@ or by importing the function configuration and source code with
                .. step:: Set Execution Logging
 
                   To include any values that the function receives as arguments in its
-                  :doc:`log entry </logs/function>`, set ``disable_arg_logs`` to
+                  :ref:`log entry <logs-function>`, set ``disable_arg_logs`` to
                   ``false``.
 
                .. step:: Specify an Authorization Expression
@@ -620,51 +616,25 @@ expression evaluates to ``false``.
 
 .. _call-function-from-client-sdks:
 
-Call from {+client-sdks+}
+Call from Realm SDKs
 ~~~~~~~~~~~~~~~~~~~~
 
 .. include:: /includes/important-sanitize-client-data-in-functions.rst
 
 You can call a function from client applications that are connected with
-an SDK or over the wire protocol.
+a Realm SDK or over the wire protocol. For code examples that demonstrate 
+how to call a function from a client application, see the documentation 
+for the Realm SDKs:
 
-.. tabs-realm-sdks::
-
-   .. tab::
-      :tabid: android
-
-      To execute a function from the Android Client SDK, see the
-      :ref:`Java SDK guide for calling a function <java-call-a-function>`.
-
-   .. tab::
-      :tabid: ios
-
-      To execute a function from the iOS Client SDK, see the
-      :ref:`Swift SDK guide for calling a function <ios-call-a-function>`.
-
-   .. tab::
-      :tabid: web
-
-      To execute a function from the Web Client SDK, see the
-      :ref:`Web SDK guide for calling a function <web-call-a-function>`.
-
-   .. tab::
-      :tabid: node
-      
-      To execute a function from the Node Client SDK, see the
-      :ref:`Node SDK guide for calling a function <node-call-a-function>`.
-
-   .. tab::
-      :tabid: react-native
-
-      To execute a function from the React Native Client SDK, see the
-      :ref:`React Native SDK guide for calling a function <react-native-call-a-function>`.
-
-   .. tab::
-      :tabid: dotnet
-
-      To execute a function from the .NET Client SDK, see the
-      :ref:`.NET SDK guide for calling a function <dotnet-call-a-function>`.
+- :ref:`C++ SDK <cpp-call-a-function>`
+- :ref:`Flutter SDK <flutter-call-function>`
+- :ref:`Java SDK <java-call-a-function>`
+- :ref:`Kotlin SDK <kotlin-call-function>`
+- :ref:`.NET SDK <dotnet-call-a-function>`
+- :ref:`Node SDK <node-call-a-function>`
+- :ref:`React Native SDK <react-native-call-a-function>`
+- :ref:`Swift SDK <ios-call-a-function>`
+- :ref:`Web SDK <web-call-a-function>`
 
 .. _function-constraints:
 

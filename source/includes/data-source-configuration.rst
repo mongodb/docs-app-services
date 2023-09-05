@@ -16,7 +16,7 @@ following form:
      }
    }
 
-The configuration file for an {+adf-datasource+} should has the following form:
+The configuration file for a {+adf-datasource+} should have the following form:
 
 .. code-block:: json
    :caption: config.json
@@ -65,7 +65,7 @@ required, depending on whether you are linking a cluster or a
    
    * - | ``config.dataLakeName``
        | String   
-     - Required when linking an {+adf-datasource+}s. The name of the instance that you want to link to your application.
+     - Required when linking a {+adf-datasource+}s. The name of the instance that you want to link to your application.
 
    * - | ``config.readPreference``
        | String

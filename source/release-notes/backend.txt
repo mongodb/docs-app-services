@@ -1,8 +1,6 @@
 ============================
-{+service+} Changelog
+Atlas App Services Changelog
 ============================
-
-.. default-domain:: mongodb
 
 .. contents:: On this page
    :local:
@@ -10,16 +8,466 @@
    :depth: 1
    :class: twocols
 
+.. _backend-2023:
+
+2023 Releases
+-------------
+
+.. _backend_20230823:
+
+23 August 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+- Raised the Atlas Function memory limit from 256MB to 350MB.
+
+- New Apps are automatically opted into Flexible Sync and cannot enable
+  Partion-Based Sync.
+
+- The UI now displays a confirmation dialog when you delete an
+  application. This dialog includes the application name and a warning
+  that the deletion is permanent. This change helps prevent accidental
+  deletions.
+
+- You can now disable GraphQL introspection queries in your GraphQL API
+  configuration.
+
+.. _backend_20230809:
+
+09 August 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Added Jakarta, Cape Town, Melbourne, Hyderabad, UAE, and Zurich to the
+  supported regions for EventBridge triggers in the Atlas UI.
+
+- Added support for multi-lined secrets in the secret input in the UI.
+
+- Added support for the ``maxTimeMS`` option to aggregation pipelines in
+  Functions.
+
+- Added support for functions in nested directories in automatic GitHub
+  deployments.
+
+- The following kinds of requests are no longer included in billing
+  usage metrics:
+
+  - Flexible sync downloads that contain no changesets
+
+  - Requests that fail for transient issues like disconnects
+
+.. _backend_20230726:
+
+26 July 2023 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Custom User Data ID fields may now contain string or ObjectId values.
+- Extended third-party services deprecation date to November 1, 2024.
+- Substantially increased the speed of static hosting draft creation & deployment.
+
+.. _backend_20230712:
+
+12 July 2023 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Renamed "Tiered Device Sync" to "Device Sync Edge Server"
+- Added "Device Sync" to the left side navigation in the Atlas UI
+
+.. _backend_20230628:
+
+28 June 2023 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Added support for the :json-operator:`%stringToUuid` and
+  :json-operator:`%uuidToString` operators in rule expressions.
+
+.. _backend_20230607:
+
+07 June 2023 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Added support for :mdn:`String.prototype.replaceAll()
+  <Web/JavaScript/Reference/Global_Objects/String/replaceAll>` in
+  Functions.
+
+.. _backend_20230524:
+
+24 May 2023 Release
+~~~~~~~~~~~~~~~~~~~
+
+- Increased function :ref:`execution timeout <function-constraints>`
+  from 270 seconds to 300 seconds.
+
+- Added support for automatically migrating a Device Sync App from
+  Partition-Based Sync to Flexible Sync. To learn more, see
+  :ref:`Migrate Device Sync Modes <realm-sync-migrate-modes>`.
+
+- App cards in the Atlas UI are now ordered by Last Updated time.
+
+- Fixed an issue where a Device Sync changeset missing required fields
+  could cause temporary JSON schema errors in the underlying cluster.
+
+.. _backend_20230510:
+
+10 May 2023 Release
+~~~~~~~~~~~~~~~~~~~
+
+- Added suport for :ref:`VPC Private Endpoints <private-endpoints>` with
+  AWS PrivateLink.
+
+.. _backend_20230426:
+
+26 April 2023 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- Added support for ``axios@^1.3.6`` in Functions.
+- Increased function :ref:`execution timeout <function-constraints>`
+  from 240 seconds to 270 seconds.
+- Updated the Scheduled Trigger configuration UI to use the timezone and
+  date format specified in the user's Atlas preferences.
+- Updated the Realm SDK model generator to output C# models based on
+  source generators with nullable type annotations.
+- Removed the permissions section from the Device Sync configuration UI.
+  Instead, define permissions from the unified :guilabel:`Rules` screen.
+
+.. _backend_20230412:
+
+12 April 2023 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- The GraphQL API will now emit a warning if multiple schemas use the
+  same ``title`` value.
+- Renamed "Asymmetric Sync" to "Data Ingest" in the UI
+
+.. _backend_20230329:
+
+29 March 2023 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- Increased function :ref:`execution timeout <function-constraints>`
+  from 210 seconds to 240 seconds.
+- Remove ``function_name`` in endpoint request body when
+  :admin-api-endpoint:`fetching, creating, and modifying HTTPS Endpoints from the Admin API <tag/endpoints>`.
+
+.. _backend_20230316:
+
+16 March 2023 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- Expiration times for user refresh tokens can be :ref:`configured from the UI
+  <refresh-token-expiration>`.
+- Change the email address associated with email/password authentication via an
+  :admin-api-endpoint:`Admin API endpoint <operation/adminResetUserEmail>`.
+- :ref:`Device Sync is automatically paused <mongodb-service-limitations-sync-inactive-pause>`
+  if it is inactive for 30 days.
+- Updated all existing apps using Atlas Device Sync with Flexible Sync to
+  :ref:`use the same rules and permissions as other services <unified-rule-migration>`.
+  This update has been rolled out to all existing Apps from 6 March, 2023 through
+  15 March, 2023.
+
+.. _backend_20230224:
+
+24 February 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Add additional ``currentPasswordValid`` parameter to :ref:`password reset function
+  <auth-run-a-password-reset-function>`.
+- Update Atlas Device Sync with Flexible Sync to :ref:`use the same rules and permissions
+  <device-sync-compatibility>` as other services. This update is currently only
+  applied to newly created Apps. On the week of 26 February, 2023, existing apps
+  will have their Flexible Sync specific-rules migrated to use the same rules and
+  permissions as other services.
+
+
+.. _backend_20230208:
+
+08 February 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Increase :ref:`App concurrent request limit <mongodb-service-limitations-request-traffic>` from 5,000 to 10,000.
+- Configure :ref:`user creation function <user-creation-function>` via the App Services UI.
+- :ref:`Change App deployment model <change-deployment-models>` from the UI and API.
+
+.. _backend_20230125:
+
+25 January 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Authenticate Data API and HTTPS Endpoint requests :ref:`using Bearer Authentication
+  <data-api-bearer-authentication>`.
+
+.. _backend_20230111:
+
+11 January 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Configure :ref:`user creation function <user-creation-function>` via the App Services CLI and Admin API.
+
 .. _backend-2022:
 
 2022 Releases
 -------------
 
-.. include:: /release-notes/changelogs/backend/changelog-backend-2022.rst
+.. _backend_20221214:
+
+14 December 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Raise :ref:`Atlas Function request timeout <function-constraints>`
+  from 150 seconds to 180 seconds.
+- Expiration times for refresh tokens can be
+  :admin-api-endpoint:`configured from the API <operation/adminGetRefreshTokenExpiration>`.
+- Let users create Apps in AWS region Ohio (us-east-2) from the UI.
+
+.. _backend_20221130:
+
+30 November 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Remove maximum number of clients that can concurrently
+  :ref:`listen to database change streams <mongodb-service-limitations-change-streams>`
+  based on cluster size.
+- Support :ref:`App Services deployments <deployment-regions>` in the AWS region
+  Ohio (aws-us-east-2).
+- :ref:`Authenticate Atlas Data API requests <endpoint-authenticate>`
+  with the ``apiKey`` authentication credential headers for API key authentication.
+- GraphQL API support for query on relationships nested in relationship arrays.
+- When creating or configuring your App in the UI, App Services selects the
+  :ref:`App Services deployment region <deployment-regions>` geographically closest
+  to your selected Atlas data source as the default option.
+
+
+.. _backend_20221117:
+
+17 November 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support :ref:`App Services deployments <deployment-regions>` in the AWS region
+  São Paulo (aws-sa-east-1).
+- Updated :ref:`Admin API <admin-api>` endpoint to fetch Atlas Triggers and
+  Atlas Data API apps.
+
+.. _backend_20221103:
+
+3 November 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- :ref:`Function context.app.id <context-app>` returns a string (formerly BSON ObjectId).
+- Support :ref:`App Services deployments <deployment-regions>` in the AWS region
+  London (aws-eu-west-2).
+- Added :ref:`Admin API <admin-api>` endpoint to retrieve App Services metrics.
+
+.. _backend_20221020:
+
+20 October 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added option to :ref:`auto-resume Database Triggers <automatically-resume-a-suspended-trigger>`
+  that were suspended because resume token was lost.
+
+.. _backend_20221005:
+
+10 October 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Increased :ref:`request timeout <function-constraints>` from 120 seconds to 150 seconds.
+
+.. _backend_20220923:
+
+23 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added :method:`mongodb.admin()` and :method:`admin.getDBNames()` in
+  Atlas Functions.
+
+.. _backend_20220909:
+
+9 September 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Support App Services deployments in the following :ref:`GCP regions<deployment-regions>`:
+
+  - Ohio (``us-central1``)
+  - Virginia (``us-east4``)
+  - Oregon (``us-west1``)
+  - Belgium (``europe-west1``)
+  - Mumbai (``asia-south1``)
+
+- Added support for :method:`database.getCollectionNames()` in Atlas
+  Functions.
+
+.. _backend_20220629:
+
+29 June 2022 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Introduced a refreshed UI for Rules.
+
+.. _backend_20220615:
+
+15 June 2022 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Introduced ability to configure :ref:`field-level permissions with the Data API <field-level-permissions>`.
+
+.. _backend_20220607:
+
+7 June 2022 Release
+~~~~~~~~~~~~~~~~~~~
+
+- Released Flexible Sync as GA.
+- Released :ref:`Asymmetric Sync <optimize-data-ingest>`, which optimizes Flexible Sync for write-heavy workloads.
+- Released :ref:`Data API <data-api>` as GA.
+- Introduced Data API for all Apps.
+- Introduced field-level permissions for Flexible Sync.
+- Introduced :ref:`local regions for Azure data sources <deployment-regions>`.
+
+.. _backend_20220519:
+
+19 May 2022 Release
+~~~~~~~~~~~~~~~~~~~
+
+- Introduced option to encode HTTPS Endpoint responses as :ref:`EJSON or JSON <endpoint-return-types>`.
+- Added support for serverless Atlas instances as data sources. Serverless instances do not yet
+  support Triggers or Sync.
+
+.. _backend_20220420:
+
+20 April 2022 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- Introduced ability to accept null values as optional types in Realm Schema.
+- Added ability to download logs from the UI.
+- Added Flexible Sync support for queries using ``BETWEEN`` and the string operators ``BEGINSWITH``, ``ENDSWITH``, ``CONTAINS``.
+- Added Flexible Sync support for queries on arrays of primitives.
+
+.. _backend_20220325:
+
+25 March 2022 Release
+~~~~~~~~~~~~~~~~~~~~~
+- Performance improvements for Functions, particularly aimed at decreasing the 
+  runtime for those dependencies that make external requests. 
+
+- MongoDB Atlas moved to Let's Encrypt as the new Certificate 
+  Authority for TLS certificates for all App Services.
+
+.. _backend_20220126:
+
+26 January 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Visually refreshed the :ref:`Schema UI <enforce-a-schema>`.
+- Introduced :ref:`Log Forwarding <forward-logs>`, which automatically stores your
+  application's server-side logs in a MongoDB collection or sends them to
+  an external service.
+
+.. _backend_20220119:
+
+19 January 2022 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Introduced :ref:`Flexible Sync (preview) <flexible-sync>`, which allows clients to sync data without the need for partition keys.
 
 .. _backend-2021:
 
 2021 Releases
 -------------
 
-.. include:: /release-notes/changelogs/backend/changelog-backend-2021.rst
+.. _backend_20211202:
+
+02 December 2021 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added ability to import dependencies :ref:`from the UI <add-external-dependencies>`.
+- Deprecated :ref:`third party services <third-party-services>`. Third party services will be fully removed on December 1, 2022. 
+- Renamed "Webhooks" to ":ref:`HTTPS Endpoints <https-endpoints>`".
+
+.. _backend_20211118:
+
+18 November 2021 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Requests blocked by an application's :ref:`IP Access List <manage-ip-access>` no longer count towards billing.
+
+.. _backend_20211006:
+
+06 October 2021 Release
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Added the ability to configure an :ref:`IP Access List <realm-cli-accessList-create>`.
+- Increased function :ref:`execution timeout <function-constraints>` from 90 seconds to 120 seconds.
+- Added the ability to create apps with a Template Starter Application.
+- App Services Events are now available to view on the :atlas:`Atlas Activity Feed </tutorial/activity-feed/>`.
+  You can configure these events in the :atlas:`Atlas Alert Settings </configure-alerts/>`.
+
+.. _backend_20210908:
+
+08 September 2021 Release
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Increased :ref:`request limit <mongodb-service-limitations-request-traffic>` from 3000 requests per second to 5000 requests per second.
+- Allows users to store non-Realm files in the App Services
+  :ref:`app structure <app-configuration>`.
+- Updates to documents that do not match an application's :ref:`schema <schemas>`
+  can now enable Atlas Device Sync for those documents.
+
+
+.. _backend_20210825:
+
+25 August 2021 Release
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Introduced the ability to export and re-deploy the most recent 25 deploys.
+
+.. _backend_20210811:
+
+11 August 2021 Release
+~~~~~~~~~~~~~~~~~~~~~~
+
+- Support the option of sending events using :manual:`Extended JSON </reference/mongodb-extended-json/>`
+  in :ref:`AWS EventBridge Triggers <aws-eventbridge>` to support sending additional data types such as
+  ``Decimal128``.
+- Display the generated data models in SDKs Data Models when :ref:`Development Mode <development-mode>`
+  is enabled for Atlas Device Sync. 
+
+
+.. _backend_20210728:
+
+28 July 2021 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Deprecated the :github:`Stitch JS SDK <mongodb/stitch-js-sdk>`.
+- Released the :ref:`Trigger Preimages <preimages>` option for GA.
+
+.. _backend_20210715:
+
+15 July 2021 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Improved usability of the Admin UI Dashboard.
+- Released :ref:`mongodb-realm-cli 2.0 <realm-cli-quickstart>`.
+
+.. _backend_20210702:
+
+02 July 2021 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Added :ref:`JWT Authentication <custom-jwt-authentication>` support for
+  JWTs with multiple audiences.
+- Introduced support for bi-directional :ref:`GitHub Autodeploy <deploy-github>`.
+- Added the ability to link a Github repository on application create.
+
+.. _backend_20210616:
+
+16 June 2021 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Introduced ability to link new data sources via :ref:`Github Autodeploy <deploy-github>`.
+
+.. _backend_20210604:
+
+04 June 2021 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Improves performance of client requests to app servers.
+- Fixes an issue where aggregation pipelines did not support the ``$set`` operator.
+- Reduces "Invalid Session" logs.

@@ -15,7 +15,7 @@ Sync Errors
 Overview
 --------
 
-While you develop applications using {+sync+}, you may run into errors. This
+While you develop applications using Atlas Device Sync, you may run into errors. This
 section lists common errors and describes how to and handle them.
 
 .. note::
@@ -25,12 +25,12 @@ section lists common errors and describes how to and handle them.
 
 .. _sync-protocol-errors:
 
-Sync Protocol Errors 
----------------------
+Sync Protocol Errors
+--------------------
 
-The following table describes :ref:`{+sync-short+} protocol <sync-protocol>`
-errors and how to handle them. {+service+} reports errors in your
-:doc:`{+sync-short+} logs </logs>`.
+The following table describes :ref:`Device Sync protocol <sync-protocol>`
+errors and how to handle them. Atlas App Services reports errors in your
+:doc:`Device Sync logs </logs>`.
 
 .. list-table::
    :header-rows: 1
@@ -40,17 +40,17 @@ errors and how to handle them. {+service+} reports errors in your
      - Description
 
    * - ErrorBadClientFileIdent
-     - This error occurs when the client is using a {+realm+} file that the
+     - This error occurs when the client is using a realm file that the
        server cannot access after :ref:`terminating and re-enabling
-       {+sync-short+} <terminating-and-reenabling-sync>`.
+       Device Sync <terminating-and-reenabling-sync>`.
        
        This error triggers a client reset. To recover from this error, 
        perform a :ref:`client reset <client-resets>`.
 
    * - ErrorClientFileUserMismatch
      - This error indicates that the client attempted to synchronize a
-       {+realm+} file associated with an identity other than the specified user.
-       This may occur if {+sync-short+} is :ref:`terminated and reenabled
+       realm file associated with an identity other than the specified user.
+       This may occur if Device Sync is :ref:`terminated and reenabled
        <terminating-and-reenabling-sync>` while the user is
        offline, which invalidates their previous identity.
        
@@ -59,8 +59,8 @@ errors and how to handle them. {+service+} reports errors in your
 
    * - ErrorDivergingHistories
      - This error indicates that the client attempted to synchronize a 
-       {+realm+} file that has a different sync history than the server
-       {+realm+}. This may occur if {+sync-short+} is :ref:`terminated and
+       realm file that has a different sync history than the server
+       realm. This may occur if Device Sync is :ref:`terminated and
        reenabled <terminating-and-reenabling-sync>` while the
        user is offline, which invalidates their previous sync history.
        
@@ -72,9 +72,8 @@ errors and how to handle them. {+service+} reports errors in your
        sufficient for a given request. This can occur if a user attempts to open
        a realm without read permission or modify data without write permission.
        
-       To troubleshoot this error, review your :ref:`{+sync-short+} rules
-       <sync-rules>` to make sure that users have proper data access
-       permissions.
+       To troubleshoot this error, review your :ref:`rules <rules>` to make sure
+       that users have proper data access permissions.
    
    * - ErrorOtherError
      - This error indicates an internal failure that is not covered by a more
@@ -86,7 +85,7 @@ errors and how to handle them. {+service+} reports errors in your
 Partition-Based Sync Errors
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following errors may occur when your {+app+} uses :ref:`Partition-Based Sync 
+The following errors may occur when your App uses :ref:`Partition-Based Sync 
 <partition-based-sync>`.
 
 .. list-table::
@@ -97,21 +96,21 @@ The following errors may occur when your {+app+} uses :ref:`Partition-Based Sync
      - Description
 
    * - ErrorIllegalRealmPath
-     - This error indicates that the client attempted to open a {+realm+} with a
+     - This error indicates that the client attempted to open a realm with a
        partition value of the wrong type. For example, you might see the error
        message "attempted to bind on illegal realm partition: expected partition
        to have type objectId but found string".
        
        To recover from this error, ensure that the type of the partition value
        used to open the realm matches the partition key type in your
-       {+sync-short+} configuration.
+       Device Sync configuration.
 
 .. _flexible-sync-errors:
 
 Flexible Sync Errors
 ~~~~~~~~~~~~~~~~~~~~
 
-The following errors may occur when your {+app+} uses :ref:`Flexible Sync 
+The following errors may occur when your App uses :ref:`Flexible Sync 
 <flexible-sync>`.
 
 .. list-table::
@@ -205,8 +204,8 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
          before realm-core 12.1.0. In this case, the server will not undo the
          illegal write, and you will need to perform a :ref:`manual client reset
          <manual-client-reset>`.
-       - When modifying an object in a collection with :ref:`asymmetric sync
-         <optimize-asymmetric-sync>` enabled. In this case, the error is
+       - When modifying an object in a collection with :ref:`Data Ingest 
+         <optimize-data-ingest>` enabled. In this case, the error is
          non-fatal and does not trigger a client reset. The server skips over
          the illegal change and does not apply it to the synced MongoDB cluster.
 
@@ -215,7 +214,7 @@ The following errors may occur when your {+app+} uses :ref:`Flexible Sync
 MongoDB Translator Errors
 -------------------------
 
-The following errors may occur in the translation process between {+sync-short+}
+The following errors may occur in the translation process between Device Sync
 and MongoDB Atlas.
 
 .. list-table::
@@ -235,7 +234,7 @@ and MongoDB Atlas.
    
    * - TranslatorCorrectiveErasure
      - This error occurs when a synced MongoDB cluster rejects the write
-       operation for a propagated {+sync-short+} change. This is usually caused by
+       operation for a propagated Device Sync change. This is usually caused by
        a duplicate key exception, which means that two objects use the same
        primary key. To avoid this error, use an ``ObjectId`` or ``UUID`` as the
        primary key value. Alternatively, ensure that every synced object has a
@@ -261,6 +260,18 @@ and MongoDB Atlas.
        <terminating-realm-sync>` and :ref:`re-enable Sync
        <re-enable-realm-sync>`.
 
+MongoDB Connection Errors
+-------------------------
+
+If you enable Device Sync on a newly-created cluster, the operation may
+fail to parse the cluster URI. This happens because an SRV record for
+the cluster hasn't propagated yet. There are two possible workarounds,
+either:
+
+- Wait five minutes, then enable Atlas Device Sync.
+
+- Unlink and :ref:`re-link the cluster <link-a-data-source>`.
+
 .. _sync-client-errors:
 
 Sync Client Errors
@@ -272,42 +283,24 @@ message contains a code number and a description of the error.
 
 To see the full list of sync errors, refer to the :github:`error code list
 <realm/realm-core/blob/master/doc/protocol.md#error-codes>` in the
-{+client-database+} Core GitHub repository.
+Realm Database Core GitHub repository.
 
 .. _handle-and-log-sync-errors:
 
 Handle Sync Errors
 ------------------
 
-Every application that uses Sync needs a sync error handler. To learn more 
+Every application that uses Sync needs a sync error handler. To learn more
 about sync error handling, see your preferred SDK:
 
-.. tabs-realm-sdks::
-
-   .. tab::
-      :tabid: android
-
-      :ref:`Handle Sync Errors - Java SDK <java-handle-sync-errors>`
-
-   .. tab::
-      :tabid: ios
-
-      :ref:`Handle Sync Errors - Swift SDK <ios-handle-sync-errors>`
-
-   .. tab::
-      :tabid: node
-
-      :ref:`Handle Sync Errors - Node.js SDK <node-handle-sync-errors>`
-
-   .. tab::
-      :tabid: react-native
-
-      :ref:`Handle Sync Errors - React Native SDK <react-native-handle-sync-errors>`
-
-   .. tab::
-      :tabid: dotnet
-
-      :ref:`Handle Sync Errors - .NET SDK <dotnet-handle-sync-errors>`
+- :ref:`Handle Sync Errors - C++ SDK <cpp-handle-sync-errors>`
+- :ref:`Handle Sync Errors - Flutter SDK <flutter-handle-sync-errors>`
+- :ref:`Handle Sync Errors - Java SDK <java-handle-sync-errors>`
+- :ref:`Handle Sync Errors - Kotlin SDK <kotlin-handle-sync-errors>`
+- :ref:`Handle Sync Errors - .NET SDK <dotnet-handle-sync-errors>`
+- :ref:`Handle Sync Errors - Node.js SDK <node-handle-sync-errors>`
+- :ref:`Handle Sync Errors - React Native SDK <react-native-handle-sync-errors>`
+- :ref:`Handle Sync Errors - Swift SDK <ios-handle-sync-errors>`
 
 .. _set-log-level:
 
@@ -327,29 +320,10 @@ only warnings or errors.
 For more information about available log levels, including how to set the 
 client log level, see your preferred SDK.
 
-.. tabs-realm-sdks::
-
-   .. tab::
-      :tabid: android
-      
-      :ref:`Set the Client Log Level - Java SDK <java-set-the-client-log-level>`
-
-   .. tab::
-      :tabid: ios
-      
-      :ref:`Set the Client Log Level - Swift SDK <ios-set-the-client-log-level>`
-
-   .. tab::
-      :tabid: node
-      
-      :ref:`Set the Client Log Level - Node.js SDK <node-set-the-client-log-level>`
-
-   .. tab::
-      :tabid: react-native
-      
-      :ref:`Set the Client Log Level - React Native SDK <react-native-set-the-client-log-level>`
-
-   .. tab::
-      :tabid: dotnet
-      
-      :ref:`Set the Client Log Level - .NET SDK <dotnet-set-the-client-log-level>`
+- :ref:`Set the Client Log Level - Flutter SDK <flutter-client-log-level>`
+- :ref:`Set the Client Log Level - Java SDK <java-set-the-client-log-level>`
+- :ref:`Set the Client Log Level - Kotlin SDK <kotlin-client-log-level>`
+- :ref:`Set the Client Log Level - .NET SDK <dotnet-set-the-client-log-level>`
+- :ref:`Set the Client Log Level - Node.js SDK <node-set-the-client-log-level>`
+- :ref:`Set the Client Log Level - React Native SDK <react-native-set-the-client-log-level>`
+- :ref:`Set the Client Log Level - Swift SDK <ios-set-the-client-log-level>`

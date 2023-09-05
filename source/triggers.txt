@@ -15,6 +15,7 @@ Atlas Triggers
    Scheduled Triggers </triggers/scheduled-triggers>
    Disable a Trigger </triggers/disable>
    Send Trigger Events to AWS EventBridge </triggers/aws-eventbridge>
+   Triggers Code Examples <https://github.com/mongodb/atlas-app-services-examples/tree/main/triggers-examples>
 
 .. contents:: On this page
    :local:
@@ -70,23 +71,31 @@ constraints as all Atlas Functions.
 
 :ref:`Learn more about Atlas Function constraints.<function-constraints>`
 
-Maximum Executions Per Second
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Event Processing Throughput
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-App Services limits the execution of Trigger
-Functions. A Trigger can execute up to 2500 times per second. When a
-Trigger calls a Function, this call goes into a queue. When capacity
-becomes available, App Services executes the Function call.
+Trigger events are added to a queue and processed when capacity becomes
+available. The rate at which a Trigger processes events depends on the
+Trigger's configuration as well as the logic in the Trigger function.
 
-.. note::
+Ordered triggers process events from the queue one at a time. An
+unordered trigger can process up to 10,000 events concurrently.
 
-   Your application's execution rate may be lower than 2500 per second. This
-   varies depending on your Atlas instance size.
+To increase the throughput of a Trigger, you can try to:
 
-Database Triggers with *event ordering* work differently. Each ordered
-Trigger processes events in sequence. App Services waits for each event
-execution in the sequence to complete. Then, it handles the next event. Only
-one sequence for a given ordered Trigger executes at a time.
+- Optimize the Trigger function's run time. For example, you might
+  reduce the number of network calls that you make.
+
+- Reduce the size of each event object with the Trigger's projection
+  filter. For the best performance, we recommend limiting the size of
+  each change event to 2KB or less.
+
+- Use a match filter to reduce the number of events that the Trigger
+  processes. For example, you might want to do something only if a
+  specific field changed. Instead of matching every update event and
+  checking if the field changed in your Function code, you can use the
+  Trigger's match filter to fire only if the field is included in the
+  event's ``updateDescription.updatedFields`` object.
 
 Number of Triggers Cannot Exceed Available Change Streams
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -99,5 +108,5 @@ streams. A Database Trigger requires its own change stream. Other App Services
 also use change streams, such as Atlas Device Sync. Database Triggers
 may not exceed the number of available change streams.
 
-:ref:`Learn more about the number of supported change streams for Atlas
-tiers. <mongodb-service-limitations-change-streams>`
+:ref:`Learn more about the number of supported change streams for Atlas tiers.
+<mongodb-service-limitations-change-streams>`

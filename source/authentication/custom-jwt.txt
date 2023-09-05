@@ -17,17 +17,18 @@ Custom JWT Authentication
 Overview
 --------
 
-The Custom JWT authentication provider allows users to authenticate with
-an authentication system that is independent from Atlas App Services. The external
-system must return a signed :jwt-io:`JSON Web Token <introduction>` that
-contains a unique ID value for the authenticated user.
+The Custom JWT authentication provider allows users to log in with an
+authentication credential from a third-party system external to Atlas
+App Services. The external system must return a signed :jwt-io:`JSON Web
+Token (JWT) <introduction>` that contains a unique ID value for the
+authenticated user.
 
-App Services uses the :abbr:`JWT (JSON Web Token)` to identify your
-application's users and authenticate their requests but does not impose
-any restrictions on the external authentication system's requirements or
-authentication methods. For example, the system could require the user
-to perform two factor authentication, provide specific credentials, or
-otherwise identify themself.
+App Services uses the JWT to identify your application's users and
+authenticate their requests. It does not impose any restrictions on the
+external authentication system's requirements or authentication methods.
+For example, the system could require the user to perform two factor
+authentication, provide specific credentials, or otherwise identify
+themself.
 
 .. figure:: /images/custom-auth-diagram.png
    :alt: Diagram of Custom JWT authentication architecture.
@@ -39,14 +40,18 @@ otherwise identify themself.
 Configuration
 -------------
 
+You can configure Custom JWT authentication from the UI or by modifying
+the underlying configuration files directly with the CLI or Admin API.
+Choose your preferred method below.
+
 .. tabs-realm-admin-interfaces::
 
    .. tab::
       :tabid: ui
 
-      You can enable the JWT authentication provider from the App Services UI
-      by selecting :guilabel:`Custom JWT Authentication` from the
-      :guilabel:`Authentication` page.
+      You can enable the JWT authentication provider from the App
+      Services UI by selecting :guilabel:`Custom JWT Authentication`
+      from the :guilabel:`Authentication` page.
 
       You can configure the following properties for the provider:
 
@@ -58,10 +63,11 @@ Configuration
       :tabid: cli
 
       To enable and configure the Custom JWT authentication provider with
-      the {+cli-ref+}, define a :ref:`configuration 
+      {+cli-ref+}, define a :ref:`configuration
       object <appconfig-auth>` for it in ``/auth/providers.json``.
 
-      Custom JWT provider configurations have the following form:
+      A :ref:`Custom JWT provider configuration <appconfig-auth>` has
+      the following form:
 
       .. code-block:: none
          :caption: /auth/providers.json
@@ -72,6 +78,7 @@ Configuration
              "type": "custom-token",
              "config": {
                "audience": "<JWT Audience>",
+               "requireAnyAudience": <boolean>,
                "signingAlgorithm": "<JWT Signing Algorithm>",
                "useJWKURI": <boolean>,
                "jwkURI": "<JWK or JWKS URL>",
@@ -100,19 +107,22 @@ Audience
 ~~~~~~~~
 
 The :guilabel:`Audience` of a JWT specifies its intended recipient. JWTs
-describe their audience in the ``aud`` claim. By default, App Services expects
-``aud`` to contain the App ID of the App for which the provider
+describe their audience in the ``aud`` claim. By default, App Services
+expects ``aud`` to contain the App ID of the App for which the provider
 is configured.
 
 If the external authentication system JWT specifies a different ``aud``
 value, then you can configure the provider to use that value instead.
 
-You can input a single audience or multiple audiences as a comma-separated list.
-If you add multiple audiences, a toggle appears containing the following options:
+You can input a single audience or multiple audiences as a
+comma-separated list. If you add multiple audiences, you must specify
+how to handle them, either:
 
-- ``All of these audiences``: the JWT must include every audience in the list.
-- ``Any one of these audiences``: the JWT only needs to include one audience
-  from the list. 
+- **All of these audiences**: the JWT must include every audience in the
+  list.
+
+- **Any one of these audiences**: the JWT only needs to include one
+  audience from the list.
 
 .. tabs-realm-admin-interfaces::
 
@@ -130,7 +140,6 @@ If you add multiple audiences, a toggle appears containing the following options
 
       .. figure:: /images/custom-jwt-audience-multiple.png
          :alt: The Custom JWT audience configuration input with multiple audiences
-
 
    .. tab::
       :tabid: cli
@@ -311,7 +320,7 @@ some field included in the JWT from the external authentication system.
 If you set the ``name`` field of a user, then App Services will use that
 field as the user's display name. App Services refreshes a user's metadata
 whenever they log in and exposes the fields in the ``data`` object of the 
-:doc:`user object </authentication>`.
+:doc:`user object </users>`.
 
 .. important:: 2048 Character Limit
 
@@ -647,479 +656,200 @@ algorithm specified in the ``"alg"`` field of the header.
      signingKey
    )
 
-.. _custom-jwt-authentication-firebase: 
-
-Firebase JWT Authentication
----------------------------
-
-You can use the `Firebase Authentication
-<https://firebase.google.com/docs/auth>`__ service to authenticate users into
-App Services apps as well as Firebase apps. Use App Services Custom JWT
-authentication to access App Services with Firebase credentials. 
-
-To set up Firebase Authentication as your Custom JWT provider in App Services: 
-
-.. procedure:: 
-
-   .. step:: Configure Firebase Authentication
-
-      Follow `the official docs <https://firebase.google.com/docs/auth>`__ to set up
-      Firebase Authentication for your project.
-
-   .. step::  Configure App Services JWT Authentication
-
-      .. tabs-realm-admin-interfaces::
-
-         .. tab::
-            :tabid: ui
-
-            #. Enable JWT Authentication. 
-            #. Set :guilabel:`Verification Method` to :guilabel:`Use a JWK URI`.
-            #. Add the following URL for :guilabel:`JWK URI`:
-
-               .. code-block::
-
-                  https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com
-            
-            #. While you don't *need* to add any data for :guilabel:`Metadata Fields`, 
-               it is useful for getting basic user information from the Firebase JWT 
-               into your :ref:`App Services User object <user-objects>`. 
-
-               The following is a basic mapping from the Firebase JWT to an App Services user.
-               You can add these to the table in the UI. Modify as you wish following
-               the :ref:`Metadata Fields documentation <custom-jwt-authentication-configuration-metadata-fields>`.
-
-               .. list-table::
-                  :header-rows: 1
-                  :widths: 50 50
-
-                  * - Path
-
-                    - Field Name
-                  
-                  * - firebase.identities.email
-                    
-                    - emails
-                  
-                  * - firebase.sign_in_provider
-
-                    - signInProvider
-                  
-                  * - user_id
-
-                    - userId
-                  
-                  * - email_verified
-
-                    - emailVerified
-
-                  * - email
-
-                    - email
-
-            #. Set :guilabel:`Audience` to your `Firebase Project ID
-               <https://firebase.google.com/docs/projects/learn-more#project-id>`__.
-
-               .. important:: You must set Audience to Firebase Project ID
-
-                  You *must* set :guilabel:`Audience` to use your Firebase Project ID as a 
-                  Custom JWT provider even though it's labeled as optional in the UI. 
-
-         .. tab::
-            :tabid: cli
-
-            To enable and configure the Custom JWT authentication provider with 
-            the {+cli-ref+}, define a :ref:`configuration <appconfig-auth>`
-            object for it in ``/auth/providers.json``.
-
-            Custom JWT configurations for Firebase have the following form. 
-
-            .. code-block:: javascript
-               :caption: /auth/providers.json
-               :emphasize-lines: 6-9, 11, 17
-
-                {
-                  "custom-token": {
-                    "name": "custom-token",
-                    "type": "custom-token",
-                    "config": {
-                        "audience": ["<Firebase Project ID>"], // required
-                        // "jwkURI" is required with this URL as the value
-                        "jwkURI": 
-                          "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com", 
-                        "signingAlgorithm": "",
-                        "useJWKURI": true // required
-                    },
-                    "secret_config": {
-                        "signingKeys": []
-                    },
-                    "disabled": false,
-                    "metadata_fields": [ // optional but recommended
-                        {
-                            "required": false,
-                            "name": "firebase.identities.email",
-                            "field_name": "emails"
-                        },
-                        {
-                            "required": false,
-                            "name": "firebase.sign_in_provider",
-                            "field_name": "signInProvider"
-                        },
-                        {
-                            "required": false,
-                            "name": "user_id",
-                            "field_name": "userId"
-                        }
-                        ...any other fields you want to map into App Services
-                    ]
-                  },
-                  ...rest of config
-                }
-
-      For more details, refer to the :ref:`JWT authentication configuration documentation 
-      <config-custom-jwt>`.
-
-   .. step::  Log In to App Services Using Firebase JWT with Client SDK
-
-      Now that you've configured App Services to work with Firebase JWTs, you can
-      log users in using Firebase and Realm SDKs in languages supported by both.
-
-      #. Log the user into Firebase. See the relevant `Firebase SDK documentation 
-         <https://firebase.google.com/docs/auth>`__. 
-      #. Retrieve the user's Firebase JWT. See the documentation on 
-         `using a client Firebase SDK to get  a user's JWT
-         <https://firebase.google.com/docs/auth/admin/verify-id-tokens#retrieve_id_tokens_on_clients>`__. 
-      #. Pass the Firebase JWT to a a {+client-sdk+} Custom JWT authentication method. 
-         For more information how to use {+client-sdks+} to perform Custom JWT authentication, 
-         refer to :ref:`Custom JWT Examples <custom-jwt-authentication-examples>`. 
-
 .. _custom-jwt-authentication-examples:
 
-Examples
---------
+Register & Log In a Custom JWT User
+-----------------------------------
+
+You can register new Custom JWT users and log in from a Realm SDK or
+using an API service.
+
+Realm SDKs
+~~~~~~~~~~
 
 For code examples that demonstrate how to register and log in using
-Custom JWT authentication, see the documentation for the {+client-sdks+}:
+Custom JWT authentication, see the Realm SDK documentation for your
+preferred language and platform:
 
-.. tabs-realm-sdks::
+.. include:: /includes/custom-jwt-authentication-sdk-examples.rst
 
-   .. tab::
-      :tabid: android
+API Services
+~~~~~~~~~~~~
 
-      To register or log in a Custom JWT user from the Android Client SDK, see the
-      :ref:`Java SDK guide to Custom JWT authentication <java-login-custom-jwt>`.
+You can authenticate Data API and GraphQL requests using the Custom JWT
+provider. You can either:
 
-   .. tab::
-      :tabid: ios
+- specify the JWT directly in the ``jwtTokenString`` request header
 
-      To register or log in a Custom JWT user from the iOS Client SDK, see the
-      :ref:`Swift SDK guide to Custom JWT authentication <ios-login-custom-jwt>`.
+- start a user session with the JWT and include the session access token
+  as an ``Authorization`` header bearer token.
 
-   .. tab::
-      :tabid: web
+You can either require that users create accounts before using an API
+service or configure your API endpoints to automatically create a new
+user account if a request contains a valid JWT that does not match an
+existing user.
 
-      To register or log in a Custom JWT user from the Web Client SDK, see the
-      :ref:`Web SDK guide to Custom JWT authentication <web-login-custom-jwt>`.
-
-   .. tab::
-      :tabid: node
-      
-      To register or log in a Custom JWT user from the Node Client SDK, see the
-      :ref:`Node SDK guide to Custom JWT authentication <node-login-custom-jwt>`.
-
-   .. tab::
-      :tabid: react-native
-
-      To register or log in a Custom JWT user from the React Native Client SDK, see the
-      :ref:`React Native SDK guide to Custom JWT authentication <react-native-login-custom-jwt>`.
-
-   .. tab::
-      :tabid: dotnet
-
-      To register or log in a Custom JWT user from the .NET Client SDK, see the
-      :ref:`.NET SDK guide to Custom JWT authentication <dotnet-login-custom-jwt>`.
-
-   .. tab::
-      :tabid: kotlin
-
-      To register or log in a Custom JWT user from the Kotlin Client SDK, see the
-      :ref:`Kotlin SDK guide to Custom JWT authentication <kotlin-login-jwt>`.
+For more information, see :ref:`Authenticate Data API Requests
+<data-api-authenticate-requests>` and :ref:`Authenticate GraphQL
+Requests <graphql-authentication>`.
 
 .. _jwt-tutorial:
 
-Walkthrough
------------
+Example
+-------
 
-In this walkthrough, you will implement :ref:`Custom JWT Authentication <config-custom-jwt>`  
-for your {+service-short+} app. You will learn how to:
+In this walkthrough, you will implement Custom JWT Authentication for
+your App Services App. You will learn how to:
 
 - Enable JWT Authentication
 - Use a third-party JWT provider to generate a valid token
 - Authenticate against the backend from a client application
 
-Prerequisites
-~~~~~~~~~~~~~
+You can use any App Services App for this tutorial. If you do not have a
+test app to use, you can :ref:`create an app <create-app>` or use one of
+the :ref:`Template Apps <template-apps>`.
 
-You can use any {+service-short+} app for this tutorial. If you do not have 
-a test app to use, you can :ref:`create an {+app+} <create-a-realm-app>` or 
-use one of the :ref:`Template Apps <template-apps>`.
+.. procedure::
 
-Procedure
-~~~~~~~~~
-This procedure is divided into three logical steps:
+   .. step:: Enable & Configure Custom JWT Authentication
+   .. step:: Create a JSON Web Token
+   .. step:: Log In from a Client App
 
-1. Create a JWT token
-2. Enable and configure JWT Authentication in {+service-short+}
-3. Add authentication code to your client app
+Create a JWT
+~~~~~~~~~~~~
 
-Create a JWT Token
-``````````````````
-For this tutorial, we will use a third-party website, `jwt.io <https://jwt.io/>`_,
-to generate a JWT token. 
+In this example we won't connect to an actual external identity provider
+or authentication service. Instead, we'll use a third-party website to
+generate a JSON Web Token that resembles a token returned by one of
+these systems.
 
-Go to `jwt.io <https://jwt.io/>`_. Scroll down until you see the **Encoded** 
-and **Decoded** headers. In the **Decoded** column, you will see three sections 
-that comprise a JWT token: **Header**, **Payload**, and 
-**Verify Signature** areas, each of which is explained in the next sections.
- 
-Header
-++++++
+To create the token, go to `jwt.io <https://jwt.io/>`_ and scroll down
+until you see the **Encoded** and **Decoded** headings. In the
+**Decoded** column, you will see the three sections that comprise a JWT:
+**Header**, **Payload**, and **Verify Signature**.
 
-The header of a JWT informs consuming applications what algorithm was used to 
-encode the token. The default, which we will use for this tutorial, is ``HS256``. 
+The default header specifies that the token is encoded using the
+``HS256`` algorithm. App Services supports ``HS256`` signatures, so
+leave this unchanged.
 
-.. note::
+The default payload contains three fields: ``sub``, ``name``, and
+``iat``. We will use these three, plus two more fields which are
+required to use the Custom JWT provider:
 
-   For more information on JWT algorithms, see 
-   `JSON Web Token (JWT) Signing Algorithms Overview 
-   <https://auth0.com/blog/json-web-token-signing-algorithms-overview/>`_.
-   {+service-short+} supports ``HS256`` and ``RS256``.
+- ``aud``, which represents the audience (consumer) of the token. By
+  default, App Services expects this value to be the App ID of your App,
+  e.g. ``myapp-abcde``.
 
+- ``exp``, which represents the expiration date of the token. For this
+  example, choose an ``exp`` value far in the future, such as
+  ``9999999999``.
 
-Payload
-+++++++
+Replace the default payload with your own, making sure to specify your
+App Services App ID in the ``aud`` field.
 
-The Payload section contains the information that we need to configure for 
-our {+service-short+}-specific needs. By default, three fields are included: ``sub``, 
-``name``, and ``iat``. We will use these three, plus two more fields. The following 
-table explains each field and the value expected:
+.. example::
 
-.. list-table::
-   :header-rows: 1
+   The following payload represents a user named "Caleb" with an
+   external ID of of ``"1234567890"``. The token is valid for the App
+   Services App ``myapp-abcde``.
 
-   * - Field
-     - Description
-     - Value
+   .. code-block:: javascript
    
-   * - ``sub`` 
-     - The subject of the jwt, which you set according to your business needs. 
-       For more information, see 
-       `RFC 7519 4.1.2 <https://tools.ietf.org/html/rfc7519#page-9>`_. 
-     - <your email or any other unique value>
-   
-   * - ``name`` 
-     - The name of the user to whom this JWT is assigned. If specified, {+service-short+} 
-       uses this value as the user's display name. Optional.
-     - <your name>
-   
-   * - ``iat``
-     - "Issued At" is a Unix epoch timestamp of when the token was issued. 
-     - The current date-time in seconds since Unix epoch. 
-   
-   * - ``exp``
-     - The date-time when this token will expire. 
-     - A future date-time (in seconds since Unix epoch) for when you want the token to expire. Depending on your business needs, this can be any duration.
-   
-   * - ``aud``
-     - The audience (consumer) of the token.
-     - Your {+service-short+} App ID, which you can 
-       :ref:`find in the {+service-short+} UI <find-your-app-id>`.
-       If applicable, you can input multiple App IDs as a comma-separated
-       list. When inputting multiple, you can specify whether the JWT requires 
-       all or any one of the listed audiences.
+      {
+         "aud": "myapp-abcde",
+         "exp": 1893459755,
+         "iat": 1672534955,
+         "name": "Caleb",
+         "sub": "1234567890"
+      }
 
-  
-For this tutorial, we have created a JWT for a user named "Caleb". The token was 
-issued at the time of writing and will expire in exactly 1 year, and is 
-intended to be used by an {+service-short+} with an ID of "boiboi-cul8r". Our 
-completed JSON payload looks like this:
+Once you've defined the payload, enter a 256-bit secret value in the
+**Verify Signature** section. This secret is used to sign the token. If
+you are uncertain of what value to use, consider visiting a random key
+generator website, like `keygen.io <https://keygen.io/>`_ and using one
+of the generated 256-bit values there.
 
-.. code-block:: javascript
-
-   {
-      "sub": "1234567890",
-      "name": "Caleb",
-      "iat": 1617313420,
-      "exp": 1648849420,
-      "aud": "boiboi-cul8r"
-   }
-   
-
-Verify Signature
-++++++++++++++++
-
-The final step in creating the JWT is to add a 256-bit secret with which the 
-token is encoded. In this last section, find the field with the placeholder 
-text of "your-256-bit-secret". Paste in any 256-bit string value into this field.
-If you are uncertain what value to use, consider visiting a random key 
-generator website, like `keygen.io <https://keygen.io/>`_, and  
-copy one of the 256-bit values that has been generated. 
+Note the 256-bit value somewhere you can find it again. You will have to
+specify the same value later in your App Services Custom JWT provider
+configuration.
 
 .. important::
 
-   The key you use must only contain ASCII letters, numbers, underscores, 
+   The secret key must only contain ASCII letters, numbers, underscores,
    and hyphens, and must be between 32 and 512 characters long.
 
-.. note::
-
-   Keep track of this secret, as you will need it in the next section when 
-   we configure {+service-short+} authentication.
-
-After pasting in your key, check the ``secret base64 encoded`` check box.
-
-At this point, you have generated a JWT key that can be used with — and 
-only with — the {+app+} you specified. Copy this key from the 
-:guilabel:`Encoded` box and temporarily save it in a text document. Your JWT 
-will be 3 sections of values, separated by periods, and looks something like 
-the following (your token will **not** match this!):
+At this point, you have generated a JWT string that can be used with the
+App you specified. Copy the key from the **Encoded** box and temporarily
+save it in a text document. Your JWT will be 3 sections of values,
+separated by periods, and looks something like the following (your token
+will **not** match this exactly):
 
 .. code-block:: sh
    :copyable: false
 
-   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9. ⤶ 
-   eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkNhbGViIiwiaWF0IjoxNjE3MzEzNDIwLCJle ⤶ 
-   HAiOjE2NDg4NDk0MjAsImF1ZCI6ImJvaWJvaS1jeWFsOHIifQ. ⤶ 
-   GaIE4e6mGxlIBNnz4FcheFBUmxd25GK-rfOfF6F85rY
+   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteWFwcC1hYmNkZSIsImV4cCI6MTg5MzQ1OTc1NSwiaWF0IjoxNjcyNTM0OTU1LCJuYW1lIjoiQ2FsZWIiLCJzdWIiOiIxMjM0NTY3ODkwIn0.42_ih-ZBjcR4Q_KV1vVtN9s0YauUNZz3cHTj9B1zVuw
 
+Enable JWT Authentication
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Enable JWT Authentication in Your {+app+}
-`````````````````````````````````````
+Before you can log in, you must turn on the Custom JWT authentication
+provider and configure it to accept the JWT you just created.
 
-If you are not currently logged in to `{+service-short+} <https://realm.mongodb.com?tck=docs_realm>`_ 
-do so now and navigate to the {+app+} that you specified when generating the 
-JWT in the previous section.
+Log in to `MongoDB Atlas <https://realm.mongodb.com?tck=docs_realm>`__
+and navigate to your App Services App.
 
-
-1. In the left-hand navigation, under :guilabel:`Data Access`, select 
+1. In the left-hand navigation, under :guilabel:`Data Access`, click
    :guilabel:`Authentication`.
 
-2. Select the :guilabel:`Authentication Providers` tab.
+#. In the list of providers, click :guilabel:`Custom JWT Authentication`.
 
-3. Near the bottom of the list of providers, select :guilabel:`Custom JWT Authentication`.
+#. Set the :guilabel:`Provider Enabled` toggle to on.
 
-4. Use the following table to set the properties on this page:
+#. Set the :guilabel:`Verification Method` to :guilabel:`Manually
+   specify signing keys`.
 
-   .. list-table::
-      :header-rows: 1
-      :widths: 30 70
+#. Set the :guilabel:`Signing Algorithm` to :guilabel:`HS256`.
 
-      * - Field
-        - Value
+#. In the :guilabel:`Signing Key (Secret Name)` field, enter a name for
+   the :ref:`Secret <app-secret>` that will store the JWT signing key
+   (for example, ``jwtSigningKey``). Then, click :guilabel:`Create <key
+   name>` and enter the 256-bit signing key you used to generate the JWT
+   into the :guilabel:`Signing Key` input.
+
+   .. important::
       
-      * - :guilabel:`Provider Enabled`
-        - Select to enable
-      
-      * - :guilabel:`Verification Method`
-        - ``Manually specify signing keys``
-      
-      * - :guilabel:`Signing Algorithm`
-        - ``HS256``
-      
-      * - :guilabel:`Signing Key (Secret Name)`
-        - Provide a name that will have some meaning to you (for example, "newKey"), 
-          and then click the box that appears immediately below the name that reads 
-          "Create <key name>".
+      A :guilabel:`Signing Key` is a secret key and anyone with the
+      key can issue valid user credentials for your app. Ensure that
+      it's never stored in a publicly accessible location, such as a
+      git repository, message board, or in your code.
 
-          In the resulting :guilabel:`Signing Key` text box, paste in the 256-bit 
-          key that you used when generating the JWT in the previous section. **Do 
-          not** click the "Add Signing Key" button.
+#. Leave :guilabel:`Metadata Fields` and :guilabel:`Audience` blank.
 
-          .. warning::
+#. Click :guilabel:`Save`. If you have UI deployment drafts enabled,
+   review and deploy your changes.
 
-             A :guilabel:`Signing Key` is a secret key and anyone with the
-             key can issue valid user credentials for your app. Ensure that
-             it's never stored in a publicly accessible location, such as a
-             git repository, message board, or in your code.
-      
-      * - :guilabel:`Metadata Fields (Optional)`
-        - Leave blank
-      
-      * - :guilabel:`Audience (Optional)`
-        - Leave blank.
+Log In with a Custom JWT
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-5. When you have set all of the values, click :guilabel:`Save`. If you are  
-   prompted at the top of the screen to do so, review and deploy your changes. 
+Once you've enabled the Custom JWT provider, you can log in using the
+JWT you created.
 
-Update Your Client to Use JWT Authentication
-````````````````````````````````````````````
+The Realm SDKs automatically manage the login process and user sessions
+for you. For code examples that demonstrate JWT authentication, see the
+Realm SDK documentation for your preferred language and platform:
 
-The final step in this tutorial is to update your client application to use 
-JWT authentication. The a Realm SDKs make this process straightforward, 
-and while each language has its own specific implementation, the pattern they 
-each use is the same: pass the generated token to a login call:
+- :ref:`C++ SDK <cpp-login-custom-jwt>`
+- :ref:`Flutter SDK <flutter-login-custom-jwt>`
+- :ref:`Java SDK <java-login-custom-jwt>`
+- :ref:`Kotlin SDK <kotlin-login-jwt>`
+- :ref:`.NET SDK <dotnet-login-custom-jwt>`
+- :ref:`Node SDK <node-login-custom-jwt>`
+- :ref:`React Native SDK <react-native-login-custom-jwt>`
+- :ref:`Swift SDK <ios-login-custom-jwt>`
+- :ref:`Web SDK <web-login-custom-jwt>`
 
-.. tabs-realm-sdks::
-
-   .. tab::
-      :tabid: android
-
-      The following code snippet demonstrates implementing JWT Authentication 
-      in Java:
-
-      .. literalinclude:: /examples/generated/java/sync/AuthenticationTest.snippet.custom-jwt.java
-         :language: java
-
-      The following code snippet demonstrates implementing JWT Authentication 
-      in Kotlin:
-
-      .. literalinclude:: /examples/generated/java/sync/AuthenticationTest.snippet.custom-jwt.kt
-         :language: kotlin
-
-      For more information, see :ref:`<java-login-custom-jwt>`.
-
-   .. tab::
-      :tabid: ios
-
-      The following code snippet demonstrates implementing JWT Authentication 
-      in Swift:
-
-      .. literalinclude:: /examples/generated/code/start/Authenticate.snippet.jwt.swift
-         :language: swift
-      
-      For more information, see :ref:`<ios-login-custom-jwt>`
-
-   .. tab::
-      :tabid: node
-      
-      The following code snippet demonstrates implementing JWT Authentication 
-      in Javascript:
-
-      .. literalinclude:: /examples/generated/code/start/authenticate.snippet.custom-jwt-login.js
-         :language: javascript
-
-      For more information, see :ref:`<node-login-custom-jwt>`
-
-   .. tab::
-      :tabid: react-native
-      
-      The following code snippet demonstrates implementing JWT Authentication 
-      in Javascript:
-
-      .. literalinclude:: /examples/generated/code/start/authenticate.snippet.custom-jwt-login.js
-         :language: javascript
-
-      For more information, see :ref:`<react-native-login-custom-jwt>`
-
-   .. tab::
-      :tabid: dotnet
-      
-      The following code snippet demonstrates implementing JWT Authentication 
-      in C#:
-
-      .. literalinclude:: /examples/generated/dotnet/AuthenticationExamples.snippet.logon_JWT.cs
-         :language: csharp
-
-      For more information, see :ref:`<dotnet-login-custom-jwt>`
+If you cannot use a Realm SDK, you can also :ref:`create and manage
+authenticated sessions manually <manage-user-sessions>`.
 
 .. _custom-jwt-authentication-summary:
 

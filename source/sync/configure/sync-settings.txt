@@ -1,0 +1,383 @@
+.. _sync-settings:
+
+=============
+Sync Settings
+=============
+
+.. default-domain:: mongodb
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+This page explains the settings available when you :ref:`enable or configure
+Device Sync <enable-sync>`.
+
+Available Settings
+------------------
+
+.. _flexible-sync:
+
+Sync Type
+~~~~~~~~~
+
+Atlas Device Sync has two sync modes: Flexible Sync and the older
+Partition-Based Sync. We recommend using Flexible Sync. For information about
+Partition-Based Sync, refer to :ref:`partition-based-sync`.
+
+Flexible Sync lets you define a query in the client and sync only the objects
+that match the query. With client-side subscriptions, client applications can:
+
+- Maintain queries
+- React to changes
+- Add, change, or delete queries
+
+.. _development-mode:
+.. _enable-development-mode:
+.. _enable-disable-development-mode:
+
+Development Mode
+~~~~~~~~~~~~~~~~
+
+**Development Mode** is a configuration setting that allows Device Sync
+to infer and update schemas based on client-side data models. This 
+streamlines development, but should not be used in production.
+
+Development Mode speeds up development by allowing you to design :ref:`schemas
+<configure-your-data-model>` directly in client application code.
+
+When you sync a realm file, Atlas App Services maps every synced object type
+to its own collection in the database specified by
+:ref:`sync-config-database-name`. If you update the object model on the client
+side, App Services updates the collection schema to match. This lets you update
+objects in your client code as you develop your app.
+
+You can use :ref:`data access rules <sync-rules>` with Development Mode. Note
+that schema changes ignore data access rules. This means that any client can
+update the backend schema by changing the client model.
+
+To learn more about how the Realm Object Schemas map to the App Services Schemas
+when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
+
+For more information about modifying synced object schemas, including how to
+handle breaking changes, see: :ref:`<synced-schema-overview>`.
+
+.. important:: Disable Development Mode for Production Apps
+   
+   Development mode is a development utility that is not suitable for 
+   production use. Make sure that you turn off Development Mode before you 
+   make your app accessible in a production environment.
+
+Side Effects of Enabling Development Mode
+`````````````````````````````````````````
+
+Enabling Development Mode has two side effects:
+
+- *Enabling* :ref:`anonymous authentication <anonymous-authentication>`.
+- *Disabling* :ref:`deployment drafts <deployment-draft>`.
+
+If your app does not need anonymous authentication, you may want to 
+disable it after enabling Development Mode.
+
+You cannot re-enable deployment drafts in the UI until Development Mode 
+is disabled. However, you can still manually create deployment drafts 
+through the CLI or the Admin API.
+
+.. _sync-config-data-source:
+
+Cluster to Sync
+~~~~~~~~~~~~~~~
+
+The name of the Atlas cluster :ref:`data source <appconfig-data_sources>` where
+you want the synced data stored.
+
+Flexible Sync requires MongoDB 5.0. You cannot use Sync with a :ref:`serverless
+instance <serverless-caveats>`. In the UI, clusters display as gray and
+not-selectable when they do not meet the requirements for Flexible Sync.
+
+.. _sync-config-database-name:
+
+Database Name (Development Mode Only)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you enable :ref:`Development Mode <development-mode>`, you specify a
+database to store synced objects. App Services creates new collections in this
+Development Mode database for every type of synced object.
+
+.. example::
+
+   Specify a Development Mode database of ``myapp``. Your iOS client has a 
+   ``Person`` model. You sync a realm that contains an instance of the 
+   ``Person`` object. Development Mode creates a server-side schema associated 
+   with the model. The object syncs to the ``myapp.Person`` collection. 
+
+   App Services continues creating new server-side schemas and collections 
+   for each new object type. If you later add a ``Dog`` object, that object 
+   will sync to a new ``myapp.Dog`` collection that App Services will
+   create.
+
+.. _queryable-fields:
+
+Queryable Fields
+~~~~~~~~~~~~~~~~
+
+When you configure Flexible Sync, you specify field names that your client
+application can query. Fields that can be used in a subscription query are
+called **queryable fields**.
+
+You can automatically specify queryable fields by enabling :ref:`Development
+Mode <development-mode>`. Development Mode allows App Services to automatically
+mark fields as queryable as they are used.
+
+Queryable fields apply across all collections in an App's Schema. You
+can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` to
+configure more granular access control on individual collections.
+
+The field names you provide are arbitrary strings. If an object type has a field
+whose name matches a field name you provided (and meets other eligibility
+criteria), that field becomes available to Device Sync to query.
+
+.. example::
+
+   In a to-do list app, you might set ``assignee`` or ``owner`` 
+   as queryable fields. On the client side, you can then query for tasks 
+   whose ``assignee`` or ``owner`` matches the logged-in user. 
+
+.. _flexible-sync-eligible-field-types:
+
+Eligible Field Types
+````````````````````
+
+Flexible Sync only supports top-level primitive fields with a scalar type as 
+queryable fields. You can also include arrays of these primitives as queryable 
+fields. Flexible Sync does not support embedded objects or arrays of 
+objects as queryable fields.
+
+.. seealso:: Realm Query Language - Flexible Sync Limitations
+
+   For information on the queries you can perform on these fields, see:
+   :ref:`flexible-sync-rql-limitations`
+
+.. _flexible-sync-reserved-field-names:
+
+Reserved Field Names
+````````````````````
+
+.. include:: /includes/reserved-field-names.rst
+
+Performance and Storage
+```````````````````````
+
+Each queryable field adds additional metadata storage to your Atlas cluster and
+may lead to degraded write performance. You should have as few queryable fields
+as needed by your application. A good rule of thumb is to have at most 10
+queryable fields.
+
+.. seealso::
+
+   Learn more about :ref:`optimizing performance and storage when using Flexible Sync <optimizing-performance-and-storage-flexible-sync>`.
+
+Consequences of Adding or Removing Queryable Fields
+```````````````````````````````````````````````````
+
+You can :ref:`update your Sync configuration <alter-your-sync-configuration>` to
+add or remove queryable field names, but be aware of the following:
+
+When you add a queryable field, devices can only sync on that field once the
+device has caught up to the point in time in :ref:`Device Sync History
+<sync-history>` where the field was added. 
+
+When you remove a queryable field, any devices still using that field will have
+their Device Sync session dropped and must perform a :ref:`client reset
+<client-resets>`. Clients not using the removed field won't receive any errors.
+To avoid triggering a client reset when you remove the queryable field, you
+should first remove usage of that field on the client-side.
+
+
+Permissions
+~~~~~~~~~~~
+
+Atlas Device Sync enforces role-based data access rules for all requests to a
+synced cluster. Rules are dynamic :ref:`JSON expressions <expressions>` that
+determine a user's ability to sync, view, and modify data.
+
+For details, see :ref:`sync-permissions`.
+
+.. _asymmetric-sync:
+.. _optimize-data-ingest:
+
+Data Ingest
+~~~~~~~~~~~
+
+Data Ingest is a sync strategy for applications with heavy client-side
+insert-only workloads. You can enable it for one or more collections. It
+supports writing to any collection type, including an Atlas time-series
+collection.
+
+For example, an IoT app that frequently logs sensor data has a significant write
+workload and no read workload. The device may also be offline for extended
+periods of time. Data Ingest bypasses some of the processing required for
+bi-directional sync, significantly improving write speed to an Atlas collection.
+
+Other use cases include writing immutable data, such as invoices from a retail
+app, or logging application events, neither of which requires conflict
+resolution.
+
+You can apply Data Ingest to individual collections. This means your app can
+use Data Ingest to write some data, but bi-directional Flexible Sync on
+other collections.
+
+Data Ingest collections are only for writing data. You cannot use Flexible
+Sync queries against these collections. Instead, use :ref:`data-sources`.
+
+After you have enabled Data Ingest, you implement it in the client app via
+the client SDKs. Currently, the following Realm SDKs support Data Ingest:
+
+- C++ SDK: :ref:`cpp-stream-data-to-atlas`
+- .NET SDK: :ref:`dotnet-data-ingest`
+- Kotlin SDK: :ref:`kotlin-stream-data-to-atlas`
+- Node.js SDK: :ref:`node-define-an-asymmetric-object`
+- React Native SDK: :ref:`react-native-define-an-asymmetric-object`
+- Swift SDK: :ref:`swift-stream-data-to-atlas`
+
+Client Max Offline Time
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Client Maximum Offline Time determines how long the client can be offline
+between sync sessions. Changing this value enables you to balance offline access
+with storage used in the synced Atlas cluster. For more information, refer to
+:ref:`client-maximum-offline-time`.
+
+Client Recovery
+~~~~~~~~~~~~~~~
+
+Client Recovery enables the client to attempt to automatically perform a client
+reset while recovering data on the device. For more information, refer to
+:ref:`recover-unsynced-changes`.
+
+.. _appconfig-sync:
+.. _sync-configuration-reference:
+
+Sync Configuration File Reference
+---------------------------------
+
+You can find the Sync configuration file for your application in the ``sync``
+directory of an :ref:`exported <export-app>` app:
+
+.. code-block:: none
+   
+   app/
+   └── sync/
+       └── config.json
+
+For example, the following Sync configuration applies to apps using Flexible
+Sync (recommended). If you are using the older Partition-Based Sync, refer to
+:ref:`partition-based-sync-config-object`.
+
+.. code-block:: json
+   :caption: sync/config.json
+
+   {
+     "type": "flexible",
+     "development_mode_enabled": <Boolean>,
+     "service_name": "<Data Source Name>",
+     "database_name": "<Development Mode Database Name>",
+     "state": <"enabled" | "disabled">,
+     "client_max_offline_days": <Number>,
+     "is_recovery_mode_disabled": <Boolean>,
+     "queryable_fields_names": [
+       <Array of String Field Names>
+     ],
+     "permissions": "<Deprecated, Do Not Use>"
+   }
+
+The deprecated ``permissions`` field might still appear in your exported app's
+configuration. That might indicate your app has not automatically migrated to
+the :ref:`unified rule system yet <unified-rule-migration>`. Please avoid
+deleting this field until your app has been migrated.
+
+.. _flexible-sync-config-object:
+
+Sync Config Object
+~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 40
+
+   * - Field
+     - Description
+
+   * - | ``type``
+       | String
+     
+     - The sync mode. There are two Sync modes: Flexible Sync and the older
+       Partition-Based Sync. We recommend using Flexible Sync. For more
+       information about Partition-Based Sync, refer to
+       :ref:`partition-based-sync`.
+       
+       Valid Options for a Flexible Sync Configuration:
+
+       - ``"flexible"``
+
+   * - | ``development_mode_enabled``
+       | Boolean
+     
+     - If ``true``, :ref:`Development Mode <development-mode>` is enabled
+       for the application. While enabled, App Services automatically stores synced
+       objects in a specific database (specified in ``database_name``) and
+       mirrors objects types in that database's collection schemas.
+
+   * - | ``service_name``
+       | String
+     
+     - The name of the Atlas cluster :ref:`data source <appconfig-data_sources>`
+       to sync. You cannot use sync with a :ref:`serverless instance
+       <serverless-caveats>`.
+
+   * - | ``database_name``
+       | String
+     
+     - The name of a database in the synced cluster where App Services stores data in
+       :ref:`Development Mode <development-mode>`. App Services automatically
+       generates a schema for each synced type and maps each object type to a
+       collection within the database.
+
+   * - | ``state``
+       | String
+     
+     - The current state of the sync protocol for the application.
+       
+       Valid Options:
+
+       - ``"enabled"``
+       - ``"disabled"``
+
+   * - | ``client_max_offline_days``
+       | Number
+     
+     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
+       process waits before aggressively pruning metadata that some clients
+       require to synchronize from an old version of a realm.
+
+   * - | ``is_recovery_mode_disabled``
+       | Boolean
+     - If ``false``, :ref:`Recovery Mode <recover-unsynced-changes>` is enabled
+       for the application. While enabled, Realm SDKs that support this feature 
+       attempt to recover unsynced changes upon performing a client reset.
+       Recovery mode is enabled by default.
+
+   * - | ``queryable_fields_names``
+       | Array<String>
+     
+     - The :ref:`names of the fields <queryable-fields>` that your client 
+       application can query to determine which data to synchronize.
+
+   * - | ``last_disabled``
+       | Number
+     
+     - The date and time that sync was last paused or disabled, represented by
+       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
+       UTC).

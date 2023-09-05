@@ -9,34 +9,44 @@ Atlas Data API
    :hidden:
    
    Data API Endpoints </data-api/generated-endpoints>
-   Data API Examples </data-api/examples>
    Custom HTTPS Endpoints </data-api/custom-endpoints>
+   Authenticate Data API Requests </data-api/authenticate>
+   Data API Examples </data-api/examples>
+   Data Formats </data-api/data-formats>
+   Data API OpenAPI Reference </data-api/openapi>
 
 .. contents:: On this page
-   :local:
-   :backlinks: none
    :depth: 2
-   :class: singlecol
 
-The Atlas Data API is a secure, serverless HTTPS API that lets you work with
-data stored in a linked data source or run custom application logic. You
-don't need to install any database drivers or opinionated libraries to
-work with the Data API. Instead, you send requests like this from an
-HTTPS client:
+The Data API is a managed service that lets you securely work with data
+stored in Atlas using standard HTTPS requests. The Data API is not a
+direct connection to your database. Instead, the API is a fully-managed
+middleware service that sits between your cluster and the clients that
+send requests.
 
-.. code-block:: bash
+You can use the Data API to connect to MongoDB Atlas from any platform
+that supports HTTPS, including:
+
+- Web browsers
+- Web servers
+- CI/CD pipelines
+- Serverless & Edge compute environments
+- Mobile applications
+- Internet-Of-Things devices
+
+You don't need to install any database drivers or opinionated libraries
+to work with the Data API. Instead, you send standard HTTPS requests
+like the following:
+
+.. io-code-block::
    
-   curl -X POST \
-        https://data.mongodb-api.com/app/myapp-abcde/endpoint/hello \
-        -H 'api-key: <API Key>' \
-        -H 'Content-Type: application/json' \
-        -d '{ "message": "Hello, world!" }'
+   .. input:: /data-api/snippets/generated-endpoints.snippet.hello-world.sh
+      :language: bash
 
-The Data API is not a direct connection to your database. Instead, the
-API is a fully-managed middleware service that sits between your cluster
-and client apps. For each incoming request, the Data API authenticates
-the calling user, authorizes the request, runs the endpoint logic, and
-then returns an HTTPS response to the caller.
+   .. output::
+      :language: json
+
+      { "insertedId": "63dc56ac74ddb86ed3eb8474" }
 
 Endpoints
 ---------
@@ -51,298 +61,77 @@ The Data API supports two types of endpoints:
   To learn more, including how to set up and call endpoints, see
   :ref:`Data API Endpoints <data-api-endpoints>`.
 
-- **Custom Endpoints** are app-specific API routes handled by functions
-  that you write. You can use custom endpoints to run your app's backend
-  logic or as webhooks that integrate with external services.
+- **Custom Endpoints** are app-specific API routes handled by Atlas
+  Functions that you write. You can use custom endpoints to define
+  operations that fit your use case specifically. For example, you could
+  create an endpoint that runs a pre-defined aggregation or that
+  integrates with an external webhook service.
 
   To learn more, including how to create and call endpoints, see
   :ref:`Custom HTTPS Endpoints <custom-endpoints>`.
 
-.. _data-api-supported-environments:
-
-Supported Environments
+How the Data API Works
 ----------------------
 
-You can call the Data API from most HTTP clients. Supported environments include:
+Data API requests may resemble traditional database operations, like
+``find`` or ``insertOne``, but the Data API is not a direct connection
+to your database. Instead, the Data API adds additional authentication,
+authorization, and correctness checks to ensure that your data is only
+accessed or modified in the ways you allow. This allows you to safely
+access data in Atlas from potentially vulnerable clients like web apps.
 
-- Serverless functions
-- Mobile applications
-- Servers
-- Internet of things devices
+For each incoming request, the Data API:
 
-You **cannot** call the Data API from a web browser or any other client that
-enforces the :mdn:`CORS protocol <Web/HTTP/CORS>`.
-Atlas provides alternative methods to query MongoDB from the web browser:
+1. **Authenticates the calling user.** This might involve validating an
+   access token, logging in with header credentials, or directly
+   assigning a specific runtime user based on your configuration.
 
-- Use the :ref:`Realm Web SDK MongoDB client <web-query-mongodb>`.
-- Configure the :ref:`Atlas GraphQL API <graphql-api>`. Then call the GraphQL API
-  from the browser :ref:`using a GraphQL client, like Apollo <graphql-api>`.
-- Create an :ref:`Atlas Function that queries MongoDB <functions-mongodb>`.
-  Then use the Realm Web SDK to :ref:`call the Function <web-call-a-function>`.
-  
-.. note::
+2. **Authorizes the request.** This ensures that the user sent a
+   well-formed request and has permission to perform the requested
+   operation based on your endpoint authorization scheme.
 
-   Atlas App Services does not currently support :atlas:`private endpoints </security-private-endpoint/>`.
+3. **Runs the requested operation.** This might involve reading or
+   writing data in Atlas with a generated endpoint or invoke a custom
+   function that you wrote.
 
-.. _data-api-data-formats:
+   For requests that read or write data in Atlas, the Data API also
+   enforces the access control rules and document schemas defined in
+   your App. This means that users can only access data they're allowed
+   to read and write. Requests fail if they include an invalid write
+   operation.
 
-Data Formats
-------------
+4. **Returns an HTTPS response to the caller.** The response includes
+   the result of a generated endpoint operation or any data that you
+   return from a custom endpoint. In the request, you can choose to receive the
+   response in either :ref:`JSON or EJSON format
+   <data-api-data-formats>`.
 
-MongoDB stores data in a format called BSON, which is similar to a JSON
-object in structure but supports additional data types and uses a binary
-encoding. BSON is efficient for computers but is not human readable so
-you can't work with it directly.
+When to Use the Data API
+------------------------
 
-Instead, the Data API uses two formats to represent data in requests and
-responses:
+For server applications, and especially for high-load and latency
+sensitive use-cases, we recommend connecting directly to Atlas with a
+MongoDB driver. Operations called through a Data API endpoint take
+longer to complete than the corresponding MongoDB operations called
+through a driver. Additionally, the drivers provide more flexibility and
+control over how your operations are executed. To learn more, visit the
+:driver:`MongoDB Drivers </>` documentation.
 
-- The **JSON** format uses standard types that any tool can parse and
-  understand. However, JSON cannot represent all BSON types so JSON
-  responses may lose type information for some fields. For example, BSON
-  has distinct types for 32-bit integers and 64-bit floats but a JSON
-  response represents both as a ``number``.
+We recommend using the Data API when:
 
-- The **EJSON** format, short for :manual:`MongoDB Extended JSON
-  </reference/mongodb-extended-json/>`, is a superset of standard JSON
-  that uses structured fields to represent BSON data that don't have
-  corresponding JSON types. This fully represents your data but requires
-  your client to understand how to work with EJSON.
+- You want to run MongoDB operations from a web application or other
+  client that you can't trust.
 
-.. example::
-   
-   The following document shows BSON types represented in JSON and EJSON:
-   
-   .. tabs::
-       
-       .. tab:: EJSON
-          :tabid: ejson
-          
-          .. code-block:: json
-             
-             {
-                "Name": "Mango",
-                "Year": { "$numberLong": "2022" },
-                "Weight": { "$numberDecimal": "9823.1297" },
-                "Date": { "$date": { "$numberLong": "1641954803067" } }
-             }
-       
-       .. tab:: JSON
-          :tabid: json
-          
-          .. code-block:: json
-             
-             {
-                "Name": "Mango",
-                "Year": 2022,
-                "Weight": "9823.1297",
-                "Date": "2022-01-12T02:33:23.067Z"
-             }
+- You can't or don't want to manage a MongoDB driver in your server-side
+  environment. For example, some edge compute environments don't support
+  database drivers or connection pooling.
 
-You define a single default return type for all generated Data API
-endpoints and individually for each custom endpoint. Incoming requests
-can also specify a preferred data format that overrides the default
-using an ``Accept`` header.
+- You want to develop a new feature and prefer a flexible solution for
+  working on the client side first before later creating and refining
+  the API layer.
 
-The following table compares the JSON and EJSON representations of each
-supported type:
+- You want to integrate Atlas data access into a federated API gateway.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 15 42 42
-   
-   * - Type
-     - EJSON
-     - JSON
-   
-   * - ``Array``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          [ <elements> ]
-     
-     - .. code-block:: json
-          :copyable: false
-
-          [ <elements> ]
-
-   * - ``Binary``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "$binary": {
-                "base64": "e67803a39588be8a95731a21e27d7391",
-                "subType": "05"
-             }
-          }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "Subtype": 5,
-             "Data": "e67803a39588be8a95731a21e27d7391"
-          }
-
-   * - ``Date``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "$date": {
-                "$numberLong": "1641954803067"
-             }
-          }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          "2022-01-12T02:33:23.067Z"
-
-   * - ``Decimal128``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          { "$numberDecimal": "9823.1297" }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          "9823.1297"
-
-   * - ``Document``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          { <content> }
-     
-     - .. code-block::
-          :copyable: false
-
-          { <content> }
-
-   * - ``Double``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "$numberDouble": "10.5"
-          }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          10.5
-   
-   * - ``Int32``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {"$numberInt":"10"}
-     
-     - .. code-block:: json
-          :copyable: false
-
-          10
-   
-   * - ``Int64``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {"$numberLong":"50"}
-     
-     - .. code-block:: json
-          :copyable: false
-
-          50
-   
-   * - ``MaxKey``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          { "$maxKey": 1 }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {}
-       
-       *No JSON equivalent*
-
-   * - ``MinKey``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          { "$minKey": 1 }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {}
-       
-       *No JSON equivalent*
-
-   * - ``ObjectId``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "$oid":"5d505646cf6d4fe581014ab2"
-          }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          "5d505646cf6d4fe581014ab2"
-
-   * - ``Regular Expression``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "$regularExpression": {
-                "pattern":"^H",
-                "options":"i"
-             }
-          }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "Pattern": "^H",
-             "Options": "i"
-          }
-
-   * - ``Timestamp``
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "$timestamp": {
-                "t":1565545664,
-                "i":1
-              }
-          }
-     
-     - .. code-block:: json
-          :copyable: false
-
-          {
-             "T": 1565545664,
-             "I": 1
-          }
+- You want to connect to App Services from an environment not currently
+  supported by a Realm SDK and don't want to use a driver to connect
+  over the :ref:`wire protocol <wire-protocol>`.

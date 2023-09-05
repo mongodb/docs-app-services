@@ -53,6 +53,12 @@ Consider using the custom function provider in your app if:
    such as requiring a password, :wikipedia:`two-factor authentication <Multi-factor_authentication>`, or a
    :wikipedia:`single sign-on <Single_sign-on>` token.
 
+The following diagram shows the custom function logon process:
+
+.. figure:: /images/auth-custom-function-flow.png
+    :alt: Custom Function authentication flow diagram
+    :width: 350px
+
 .. _authentication-function:
 
 The Authentication Function
@@ -79,60 +85,18 @@ included with the custom function provider credential in the client app.
 The function accepts any value provided from your client app, so the
 actual field names and values depend on your implementation.
 
-.. example::
+For examples of how to create a custom credential ``payload`` object
+using the Realm SDKs, refer to the documentation for each SDK:
 
-   The following code examples show how to create a function credential
-   using the {+client-sdks+}. The credential includes a ``payload`` object
-   that is passed to the authentication function.
-
-   .. tabs-realm-languages::
-   
-      .. tab::
-         :tabid: javascript
-   
-         .. code-block:: javascript
-         
-            const credentials = Realm.Credentials.function({
-              username: "mongolover",
-              pin: "24601",
-            });
-   
-      .. tab::
-         :tabid: java
-   
-         .. code-block:: java
-            
-            import org.bson.Document;
-            import static java.util.Map.entry;
-   
-            val credentials: Credentials = Credentials.customFunction(
-              Document(
-                Map.ofEntries(
-                  entry("username", "mongolover"),
-                  entry("pin", "24601")
-                )
-              )
-            )
-   
-      .. tab::
-         :tabid: c-sharp
-   
-         .. code-block:: csharp
-         
-            var credentials = Credentials.Function(new {
-              username = "mongolover",
-              pin = "24601"
-            })
-   
-      .. tab::
-         :tabid: swift
-   
-         .. code-block:: swift
-         
-            let credentials = Credentials.function(payload: [
-               "username": "mongolover",
-               "pin": "24601"
-            ])
+- :ref:`C++ SDK <cpp-login-custom-function>`
+- :ref:`Flutter SDK <flutter-login-custom-function>`
+- :ref:`Java SDK <java-login-custom-function>`
+- :ref:`Kotlin SDK <kotlin-login-custom-function>`
+- :ref:`.NET SDK <dotnet-login-custom-function>`
+- :ref:`Node.js SDK <node-login-custom-function>`
+- :ref:`React Native SDK <react-native-login-custom-function>`
+- :ref:`Swift SDK <ios-login-custom-function>`
+- :ref:`Web SDK <web-login-custom-function>`
 
 Return an Authenticated User ID
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +195,7 @@ deployment method.
 
             To enable the provider:
 
-            1. Click :guilabel:`App Users` in the {+leftnav+}.
+            1. Click :guilabel:`App Users` in the left navigation menu.
 
             2. Select the :guilabel:`Providers` tab.
 
@@ -274,7 +238,7 @@ deployment method.
             To make custom function authentication available to client
             applications, deploy your application.
 
-            1. Click :guilabel:`Deploy` in the {+leftnav+}
+            1. Click :guilabel:`Deploy` in the left navigation menu
 
             2. Find the draft in the deployment history table and then click
                :guilabel:`Review & Deploy Changes`.
@@ -407,7 +371,7 @@ custom function provider users:
    .. literalinclude:: /authentication/custom-function/onNewCustomFunctionUser.js
       :language: javascript
 
-Log In from a {+client-sdk+}
+Log In from a Realm SDK
 -----------------------
 
 To log in from a client application, use a Custom Function credential
@@ -415,9 +379,12 @@ that contains your login payload data.
 
 For examples, refer to the documentation for a specific SDK:
 
-- :ref:`Swift SDK <ios-login-custom-function>`
+- :ref:`C++ SDK <cpp-login-custom-function>`
+- :ref:`Flutter SDK <flutter-login-custom-function>`
 - :ref:`Java SDK <java-login-custom-function>`
+- :ref:`Kotlin SDK <kotlin-login-custom-function>`
 - :ref:`.NET SDK <dotnet-login-custom-function>`
-- :ref:`React Native SDK <react-native-login-custom-function>`
 - :ref:`Node.js SDK <node-login-custom-function>`
+- :ref:`React Native SDK <react-native-login-custom-function>`
+- :ref:`Swift SDK <ios-login-custom-function>`
 - :ref:`Web SDK <web-login-custom-function>`

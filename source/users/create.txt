@@ -1,97 +1,91 @@
-=============
-Create a User
-=============
+==================
+Create an App User
+==================
 
 .. default-domain:: mongodb
 
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 1
+   :depth: 2
    :class: singlecol
 
-Create a User Upon First Authentication
----------------------------------------
+Overview
+--------
 
-For most :ref:`authentication providers <authentication-providers>`, 
-Atlas App Services automatically creates a :ref:`user object <user-objects>` the 
-first time a user authenticates through the authentication provider. The 
-only exception is :ref:`email/password user authentication 
-<email-password-authentication>`, in which you must register and confirm 
-a user before the user can authenticate.
+Atlas App Services provides various :ref:`authentication providers <authentication-providers>`
+to log users into your app. For most providers, App Services automatically creates a 
+user account the first time a user authenticates through the provider. The only exception is 
+:ref:`email/password user authentication <create-email-password-user>`, which requires 
+registering and confirming a user before the user can authenticate.
 
 .. include:: /includes/apple-account-deletion-requirements.rst
+
+Identity
+--------
+
+When you first log in with an authentication provider, App Services creates a 
+:ref:`user object <user-objects>` that contains a unique identity ID and 
+:ref:`provider-specific metadata <auth-provider-metadata>` about the user.
+
+Link to Existing Accounts
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+A single user object can have more than one identity. You can use the Realm SDKs 
+to link identities to existing user accounts. This allows users to log in to 
+a single account with more than one provider. For more information, see the 
+documentation on linking identities for your preferred SDK:
+
+- :ref:`Link User Identities - Flutter SDK <flutter-link-user-identities>`
+- :ref:`Link User Identities - Java SDK <java-link-user-identities>`
+- :ref:`Link User Identities - Kotlin SDK <kotlin-link-user-identities>`
+- :ref:`Link User Identities - .NET SDK <dotnet-link-user-identities>`
+- :ref:`Link User Identities - Node.js SDK <node-link-user-identities>`
+- :ref:`Link User Identities - React Native SDK <react-native-link-user-identities>`
+- :ref:`Link User Identities - Swift SDK <ios-link-user-identities>`
+- :ref:`Link User Identities - Web SDK <web-link-user-identities>`
+
+.. _create-email-password-user:
 
 Create an Email/Password User
 -----------------------------
 
 When you use :ref:`email/password user authentication 
-<email-password-authentication>`, you must register a user, which creates 
+<email-password-authentication>`, you must first register a user, which creates 
 the user object. You can register users in your client application
-using your preferred SDK, or you can manually create email/password users.
+using your preferred SDK or you can manually create email/password users.
+
+After registering the user, you must :ref:`confirm the user <confirm-user>` 
+before they can authenticate.
 
 Create an Email/Password User in the SDK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Each SDK offers an API that enables you to register an email/password user. 
 After registering the user, you must confirm the user before the they can 
-authenticate.
+authenticate. For code examples that demonstrate how to manage email/password 
+users in the client application, see the documentation for the Realm SDKs:
 
-.. tabs-realm-sdks::
-   
-   .. tab::
-      :tabid: node
-      
-      Learn how to :ref:`register an email/password user from a Node
-      application <node-register-new-user>`.
-
-   .. tab::
-      :tabid: react-native
-      
-      Learn how to :ref:`register an email/password user from a React Native
-      application <react-native-register-new-user>`.
-
-   .. tab::
-      :tabid: android
-
-      Learn how to :ref:`register an email/password user from an Android
-      application <java-register-a-new-user-account>`.
-
-   .. tab::
-      :tabid: ios
-
-      Learn how to :ref:`register an email/password user from an iOS
-      application <ios-register-a-new-user-account>`.
-
-   .. tab::
-      :tabid: dotnet
-
-      Learn how to :ref:`register an email/password user from a .NET
-      application <dotnet-email-password-register-new-user>`.
-
-   .. tab::
-      :tabid: flutter
-
-      Learn how to :ref:`register an email/password user from a Flutter
-      application <flutter-manage-email-password-users-register>`.
-
-   .. tab::
-      :tabid: kotlin
-
-      Learn how to :ref:`register an email/password user from a Kotlin
-      application <kotlin-manage-email-password-users>`.
-
+- :ref:`Create Email/Password Users - C++ SDK <cpp-manage-users>`
+- :ref:`Create Email/Password Users - Flutter SDK <flutter-manage-email-password-users-register>`
+- :ref:`Create Email/Password Users - Java SDK <java-register-a-new-user-account>`
+- :ref:`Create Email/Password Users - Kotlin SDK <kotlin-manage-email-password-users>`
+- :ref:`Create Email/Password Users - .NET SDK <dotnet-email-password-register-new-user>`
+- :ref:`Create Email/Password Users - Node SDK <node-register-new-user>`
+- :ref:`Create Email/Password Users - React Native SDK <react-native-register-new-user>`
+- :ref:`Create Email/Password Users - Swift SDK <ios-register-a-new-user-account>`
+- :ref:`Create Email/Password Users - Web SDK <web-manage-email-password-users>`
 
 Manually Create an Email/Password User
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can create a new :ref:`Email/Password <email-password-authentication>` user
-from the UI or CLI. Manually-created users bypass any configured user
-confirmation flows.
+from the App Services UI, CLI, or Admin API. Manually-created users bypass any 
+configured user confirmation flows.
 
 .. tip::
    
-   This is particularly useful for testing and debugging your application in
+   Manually creating a user can be useful for testing and debugging your application in
    development.
 
 .. tabs-realm-admin-interfaces::
@@ -99,7 +93,7 @@ confirmation flows.
    .. tab::
       :tabid: ui
       
-      #. Select :guilabel:`App Users` from the {+leftnav+}.
+      #. Select :guilabel:`App Users` from the left navigation menu.
       
       #. Click the :guilabel:`Add New User` button.
       
@@ -145,6 +139,29 @@ confirmation flows.
          The Email/Password authentication provider requires passwords to be
          between 6 and 128 characters long.
 
+   .. tab::
+      :tabid: api
+
+      To create a new email/password user, create a ``POST`` request 
+      in the following format. You must specify the user credentials 
+      in the request body and the Group and App ID in the request URL.
+
+      .. code-block:: sh
+
+         curl --request POST \
+           --header 'Authorization: Bearer <access_token>' \
+           --data '{ "email": "<string>", "password": "<string>" }' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users
+
+      .. note::
+         
+         The Email/Password authentication provider requires passwords to be
+         between 6 and 128 characters long.
+
+      .. seealso::
+       
+         :admin-api-endpoint:`Admin API Documentation <operation/adminCreateUser>`
+
 .. _confirm-user:
 
 Confirm a User
@@ -160,7 +177,7 @@ user and your application. You can read more about
 Email/Password user confirmation at :ref:`Email/Password
 Confirmation <email-password-authentication-confirmation>`.
 
-Sometimes, however, users are unable to complete the confirmation
+Sometimes, users are unable to complete the confirmation
 process. For example:
 
 - An overzealous spam filter might block App Services email confirmation
@@ -169,31 +186,55 @@ process. For example:
 - A proxy or web blocker could prevent a user from activating the
   ``confirmUser`` client SDK function via the client application.
 
-- an implementation error could cause the client application's user
+- An implementation error could cause the client application's user
   confirmation page to fail for specific use cases.
 
-To help you work around cases like this, App Services allows you to confirm
-users manually by following the below steps:
+To help you work around cases like this, you can confirm
+users manually using the App Services UI or the Admin API:
 
-#. Select :guilabel:`App Users` from the {+leftnav+}.
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-#. Under the :guilabel:`Users` tab, select the :guilabel:`PENDING`
-   button.
+      To confirm a pending email/password user in the UI:
 
-#. Find the user in the list and click on the ellipsis (``...``).
+      #. Select :guilabel:`App Users` from the left navigation menu.
 
-#. Select the :guilabel:`Confirm User` option from the context menu that
-   appears.
+      #. Under the :guilabel:`Users` tab, select the :guilabel:`PENDING`
+         button.
 
-#. If the operation succeeds, the banner at the top of the App Services
-   admin console should display a confirmation message. The user's
-   :guilabel:`User Status` changes from :guilabel:`Pending Confirmation`
-   to :guilabel:`Pending User Login`.
+      #. Find the user in the list and click on the ellipsis (``...``).
 
-A manually-confirmed user continues to appear in the :guilabel:`PENDING`
-user list until they log in to your application for the first time, at
-which point App Services moves them into the list of confirmed users and
-transitions their :guilabel:`User Status` to ``confirmed``.
+      #. Select the :guilabel:`Confirm User` option from the context menu that
+         appears.
+
+      #. If the operation succeeds, the banner at the top of the App Services
+         admin console should display a confirmation message. The user's
+         :guilabel:`User Status` changes from :guilabel:`Pending Confirmation`
+         to :guilabel:`Pending User Login`.
+
+      A manually-confirmed user continues to appear in the :guilabel:`PENDING`
+      user list until they log in to your application for the first time, at
+      which point App Services moves them into the list of confirmed users and
+      transitions their :guilabel:`User Status` to ``confirmed``.
+
+   .. tab::
+      :tabid: api
+
+      To confirm a pending email/password user using the Admin API, create 
+      a ``POST`` request in the following format. You must specify the Group 
+      ID, App ID, and email address.
+
+      .. code-block:: sh
+
+         curl --request POST \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/by_email/<email>/confirm
+
+      .. seealso::
+       
+         :admin-api-endpoint:`Admin API Documentation <operation/adminConfirmPendingUser>`
 
 Re-run the User Confirmation Workflow
 -------------------------------------
@@ -226,39 +267,67 @@ There is no such specific method to re-run a custom confirmation
 function. Instead, App Services has a method to trigger a re-run of whatever
 the current Email/Password user confirmation workflow happens to be. You
 can manually re-run the currently selected user confirmation flow using
-the :doc:`App Services Admin API </admin/api/v3>` or via the App Services UI:
+the App Services UI or the :doc:`App Services Admin API </admin/api/v3>`:
 
-To re-run the confirmation workflow for a user through the App Services UI:
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-#. Select :guilabel:`App Users` from the {+leftnav+}.
+      To re-run the confirmation workflow for a user in the UI:
 
-#. Under the :guilabel:`Users` tab, select the :guilabel:`PENDING`
-   button.
+      #. Select :guilabel:`App Users` from the left navigation menu.
 
-#. Find the user in the list and click on the ellipsis (``...``).
+      #. Under the :guilabel:`Users` tab, select the :guilabel:`PENDING`
+         button.
 
-#. Select the :guilabel:`Run user confirmation` option from the context
-   menu that appears.
+      #. Find the user in the list and click on the ellipsis (``...``).
 
-#. Select the :guilabel:`Run User Confirmation` button in the dialogue
-   box that appears.
+      #. Select the :guilabel:`Run user confirmation` option from the context
+         menu that appears.
 
-#. If the operation succeeds, the banner at the top of the App Services
-   admin console should display a confirmation message. The user's
-   :guilabel:`User Status` changes from :guilabel:`Pending Confirmation`
-   to :guilabel:`Pending User Login`. Once the user logs in, they will
-   move into the active users list automatically.
+      #. Select the :guilabel:`Run User Confirmation` button in the dialogue
+         box that appears.
 
-If the re-run fails or the user's tokens expire again, you can re-run
-the confirmation function as many times as necessary.
+      #. If the operation succeeds, the banner at the top of the App Services
+         admin console should display a confirmation message. The user's
+         :guilabel:`User Status` changes from :guilabel:`Pending Confirmation`
+         to :guilabel:`Pending User Login`. Once the user logs in, they will
+         move into the list of active users automatically.
+
+      If the re-run fails or the user's tokens expire again, you can re-run
+      the confirmation function as many times as necessary.
+
+   .. tab::
+      :tabid: api
+
+      To re-run the confirmation workflow for a user using the Admin API, create a 
+      ``POST`` request in the following format. You must specify the Group ID, App ID, 
+      and email address.
+
+      .. code-block:: sh
+
+         curl --request POST \
+           --header 'Authorization: Bearer <access_token>' \
+           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/by_email/<email>/run_confirm
+
+      .. seealso::
+       
+         :admin-api-endpoint:`Admin API Documentation <operation/adminRerunPendingUserConfirmation>`
 
 Summary
 -------
 
-- The Email/Password authentication provider requires users to create an
-  account the first time they connect to your App
+- For all providers except for Email/Password authentication,
+  App Services automatically creates a user object the first time a user authenticates.
 
-- Email/Password users must be confirmed manually through the App Services UI
+- You can log in to a single account with more than one provider by using the Realm SDKs
+  to link identities.
+
+- The Email/Password authentication provider requires users to create an
+  account the first time they connect to your App.
+
+- Email/Password users must be confirmed manually through the App Services UI or Admin API.
 
 - Users caught in an incomplete Email/Password confirmation workflow
-  must re-run the confirmation through the App Services UI
+  must re-run the confirmation through the App Services UI or Admin API.

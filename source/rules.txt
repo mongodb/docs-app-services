@@ -1,109 +1,60 @@
 .. _rules:
 .. _mongodb-rules:
 
-=====
-Rules
-=====
+==============================
+Define Data Access Permissions
+==============================
 
 .. toctree::
    :titlesonly:
    :hidden:
    
    Role-based Permissions </rules/roles>
-   Filters </rules/filters>
-   Expressions </rules/expressions>
-   Examples </rules/examples>
-   Define Roles And Permissions </mongodb/define-roles-and-permissions>
-   Filter Incoming Queries </mongodb/filter-incoming-queries>
+   Rule Expressions </rules/expressions>
+   Filter Incoming Queries </rules/filters>
+   Device Sync-Compatible Permissions </rules/sync-compatibility>
    Configure Advanced Rules </mongodb/configure-advanced-rules>
+   Data Access Role Examples </rules/examples>
 
-.. include:: /includes/non-sync-rules-note.rst
+Overview
+--------
 
 In traditional applications, an application server exposes an API to client
 applications and handles database queries on their behalf. To prevent malicious,
 improper, or incorrect read and write operations, clients don't query the
 database directly.
 
-Atlas App Services provides a configurable and dynamic rules engine that enables you to
-run a MongoDB query from client applications while transparently preventing
-unauthorized reads and writes. Rules are defined for entire collections in a
-linked MongoDB Atlas cluster and apply to individual documents in the collection
-dynamically based on the :doc:`application user </authentication>` that issued a
-query. You can also define default rules that serve as a fallback for any collection
-that doesn't have its own rules.
+Atlas App Services provides a configurable and dynamic permissions engine that
+enables you to run MongoDB and Device Sync queries from client applications
+while transparently preventing unauthorized reads and writes. Permissions are
+defined for entire collections in a linked MongoDB Atlas cluster and apply to
+individual documents in the collection dynamically based on the
+:doc:`application user </users>` that issues a query or uses Device Sync. You
+can also define default roles that serve as a fallback for any collection that
+doesn't have its own roles.
 
 .. include:: /includes/adf-rules-note.rst
 
-The rules engine handles incoming queries with the following 4-step
-process:
+Key Concepts
+------------
 
-.. procedure::
+To understand how the permissions engine works and how to configure it for your
+use case, see :doc:`Role-based Permissions </rules/roles>`.
 
-   .. step:: Find All Relevant Documents
+You define permissions with :doc:`Rule Expressions </rules/expressions>`, a
+domain-specific language built on JSON.
 
-      App Services evaluates the queried collection's **Filters** in the context
-      of the incoming request. Filters dynamically add additional query
-      predicates and projections to incoming queries based on an expression
-      that you define.
+You can optimize the performance of the permissions engine with filters. See
+:doc:`Filter Incoming Queries </rules/filters>`.
 
-      After evaluating, App Services applies all relevant filters to the incoming
-      query and then finds all documents that match the filtered query.
+If you're using Device Sync (Flexible Mode), permissions work a bit differently.
+See :doc:`Device Sync-Compatible Permissions </rules/sync-compatibility>` for
+important considerations.
 
-      .. note:: Filters
+The default or "Basic Mode" rules editor in the App Services UI covers the
+majority of use cases for collection rules. However, there are times when you
+need more fine-grained control than the UI interface provides. In those times,
+see :doc:`Configure Advanced Rules </mongodb/configure-advanced-rules>`.
 
-         To learn how to configure a :ref:`filter <filters>` for a collection, see
-         :doc:`Filter Incoming Queries </mongodb/filter-incoming-queries>`.
-
-
-   .. step:: Evaluate A Role For Each Document
-
-      App Services evaluates a **Role** with specific read and write
-      permissions for each document that matches the filtered query. You
-      define the roles for each collection, including the permissions they
-      have and the conditions under which they apply.
-
-      .. note:: Roles
-
-         To learn how to configure :ref:`role-based permissions <roles>` for a
-         collection, see :doc:`Define Roles and Permissions
-         </mongodb/define-roles-and-permissions>`.
-
-         To learn more about roles, explore the :ref:`roles <roles>` reference page.
-         There you'll find more information, including configuration parameters,
-         use-case examples, and details on how App Services assigns roles to
-         documents.
-
-
-   .. step:: Run The Query With The Assigned Roles
-
-      Once App Services has evaluated a role for each document, it runs the
-      filtered query and prevents reads and writes on each document unless
-      the document's role allows them. If no role applies to a specific
-      document, App Services withholds that document entirely and prevents the
-      query from reading or writing any fields.
-
-
-   .. step:: Validate The Document Schema
-
-      If the query was a write operation, App Services checks each affected
-      document to ensure that they conform to the collection's **Document
-      Schema**. If any document does not match the schema, App Services rolls back
-      the operation and rejects the query.
-
-      .. seealso::
-
-         - :ref:`schemas`
-         - :ref:`enforce-a-schema`
-
-
-.. _default-rules:
-
-Default Rules
--------------
-
-You can define a set of default roles and filters that apply to any
-collection in a data source that does not have more specific collection
-rules defined.
-
-To learn more about default roles and filters, including how to define
-them, see :ref:`Role-based Permissions <roles>`.
+Finally, to help you put these concepts into practice, we have provided some
+:doc:`Data Access Role Examples </rules/examples>`.

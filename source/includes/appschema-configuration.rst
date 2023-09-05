@@ -135,7 +135,7 @@ Configuration
    * - | ``custom_user_data_config``
        | Document
      - A document that contains configuration options for
-       :doc:`custom user data </users/enable-custom-user-data>`.
+       :ref:`custom user data <custom-user-data>`.
        
        .. code-block:: json
           :copyable: False
@@ -164,7 +164,7 @@ Configuration
 
           * - | ``mongo_service_id``
               | String
-            - The service ID of the :ref:`{+atlas+} data source
+            - The service ID of the :ref:`MongoDB Atlas data source
               <data-sources>` that contains the custom user
               data. You can find this value in the ``id`` field of the
               service configuration file.

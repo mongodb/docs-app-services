@@ -51,7 +51,7 @@ content: |
 
          | ``digestAuth: <boolean>``
 
-       - Optional. If ``true``, {+service-short+} authenticates the request using
+       - Optional. If ``true``, App Services authenticates the request using
          :wikipedia:`digest authentication
          <Digest_access_authentication>`. You must specify a
          ``username`` and ``password`` (either as fields in the request
@@ -92,12 +92,20 @@ content: |
 
      * - :guilabel:`Request Body`
 
-         | ``body: <string>``
+         | ``body: <object> or <string>``
 
-       - Required. The stringified body of the HTTP request.
+       - Required. The object or stringified body of the HTTP request.
          If the request payload has a content type of
          ``multipart/form-data``, use the ``form`` parameter instead of
-         ``body``.
+         ``body``. If the request body is an object, the 
+         ``encodeBodyAsJSON`` parameter must be ``true``.
+    
+     * - :guilabel:`Encode Body as JSON`
+
+         | ``encodeBodyAsJSON: <boolean>``
+
+       - If ``true``, the body is automatically encoded as an EJSON string using ``EJSON.stringify()``. Only use when the ``body`` 
+         parameter is an object. 
 
      * - :guilabel:`Form Request Body`
 
@@ -158,7 +166,7 @@ content: |
 
          | ``digestAuth: <boolean>``
 
-       - Optional. If ``true``, {+service-short+} authenticates the request using
+       - Optional. If ``true``, App Services authenticates the request using
          :wikipedia:`digest authentication
          <Digest_access_authentication>`. You must specify a
          ``username`` and ``password`` (either as fields in the request
@@ -265,7 +273,7 @@ content: |
 
          | ``digestAuth: <boolean>``
 
-       - Optional. If ``true``, {+service-short+} authenticates the request using
+       - Optional. If ``true``, App Services authenticates the request using
          :wikipedia:`digest authentication
          <Digest_access_authentication>`. You must specify a
          ``username`` and ``password`` (either as fields in the request
@@ -345,7 +353,7 @@ content: |
 
          | ``digestAuth: <boolean>``
 
-       - Optional. If ``true``, {+service-short+} authenticates the request using
+       - Optional. If ``true``, App Services authenticates the request using
          :wikipedia:`digest authentication
          <Digest_access_authentication>`. You must specify a
          ``username`` and ``password`` (either as fields in the request
@@ -404,7 +412,7 @@ content: |
 
          | ``digestAuth: <boolean>``
 
-       - Optional. If ``true``, {+service-short+} authenticates the request using
+       - Optional. If ``true``, App Services authenticates the request using
          :wikipedia:`digest authentication
          <Digest_access_authentication>`. You must specify a
          ``username`` and ``password`` (either as fields in the request
@@ -471,7 +479,7 @@ content: |
 
          | ``digestAuth: <boolean>``
 
-       - Optional. If ``true``, {+service-short+} authenticates the request using
+       - Optional. If ``true``, App Services authenticates the request using
          :wikipedia:`digest authentication
          <Digest_access_authentication>`. You must specify a
          ``username`` and ``password`` (either as fields in the request

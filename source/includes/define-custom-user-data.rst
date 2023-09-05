@@ -2,7 +2,8 @@ To enable Custom User Data in the App Services UI, follow these steps:
 
 1. Click :guilabel:`App Users` in the left hand panel.
 
-#. Select the :guilabel:`Custom User Data` tab.
+#. Select the :guilabel:`User Settings` tab and find the
+   :guilabel:`Custom User Data` section.
 
 #. Set the :guilabel:`Enable Custom User Data` toggle to :guilabel:`On`.
 
@@ -32,3 +33,27 @@ To enable Custom User Data in the App Services UI, follow these steps:
        leads to unexpected results.
      
 #. Save and deploy the changes.
+
+   .. note:: Restart the Sync Session after Updating Custom User Data
+
+    The sync server caches custom user data for the duration of the session.
+    As a result, you must restart the sync session after updating custom user data
+    to avoid a :ref:`compensating write error <flexible-sync-errors>`. 
+    To restart the sync session, pause and resume all open Sync Sessions in the client application.
+    For more information on pausing and resuming sync from the client SDKs, see your preferred SDK:
+
+    - :ref:`Pause or resume a Device Sync session - Flutter SDK
+      <flutter-pause-resume-sync>`
+    - :ref:`Pause or resume a Device Sync session - Kotlin SDK 
+      <kotlin-pause-resume-sync>`
+    - :ref:`Pause or resume a Device Sync session - Java SDK
+      <java-pause-or-resume-a-sync-session>`
+    - :ref:`Pause or resume a Device Sync session - .Net SDK
+      <dotnet-pause-or-resume-a-sync-session>`
+    - :ref:`Pause or resume a Device Sync session - Node SDK
+      <node-pause-or-resume-a-sync-session>`
+    - :ref:`Pause or resume a Device Sync session - React Native SDK
+      <react-native-pause-or-resume-a-sync-session>`
+    - :ref:`Pause or resume a Device Sync session - Swift SDK
+      <ios-suspend-or-resume-a-sync-session>`
+       
