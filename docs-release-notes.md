@@ -7,10 +7,10 @@
 ## Reference
 
 - App Configuration Files
-  - GraphQL: Add `disable_schema_introspection` to the config object, clarify details about `use_natural_pluralization`.
+  - GraphQL: Add `disable_schema_introspection` to the config object. Clarify details about `use_natural_pluralization`.
 - App Services Admin API: Update documentation for the following endpoints:
   - GraphQL API
-    - Get GraphQL API Configuration (GraphQL API GET and PUT): Add `disable_schema_introspection` to the config object, clarify details about `use_natural_pluralization`.
+    - Get GraphQL API Configuration (GraphQL API GET and PUT): Add `disable_schema_introspection` to the config object. Clarify details about `use_natural_pluralization`.
   - Triggers
     - Resume a suspended trigger (Triggers/PUT): Correct the description for the `disable_token`.
     - Create a trigger (Triggers/POST): Add a missing `project` object parameter to the Trigger config details.
