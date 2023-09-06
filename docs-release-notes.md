@@ -1,3 +1,20 @@
+# September 1, 2023
+
+## Triggers
+
+- Database Triggers: Add supported version information for document preimages on sharded clusters.
+
+## Reference
+
+- App Configuration Files
+  - GraphQL: Add `disable_schema_introspection` to the config object. Clarify details about `use_natural_pluralization`.
+- App Services Admin API: Update documentation for the following endpoints:
+  - GraphQL API
+    - Get GraphQL API Configuration (GraphQL API GET and PUT): Add `disable_schema_introspection` to the config object. Clarify details about `use_natural_pluralization`.
+  - Triggers
+    - Resume a suspended trigger (Triggers/PUT): Correct the description for the `disable_token`.
+    - Create a trigger (Triggers/POST): Add a missing `project` object parameter to the Trigger config details.
+
 # August 25, 2023
 
 ## Get Started
@@ -12,7 +29,7 @@
 ## Reference
 
 - App Configuration Files/GraphQL: Add that `use_natural_pluralization` cannot be changed to false using realm-cli but can be when creating a new app with Admin API.
-- App Services Admin API: Improve authentication documentation in the Admin API for the following sections: 
+- App Services Admin API: Improve authentication documentation in the Admin API for the following sections:
   - Project & Application IDs
   - Get an Admin API Session Access Token
   - Refresh an Admin API Session Access Token
