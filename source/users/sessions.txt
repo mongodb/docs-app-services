@@ -98,15 +98,10 @@ access token.
 
    .. step:: Choose an Authentication Provider
 
-      Append the login endpoint path for a specific authentication
-      provider to the base URL to get the endpoint URL:
-
-      .. code-block:: text
-
-         <Base URL>/auth/providers/<ProviderType>/login
-
-      Replace ``<ProviderType>`` with one of the following
-      authentication provider types:
+      Using the base URL, append the login endpoint path for a specific
+      authentication provider. The login endpoint is in the form 
+      ``<Base URL>/auth/providers/<ProviderType>/login``. Replace 
+      ``<ProviderType>`` with one of the following authentication provider types:
 
       - ``anon-user``
       - ``local-userpass``
@@ -114,10 +109,8 @@ access token.
       - ``custom-token``
       - ``custom-function``
 
-   .. step:: Authenticate a User
-
-      Send an HTTPS POST request to the authentication endpoint with a
-      JSON body that contains the user's login credentials for the
+      Using login endpoint endpoint, send an HTTPS POST request with a
+      JSON body that contains the user's login credentials for the chosen 
       provider type.
 
       .. tabs-realm-auth-providers::
