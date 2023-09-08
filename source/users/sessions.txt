@@ -96,17 +96,12 @@ access token.
               "ws_hostname": "wss://ws.us-east-1.aws.realm.mongodb.com"
             }
 
-   .. step:: Choose an Authentication Provider
+   .. step:: Authenticate a User
 
-      Append the login endpoint path for a specific authentication
-      provider to the base URL to get the endpoint URL:
-
-      .. code-block:: text
-
-         <Base URL>/auth/providers/<ProviderType>/login
-
-      Replace ``<ProviderType>`` with one of the following
-      authentication provider types:
+      To authenticate a user, call the login endpoint, specifying the 
+      authentication provider. The login endpoint is  
+      ``<Base URL>/auth/providers/<ProviderType>/login``, where 
+      ``<ProviderType>`` is one of the following types:
 
       - ``anon-user``
       - ``local-userpass``
@@ -114,11 +109,9 @@ access token.
       - ``custom-token``
       - ``custom-function``
 
-   .. step:: Authenticate a User
-
-      Send an HTTPS POST request to the authentication endpoint with a
-      JSON body that contains the user's login credentials for the
-      provider type.
+      Append the login endpoint to the base URL, and send an HTTPS POST request 
+      with a JSON body that contains the user's login credentials for the chosen 
+      provider type:
 
       .. tabs-realm-auth-providers::
 
