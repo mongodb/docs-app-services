@@ -1,0 +1,129 @@
+:template: product-landing
+:hidefeedback: header
+:noprevnext:
+
+.. _edge-server:
+
+=================
+Atlas Edge Server
+=================
+
+.. toctree::
+   :titlesonly:
+   :hidden:
+   
+   Configure Edge Server </edge-server/configure>
+   Connect to Edge Server </edge-server/connect>
+   Use MongoDB APIs with Edge Server </edge-server/mongodb>
+
+.. introduction::
+
+   You have a warehouse, retail store, air-gapped laboratory, or another 
+   premises where devices should be able to seamlessly sync their data.
+   Those locations may or may not be online at any given time. Lack of a 
+   network connection shouldn't prevent the devices from sharing data
+   with each other.
+
+   Your teams don't need to build and maintain complex data layers with network
+   handling, real-time synchronization capabilities, and conflict resolution.
+   
+   Edge Server runs on-premises and enables sync between local devices,
+   and bi-directional sync between the Edge Server and Atlas.
+
+   Edge Server is currently in private preview. If you are interested in 
+   previewing the Atlas Device Sync Edge Server, complete this form.
+
+   .. button:: Start Building with a Template App
+      :uri: https://forms.gle/3TgGK9cUGenTAQYH7
+
+.. image:: /images/plp/Spot_AzureBlue_Sync_Tech_RealmSync.png
+   :alt: Atlas Device Sync Illustration
+
+
+.. kicker:: What It Is
+
+Key Features
+------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: MongoDB + Sync - On Premises
+      :icon: /images/icons/General_FEATURES_IntelligentEdge3x.png
+      :icon-alt: An icon depicting a mobile phone connecting with the cloud
+
+      Edge server is a local instance of MongoDB paired with a sync server 
+      that runs on-premises. It brings real-time sync, disconnection 
+      tolerance, and conflict resolution to the location's devices.
+
+   .. card::
+      :headline: Optimize Bandwidth
+      :icon: /images/icons/Technical_REALM_ConflictResolution3x.png
+      :icon-alt: An icon depicting conflict resolution
+
+      Delta sync ensures that only fields with changes in a document are 
+      sent to Atlas. Mission-critical data is transferred efficiently while 
+      minimizing network congestion.
+
+   .. card::
+      :headline: Client Independence
+      :icon: /images/icons/Technical_REALM_Offline3x.png
+      :icon-alt: An icon depicting network loss
+
+      Edge clients can sync and access essential data independently, even 
+      when disconnected from the central database. Applications and devices 
+      in a connected infrastructure continue to function seamlessly, 
+      even with intermittent connectivity.
+
+.. kicker:: How it Works
+
+Edge Server Architecture
+------------------------
+
+.. procedure::
+
+   .. step:: Create a Device Sync-Enabled App
+
+      Create an :ref:`App Services App <create-app>` with 
+      :ref:`Device Sync enabled <enable-sync>`.
+
+      To get started quickly, create a template app.
+
+      .. button:: Start Building with a Template App
+         :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
+
+      Once your App is created, coordinate with your Product or Account 
+      Representative to enable Edge Server.
+
+   .. step:: Configure the Edge Server Host
+
+      Configure hardware on-site or a cloud server to host your Edge Server.
+      Refer to the documentation for required network access, hardware 
+      requirements, and supported operating systems.
+
+   .. step:: Install and Configure the Edge Server
+
+      Install the Edge Server on your hardware, complete a basic 
+      ``config.json`` with your configuration details, and install required
+      dependencies. Then, start the Edge Server.
+
+   .. step:: Configure an Authentication Provider
+
+      Edge Server supports these authentication providers:
+
+      - :ref:`Anonymous Authentication <anonymous-authentication>`
+      - :ref:`Email/Password Authentication <email-password-authentication>`
+      - :ref:`Custom JWT Authentication <custom-jwt-authentication>`
+      - :ref:`API Key Authentication <api-key-authentication>`
+
+      Enable an authentication provider to secure client connections to
+      the Edge Server.
+
+   .. step:: Connect to the Edge Server from a Client
+
+      Configure your client to connect to the Edge Server instead of directly
+      to your Atlas App. Local clients can sync data through the Edge Server
+      even without network connectivity. When the Edge Server connects
+      with Atlas, it syncs data from the premises.
