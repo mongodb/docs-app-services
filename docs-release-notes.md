@@ -12,7 +12,7 @@
 
 ## Authenticate and MAnage Users
 
-- Manage User Sessions: Update Get a User Access Token Over HTTPS steps for clarity
+- Manage User Sessions: Update Get a User Access Token Over HTTPS steps for clarity.
 
 ## Reference
 
