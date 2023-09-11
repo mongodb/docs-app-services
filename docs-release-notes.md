@@ -16,7 +16,7 @@
 
 ## Reference
 
-- App Services Admin API: Add missing properties, ``run_as_user_id`` and ``run_as_user_id_script_source``, to the Create a New Function endpoint.
+- App Services Admin API/Functions/Create a New Function: Add missing properties, ``run_as_user_id`` and ``run_as_user_id_script_source``.
 
 ## Release Notes
 
@@ -24,7 +24,7 @@
 
 ## Internal
 
-- Update the facets.csv with SubProduct value to programmatically tag the repo correctly.
+- Add programmatically-generated facet tags to the repo for improved search indexing.
 
 # September 1, 2023
 
