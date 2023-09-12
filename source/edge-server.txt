@@ -48,8 +48,8 @@ Key Features
 
    .. card::
       :headline: MongoDB + Sync - On Premises
-      :icon: /images/icons/General_FEATURES_IntelligentEdge3x.png
-      :icon-alt: An icon depicting a mobile phone connecting with the cloud
+      :icon: /images/icons/General_CLOUD_Transfer10x.png
+      :icon-alt: An icon depicting a cloud with a two-way transfer icon
 
       Edge server is a local instance of MongoDB paired with a sync server 
       that runs on-premises. It brings real-time sync, disconnection 
@@ -57,17 +57,17 @@ Key Features
 
    .. card::
       :headline: Optimize Bandwidth
-      :icon: /images/icons/Technical_REALM_ConflictResolution3x.png
-      :icon-alt: An icon depicting conflict resolution
+      :icon: /images/icons/General_FEATURES_Flexibility10x.png
+      :icon-alt: An icon depicting data syncing
 
-      Delta sync ensures that only fields with changes in a document are 
+      Delta Sync ensures that only fields with changes in a document are 
       sent to Atlas. Mission-critical data is transferred efficiently while 
       minimizing network congestion.
 
    .. card::
       :headline: Client Independence
-      :icon: /images/icons/Technical_REALM_Offline3x.png
-      :icon-alt: An icon depicting network loss
+      :icon: /images/icons/Technical_REALM_iOSAndriodCrossPlatform10x.png
+      :icon-alt: An icon depicting two mobile devices sharing data
 
       Edge clients can sync and access essential data independently, even 
       when disconnected from the central database. Applications and devices 
@@ -91,38 +91,14 @@ Edge Server Setup
       Once your App is created, coordinate with your Product or Account 
       Representative to enable Edge Server.
 
-      .. button:: Start Building with a Template App
-         :uri: https://www.mongodb.com/realm/register?tck=docs_CTA_app_services
-
-   .. step:: Configure the Edge Server Host
-
-      Configure hardware on-site or a cloud server to host your Edge Server.
-      Refer to the documentation for required network access, hardware 
-      requirements, and supported operating systems.
-
    .. step:: Install and Configure the Edge Server
 
+      Configure hardware on-site or a cloud server to host your Edge Server.
       Install the Edge Server on your hardware, complete a basic 
       ``config.json`` with your configuration details, and install required
       dependencies.
 
-   .. step:: Configure an Authentication Provider
-
-      Enable an authentication provider to secure client connections to
-      the Edge Server.
-
-      Edge Server supports these authentication providers:
-
-      - :ref:`Anonymous Authentication <anonymous-authentication>`
-      - :ref:`Email/Password Authentication <email-password-authentication>`
-      - :ref:`Custom JWT Authentication <custom-jwt-authentication>`
-      - :ref:`API Key Authentication <api-key-authentication>`
-
-   .. step:: Start the Edge Server
-
-      With everything configured, a simple command starts the Edge Server:
-
-      ``make up``
+      Add an authorization provider, and start the Edge Server.
 
    .. step:: Connect to the Edge Server from a Client
 
@@ -130,3 +106,39 @@ Edge Server Setup
       to your Atlas App. Local clients can sync data through the Edge Server
       even without network connectivity. When the Edge Server connects
       with Atlas, it syncs data from the local clients.
+
+.. kicker:: More Info
+
+Secure, Powerful, Fast
+----------------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: Secure Authentication
+      :icon: /images/icons/user-auth.png
+      :icon-alt: An icon depicting a user with a shield, representing access
+
+      Built-in user authentication providers include anonymous, 
+      email/password, API key, and Custom JWT. A user-based permissions 
+      system lets you control who can access which data.
+
+   .. card::
+      :headline: Conflict Resolution
+      :icon: /images/icons/Technical_REALM_ConflictResolution3x.png
+      :icon-alt: An icon depicting conflict resolution
+
+      Edge Server uses the Device Sync engine to handle conflicts. You don't 
+      have to write complex custom code to resolve conflicting writes from 
+      multiple clients.
+
+   .. card::
+      :headline: Reduce Latency
+      :icon: /images/icons/Technical_REALM_MobileSync10x.png
+      :icon-alt: An icon depicting a mobile device with data synchronization
+
+      Having a local data layer enables rapid synchronization of critical 
+      data to edge devices. Reduce latency and enable immediate actions 
+      based on real-time insights.
