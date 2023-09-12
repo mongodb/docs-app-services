@@ -104,7 +104,7 @@ Edge Server Setup
 
       Install the Edge Server on your hardware, complete a basic 
       ``config.json`` with your configuration details, and install required
-      dependencies. Then, start the Edge Server.
+      dependencies.
 
    .. step:: Configure an Authentication Provider
 
@@ -118,9 +118,17 @@ Edge Server Setup
       - :ref:`Custom JWT Authentication <custom-jwt-authentication>`
       - :ref:`API Key Authentication <api-key-authentication>`
 
+   .. step:: Start the Edge Server
+
+      With everything configured, a simple command starts the Edge Server.
+
+      .. code:: console
+
+         make up
+
    .. step:: Connect to the Edge Server from a Client
 
       Configure your client to connect to the Edge Server instead of directly
       to your Atlas App. Local clients can sync data through the Edge Server
       even without network connectivity. When the Edge Server connects
-      with Atlas, it syncs data from the premises.
+      with Atlas, it syncs data from the local clients.
