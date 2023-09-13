@@ -25,16 +25,19 @@ To connect to the Edge Server from a client, your app must:
 - Set the Sync URL to the public accessible DNS address you set in the 
   Edge Server config's ``hostname`` field
 
-For a quick proof of concept using a template app, these are the 
-modifications you can make to the :github:`Swift template app 
-<mongodb/template-app-swiftui-todo>` to connect to the Edge Server:
-
 .. tip::
 
    While your Edge Server deployment is in development, we recommend connecting
    with HTTP over port 80 for simplicity. Before moving to production, 
    you can coordinate with your Product or Account Representative to configure
    HTTPS with a self-signed certificate.
+
+Example: SwiftUI Template App
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For a quick proof of concept using a template app, these are the 
+modifications you can make to the :github:`Swift template app 
+<mongodb/template-app-swiftui-todo>` to connect to the Edge Server:
 
 .. procedure::
 
@@ -96,46 +99,49 @@ modifications you can make to the :github:`Swift template app
       .. image:: /images/tiered-sync-info-plist.png
          :alt: Screenshot of an Info.plist file showing the settings above
 
-   .. step:: Adjust the Sync Log Level, If Desired
+   .. step:: Adjust the Log Level (Optional)
 
-      You can optionally adjust the Sync log level if you'd like to get 
-      additional details about the status of communication with the 
-      Edge Server.
+      You can adjust the log level if you'd like to get additional details 
+      about the status of communication with the Edge Server.
 
-      In the :file:`App` file, the Realm Swift app is initialized in the 
-      ``ErrorHandler`` class that starts in line 29. Add a log level
-      line to this initializer around line 38 to get additional information:
+      In the :file:`App` file, you can add an ``.onAppear`` block to set 
+      the log level. Add a log level line in this block to get additional 
+      information:
 
       .. code-block:: swift
-         :emphasize-lines: 10
+         :emphasize-lines: 10-12
 
-         final class ErrorHandler: ObservableObject {
-             @Published var error: Swift.Error?
-
-             init(app: RealmSwift.App) {
-                 // Sync Manager listens for sync errors.
-                 app.syncManager.errorHandler = { syncError, syncSession in
-                     self.error = syncError
-                 }
-        
-                 app.syncManager.logLevel = .trace
-             }
+         var body: some Scene {
+            WindowGroup {
+               ContentView(app: app)
+                  .environmentObject(errorHandler)
+                  .alert(Text("Error"), isPresented: .constant(errorHandler.error != nil)) {
+                     Button("OK", role: .cancel) { errorHandler.error = nil }
+                  } message: {
+                     Text(errorHandler.error?.localizedDescription ?? "")
+                  }
+                  .onAppear {
+                     Logger.shared.level = .trace
+                  }
+            }
          }
+
+      For more information about setting the log level, refer to 
+      :ref:`swift-logging`.
 
    .. step:: Run the App
 
-      Now you should be able to build and run the app. When you log in, 
-      you should be connected to the Edge Server. When you create new Items, 
-      those sync with the Edge Server, and from there to the Atlas App 
-      Services App.
+      Now you can build and run the app. When you log in, the app connects 
+      to the Edge Server. When you create new Items, those sync with the 
+      Edge Server, and from there to the Atlas App Services App.
 
       You can check the status of the Edge Server from your host.
-      With the client running, you should see ``"num_local_clients": 1`` in 
+      With the client running, you can see ``"num_local_clients": 1`` in 
       the Edge Server status. You can also see error messages reflected
       in the sync status.
 
       After the next time the Edge Server syncs with your App Services App,
-      you should see synced changes reflected in the linked Atlas collection.
+      you can see synced changes reflected in the linked Atlas collection.
 
       .. important::
 

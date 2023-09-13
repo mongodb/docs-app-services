@@ -15,8 +15,7 @@ the MongoDB Atlas App. For most use cases, you'll provision hardware
 on-premises to host the Edge Server. While you're developing your Edge 
 Server application, you may host it on a cloud server for convenience.
 
-Client devices on-prem connect to Edge Server, using authentication and 
-data access rules that you configure on the Edge Server. Your Edge Server
+Client devices on-prem connect to Edge Server. Your Edge Server
 connects to a MongoDB Atlas App. Clients do not connect to the MongoDB 
 Atlas App directly.
 
@@ -24,12 +23,13 @@ This page details how to configure and start the Edge Server.
 
 .. _edge-server-create-device-sync-app:
 
-Prerequisite
-------------
+Prerequisites
+-------------
 
 Edge Server connects to a Device Sync-enabled App Services App. Before
-you can use Edge Server, you must create an App Services App and enable
-Device Sync.
+you can use Edge Server, you must create an App Services App, enable
+Device Sync, and configure an authentication provider and permissions
+for your App.
 
 .. procedure::
 
@@ -55,23 +55,30 @@ Device Sync.
          :ref:`email/password authentication <email-password-authentication>` 
          enabled.
 
-         If you start with a template app, go to :guilabel:`Rules`, and delete 
-         the existing rule for the ``todo`` / ``Item`` collection. Replace 
-         it with ``readAndWriteAll``.
-
-         In the :ref:`edge-server-connect-from-client` section below, you
-         can learn how to modify the client to connect to the Edge Server.
+         On the :ref:`edge-server-connect` page, you can learn how to 
+         modify the client to connect to the Edge Server.
 
    .. step:: Enable Device Sync or Modify the Template Configuration
 
       If you have not started with a template app, :ref:`enable Device Sync 
-      <enable-sync>` with Flexible Sync. Configure :ref:`permissions 
-      <device-sync-compatibility>` to allow anyone to read and write all data.
+      <enable-sync>` with Flexible Sync. Configure any :ref:`permissions 
+      <device-sync-compatibility>` your App needs to enforce data access rules.
 
-      When you connect to your App Services App with the Edge Server, it 
-      must be able to read and write all data. You can configure the Edge
-      Server with rules to limit client data access when clients connect 
-      to the Edge Server.
+   .. step:: Configure an Authentication Provider
+
+      Edge Server supports these authentication providers:
+
+      - :ref:`Anonymous Authentication <anonymous-authentication>`
+      - :ref:`Email/Password Authentication <email-password-authentication>`
+      - :ref:`Custom JWT Authentication <custom-jwt-authentication>`
+      - :ref:`API Key Authentication <api-key-authentication>`
+
+      Enable an authentication provider for clients to connect to the Edge Server.
+
+      .. note::
+         
+         If you created a :ref:`template app <template-apps>`, email/password 
+         authentication is already enabled in the template app configuration.
 
 .. _edge-server-configure-host:
 
@@ -235,25 +242,6 @@ Set up and run the Edge Server on the host.
       The Edge Server requires several dependencies, which are listed 
       in the :file:`README.md` in the ``edge_server`` directory. Follow the 
       instructions to install the required dependencies.
-
-.. _edge-server-configure-authentication:
-
-Configure an Authentication Provider
-------------------------------------
-
-Edge Server supports these authentication providers:
-
-- :ref:`Anonymous Authentication <anonymous-authentication>`
-- :ref:`Email/Password Authentication <email-password-authentication>`
-- :ref:`Custom JWT Authentication <custom-jwt-authentication>`
-- :ref:`API Key Authentication <api-key-authentication>`
-
-Enable an authentication provider for clients to connect to the Edge Server.
-
-.. note::
-   
-   If you created a :ref:`template app <template-apps>`, email/password 
-   authentication is already enabled in the template app configuration.
 
 .. _start-and-stop-edge-server:
 
