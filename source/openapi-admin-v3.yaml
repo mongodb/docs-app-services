@@ -1397,6 +1397,30 @@ paths:
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ServiceId"
       - "$ref": "#/components/parameters/IncomingWebhookId"
+  "/groups/{groupId}/apps/{appId}/sync/data":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - sync
+      operationId: adminGetSync
+      summary: Get Partition Based Sync information for a specific linked MongoDB cluster
+      description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
+      responses:
+        "200":
+          description: Successfully retrieved.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SyncDataResponse"
+      parameters:
+        - in: query
+          name: service_id
+          required: true
+          schema:
+            type: string
+          description: The Service ID for the linked cluster.
   "/groups/{groupId}/apps/{appId}/service/{serviceId}/config":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -6614,12 +6638,23 @@ components:
               description: The state of the sync service ("enabled", "disabled", or empty if Sync is not configured).
             queryable_fields_names:
               type: array
-              description: An array of field names queryable on **any collection**.
+              description: |-
+                An array of 
+                (queryable field)[https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields] 
+                names on **any collection**.
+              items:
+                type: string
             collection_queryable_fields_names:
               type: object
-              description: The queryable fields on the **specified collection**.
+              description:  |-
+                An array of 
+                (queryable field)[https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields] 
+                names on the specified collection.
               additionalProperties:
-                "$ref": "#/components/schemas/QueryableFields"
+                type: object
+                additionalProperties:
+                  description: The name of the queryable field.
+                  type: string
             queryable_fields_version:
               type: string
               description: The version of the queryable field.
@@ -7064,11 +7099,6 @@ components:
 
             The expiration time must be between 30 minutes and 180 days,
             inclusive. The default expiration time is 60 days.
-    QueryableFields:
-      type: object
-      additionalProperties:
-        description: The name of the queryable field.
-        type: string
     Relationship:
       type: object
       description: A [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition.
