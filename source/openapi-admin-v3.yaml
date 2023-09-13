@@ -6725,15 +6725,6 @@ components:
         name: onNewEmployee
         type: DATABASE
         function_id: 5eea9ca4ca0e356e2c2a148a
-        function_name: handleNewEmployeeEvent
-        event_processors:
-          {
-            FUNCTION:
-              {
-                function_id: 5eea9ca4ca0e356e2c2a148a,
-                function_name: handleNewEmployeeEvent,
-              },
-          }
         config:
           operation_types:
             - INSERT
@@ -6847,7 +6838,7 @@ components:
       example:
         name: onNewApiKey
         type: AUTHENTICATION
-        function_name: handleNewApiKeyUser
+        function_id: 5eea9ca4ca0e356e2c2a148a
         config:
           operation_type:
             - CREATE
@@ -6888,7 +6879,7 @@ components:
       example:
         name: createDailyReport
         type: SCHEDULED
-        function_name: createReport
+        function_id: 5eea9ca4ca0e356e2c2a148a
         config:
           schedule: "0 8 * * *"
       allOf:
