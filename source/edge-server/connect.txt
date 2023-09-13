@@ -10,4 +10,140 @@ Connect to an Edge Server
    :depth: 2
    :class: singlecol
 
-This is a placeholder page.
+Once the Edge Server is :ref:`configured <edge-server-configure>` and 
+:ref:`running <start-and-stop-edge-server>`, you can connect to it from 
+a client application.
+
+.. _edge-server-connect-from-client:
+
+Connect to the Edge Server from a Client
+----------------------------------------
+
+To connect to the Edge Server from a client, your app must:
+
+- Use HTTP over port 80
+- Set the Sync URL to the public accessible DNS address you set in the 
+  Edge Server config's ``hostname`` field
+
+For a quick proof of concept using a template app, these are the 
+modifications you can make to the :github:`Swift template app 
+<mongodb/template-app-swiftui-todo>` to connect to the Edge Server:
+
+.. tip::
+
+   While your Edge Server deployment is in development, we recommend connecting
+   with HTTP over port 80 for simplicity. Before moving to production, 
+   you can coordinate with your Product or Account Representative to configure
+   HTTPS with a self-signed certificate.
+
+.. procedure::
+
+   .. step:: Configure the Server Connection
+
+      In the Swift template app's :file:`atlasConfig`, set the values to:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Key
+           - Value
+
+         * - ``baseUrl``
+           - The public-addressable DNS of your Edge Server's host. 
+             This is ``http://`` followed by the same value you set in your 
+             Edge Server config's ``hostname`` field.
+          
+         * - ``appId``
+           - The App ID of the App Services App you created above.
+
+   .. step:: Adjust the App Transport Security Settings
+
+      For iOS, Apple disables insecure connections by default. You must add
+      an exception for your public-addressable DNS to allow the client app 
+      to connect to it.
+
+      Select your App target, and go to the :guilabel:`Signing & Capabilities`
+      tab. Press the :guilabel:`+ Capability` button, and search for 
+      ``App Transport Security Settings``. Add this to your app.
+
+      Add an exception domain for your public-addressable DNS. This should
+      be just the string domain, similar to: ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
+
+      This creates an :file:`Info.plist` file in your project. Go to this file
+      to make additional adjustments.
+
+      Change this ``String`` key to a ``Dictionary``. Add two more keys for:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Key
+           - Type
+           - Value
+
+         * - ``NSIncludesSubdomains``
+           - Boolean
+           - ``YES``
+          
+         * - ``NSExceptionAllowsInsecureHTTPLoads``
+           - Boolean
+           - ``YES``
+
+      This enables your iOS client to connect to the insecure HTTP DNS.
+
+      Your :file:`Info.plist` file should look similar to:
+
+      .. image:: /images/tiered-sync-info-plist.png
+         :alt: Screenshot of an Info.plist file showing the settings above
+
+   .. step:: Adjust the Sync Log Level, If Desired
+
+      You can optionally adjust the Sync log level if you'd like to get 
+      additional details about the status of communication with the 
+      Edge Server.
+
+      In the :file:`App` file, the Realm Swift app is initialized in the 
+      ``ErrorHandler`` class that starts in line 29. Add a log level
+      line to this initializer around line 38 to get additional information:
+
+      .. code-block:: swift
+         :emphasize-lines: 10
+
+         final class ErrorHandler: ObservableObject {
+             @Published var error: Swift.Error?
+
+             init(app: RealmSwift.App) {
+                 // Sync Manager listens for sync errors.
+                 app.syncManager.errorHandler = { syncError, syncSession in
+                     self.error = syncError
+                 }
+        
+                 app.syncManager.logLevel = .trace
+             }
+         }
+
+   .. step:: Run the App
+
+      Now you should be able to build and run the app. When you log in, 
+      you should be connected to the Edge Server. When you create new Items, 
+      those sync with the Edge Server, and from there to the Atlas App 
+      Services App.
+
+      You can check the status of the Edge Server from your host.
+      With the client running, you should see ``"num_local_clients": 1`` in 
+      the Edge Server status. You can also see error messages reflected
+      in the sync status.
+
+      After the next time the Edge Server syncs with your App Services App,
+      you should see synced changes reflected in the linked Atlas collection.
+
+      .. important::
+
+         If you have previously connected directly from the client to your 
+         App Services App with Device Sync, you may need to clear state on the 
+         simulator or device. Resetting your cache enables your client to 
+         connect to the Edge Server.
+
+         In a console app, delete the ``mongodb-realm`` directory. If you're
+         using an iOS or Android simulator or device, uninstall and reinstall
+         the app.
