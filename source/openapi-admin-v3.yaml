@@ -1404,7 +1404,7 @@ paths:
     get:
       tags:
         - sync
-      operationId: adminGetSync
+      operationId: adminGetPartitionSync
       summary: Get Partition Based Sync information for a specific linked MongoDB cluster
       description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
       responses:
@@ -1429,8 +1429,8 @@ paths:
     get:
       tags:
         - sync
-      operationId: adminGetSync
-      summary: Get sync information for a specific Atlas App Services App
+      operationId: adminGetFlexSync
+      summary: Get Flexible Sync information for a specific Atlas App Services App
       description: Retrieve all sync data when using [Flexible Sync](https://www.mongodb.com/docs/atlas/app-services/sync/get-started/).
       responses:
         "200":
@@ -6640,7 +6640,7 @@ components:
               type: array
               description: |-
                 An array of 
-                (queryable field)[https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields] 
+                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
                 names on **any collection**.
               items:
                 type: string
@@ -6648,7 +6648,7 @@ components:
               type: object
               description:  |-
                 An array of 
-                (queryable field)[https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields] 
+                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
                 names on the specified collection.
               additionalProperties:
                 type: object
