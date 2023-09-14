@@ -22,7 +22,7 @@ Connect to the Edge Server from a Client
 To connect to the Edge Server from a client, your app must:
 
 - Use HTTP over port 80.
-- Set the Sync URL to the public accessible DNS address you set in the 
+- Set the Sync URL to the public-accessible DNS address you set in the 
   Edge Server :ref:`config's <edge-server-install-and-configure>` ``hostname`` 
   field.
 
@@ -53,28 +53,30 @@ modifications you can make to the :github:`Swift template app
            - Value
 
          * - ``baseUrl``
-           - The public-addressable DNS of your Edge Server's host. 
+           - The public-accessible DNS of your Edge Server's host. 
              This is ``http://`` followed by the same value you set in your 
              Edge Server config's ``hostname`` field.
           
          * - ``appId``
-           - The App ID of the App Services App you created above.
+           - The App ID of your App Services App that has Edge Server 
+             enabled. For more information about finding the App ID, refer 
+             to :ref:`find-app-id`.
 
    .. step:: Adjust the App Transport Security Settings
 
       For iOS, Apple disables insecure connections by default. You must add
-      an exception for your public-addressable DNS to allow the client app 
+      an exception for your public-accessible DNS to allow the client app 
       to connect to it.
 
       Select your App target, and go to the :guilabel:`Signing & Capabilities`
       tab. Press the :guilabel:`+ Capability` button, and search for 
       ``App Transport Security Settings``. Add this to your app.
 
-      Add an exception domain for your public-addressable DNS. This should
+      Add an exception domain for your public-accessible DNS. This should
       be just the string domain, similar to: ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
 
       This creates an :file:`Info.plist` file in your project. Go to this file
-      to make additional adjustments.
+      to make the following adjustments.
 
       Change this ``String`` key to a ``Dictionary``. Add two more keys for:
 
@@ -134,7 +136,7 @@ modifications you can make to the :github:`Swift template app
 
       Now you can build and run the app. When you log in, the app connects 
       to the Edge Server. When you create new Items, those sync with the 
-      Edge Server, and from there to the Atlas App Services App.
+      Edge Server. The Edge Server then syncs with the Atlas App Services App.
 
       You can check the status of the Edge Server from your host.
       With the client running, you can see ``"num_local_clients": 1`` in 

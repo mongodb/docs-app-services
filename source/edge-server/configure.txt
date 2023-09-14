@@ -84,13 +84,21 @@ for your App.
          If you created a :ref:`template app <template-apps>`, email/password 
          authentication is already enabled in the template app configuration.
 
-.. _edge-server-configure-host:
+   .. step:: Get Edge Server Enabled
 
-Configure the Host
-------------------
+      At this time, Edge Server is in Private Preview. Your MongoDB 
+      representative must enable Edge Server for your App. Give
+      your :ref:`App Services App ID <find-app-id>` to your 
+      Product or Account Representative. They will enable Edge Server and 
+      generate an authorization secret for your App.
 
-Configure the host to run the Edge Server. This may be
-an EC2 instance or other cloud server, or hardware that you provision on-site.
+.. _edge-server-host-requirements:
+
+Edge Server Host Requirements
+-----------------------------
+
+The host that runs Edge Server may be an EC2 instance or other cloud 
+server, or hardware that you provision on-site.
 
 .. tip::
 
@@ -176,7 +184,8 @@ Set up and run the Edge Server on the host.
            - Value
 
          * - ``clientAppId``
-           - The App ID of the App Services App you created above.
+           - The unique ID of your App Services App. For information about 
+             finding the App ID, refer to :ref:`find-app-id`.
 
          * - ``query``
            - An object containing one or more collections and queries that 
@@ -189,7 +198,7 @@ Set up and run the Edge Server on the host.
              template app, this is the ``Item`` collection.
             
          * - ``YOUR-QUERY``
-           - This query determines what documents the Edge Server
+           - The query that determines what documents the Edge Server
              can sync with the collection. For example, ``truepredicate``
              means the Edge Server syncs all documents with the collection.
              You can use :ref:`Realm Query Language <rql>` to define this
@@ -197,9 +206,9 @@ Set up and run the Edge Server on the host.
              Limitations <flexible-sync-rql-limitations>`.
 
          * - ``cloudSyncServerAuthSecret``
-           - Give your :ref:`App Services App ID <find-app-id>` to your 
-             Product or Account Representative. They will generate an
-             authorization secret for your App.
+           - The authorization secret that your Product or Account 
+             Representative provided when you contacted them to get 
+             Edge Server enabled for your App.
 
          * - ``hostname``
            - The public DNS of your host. This should resemble something
