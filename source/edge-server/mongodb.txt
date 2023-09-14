@@ -10,4 +10,142 @@ Edge Server MongoDB API Support
    :depth: 2
    :class: singlecol
 
-This is a placeholder page.
+Atlas Edge Server natively implements a subset of the MongoDB wire protocol,
+which allows you to connect to an App through one of its :ref:`linked
+MongoDB Atlas data sources <data-sources>` using standard MongoDB
+drivers and tools. 
+
+Clients use a specialized :ref:`MongoDB URI connection string 
+<edge-server-wireprotocol-connect>` to connect and send requests.
+
+Edge Server currently supports a subset of the MongoDB APIs over the 
+wire protocol.
+
+.. _edge-server-wireprotocol-connect:
+
+Connect to the Edge Server
+--------------------------
+
+The wire protocol server is on by default. You can connect to it via the 
+host machine using this MongoDB URI:
+
+.. code:: console
+
+   mongodb://EDGE_SERVER_HOSTNAME:PORT
+
+- ``EDGE_SERVER_HOSTNAME``: The public DNS of your Edge Server host. For
+  more information, refer to :ref:`edge-server-install-and-configure`.
+- ``PORT``: The wire protocol server is accessible on port ``27021``.
+
+.. example::
+
+   A wire protocol connection URI for an Edge Server hosted on Amazon EC2 
+   might look similar to:
+
+   .. code:: console
+
+      mongodb://ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021
+
+CRUD APIs
+---------
+
+Edge Server currently supports using these MongoDB CRUD APIs over the 
+wire protocol.
+
+Read APIs
+~~~~~~~~~
+
+Read operations take a query filter and find all documents in a collection 
+that match the filter. 
+
+Find a Single Document (``findOne()``)
+``````````````````````````````````````
+
+You can find a single document using the :method:`collection.findOne()`
+method. If multiple documents match the query, this returns the first 
+matching document according to the query's sort order or natural order.
+
+Find One or More Documents (``find()``)
+```````````````````````````````````````
+
+You can find multiple documents using the :method:`collection.find()`
+method. Returns a cursor object that allows you to access matching 
+documents.
+
+Insert
+~~~~~~
+
+Insert operations take one or more documents and add them to a MongoDB 
+collection.
+
+They return documents that describe the results of the operation.
+
+Insert (``insert()``)
+`````````````````````
+
+You can insert a document or documents into a collection using the 
+:method:`collection.insert()` method.
+
+Insert a Single Document (``insertOne()``)
+``````````````````````````````````````````
+
+You can insert a single document using the
+:method:`collection.insertOne()` method. This returns the ``_id`` of the 
+inserted document.
+
+Insert One or More Documents (``insertMany()``)
+```````````````````````````````````````````````
+
+You can insert multiple documents at the same time using the
+:method:`collection.insertMany()` method. This returns a list that contains 
+the ``_id`` value for each inserted document.
+
+Update
+~~~~~~
+
+Update operations find existing documents in a MongoDB collection and
+modify their data. You use standard MongoDB query syntax to specify
+which documents to update and :manual:`update operators
+</reference/operator/update>` to describe the changes to apply to
+matching documents.
+
+Update (``update()``)
+`````````````````````
+
+You can update a document or documents in a collection using the 
+:method:`collection.update()` method. 
+
+Update a Single Document (``updateOne()``)
+``````````````````````````````````````````
+
+You can update a single document using the
+:method:`collection.updateOne()` method. This returns metadata about the 
+operation.
+
+Update One or More Documents (``updateMany()``)
+```````````````````````````````````````````````
+
+You can update multiple documents in a collection using the
+:method:`collection.updateMany()` method. This returns metadata about the 
+operation.
+
+Delete
+~~~~~~
+
+Delete operations find existing documents in a MongoDB collection and
+remove them. You use standard MongoDB query syntax to specify which
+documents to delete.
+
+Delete a Single Document (``deleteOne()``)
+``````````````````````````````````````````
+
+You can delete a single document from a collection using the
+:method:`collection.deleteOne()` method. This returns a Promise
+that resolves to a document that describes the delete operation.
+
+Delete One or More Documents (``deleteMany()``)
+```````````````````````````````````````````````
+
+You can delete multiple items from a collection using the
+:method:`collection.deleteMany()` method. This returns a Promise
+that resolves to a document that describes the delete operation.
