@@ -52,6 +52,9 @@ CRUD APIs
 Edge Server currently supports using these MongoDB CRUD APIs over the 
 wire protocol.
 
+For examples of using these commands, refer to the documentation for the
+Driver or tool you're using to execute these commands.
+
 Read APIs
 ~~~~~~~~~
 
@@ -61,16 +64,14 @@ that match the filter.
 Find a Single Document (``findOne()``)
 ``````````````````````````````````````
 
-You can find a single document using the :method:`collection.findOne()`
-method. If multiple documents match the query, this returns the first 
-matching document according to the query's sort order or natural order.
+You can find a single document using the ``collection.findOne()``
+method.
 
 Find One or More Documents (``find()``)
 ```````````````````````````````````````
 
-You can find multiple documents using the :method:`collection.find()`
-method. Returns a cursor object that allows you to access matching 
-documents.
+You can find multiple documents using the ``collection.find()``
+method.
 
 Insert
 ~~~~~~
@@ -78,27 +79,23 @@ Insert
 Insert operations take one or more documents and add them to a MongoDB 
 collection.
 
-They return documents that describe the results of the operation.
-
 Insert (``insert()``)
 `````````````````````
 
 You can insert a document or documents into a collection using the 
-:method:`collection.insert()` method.
+``collection.insert()`` method.
 
 Insert a Single Document (``insertOne()``)
 ``````````````````````````````````````````
 
 You can insert a single document using the
-:method:`collection.insertOne()` method. This returns the ``_id`` of the 
-inserted document.
+``collection.insertOne()`` method.
 
 Insert One or More Documents (``insertMany()``)
 ```````````````````````````````````````````````
 
 You can insert multiple documents at the same time using the
-:method:`collection.insertMany()` method. This returns a list that contains 
-the ``_id`` value for each inserted document.
+``collection.insertMany()`` method.
 
 Update
 ~~~~~~
@@ -109,25 +106,27 @@ which documents to update and :manual:`update operators
 </reference/operator/update>` to describe the changes to apply to
 matching documents.
 
+.. note:: 
+
+   Edge Server does not currently support ``upsert``.
+
 Update (``update()``)
 `````````````````````
 
 You can update a document or documents in a collection using the 
-:method:`collection.update()` method. 
+``collection.update()`` method. 
 
 Update a Single Document (``updateOne()``)
 ``````````````````````````````````````````
 
 You can update a single document using the
-:method:`collection.updateOne()` method. This returns metadata about the 
-operation.
+``collection.updateOne()`` method.
 
 Update One or More Documents (``updateMany()``)
 ```````````````````````````````````````````````
 
 You can update multiple documents in a collection using the
-:method:`collection.updateMany()` method. This returns metadata about the 
-operation.
+``collection.updateMany()`` method.
 
 Delete
 ~~~~~~
@@ -140,12 +139,10 @@ Delete a Single Document (``deleteOne()``)
 ``````````````````````````````````````````
 
 You can delete a single document from a collection using the
-:method:`collection.deleteOne()` method. This returns a Promise
-that resolves to a document that describes the delete operation.
+``collection.deleteOne()`` method.
 
 Delete One or More Documents (``deleteMany()``)
 ```````````````````````````````````````````````
 
 You can delete multiple items from a collection using the
-:method:`collection.deleteMany()` method. This returns a Promise
-that resolves to a document that describes the delete operation.
+``collection.deleteMany()`` method.
