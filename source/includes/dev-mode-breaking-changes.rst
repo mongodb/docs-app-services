@@ -1,6 +1,6 @@
-*Applies to App Services Apps created after September 13, 2022.* 
+*Applies to App Services Apps created after September 13, 2023.* 
 
-App Services Apps in Development Mode that were created after September 13, 2022
+App Services Apps in Development Mode that were created after September 13, 2023
 can make :ref:`breaking changes <breaking-change-quick-reference>` from their
 client code to synced object schemas.
 
