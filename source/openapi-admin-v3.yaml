@@ -1405,7 +1405,7 @@ paths:
       tags:
         - sync
       operationId: adminGetSync
-      summary: Get sync information for a specific linked MongoDB cluster
+      summary: Get Partition-Based Sync information
       description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
       responses:
         "200":
@@ -1413,7 +1413,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/SyncDataResponse"
+                "$ref": "#/components/schemas/PbsSyncResponse"
       parameters:
         - in: query
           name: service_id
@@ -6601,6 +6601,20 @@ components:
           type: string
         type:
           type: string
+    PbsSyncResponse:
+      properties:
+        service_id:
+          type: string
+          description:
+            The Service ID for the currently synced cluster, if there is
+            one.
+        partition_fields:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Partition"
+          description: |-
+            A list of valid partition keys based on the cluster's collection
+            schemas.
     SyncDataResponse:
       properties:
         service_id:
