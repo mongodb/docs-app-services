@@ -1421,6 +1421,24 @@ paths:
           schema:
             type: string
           description: The Service ID for the linked cluster.
+  "/groups/{groupId}/apps/{appId}/service/{serviceId}/config":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/ServiceId"
+    get:
+      tags:
+        - sync
+      operationId: adminGetFlexSync
+      summary: Get Flexible Sync information for a specific Atlas App Services App
+      description: Retrieve all sync data when using [Flexible Sync](https://www.mongodb.com/docs/atlas/app-services/sync/get-started/).
+      responses:
+        "200":
+          description: Successfully retrieved.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SyncDataResponse"
   "/groups/{groupId}/apps/{appId}/push/notifications":
     get:
       tags:
@@ -6617,18 +6635,82 @@ components:
             schemas.
     SyncDataResponse:
       properties:
-        service_id:
+        clusterId: 
           type: string
-          description:
-            The Service ID for the currently synced cluster, if there is
-            one.
-        partition_fields:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Partition"
-          description: |-
-            A list of valid partition keys based on the cluster's collection
-            schemas.
+          description: The Service ID for the linked cluster.
+        clusterName: 
+          type: string
+          description: The name of the linked cluster
+        clusterType:
+          type: string
+          description: The service type of the linked cluster ("atlas" by default)
+        flexible_sync:
+          type: object
+          properties:
+            state:
+              type: string
+              description: The state of the sync service ("enabled", "disabled", or empty if Sync is not configured).
+            queryable_fields_names:
+              type: array
+              description: |-
+                An array of 
+                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
+                names on **any collection**.
+              items:
+                type: string
+            collection_queryable_fields_names:
+              type: object
+              description:  |-
+                An array of 
+                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
+                names on the specified collection.
+              additionalProperties:
+                type: object
+                additionalProperties:
+                  description: The name of the queryable field.
+                  type: string
+            queryable_fields_version:
+              type: string
+              description: The version of the queryable field.
+            permissions:
+              type: object
+              description: |- 
+                **Deprecated**
+            last_disabled:
+              type: string
+              description: The last time Sync was disabled, represented by the number of seconds since the UNIX epoch.
+            client_max_offline_days:
+              type: integer
+              description: |-
+                 The number of days the client can be offline before a client 
+                 [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/) 
+                 is required.
+            is_recovery_mode_disabled:
+              type: boolean
+              description: |-
+                 Specifies whether the 
+                 [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes) 
+                 is disabled. By default, client reset mode is enabled and this value is **false**.
+        groupName:
+          type: string
+          description: The name of the App's Atlas Project.
+        orgName:
+            type: string
+            description: The name of the App's Atlas Organization.
+        readPreference:
+            type: string
+            enum:
+              - primary
+              - primaryPreferred
+              - secondary
+              - secondaryPreferred
+              - nearest
+        wireProtocolEnabled:
+              type: boolean
+              description: |-
+                If true, clients may [connect to the app over the
+                MongoDB Wire
+                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
     AnyTrigger:
       oneOf:
         - $ref: "#/components/schemas/DatabaseTrigger"
@@ -6739,15 +6821,6 @@ components:
         name: onNewEmployee
         type: DATABASE
         function_id: 5eea9ca4ca0e356e2c2a148a
-        function_name: handleNewEmployeeEvent
-        event_processors:
-          {
-            FUNCTION:
-              {
-                function_id: 5eea9ca4ca0e356e2c2a148a,
-                function_name: handleNewEmployeeEvent,
-              },
-          }
         config:
           operation_types:
             - INSERT
@@ -6861,7 +6934,7 @@ components:
       example:
         name: onNewApiKey
         type: AUTHENTICATION
-        function_name: handleNewApiKeyUser
+        function_id: 5eea9ca4ca0e356e2c2a148a
         config:
           operation_type:
             - CREATE
@@ -6902,7 +6975,7 @@ components:
       example:
         name: createDailyReport
         type: SCHEDULED
-        function_name: createReport
+        function_id: 5eea9ca4ca0e356e2c2a148a
         config:
           schedule: "0 8 * * *"
       allOf:

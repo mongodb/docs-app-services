@@ -1,3 +1,31 @@
+# September 8, 2023
+
+## App Builder's Resources
+
+- Configure & Connect to an Edge Server: Fix small spelling typo.
+
+## Device Sync
+
+- Configure and Update your Data Model/Update a Data Model: Fix small spelling typo.
+- Configure Sync/Sync Settings: Update queryable fields documentation for Indexed Queryable Fields and Collection Queryable Fields.
+- Handle Errors/Sync Errors: Update queryable fields documentation for Indexed Queryable Fields and Collection Queryable Fields. 
+
+## Authenticate and MAnage Users
+
+- Manage User Sessions: Update Get a User Access Token Over HTTPS steps for clarity.
+
+## Reference
+
+- App Services Admin API/Functions/Create a New Function: Add missing properties, ``run_as_user_id`` and ``run_as_user_id_script_source``.
+
+## Release Notes
+
+- Update change log with release notes for v20230906.
+
+## Internal
+
+- Add programmatically-generated facet tags to the repo for improved search indexing.
+
 # September 1, 2023
 
 ## Triggers
