@@ -1,2 +1,2 @@
-{+cli+} :ref:`installed <install-realm-cli>` and added to your system
+{+cli+} :ref:`installed <install-app-services-cli>` and added to your system
 ``PATH``.
