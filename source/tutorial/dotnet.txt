@@ -104,19 +104,26 @@ on it.
    .. tab:: App Services CLI
       :tabid: cli
 
-      From {+cli+}, you can run the :ref:`realm-cli apps create 
-      <realm-cli-apps-create>` command to set up the backend and create the 
-      C# (MAUI) base app. The following command creates a new app based on the 
-      ``maui.todo.flex`` template. The command below creates an app that is:
+      The :ref:`{+cli-bin+} apps create <app-services-cli-apps-create>`
+      command sets up the backend and creates a C# (MAUI) template
+      app for you to use as a base for this tutorial.
 
-      - Named "MyTutorialApp"
-      - Deployed in the US-VA region
-      - Using a "development" (instead of production or QA) environment.
+      Run the following command in a terminal window to create an app
+      named "MyTutorialApp" that is deployed in the ``US-VA`` region
+      with its environment set to "development" (instead of production
+      or QA).
 
       .. code-block:: shell
 
-         realm-cli apps create -n MyTutorialApp --template maui.todo.flex \
-            --location us-va --environment development
+         {+cli-bin+} app create \
+           --name MyTutorialApp \
+           --template maui.todo.flex \
+            --deployment-model global \
+            --location us-va \
+            --environment development
+
+      The command creates a new directory in your current path with the
+      same name as the value of the ``--name`` flag.
 
    .. tab:: GitHub Repository
       :tabid: github
