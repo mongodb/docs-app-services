@@ -177,7 +177,16 @@ Set up and run the Edge Server on the host.
              "YOUR-COLLECTION-NAME": "YOUR-QUERY"
            },
            "cloudSyncServerAuthSecret": "YOUR-AUTH-SECRET",
-           "hostname": "YOUR-EDGE-SERVER-DOMAIN"
+           "hostname": "YOUR-EDGE-SERVER-DOMAIN",
+           "tls" : {
+             "enabled": true,
+             "certificates": [
+               {
+                 "publicKeyPath": "YOUR_PUBLIC_KEY_PATH/cert.pem",
+                 "privateKeyPath": "YOUR_PRIVATE_KEY_PATH/certkey.pem"
+               }
+             ]
+           }
          }
 
       .. list-table::
@@ -217,6 +226,22 @@ Set up and run the Edge Server on the host.
            - The public DNS of your host. This should resemble something
              like ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``. 
              For localhost, set this value to ``localhost:80``.
+         
+         * - ``tls``
+           - A configuration object that includes the Transport Layer 
+             Security options for your Edge Server.
+
+             When ``enabled`` is ``true``, Edge Server uses the TLS 
+             certificates you specify in the ``certificates`` object to 
+             encrypt your data. You must set the ``publicKeyPath`` and 
+             ``privateKeyPath`` values to the locations of your TLS 
+             certificates.
+
+             You must provide certificates signed by a certificate authority;
+             for example, Let's Encrypt; or create self-signed certificates
+             and install them on the devices that connect to Edge Server.
+             During development, you may bypass certificate management by 
+             disabling certificate verification in the device connection code.
 
       .. example::
 
@@ -232,7 +257,16 @@ Set up and run the Edge Server on the host.
                   "Item": "truepredicate"
                },
                "cloudSyncServerAuthSecret": "3814f3fb7befe2eef66ee01781ae245a",
-               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com"
+               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+               "tls" : {
+                 "enabled": true,
+                 "certificates": [
+                   {
+                     "publicKeyPath": "certs/cert.pem",
+                     "privateKeyPath": "certs/certkey.pem"
+                   }
+                 ]
+               }
             }
 
          The "query" could include multiple collection names, similar to:
@@ -247,7 +281,16 @@ Set up and run the Edge Server on the host.
                   "Project": "truepredicate"
                },
                "cloudSyncServerAuthSecret": "3814f3fb7befe2eef66ee01781ae245a",
-               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com"
+               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+               "tls" : {
+                 "enabled": true,
+                 "certificates": [
+                   {
+                     "publicKeyPath": "certs/cert.pem",
+                     "privateKeyPath": "certs/certkey.pem"
+                   }
+                 ]
+               }
             }
 
          For more details on what you could include in a query, refer to 
