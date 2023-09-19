@@ -48,7 +48,7 @@ streamlines development, but should not be used in production.
 Development Mode speeds up development by allowing you to design :ref:`schemas
 <configure-your-data-model>` directly in client application code.
 
-When you sync a realm file, Atlas App Services maps every synced object type
+When you sync a realm, Atlas App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`. If you update the object model on the client
 side, App Services updates the collection schema to match. This lets you update
@@ -61,14 +61,62 @@ update the backend schema by changing the client model.
 To learn more about how the Realm Object Schemas map to the App Services Schemas
 when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
 
-For more information about modifying synced object schemas, including how to
-handle breaking changes, see: :ref:`<synced-schema-overview>`.
+For more information about modifying synced object schemas, see:
+:ref:`<synced-schema-overview>`.
 
 .. important:: Disable Development Mode for Production Apps
    
    Development mode is a development utility that is not suitable for 
    production use. Make sure that you turn off Development Mode before you 
    make your app accessible in a production environment.
+
+.. _dev-mode-breaking-changes:
+
+Breaking Changes
+````````````````
+
+App Services Apps in Development Mode that were created after September 13, 2023
+can make :ref:`breaking changes <breaking-change-quick-reference>` to synced
+object schemas from client code.
+
+**Prerequisites** 
+
+- App Services App created after September 13, 2023
+- MongoDB 5.0 or later for Flexible Sync compatibility
+- Minimum SDK version:
+
+  - Realm Swift SDK v10.42.2
+  - Realm Kotlin SDK v11.1.1
+
+.. - Realm Node.js SDK v[SDK-VERSION]
+.. - Realm React Native SDK v[SDK-VERSION]
+.. - Realm .NET SDK v[SDK-VERSION]
+.. - Realm Java SDK v[SDK-VERSION]
+
+.. note:: Apps created before September 13, 2023
+   
+   For Apps created before September 13, 2023, you need to update your
+   object schema in the App Services UI. For details, see
+   :ref:`<synced-schema-overview>`
+
+To make a breaking change from client code:
+
+#. Delete your local realm and data.
+   This will not affect data synced to the backend. Local changes that have not
+   been synced will be removed and are unrecoverable.
+#. Change your local object model.
+#. Open a realm with your updated object model.
+#. Run your client app to sync your changes to the backend.
+
+To delete a Realm file use the Realm SDK-specific methods:
+
+- :ref:`Realm Kotlin SDK <kotlin-delete-a-realm>`
+- :ref:`Realm Flutter SDK <flutter-delete-realm>`
+- :ref:`Realm Java SDK <io_realm_Realm_deleteRealm>`
+- :ref:`Realm .NET SDK <dotnet-delete-a-realm>`
+- :js-sdk:`Realm Node.js SDK <Realm.html#.deleteFile>`
+- :js-sdk:`Realm React Native SDK <Realm.html#.deleteFile>`
+- :ref:`Realm Swift SDK <swift-delete-a-realm>`
 
 Side Effects of Enabling Development Mode
 `````````````````````````````````````````
@@ -124,26 +172,53 @@ Queryable Fields
 ~~~~~~~~~~~~~~~~
 
 When you configure Flexible Sync, you specify field names that your client
-application can query. Fields that can be used in a subscription query are
-called **queryable fields**.
-
-You can automatically specify queryable fields by enabling :ref:`Development
-Mode <development-mode>`. Development Mode allows App Services to automatically
-mark fields as queryable as they are used.
-
-Queryable fields apply across all collections in an App's Schema. You
-can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` to
-configure more granular access control on individual collections.
-
-The field names you provide are arbitrary strings. If an object type has a field
-whose name matches a field name you provided (and meets other eligibility
-criteria), that field becomes available to Device Sync to query.
+application can query in a Flexible Sync subscription. Fields that can be 
+used in a subscription query are called **queryable fields**.
 
 .. example::
 
    In a to-do list app, you might set ``assignee`` or ``owner`` 
    as queryable fields. On the client side, you can then query for tasks 
    whose ``assignee`` or ``owner`` matches the logged-in user. 
+
+.. _queryable-field-scopes:
+
+Queryable Field Scopes
+``````````````````````
+
+Queryable fields apply to a scope you designate when you configure them. The
+two available scopes are:
+
+- **Global queryable fields**: scoped across all collections in an App's Schema.
+- **Collection queryable fields**: scoped to a single collection in the App.
+
+You can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` 
+to configure more granular access control on a per-collection basis. You 
+can define collection-level rules and permissions for both global and 
+collection queryable fields.
+
+Configure Queryable Fields
+``````````````````````````
+
+You can automatically specify queryable fields by enabling :ref:`Development
+Mode <development-mode>`. Fields that appear in client queries while using 
+Development mode are automatically added as **collection queryable fields** 
+for the collection being queried.
+
+The field names you provide are arbitrary strings. If an object type has a field
+whose name matches a field name you provided (and meets other eligibility
+criteria), that field becomes available to Device Sync to query.
+
+Configure Indexed Queryable Fields
+++++++++++++++++++++++++++++++++++
+
+You may only add or remove an indexed queryable field when Device Sync is 
+not enabled. If Device Sync is already running in your App, you must 
+:ref:`terminate Sync <terminating-realm-sync>`, and configure the indexed
+queryable field when you :ref:`re-enable it <re-enable-realm-sync>`.
+
+This causes :ref:`client resets <client-resets>` for any client attempting 
+to reconnect after re-enabling Sync.
 
 .. _flexible-sync-eligible-field-types:
 
@@ -154,6 +229,9 @@ Flexible Sync only supports top-level primitive fields with a scalar type as
 queryable fields. You can also include arrays of these primitives as queryable 
 fields. Flexible Sync does not support embedded objects or arrays of 
 objects as queryable fields.
+
+**Indexed queryable fields** support a subset of data types. Your indexed 
+queryable field can be one of: ``int64``, ``string``, ``ObjectId``, ``UUID``.
 
 .. seealso:: Realm Query Language - Flexible Sync Limitations
 
@@ -172,18 +250,107 @@ Performance and Storage
 
 Each queryable field adds additional metadata storage to your Atlas cluster and
 may lead to degraded write performance. You should have as few queryable fields
-as needed by your application. A good rule of thumb is to have at most 10
-queryable fields.
+as needed by your application, and scope them to the minimum number of 
+collections required.
 
-.. seealso::
+Many apps find a good balance between storage usage and query flexibility 
+with at most 10 queryable fields applying to any single collection. 
+For example, if you have 3 *global queryable fields* and 7 
+*collection queryable fields*, you have 10 queryable fields that apply to the 
+collection.
 
-   Learn more about :ref:`optimizing performance and storage when using Flexible Sync <optimizing-performance-and-storage-flexible-sync>`.
+If you have a field that you only want to query in one collection, but it 
+is configured as a *global queryable field*, this unnecessarily consumes 
+Atlas storage space. For example, if you have a ``user`` field in every 
+collection, but you only use it for Sync queries in one collection, scoping 
+that as a *collection queryable field* reduces storage requirements. Reducing
+the scope means that Sync does not have to maintain metadata for that field
+for the other collections where you are not querying on the ``user`` field.
+
+If you need to reduce storage usage or improve performance, you can remove 
+unneeded queryable fields from your App. However, be aware of the consequences 
+of adding or removing queryable fields. For more information, refer to 
+:ref:`consequences-of-adding-removing-queryable-fields`.
+
+For additional considerations, refer to :ref:`optimizing performance and 
+storage when using Flexible Sync <optimizing-performance-and-storage-flexible-sync>`.
+
+.. _fs-indexed-queryable-fields:
+
+Indexed Queryable Fields
+++++++++++++++++++++++++
+
+You can improve performance for certain types of workloads by adding an
+indexed queryable field. An **indexed queryable field** is a 
+**global queryable field** that can be queried on more efficiently, providing
+improved Sync performance. You can designate *one* global queryable field
+as an indexed queryable field.
+
+Indexing a queryable field improves performance for simple queries on a 
+single field, such as ``{“store_id”: 1}`` or  
+``{“user_id”: “641374b03725038381d2e1fb”}``.
+
+The indexed queryable field *must* appear in the schemas of all of your 
+Sync collections, and it must use the same valid data type. For example,
+if your indexed queryable field is ``store_id``, it must appear in all of
+the collections you sync, and it must be the same valid type in all the
+collections. For more information about eligible field types, refer to
+:ref:`flexible-sync-eligible-field-types`.
+
+**You Can't Change Indexed Queryable Field Values on the Client**
+
+After you configure an indexed queryable field, client devices **cannot**
+update an existing object's indexed queryable field value. For example,
+if your indexed queryable field is ``store_id``, the client cannot change 
+this value directly. Changing it from the client is not supported because 
+it may conflict with other updates made to the object in the same timeframe. 
+
+You can still change this value directly in the Atlas database. 
+
+.. warning::
+
+   Changing an object's indexed queryable field value through Atlas may 
+   overwrite concurrent client updates to the object.
+
+.. _fs-indexed-queryable-fields-valid-client-side-queries:
+
+**Client-Side Queries on Indexed Queryable Fields**
+
+When your app uses an indexed queryable field, client-side queries in a 
+Flexible Sync subscription *must* include the indexed queryable field using
+an ``==`` or ``IN`` comparison against a constant at least once. For
+example, ``user_id == 641374b03725038381d2e1fb`` or ``store_id IN {1,2,3}``.
+
+You can optionally include an ``AND`` comparison as long as the indexed
+queryable field is directly compared against a constant using ``==`` or ``IN``
+at least once. For example, ``store_id IN {1,2,3} AND region=="Northeast"``
+or ``store_id == 1 AND (active_promotions < 5 OR num_employees < 10)``.
+
+*Invalid* Flexible Sync queries on an indexed queryable field include queries 
+where:
+
+- The indexed queryable field does not use ``AND`` with the rest of the query.
+  For example ``store_id IN {1,2,3} OR region=="Northeast"`` is invalid
+  because it uses ``OR`` instead of ``AND``.  Similarly, 
+  ``store_id == 1 AND active_promotions < 5 OR num_employees < 10`` is invalid
+  because the ``AND`` only applies to the term next to it, not the entire
+  query.
+- The indexed queryable field is not used in an equality operator. For example
+  ``store_id > 2 AND region=="Northeast"`` is invalid because it uses only 
+  the ``>`` operator with the indexed queryable field and does not have an 
+  equality comparison.
+- The query is missing the indexed queryable field entirely. For example, 
+  ``region=="Northeast`` or ``truepredicate`` are invalid because they do
+  not contain the indexed queryable field.
+
+.. _consequences-of-adding-removing-queryable-fields:
 
 Consequences of Adding or Removing Queryable Fields
 ```````````````````````````````````````````````````
 
-You can :ref:`update your Sync configuration <alter-your-sync-configuration>` to
-add or remove queryable field names, but be aware of the following:
+You can :ref:`update your Sync configuration <alter-your-sync-configuration>` 
+to add or remove queryable field names while Sync is enabled, but be aware 
+of the following:
 
 When you add a queryable field, devices can only sync on that field once the
 device has caught up to the point in time in :ref:`Device Sync History
@@ -195,6 +362,10 @@ their Device Sync session dropped and must perform a :ref:`client reset
 To avoid triggering a client reset when you remove the queryable field, you
 should first remove usage of that field on the client-side.
 
+If you :ref:`terminate Sync <terminating-realm-sync>` before adding or 
+removing queryable fields, these considerations do not apply. However, 
+terminating Sync does trigger a :ref:`client reset <client-resets>` for
+any client that has Synced with your App.
 
 Permissions
 ~~~~~~~~~~~
@@ -241,6 +412,10 @@ the client SDKs. Currently, the following Realm SDKs support Data Ingest:
 - Node.js SDK: :ref:`node-define-an-asymmetric-object`
 - React Native SDK: :ref:`react-native-define-an-asymmetric-object`
 - Swift SDK: :ref:`swift-stream-data-to-atlas`
+
+Atlas Device Sync completely manages the lifecycle of this data. 
+It is maintained on the device until Data Ingest synchronization is 
+complete, and then removed from the device.
 
 Client Max Offline Time
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,6 +465,10 @@ Sync (recommended). If you are using the older Partition-Based Sync, refer to
      "queryable_fields_names": [
        <Array of String Field Names>
      ],
+     "indexed_queryable_fields_names": [
+      <Array of String Field Names>
+     ],
+     "collection_queryable_fields_names": <Map[String][]String>
      "permissions": "<Deprecated, Do Not Use>"
    }
 
@@ -372,8 +551,31 @@ Sync Config Object
    * - | ``queryable_fields_names``
        | Array<String>
      
-     - The :ref:`names of the fields <queryable-fields>` that your client 
-       application can query to determine which data to synchronize.
+     - The :ref:`names of the global queryable fields <queryable-fields>` 
+       that your client application can query to determine which data to 
+       synchronize. These fields are queryable across all synced collections.
+
+   * - | ``indexed_queryable_fields_names``
+       | Array<String>
+     
+     - The :ref:`name of the indexed queryable field <fs-indexed-queryable-fields>` 
+       that your client application can query to determine which data to 
+       synchronize. While this property is an array, we currently support
+       only one one indexed queryable field. This array may contain only one 
+       element. The indexed queryable field must be present in the schema 
+       and be the same :ref:`eligible field type <flexible-sync-eligible-field-types>`
+       in every collection you sync. The indexed queryable field name must 
+       *also* appear in ``queryable_fields_names`` since this is a global
+       queryable field.
+
+   * - | ``collection_queryable_fields_names``
+       | <Map[String][]String>
+     
+     - The :ref:`names of the collection queryable fields <queryable-field-scopes>` 
+       that your client application can query to determine which data to 
+       synchronize. Collection queryable fields are scoped to the specified
+       collection. Scoping a queryable field to a specific collection reduces
+       the amount of backing Atlas storage required to store Sync metadata.
 
    * - | ``last_disabled``
        | Number

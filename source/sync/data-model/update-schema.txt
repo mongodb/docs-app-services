@@ -32,6 +32,9 @@ realms, allowing old clients to sync with newer ones.
 Breaking schema changes, however, take some planning and work, and should
 be avoided whenever possible.
 
+Breaking Changes
+----------------
+
 Breaking schema changes are difficult because older clients (those that 
 have not been updated to your new code and schema) still need access to 
 the data via the old schema definition. Clients that are updated need to 
@@ -47,7 +50,7 @@ work with the new schema changes.
 .. _breaking-change-quick-reference:
 
 Breaking vs. Non-Breaking Change Quick Reference
-------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A breaking change is a change that you make in your server-side
 schema that requires additional action to handle. 
@@ -124,6 +127,11 @@ non-breaking change.
    While renaming a property or object is a breaking change, some of the Realm 
    SDKs offer a workaround to remap the property name. See 
    :ref:`schema-update-change-property-name` for more details.
+
+Development Mode and Breaking Changes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. include:: /includes/dev-mode-breaking-changes.rst
 
 .. _schema-update-add-object-type:
 
@@ -233,7 +241,7 @@ optional property to both the model and the schema.
 Remove an Object Type
 ---------------------
 
-You can remove an object fom the client's object model as a non-breaking change. 
+You can remove an object from the client's object model as a non-breaking change. 
 If you remove the object from the server-side schema, it is a breaking change.
 For this reason, we recommend you remove the object type from the client-side 
 object model only and leave it in place on the server-side schema. 
