@@ -11,8 +11,8 @@ Edge Server MongoDB API Support
    :class: singlecol
 
 Atlas Edge Server natively implements a subset of the MongoDB wire protocol,
-which allows you to connect to an App through one of its linked MongoDB 
-Atlas data sources using standard MongoDB drivers and tools. 
+which allows you to access your Atlas data on the Edge using standard
+MongoDB drivers and tools. 
 
 Clients use a specialized MongoDB URI connection string to connect and 
 send requests.
@@ -30,11 +30,13 @@ host machine using this MongoDB URI:
 
 .. code:: console
 
-   mongodb://EDGE_SERVER_HOSTNAME:PORT
+   mongodb://EDGE_SERVER_HOSTNAME:27021
 
-- ``EDGE_SERVER_HOSTNAME``: The public DNS of your Edge Server host. For
-  more information, refer to :ref:`edge-server-install-and-configure`.
-- ``PORT``: The wire protocol server is accessible on port ``27021``.
+The ``EDGE_SERVER_HOSTNAME`` is the public DNS of your Edge Server host. 
+For more information, refer to :ref:`edge-server-install-and-configure`.
+
+You must make port 27021 accessible to the client through port mapping or
+firewall rules.
 
 .. example::
 
