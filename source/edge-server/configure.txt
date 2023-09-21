@@ -301,10 +301,14 @@ Set up and run the Edge Server on the host.
          With this example, we explicitly sync data from the ``Item`` and 
          ``Project`` collections, because the App Services schema also 
          has a ``Team`` collection that we don't want to sync to the 
-         Edge Server. If we instead wanted to sync all the data in the 
-         App Services schema, we could use the default value for the query:
-         ``query: "*"``. We could also have more granular queries; for 
-         example, only sync Projects where ``facility_id == 42``.
+         Edge Server. 
+         
+         If we wanted to sync all the data in the App Services schema, we 
+         could use the default value for the query: ``query: "*"``. 
+         
+         We could also use more granular queries to sync a subset of
+         documents with a collection. For example, only sync Projects where 
+         ``facility_id == 42``.
 
          For more details on what you could include in a query, refer to 
          :ref:`Realm Query Language <rql>`.
