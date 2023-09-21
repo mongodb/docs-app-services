@@ -176,7 +176,7 @@ Set up and run the Edge Server on the host.
            "cloudSyncServerAuthSecret": "YOUR-AUTH-SECRET",
            "hostname": "YOUR-EDGE-SERVER-DOMAIN",
            "tls" : {
-             "enabled": true,
+             "enabled": false,
              "certificates": [
                {
                  "publicKeyPath": "YOUR_PUBLIC_KEY_PATH/cert.pem",
@@ -198,8 +198,8 @@ Set up and run the Edge Server on the host.
 
          * - ``query``
            - The ``query`` field defaults to ``"*"``, which automatically 
-             syncs all data in all of the collections in your App Services
-             schema.
+             syncs all data in all of the collections in your :ref:`App 
+             Services schema <schemas>`.
            
              If you would like to filter the data that syncs to your Edge 
              Server, pass an object containing one or more collections 
@@ -255,13 +255,15 @@ Set up and run the Edge Server on the host.
              certificates you specify in the ``certificates`` object to 
              encrypt your data. You must set the ``publicKeyPath`` and 
              ``privateKeyPath`` values to the locations of your TLS 
-             certificates.
+             certificates. When ``false``, the certificates are ignored 
+             entirely, even if they point to valid certificates.
 
-             You must provide certificates signed by a certificate authority;
-             for example, Let's Encrypt; or create self-signed certificates
-             and install them on the devices that connect to Edge Server.
-             During development, you may bypass certificate management by 
-             disabling certificate verification in the device connection code.
+             To use TLS, you must provide certificates signed by a certificate 
+             authority; for example, Let's Encrypt; or create self-signed 
+             certificates and install them on the devices that connect to 
+             Edge Server. During development, you may bypass certificate 
+             management by disabling certificate verification in the device 
+             connection code.
 
       .. example::
 
