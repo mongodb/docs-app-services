@@ -10,4 +10,379 @@ Configure Edge Server
    :depth: 2
    :class: singlecol
 
-This is a placeholder page.
+Edge Server is a "local" server that sits between your client devices and 
+MongoDB Atlas App Services. For most use cases, you'll provision hardware 
+on-premises to host the Edge Server. While you're developing your Edge 
+Server application, you may host it on a cloud server for convenience.
+
+Client devices on-prem connect to Edge Server. Your Edge Server connects 
+to App Services. Clients do not connect to App Services directly.
+
+.. image:: /images/edge-server-in-action.png
+   :alt: Architecture diagram showing devices connected to an Edge Server, which is connected to Atlas
+
+This page details how to configure and start the Edge Server.
+
+.. _edge-server-create-device-sync-app:
+
+Prerequisites
+-------------
+
+Edge Server connects to a Device Sync-enabled App Services App. Before
+you can use Edge Server, you must create an App Services App, enable
+Device Sync, and configure an authentication provider and permissions
+for your App.
+
+.. procedure::
+
+   .. step:: Create an App Services App
+
+      Create an :ref:`App Services App using the UI, CLI, or Admin API <create-app>`.
+      
+      .. tip:: Get started quickly with a template app
+
+         You can use an Edge Server with any Flexible Sync-enabled 
+         App Services App. For a quick proof-of-concept, you can 
+         :ref:`create an app from a template <create-template-app>`. 
+         Any of the starter templates whose name includes 
+         :guilabel:`Atlas Device Sync Starter` can quick-start your 
+         Edge Server proof-of-concept. If you create a template app from 
+         the Atlas UI, choose :guilabel:`Real-time Sync`.
+         
+         These templates set up a Device Sync-enabled task tracker app with a 
+         downloadable front-end client. The template app comes pre-configured 
+         with permissions for the user to write their own Items to an ``Item`` 
+         collection in a ``todo`` database. It also has 
+         :ref:`Development Mode <development-mode>` and 
+         :ref:`email/password authentication <email-password-authentication>` 
+         enabled.
+
+         On the :ref:`edge-server-connect` page, you can learn how to 
+         modify the client to connect to the Edge Server.
+
+   .. step:: Enable Device Sync
+
+      If you have not started with a template app, :ref:`enable Device Sync 
+      <enable-sync>` with Flexible Sync. 
+      
+   .. step:: Configure Data Access Permissions
+
+      Configure any :ref:`permissions <device-sync-compatibility>` your 
+      App needs to enforce data access rules.
+
+   .. step:: Configure an Authentication Provider
+
+      Edge Server supports these authentication providers:
+
+      - :ref:`Anonymous Authentication <anonymous-authentication>`
+      - :ref:`Email/Password Authentication <email-password-authentication>`
+      - :ref:`Custom JWT Authentication <custom-jwt-authentication>`
+      - :ref:`API Key Authentication <api-key-authentication>`
+
+      Enable an authentication provider for clients to connect to the Edge Server.
+
+      .. note::
+         
+         If you created a :ref:`template app <template-apps>`, email/password 
+         authentication is already enabled in the template app configuration.
+
+   .. step:: Get Edge Server Enabled
+
+      At this time, Edge Server is in Private Preview. Your MongoDB 
+      representative must enable Edge Server for your App. Give
+      your :ref:`App Services App ID <find-app-id>` to your 
+      Product or Account Representative. They will enable Edge Server and 
+      generate an authorization secret for your App.
+
+.. _edge-server-host-requirements:
+
+Edge Server Host Requirements
+-----------------------------
+
+The host that runs Edge Server may be an EC2 instance or other cloud 
+server, or hardware that you provision on-site.
+
+.. tip::
+
+   For proof-of-concept testing, you can launch an EC2 instance running 
+   Ubuntu Server 18.x. Under Network settings, add a rule to allow access 
+   via HTTP/Port 80. Free tier settings are sufficient for small PoC projects.
+
+.. _edge-server-required-network-access:
+
+Required Network Access
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The host that runs the Edge Server must allow access to port 80 via HTTP 
+to the general internet. 
+
+.. _edge-server-os-support:
+
+OS Compatibility
+~~~~~~~~~~~~~~~~
+
+The Edge Server has been verified with the following operating systems:
+
+- Ubuntu Server 18+
+- macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
+
+Other operating systems may be possible, but have not yet been verified.
+
+.. _edge-server-hardware-requirements:
+
+Hardware Requirements
+~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server benchmarking is not yet complete, so minimum required hardware
+is not yet available. 
+
+.. _edge-server-install-and-configure:
+
+Install and Configure the Edge Server
+-------------------------------------
+
+Set up and run the Edge Server on the host.
+
+.. include:: /includes/important-stop-tiered-sync-server.rst
+
+.. procedure::
+
+   .. step:: Get the Edge Server Code
+
+      Use ``wget`` to get the current Edge Server code as a ``.tar`` file:
+
+      .. code-block:: shell
+
+         wget --content-disposition https://realm.mongodb.com/api/client/v2.0/tiered-sync/package/latest
+
+      Unzip the tar to get the files.
+
+      .. code-block:: shell
+
+         tar -xvf *.tgz
+
+      You now have an ``edge_server`` directory containing the server files.
+
+   .. step:: Complete the Edge Server Configuration Details
+
+      The ``edge_server`` directory contains a :file:`config.json` file you 
+      must edit with the appropriate values to configure the server.
+
+      .. code-block:: json
+
+         {
+           "clientAppId": "YOUR-APP-ID",
+           "query": "*",
+           "cloudSyncServerAuthSecret": "YOUR-AUTH-SECRET",
+           "hostname": "YOUR-EDGE-SERVER-DOMAIN",
+           "tls" : {
+             "enabled": false,
+             "certificates": [
+               {
+                 "publicKeyPath": "YOUR_PUBLIC_KEY_PATH/cert.pem",
+                 "privateKeyPath": "YOUR_PRIVATE_KEY_PATH/certkey.pem"
+               }
+             ]
+           }
+         }
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Field name
+           - Value
+
+         * - ``clientAppId``
+           - The unique ID of your App Services App. For information about 
+             finding the App ID, refer to :ref:`find-app-id`.
+
+         * - ``query``
+           - The ``query`` field defaults to ``"*"``, which automatically 
+             syncs all data in all of the collections in your :ref:`App 
+             Services schema <schemas>`.
+           
+             If you would like to filter the data that syncs to your Edge 
+             Server, pass an object containing one or more collections 
+             and queries to sync a subset of your data with Edge Server.
+             This may resemble:
+
+             .. code-block:: json
+
+                {
+                  "clientAppId": "sync-template-app-zkiee",
+                  "query": {
+                    "YOUR-COLLECTION-NAME": "YOUR-QUERY",
+                    "YOUR-COLLECTION-NAME": "YOUR-QUERY"
+                  },
+                  ... additional configuration fields...
+                }
+
+         * - ``YOUR-COLLECTION-NAME``
+           - If you're passing a query object to filter the data that syncs
+             to the Edge Server, this is the name of a collection in your 
+             database. If you're using a template app, this is the ``Item`` 
+             collection. Your Edge Server query may contain many collections.
+            
+         * - ``YOUR-QUERY``
+           - If you're passing a query object to filter the data that syncs
+             to the Edge Server, this is the query that determines what 
+             documents the Edge Server can sync with a collection. You can 
+             use :ref:`Realm Query Language <rql>` to define this query, 
+             with the same caveats around :ref:`Flexible Sync RQL 
+             Limitations <flexible-sync-rql-limitations>`.
+             
+             For example, ``truepredicate`` means the Edge Server syncs 
+             all documents with the collection. You might only want to sync 
+             a subset of documents with an Edge Server, so you could pass a
+             RQL query similar to ``“store_id == 42”``.
+
+         * - ``cloudSyncServerAuthSecret``
+           - The authorization secret that your Product or Account 
+             Representative provided when you contacted them to get 
+             Edge Server enabled for your App.
+
+         * - ``hostname``
+           - The public DNS of your host. This should resemble something
+             like ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``. 
+             For localhost, set this value to ``localhost:80``.
+         
+         * - ``tls``
+           - A configuration object that includes the Transport Layer 
+             Security options for your Edge Server. The default value is
+             ``false``.
+
+             When ``enabled`` is ``true``, Edge Server uses the TLS 
+             certificates you specify in the ``certificates`` object to 
+             encrypt your data. You must set the ``publicKeyPath`` and 
+             ``privateKeyPath`` values to the locations of your TLS 
+             certificates. When ``false``, the certificates are ignored 
+             entirely, even if they point to valid certificates.
+
+             To use TLS, you must provide certificates signed by a certificate 
+             authority; for example, Let's Encrypt; or create self-signed 
+             certificates and install them on the devices that connect to 
+             Edge Server. During development, you may bypass certificate 
+             management by disabling certificate verification in the device 
+             connection code.
+
+      .. example::
+
+         The following example shows an Edge Server configuration file that:
+
+         - Runs on an EC2 instance.
+         - Syncs data with two collections: ``Item`` and ``Project``. 
+           The ``Project`` collection has a list property that represents 
+           a :ref:`to-many relationship <relationships-to-many>` to the 
+           ``Item`` collection.
+         - Has TLS enabled, with certificates signed by Let's Encrypt. 
+
+         .. code-block:: json
+            :copyable: false
+
+            {
+               "clientAppId": "sync-template-app-zkiee",
+               "query": {
+                  "Item": "truepredicate",
+                  "Project": "truepredicate"
+               },
+               "cloudSyncServerAuthSecret": "3814f3fb7befe2eef66ee01781ae245a",
+               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+               "tls" : {
+                 "enabled": true,
+                 "certificates": [
+                   {
+                     "publicKeyPath": "certs/cert.pem",
+                     "privateKeyPath": "certs/certkey.pem"
+                   }
+                 ]
+               }
+            }
+
+         With this example, we explicitly sync data from the ``Item`` and 
+         ``Project`` collections, because the App Services schema also 
+         has a ``Team`` collection that we don't want to sync to the 
+         Edge Server. 
+         
+         If we wanted to sync all the data in the App Services schema, we 
+         could use the default value for the query: ``query: "*"``. 
+         
+         We could also use more granular queries to sync a subset of
+         documents with a collection. For example, only sync Projects where 
+         ``facility_id == 42``.
+
+         For more details on what you could include in a query, refer to 
+         :ref:`Realm Query Language <rql>`.
+
+   .. step:: Install Dependencies
+
+      The Edge Server requires several dependencies, which are listed 
+      in the :file:`README.md` in the ``edge_server`` directory. Follow the 
+      instructions to install the required dependencies.
+
+.. _start-and-stop-edge-server:
+
+Start and Stop the Edge Server
+------------------------------
+
+To start the server, from the ``edge_server`` directory:
+
+.. code-block:: shell
+
+   make up
+
+.. note::
+
+   You don't have to run the Docker commands as root. However, if you 
+   don't, you may get a message similar to this:
+   
+   .. code-block:: console
+      :copyable: false
+   
+      Couldn't connect to Docker daemon at http+docker://localunixsocket
+
+   If this occurs, you can switch to the root user with ``sudo su``.
+
+Now you can connect clients directly to the Edge Server.
+
+In the App Services logs, you should see an ``Authentication -> Login``
+entry whose ``Name`` is ``tiered-sync-token``. This is the Edge Server
+connecting to your App Services App.
+
+To stop the server, from the ``edge_server`` directory:
+
+.. code-block:: shell
+
+   make down
+
+.. include:: /includes/important-stop-tiered-sync-server.rst
+
+.. _check-edge-server-status:
+
+Check the Edge Server Status
+----------------------------
+
+When the Edge Server is running, you can see the status of the 
+Edge Server with:
+
+.. code-block:: shell
+
+   make status
+
+This gives you information about the number of clients connected to the 
+server, as well as errors that may have occurred.
+
+.. example::
+
+   The status object of an Edge Server may look similar to:
+
+   .. code-block:: json
+      :copyable: false
+
+      {
+         "status": "ACTIVE",
+         "cloud_connected": true,
+         "num_local_clients": 1,
+         "query": {
+            "Item": "truepredicate"
+         }
+      }

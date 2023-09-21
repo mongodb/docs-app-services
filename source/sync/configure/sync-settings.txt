@@ -48,7 +48,7 @@ streamlines development, but should not be used in production.
 Development Mode speeds up development by allowing you to design :ref:`schemas
 <configure-your-data-model>` directly in client application code.
 
-When you sync a realm file, Atlas App Services maps every synced object type
+When you sync a realm, Atlas App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`. If you update the object model on the client
 side, App Services updates the collection schema to match. This lets you update
@@ -61,14 +61,62 @@ update the backend schema by changing the client model.
 To learn more about how the Realm Object Schemas map to the App Services Schemas
 when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
 
-For more information about modifying synced object schemas, including how to
-handle breaking changes, see: :ref:`<synced-schema-overview>`.
+For more information about modifying synced object schemas, see:
+:ref:`<synced-schema-overview>`.
 
 .. important:: Disable Development Mode for Production Apps
    
    Development mode is a development utility that is not suitable for 
    production use. Make sure that you turn off Development Mode before you 
    make your app accessible in a production environment.
+
+.. _dev-mode-breaking-changes:
+
+Breaking Changes
+````````````````
+
+App Services Apps in Development Mode that were created after September 13, 2023
+can make :ref:`breaking changes <breaking-change-quick-reference>` to synced
+object schemas from client code.
+
+**Prerequisites** 
+
+- App Services App created after September 13, 2023
+- MongoDB 5.0 or later for Flexible Sync compatibility
+- Minimum SDK version:
+
+  - Realm Swift SDK v10.42.2
+  - Realm Kotlin SDK v11.1.1
+
+.. - Realm Node.js SDK v[SDK-VERSION]
+.. - Realm React Native SDK v[SDK-VERSION]
+.. - Realm .NET SDK v[SDK-VERSION]
+.. - Realm Java SDK v[SDK-VERSION]
+
+.. note:: Apps created before September 13, 2023
+   
+   For Apps created before September 13, 2023, you need to update your
+   object schema in the App Services UI. For details, see
+   :ref:`<synced-schema-overview>`
+
+To make a breaking change from client code:
+
+#. Delete your local realm and data.
+   This will not affect data synced to the backend. Local changes that have not
+   been synced will be removed and are unrecoverable.
+#. Change your local object model.
+#. Open a realm with your updated object model.
+#. Run your client app to sync your changes to the backend.
+
+To delete a Realm file use the Realm SDK-specific methods:
+
+- :ref:`Realm Kotlin SDK <kotlin-delete-a-realm>`
+- :ref:`Realm Flutter SDK <flutter-delete-realm>`
+- :ref:`Realm Java SDK <io_realm_Realm_deleteRealm>`
+- :ref:`Realm .NET SDK <dotnet-delete-a-realm>`
+- :js-sdk:`Realm Node.js SDK <Realm.html#.deleteFile>`
+- :js-sdk:`Realm React Native SDK <Realm.html#.deleteFile>`
+- :ref:`Realm Swift SDK <swift-delete-a-realm>`
 
 Side Effects of Enabling Development Mode
 `````````````````````````````````````````

@@ -10,4 +10,154 @@ Connect to an Edge Server
    :depth: 2
    :class: singlecol
 
-This is a placeholder page.
+Once the Edge Server is :ref:`configured <edge-server-configure>` and 
+:ref:`running <start-and-stop-edge-server>`, you can connect to it from 
+a client application.
+
+.. _edge-server-connect-from-client:
+
+Connect to the Edge Server from a Client
+----------------------------------------
+
+To connect to the Edge Server from a client, your app must:
+
+- Set the Sync URL to the public-accessible DNS address you set in the 
+  Edge Server :ref:`config's <edge-server-install-and-configure>` ``hostname`` 
+  field.
+- If TLS is not enabled, use HTTP over port 80.
+
+.. tip::
+
+   While your Edge Server deployment is in development, we recommend connecting
+   with HTTP over port 80 for simplicity. Before moving to production, 
+   you can coordinate with your Product or Account Representative to configure
+   HTTPS with a self-signed certificate.
+
+Example: SwiftUI Template App
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For a quick proof of concept using a template app, these are the 
+modifications you can make to the :github:`Swift template app 
+<mongodb/template-app-swiftui-todo>` to connect to the Edge Server:
+
+.. procedure::
+
+   .. step:: Configure the Server Connection
+
+      In the Swift template app's :file:`atlasConfig`, set the values to:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Key
+           - Value
+
+         * - ``baseUrl``
+           - The public-accessible DNS of your Edge Server's host.
+             This is ``http://``, or if TLS is enabled, ``https://``, 
+             followed by the same value you set in your Edge Server 
+             config's ``hostname`` field.
+          
+         * - ``appId``
+           - The App ID of your App Services App that has Edge Server 
+             enabled. For more information about finding the App ID, refer 
+             to :ref:`find-app-id`.
+
+   .. step:: Adjust the App Transport Security Settings (Optional)
+
+      If your app uses TLS, you can disregard this step. If you are developing
+      an Edge Server app with TLS not enabled during development, you must 
+      complete this step.
+
+      For iOS, Apple disables insecure connections by default. You must add
+      an exception for your public-accessible DNS to allow the client app 
+      to connect to it.
+
+      Select your App target, and go to the :guilabel:`Signing & Capabilities`
+      tab. Press the :guilabel:`+ Capability` button, and search for 
+      ``App Transport Security Settings``. Add this to your app.
+
+      Add an exception domain for your public-accessible DNS. This should
+      be just the string domain, similar to: ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``.
+
+      This creates an :file:`Info.plist` file in your project. Go to this file
+      to make the following adjustments.
+
+      Change this ``String`` key to a ``Dictionary``. Add two more keys for:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Key
+           - Type
+           - Value
+
+         * - ``NSIncludesSubdomains``
+           - Boolean
+           - ``YES``
+          
+         * - ``NSExceptionAllowsInsecureHTTPLoads``
+           - Boolean
+           - ``YES``
+
+      This enables your iOS client to connect to the insecure HTTP DNS.
+
+      Your :file:`Info.plist` file should look similar to:
+
+      .. image:: /images/tiered-sync-info-plist.png
+         :alt: Screenshot of an Info.plist file showing the settings above
+
+   .. step:: Adjust the Log Level (Optional)
+
+      You can adjust the log level if you'd like to get additional details 
+      about the status of communication with the Edge Server.
+
+      In the :file:`App` file, you can add an ``.onAppear`` block to set 
+      the log level. Add a log level line in this block to get additional 
+      information:
+
+      .. code-block:: swift
+         :emphasize-lines: 10-12
+
+         var body: some Scene {
+            WindowGroup {
+               ContentView(app: app)
+                  .environmentObject(errorHandler)
+                  .alert(Text("Error"), isPresented: .constant(errorHandler.error != nil)) {
+                     Button("OK", role: .cancel) { errorHandler.error = nil }
+                  } message: {
+                     Text(errorHandler.error?.localizedDescription ?? "")
+                  }
+                  .onAppear {
+                     Logger.shared.level = .trace
+                  }
+            }
+         }
+
+      For more information about setting the log level, refer to 
+      :ref:`swift-logging`.
+
+   .. step:: Run the App
+
+      Now you can build and run the app. When you log in, the app connects 
+      to the Edge Server. When you create new Items, those sync with the 
+      Edge Server. The Edge Server then syncs with the Atlas App Services App.
+
+      You can check the status of the Edge Server from your host.
+      With the client running, you can see ``"num_local_clients": 1`` in 
+      the Edge Server status. You can also see error messages reflected
+      in the sync status.
+
+      After the next time the Edge Server syncs with your App Services App,
+      you can see synced changes reflected in the linked Atlas collection.
+
+      .. important::
+
+         If you have previously connected directly from the client to your 
+         App Services App with Device Sync, you may need to clear state on the 
+         simulator or device. Resetting your cache enables your client to 
+         connect to the Edge Server.
+
+         In a console app, delete the ``mongodb-realm`` directory. If you're
+         using an iOS or Android simulator or device, uninstall and reinstall
+         the app.
