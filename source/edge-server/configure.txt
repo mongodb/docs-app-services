@@ -267,13 +267,14 @@ Set up and run the Edge Server on the host.
 
       .. example::
 
-         An example Edge Server configuration file for a template app running
-         on an EC2 instance might look similar to:
+         The following example shows an Edge Server configuration file that:
 
-         .. code-block:: json
-            :copyable: false
-
-         The "query" could include multiple collection names, similar to:
+         - Runs on an EC2 instance.
+         - Syncs data with two collections: ``Item`` and ``Project``. 
+           The ``Project`` collection has a list property that represents 
+           a :ref:`to-many relationship <relationships-to-many>` to the 
+           ``Item`` collection.
+         - Has TLS enabled, with certificates signed by Let's Encrypt. 
 
          .. code-block:: json
             :copyable: false
@@ -296,6 +297,14 @@ Set up and run the Edge Server on the host.
                  ]
                }
             }
+
+         With this example, we explicitly sync data from the ``Item`` and 
+         ``Project`` collections, because the App Services schema also 
+         has a ``Team`` collection that we don't want to sync to the 
+         Edge Server. If we instead wanted to sync all the data in the 
+         App Services schema, we could use the default value for the query:
+         ``query: "*"``. We could also have more granular queries; for 
+         example, only sync Projects where ``facility_id == 42``.
 
          For more details on what you could include in a query, refer to 
          :ref:`Realm Query Language <rql>`.
