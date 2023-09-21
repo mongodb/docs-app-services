@@ -21,10 +21,10 @@ Connect to the Edge Server from a Client
 
 To connect to the Edge Server from a client, your app must:
 
-- Use HTTP over port 80.
 - Set the Sync URL to the public-accessible DNS address you set in the 
   Edge Server :ref:`config's <edge-server-install-and-configure>` ``hostname`` 
   field.
+- If TLS is not enabled, use HTTP over port 80.
 
 .. tip::
 
@@ -53,16 +53,21 @@ modifications you can make to the :github:`Swift template app
            - Value
 
          * - ``baseUrl``
-           - The public-accessible DNS of your Edge Server's host. 
-             This is ``http://`` followed by the same value you set in your 
-             Edge Server config's ``hostname`` field.
+           - The public-accessible DNS of your Edge Server's host.
+             This is ``http://``, or if TLS is enabled, ``https://``, 
+             followed by the same value you set in your Edge Server 
+             config's ``hostname`` field.
           
          * - ``appId``
            - The App ID of your App Services App that has Edge Server 
              enabled. For more information about finding the App ID, refer 
              to :ref:`find-app-id`.
 
-   .. step:: Adjust the App Transport Security Settings
+   .. step:: Adjust the App Transport Security Settings (Optional)
+
+      If your app uses TLS, you can disregard this step. If you are developing
+      an Edge Server app with TLS not enabled during development, you must 
+      complete this step.
 
       For iOS, Apple disables insecure connections by default. You must add
       an exception for your public-accessible DNS to allow the client app 

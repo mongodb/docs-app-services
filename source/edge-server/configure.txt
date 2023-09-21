@@ -11,13 +11,12 @@ Configure Edge Server
    :class: singlecol
 
 Edge Server is a "local" server that sits between your client devices and 
-the MongoDB Atlas App. For most use cases, you'll provision hardware 
+MongoDB Atlas App Services. For most use cases, you'll provision hardware 
 on-premises to host the Edge Server. While you're developing your Edge 
 Server application, you may host it on a cloud server for convenience.
 
-Client devices on-prem connect to Edge Server. Your Edge Server
-connects to a MongoDB Atlas App. Clients do not connect to the MongoDB 
-Atlas App directly.
+Client devices on-prem connect to Edge Server. Your Edge Server connects 
+to App Services. Clients do not connect to App Services directly.
 
 .. image:: /images/edge-server-in-action.png
    :alt: Architecture diagram showing devices connected to an Edge Server, which is connected to Atlas
@@ -173,9 +172,7 @@ Set up and run the Edge Server on the host.
 
          {
            "clientAppId": "YOUR-APP-ID",
-           "query": {
-             "YOUR-COLLECTION-NAME": "YOUR-QUERY"
-           },
+           "query": "*",
            "cloudSyncServerAuthSecret": "YOUR-AUTH-SECRET",
            "hostname": "YOUR-EDGE-SERVER-DOMAIN",
            "tls" : {
@@ -200,22 +197,44 @@ Set up and run the Edge Server on the host.
              finding the App ID, refer to :ref:`find-app-id`.
 
          * - ``query``
-           - An object containing one or more collections and queries that 
-             define the collections and documents the Edge Server can 
-             sync.
+           - The ``query`` field defaults to ``"*"``, which automatically 
+             syncs all data in all of the collections in your App Services
+             schema.
+           
+             If you would like to filter the data that syncs to your Edge 
+             Server, pass an object containing one or more collections 
+             and queries to sync a subset of your data with Edge Server.
+             This may resemble:
+
+             .. code-block:: json
+
+                {
+                  "clientAppId": "sync-template-app-zkiee",
+                  "query": {
+                    "YOUR-COLLECTION-NAME": "YOUR-QUERY",
+                    "YOUR-COLLECTION-NAME": "YOUR-QUERY"
+                  },
+                  ... additional configuration fields...
+                }
 
          * - ``YOUR-COLLECTION-NAME``
-           - The name of the collection in your database where the Edge 
-             Server should sync data. If you're using a 
-             template app, this is the ``Item`` collection.
+           - If you're passing a query object to filter the data that syncs
+             to the Edge Server, this is the name of a collection in your 
+             database. If you're using a template app, this is the ``Item`` 
+             collection. Your Edge Server query may contain many collections.
             
          * - ``YOUR-QUERY``
-           - The query that determines what documents the Edge Server
-             can sync with the collection. For example, ``truepredicate``
-             means the Edge Server syncs all documents with the collection.
-             You can use :ref:`Realm Query Language <rql>` to define this
-             query, with the same caveats around :ref:`Flexible Sync RQL 
+           - If you're passing a query object to filter the data that syncs
+             to the Edge Server, this is the query that determines what 
+             documents the Edge Server can sync with a collection. You can 
+             use :ref:`Realm Query Language <rql>` to define this query, 
+             with the same caveats around :ref:`Flexible Sync RQL 
              Limitations <flexible-sync-rql-limitations>`.
+             
+             For example, ``truepredicate`` means the Edge Server syncs 
+             all documents with the collection. You might only want to sync 
+             a subset of documents with an Edge Server, so you could pass a
+             RQL query similar to ``“store_id == 42”``.
 
          * - ``cloudSyncServerAuthSecret``
            - The authorization secret that your Product or Account 
@@ -229,7 +248,8 @@ Set up and run the Edge Server on the host.
          
          * - ``tls``
            - A configuration object that includes the Transport Layer 
-             Security options for your Edge Server.
+             Security options for your Edge Server. The default value is
+             ``false``.
 
              When ``enabled`` is ``true``, Edge Server uses the TLS 
              certificates you specify in the ``certificates`` object to 
@@ -250,24 +270,6 @@ Set up and run the Edge Server on the host.
 
          .. code-block:: json
             :copyable: false
-
-            {
-               "clientAppId": "sync-template-app-zkiee",
-               "query": {
-                  "Item": "truepredicate"
-               },
-               "cloudSyncServerAuthSecret": "3814f3fb7befe2eef66ee01781ae245a",
-               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
-               "tls" : {
-                 "enabled": true,
-                 "certificates": [
-                   {
-                     "publicKeyPath": "certs/cert.pem",
-                     "privateKeyPath": "certs/certkey.pem"
-                   }
-                 ]
-               }
-            }
 
          The "query" could include multiple collection names, similar to:
 
