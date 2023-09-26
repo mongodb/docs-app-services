@@ -2,7 +2,7 @@
 
 ## Device Sync
 
-- Configure Sync/Sync Settings: Development Mode: Document update, which allows breaking changes in development mode.
+- Configure Sync/Sync Settings: Development Mode: Add "Breaking Changes" subsection with details on an update that allows breaking changes in development mode.
 
 ## Edge Server
 
@@ -13,12 +13,11 @@
 
 ## Data API
 
-- Internal: Add programmatically-generated facet tags to the landing page for improved search indexing.
+- Internal: Add programmatically generated facet tags to the landing page for improved search indexing.
 
 ## Monitor App Activity
 
 - Activity Feed Alerts: Clarify list of default alerts on page.
-
 
 # September 15, 2023
 
@@ -59,7 +58,7 @@
 
 ## Internal
 
-- Add programmatically-generated facet tags to the repo for improved search indexing.
+- Add programmatically generated facet tags to the repo for improved search indexing.
 
 # September 1, 2023
 
