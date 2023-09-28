@@ -1,0 +1,141 @@
+:template: product-landing
+:hidefeedback: header
+:noprevnext:
+
+.. _edge-server:
+
+=================
+Atlas Edge Server
+=================
+
+.. toctree::
+   :titlesonly:
+   :hidden:
+   
+   Configure Edge Server </edge-server/configure>
+   Connect to Edge Server </edge-server/connect>
+   Use MongoDB APIs with Edge Server </edge-server/mongodb>
+
+.. introduction::
+
+   You have a warehouse, retail store, or another premises where devices 
+   need to seamlessly sync their data. Those locations may or may not be 
+   online at any given time. Lack of a network connection shouldn't prevent 
+   the devices from sharing data with each other.
+
+   Edge Server runs on-premises and handles sync between local devices,
+   and bi-directional sync between the Edge Server and Atlas.
+
+   Edge Server is currently in Private Preview. Learn more about previewing
+   the 
+   `Atlas Device Sync Edge Server <https://www.mongodb.com/products/platform/atlas-edge-server>`__.
+
+.. image:: /images/plp/Technical_SOFTWARE_DataSync_Spot.png
+   :alt: Atlas Data Sync Illustration
+
+
+.. kicker:: What It Is
+
+Key Features
+------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: On-Premises Sync + Atlas
+      :icon: /images/icons/General_CLOUD_Transfer10x.png
+      :icon-alt: An icon depicting a cloud with a two-way transfer icon
+
+      Edge server is a local instance of MongoDB paired with a Device Sync 
+      server that runs on-premises. It brings real-time sync, disconnection 
+      tolerance, and conflict resolution to the location's devices. It 
+      seamlessly syncs with Atlas when it has a network connection.
+
+   .. card::
+      :headline: Optimize Bandwidth
+      :icon: /images/icons/General_FEATURES_Flexibility10x.png
+      :icon-alt: An icon depicting data syncing
+
+      Delta Sync ensures that only fields with changes in a document are 
+      sent to Atlas. Mission-critical data is transferred efficiently while 
+      minimizing network congestion.
+
+   .. card::
+      :headline: Client Independence
+      :icon: /images/icons/Technical_REALM_iOSAndriodCrossPlatform10x.png
+      :icon-alt: An icon depicting two mobile devices sharing data
+
+      Edge clients can sync and access essential data independently, even 
+      when disconnected from the central database. Applications and devices 
+      in a connected infrastructure continue to function seamlessly, 
+      despite intermittent connectivity.
+
+.. kicker:: How it Works
+
+Edge Server Setup
+-----------------
+
+.. procedure::
+
+   .. step:: Create a Device Sync-Enabled App
+
+      Create an :ref:`App Services App <create-app>` with 
+      :ref:`Device Sync enabled <enable-sync>`. To get started quickly, 
+      :ref:`create a template app <create-template-app>`.
+
+      Once your App is created, coordinate with your Product or Account 
+      Representative to enable Edge Server.
+
+   .. step:: Install and Configure the Edge Server
+
+      Configure hardware on-site or a cloud server to host your Edge Server.
+      Install the Edge Server on your hardware, complete a basic 
+      ``config.json`` with your configuration details, and install required
+      dependencies.
+
+      Add an authorization provider, and start the Edge Server.
+
+   .. step:: Connect to the Edge Server from a Client
+
+      Configure your client to connect to the Edge Server instead of directly
+      to your Atlas App. Local clients can sync data through the Edge Server
+      even without network connectivity. When the Edge Server connects
+      with Atlas, it syncs data from the local clients.
+
+.. kicker:: More Info
+
+Secure, Powerful, Fast
+----------------------
+
+.. card-group::
+   :columns: 3
+   :style: compact
+
+   .. card::
+      :headline: Secure Authentication
+      :icon: /images/icons/user-auth.png
+      :icon-alt: An icon depicting a user with a shield, representing access
+
+      Built-in user authentication providers include anonymous, 
+      email/password, API key, and Custom JWT. A user-based permissions 
+      system lets you control who can access which data.
+
+   .. card::
+      :headline: Conflict Resolution
+      :icon: /images/icons/Technical_REALM_ConflictResolution3x.png
+      :icon-alt: An icon depicting conflict resolution
+
+      Edge Server uses the Device Sync engine to handle conflicts. You don't 
+      have to write complex custom code to resolve conflicting writes from 
+      multiple clients.
+
+   .. card::
+      :headline: Reduce Latency
+      :icon: /images/icons/Technical_REALM_MobileSync10x.png
+      :icon-alt: An icon depicting a mobile device with data synchronization
+
+      Having a local data layer enables rapid synchronization of critical 
+      data to edge devices. Reduce latency and enable immediate actions 
+      based on real-time insights.
