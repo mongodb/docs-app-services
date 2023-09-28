@@ -14,25 +14,61 @@ Custom JWT Authentication
 
 .. _custom-jwt-authentication-overview:
 
-Overview
---------
-
 The Custom JWT authentication provider allows users to log in with an
-authentication credential from a third-party system external to Atlas
-App Services. The external system must return a signed :jwt-io:`JSON Web
+authentication credential from a third-party system (external to Atlas
+App Services) and use that token to access data and services with App Services. 
+The external system must return a signed :jwt-io:`JSON Web
 Token (JWT) <introduction>` that contains a unique ID value for the
 authenticated user.
 
-App Services uses the JWT to identify your application's users and
-authenticate their requests. It does not impose any restrictions on the
+Authentication and Authorization
+--------------------------------
+
+The third party JWT provider authenticates users and returns a JWT. App Services 
+uses the JWT to identify your application's users and authorize their requests.
+
+App Services is agnostic to the authentication methods used by the third party 
+provider. It does not impose any restrictions on the
 external authentication system's requirements or authentication methods.
 For example, the system could require the user to perform two factor
 authentication, provide specific credentials, or otherwise identify
-themself.
+themselves.
+
+How JWT Authentication Works
+----------------------------
+
+There are many resources online that dive into the intricacies of JWT authentication. 
+In the context of App Services, the following diagram provides the process flow 
+of a user logging on to an app that uses Device Sync. The steps below the 
+diagram provide details.
 
 .. figure:: /images/custom-auth-diagram.png
    :alt: Diagram of Custom JWT authentication architecture.
    :figwidth: 750px
+
+JWT authentication with App Services follows these general steps:
+
+1. The user logs on to the third party authentication provider by whatever means 
+   the provider requires.
+
+#. If authentication succeeds, the provider returns a JWT to the client app.
+
+#. The client app logs on to the App Services app, providing the JWT credential.
+
+#. App Services parses and decodes the JWT.
+
+#. If you manually provided signing keys in App Services, App Services checks if 
+   the signing key in the JWT matches one of the signing keys you specified. If 
+   so, the user is authenticated. 
+
+#. If you configured App Services to use a JWK (also referred to JWKS) URI, App 
+   Services passes the JWT and public key to the third-party provider's JWK API. 
+
+   #. The provider decodes and verifies the signature and returns a JWK.
+
+   #. App Services checks if the signature in the JWK matches the JWT's 
+      signature. If so, the user is authenticated.
+
 
 .. _custom-jwt-authentication-configuration:
 .. _config-custom-jwt:
@@ -40,16 +76,15 @@ themself.
 Configuration
 -------------
 
-You can configure Custom JWT authentication from the UI or by modifying
-the underlying configuration files directly with the CLI or Admin API.
-Choose your preferred method below.
+You configure Custom JWT authentication from the UI or with the CLI. Choose your 
+preferred method below.
 
 .. tabs-realm-admin-interfaces::
 
    .. tab::
       :tabid: ui
 
-      You can enable the JWT authentication provider from the App
+      You enable the JWT authentication provider from the App
       Services UI by selecting :guilabel:`Custom JWT Authentication`
       from the :guilabel:`Authentication` page.
 
@@ -101,122 +136,23 @@ Choose your preferred method below.
            }
          }
 
-.. _custom-jwt-authentication-configuration-audience:
-
-Audience
-~~~~~~~~
-
-The :guilabel:`Audience` of a JWT specifies its intended recipient. JWTs
-describe their audience in the ``aud`` claim. By default, App Services
-expects ``aud`` to contain the App ID of the App for which the provider
-is configured.
-
-If the external authentication system JWT specifies a different ``aud``
-value, then you can configure the provider to use that value instead.
-
-You can input a single audience or multiple audiences as a
-comma-separated list. If you add multiple audiences, you must specify
-how to handle them, either:
-
-- **All of these audiences**: the JWT must include every audience in the
-  list.
-
-- **Any one of these audiences**: the JWT only needs to include one
-  audience from the list.
-
-.. tabs-realm-admin-interfaces::
-
-   .. tab::
-      :tabid: ui
-
-      To override the default audience, specify a new value in the
-      :guilabel:`Audience` input:
-
-      .. figure:: /images/custom-jwt-audience.png
-         :alt: The Custom JWT audience configuration input
-
-      To require or allow for multiple audiences, 
-      specify multiple new values and toggle the :guilabel:`Requires` option:
-
-      .. figure:: /images/custom-jwt-audience-multiple.png
-         :alt: The Custom JWT audience configuration input with multiple audiences
-
-   .. tab::
-      :tabid: cli
-
-      To override the default audience, set the value of
-      ``config.audience``:
-
-      .. code-block:: json
-
-         "config": {
-           "audience": [
-             "<JWT Audience>",
-           ],
-           "requireAnyAudience": <boolean>,
-         }
-         
-      .. list-table::
-        :header-rows: 1
-        :widths: 15 30
-
-        * - Field
-          - Description
-
-        * - ``audience``
-
-          - Array of Strings. The audience or audiences expected
-            to be found in a client JWT. 
-
-        * - ``requireAnyAudience``
-
-          - Boolean. If ``false``, valid JWTs must include all of the listed
-            audiences. If ``true``, valid JWTs must include at least one of
-            the listed audiences.
 
 .. _custom-jwt-authentication-configuration-verification-method:
 
 Verification Method
 ~~~~~~~~~~~~~~~~~~~
 
-The :guilabel:`Verification Method` configures how the provider
-determines which signing algorithm and signing keys the external
-authentication system must use to sign each JWT.
-
-You can either :ref:`manually specify signing keys
-<custom-jwt-authentication-configuration-manually-signing-keys>`
-or :ref:`specify a JSON Web Key URI
-<custom-jwt-authentication-configuration-jwk-uri>`.
+The :guilabel:`Verification Method` configures how App Services will 
+validate the JWT returned from the JWT provider. You can configure App Services 
+to validate the JWT by using the signing key(s) you provide, or to validate by 
+using a JSON Web Key Set (JWK or JWKS) URI issued by the third party provider.
 
 .. _custom-jwt-authentication-configuration-manually-signing-keys:
 
 Manually Specify Signing Keys
 `````````````````````````````
-
-You can manually configure the signing algorithm and specify one or more
-signing keys that the external authentication system may use to sign
-JWTs.
-
-.. tabs-realm-admin-interfaces::
-
-   .. tab::
-      :tabid: ui
-
-   .. tab::
-      :tabid: cli
-
-      .. code-block:: javascript
-         :emphasize-lines: 2, 5-8
-
-         "config": {
-           "signingAlgorithm": "<JWT Signing Algorithm>",
-         },
-         "secret_config": {
-           "signingKeys": [
-             "<Signing Key Secret Name>",
-             ...
-           ]
-         }
+You can configure your app to use one or more signing keys to validate the JWT. 
+There are two settings you need to provide:
 
 .. list-table::
    :header-rows: 1
@@ -235,44 +171,93 @@ JWTs.
        - ``HS256``
        - ``RS256``
        
-       .. figure:: /images/custom-jwt-signing-algorithm.png
-          :alt: The Signing Algorithm configuration dropdown
-
    * - | :guilabel:`Signing Key`
        | *secret_config.signingKeys*
 
      - A list of the names of up to three :ref:`Secrets <app-secret>`
        that each contain a signing key used by the external
        authentication system to sign :abbr:`JWTs (JSON Web Tokens)`.
-       Each signing key Secret must be a string with length between 32
-       and 512 characters.
-       
-       .. figure:: /images/custom-jwt-signing-key.png
-          :alt: The Signing Keys configuration inputs
+       The secret key can only contain ASCII letters, numbers, 
+       underscores, and hyphens, and must be between 32 and 512 characters long. 
+       The following is a valid 256-bit signing key:
 
-       .. warning::
+       .. code-block:: sh
+         :copyable: false
+ 
+         231a58b00632c9c4d8ac02b268ca4caf8dd48fd020e3dffa72666523d860988f
 
-          A :guilabel:`Signing Key` is a secret key and anyone with the
-          key can issue valid user credentials for your app. Ensure that
-          it's never stored in a publicly accessible location, such as a
-          git repository, message board, or in your code.
+         .. note::
 
-.. _custom-jwt-authentication-configuration-jwk-uri:
-
-Use a JWK URI
-`````````````
-
-Some external authentication systems provide a `JSON Web Key Set
-<https://tools.ietf.org/html/rfc7517>`_ that describes the signing
-algorithm and signing keys the system uses to sign JWTs. You can use the
-JWKS to configure the provider instead of manually specifying the
-signing algorithm and keys. When enabled, each token must include a
-:data:`kid` header that specifies the Key ID of a key from the JWKS.
+            If you are uncertain of what value to use, consider visiting a random 
+            key generator website, like `keygen.io <https://keygen.io/>`_, and 
+            using one of the generated 256-bit values. 
 
 .. tabs-realm-admin-interfaces::
 
    .. tab::
       :tabid: ui
+
+      1. Set the Signing Algorithm:
+
+         .. figure:: /images/custom-jwt-signing-algorithm.png
+             :alt: The Signing Keys configuration inputs
+
+      2. Create one or more signing keys that is used to sign the JWT. To do 
+         this, provide a name for the key (which is solely for your reference 
+         later), and then specify a 256-bit signing key. 
+
+         .. figure:: /images/custom-jwt-signing-key.png
+             :alt: The Signing Keys configuration inputs
+
+
+   .. tab::
+      :tabid: cli
+
+      .. code-block:: javascript
+         :emphasize-lines: 2, 5-8
+
+         "config": {
+           "signingAlgorithm": "<JWT Signing Algorithm>",
+         },
+         "secret_config": {
+           "signingKeys": [
+             "<Signing Key Secret Name>",
+             ...
+           ]
+         }
+
+.. warning::
+
+  A :guilabel:`Signing Key` is a secret key and anyone with the
+  key can issue valid user credentials for your app. Ensure that
+  it's never stored in a publicly accessible location, such as a
+  git repository, message board, or in your code.
+
+.. _custom-jwt-authentication-configuration-jwk-uri:
+
+Use a JWK URI
+`````````````
+Some external authentication systems provide a `JSON Web Key Set
+<https://tools.ietf.org/html/rfc7517>`_ (JWKS) that describes the signing
+algorithm and signing keys the system uses to sign JWTs. You can use the
+JWKS to configure the provider instead of manually specifying the
+signing algorithm and keys. The returned JWKS must include a
+:data:`kid` header that specifies the Key ID of a key from the JWKS. The JWKS 
+may specify up to three signing keys and must use the ``RS256`` algorithm. 
+
+There is only one value you need to provide:
+
+- `JWK URI`, which is the third party URL that hosts a JWK or JWKS service.
+       
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      Specify the URL to the third party JWKS endpoint:
+
+      .. figure:: /images/custom-jwt-jwk-uri.png
+        :alt: The JWKS URI input
 
    .. tab::
       :tabid: cli
@@ -284,41 +269,17 @@ signing algorithm and keys. When enabled, each token must include a
            "jwkURI": "<JWK or JWKS URL>"
          }
             
-.. list-table::
-   :header-rows: 1
-   :widths: 15 30
-
-   * - Field
-     - Description
-
-   * - | :guilabel:`Use JWK URI`
-       | *config.useJWKURI*
-
-     - If ``true``, configures App Services to use a signing algorithm and
-       signing keys defined in a :abbr:`JWK (JSON Web Key)` or
-       :abbr:`JWKS (JSON Web Key Set)`. The JWKS must be accessible at a
-       URL that you specify.
-
-   * - | :guilabel:`JWK URI`
-       | *config.jwkURI*
-
-     - A URL that hosts a JWK or JWKS that describes the signing method
-       and signing keys the JWTs should use. The JWKS may specify up to
-       three signing keys and must use the ``RS256`` algorithm.
-       
-       .. figure:: /images/custom-jwt-jwk-uri.png
-          :alt: The JWK URI input
 
 .. _custom-jwt-authentication-configuration-metadata-fields:
 
 Metadata Fields
 ~~~~~~~~~~~~~~~
 
-:guilabel:`Metadata Fields` are additional data that describe each user.
-App Services determines the value of each metadata field from the value of
-some field included in the JWT from the external authentication system. 
-If you set the ``name`` field of a user, then App Services will use that
-field as the user's display name. App Services refreshes a user's metadata
+:guilabel:`Metadata Fields` are additional data that describe each internal 
+App Services user. App Services determines the value of each metadata field from 
+the value of a field included in the JWT from the external authentication system. 
+For example, if you set the ``name`` field of a user, then App Services will use 
+that field as the user's display name. App Services refreshes a user's metadata
 whenever they log in and exposes the fields in the ``data`` object of the 
 :doc:`user object </users>`.
 
@@ -329,6 +290,41 @@ whenever they log in and exposes the fields in the ``data`` object of the
    JWT token to 2048 characters.** If you exceed this limit, App Services 
    logs an error and the ticket is not processed.
 
+There are three values that you need to specify for each metadata field:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 30
+
+   * - Field
+     - Description
+
+   * - | :guilabel:`Required`
+       | *required*
+
+     - If ``true`` , the metadata field is required for all
+       users associated with the provider, i.e. the :ref:`JWT
+       <json-web-tokens>` returned by the external system must have a
+       value assigned to the field designated by :guilabel:`Path`.
+
+   * - | :guilabel:`Path`
+       | *name*
+
+     - The name of a field in the :ref:`JWT <json-web-tokens>` that
+       contains the value for the metadata field. To specify a field in
+       an embedded object, use :manual:`dot notation
+       </core/document/#dot-notation>`.
+
+   * - | :guilabel:`Field Name`
+       | *field_name*
+
+     - Optional. A name for the field in the user object's ``data``
+       document that exposes the metadata field value. If not specified,
+       this defaults to the same name as the JWT field that contains the
+       value. The metadata field name may contain a maximum of 64
+       characters.
+       
+  
 .. tabs-realm-admin-interfaces::
 
    .. tab::
@@ -357,53 +353,6 @@ whenever they log in and exposes the fields in the ``data`` object of the
            field_name: "<metadata field name>"
          }
 
-.. list-table::
-   :header-rows: 1
-   :widths: 10 30
-
-   * - Field
-     - Description
-
-   * - | :guilabel:`Required`
-       | *required*
-
-     - If ``true`` , the metadata field is required for all
-       users associated with the provider, i.e. the :ref:`JWT
-       <json-web-tokens>` returned by the external system must have a
-       value assigned to the field designated by :guilabel:`Path`.
-
-   * - | :guilabel:`Path`
-       | *name*
-
-     - The name of a field in the :ref:`JWT <json-web-tokens>` that
-       contains the value for the metadata field. To specify a field in
-       an embedded object, use :manual:`dot notation
-       </core/document/#dot-notation>`.
-
-       .. note:: Escaping periods in JWT keys
-
-          Use a backslash (``\``) to escape period (``.``) characters in JWT keys. 
-          Take this JSON object for example: 
-
-          .. code-block:: json
-
-            { "valid.json.key": {
-                "nested_key": "val"
-              }
-            }
-
-          You could represent the ``"nested_key"`` in the path name as
-          ``valid\.json\.key.nested_key``.
-
-   * - | :guilabel:`Field Name`
-       | *field_name*
-
-     - Optional. A name for the field in the user object's ``data``
-       document that exposes the metadata field value. If not specified,
-       this defaults to the same name as the JWT field that contains the
-       value. The metadata field name may contain a maximum of 64
-       characters.
-       
        .. tabs-realm-admin-interfaces::
           :hidden: true
           
@@ -420,6 +369,18 @@ whenever they log in and exposes the fields in the ``data`` object of the
              For example, if you specify a :guilabel:`Path` of
              ``location.primary.city``, the default value for
              :guilabel:`Field Name` is ``city``.
+
+                    .. note:: Escaping periods in JWT keys
+
+             Use a backslash (``\``) to escape period (``.``) characters in JWT keys. 
+             Take this JSON object for example:  
+             .. code-block:: json 
+               { "valid.json.key": {
+                   "nested_key": "val"
+                 }
+               } 
+             You could represent the ``"nested_key"`` in the path name as
+             ``valid\.json\.key.nested_key``.
 
 .. example::
 
@@ -491,178 +452,91 @@ whenever they log in and exposes the fields in the ``data`` object of the
         ]
       }
 
-.. _custom-jwt-authentication-jwt:
-.. _json-web-tokens:
+.. _custom-jwt-authentication-configuration-audience:
 
-JSON Web Tokens
----------------
+Audience
+~~~~~~~~
 
-The external authentication system must return a `JSON web token
-<https://jwt.io/introduction/>`_ that uniquely identifies the
-authenticated user. JSON web tokens are an industry standard
-(see :rfc:`RFC 7519 <7519>`) for securely representing
-claims between two parties. A JWT is a string that consists of three
-parts: a header, a payload and a signature and has the following form:
+The :guilabel:`Audience` of a JWT specifies the intended recipient of the token. 
+JWTs describe their audience in the ``aud`` claim. App Services
+expects ``aud`` to contain the App ID of the App for which the provider
+is configured. However, if the external authentication system JWT specifies a 
+different ``aud`` value, then you can configure the provider to use that value 
+instead.
 
-.. code-block:: none
+.. tabs-realm-admin-interfaces::
 
-   <header>.<payload>.<signature>
+   .. tab::
+      :tabid: ui
 
-.. _custom-jwt-authentication-jwt-header:
+      There are two fields you configure:
 
-JWT Header
-~~~~~~~~~~
+      .. list-table::
+              :header-rows: 1
+              :widths: 15 30
 
-The header portion of the JWT consists of a ``Base64UrlEncoded``
-document of the following form:
+              * - Field
+                - Description
 
-.. code-block:: javascript
+              * - ``Audience``
 
-   {
-     "alg": "HS256",
-     "typ": "JWT",
-     "kid": "<JWK Key ID>"
-   }
+                - A single value or comma-separated list of values or the audience or 
+                  audiences expected to be found in a client JWT. 
 
-.. list-table::
-   :header-rows: 1
-   :widths: 15 60
+              * - ``Require``
+                
+                - If you provide multiple audiences, you must 
+                  specify how to handle them. Your options are:
 
-   * - Field
-     - Description
+                  - **All of these audiences**: the JWT must include every audience in 
+                    the list.
 
-   * - .. data:: alg
+                  - **Any one of these audiences**: the JWT only needs to include one
+                    audience from the list.
 
-     - Required. A string representing the hashing algorithm being used.
+      .. figure:: /images/custom-jwt-audience-multiple.png
+         :alt: The Custom JWT audience configuration input with multiple audiences
 
-       App Services supports JWTs encoded with the following algorithms:
+   .. tab::
+      :tabid: cli
 
-       .. list-table::
-          :header-rows: 1
-          :widths: 40 10
+      To set an audience, configure ``config.audience``. There are two fields 
+      you configure:
 
-          * - Algorithm
-            - Value
+      .. list-table::
+              :header-rows: 1
+              :widths: 15 30
 
-          * - HMAC SHA-256
-            - ``"HS256"``
+              * - Field
+                - Description
 
-          * - RSA Signature SHA-256
-            - ``"RS256"``
+              * - ``audience``
+                - An array of strings specifying the audience or audiences expected
+                  to be found in a client JWT.
 
-   * - .. data:: typ
+              * - ``requireAnyAudience``
+                - Boolean. If ``false``, the JWT must include **all** of the listed
+                  audiences. If ``true``, the JWT must only include at one or 
+                  more of the listed audiences.
 
-     - Required. The type of the token. App Services expects a JSON web token
-       so the value should be ``"JWT"``.
+      .. code-block:: json
 
-   * - .. data:: kid
+         "config": {
+           "audience": [
+             "<JWT Audience>",
+           ],
+           "requireAnyAudience": <boolean>,
+         }
+         
 
-     - Optional. The Key ID of a specific key to use from a set of keys
-       in a JWK. You must include the ``kid`` header when you :ref:`use
-       a JWK URL <custom-jwt-authentication-configuration-jwk-uri>`.
-
-.. _custom-jwt-authentication-jwt-payload:
-
-JWT Payload
-~~~~~~~~~~~
-
-The payload portion of the JWT consists of a ``Base64UrlEncoded``
-document of the following form:
-
-.. code-block:: javascript
-
-   {
-     "aud": "<realm app id>"
-     "sub": "<unique user id>",
-     "exp": <NumericDate>,
-     "iat": <NumericDate>,
-     "nbf": <NumericDate>,
-     ...
-   }
-
-.. list-table::
-   :header-rows: 1
-   :widths: 15 60
-
-   * - Field
-     - Description
-
-   * - .. data:: aud
-
-     - Required. The audience of the token.
-       By default, App Services expects this value to be the App ID of your
-       App. If your external authentication service
-       returns a different ``aud`` value, you should specify that value
-       instead.
-
-   * - .. data:: sub
-
-     - Required. The subject of the token. The value should be a unique
-       ID for the authenticated user from your custom-built
-       authentication system.
-
-   * - .. data:: exp
-
-     - Required. The Expiration date of the token. The value should be a
-       NumericDate number indicating the time at which the token expires.
-
-       .. note::
-
-          App Services will not accept expired authentication tokens.
-
-   * - .. data:: iat
-
-     - Optional. The "issued at" date of the token. The value
-       should be a NumericDate number that indicates the time after
-       which the token is considered valid. This field is functionally
-       identical to ``nbf``.
-
-   * - .. data:: nbf
-
-     - Optional. The "not before" date of the token. The value should be
-       a NumericDate number that indicates the time before which the
-       token is considered invalid. This field is functionally identical
-       to ``iat``.
-
-.. note::
-
-   App Services maps certain values from the JWT the :ref:`user
-   object <user-objects>` so that you can access them in your
-   application:
-
-   - The required fields listed in this section map to the ``User.identities.data`` property for their Custom JWT provider identity.
-   
-   - The metadata fields listed in the :ref:`Custom JWT provider configuration <custom-jwt-authentication-configuration>` map to the ``User.data`` property.
-   
-   - Any optional fields not listed in the provider configuration are ignored and do not map to the user object.
-
-.. _custom-jwt-authentication-usage-jwt-signature:
-
-JWT Signature
-~~~~~~~~~~~~~
-
-The signature portion of the JWT is a hash of the encoded
-token header and payload. To form the signature,
-concatenate the encoded header and payload with a period
-and sign the result with the :guilabel:`Signing Key`
-specified in the authentication provider :ref:`configuration
-<custom-jwt-authentication-configuration>` using the hashing
-algorithm specified in the ``"alg"`` field of the header.
-
-.. code-block:: none
-
-   HMACSHA256(
-     base64UrlEncode(header) + "." + base64UrlEncode(payload),
-     signingKey
-   )
 
 .. _custom-jwt-authentication-examples:
 
-Register & Log In a Custom JWT User
------------------------------------
+Using JWT Authentication
+------------------------
 
-You can register new Custom JWT users and log in from a Realm SDK or
-using an API service.
+You can register new Custom JWT users and log them in using one of the Realm SDKs, 
+or when using an API service.
 
 Realm SDKs
 ~~~~~~~~~~
@@ -671,7 +545,15 @@ For code examples that demonstrate how to register and log in using
 Custom JWT authentication, see the Realm SDK documentation for your
 preferred language and platform:
 
-.. include:: /includes/custom-jwt-authentication-sdk-examples.rst
+- :ref:`C++ SDK <cpp-login-custom-jwt>`
+- :ref:`Flutter SDK <flutter-login-custom-jwt>`
+- :ref:`Java SDK <java-login-custom-jwt>`
+- :ref:`Kotlin SDK <kotlin-login-jwt>`
+- :ref:`.NET SDK <dotnet-login-custom-jwt>`
+- :ref:`Node SDK <node-login-custom-jwt>`
+- :ref:`React Native SDK <react-native-login-custom-jwt>`
+- :ref:`Swift SDK <ios-login-custom-jwt>`
+- :ref:`Web SDK <web-login-custom-jwt>`
 
 API Services
 ~~~~~~~~~~~~
@@ -692,179 +574,3 @@ existing user.
 For more information, see :ref:`Authenticate Data API Requests
 <data-api-authenticate-requests>` and :ref:`Authenticate GraphQL
 Requests <graphql-authentication>`.
-
-.. _jwt-tutorial:
-
-Example
--------
-
-In this walkthrough, you will implement Custom JWT Authentication for
-your App Services App. You will learn how to:
-
-- Enable JWT Authentication
-- Use a third-party JWT provider to generate a valid token
-- Authenticate against the backend from a client application
-
-You can use any App Services App for this tutorial. If you do not have a
-test app to use, you can :ref:`create an app <create-app>` or use one of
-the :ref:`Template Apps <template-apps>`.
-
-.. procedure::
-
-   .. step:: Enable & Configure Custom JWT Authentication
-   .. step:: Create a JSON Web Token
-   .. step:: Log In from a Client App
-
-Create a JWT
-~~~~~~~~~~~~
-
-In this example we won't connect to an actual external identity provider
-or authentication service. Instead, we'll use a third-party website to
-generate a JSON Web Token that resembles a token returned by one of
-these systems.
-
-To create the token, go to `jwt.io <https://jwt.io/>`_ and scroll down
-until you see the **Encoded** and **Decoded** headings. In the
-**Decoded** column, you will see the three sections that comprise a JWT:
-**Header**, **Payload**, and **Verify Signature**.
-
-The default header specifies that the token is encoded using the
-``HS256`` algorithm. App Services supports ``HS256`` signatures, so
-leave this unchanged.
-
-The default payload contains three fields: ``sub``, ``name``, and
-``iat``. We will use these three, plus two more fields which are
-required to use the Custom JWT provider:
-
-- ``aud``, which represents the audience (consumer) of the token. By
-  default, App Services expects this value to be the App ID of your App,
-  e.g. ``myapp-abcde``.
-
-- ``exp``, which represents the expiration date of the token. For this
-  example, choose an ``exp`` value far in the future, such as
-  ``9999999999``.
-
-Replace the default payload with your own, making sure to specify your
-App Services App ID in the ``aud`` field.
-
-.. example::
-
-   The following payload represents a user named "Caleb" with an
-   external ID of of ``"1234567890"``. The token is valid for the App
-   Services App ``myapp-abcde``.
-
-   .. code-block:: javascript
-   
-      {
-         "aud": "myapp-abcde",
-         "exp": 1893459755,
-         "iat": 1672534955,
-         "name": "Caleb",
-         "sub": "1234567890"
-      }
-
-Once you've defined the payload, enter a 256-bit secret value in the
-**Verify Signature** section. This secret is used to sign the token. If
-you are uncertain of what value to use, consider visiting a random key
-generator website, like `keygen.io <https://keygen.io/>`_ and using one
-of the generated 256-bit values there.
-
-Note the 256-bit value somewhere you can find it again. You will have to
-specify the same value later in your App Services Custom JWT provider
-configuration.
-
-.. important::
-
-   The secret key must only contain ASCII letters, numbers, underscores,
-   and hyphens, and must be between 32 and 512 characters long.
-
-At this point, you have generated a JWT string that can be used with the
-App you specified. Copy the key from the **Encoded** box and temporarily
-save it in a text document. Your JWT will be 3 sections of values,
-separated by periods, and looks something like the following (your token
-will **not** match this exactly):
-
-.. code-block:: sh
-   :copyable: false
-
-   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJteWFwcC1hYmNkZSIsImV4cCI6MTg5MzQ1OTc1NSwiaWF0IjoxNjcyNTM0OTU1LCJuYW1lIjoiQ2FsZWIiLCJzdWIiOiIxMjM0NTY3ODkwIn0.42_ih-ZBjcR4Q_KV1vVtN9s0YauUNZz3cHTj9B1zVuw
-
-Enable JWT Authentication
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Before you can log in, you must turn on the Custom JWT authentication
-provider and configure it to accept the JWT you just created.
-
-Log in to `MongoDB Atlas <https://realm.mongodb.com?tck=docs_realm>`__
-and navigate to your App Services App.
-
-1. In the left-hand navigation, under :guilabel:`Data Access`, click
-   :guilabel:`Authentication`.
-
-#. In the list of providers, click :guilabel:`Custom JWT Authentication`.
-
-#. Set the :guilabel:`Provider Enabled` toggle to on.
-
-#. Set the :guilabel:`Verification Method` to :guilabel:`Manually
-   specify signing keys`.
-
-#. Set the :guilabel:`Signing Algorithm` to :guilabel:`HS256`.
-
-#. In the :guilabel:`Signing Key (Secret Name)` field, enter a name for
-   the :ref:`Secret <app-secret>` that will store the JWT signing key
-   (for example, ``jwtSigningKey``). Then, click :guilabel:`Create <key
-   name>` and enter the 256-bit signing key you used to generate the JWT
-   into the :guilabel:`Signing Key` input.
-
-   .. important::
-      
-      A :guilabel:`Signing Key` is a secret key and anyone with the
-      key can issue valid user credentials for your app. Ensure that
-      it's never stored in a publicly accessible location, such as a
-      git repository, message board, or in your code.
-
-#. Leave :guilabel:`Metadata Fields` and :guilabel:`Audience` blank.
-
-#. Click :guilabel:`Save`. If you have UI deployment drafts enabled,
-   review and deploy your changes.
-
-Log In with a Custom JWT
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-Once you've enabled the Custom JWT provider, you can log in using the
-JWT you created.
-
-The Realm SDKs automatically manage the login process and user sessions
-for you. For code examples that demonstrate JWT authentication, see the
-Realm SDK documentation for your preferred language and platform:
-
-- :ref:`C++ SDK <cpp-login-custom-jwt>`
-- :ref:`Flutter SDK <flutter-login-custom-jwt>`
-- :ref:`Java SDK <java-login-custom-jwt>`
-- :ref:`Kotlin SDK <kotlin-login-jwt>`
-- :ref:`.NET SDK <dotnet-login-custom-jwt>`
-- :ref:`Node SDK <node-login-custom-jwt>`
-- :ref:`React Native SDK <react-native-login-custom-jwt>`
-- :ref:`Swift SDK <ios-login-custom-jwt>`
-- :ref:`Web SDK <web-login-custom-jwt>`
-
-If you cannot use a Realm SDK, you can also :ref:`create and manage
-authenticated sessions manually <manage-user-sessions>`.
-
-.. _custom-jwt-authentication-summary:
-
-Summary
--------
-
-- Custom JWT authentication allows you to identify your application's
-  users via a JSON Web Token issued outside of App Services.
-- App Services expects JWT audience values to be the App ID of the App
-  unless otherwise configured in the application.
-- App Services can verify JWTs using either
-  :ref:`manually specified keys and signing algorithms
-  <custom-jwt-authentication-configuration-manually-signing-keys>` or a
-  :ref:`JSON Web Key URI
-  <custom-jwt-authentication-configuration-jwk-uri>`.
-- You can pass custom :ref:`user data
-  <custom-jwt-authentication-configuration-metadata-fields>` in your JWT
-  that App Services refreshes whenever the user refreshes their token.
