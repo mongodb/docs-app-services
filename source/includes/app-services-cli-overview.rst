@@ -4,7 +4,7 @@ Overview
 --------
 
 The Atlas App Services Command Line Interface (``{+cli-bin+}``) allows you
-to programmatically manage your {+app+}s.
+to programmatically manage your Apps.
 
 With the {+cli+}, you can create or update Apps from a local directory
 as well as export existing applications to a local directory.
