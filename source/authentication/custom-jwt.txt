@@ -9,7 +9,7 @@ Custom JWT Authentication
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 3
    :class: singlecol
 
 .. _custom-jwt-authentication-overview:
@@ -30,17 +30,17 @@ uses the JWT to identify your application's users and authorize their requests.
 App Services is agnostic to the authentication methods used by the third party 
 provider. It does not impose any restrictions on the
 external authentication system's requirements or authentication methods.
-For example, the system could require the user to perform two factor
-authentication, provide specific credentials, or otherwise identify
+For example, the system could require the user to perform multi-factor
+authentication (MFA), provide specific credentials, or otherwise identify
 themselves.
 
 How JWT Authentication Works
 ----------------------------
 
-There are many resources online that dive into the intricacies of JWT authentication. 
-In the context of App Services, the following diagram provides the process flow 
-of a user logging on to an app that uses Device Sync. The steps below the 
-diagram provide details.
+There are many resources online that dive into the intricacies of JWT 
+authentication and the token structure. In the context of App Services, the 
+following diagram provides the process flow of a user logging on to a 
+Device Sync app. The steps below the diagram provide details.
 
 .. figure:: /images/custom-auth-diagram.png
    :alt: Diagram of Custom JWT authentication architecture.
@@ -142,7 +142,7 @@ preferred method below.
 Verification Method
 ~~~~~~~~~~~~~~~~~~~
 
-The :guilabel:`Verification Method` configures how App Services will 
+The :guilabel:`Verification Method` field determines how App Services will 
 validate the JWT returned from the JWT provider. You can configure App Services 
 to validate the JWT by using the signing key(s) you provide, or to validate by 
 using a JSON Web Key Set (JWK or JWKS) URI issued by the third party provider.
@@ -174,10 +174,10 @@ There are two settings you need to provide:
    * - | :guilabel:`Signing Key`
        | *secret_config.signingKeys*
 
-     - A list of the names of up to three :ref:`Secrets <app-secret>`
-       that each contain a signing key used by the external
+     - A list of up to three :ref:`Secrets <app-secret>`
+       that each contain a signing key used by the third party 
        authentication system to sign :abbr:`JWTs (JSON Web Tokens)`.
-       The secret key can only contain ASCII letters, numbers, 
+       The key can only contain ASCII letters, numbers, 
        underscores, and hyphens, and must be between 32 and 512 characters long. 
        The following is a valid 256-bit signing key:
 
@@ -186,11 +186,11 @@ There are two settings you need to provide:
  
          231a58b00632c9c4d8ac02b268ca4caf8dd48fd020e3dffa72666523d860988f
 
-         .. note::
-
-            If you are uncertain of what value to use, consider visiting a random 
-            key generator website, like `keygen.io <https://keygen.io/>`_, and 
-            using one of the generated 256-bit values. 
+       .. note::
+ 
+         If you are uncertain of what value to use, consider visiting a random 
+         key generator website, like `keygen.io <https://keygen.io/>`_, and 
+         using one of the generated 256-bit values. 
 
 .. tabs-realm-admin-interfaces::
 
@@ -277,11 +277,14 @@ Metadata Fields
 
 :guilabel:`Metadata Fields` are additional data that describe each internal 
 App Services user. App Services determines the value of each metadata field from 
-the value of a field included in the JWT from the external authentication system. 
+the value of a field included in the third party JWT. 
 For example, if you set the ``name`` field of a user, then App Services will use 
-that field as the user's display name. App Services refreshes a user's metadata
-whenever they log in and exposes the fields in the ``data`` object of the 
-:doc:`user object </users>`.
+that field in the JWT as the user's display name. 
+
+.. note:: 
+
+  App Services refreshes a user's metadata whenever they log, in and exposes the 
+  fields in the ``data`` object of the :ref:`user metadata <user-objects>`.
 
 .. important:: 2048 Character Limit
 
@@ -314,17 +317,23 @@ There are three values that you need to specify for each metadata field:
        contains the value for the metadata field. To specify a field in
        an embedded object, use :manual:`dot notation
        </core/document/#dot-notation>`.
+       
+       
+       For example, if you specify a ``name``
+        with of ``location.primary.city``, the default value for ``field_name`` 
+        is ``city``.
 
    * - | :guilabel:`Field Name`
        | *field_name*
 
      - Optional. A name for the field in the user object's ``data``
        document that exposes the metadata field value. If not specified,
-       this defaults to the same name as the JWT field that contains the
-       value. The metadata field name may contain a maximum of 64
-       characters.
+       the name defaults to the name of the field that contains the
+       value. The metadata field name must be less than 64 characters long.
+       If the **Path** value uses dot notation, the default name will be the 
+       last part of the notation. For example, if you specify a path of 
+       ``location.primary.city``, the default value for the name is ``city``.
        
-  
 .. tabs-realm-admin-interfaces::
 
    .. tab::
@@ -353,34 +362,18 @@ There are three values that you need to specify for each metadata field:
            field_name: "<metadata field name>"
          }
 
-       .. tabs-realm-admin-interfaces::
-          :hidden: true
-          
-          .. tab::
-             :tabid: ui
 
-             For example, if you specify a ``name`` of
-             ``location.primary.city``, the default value for
-             ``field_name`` is ``city``.
-          
-          .. tab::
-             :tabid: cli
+      Use a backslash (``\``) to escape period (``.``) characters in JWT keys. 
+      
+      For example, in this JSON object, you represent the ``"nested_key"`` in 
+      the path name as ``valid\.json\.key\.nested_key``.
 
-             For example, if you specify a :guilabel:`Path` of
-             ``location.primary.city``, the default value for
-             :guilabel:`Field Name` is ``city``.
+      .. code-block:: json 
 
-                    .. note:: Escaping periods in JWT keys
-
-             Use a backslash (``\``) to escape period (``.``) characters in JWT keys. 
-             Take this JSON object for example:  
-             .. code-block:: json 
-               { "valid.json.key": {
-                   "nested_key": "val"
-                 }
-               } 
-             You could represent the ``"nested_key"`` in the path name as
-             ``valid\.json\.key.nested_key``.
+        { "valid.json.key": {
+            "nested_key": "val"
+          }
+        } 
 
 .. example::
 
@@ -404,8 +397,8 @@ There are three values that you need to specify for each metadata field:
       }
 
    To include the values from the ``user_data`` field in each user's
-   :ref:`user object <user-objects>`, you could specify the following
-   metadata fields:
+   :ref:`user object <user-objects>`, specify the following
+   metadata fields in your App Services configuration:
 
    .. list-table::
       :header-rows: 1
@@ -419,9 +412,7 @@ There are three values that you need to specify for each metadata field:
       * - ``user_data.aliases``
         - ``aliases``
 
-   We can now access the mapped values directly from the :ref:`user
-   object <user-objects>`, which would resemble the following for the
-   given JWT:
+   The :ref:`user object <user-objects>`, will now include those fields:
 
    .. code-block:: json
 
@@ -516,7 +507,7 @@ instead.
 
               * - ``requireAnyAudience``
                 - Boolean. If ``false``, the JWT must include **all** of the listed
-                  audiences. If ``true``, the JWT must only include at one or 
+                  audiences. If ``true``, the JWT must only include one or 
                   more of the listed audiences.
 
       .. code-block:: json
@@ -559,17 +550,15 @@ API Services
 ~~~~~~~~~~~~
 
 You can authenticate Data API and GraphQL requests using the Custom JWT
-provider. You can either:
+provider. You can either require users to create accounts before using a 
+service, or configure your API endpoints to automatically create a new
+user account if the request contains a valid JWT that does not match an
+existing user. There are two approaches to using JWTs with your service APIs:
 
 - specify the JWT directly in the ``jwtTokenString`` request header
 
 - start a user session with the JWT and include the session access token
   as an ``Authorization`` header bearer token.
-
-You can either require that users create accounts before using an API
-service or configure your API endpoints to automatically create a new
-user account if a request contains a valid JWT that does not match an
-existing user.
 
 For more information, see :ref:`Authenticate Data API Requests
 <data-api-authenticate-requests>` and :ref:`Authenticate GraphQL
