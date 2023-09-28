@@ -9,12 +9,12 @@ to programmatically manage your Apps.
 With the {+cli+}, you can create or update Apps from a local directory
 as well as export existing applications to a local directory.
 
-.. _install-app-services-cli:
+.. _install-appservices-cli:
 
 Installation
 ------------
 
-.. include:: /includes/install-app-services-cli.rst
+.. include:: /includes/install-appservices-cli.rst
 
 .. _cli-auth-with-api-token:
 

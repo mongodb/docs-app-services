@@ -6,11 +6,13 @@
     :atlas:`Atlas Getting Started </getting-started>` documentation. For this 
     tutorial, you need an Atlas account with a free-tier cluster.
 
-  - You also need an Atlas :atlas:`API key </configure-api-access/#programmatic-api-keys>`
-    for the MongoDB Cloud account you wish to log in with. 
-    You must be a :atlas:`Project Owner </reference/user-roles/#project-roles>` 
-    to create a Template App using {+cli-bin+}.
+  - You also need an Atlas :atlas:`API key
+    </configure-api-access/#programmatic-api-keys>` for the MongoDB
+    Cloud account you wish to log in with. You must be a :atlas:`Project
+    Owner </reference/user-roles/#project-roles>` to create a Template
+    App using {+cli-bin+}.
 
-  - To learn more about installing {+cli-bin+}, see
-    :ref:`Install app-services-cli <install-app-services-cli>`. After you have installed {+cli-bin+},
-    :ref:`login <app-services-cli-login>` using the API key for your Atlas project.
+  - To learn more about installing {+cli-bin+}, see :ref:`Install App
+    Services CLI <install-appservices-cli>`. After installing, run the
+    :ref:`login <appservices-login>` command using the API key for
+    your Atlas project.
