@@ -1397,30 +1397,6 @@ paths:
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ServiceId"
       - "$ref": "#/components/parameters/IncomingWebhookId"
-  "/groups/{groupId}/apps/{appId}/sync/data":
-    parameters:
-      - "$ref": "#/components/parameters/GroupId"
-      - "$ref": "#/components/parameters/AppId"
-    get:
-      tags:
-        - sync
-      operationId: adminGetPartitionSync
-      summary: Get Partition Based Sync information for a specific linked MongoDB cluster
-      description: Retrieve partition field data when using [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
-      responses:
-        "200":
-          description: Successfully retrieved.
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/SyncDataResponse"
-      parameters:
-        - in: query
-          name: service_id
-          required: true
-          schema:
-            type: string
-          description: The Service ID for the linked cluster.
   "/groups/{groupId}/apps/{appId}/service/{serviceId}/config":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -1430,8 +1406,10 @@ paths:
       tags:
         - sync
       operationId: adminGetFlexSync
-      summary: Get Flexible Sync information for a specific Atlas App Services App
-      description: Retrieve all sync data when using [Flexible Sync](https://www.mongodb.com/docs/atlas/app-services/sync/get-started/).
+      summary: Get Flexible Sync information
+      description: |-
+         Retrieve sync data for a specific Atlas App Services App when using 
+         [Flexible Sync](https://www.mongodb.com/docs/atlas/app-services/sync/get-started/).
       responses:
         "200":
           description: Successfully retrieved.
@@ -1439,6 +1417,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/SyncDataResponse"
+  "/groups/{groupId}/apps/{appId}/sync/data":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    get:
+      tags:
+        - sync
+      operationId: adminGetSync
+      summary: Get Partition-Based Sync information
+      description: |- 
+        Retrieve partition field data when using 
+        [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
+      responses:
+        "200":
+          description: Successfully retrieved.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PbsSyncResponse"
+      parameters:
+        - in: query
+          name: service_id
+          required: true
+          schema:
+            type: string
+          description: The Service ID for the linked cluster.
   "/groups/{groupId}/apps/{appId}/push/notifications":
     get:
       tags:
@@ -6619,6 +6623,20 @@ components:
           type: string
         type:
           type: string
+    PbsSyncResponse:
+      properties:
+        service_id:
+          type: string
+          description:
+            The Service ID for the currently synced cluster, if there is
+            one.
+        partition_fields:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Partition"
+          description: |-
+            A list of valid partition keys based on the cluster's collection
+            schemas.
     SyncDataResponse:
       properties:
         clusterId: 

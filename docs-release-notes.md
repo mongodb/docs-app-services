@@ -1,3 +1,37 @@
+# September 22, 2023
+
+## Device Sync
+
+- Configure Sync/Sync Settings: Development Mode: Add "Breaking Changes" subsection with details on an update that allows breaking changes in development mode.
+
+## Edge Server
+
+- Landing Page: Create landing page for the new Edge Server section.
+- Configure to Edge Server: Create a new subpage with installation requirements and instructions for configuring Edge Server.  
+- Connect to Edge Server: Create a new subpage for connecting to the Edge Server with an example from the SwiftUI template app.
+- Use MongoDB APIs with Edge Server: Create a new subpage with details on MongoDB operations via wireprotocol supported by Edge Server.
+
+## Data API
+
+- Internal: Add programmatically generated facet tags to the landing page for improved search indexing.
+
+## Monitor App Activity
+
+- Activity Feed Alerts: Clarify list of default alerts on page.
+
+# September 15, 2023
+
+## Device Sync
+
+  - App Builder's Resources/Stream Data from Client to Atlas: Note that Device Sync manages the lifecycle of asymmetric objects on the device, and no cleanup is required.
+  - Configure Sync/Sync Settings: Data Ingest: Note that Device Sync manages the lifecycle of asymmetric objects on the device, and no cleanup is required.
+
+## Reference
+
+- App Services Admin API
+  - Sync: Add documentation to `GET` Sync information for a Flexible Sync-enabled App.
+  - Triggers/Create a Trigger: Update `POST` for creating a trigger to use `function_id` in example payload instead of `function_name` and `event_processors`.
+
 # September 8, 2023
 
 ## App Builder's Resources
@@ -8,15 +42,15 @@
 
 - Configure and Update your Data Model/Update a Data Model: Fix small spelling typo.
 - Configure Sync/Sync Settings: Update queryable fields documentation for Indexed Queryable Fields and Collection Queryable Fields.
-- Handle Errors/Sync Errors: Update queryable fields documentation for Indexed Queryable Fields and Collection Queryable Fields. 
+- Handle Errors/Sync Errors: Update queryable fields documentation for Indexed Queryable Fields and Collection Queryable Fields.
 
-## Authenticate and MAnage Users
+## Authenticate and Manage Users
 
 - Manage User Sessions: Update Get a User Access Token Over HTTPS steps for clarity.
 
 ## Reference
 
-- App Services Admin API/Functions/Create a New Function: Add missing properties, ``run_as_user_id`` and ``run_as_user_id_script_source``.
+- App Services Admin API/Functions/Create a New Function: Add missing properties, `run_as_user_id` and `run_as_user_id_script_source`.
 
 ## Release Notes
 
@@ -24,7 +58,7 @@
 
 ## Internal
 
-- Add programmatically-generated facet tags to the repo for improved search indexing.
+- Add programmatically generated facet tags to the repo for improved search indexing.
 
 # September 1, 2023
 
