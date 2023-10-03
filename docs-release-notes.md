@@ -1,3 +1,17 @@
+# September 29, 2023
+
+## Edge Server
+
+- Landing Page: Update the CTA to learn more about the Preview to point to a new Edge Server product marketing page.
+
+## Data API
+
+- Data API OpenAPI Reference: Fix a semantic error in the spec. This resolves a HELP issue with a customer getting errors when trying to use the spec in an internal tool and in Swagger.
+
+## Other
+
+- Add an App Services docs-wide banner with a link to the blog post announcing that "Realm is now Atlas Device SDK."
+
 # September 22, 2023
 
 ## Device Sync
@@ -7,7 +21,7 @@
 ## Edge Server
 
 - Landing Page: Create landing page for the new Edge Server section.
-- Configure to Edge Server: Create a new subpage with installation requirements and instructions for configuring Edge Server.  
+- Configure to Edge Server: Create a new subpage with installation requirements and instructions for configuring Edge Server.
 - Connect to Edge Server: Create a new subpage for connecting to the Edge Server with an example from the SwiftUI template app.
 - Use MongoDB APIs with Edge Server: Create a new subpage with details on MongoDB operations via wireprotocol supported by Edge Server.
 
@@ -23,8 +37,8 @@
 
 ## Device Sync
 
-  - App Builder's Resources/Stream Data from Client to Atlas: Note that Device Sync manages the lifecycle of asymmetric objects on the device, and no cleanup is required.
-  - Configure Sync/Sync Settings: Data Ingest: Note that Device Sync manages the lifecycle of asymmetric objects on the device, and no cleanup is required.
+- App Builder's Resources/Stream Data from Client to Atlas: Note that Device Sync manages the lifecycle of asymmetric objects on the device, and no cleanup is required.
+- Configure Sync/Sync Settings: Data Ingest: Note that Device Sync manages the lifecycle of asymmetric objects on the device, and no cleanup is required.
 
 ## Reference
 
