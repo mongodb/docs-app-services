@@ -24,10 +24,10 @@ authenticated user.
 Authentication and Authorization
 --------------------------------
 
-The third party JWT provider authenticates users and returns a JWT. App Services 
+The third-party JWT provider authenticates users and returns a JWT. App Services 
 uses the JWT to identify your application's users and authorize their requests.
 
-App Services is agnostic to the authentication methods used by the third party 
+App Services is agnostic to the authentication methods used by the third-party 
 provider. It does not impose any restrictions on the
 external authentication system's requirements or authentication methods.
 For example, the system could require the user to perform multi-factor
@@ -50,7 +50,7 @@ Device Sync app. The steps below the diagram provide details.
 
 JWT authentication with App Services follows these general steps:
 
-1. The user logs on to the third party authentication provider by whatever means 
+1. The user logs on to the third-party authentication provider by whatever means 
    the provider requires.
 
 #. If authentication succeeds, the provider returns a JWT to the client app.
@@ -63,7 +63,7 @@ JWT authentication with App Services follows these general steps:
    the signing key in the JWT matches one of the signing keys you specified. If 
    so, the user is authenticated. 
 
-#. If you configured App Services to use a JWK (also referred to JWKS) URI, App 
+#. If you configured App Services to use a JSON Web Key (JWK) URI, App 
    Services passes the JWT and public key to the third-party provider's JWK API. 
 
    #. The provider decodes and verifies the signature and returns a JWK.
@@ -78,7 +78,7 @@ JWT authentication with App Services follows these general steps:
 Configuration
 -------------
 
-You configure Custom JWT authentication from the UI or with the CLI. Choose your 
+You configure Custom JWT Authentication from the UI or with the CLI. Choose your 
 preferred method below.
 
 .. tabs-realm-admin-interfaces::
@@ -141,7 +141,7 @@ Verification Method
 The :guilabel:`Verification Method` field determines how App Services will 
 validate the JWT returned from the JWT provider. You can configure App Services 
 to validate the JWT by using the signing key(s) you provide, or to validate by 
-using a JSON Web Key Set (JWKS) URI issued by the third party provider.
+using a JSON Web Key (JWK) URI issued by the third-party provider.
 
 .. _custom-jwt-authentication-configuration-manually-signing-keys:
 
@@ -161,7 +161,7 @@ There are two settings you need to provide:
        | *config.signingAlgorithm*
 
      - The cryptographic method that the external system uses to sign
-       the JWT. Custom authentication supports JWTs signed using any of
+       the JWT. Custom authentication supports JWTs signed using either of
        the following algorithms:
 
        - ``HS256``
@@ -171,7 +171,7 @@ There are two settings you need to provide:
        | *secret_config.signingKeys*
 
      - A list of up to three :ref:`Secrets <app-secret>`
-       that each contain a signing key used by the third party 
+       that each contain a signing key used by the third-party 
        authentication system to sign :abbr:`JWTs (JSON Web Tokens)`.
        The key can only contain ASCII letters, numbers, 
        underscores, and hyphens, and must be between 32 and 512 characters long. 
@@ -198,7 +198,7 @@ There are two settings you need to provide:
          .. figure:: /images/custom-jwt-signing-algorithm.png
              :alt: The Signing Keys configuration inputs
 
-      2. Create one or more signing keys that is used to sign the JWT. To do 
+      2. Create one or more signing keys to sign the JWT. To do 
          this, provide a name for the key (which is solely for your reference 
          later), and then specify a 256-bit signing key. 
 
@@ -241,16 +241,22 @@ signing algorithm and keys. The returned JWKS must include a
 ``kid`` header that specifies the Key ID of a key from the JWKS. The JWKS 
 may specify up to three signing keys and must use the ``RS256`` algorithm. 
 
+.. note:: 
+   
+   JWK and JWKS are used synonymously in Atlas App Services. 
+
 There is only one value you need to provide:
 
-- ``JWK URI``, which is the third party URL that hosts a JWK or JWKS service.
+- ``JWK URI``, which is the third-party URL that hosts a JWK or JWKS service. 
+  When you choose this option, App Service automatically sets encryption  
+  to the required ``RS256`` method.
        
 .. tabs-realm-admin-interfaces::
 
    .. tab::
       :tabid: ui
 
-      Specify the URL to the third party JWKS endpoint:
+      Specify the URL to the third-party JWKS endpoint:
 
       .. figure:: /images/custom-jwt-jwk-uri.png
         :alt: The JWKS URI input
@@ -273,13 +279,13 @@ Metadata Fields
 
 :guilabel:`Metadata Fields` are additional data that describe each internal 
 App Services user. App Services determines the value of each metadata field from 
-the value of a field included in the third party JWT. 
+the value of a field included in the third-party JWT. 
 For example, if you set the ``name`` field of a user, then App Services will use 
 that field in the JWT as the user's display name. 
 
 .. note:: 
 
-  App Services refreshes a user's metadata whenever they log, in and exposes the 
+  App Services refreshes a user's metadata whenever they log in and exposes the 
   fields in the ``data`` object of the :ref:`user metadata <user-objects>`.
 
 .. important:: 2048 Character Limit
@@ -302,7 +308,7 @@ There are three values that you need to specify for each metadata field:
        | *required*
 
      - If ``true`` , the metadata field is required for all
-       users associated with the provider, i.e. the JWT
+       users associated with the provider. The JWT 
        returned by the external system must have a
        value assigned to the field designated by :guilabel:`Path`.
 
@@ -473,8 +479,8 @@ instead.
 
               * - ``Audience``
 
-                - A single value or comma-separated list of values or the audience or 
-                  audiences expected to be found in a client JWT. 
+                - A single value or comma-separated list of values for the 
+                  audience or audiences expected to be found in a client JWT. 
 
               * - ``Require``
                 
@@ -528,8 +534,8 @@ instead.
 Using JWT Authentication
 ------------------------
 
-You can register new Custom JWT users and log them in using one of the Realm SDKs, 
-or when using an API service.
+You can register new Custom JWT users and log them in using one of the Realm SDKs 
+or an API service.
 
 Realm SDKs
 ~~~~~~~~~~
