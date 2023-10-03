@@ -509,3 +509,74 @@ with the ``title`` field set to the embedded object's type name:
             }
       }
    }
+
+.. _geospatial
+
+
+Geospatial Data
+~~~~~~~~~~~~~~~
+
+Geospatial data describes points and other data on the earth's surface. App 
+Services supports defining GEOPoint data in a schema. 
+
+GeoJSON Point
+`````````````
+A GeoJSON point is a single location on the Earth's surface, described by its 
+longitude and latitude. To ensure wide compatibility, App Services stores these 
+points in accordance to the `GeoJSON spec <https://datatracker.ietf.org/doc/html/rfc7946>`_, 
+which has additional requirements. Specifically, you must apply the following 
+rules to the GeoPoint:
+
+- It must be of type ``object``
+- It must be embedded within another type
+- It must contain the following fields:
+
+  - ``type``, of type ``string``, which is always set to "Point"
+  - ``coordinates``, of type ``array``. The ``coordinates`` array contains 
+    exactly 2 double values. The first double is the longitude of the point and 
+    the second is the latitude.
+
+- Additional properties are allowed.
+ 
+ The following is the schema of a GeoPoint:
+
+.. code-block:: json
+
+{
+  "title": "MyObject",
+  "properties": {
+    "location": {
+      "bsonType": "object",
+      "required": [ "type" ],
+      "properties": {
+        "type": {
+          "bsonType": "string",
+        },
+        "coordinates": {
+          "bsonType": "array",
+          "items": {
+            "bsonType": "double"
+          }
+        }
+      }
+    },
+    "another_property": {
+          "bsonType": "double"
+    },
+  }
+}
+
+You can query geospatial data when using :ref:`Flexible Sync <flexible-sync>`. 
+No additional configuration is required. 
+
+To learn about querying against geospatial data, see:
+
+- :ref:`Geospatial - .NET SDK <dotnet-geospatials
+- :ref:`Geospatial - Kotlin SDK <kotlin-geospatial
+- :ref:`Geospatial - Node.js SDK <node-data-types-geospatial>
+- :ref:`Geospatial - React Native SDK <react-native-data-types-geospatial
+
+.. note::
+
+   Atlas does not support creating an index on Geospatial fields, so querying 
+   large collections may reduce performance.
