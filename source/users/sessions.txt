@@ -457,20 +457,19 @@ then all of the user's sessions are automatically revoked.
    .. tab::
       :tabid: cli
 
-      .. include:: /includes/note-procedure-uses-cli-v2.rst
-
-      To revoke all sessions for a user, call ``realm-cli users revoke``. The CLI will prompt you
-      for your App ID and list users in that app for you to select.
-
-      .. code-block:: bash
-
-         realm-cli users revoke
-
-      You can also specify the arguments when you call the program:
+      To revoke all sessions for a user, call ``{+cli-bin+} users
+      revoke``. The CLI will prompt you for your App ID and list users
+      in that app for you to select.
 
       .. code-block:: bash
 
-         realm-cli users revoke \
+         {+cli-bin+} users revoke
+
+      You can also specify the arguments when you run the command:
+
+      .. code-block:: bash
+
+         {+cli-bin+} users revoke \
            --app=<Your App ID> \
            --user=<User ID>
 
@@ -481,7 +480,7 @@ then all of the user's sessions are automatically revoked.
 
          .. code-block:: bash
 
-            realm-cli users revoke --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
+            {+cli-bin+} users revoke --user=6099694d5debcbcc873ff413,60996996b78eca4a8d615d3a
 
    .. tab::
       :tabid: api

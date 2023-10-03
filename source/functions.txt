@@ -364,7 +364,7 @@ or by importing the function configuration and source code with
 
             .. code-block:: shell
 
-               realm-cli pull --remote=<App ID>
+               {+cli-bin+} pull --remote=<App ID>
 
 
          .. step:: Write the Function Source Code
@@ -526,7 +526,7 @@ or by importing the function configuration and source code with
 
             .. code-block:: shell
 
-               realm-cli push
+               {+cli-bin+} push
 
 
 Call a Function
@@ -563,18 +563,18 @@ runs in the same context as the function that called it.
      return context.functions.execute("sum", a, -1 * b);
    };
 
-.. _call-function-from-realm-cli:
+.. _call-function-cli:
 
 Call from {+cli+}
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can call a function through {+cli+} with the :ref:`function run
-<realm-cli-function-run>` command. The command returns the function
+<appservices-function-run>` command. The command returns the function
 result as EJSON as well as any log or error messages.
 
 .. code-block:: sh
    
-   realm-cli function run \
+   {+cli-bin+} function run \
      --function=sum \
      --args=1 --args=2
 
@@ -585,7 +585,7 @@ user, include their User ID in the ``--user`` argument.
 .. code-block:: sh
    :emphasize-lines: 4
    
-   realm-cli function run \
+   {+cli-bin+} function run \
      --function=sum \
      --args=1 --args=2 \
      --user=61a50d82532cbd0de95c7c89

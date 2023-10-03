@@ -138,15 +138,13 @@ the Development stage or use your production App ID in the Production stage.
    <sdlc-create-app>`.
 
 Set Up {+cli+}
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
-:ref:`{+cli+} <realm-cli>` is the easiest way to programmatically create,
-configure, and manage App Services Apps. You should :ref:`install <install-realm-cli>`
-and use the latest version in your deployment scripts.
+The {+cli+} is the easiest way to programmatically
+create, configure, and manage Atlas Apps. You should install and
+use the latest version in your deployment scripts.
 
-.. code-block:: bash
-   
-   npm install -g mongodb-realm-cli
+.. include:: /includes/install-appservices-cli.rst
 
 You'll also need a MongoDB Atlas public/private API key pair to authenticate and
 use the CLI. For more information and a walkthrough of how to get an API key,
@@ -157,7 +155,7 @@ To log in, save your API keys in a new named profile configuration and then log
 in with that profile:
 
 .. code-block:: yaml
-   :caption: ~/.config/realm-cli/<Profile Name>.yaml
+   :caption: ~/.config/{+cli-bin+}/<Profile Name>.yaml
    
    <Profile Name>:
      public_api_key: "<MongoDB Atlas Public API Key>"
@@ -168,7 +166,7 @@ in with that profile:
 
 .. code-block:: bash
    
-   realm-cli login --profile="<Profile Name>"
+   {+cli-bin+} login --profile="<Profile Name>"
 
 .. tip::
    
@@ -194,7 +192,7 @@ To use a new app for your development or staging branch:
    .. code-block:: bash
       
       cd path/to/realmApp
-      realm-cli push -y --project="<MongoDB Atlas Project ID>" # e.g. --project="609ea544934fe445460219a2"
+      {+cli-bin+} push -y --project="<MongoDB Atlas Project ID>" # e.g. --project="609ea544934fe445460219a2"
 
 2. **Save the App ID**
    
@@ -205,7 +203,7 @@ To use a new app for your development or staging branch:
    .. code-block:: bash
       
       # Save to an environment variable
-      output=$(realm-cli app describe)
+      output=$({+cli-bin+} app describe)
       app_id=$(echo $output | sed 's/^.*client_app_id": "\([^"]*\).*/\1/')
       export REALM_APP_ID=app_id
       # Save to a file
@@ -224,7 +222,7 @@ To update an existing app, specify its App ID in the ``--remote`` flag:
 
 .. code-block:: bash
    
-   realm-cli push --remote=$REALM_APP_ID -y
+   {+cli-bin+} push --remote=$REALM_APP_ID -y
 
 Run Tests Against the App
 ~~~~~~~~~~~~~~~~~~~~~~~~~

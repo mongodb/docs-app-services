@@ -43,7 +43,7 @@ Before You Begin
 
       - .. include:: /includes/prereqs/atlas-admin-api-key.rst
 
-      - .. include:: /includes/prereqs/app-services-cli.rst
+      - .. include:: /includes/prereqs/appservices-cli.rst
 
    .. tab::
       :tabid: github
@@ -80,7 +80,7 @@ Procedure
                .. code-block:: bash
 
                   # Create the new App
-                  realm-cli app create \
+                  {+cli-bin+} app create \
                     --name "myapp-copy" \
                     --deployment-model "LOCAL" \
                     --location "US-OR"
@@ -100,7 +100,7 @@ Procedure
                .. code-block:: bash
 
                   # Pull the config files for an existing App
-                  realm-cli pull --remote="myapp-abcde"
+                  {+cli-bin+} pull --remote="myapp-abcde"
 
             .. include:: /apps/copy-app-copy-config-files.rst
 
@@ -117,7 +117,7 @@ Procedure
                   # Navigate back to the new App
                   cd myapp-copy
                   # Push the copied configuration files to App Services
-                  realm-cli push
+                  {+cli-bin+} push
 
    .. tab::
       :tabid: github
@@ -157,7 +157,7 @@ Procedure
                   cd myapp-copy
                   # Create the new App. The create command saves the new
                   # App's configiration file directory in the current directory
-                  realm-cli app create \
+                  {+cli-bin+} app create \
                     --name "myapp-copy" \
                     --deployment-model "LOCAL" \
                     --location "US-OR"
