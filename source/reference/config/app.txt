@@ -12,28 +12,28 @@ App Configuration Files
    :depth: 2
    :class: singlecol
 
-You can configure high-level features of your application in the
-root-level ``config.json``.
+You configure Application-level settings like your App name,
+environment, and deployment configuration in ``root_config.json``.
 
 .. code-block:: none
    
    app/
-   └── config.json
+   └── root_config.json
 
-Configuration
--------------
+Root Configuration
+------------------
 
-.. code-block:: javascript
-   :caption: /config.json
+Your configuration directory must include a ``root_config.json`` file
+with the following structure:
+
+.. code-block:: typescript
+   :caption: /root_config.json
 
    {
-     "app_id": "<App ID>",
      "name": "<App Name>",
-     "config_version": <Version Number>,
-     "environment": "<Environment Name>",
-     "allowed_request_origins": ["<Origin URL>", ...],
      "deployment_model": "<Deployment Model Type>",
-     "location": "<Deployment Cloud Region Name>"
+     "provider_region": "<Cloud Provider Region Name>",
+     "environment": "<Environment Name>"
    }
 
 .. list-table::
@@ -42,67 +42,45 @@ Configuration
 
    * - Field
      - Description
-   
-   * - | ``app_id``
-       | String
-     - The application's :guilabel:`App ID`.
-   
-   * - | ``name``
-       | String
-     - The application's name.
-       
-       .. include:: /includes/note-app-name-limitations.rst
-   
-   * - | ``config_version``
-       | Number
-     
-     - The schema version that all configuration files in the application
-       conform to. This value is machine generated and you typically should not
-       manually set or modify it.
-   
-   * - | ``environment``
-       | String
-     
-     - The name of the environment the app should
-       use when evaluating :ref:`environment values <environment-values>`.
-       
-       Valid options:
-       
-       .. include:: /includes/list-of-environment-names.rst
 
-       Default: ``""``
-   
-   * - | ``allowed_request_origins``
-       | Document
-     - An array of URLs that incoming requests may originate from. If you define
-       any allowed request origins, then Atlas App Services blocks any incoming
-       request from an origin that is not listed.
-       
-       .. tip::
-          
-          Request origins are URLs with the following form:
-          
-          .. code-block:: text
-             
-             <scheme>://<host>[:port]
-   
+   * - | ``name``
+       | ``string``
+
+     - The application's name.
+
+       .. include:: /includes/note-app-name-limitations.rst
+
    * - | ``deployment_model``
-       | String
+       | ``string``
+
      - The application's :ref:`deployment model <realm-deployment-models>`.
-       
+
        Valid options:
-       
+
        - ``"GLOBAL"`` for :ref:`Global Deployment <global-deployment>`
        - ``"LOCAL"`` for :ref:`Local Deployment <local-deployment>`
-   
-   * - | ``location``
-       | String
-     - The name of the :ref:`cloud region <deployment-regions>` that the application
-       is deployed in.
-       
+
+   * - | ``provider_region``
+       | ``string``
+
+     - The name of the :ref:`cloud region <deployment-regions>` that the
+       application is deployed in.
+
        - :ref:`Global applications <global-deployment>` process
          all database writes in this region, but serve other application
          requests in the nearest deployment region.
-       
+
        - :ref:`Local applications <local-deployment>` process all
          application requests and database writes in this region.
+
+   * - | ``environment``
+       | ``string?``
+
+     - The name of the environment the app should use when evaluating
+       :ref:`environment values <environment-values>`.
+
+       Valid options:
+
+       .. include:: /includes/list-of-environment-names.rst
+
+       Default: ``""``

@@ -45,12 +45,12 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
      - Description
     
    * - | ``route``
-       | string
+       | ``string``
      
      - The endpoint :ref:`route <endpoint-route>`.
     
    * - | ``http_method``
-       | string
+       | ``string``
      
      - The type of :mdn:`HTTP method <Web/HTTP/Methods>` that the
        endpoint handles. Specify ``*`` to handle all methods with a
@@ -67,14 +67,14 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        - ``"*"``
     
    * - | ``function_name``
-       | string
+       | ``string``
      
      - The name of the :ref:`function <appconfig-functions>` associated
        with the endpoint. The function should use the :ref:`endpoint
        function signature <endpoint-function>`.
     
    * - | ``validation_method``
-       | string
+       | ``string``
      
      - The :ref:`endpoint authorization scheme <endpoint-authorization>`
        used to validate incoming requests.
@@ -86,14 +86,14 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        - ``"NO_VALIDATION"``
    
    * - | ``secret_name``
-       | string
+       | ``string``
      
      - The name of a :ref:`secret <app-secret>` that contains a string.
        If ``validation_method`` is set to ``SECRET_AS_QUERY_PARAM`` or
        ``VERIFY_PAYLOAD``, this secret is used to authorize requests.
    
    * - | ``respond_result``
-       | boolean
+       | ``boolean``
      
      - If ``true``, the endpoint returns a customizable HTTP response to
        the client. You configure the response by calling the methods on
@@ -106,7 +106,7 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        with no data in the body.
     
    * - | ``fetch_custom_user_data``
-       | boolean
+       | ``boolean``
      
      - If ``true``, the authenticated user's :ref:`custom user data
        <custom-user-data>` document is available via
@@ -116,7 +116,7 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        ``context.user.custom_data`` is an empty object.
     
    * - | ``create_user_on_auth``
-       | boolean
+       | ``boolean``
      
      - If ``true``, your app automatically creates a new user
        if the provided user credentials authenticate successfully but
@@ -129,7 +129,7 @@ endpoints <https-endpoints>` as an array in ``http_endpoints/config.json``.
        user with the JWT as an identity.
    
    * - | ``disabled``
-       | boolean
+       | ``boolean``
      
      - Enables (``false``) or disables (``true``) the endpoint.
 
@@ -161,13 +161,13 @@ endpoints <data-api-endpoints>` in ``http_endpoints/data_api_config.json``.
      - Description
     
    * - | ``disabled``
-       | boolean
+       | ``boolean``
      
      - If ``false``, the Data API is not enabled. Generated endpoints
        will not handle or respond to requests.
     
    * - | ``versions``
-       | string[]
+       | ``string[]``
      
      - An list of Data API versions that your app supports. The list may
        include a subset of all possible versions but must list the
@@ -180,7 +180,7 @@ endpoints <data-api-endpoints>` in ``http_endpoints/data_api_config.json``.
        - ``"v1"``
     
    * - | ``return_type``
-       | string
+       | ``string``
      
      - The data format to use for data returned by endpoints in HTTPS
        response bodies.
@@ -191,7 +191,7 @@ endpoints <data-api-endpoints>` in ``http_endpoints/data_api_config.json``.
        - ``"JSON"``
        
    * - | ``create_user_on_auth``
-       | boolean
+       | ``boolean``
      
      - If ``true``, your app automatically creates a new user
        if the provided user credentials authenticate successfully but
@@ -204,14 +204,14 @@ endpoints <data-api-endpoints>` in ``http_endpoints/data_api_config.json``.
        user with the JWT as an identity.
    
    * - | ``run_as_user_id``
-       | string
+       | ``string``
      - An application user's account ID. If defined, endpoints will
        always run as the specified user.
        
        Cannot be used with ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id_script_source``
-       | string
+       | ``string``
      - Stringified source code for a :ref:`function <functions>` that
        returns an application user's account ID. If defined, endpoints
        execute the function on every request and run as the user with

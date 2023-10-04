@@ -15,20 +15,20 @@
      - Description
 
    * - | ``name``
-       | String
+       | ``string``
      - Required. The name of the filter. Filter names are
        useful for identifying and distinguishing between filters.
        Limited to 100 characters or fewer.
 
    * - | ``apply_when``
-       | Expression
+       | ``object``
      - An :ref:`expression <expressions>` that determines when this filter
        applies to an incoming MongoDB operation.
 
        .. include:: /includes/note-filters-no-mongodb-expansions.rst
 
    * - | ``query``
-       | Object
+       | ``object``
        | *Default:* ``{}``
      - A :manual:`MongoDB query </tutorial/query-documents/>` that App Services merges
        into a filtered operation's existing query.
@@ -43,7 +43,7 @@
              { "score": { "$gte": 20 } }
 
    * - | ``projection``
-       | Object
+       | ``object``
        | *Default:* ``{}``
      - A :manual:`MongoDB projection </tutorial/project-fields-from-query-results/>`
        that App Services merges into a filtered operation's existing projection.
