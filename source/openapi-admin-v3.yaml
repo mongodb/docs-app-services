@@ -5528,6 +5528,9 @@ components:
     AtlasCluster:
       type: object
       properties:
+        _id:
+          type: string
+          description: A unique ID for the service.
         name:
           type: string
           example: mongodb-atlas
@@ -5538,37 +5541,12 @@ components:
           example: mongodb-atlas
           enum:
             - mongodb-atlas
-        config:
-          type: object
-          required:
-            - clusterName
-          properties:
-            clusterName:
-              type: string
-              example: Cluster0
-              description: |-
-                The service name used to refer to the data source within
-                this Atlas app. The name may be at most 64 characters
-                long and must only contain ASCII letters, numbers,
-                underscores, and hyphens.
-            readPreference:
-              type: string
-              enum:
-                - primary
-                - primaryPreferred
-                - secondary
-                - secondaryPreferred
-                - nearest
-              description: |-
-                The [read
-                preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
-                mode for read requests to the data source.
-            wireProtocolEnabled:
-              type: boolean
-              description: |-
-                If true, clients may [connect to the app over the
-                MongoDB Wire
-                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+        version:
+          type: string
+          example: 1
+        last_modified:
+          type: number
+          example: 1668028570
     AtlasFederatedInstance:
       type: object
       properties:
