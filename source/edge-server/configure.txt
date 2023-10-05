@@ -420,15 +420,6 @@ Upgrade Edge Server Procedure
 
 .. procedure::
 
-   .. step:: Stop the Edge Server
-
-      From the ``edge_server`` directory, run the command to stop the Edge 
-      Server:
-
-      .. code-block:: shell
-
-         make down
-
    .. step:: Run the upgrade command
 
       From the ``edge_server`` directory, run 
@@ -438,6 +429,9 @@ Upgrade Edge Server Procedure
       .. code-block:: shell
 
          make upgrade-minor
+
+      Depending on your hardware and network connection, the upgrade 
+      process may take seconds to minutes.
 
    .. step:: Start the Edge Server
 
@@ -451,14 +445,8 @@ Upgrade Edge Server Procedure
    .. step:: (Optional) Reset the Edge Server
 
       If you encounter unexpected behavior after upgrading the Edge Server,
-      you may want to reset it and start it again. Stop the Edge Server
-      with:
-
-      .. code-block::
-
-         make down
-
-      Then, run the following command to reset and restart it:
+      you may want to reset it and start it again. Run the following 
+      command:
 
       .. code-block::
 
