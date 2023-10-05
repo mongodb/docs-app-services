@@ -830,6 +830,8 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ValueId"
+
+  
   "/groups/{groupId}/apps/{appId}/services":
     get:
       tags:
@@ -847,7 +849,7 @@ paths:
               schema:
                 items:
                   anyOf:
-                    - $ref: "#/components/schemas/AtlasCluster"
+                    - $ref: "#/components/schemas/ServiceResponse"
                     - $ref: "#/components/schemas/AtlasFederatedInstance"
                     - $ref: "#/components/schemas/ThirdPartyService"
     post:
@@ -863,7 +865,7 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/AtlasCluster"
+                - $ref: "#/components/schemas/CreateServiceRequest"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyService"
 
@@ -874,7 +876,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/AtlasCluster"
+                  - $ref: "#/components/schemas/ServiceResponse"
                   - $ref: "#/components/schemas/AtlasFederatedInstance"
                   - $ref: "#/components/schemas/ThirdPartyService"
         "409":
@@ -882,6 +884,66 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+
+
+
+  "/groups/{groupId}/apps/{appId}/services/config":
+    get:
+      tags:
+        - services
+      operationId: adminGetServiceConfig
+      summary: Get configuration of sources and third-party services
+      description: |-
+        Get configuration of [data sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) 
+        and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+      responses:
+        "200":
+          description: Successfully returned service configuration.
+          content:
+            application/json:
+              schema:
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/AtlasCluster"
+                    - $ref: "#/components/schemas/AtlasFederatedInstance"
+                    - $ref: "#/components/schemas/ThirdPartyService"
+    patch:
+      tags:
+        - services
+      operationId: adminCreateService
+      summary: Create a data source or third-party service
+      description: |-
+        Create a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or [third-party
+        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/ServiceResponse"
+                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/ThirdPartyService"
+
+      responses:
+        "201":
+          description: Successfully created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/ServiceResponse"
+                  - $ref: "#/components/schemas/AtlasFederatedInstance"
+                  - $ref: "#/components/schemas/ThirdPartyService"
+        "409":
+          description: There is already a service with the given `name`.
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+
+      
+
+
+  
   "/groups/{groupId}/apps/{appId}/services/{serviceId}":
     get:
       tags:
@@ -898,7 +960,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/AtlasCluster"
+                  - $ref: "#/components/schemas/ServiceResponse"
                   - $ref: "#/components/schemas/AtlasFederatedInstance"
                   - $ref: "#/components/schemas/ThirdPartyService"
     delete:
@@ -5525,12 +5587,78 @@ components:
         error_code:
           type: string
           description: The error type.
-    AtlasCluster:
+
+    AtlasConfigResponse:
       type: object
       properties:
-        _id:
-          type: string
-          description: A unique ID for the service.
+        config:
+          type: object
+          properties:
+            clusterId:
+              type: number
+              example: 05e821b3975d271289f372e3a
+              description: |-
+                The service ID.
+            clusterName:
+              type: string
+              example: Cluster0
+              description: |-
+                The service name used to refer to the data source within
+                this Atlas app. The name may be at most 64 characters
+                long and must only contain ASCII letters, numbers,
+                underscores, and hyphens.
+            clusterType:
+              type: string
+              example: atlas
+              description: |-
+                The type of service.
+            flexible_sync:
+              type: object
+              properties:
+            groupName:
+              type: string
+              example: Project 0
+              description: |-
+                The name of the group that contains the service.
+            orgName:
+              type: string
+              example: MongoDB_Org
+              description: |-
+                The name of the organization that contains the service.
+            readPreference:
+              type: string
+              enum:
+                - primary
+                - primaryPreferred
+                - secondary
+                - secondaryPreferred
+                - nearest
+              description: |-
+                The [read
+                preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
+                mode for read requests to the data source.
+            wireProtocolEnabled:
+              type: boolean
+              description: |-
+                If true, clients may [connect to the app over the
+                MongoDB Wire
+                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+            secret_config:
+              type: object
+              description: |- 
+                [Deprecated] The configuration for a third-party service.
+              
+    ServiceResponse:
+      _id: string;
+      name: string;
+      type: string;
+      version: number;
+      last_modified: number;
+  
+
+    CreateServiceRequest:
+      type: object
+      properties:
         name:
           type: string
           example: mongodb-atlas
@@ -5541,12 +5669,66 @@ components:
           example: mongodb-atlas
           enum:
             - mongodb-atlas
-        version:
-          type: string
-          example: 1
-        last_modified:
-          type: number
-          example: 1668028570
+        config:
+          config:
+          type: object
+          properties:
+            clusterName:
+              type: string
+              example: Cluster0
+              description: |-
+                The name of the service to create. The name may be at most 64 
+                characters long and must only contain ASCII letters, numbers,
+                underscores, and hyphens.
+            clusterType:
+              type: string
+              example: atlas
+              description: |-
+                The type of service.
+            flexible_sync:
+              type: object
+              properties:
+            groupName:
+              type: string
+              example: Project 0
+              description: |-
+                The name of the group that contains the service.
+            orgName:
+              type: string
+              example: MongoDB_Org
+              description: |-
+                The name of the organization that contains the service.
+            readPreference:
+              type: string
+              enum:
+                - primary
+                - primaryPreferred
+                - secondary
+                - secondaryPreferred
+                - nearest
+              description: |-
+                The [read
+                preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
+                mode for read requests to the data source.
+            readPreferenceTagSets:
+              type: array
+              items:
+              $ref: "#/components/schemas/ReadPreferencesTagSet"
+              description: |-
+                Target read operations to specific members of a replica set.
+            wireProtocolEnabled:
+              type: boolean
+              description: |-
+                If true, clients may [connect to the app over the
+                MongoDB Wire
+                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+
+    ReadPreferencesTagSet:
+        type: string
+        enum:
+          - server1
+          - server2
+
     AtlasFederatedInstance:
       type: object
       properties:
