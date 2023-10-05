@@ -33,7 +33,8 @@ with the following structure:
      "name": "<App Name>",
      "deployment_model": "<Deployment Model Type>",
      "provider_region": "<Cloud Provider Region Name>",
-     "environment": "<Environment Name>"
+     "environment": "<Environment Name>",
+     "allowed_request_origins": ["<Request Origin URL>", ...]
    }
 
 .. list-table::
@@ -84,3 +85,25 @@ with the following structure:
        .. include:: /includes/list-of-environment-names.rst
 
        Default: ``""``
+
+   * - | ``allowed_request_origins``
+       | ``string[]?``
+
+     - An array of URLs that incoming requests may originate from. If you define
+       any allowed request origins, then Atlas App Services blocks any incoming
+       request from an origin that is not listed.
+
+       .. tip::
+
+          Request origins are URLs with the following form:
+
+          .. code-block:: text
+
+             <scheme>://<host>[:port]
+
+          For example, the following are both valid request origins:
+
+          .. code-block:: text
+
+             https://www.example.com
+             https://www.example.com:443
