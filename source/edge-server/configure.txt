@@ -386,3 +386,80 @@ server, as well as errors that may have occurred.
             "Item": "truepredicate"
          }
       }
+
+.. _upgrade-edge-server-version:
+
+Upgrade the Edge Server Version
+-------------------------------
+
+As Edge Server evolves, you may want to upgrade your Edge Server version
+to take advantage of new functionality.
+
+Prerequisites
+~~~~~~~~~~~~~
+
+Upgrading the Edge Server version requires the host machine to have 
+`jq <https://jqlang.github.io/jq/>`__ installed. If you do not already
+have ``jq`` installed, running an install command tells you to install 
+``jq``.
+
+.. _edge-server-upgrade-commands:
+
+Upgrade Edge Server Commands
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can upgrade the Edge Server version using one of three commands:
+
+- ``make upgrade-major``: Upgrade to the latest major version of Edge Server.
+- ``make upgrade-minor``: Upgrade to the latest minor version of Edge Server.
+- ``make upgrade-force``: Upgrade to the latest version of Edge Server, 
+  regardless of major or minor version status.
+
+Upgrade Edge Server Procedure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. procedure::
+
+   .. step:: Stop the Edge Server
+
+      From the ``edge_server`` directory, run the command to stop the Edge 
+      Server:
+
+      .. code-block:: shell
+
+         make down
+
+   .. step:: Run the upgrade command
+
+      From the ``edge_server`` directory, run 
+      :ref:`the relevant upgrade command <edge-server-upgrade-commands>`
+      to upgrade to your preferred version of the Edge Server:
+
+      .. code-block:: shell
+
+         make upgrade-minor
+
+   .. step:: Start the Edge Server
+
+      After upgrading, from the ``edge_server`` directory, run the command 
+      to start the Edge Server:
+
+      .. code-block:: shell
+
+         make up
+
+   .. step:: (Optional) Reset the Edge Server
+
+      If you encounter unexpected behavior after upgrading the Edge Server,
+      you may want to reset it and start it again. Stop the Edge Server
+      with:
+
+      .. code-block::
+
+         make down
+
+      Then, run the following command to reset and restart it:
+
+      .. code-block::
+
+         make clean up
