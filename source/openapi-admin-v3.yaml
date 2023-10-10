@@ -6011,9 +6011,9 @@ components:
                 If true, clients may [connect to the app over the
 
                 MongoDB Wire Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
-            secret_config:
-              type: object
-              description: "[Deprecated] The configuration for a third-party service."
+        secret_config:
+          type: object
+          description: "[Deprecated] The configuration for a third-party service."
     ServiceResponse:
       _id: string;
       name: string;
@@ -6049,8 +6049,7 @@ components:
               example: atlas
               description: The type of service.
             flexible_sync:
-              type: object
-              properties: TODO
+              $ref: "#/components/schemas/FlexibleSync"
             groupName:
               type: string
               example: Project 0
@@ -6764,8 +6763,6 @@ components:
                   type: string
                   description: >-
                     Your Apple Services ID.
-
-
                     To learn how to get this, see [Create a Services ID](https://www.mongodb.com/docs/atlas/app-services/authentication/apple/#create-a-services-id).
             secret_config:
               type: object
@@ -7232,61 +7229,7 @@ components:
           type: string
           description: The service type of the linked cluster ("atlas" by default)
         flexible_sync:
-          type: object
-          properties:
-            state:
-              type: string
-              description: The state of the sync service ("enabled", "disabled", or empty if
-                Sync is not configured).
-            queryable_fields_names:
-              type: array
-              description: >-
-                An array of 
-
-                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
-
-                names on **any collection**.
-              items:
-                type: string
-            collection_queryable_fields_names:
-              type: object
-              description: >-
-                An array of 
-
-                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
-
-                names on the specified collection.
-              additionalProperties:
-                type: object
-                additionalProperties:
-                  description: The name of the queryable field.
-                  type: string
-            queryable_fields_version:
-              type: string
-              description: The version of the queryable field.
-            permissions:
-              type: object
-              description: '"**Deprecated**"'
-            last_disabled:
-              type: string
-              description: The last time Sync was disabled, represented by the number of
-                seconds since the UNIX epoch.
-            client_max_offline_days:
-              type: integer
-              description: >-
-                The number of days the client can be offline before a client 
-
-                [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/) 
-
-                is required.
-            is_recovery_mode_disabled:
-              type: boolean
-              description: >-
-                Specifies whether the 
-
-                [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes) 
-
-                is disabled. By default, client reset mode is enabled and this value is **false**.
+          $ref: "#/components/schemas/FlexibleSync"
         groupName:
           type: string
           description: The name of the App's Atlas Project.
@@ -7305,10 +7248,60 @@ components:
           type: boolean
           description: >-
             If true, clients may [connect to the app over the
-
             MongoDB Wire
-
             Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+    
+    FlexibleSync:
+      type: object
+      properties:
+        state:
+          type: string
+          description: The state of the sync service ("enabled", "disabled", or empty if
+            Sync is not configured).
+        queryable_fields_names:
+          type: array
+          description: >-
+            An array of 
+            [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
+            names on **any collection**.
+          items:
+            type: string
+        collection_queryable_fields_names:
+          type: object
+          description: >-
+            An array of 
+
+            [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
+
+            names on the specified collection.
+          additionalProperties:
+            type: object
+            additionalProperties:
+              description: The name of the queryable field.
+              type: string
+        queryable_fields_version:
+          type: string
+          description: The version of the queryable field.
+        permissions:
+          type: object
+          description: '"**Deprecated**"'
+        last_disabled:
+          type: string
+          description: The last time Sync was disabled, represented by the number of
+            seconds since the UNIX epoch.
+        client_max_offline_days:
+          type: integer
+          description: >-
+            The number of days the client can be offline before a client 
+            [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/) 
+            is required.
+        is_recovery_mode_disabled:
+          type: boolean
+          description: >-
+            Specifies whether the 
+            [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes) 
+            is disabled. By default, client reset mode is enabled and this value is **false**.
+    
     AnyTrigger:
       oneOf:
         - $ref: "#/components/schemas/DatabaseTrigger"
