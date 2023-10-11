@@ -104,3 +104,53 @@ Authenticate with an API Key
       .. code-block:: shell
 
          you have successfully logged in as <your public key>
+
+.. _dot-mdb:
+
+The ``.mdb`` Directory
+----------------------
+
+When you use the {+cli+} to push or pull configuration files, the CLI
+stores information about the App you're working with in the ``.mdb``
+directory of your application config. This allows the CLI to remember a
+specific deployment your configuration files are associated with across
+multiple commands.
+
+The CLI stores identifiers and configuration metadata in the
+``.mdb/meta.json`` file, which has the following format:
+
+.. code-block:: json
+
+   {
+     "config_version": 20230101,
+     "app_id": "42249d526d97af5a287c1eae",
+     "group_id": "4b2cf422930196872221a2d4",
+     "client_app_id": "myapp-abcde"
+   }
+
+- The schema version that all configuration files in the application
+  conform to. This value is machine generated and you typically should not
+  manually set or modify it.
+
+.. list-table::
+   :header-rows: 1
+
+   * - Field
+     - Description
+
+   * - | ``config_version``
+       | ``number``
+     - The version of the configuration file format. This is used to
+       ensure that the CLI can read the configuration file format.
+
+   * - | ``app_id``
+       | ``string``
+     - The App's internal ObjectId value.
+
+   * - | ``group_id``
+       | ``string``
+     - The Atlas Project ID that the App is associated with.
+
+   * - | ``client_app_id``
+       | ``string``
+     - The human-readable Client App ID.

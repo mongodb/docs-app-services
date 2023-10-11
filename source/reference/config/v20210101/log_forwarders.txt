@@ -1,10 +1,12 @@
-.. _appconfig-log_forwarders:
+.. _appconfig-v20210101-log_forwarders:
 
 =================================
 Log Forwarder Configuration Files
 =================================
 
 .. default-domain:: mongodb
+
+.. include:: /reference/config/v20210101/note-old-version.rst
 
 You define log forwarder configuration files in the ``/log_forwarders``
 directory.
@@ -34,11 +36,11 @@ directory.
      - Description
     
    * - | ``name``
-       | ``string``
+       | String
      - A unique name for the log forwarder.
     
    * - | ``log_types``
-       | ``string[]``
+       | Array<String>
      - An array of one or more log types that the forwarder should
        send to a service. Atlas App Services only forwards a log if its type is
        listed *and* its status is listed in ``log_statuses``.
@@ -48,7 +50,7 @@ directory.
        .. include:: /includes/log-forwarder-types.rst
     
    * - | ``log_statuses``
-       | ``string[]``
+       | Array<String>
      - An array of one or more log statuses that the forwarder should
        send to a service. App Services only forwards a log if its type is
        listed *and* its type is listed in ``log_types``.
@@ -58,7 +60,7 @@ directory.
        .. include:: /includes/log-forwarder-statuses.rst
     
    * - | ``policy``
-       | ``object``
+       | Object
      - An object that configures the forwarder's batching policy.
        
        To forward logs individually:
@@ -74,7 +76,7 @@ directory.
           { "type": "batch" }
     
    * - | ``action``
-       | ``object``
+       | Object
      - An object that configures where and how the forwarder sends logs.
        
        To forward logs to a linked MongoDB collection:

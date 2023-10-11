@@ -1,10 +1,12 @@
-.. _appconfig-graphql:
+.. _appconfig-v20210101-graphql:
 
 ===========================
 GraphQL Configuration Files
 ===========================
 
 .. default-domain:: mongodb
+
+.. include:: /reference/config/v20210101/note-old-version.rst
 
 .. contents:: On this page
    :local:
@@ -42,7 +44,7 @@ Service Configuration
      - Description
 
    * - | ``use_natural_pluralization``
-       | ``boolean``
+       | Boolean
      - ``true`` by default for new apps. 
         
        You can only set the value to ``false`` when you :admin-api-endpoint:`create a new app with the Admin API endpoint <operation/adminCreateApplication>` 
@@ -65,7 +67,7 @@ Service Configuration
           - Default: "mouses"
 
    * - | ``disable_schema_introspection``
-       | ``boolean``
+       | Boolean
      - This value is ``false`` by default for new apps.
 
        If ``true``, the GraphQL API blocks :graphql:`introspection
@@ -76,7 +78,7 @@ Service Configuration
        disabled, clients like GraphiQL cannot show docs for the API
        schema or autocomplete queries and mutations.
 
-.. _appconfig-custom-resolver:
+.. _appconfig-v20210101-custom-resolver:
 
 Custom Resolver Configuration
 -----------------------------
@@ -102,7 +104,7 @@ Custom Resolver Configuration
      - Description
 
    * - | ``on_type``
-       | ``string``
+       | String
      - The parent type that exposes the custom resolver as one of its fields.
        
        Valid Options:
@@ -112,7 +114,7 @@ Custom Resolver Configuration
        - A singular :ref:`exposed <graphql-expose-data>` type name (for :ref:`computed properties <example-graphql-computed-property>`)
 
    * - | ``field_name``
-       | ``string``
+       | String
      - The name of the field on the parent type that exposes the custom
        resolver. The field name must be unique among all custom resolver on its
        parent type.
@@ -121,7 +123,7 @@ Custom Resolver Configuration
        resolver overrides the schema type.
 
    * - | ``function_name``
-       | ``string``
+       | String
      - The name of the :ref:`function <appconfig-functions>` that runs when the
        resolver is called. The function arguments may accept a single argument
        (configured by ``input_type`` and ``input_type_format``) and must return
@@ -129,13 +131,13 @@ Custom Resolver Configuration
        ``payload_type_format``).
 
    * - | ``input_type``
-       | ``string | object``
+       | String | JSON Schema
      - The type of the resolver's ``input`` argument (if it accepts input). You
        can specify either the name of another type in your GraphQL schema or a
        custom JSON schema specific to the resolver.
 
    * - | ``input_type_format``
-       | ``string``
+       | String
      - A metadata description of the ``input_type``.
        
        Valid Options:
@@ -147,7 +149,7 @@ Custom Resolver Configuration
        - ``"custom"`` (for a custom JSON schema)
 
    * - | ``payload_type``
-       | ``string | object``
+       | String | JSON Schema
      - The type of the value returned in the resolver's payload. You can specify
        either the name of another type in your GraphQL schema or a custom JSON
        schema specific to the resolver.
@@ -159,7 +161,7 @@ Custom Resolver Configuration
           :language: graphql
 
    * - | ``payload_type_format``
-       | ``string``
+       | String
      - A metadata description of the ``payload_type``.
        
        Valid Options:

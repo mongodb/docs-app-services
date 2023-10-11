@@ -192,6 +192,9 @@ two available scopes are:
 - **Global queryable fields**: scoped across all collections in an App's Schema.
 - **Collection queryable fields**: scoped to a single collection in the App.
 
+Scoping a queryable field to a specific collection reduces the amount of
+backing Atlas storage required to store Sync metadata.
+
 You can use :ref:`rules and permissions <flexible-sync-rules-and-permissions>` 
 to configure more granular access control on a per-collection basis. You 
 can define collection-level rules and permissions for both global and 
@@ -482,104 +485,4 @@ deleting this field until your app has been migrated.
 Sync Config Object
 ~~~~~~~~~~~~~~~~~~
 
-.. list-table::
-   :header-rows: 1
-   :widths: 10 40
-
-   * - Field
-     - Description
-
-   * - | ``type``
-       | String
-     
-     - The sync mode. There are two Sync modes: Flexible Sync and the older
-       Partition-Based Sync. We recommend using Flexible Sync. For more
-       information about Partition-Based Sync, refer to
-       :ref:`partition-based-sync`.
-       
-       Valid Options for a Flexible Sync Configuration:
-
-       - ``"flexible"``
-
-   * - | ``development_mode_enabled``
-       | Boolean
-     
-     - If ``true``, :ref:`Development Mode <development-mode>` is enabled
-       for the application. While enabled, App Services automatically stores synced
-       objects in a specific database (specified in ``database_name``) and
-       mirrors objects types in that database's collection schemas.
-
-   * - | ``service_name``
-       | String
-     
-     - The name of the Atlas cluster :ref:`data source <appconfig-data_sources>`
-       to sync. You cannot use sync with a :ref:`serverless instance
-       <serverless-caveats>`.
-
-   * - | ``database_name``
-       | String
-     
-     - The name of a database in the synced cluster where App Services stores data in
-       :ref:`Development Mode <development-mode>`. App Services automatically
-       generates a schema for each synced type and maps each object type to a
-       collection within the database.
-
-   * - | ``state``
-       | String
-     
-     - The current state of the sync protocol for the application.
-       
-       Valid Options:
-
-       - ``"enabled"``
-       - ``"disabled"``
-
-   * - | ``client_max_offline_days``
-       | Number
-     
-     - Controls how long the :ref:`backend compaction <optimize-sync-atlas-usage>`
-       process waits before aggressively pruning metadata that some clients
-       require to synchronize from an old version of a realm.
-
-   * - | ``is_recovery_mode_disabled``
-       | Boolean
-     - If ``false``, :ref:`Recovery Mode <recover-unsynced-changes>` is enabled
-       for the application. While enabled, Realm SDKs that support this feature 
-       attempt to recover unsynced changes upon performing a client reset.
-       Recovery mode is enabled by default.
-
-   * - | ``queryable_fields_names``
-       | Array<String>
-     
-     - The :ref:`names of the global queryable fields <queryable-fields>` 
-       that your client application can query to determine which data to 
-       synchronize. These fields are queryable across all synced collections.
-
-   * - | ``indexed_queryable_fields_names``
-       | Array<String>
-     
-     - The :ref:`name of the indexed queryable field <fs-indexed-queryable-fields>` 
-       that your client application can query to determine which data to 
-       synchronize. While this property is an array, we currently support
-       only one one indexed queryable field. This array may contain only one 
-       element. The indexed queryable field must be present in the schema 
-       and be the same :ref:`eligible field type <flexible-sync-eligible-field-types>`
-       in every collection you sync. The indexed queryable field name must 
-       *also* appear in ``queryable_fields_names`` since this is a global
-       queryable field.
-
-   * - | ``collection_queryable_fields_names``
-       | <Map[String][]String>
-     
-     - The :ref:`names of the collection queryable fields <queryable-field-scopes>` 
-       that your client application can query to determine which data to 
-       synchronize. Collection queryable fields are scoped to the specified
-       collection. Scoping a queryable field to a specific collection reduces
-       the amount of backing Atlas storage required to store Sync metadata.
-
-   * - | ``last_disabled``
-       | Number
-     
-     - The date and time that sync was last paused or disabled, represented by
-       the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
-       UTC).
+.. include:: /sync/config-table.rst

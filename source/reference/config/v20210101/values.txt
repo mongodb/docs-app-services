@@ -1,4 +1,4 @@
-.. _appconfig-values:
+.. _appconfig-v20210101-values:
 
 =========================
 Value Configuration Files
@@ -11,6 +11,8 @@ Value Configuration Files
    :backlinks: none
    :depth: 2
    :class: singlecol
+
+.. include:: /reference/config/v20210101/note-old-version.rst
 
 You can define static :ref:`values <app-value>` in the ``/values`` directory.
 Each value is defined in its own JSON file with the same name as the value.
@@ -42,22 +44,22 @@ Configuration
      - Description
    
    * - | ``id``
-       | ``string``
+       | String
      - A string that uniquely identifies the value. Atlas App Services automatically
        generates a unique ID for a value when you create it.
    
    * - | ``name``
-       | ``string``
+       | String
      - A unique name for the value. This name is how you refer to
        the value in functions and rules.
    
    * - | ``from_secret``
-       | ``boolean``
+       | Boolean
      - Default: ``false``. If ``true``, the value exposes a
        :ref:`Secret <app-secret>` instead of a plain-text JSON value.
    
    * - | ``value``
-       | ``any``
+       | String, Array, or Object
      - The stored data that App Services exposes when the value is referenced.
        
        If ``from_secret`` is ``false``, ``value`` can be a standard

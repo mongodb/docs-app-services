@@ -163,7 +163,7 @@ evaluates dynamically for each request. Each collection's rules are stored in a
    * - | ``roles``
        | Array<Document>
      - An array of :ref:`Role configuration documents
-       <role-config>`, which have the following form:
+       <config-v20210101-role>`, which have the following form:
        
        .. include:: /mongodb/tables/role-configuration.rst
 
@@ -185,6 +185,6 @@ evaluates dynamically for each request. Each collection's rules are stored in a
    * - | ``filters``
        | Array<Document>
      - An array of :ref:`Filter configuration documents
-       <filter-config>`, which have the following form:
+       <config-v20210101-filter>`, which have the following form:
 
        .. include:: /mongodb/tables/query-filter-params.rst

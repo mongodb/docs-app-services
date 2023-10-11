@@ -1,4 +1,4 @@
-.. _appconfig-auth:
+.. _appconfig-v20210101-auth:
 
 ==================================================
 User & Authentication Provider Configuration Files
@@ -12,6 +12,8 @@ User & Authentication Provider Configuration Files
    :depth: 2
    :class: singlecol
 
+.. include:: /reference/config/v20210101/note-old-version.rst
+
 .. code-block:: none
    
    app/
@@ -19,7 +21,7 @@ User & Authentication Provider Configuration Files
        ├── providers.json
        └── custom_user_data.json
 
-.. _config-auth-providers:
+.. _config-v20210101-auth-providers:
 
 Authentication Providers
 ------------------------
@@ -75,12 +77,12 @@ configuration fields.
      - Description
    
    * - | ``name``
-       | ``string``
+       | String
      - The name of the authentication provider. This will always be the same as
        the the provider's ``type``.
    
    * - | ``type``
-       | ``string``
+       | String
      - The authentication provider type.
        
        Valid options:
@@ -151,7 +153,7 @@ configuration fields.
        - :ref:`Facebook <config-oauth2-facebook>`
        - :ref:`Apple ID <config-oauth2-apple>`
 
-.. _config-custom-user-data:
+.. _config-v20210101-custom-user-data:
 
 Custom User Data
 ----------------
@@ -185,24 +187,24 @@ collection for your app in ``/auth/custom_user_data.json``.
        collection that contains their custom data.
    
    * - | ``mongo_service_name``
-       | ``string``
+       | String
      - The name of the :ref:`data source <appconfig-data_sources>` that contains
        the custom user data collection.
    
    * - | ``database_name``
-       | ``string``
+       | String
      - The name of the database that contains the custom user data collection.
    
    * - | ``collection_name``
-       | ``string``
+       | String
      - The name of the collection that contains the custom user data.
    
    * - | ``user_id_field``
-       | ``string``
+       | String
      - The name of the field in custom user data documents that
        contains the user ID of the application user the document
        describes.
 
    * - | ``on_user_creation_function_name``
-       | ``string?``
+       | String
      - The name of the :ref:`user creation function <user-creation-function>`.

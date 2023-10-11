@@ -1,10 +1,12 @@
-.. _appconfig-data_sources:
+.. _appconfig-v20210101-data_sources:
 
 =======================================
 MongoDB Data Source Configuration Files
 =======================================
 
 .. default-domain:: mongodb
+
+.. include:: /reference/config/v20210101/note-old-version.rst
 
 .. contents:: On this page
    :local:
@@ -27,7 +29,7 @@ MongoDB Data Source Configuration Files
 Service Configuration
 ---------------------
 
-.. _config-mongodb-cluster:
+.. _config-v20210101-mongodb-cluster:
 
 MongoDB Clusters
 ~~~~~~~~~~~~~~~~
@@ -53,7 +55,7 @@ MongoDB Clusters
      - Description
    
    * - | ``name``
-       | ``string``
+       | String
      - Required. Default: ``mongodb-atlas``
        
        The service name used to refer to the cluster within this Atlas App Services
@@ -61,15 +63,15 @@ MongoDB Clusters
        contain ASCII letters, numbers, underscores, and hyphens.
    
    * - | ``type``
-       | ``string``
+       | String
      - Required. For MongoDB Atlas clusters, this value is always ``"mongodb-atlas"``.
    
    * - | ``config.clusterName``
-       | ``string``
+       | String
      - Required. The name of the cluster in Atlas.
 
    * - | ``config.readPreference``
-       | ``string``
+       | String
      - The :ref:`read preference <read-preference>` mode for queries sent
        through the service.
        
@@ -80,7 +82,7 @@ MongoDB Clusters
      - If ``true``, clients may :ref:`connect to the app over the MongoDB Wire
        Protocol <wire-protocol-connect>`.
 
-.. _config-adf:
+.. _config-v20210101-adf:
 
 {+adf-instance+}s
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,7 +106,7 @@ MongoDB Clusters
      - Description
    
    * - | ``name``
-       | ``string``
+       | String
      - Required. Default: ``mongodb-datafederation``
        
        The service name used to refer to the {+adf-instance+} within this App Services
@@ -112,17 +114,17 @@ MongoDB Clusters
        contain ASCII letters, numbers, underscores, and hyphens.
    
    * - | ``type``
-       | ``string``
+       | String
      - Required. For a {+adf-instance+}, this value is always ``"datalake"``.
    
    * - | ``config.dataLakeName``
-       | ``string``
+       | String   
      - Required. The name of the {+adf-instance+} in Atlas.
 
 Databases & Collections
 -----------------------
 
-.. _config-collection-schema:
+.. _config-v20210101-collection-schema:
 
 Collection Schema
 ~~~~~~~~~~~~~~~~~
@@ -144,7 +146,7 @@ documents. The root level schema must be an :ref:`object schema
      }
    }
 
-.. _config-relationships:
+.. _config-v20210101-relationships:
 
 Relationships
 ~~~~~~~~~~~~~
@@ -170,7 +172,7 @@ Relationships
      - Description
    
    * - | ``ref``
-       | ``string``
+       | String
      - A JSON schema ``$ref`` string that specifies the foreign collection. The
        string has the following form:
        
@@ -179,14 +181,14 @@ Relationships
           #/relationship/<Data Source Name>/<Database Name>/<Collection Name>
    
    * - | ``source_key``
-       | ``string``
+       | String
      - The name of the field in this collection's schema that specifies which
        documents in the foreign collection to include in the relationship. A
        foreign document is included if ``source_key`` contains the value of its
        ``foreign_key`` field.
    
    * - | ``foreign_key``
-       | ``string``
+       | String
      - The name of the field in the foreign collection's schema that contains
        the value referenced by ``source_key``.
    
@@ -222,7 +224,7 @@ Relationships
         }
       }
 
-.. _config-default-rules:
+.. _config-v20210101-default-rules:
 
 Default Rules
 ~~~~~~~~~~~~~
@@ -251,13 +253,13 @@ configuration file at ``data_sources/<data-source-name>/default_rule.json``.
 
    * - | ``roles``
        | Array<Role>
-     - An array of :ref:`Role <config-role>` configurations.
+     - An array of :ref:`Role <config-v20210101-role>` configurations.
 
    * - | ``filters``
        | Array<Filter>
-     - An array of :ref:`Filter <config-filter>` configurations.
+     - An array of :ref:`Filter <config-v20210101-filter>` configurations.
 
-.. _config-collection-rules:
+.. _config-v20210101-collection-rules:
 
 Collection Rules
 ~~~~~~~~~~~~~~~~
@@ -284,27 +286,27 @@ configuration file.
      - Description
    
    * - | ``database``
-       | ``string``
+       | String
      - The name of the database that holds the collection.
    
    * - | ``collection``
-       | ``string``
+       | String
      - The name of the collection.
 
    * - | ``roles``
-       | ``Role[]``
-     - An array of :ref:`Role <config-role>` configurations.
+       | Array<Role>
+     - An array of :ref:`Role <config-v20210101-role>` configurations.
 
    * - | ``filters``
-       | ``Filter[]``
-     - An array of :ref:`Filter <config-filter>` configurations.
+       | Array<Filter>
+     - An array of :ref:`Filter <config-v20210101-filter>` configurations.
 
-.. _config-rule:
+.. _config-v20210101-rule:
 
 Rule Configurations
 -------------------
 
-.. _config-role:
+.. _config-v20210101-role:
 
 Roles
 ~~~~~
@@ -312,7 +314,7 @@ Roles
 .. include:: /mongodb/tables/role-configuration.rst
 
 
-.. _config-filter:
+.. _config-v20210101-filter:
 
 Filters
 ~~~~~~~
