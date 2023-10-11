@@ -113,8 +113,14 @@ The ``.mdb`` Directory
 When you use the {+cli+} to push or pull configuration files, the CLI
 stores information about the App you're working with in the ``.mdb``
 directory of your application config. This allows the CLI to remember a
-specific deployment your configuration files are associated with across
-multiple commands.
+specific deployment that your configuration files are associated with
+across multiple commands.
+
+This directory is machine generated and you typically should not
+manually modify it. If you delete the ``.mdb`` directory, the CLI will
+no longer be able to associate your configuration files with a specific
+deployment. The CLI creates a new ``.mdb`` directory when you run a
+command that targets a specific deployment.
 
 The CLI stores identifiers and configuration metadata in the
 ``.mdb/meta.json`` file, which has the following format:
@@ -128,10 +134,6 @@ The CLI stores identifiers and configuration metadata in the
      "client_app_id": "myapp-abcde"
    }
 
-- The schema version that all configuration files in the application
-  conform to. This value is machine generated and you typically should not
-  manually set or modify it.
-
 .. list-table::
    :header-rows: 1
 
@@ -140,8 +142,10 @@ The CLI stores identifiers and configuration metadata in the
 
    * - | ``config_version``
        | ``number``
-     - The version of the configuration file format. This is used to
-       ensure that the CLI can read the configuration file format.
+
+     - The configuration file format version that all configuration
+       files in the directory conform to. This is used to ensure that
+       the CLI can read the configuration files.
 
    * - | ``app_id``
        | ``string``
