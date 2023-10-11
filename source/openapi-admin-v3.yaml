@@ -886,7 +886,7 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/ServiceResponse"
+                - $ref: "#/components/schemas/CreateServiceRequest"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyService"
       responses:
@@ -5570,8 +5570,7 @@ components:
               example: atlas
               description: The type of service.
             flexible_sync:
-              type: object
-              properties: "null"
+              $ref: "#/components/schemas/FlexibleSync"
             groupName:
               type: string
               example: Project 0
@@ -5600,11 +5599,13 @@ components:
           type: object
           description: "[Deprecated] The configuration for a third-party service."
     ServiceResponse:
-      _id: string;
-      name: string;
-      type: string;
-      version: number;
-      last_modified: number;
+      type: object
+      properties:
+        _id: string;
+        name: string;
+        type: string;
+        version: number;
+        last_modified: number;
     ReadPreferencesTagSet:
       type: string
       enum:
