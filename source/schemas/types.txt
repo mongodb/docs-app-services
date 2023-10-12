@@ -525,14 +525,14 @@ GeoJSON Point
 A GeoJSON Point (GeoPoint) is a single location on the Earth's surface. The GeoPoint 
 schema must contain the following fields:
 
-  - ``type`` (string), which is always set to "Point"
-  - ``coordinates`` (array of doubles). The ``coordinates`` array must contain  
-     at least 2 double values, and may contain a third:
-     
-     - The first double is the longitude of the point, between -180 and 180.
-     - The second is the latitude, between -90 and 90.
-     - The optional third value represents the elevation/altitude of the point, 
-       in meters.
+- ``type`` (string), which is always set to "Point"
+- ``coordinates`` (array of doubles). The ``coordinates`` array must contain  
+    at least 2 double values, and may contain a third:
+    
+    - The first double is the longitude of the point, between -180 and 180.
+    - The second is the latitude, between -90 and 90.
+    - The optional third value represents the elevation/altitude of the point, 
+      in meters.
 
 To store a GeoPoint in Atlas for later querying with :ref:`Atlas Device Sync <sync>`, 
 the following rules also apply:
@@ -565,13 +565,11 @@ property named "location". The highlighted rows show an optional property:
              "items": {
                "bsonType": "double"
              }
-           },
-           "additional_location_property": {
-             "bsonType": "string"
-           },
+           }
+          }
          }
-       }
-     }
+       },
+    "additionalProperties": true
    }
 
 The following code block shows a document that follows the schema. It has a 
@@ -607,7 +605,9 @@ query. The Device Sync server validates every embedded GeoPoint property with
   and the second element (latitude) must fall in the range of [-90, 90].
 
 If a device writes an object that fails validation, it will be reverted with a 
-:ref:`compensating write error <flexible-sync-errors>`. 
+:ref:`compensating write error <flexible-sync-errors>`. If a document that doesn't 
+meet these requirements is written directly to the MongoDB collection, the server 
+marks that document as unsyncable.
 
 Querying
 ````````
