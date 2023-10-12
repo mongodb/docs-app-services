@@ -1,3 +1,29 @@
+# October 6, 2023
+
+## Edge Server 
+
+- Configure Edge Server: Add details for upgrading the Edge Server.
+
+## Data API
+
+- Custom HTTPS Endpoints: Add more detail for creating a custom HTTPS endpoint function.
+
+## Functions
+
+- Landing Page: Add max async operations (1000 async operations) under "Constraints" section. 
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Update the page and JWT diagram with more details on configuration types.
+
+## Release Notes
+
+- Update external change log with release notes for v20231004.
+
+## Internal
+
+- Deprecate the generated Realm CLI by moving it to a new URL path. Add new App Services CLI to main `/cli` path. Introduce new source constants to refer and link to App Services CLI throughout the docs.
+
 # September 29, 2023
 
 ## Edge Server
