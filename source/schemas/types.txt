@@ -526,8 +526,9 @@ A GeoJSON Point (GeoPoint) is a single location on the Earth's surface. The GeoP
 schema must contain the following fields:
 
 - ``type`` (string), which is always set to "Point"
+
 - ``coordinates`` (array of doubles). The ``coordinates`` array must contain  
-    at least 2 double values, and may contain a third:
+  at least 2 double values, and may contain a third:
     
     - The first double is the longitude of the point, between -180 and 180.
     - The second is the latitude, between -90 and 90.
@@ -544,11 +545,10 @@ the following rules also apply:
 - Additional properties in the GeoPoint object are also allowed.
  
 The following is the Device Sync schema of an object with an embedded GeoPoint 
-property named "location". The highlighted rows show an optional property:
+property named "location":
 
 .. code-block:: json
    :copyable: false
-   :emphasize-lines: 19-21
 
    {
      "title": "MyObject",
@@ -588,7 +588,7 @@ and the GeoPoint object contain an extra property.
        "coordinates":[-122.4, 48.12, 23.0],
        "signal_strength":-118",
        "is_public": true
-       },
+      },
      "is_verified": true
    }
 
@@ -630,7 +630,3 @@ For SDK-specific details about querying against geospatial data, see:
 - :ref:`Geospatial - Node.js SDK <node-data-types-geospatial>`
 - :ref:`Geospatial - React Native SDK <react-native-data-types-geospatial>`
 
-.. note::
-
-   Atlas does not support creating an index on Geospatial fields, so querying 
-   large collections may reduce performance.
