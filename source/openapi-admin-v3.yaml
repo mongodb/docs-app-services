@@ -846,10 +846,8 @@ paths:
             application/json:
               schema:
                 items:
-                  anyOf:
-                    - $ref: "#/components/schemas/ServiceResponse"
-                    - $ref: "#/components/schemas/AtlasFederatedInstance"
-                    - $ref: "#/components/schemas/ThirdPartyService"
+                  - $ref: "#/components/schemas/ServiceResponse"
+
   "/groups/{groupId}/apps/{appId}/services/config":
     get:
       tags:
@@ -868,7 +866,7 @@ paths:
               schema:
                 items:
                   anyOf:
-                    - $ref: "#/components/schemas/AtlasConfigResponse"
+                    - $ref: "#/components/schemas/AtlasCluster"
                     - $ref: "#/components/schemas/AtlasFederatedInstance"
                     - $ref: "#/components/schemas/ThirdPartyService"
     patch:
@@ -886,7 +884,7 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/CreateServiceRequest"
+                - $ref: "#/components/schemas/CreateDataSource"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyService"
       responses:
@@ -5547,7 +5545,7 @@ components:
         error_code:
           type: string
           description: The error type.
-    AtlasConfigResponse:
+    AtlasCluster:
       type: object
       properties:
         config:
@@ -5561,12 +5559,14 @@ components:
               type: string
               example: Cluster0
               description: |-
-                The service name used to refer to the data source within
-                this Atlas app. The name may be at most 64 characters
-                long and must only contain ASCII letters, numbers,
+                The cluster name of the data source within. The name may be at 
+                most 64 characters long and must only contain ASCII letters, numbers,
                 underscores, and hyphens.
             clusterType:
               type: string
+              enum:
+                - atlas
+                - serverless
               example: atlas
               description: The type of service.
             flexible_sync:
@@ -5611,7 +5611,7 @@ components:
       enum:
         - server1
         - server2
-    CreateServiceRequest:
+    CreateDataSource:
       type: object
       properties:
         name:
@@ -5625,7 +5625,6 @@ components:
           enum:
             - mongodb-atlas
         config:
-          config: "null"
           type: object
           properties:
             clusterName:
@@ -5700,7 +5699,7 @@ components:
         - type
         - config
       oneOf:
-        - $ref: "#/components/schemas/AppConstructor"
+        - $ref: "#/components/schemas/AtlasCluster"
         - $ref: "#/components/schemas/AtlasFederatedInstance"
     ThirdPartyService:
       type: object
