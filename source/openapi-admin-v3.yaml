@@ -644,6 +644,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Trigger"
+  
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -697,6 +698,7 @@ paths:
             application/json:
               schema:
                 properties: {}
+  
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}/resume":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -734,6 +736,7 @@ paths:
                   error:
                     type: string
                     description: A description of the error that App Services encountered.
+  
   "/groups/{groupId}/apps/{appId}/values":
     get:
       tags:
@@ -781,6 +784,7 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+  
   "/groups/{groupId}/apps/{appId}/values/{valueId}":
     get:
       tags:
@@ -830,6 +834,7 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ValueId"
+  
   "/groups/{groupId}/apps/{appId}/services":
     get:
       tags:
@@ -847,7 +852,39 @@ paths:
               schema:
                 items:
                   - $ref: "#/components/schemas/ServiceResponse"
+    post:
+      tags:
+        - services
+      operationId: adminCreateService
+      summary: Create a data source or third-party service
+      description: |-
+        Create a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or [third-party
+        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/AtlasCluster"
+                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/ThirdPartyService"
 
+      responses:
+        "201":
+          description: Successfully created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AtlasCluster"
+                  - $ref: "#/components/schemas/AtlasFederatedInstance"
+                  - $ref: "#/components/schemas/ThirdPartyService"
+        "409":
+          description: There is already a service with the given `name`.
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+  
   "/groups/{groupId}/apps/{appId}/services/config":
     get:
       tags:
@@ -872,13 +909,14 @@ paths:
     patch:
       tags:
         - services
-      operationId: adminCreateService
-      summary: Create a data source or third-party service
+      operationId: adminUpdateServiceConfig
+      summary: Update configuration settings of sources and third-party services
       description: >-
-        Create a [data
+        Update the [data
         source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or
         [third-party
-        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/) 
+        configuration.
       requestBody:
         content:
           application/json:
@@ -902,6 +940,7 @@ paths:
     parameters:
       - $ref: "#/components/parameters/GroupId"
       - $ref: "#/components/parameters/AppId"
+
   "/groups/{groupId}/apps/{appId}/services/{serviceId}":
     get:
       tags:
