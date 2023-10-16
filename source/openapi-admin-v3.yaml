@@ -926,17 +926,8 @@ paths:
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyService"
       responses:
-        "201":
-          description: Successfully created.
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/ServiceResponse"
-                  - $ref: "#/components/schemas/AtlasFederatedInstance"
-                  - $ref: "#/components/schemas/ThirdPartyService"
-        "409":
-          description: There is already a service with the given `name`.
+        "204":
+          description: Successfully updated.
     parameters:
       - $ref: "#/components/parameters/GroupId"
       - $ref: "#/components/parameters/AppId"
