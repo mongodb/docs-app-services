@@ -515,9 +515,11 @@ with the ``title`` field set to the embedded object's type name:
 Geospatial Data
 ---------------
 
-Geospatial data describes points and other data on the earth's surface. Realm 
-does not have built-in geospatial types. If you are not using Device Sync, you 
-can query your geospatial data with regular 
+Geospatial data describes points and other data on the earth's surface. App 
+Services does not have built-in geospatial types. Instead, you model geographic
+data using standard GeoJSON objects.
+
+If you are not using Device Sync, you can query your geospatial data with regular 
 :manual:`geospatial operators </geospatial-queries>`. However, if you are 
 using Device Sync, there are additional requirements in how you store and 
 query the data.
@@ -526,20 +528,26 @@ GeoJSON Point
 ~~~~~~~~~~~~~
 
 A GeoJSON Point (GeoPoint) is a single location on the Earth's surface. The GeoPoint 
-schema must contain the following **required** fields:
+schema must a **required** ``type`` field, of type string, which is always set 
+to "Point".
 
-- ``type`` (string), which is always set to "Point"
-
-- ``coordinates`` (array of doubles). The ``coordinates`` array must contain  
-  at least 2 double values, and may contain a third:
+You must also provide a ``coordinates`` field, which is an array of doubles. 
+The ``coordinates`` array must contain  at least 2 double values, and may 
+contain a third:
     
-  - The first double is the longitude of the point, between -180 and 180.
-  - The second is the latitude, between -90 and 90.
-  - The optional third value represents the elevation/altitude of the point, 
-    in meters. Atlas ignores this value when performing queries. 
+- The first double is the longitude of the point, between -180 and 180.
+- The second is the latitude, between -90 and 90.
+- The optional third value represents the elevation/altitude of the point, 
+  in meters. Atlas ignores this value when performing queries. 
+
+.. note::
+
+   You cannot set an array as required in a Device Sync schema, so the Sync 
+   server checks that the coordinates field is present and meets the 
+   requirements.
 
 To store a GeoPoint in Atlas for later querying with :ref:`Atlas Device Sync <sync>`, 
-the following rules also apply:
+the following rules also apply to the GeoPoint object:
 
 - It must be of type ``object``
 - It must be embedded within another type
@@ -580,14 +588,13 @@ and the GeoPoint object contain an extra property.
 
 .. code-block:: json
    :copyable: false
-   :emphasize-lines: 4-9
+   :emphasize-lines: 3-6
 
    {
      "_id": { "$oid": "65039d09fe4e46dddee31a3f" },
      "location": {
        "type": "Point",
-       "coordinates": [-122.4, 48.12, 23.0],
-       "optional_property": true
+       "coordinates": [-122.4, 48.12, 23.0]
       },
      "another_optional_property": "geopoint name"
    }
@@ -597,12 +604,7 @@ GeoJSON Points and Device Sync Queries
 
 GeoPoints are the only form of geospatial data that Device Sync can 
 query. The Device Sync server validates every embedded GeoPoint property with 
-2 rules:
-
-- The "type" field can only be set to the string "Point" (case-sensitive), 
-- The "coordinates" field can only be set to an array of doubles. The first element 
-  in this array (longitude) must fall in the range of [-180, 180], 
-  and the second element (latitude) must fall in the range of [-90, 90].
+the rules outlined above.
 
 If a device writes an object that fails validation, it will be reverted with a 
 :ref:`compensating write error <flexible-sync-errors>`. If a document that doesn't 
@@ -612,10 +614,9 @@ marks that document as unsyncable.
 Querying
 ````````
 You can query a GeoPoint using :ref:`Realm Query Language (RQL) <rql>`, 
-using the :manual:`$geoWithin </reference/operator/query/geoWithin>` to do so.
-Although GeoPoints are the only stored type you can query, your query will often 
-contain other geospatial types. For example, this partial query looks for all points 
-within the specified GeoCircle:
+using ``$geoWithin`` to do so. Although GeoPoints are the only stored type you 
+can query, your query may contain other geospatial types. For example, 
+this partial query looks for all points within the specified GeoCircle:
 
 .. code-block:: json
    :copyable: false
