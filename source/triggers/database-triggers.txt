@@ -32,18 +32,6 @@ single change stream for each collection with at least one enabled
 trigger. If multiple triggers are enabled for a collection they all
 share the same change stream.
 
-You control which operations cause a trigger to fire as well as what
-happens when it does. For example, you can run a function whenever a
-specific field of a document is updated. The function can access the
-entire change event, so you always know what changed. You can also pass
-the change event to :ref:`AWS EventBridge <aws-eventbridge>` to handle
-the event outside of Atlas.
-
-Triggers support :manual:`$match
-</reference/operator/aggregation/match>` expressions to filter change
-events and :manual:`$project </reference/operator/aggregation/project>`
-expressions to limit the data included in each event.
-
 .. important:: Change Stream Limitations
    
    There are limits on the total number of change streams you can open
@@ -55,15 +43,26 @@ expressions to limit the data included in each event.
    <serverless-caveats>` or :ref:`{+adf-instance+}
    <data-federation-caveats>` because they do not support change streams.
 
-.. _trigger-recursion
+You control which operations cause a trigger to fire as well as what
+happens when it does. For example, you can run a function whenever a
+specific field of a document is updated. The function can access the
+entire change event, so you always know what changed. You can also pass
+the change event to :ref:`AWS EventBridge <aws-eventbridge>` to handle
+the event outside of Atlas.
+
+Triggers support :manual:`$match </reference/operator/aggregation/match>` 
+expressions to filter change events and :manual:`$project </reference/operator/aggregation/project>` 
+expressions to limit the data included in each event.
+
+.. _trigger-recursion:
 
 .. warning::
 
    It is possible to configure triggers that cause other triggers to fire on the 
-	same collection, database, or cluster, resulting in recursion. Examples 
-	include a database trigger writing to a collection within the same 
-	database, or a cluster-level logger writing database logs to a database in 
-	the same cluster.
+   same collection, database, or cluster, resulting in recursion. Examples 
+   include a database trigger writing to a collection within the same 
+   database, or a cluster-level logger writing database logs to another database 
+	in the same cluster.
    
 .. _create-a-database-trigger:
 
@@ -116,6 +115,9 @@ Configuration
 
 Database Triggers have the following configuration options:
 
+Trigger Details
+~~~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :widths: 15 30
@@ -149,6 +151,9 @@ Database Triggers have the following configuration options:
 
        .. include:: /includes/trigger-event-ordering.rst
 
+Trigger Source Details
+~~~~~~~~~~~~~~~~~~~~~~
+
 Within the :guilabel:`Trigger Source Details` section, you first select the 
 :guilabel:`Source Type`, based on the level of granularity you want. Your 
 options are:
@@ -174,13 +179,14 @@ following table describes these options.
      - Option
 
    * - :guilabel:`Collection`
-       | - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+	  - |
+         - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
            Trigger is associated with.
       
-       | - :guilabel:`Database Name`. The MongoDB database that contains the watched
+         - :guilabel:`Database Name`. The MongoDB database that contains the watched
            collection. Optional only if the :guilabel:`Collection Name` is specified.
  
-       | - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
+         - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
            <database-event-operation-types>` that occur on the collection to cause 
            the Trigger to fire. Select the operation types you want the  trigger to 
            respond to.
@@ -192,7 +198,7 @@ following table describes these options.
              update operations from these clients will generate **Replace**
              change events rather than **Update** events.
  
-       | - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         - :guilabel:`Full Document`. If enabled, **Update** change events include 
            the latest :manual:`majority-committed </reference/read-concern-majority/>`
            version of the modified document *after* the change was applied in
            the ``fullDocument`` field.
@@ -206,18 +212,19 @@ following table describes these options.
            
               - **Delete** events never include the ``fullDocument`` field.
  
-       | - :guilabel:`Document Preimage`. Disabled for Collection and Database 
+         - :guilabel:`Document Preimage`. Disabled for Collection and Database 
             sources to limit unnecessary watches on the cluster for a new 
             collection being created.
 
    * - :guilabel:`Database`
-       | - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+     - | 
+	      - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
            Trigger is associated with.
 
-       | - :guilabel:`Database Name`. The MongoDB database that contains the watched
+         - :guilabel:`Database Name`. The MongoDB database that contains the watched
            collection. Optional only if the :guilabel:`Collection Name` is specified.
            
-       | - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
+         - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
            <database-event-operation-types>` that occur on the collection to cause 
            the Trigger to fire. Select the operation types you want the  trigger to 
            respond to.
@@ -229,7 +236,7 @@ following table describes these options.
              update operations from these clients will generate **Replace**
              change events rather than **Update** events.
  
-       | - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         - :guilabel:`Full Document`. If enabled, **Update** change events include 
            the latest :manual:`majority-committed </reference/read-concern-majority/>`
            version of the modified document *after* the change was applied in
            the ``fullDocument`` field.
@@ -243,15 +250,16 @@ following table describes these options.
            
               - **Delete** events never include the ``fullDocument`` field.
 
-       | - :guilabel:`Document Preimage`. Disabled for Collection and Database 
+         - :guilabel:`Document Preimage`. Disabled for Collection and Database 
             sources to limit unnecessary watches on the cluster for a new 
             collection being created.
 
    * - :guilabel:`Deployment`
-       | - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+       |
+		   - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
            Trigger is associated with.
       
-       | - :guilabel:`Operation Type`. Checkboxes of operation types 
+         - :guilabel:`Operation Type`. Checkboxes of operation types 
            that occur in the cluster that cause the Trigger to fire. Select the 
            operation types you want the  trigger to respond to. Options include:
 
@@ -262,11 +270,15 @@ following table describes these options.
            - Shard Collection
            - Drop Collection
 
-
+Function
+~~~~~~~~
 
 Within the :guilabel:`Function` section, you choose what action is taken when 
 the trigger fires. You can choose to run a :ref:`function <functions>` or use 
 :ref:`AWS EventBridge <aws-eventbridge>`. 
+
+Advanced
+~~~~~~~~
 
 Within the :guilabel:`Advanced` section, the following **optional** configuration 
 options are available:
