@@ -62,7 +62,7 @@ expressions to limit the data included in each event.
    same collection, database, or cluster, resulting in recursion. Examples 
    include a database trigger writing to a collection within the same 
    database, or a cluster-level logger writing database logs to another database 
-	in the same cluster.
+   in the same cluster.
    
 .. _create-a-database-trigger:
 
@@ -176,99 +176,96 @@ following table describes these options.
    :widths: 15 30
 
    * - Source Type
-     - Option
+     - Options
 
    * - :guilabel:`Collection`
-	  - |
-         - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
-           Trigger is associated with.
-      
-         - :guilabel:`Database Name`. The MongoDB database that contains the watched
-           collection. Optional only if the :guilabel:`Collection Name` is specified.
+		- |- :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+   		  Trigger is associated with.
+	
+   		- :guilabel:`Database Name`. The MongoDB database that contains the watched
+   		  collection. Optional only if the :guilabel:`Collection Name` is specified.
  
-         - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
-           <database-event-operation-types>` that occur on the collection to cause 
-           the Trigger to fire. Select the operation types you want the  trigger to 
-           respond to.
+   		- :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
+   		  <database-event-operation-types>` that occur on the collection to cause 
+   		  the Trigger to fire. Select the operation types you want the  trigger to 
+   		  respond to.
  
-           .. note::
+   		  .. note::
  
-             Update operations executed from MongoDB Compass or the MongoDB Atlas
-             Data Explorer fully replace the previous document. As a result,
-             update operations from these clients will generate **Replace**
-             change events rather than **Update** events.
+   		    Update operations executed from MongoDB Compass or the MongoDB Atlas
+   		    Data Explorer fully replace the previous document. As a result,
+   		    update operations from these clients will generate **Replace**
+   		    change events rather than **Update** events.
  
-         - :guilabel:`Full Document`. If enabled, **Update** change events include 
-           the latest :manual:`majority-committed </reference/read-concern-majority/>`
-           version of the modified document *after* the change was applied in
-           the ``fullDocument`` field.
+   		- :guilabel:`Full Document`. If enabled, **Update** change events include 
+   		  the latest :manual:`majority-committed </reference/read-concern-majority/>`
+   		  version of the modified document *after* the change was applied in
+   		  the ``fullDocument`` field.
  
-           .. note::
+   		  .. note::
  
-              Regardless of this setting:
-           
-              - **Insert** and **Replace** events always include the
-               ``fullDocument`` field.
-           
-              - **Delete** events never include the ``fullDocument`` field.
+   		     Regardless of this setting:
+	
+   		     - **Insert** and **Replace** events always include the
+   		      ``fullDocument`` field.
+	
+   		     - **Delete** events never include the ``fullDocument`` field.
  
-         - :guilabel:`Document Preimage`. Disabled for Collection and Database 
-            sources to limit unnecessary watches on the cluster for a new 
-            collection being created.
+   		- :guilabel:`Document Preimage`. Disabled for Collection and Database 
+   		   sources to limit unnecessary watches on the cluster for a new 
+   		   collection being created.
 
    * - :guilabel:`Database`
-     - | 
-	      - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
-           Trigger is associated with.
+	  - |- :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+			  Trigger is associated with.
 
-         - :guilabel:`Database Name`. The MongoDB database that contains the watched
-           collection. Optional only if the :guilabel:`Collection Name` is specified.
-           
-         - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
-           <database-event-operation-types>` that occur on the collection to cause 
-           the Trigger to fire. Select the operation types you want the  trigger to 
-           respond to.
+   		- :guilabel:`Database Name`. The MongoDB database that contains the watched
+   		  collection. Optional only if the :guilabel:`Collection Name` is specified.
+	
+   		- :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
+   		  <database-event-operation-types>` that occur on the collection to cause 
+   		  the Trigger to fire. Select the operation types you want the  trigger to 
+   		  respond to.
  
-           .. note::
+   		  .. note::
  
-             Update operations executed from MongoDB Compass or the MongoDB Atlas
-             Data Explorer fully replace the previous document. As a result,
-             update operations from these clients will generate **Replace**
-             change events rather than **Update** events.
+   		    Update operations executed from MongoDB Compass or the MongoDB Atlas
+   		    Data Explorer fully replace the previous document. As a result,
+   		    update operations from these clients will generate **Replace**
+   		    change events rather than **Update** events.
  
-         - :guilabel:`Full Document`. If enabled, **Update** change events include 
-           the latest :manual:`majority-committed </reference/read-concern-majority/>`
-           version of the modified document *after* the change was applied in
-           the ``fullDocument`` field.
+   		- :guilabel:`Full Document`. If enabled, **Update** change events include 
+   		  the latest :manual:`majority-committed </reference/read-concern-majority/>`
+   		  version of the modified document *after* the change was applied in
+   		  the ``fullDocument`` field.
  
-           .. note::
+   		  .. note::
  
-              Regardless of this setting:
-           
-              - **Insert** and **Replace** events always include the
-               ``fullDocument`` field.
-           
-              - **Delete** events never include the ``fullDocument`` field.
+   		     Regardless of this setting:
+	
+   		     - **Insert** and **Replace** events always include the
+   		      ``fullDocument`` field.
+	
+   		     - **Delete** events never include the ``fullDocument`` field.
 
-         - :guilabel:`Document Preimage`. Disabled for Collection and Database 
-            sources to limit unnecessary watches on the cluster for a new 
-            collection being created.
+   		- :guilabel:`Document Preimage`. Disabled for Collection and Database 
+   		   sources to limit unnecessary watches on the cluster for a new 
+   		   collection being created.
 
    * - :guilabel:`Deployment`
-       |
-		   - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
-           Trigger is associated with.
-      
-         - :guilabel:`Operation Type`. Checkboxes of operation types 
-           that occur in the cluster that cause the Trigger to fire. Select the 
-           operation types you want the  trigger to respond to. Options include:
+		  |- :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+   		  Trigger is associated with.
+	
+   		- :guilabel:`Operation Type`. Checkboxes of operation types 
+   		  that occur in the cluster that cause the Trigger to fire. Select the 
+   		  operation types you want the  trigger to respond to. Options include:
 
-           - Drop Database
-           - Create Collection
-           - Modify Collection
-           - Rename Collection
-           - Shard Collection
-           - Drop Collection
+   		  - Drop Database
+   		  - Create Collection
+   		  - Modify Collection
+   		  - Rename Collection
+   		  - Shard Collection
+   		  - Drop Collection
 
 Function
 ~~~~~~~~
@@ -354,7 +351,6 @@ following operation types:
 
    * - **Replace**
      - Represents a new document that replaced a document in the collection.
-
 
 Database change event objects have the following general form:
 
