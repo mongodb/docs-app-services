@@ -7057,7 +7057,13 @@ components:
                     processing events at the next relevant change stream event.
                     All change stream events from when the Trigger was suspended until the Trigger
                     resumes execution do not have the Trigger fire for them.
-
+                maximum_throughput: 
+                  type: boolean
+                  default: false
+                  description: |-
+                    If `true`, the trigger will use the [maximize 
+                    throughput](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#std-label-triggers-maximum-throughput) 
+                    option. 
                 unordered:
                   type: boolean
                   description: |-
