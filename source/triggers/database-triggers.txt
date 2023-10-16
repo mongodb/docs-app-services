@@ -158,15 +158,15 @@ Within the :guilabel:`Trigger Source Details` section, you first select the
 :guilabel:`Source Type`, based on the level of granularity you want. Your 
 options are:
 
-       - :guilabel:`Collection`, when a change occurs on a specified collection
-       - :guilabel:`Database`, when a change occurs on any collection in a 
-         specified database
-       - :guilabel:`Deployment`, when deployment changes occur on a specified 
-         cluster. If you select the Deployment source type, the following 
-         databases are **not watched** for changes:
+- :guilabel:`Collection`, when a change occurs on a specified collection
+- :guilabel:`Database`, when a change occurs on any collection in a 
+  specified database
+- :guilabel:`Deployment`, when deployment changes occur on a specified 
+  cluster. If you select the Deployment source type, the following 
+  databases are **not watched** for changes:
 
-         - The admin databases `admin`, `local`, and `config`
-         - The sync databases `__realm_sync` and `__realm_sync_<app_id>`
+   - The admin databases ``admin``, ``local``, and ``config``
+   - The sync databases ``__realm_sync`` and ``__realm_sync_<app_id>``
          
 Depending on which source type you are using, the additional options differ. The 
 following table describes these options.
@@ -179,7 +179,7 @@ following table describes these options.
      - Options
 
    * - :guilabel:`Collection`
-     - |
+     - | 
        - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
            Trigger is associated with.
       
@@ -188,10 +188,16 @@ following table describes these options.
 
        - :guilabel:`Collection Name`. The MongoDB collection to watch.
 
-       - :guilabel:`Operation Type`. The :ref:`database operation types 
+       - :guilabel:`Operation Type`. The :ref:`operation types 
          <database-event-operation-types>` that occur on the collection to cause 
          the Trigger to fire. Select the operation types you want the  trigger to 
-         respond to.
+         respond to. Options include:
+       
+         - Create Collection
+         - Modify Collection
+         - Rename Collection
+         - Shard Collection
+         - Drop Collection
        
          .. note::
        
@@ -216,7 +222,7 @@ following table describes these options.
          collection being created.
 
    * - :guilabel:`Database`
-     - |
+     - | 
        - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
          Trigger is associated with.
        
@@ -225,7 +231,13 @@ following table describes these options.
        - :guilabel:`Operation Type`. The :ref:`database operation types 
          <database-event-operation-types>` that occur on any collection in the 
          database to cause the Trigger to fire. Select the operation types you 
-         want the  trigger to respond to.
+         want the  trigger to respond to. Options include:
+       
+         - Create Collection
+         - Modify Collection
+         - Rename Collection
+         - Shard Collection
+         - Drop Collection
        
          .. note::
        
@@ -250,7 +262,7 @@ following table describes these options.
          collection being created.
 
    * - :guilabel:`Deployment`
-     - |
+     - | 
        - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
          Trigger is associated with.
        
