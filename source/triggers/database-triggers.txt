@@ -234,6 +234,25 @@ options are available:
 
      - .. include:: /includes/trigger-auto-resume.rst
 
+   * - :guilabel:`Maximum Throughput Triggers`
+
+     - .. _triggers-maximum-throughput:
+      
+       If the linked data source is a dedicated server (M10+ Tier), 
+       you can increase the :ref:`maximum throughput <event_processing_throughput>`
+       from the default 10,000 concurrent processes to 50,000. 
+
+       .. important::
+
+          To enable maximum throughput, you must disable Event Ordering.
+
+       Before increasing the maximum throughput, consider whether one or more of 
+       your triggers are calling a rate-limited external API. Increasing the 
+       trigger rate might result in exceeding those limits. 
+       
+       Increasing the throughput may also add a larger workload, affecting 
+       overall cluster performance. 
+
 .. _database-events:
 
 Database Change Events
