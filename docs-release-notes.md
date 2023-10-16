@@ -9,7 +9,7 @@
 
 ## Internal
 
-- Update CLI config file documentation and internal references due to new configuration file version (20230101).
+- Update CLI config file documentation and internal references to reflect new configuration file version (20230101).
 
 # October 6, 2023
 
