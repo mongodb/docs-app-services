@@ -179,95 +179,91 @@ following table describes these options.
      - Options
 
    * - :guilabel:`Collection`
-     - | - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+     - |
+       - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
            Trigger is associated with.
-         
-         - :guilabel:`Database Name`. The MongoDB database that contains the watched
-           collection. Optional only if the :guilabel:`Collection Name` is specified.
-         
-         - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
-           <database-event-operation-types>` that occur on the collection to cause 
-           the Trigger to fire. Select the operation types you want the  trigger to 
-           respond to.
-         
-           .. note::
-         
-             Update operations executed from MongoDB Compass or the MongoDB Atlas
-             Data Explorer fully replace the previous document. As a result,
-             update operations from these clients will generate **Replace**
-             change events rather than **Update** events.
-         
-         - :guilabel:`Full Document`. If enabled, **Update** change events include 
-           the latest :manual:`majority-committed </reference/read-concern-majority/>`
-           version of the modified document *after* the change was applied in
-           the ``fullDocument`` field.
-         
-           .. note::
-         
-              Regardless of this setting:
-         
-              - **Insert** and **Replace** events always include the
-               ``fullDocument`` field.
-         
-              - **Delete** events never include the ``fullDocument`` field.
-         
-         - :guilabel:`Document Preimage`. Disabled for Collection and Database 
-            sources to limit unnecessary watches on the cluster for a new 
-            collection being created.
+      
+       - :guilabel:`Database Name`. The MongoDB database that contains the watched
+         collection. Optional if the :guilabel:`Collection Name` is specified.
+
+       - :guilabel:`Collection Name`. The MongoDB collection to watch.
+
+       - :guilabel:`Operation Type`. The :ref:`database operation types 
+         <database-event-operation-types>` that occur on the collection to cause 
+         the Trigger to fire. Select the operation types you want the  trigger to 
+         respond to.
+       
+         .. note::
+       
+           Update operations executed from MongoDB Compass or the MongoDB Atlas
+           Data Explorer fully replace the previous document. As a result,
+           update operations from these clients will generate **Replace**
+           change events rather than **Update** events.
+       
+       - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         the latest :manual:`majority-committed </reference/read-concern-majority/>`
+         version of the modified document *after* the change was applied in
+         the ``fullDocument`` field.
+       
+         .. note::
+       
+            Regardless of this setting, **Insert** and **Replace** events always 
+            include the ``fullDocument`` field. **Delete** events never include 
+            the ``fullDocument`` field.
+       
+       - :guilabel:`Document Preimage`. Disabled for Collection and Database 
+         sources to limit unnecessary watches on the cluster for a new 
+         collection being created.
 
    * - :guilabel:`Database`
      - |
-         - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
-           Trigger is associated with.
-
-         - :guilabel:`Database Name`. The MongoDB database that contains the watched
-           collection. Optional only if the :guilabel:`Collection Name` is specified.
-
-         - :guilabel:`Operation Type`. Checkboxes of :ref:`database operation types 
-           <database-event-operation-types>` that occur on the collection to cause 
-           the Trigger to fire. Select the operation types you want the  trigger to 
-           respond to.
-      
-           .. note::
-      
-             Update operations executed from MongoDB Compass or the MongoDB Atlas
-             Data Explorer fully replace the previous document. As a result,
-             update operations from these clients will generate **Replace**
-             change events rather than **Update** events.
-      
-         - :guilabel:`Full Document`. If enabled, **Update** change events include 
-           the latest :manual:`majority-committed </reference/read-concern-majority/>`
-           version of the modified document *after* the change was applied in
-           the ``fullDocument`` field.
-      
-           .. note::
-      
-              Regardless of this setting:
-
-              - **Insert** and **Replace** events always include the
-               ``fullDocument`` field.
-
-              - **Delete** events never include the ``fullDocument`` field.
-
-         - :guilabel:`Document Preimage`. Disabled for Collection and Database 
-            sources to limit unnecessary watches on the cluster for a new 
-            collection being created.
+       - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+         Trigger is associated with.
+       
+       - :guilabel:`Database Name`. The MongoDB database to watch.
+       
+       - :guilabel:`Operation Type`. The :ref:`database operation types 
+         <database-event-operation-types>` that occur on any collection in the 
+         database to cause the Trigger to fire. Select the operation types you 
+         want the  trigger to respond to.
+       
+         .. note::
+       
+           Update operations executed from MongoDB Compass or the MongoDB Atlas
+           Data Explorer fully replace the previous document. As a result,
+           update operations from these clients will generate **Replace**
+           change events rather than **Update** events.
+       
+       - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         the latest :manual:`majority-committed </reference/read-concern-majority/>`
+         version of the modified document *after* the change was applied in
+         the ``fullDocument`` field.
+       
+         .. note::
+       
+            Regardless of this setting, **Insert** and **Replace** events always 
+            include the ``fullDocument`` field. **Delete** events never include 
+            the ``fullDocument`` field.
+       
+       - :guilabel:`Document Preimage`. Disabled for Collection and Database 
+         sources to limit unnecessary watches on the cluster for a new 
+         collection being created.
 
    * - :guilabel:`Deployment`
      - |
-         - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
-           Trigger is associated with.
-
-         - :guilabel:`Operation Type`. Checkboxes of operation types 
-           that occur in the cluster that cause the Trigger to fire. Select the 
-           operation types you want the  trigger to respond to. Options include:
-
-           - Drop Database
-           - Create Collection
-           - Modify Collection
-           - Rename Collection
-           - Shard Collection
-           - Drop Collection
+       - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+         Trigger is associated with.
+       
+       - :guilabel:`Operation Type`. The operation types 
+         that occur in the cluster that cause the Trigger to fire. Select the 
+         operation types you want the  trigger to respond to. Options include:
+       
+         - Drop Database
+         - Create Collection
+         - Modify Collection
+         - Rename Collection
+         - Shard Collection
+         - Drop Collection
 
 Function
 ~~~~~~~~
