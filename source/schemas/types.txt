@@ -515,25 +515,28 @@ with the ``title`` field set to the embedded object's type name:
 Geospatial Data
 ---------------
 
-Geospatial data describes points and other data on the earth's surface. The 
-Realm SDKs support the creation of numerous types of geospatial data. However, 
-only persisted GeoJSON Point data can be queried. 
+Geospatial data describes points and other data on the earth's surface. Realm 
+does not have built-in geospatial types. If you are not using Device Sync, you 
+can query your geospatial data with regular 
+:manual:`geospatial operators </geospatial-queries>`. However, if you are 
+using Device Sync, there are additional requirements in how you store and 
+query the data.
 
 GeoJSON Point
 ~~~~~~~~~~~~~
 
 A GeoJSON Point (GeoPoint) is a single location on the Earth's surface. The GeoPoint 
-schema must contain the following fields:
+schema must contain the following **required** fields:
 
 - ``type`` (string), which is always set to "Point"
 
 - ``coordinates`` (array of doubles). The ``coordinates`` array must contain  
   at least 2 double values, and may contain a third:
     
-    - The first double is the longitude of the point, between -180 and 180.
-    - The second is the latitude, between -90 and 90.
-    - The optional third value represents the elevation/altitude of the point, 
-      in meters.
+  - The first double is the longitude of the point, between -180 and 180.
+  - The second is the latitude, between -90 and 90.
+  - The optional third value represents the elevation/altitude of the point, 
+    in meters. Atlas ignores this value when performing queries. 
 
 To store a GeoPoint in Atlas for later querying with :ref:`Atlas Device Sync <sync>`, 
 the following rules also apply:
@@ -553,23 +556,22 @@ property named "location":
    {
      "title": "MyObject",
      "properties": {
-       "location": {
-         "bsonType": "object",
-         "required": [ "type" ],
-         "properties": {
-           "type": {
-             "bsonType": "string",
-           },
-           "coordinates": {
-             "bsonType": "array",
-             "items": {
-               "bsonType": "double"
-             }
-           }
+        "location": {
+          "bsonType": "object",
+          "required": [ "type" ],
+          "properties": {
+            "type": {
+              "bsonType": "string",
+            },
+            "coordinates": {
+              "bsonType": "array",
+              "items": {
+                "bsonType": "double"
+              }
+            }
           }
-         }
-       },
-    "additionalProperties": true
+        }
+      }
    }
 
 The following code block shows a document that follows the schema. It has a 
@@ -581,21 +583,19 @@ and the GeoPoint object contain an extra property.
    :emphasize-lines: 4-9
 
    {
-     "_id":{"$oid":"65039d09fe4e46dddee31a3f"},
-     "carrier":"SuperCheapMobileProvider",
-     "location":{
-       "type":"point",
-       "coordinates":[-122.4, 48.12, 23.0],
-       "signal_strength":-118",
-       "is_public": true
+     "_id": { "$oid": "65039d09fe4e46dddee31a3f" },
+     "location": {
+       "type": "Point",
+       "coordinates": [-122.4, 48.12, 23.0],
+       "optional_property": true
       },
-     "is_verified": true
+     "another_optional_property": "geopoint name"
    }
 
-Atlas Device Sync and Querying GeoJSON Points
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+GeoJSON Points and Device Sync Queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GeoPoints are the only form of geospatial data that Atlas Device Sync can 
+GeoPoints are the only form of geospatial data that Device Sync can 
 query. The Device Sync server validates every embedded GeoPoint property with 
 2 rules:
 
@@ -611,7 +611,6 @@ marks that document as unsyncable.
 
 Querying
 ````````
-
 You can query a GeoPoint using :ref:`Realm Query Language (RQL) <rql>`, 
 using the :manual:`$geoWithin </reference/operator/query/geoWithin>` to do so.
 Although GeoPoints are the only stored type you can query, your query will often 
@@ -621,7 +620,7 @@ within the specified GeoCircle:
 .. code-block:: json
    :copyable: false
 
-   location geoWithin GeoCircle([-73.981209, 40.725055], 0.00050464271
+   location geoWithin GeoCircle([-73.981209, 40.725055], 0.00050464271)
 
 For SDK-specific details about querying against geospatial data, see:
 
