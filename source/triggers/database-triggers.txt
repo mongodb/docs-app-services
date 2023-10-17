@@ -167,7 +167,7 @@ options are:
 
   - The admin databases ``admin``, ``local``, and ``config``
   - The sync databases ``__realm_sync`` and ``__realm_sync_<app_id>``
-         
+
 Depending on which source type you are using, the additional options differ. The 
 following table describes these options.
 
@@ -187,17 +187,21 @@ following table describes these options.
        - :guilabel:`Database Name`. The MongoDB database that contains the watched
          collection.
 
-       - :guilabel:`Collection Name`. The MongoDB collection to watch.
+       - :guilabel:`Collection Name`. The MongoDB collection to watch. 
+
+         .. note::
+
+            If you leave this option blank, the Source Type changes to "Database."
 
        - :guilabel:`Operation Type`. The collection operation types 
          that cause the Trigger to fire. Select the operation types you want the 
          trigger to respond to. Options include:
        
-         - Create Collection
-         - Modify Collection
-         - Rename Collection
-         - Shard Collection
-         - Drop Collection
+         - Create Document
+         - Modify Document
+         - Rename Document
+         - Shard Document
+         - Drop Document
        
          .. note::
        
@@ -228,7 +232,11 @@ following table describes these options.
          Trigger is associated with.
        
        - :guilabel:`Database Name`. The MongoDB database to watch.
-       
+
+         .. note::
+
+            If you leave this option blank, the Source Type changes to "Deployment."
+
        - :guilabel:`Operation Type`. The :ref:`database operation types 
          <database-event-operation-types>` that cause the Trigger to fire. 
          Select the operation types you want the  trigger to respond to. 
@@ -273,11 +281,6 @@ following table describes these options.
          operation types you want the  trigger to respond to. Options include:
        
          - Drop Database
-         - Create Collection
-         - Modify Collection
-         - Rename Collection
-         - Shard Collection
-         - Drop Collection
 
 Function
 ~~~~~~~~
