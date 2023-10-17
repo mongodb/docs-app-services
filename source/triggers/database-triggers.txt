@@ -344,22 +344,52 @@ following operation types:
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 30
+   :widths: 30 15
 
    * - Operation Type
      - Description
 
-   * - **Insert**
+   * - **Insert Document** (All trigger types)
      - Represents a new document added to the collection.
 
-   * - **Update**
+   * - **Update Document** (All trigger types)
      - Represents a change to an existing document in the collection.
 
-   * - **Delete**
+   * - **Delete Document** (All trigger types)
      - Represents a document deleted from the collection.
 
-   * - **Replace**
+   * - **Replace Document** (All trigger types)
      - Represents a new document that replaced a document in the collection.
+
+   * - **Create_Collection** (Database and Deployment trigger types only)
+     - Represents the creation of a new collection.
+   
+   * - **Modify_Collection** (Database and Deployment trigger types only)
+     - Represents the modification collection.
+
+   * - **Rename_Collection** (Database and Deployment trigger types only)
+     - Represents collection being renamed.
+
+   * - **Drop_Collection** (Database and Deployment trigger types only)
+     - Represents a collection being dropped.
+
+   * - **Shard_Collection** (Database and Deployment trigger types only)
+     - Represents a collection changing from unsharded to sharded.
+
+   * - **Reshard_Collection** (Database and Deployment trigger types only)
+     - Represents a change to a collection's sharding.
+
+   * - **Refine_Collection_Shard_Key** (Database and Deployment trigger types only)
+     - Represents a change in the shard key of a collection.
+   
+   * - **Create_Indexes** (Database and Deployment trigger types only)
+     - Represents the creation of a new index.
+
+   * - **Drop_Indexes** (Database and Deployment trigger types only)
+     - Represents an index being dropped.
+
+   * - **Drop_Database** (Deployment trigger type only)
+     - Represents a database being dropped.
 
 Database change event objects have the following general form:
 
@@ -746,8 +776,6 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`update </reference/change-events/update>`
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
-
-
 
 .. example::
    

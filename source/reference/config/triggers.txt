@@ -96,8 +96,8 @@ Database Triggers
 
 Database trigger configurations conform to the base trigger schema with
 additional configuration options that specify which collection to watch and when
-to fire the trigger. The following fields exist in *database* trigger
-configuration files:
+to fire the trigger. The following fields exist in *database* and *deployment* 
+trigger configuration files:
 
 .. code-block:: json
    :caption: triggers/<trigger name>.json
@@ -138,23 +138,40 @@ configuration files:
    
    * - | ``config.database``
        | String
-     - The name of the MongoDB database that contains the watched collection.
+     - The name of the MongoDB database that contains the watched collection. 
+       Optional.
    
    * - | ``config.collection``
        | String
-     - The name of the collection that the trigger watches.
+     - The name of the collection that the trigger watches. Optional.
    
    * - | ``config.operation_types``
        | String[]
      - A list of one or more :ref:`database operation
        types <database-event-operation-types>` that cause the trigger to fire.
        
-       Valid operations types:
+       Valid operations types for all triggers:
        
        - ``"INSERT"``
        - ``"UPDATE"``
        - ``"REPLACE"``
        - ``"DELETE"``
+
+       Valid operations types for database and deployment triggers: 
+       
+       - ``"CREATE_COLLECTION"``
+       - ``"MODIFY_COLLECTION"``
+       - ``"RENAME_COLLECTION"``
+       - ``"SHARD_COLLECTION"``
+       - ``"DROP_COLLECTION"``
+       - ``"RESHARD_COLLECTION"``
+       - ``"REFINE_COLLECTION_SHARD_KEY"``
+       - ``"CREATE_INDEXES"``
+       - ``"DROP_INDEXES"``
+
+       Valid operations types for deployment triggers only:
+
+       - ``"DROP_DATABASE"``
        
        .. tip::
           
