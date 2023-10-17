@@ -549,9 +549,9 @@ contain a third:
 To store a GeoPoint in Atlas for later querying with :ref:`Atlas Device Sync <sync>`, 
 the following rules also apply to the GeoPoint object:
 
-- It must be of type ``object``
-- It must be embedded within another type
-- Additional properties are allowed within the ``coordinates`` array, as long as 
+- It must be of type ``object``.
+- It must be embedded within another type.
+- Additional values are allowed within the ``coordinates`` array, as long as 
   they are doubles.
 - Additional properties in the GeoPoint object are also allowed.
  
@@ -564,6 +564,9 @@ property named "location":
    {
      "title": "MyObject",
      "properties": {
+        "_id": {
+          "bsonType": "objectId"
+        },
         "location": {
           "bsonType": "object",
           "required": [ "type" ],
@@ -583,8 +586,7 @@ property named "location":
    }
 
 The following code block shows a document that follows the schema. It has a 
-single embedded GeoPoint object named "location". Both the containing object 
-and the GeoPoint object contain an extra property.
+single embedded GeoPoint object named "location".
 
 .. code-block:: json
    :copyable: false
@@ -595,8 +597,7 @@ and the GeoPoint object contain an extra property.
      "location": {
        "type": "Point",
        "coordinates": [-122.4, 48.12, 23.0]
-      },
-     "another_optional_property": "geopoint name"
+      }
    }
 
 GeoJSON Points and Device Sync Queries
@@ -609,12 +610,12 @@ the rules outlined above.
 If a device writes an object that fails validation, it will be reverted with a 
 :ref:`compensating write error <flexible-sync-errors>`. If a document that doesn't 
 meet these requirements is written directly to the MongoDB collection, the server 
-marks that document as unsyncable.
+marks that document as :ref:`unsyncable <unsynced-documents>`.
 
 Querying
 ````````
 You can query a GeoPoint using :ref:`Realm Query Language (RQL) <rql>`, 
-using ``$geoWithin`` to do so. Although GeoPoints are the only stored type you 
+using ``geoWithin`` to do so. Although GeoPoints are the only stored type you 
 can query, your query may contain other geospatial types. For example, 
 this partial query looks for all points within the specified GeoCircle:
 
@@ -629,4 +630,3 @@ For SDK-specific details about querying against geospatial data, see:
 - :ref:`Geospatial - Kotlin SDK <kotlin-geospatial>`
 - :ref:`Geospatial - Node.js SDK <node-data-types-geospatial>`
 - :ref:`Geospatial - React Native SDK <react-native-data-types-geospatial>`
-
