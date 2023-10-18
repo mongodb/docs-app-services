@@ -168,6 +168,10 @@ options are:
   - The admin databases ``admin``, ``local``, and ``config``
   - The sync databases ``__realm_sync`` and ``__realm_sync_<app_id>``
 
+  .. important::
+
+     The deployment-level source type is only available on dedicated tiers.
+
 Depending on which source type you are using, the additional options differ. The 
 following table describes these options.
 
@@ -194,12 +198,11 @@ following table describes these options.
          that cause the Trigger to fire. Select the operation types you want the 
          trigger to respond to. Options include:
        
-         - Create Document
-         - Modify Document
-         - Rename Document
-         - Shard Document
-         - Drop Document
-       
+         - Insert
+         - Update 
+         - Replace
+         - Delete
+
          .. note::
        
            Update operations executed from MongoDB Compass or the MongoDB Atlas
@@ -229,7 +232,9 @@ following table describes these options.
          Trigger is associated with.
        
        - :guilabel:`Database Name`. The MongoDB database to watch. Optional. 
-         If you leave this option blank, the Source Type changes to "Deployment."
+         If you leave this option blank, the Source Type changes to "Deployment," 
+         unless you are on a shared tier, in which case App Services will not 
+         let you save the trigger.
 
        - :guilabel:`Operation Type`. The :ref:`database operation types 
          <database-event-operation-types>` that cause the Trigger to fire. 
@@ -239,8 +244,10 @@ following table describes these options.
          - Create Collection
          - Modify Collection
          - Rename Collection
-         - Shard Collection
          - Drop Collection
+         - Shard Collection
+         - Reshard Collection
+         - Refine Collection Shard Key
        
          .. note::
        
