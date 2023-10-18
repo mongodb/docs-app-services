@@ -194,9 +194,10 @@ following table describes these options.
        - :guilabel:`Collection Name`. The MongoDB collection to watch. Optional.
          If you leave this option blank, the Source Type changes to "Database."
 
-       - :guilabel:`Operation Type`. The collection operation types 
-         that cause the Trigger to fire. Select the operation types you want the 
-         trigger to respond to. Options include:
+       - :guilabel:`Operation Type`. The The :ref:`operation types 
+         <database-event-operation-types>` that cause the Trigger to fire. 
+         Select the operation types you want the trigger to respond to. Options 
+         include:
        
          - Insert
          - Update 
@@ -236,7 +237,7 @@ following table describes these options.
          unless you are on a shared tier, in which case App Services will not 
          let you save the trigger.
 
-       - :guilabel:`Operation Type`. The :ref:`database operation types 
+       - :guilabel:`Operation Type`. The :ref:`operation types 
          <database-event-operation-types>` that cause the Trigger to fire. 
          Select the operation types you want the  trigger to respond to. 
          Options include:
@@ -277,10 +278,11 @@ following table describes these options.
        - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
          Trigger is associated with.
        
-       - :guilabel:`Operation Type`. The operation types 
-         that occur in the cluster that cause the Trigger to fire. Select the 
-         operation types you want the  trigger to respond to. Options include:
-       
+       - :guilabel:`Operation Type`. The The :ref:`operation types 
+         <database-event-operation-types>` that occur in the cluster that cause 
+         the Trigger to fire. Select the operation types you want the  trigger 
+         to respond to. Options include:
+
          - Drop Database
 
 Function
@@ -336,8 +338,8 @@ options are available:
 
 .. _database-events:
 
-Database Change Events
-----------------------
+Change Event Types
+------------------
 
 .. _database-event-operation-types:
 
@@ -442,7 +444,7 @@ collection as a document that resembles the following:
 
 To automate this process, the store creates a Database Trigger that
 listens for **Update** change events in the ``store.orders`` collection.
-When the trigger observes an **Update** event, it passes the
+When the trigger observes an **Update** event, it passes the 
 :ref:`change event object <database-events>` to its associated Function,
 ``textShippingUpdate``. The Function checks the change event for any
 changes to the ``shippingLocation`` field and, if it was updated, sends
@@ -783,6 +785,14 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`update </reference/change-events/update>`
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
+- :manual:`create </reference/change-events/create>`
+- :manual:`modify </reference/change-events/modify>`
+- :manual:`rename </reference/change-events/rename>`
+- :manual:`drop </reference/change-events/drop>`
+- :manual:`shardCollection </reference/change-events/shardCollection>`
+- :manual:`reshardCollection </reference/change-events/reshardCollection>`
+- :manual:`refineCollectionShardKey </reference/change-events/refineCollectionShardKey>`
+- :manual:`dropDatabase </reference/change-events/dropDatabase>`
 
 .. example::
    
