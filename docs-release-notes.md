@@ -1,3 +1,15 @@
+# October 20, 2023
+
+## Define a Data Model
+
+- Schemas/Schema Types: Document Device Sync support for geospatial data, including GeoJSON Points and querying. 
+
+## Reference 
+
+- App Services Admin API
+  - Add adminListServices endpoint and update response objects for several endpoints.
+  - Add ``maximum_throughput`` to Create Trigger and Get a Trigger. 
+
 # October 13, 2023
 
 ## Triggers
