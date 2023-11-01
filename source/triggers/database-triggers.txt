@@ -58,11 +58,11 @@ expressions to limit the data included in each event.
 
 .. warning::
 
-   It is possible to configure triggers that cause other triggers to fire on the 
-   same collection, database, or cluster, resulting in recursion. Examples 
-   include a database trigger writing to a collection within the same 
-   database, or a cluster-level logger writing database logs to another database 
-   in the same cluster.
+   In deployment and database level triggers, it is possible to configure triggers 
+   in a way that causes other triggers to fire, resulting in recursion. 
+   Examples include a database-level trigger writing to a collection within the 
+   same database, or a cluster-level logger or log forwarder writing logs to 
+   another database in the same cluster.
    
 .. _create-a-database-trigger:
 
@@ -155,7 +155,7 @@ Trigger Source Details
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Within the :guilabel:`Trigger Source Details` section, you first select the 
-:guilabel:`Source Type`, based on the level of granularity you want. Your 
+:guilabel:`Watch Against`, based on the level of granularity you want. Your 
 options are:
 
 - :guilabel:`Collection`, when a change occurs on a specified collection
@@ -222,9 +222,13 @@ following table describes these options.
             include the ``fullDocument`` field. **Delete** events never include 
             the ``fullDocument`` field.
        
-       - :guilabel:`Document Preimage`. Disabled for Collection and Database 
-         sources to limit unnecessary watches on the cluster for a new 
-         collection being created.
+       - :guilabel:`Document Preimage`. When enabled, change events include a 
+         copy of the modified document from immediately *before* the change was 
+         applied in the ``fullDocumentBeforeChange`` field. This has 
+         :ref:`performance considerations <pre-image-perf>`. All change events 
+         except for **Insert** events include the document preimage. Disabled 
+         for Collection and Database sources to limit unnecessary watches on the 
+         cluster for a new collection being created.
 
    * - :guilabel:`Database`
      - | 
@@ -268,9 +272,13 @@ following table describes these options.
             include the ``fullDocument`` field. **Delete** events never include 
             the ``fullDocument`` field.
        
-       - :guilabel:`Document Preimage`. Disabled for Collection and Database 
-         sources to limit unnecessary watches on the cluster for a new 
-         collection being created.
+       - :guilabel:`Document Preimage`. When enabled, change events include a 
+         copy of the modified document from immediately *before* the change was 
+         applied in the ``fullDocumentBeforeChange`` field. This has 
+         :ref:`performance considerations <pre-image-perf>`. All change events 
+         except for **Insert** events include the document preimage. Disabled 
+         for Collection and Database sources to limit unnecessary watches on the 
+         cluster for a new collection being created.
 
    * - :guilabel:`Deployment`
      - | 
@@ -285,41 +293,39 @@ following table describes these options.
 
          - Drop Database
 
-       - :guilabel:`Full Document`. 
-       
-       - If enabled, **Update** change events include the latest
-         :manual:`majority-committed </reference/read-concern-majority/>`
+       - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         the latest :manual:`majority-committed </reference/read-concern-majority/>`
          version of the modified document *after* the change was applied in
          the ``fullDocument`` field.
-
+       
          .. note::
+       
+            Regardless of this setting, **Insert** and **Replace** events always 
+            include the ``fullDocument`` field. **Delete** events never include 
+            the ``fullDocument`` field.
 
-            Regardless of this setting:
-            
-            - **Insert** and **Replace** events always include the
-              ``fullDocument`` field.
-            
-            - **Delete** events never include the ``fullDocument`` field.
+       - :guilabel:`Document Preimage`. When enabled, change events include a 
+         copy of the modified document from immediately *before* the change was 
+         applied in the ``fullDocumentBeforeChange`` field. This has 
+         :ref:`performance considerations <pre-image-perf>`. All change events 
+         except for **Insert** events include the document preimage. Disabled 
+         for Collection and Database sources to limit unnecessary watches on the 
+         cluster for a new collection being created.
 
-   * - :guilabel:`Document Preimage`
+.. _pre-image-perf:
 
-     - If enabled, change events include a copy of the modified document
-       from immediately *before* the change was applied in the
-       ``fullDocumentBeforeChange`` field. All change events except for
-       **Insert** events include the document preimage.
+.. tip:: Preimages and Performance Optimization
 
-       .. tip:: Performance Optimization
+   Preimages require additional storage overhead that may affect
+   performance. If you're not using preimages on a collection,
+   you should disable preimages. To learn more, see :ref:`Disable
+   Collection-Level Preimages
+   <database-triggers-disable-collection-level-preimages>`.
 
-          Preimages require additional storage overhead that may affect
-          performance. If you're not using preimages on a collection,
-          you should disable preimages. To learn more, see :ref:`Disable
-          Collection-Level Preimages
-          <database-triggers-disable-collection-level-preimages>`.
-
-       Document preimages are supported on non-sharded Atlas clusters running 
-       MongoDB 4.4+, and on sharded Atlas clusters running MongoDB 5.3 and later.
-       You can upgrade a non-sharded cluster (with preimages) to a 
-       sharded cluster, as long as the cluster is running 5.3 or later.
+   Document preimages are supported on non-sharded Atlas clusters running 
+   MongoDB 4.4+, and on sharded Atlas clusters running MongoDB 5.3 and later.
+   You can upgrade a non-sharded cluster (with preimages) to a 
+   sharded cluster, as long as the cluster is running 5.3 or later.
 
 Function
 ~~~~~~~~
