@@ -34,12 +34,12 @@
      - Description
 
    * - | ``name``
-       | string
+       | ``string``
      - The name of the role. Role names identify and distinguish between
        roles in the same collection. Limited to 100 characters or fewer.
 
    * - | ``apply_when``
-       | Expression
+       | ``object``
      - An :ref:`expression <expressions>` that evaluates to true when
        this :ref:`role <roles>` applies to a user.
 
@@ -87,7 +87,7 @@
           }
 
    * - | ``document_filters.read``
-       | Expression
+       | ``object?``
        | *Default:* ``undefined``
      - An :ref:`expression <expressions>` that specifies whether ``read``, read
        permissions in ``fields``, and read permissions in ``additional_fields``
@@ -99,7 +99,7 @@
        <queryable-fields>`.
 
    * - | ``document_filters.write``
-       | Expression
+       | ``object?``
        | *Default:* ``undefined``
      - An :ref:`expression <expressions>` that specifies whether ``write``,
        write permissions in ``fields``, and write permissions in
@@ -111,7 +111,7 @@
        <queryable-fields>`.
 
    * - | ``read``
-       | Expression
+       | ``object?``
        | *Default:* ``undefined``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to read all fields in the document.
@@ -129,7 +129,7 @@
        undefined and use ``additional_fields``.
 
    * - | ``write``
-       | Expression
+       | ``object?``
        | *Default:* ``undefined``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to add, modify, or remove all fields in the document.
@@ -156,7 +156,7 @@
           explicitly defined.
 
    * - | ``insert``
-       | Expression
+       | ``object?``
        | *Default:* ``true``
      - An :ref:`expression <expressions>` that evaluates to
        ``true`` if the role has permission to insert a new document into the
@@ -167,7 +167,7 @@
        fields in the new document.
 
    * - | ``delete``
-       | Expression
+       | ``object?``
        | *Default:* ``true``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to delete a document from the collection.
@@ -218,7 +218,7 @@
           document's embedded fields.
 
    * - | ``fields.<Field Name>.read``
-       | Expression
+       | ``object?``
        | *Default:* ``false``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to read the field.
@@ -227,7 +227,7 @@
        expression must be a boolean literal (either ``true`` or ``false``).
 
    * - | ``fields.<Field Name>.write``
-       | Expression
+       | ``object?``
        | *Default:* ``false``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to add, modify, or remove the field.
@@ -266,7 +266,7 @@
           }
 
    * - | ``additional_fields.read``
-       | Expression
+       | ``object?``
        | *Default:* ``false``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to read any field that does not have a field-level
@@ -276,7 +276,7 @@
        expression must be boolean (either ``true`` or ``false``).
 
    * - | ``additional_fields.write``
-       | Expression
+       | ``object?``
        | *Default:* ``false``
      - An :ref:`expression <expressions>` that evaluates to true if the
        role has permission to add, modify, or remove any field that does not
