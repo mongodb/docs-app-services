@@ -195,9 +195,7 @@ options are available:
      - If enabled, change events include a copy of the modified document
        from immediately *before* the change was applied in the
        ``fullDocumentBeforeChange`` field. All change events except for
-       **Insert** events include the document preimage. Document preimages are 
-       supported on non-sharded Atlas clusters running MongoDB 4.4+, and 
-       on sharded Atlas clusters running MongoDB 5.3 and later.
+       **Insert** events include the document preimage.
 
        .. tip:: Performance Optimization
 
@@ -206,6 +204,11 @@ options are available:
           you should disable preimages. To learn more, see :ref:`Disable
           Collection-Level Preimages
           <database-triggers-disable-collection-level-preimages>`.
+
+       Document preimages are supported on non-sharded Atlas clusters running 
+       MongoDB 4.4+, and on sharded Atlas clusters running MongoDB 5.3 and later.
+       You can upgrade a non-sharded cluster (with preimages) to a 
+       sharded cluster, as long as the cluster is running 5.3 or later.
 
 Within the :guilabel:`Function` section, you choose what action is taken when 
 the trigger fires. You can choose to run a :ref:`function <functions>` or use 
@@ -240,6 +243,10 @@ options are available:
        If the linked data source is a dedicated server (M10+ Tier), 
        you can increase the :ref:`maximum throughput <event_processing_throughput>`
        from the default 10,000 concurrent processes to 50,000. 
+
+       .. important::
+
+          To enable maximum throughput, you must disable Event Ordering.
 
        Before increasing the maximum throughput, consider whether one or more of 
        your triggers are calling a rate-limited external API. Increasing the 

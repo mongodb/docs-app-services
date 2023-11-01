@@ -644,6 +644,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Trigger"
+  
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -697,6 +698,7 @@ paths:
             application/json:
               schema:
                 properties: {}
+  
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}/resume":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -734,6 +736,7 @@ paths:
                   error:
                     type: string
                     description: A description of the error that App Services encountered.
+  
   "/groups/{groupId}/apps/{appId}/values":
     get:
       tags:
@@ -781,6 +784,7 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+  
   "/groups/{groupId}/apps/{appId}/values/{valueId}":
     get:
       tags:
@@ -830,6 +834,7 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ValueId"
+  
   "/groups/{groupId}/apps/{appId}/services":
     get:
       tags:
@@ -846,10 +851,7 @@ paths:
             application/json:
               schema:
                 items:
-                  anyOf:
-                    - $ref: "#/components/schemas/AtlasCluster"
-                    - $ref: "#/components/schemas/AtlasFederatedInstance"
-                    - $ref: "#/components/schemas/ThirdPartyService"
+                  - $ref: "#/components/schemas/ServiceResponse"
     post:
       tags:
         - services
@@ -882,13 +884,61 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+  
+  "/groups/{groupId}/apps/{appId}/services/config":
+    get:
+      tags:
+        - services
+      operationId: adminGetServiceConfig
+      summary: Get configuration of sources and third-party services
+      description: >-
+        Get configuration of [data
+        sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) 
+        and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+      responses:
+        "200":
+          description: Successfully returned service configuration.
+          content:
+            application/json:
+              schema:
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/AtlasCluster"
+                    - $ref: "#/components/schemas/AtlasFederatedInstance"
+                    - $ref: "#/components/schemas/ThirdPartyService"
+    patch:
+      tags:
+        - services
+      operationId: adminUpdateServiceConfig
+      summary: Update configuration settings of sources and third-party services
+      description: >-
+        Update the [data
+        source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or
+        [third-party
+        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/) 
+        configuration.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/CreateDataSource"
+                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/ThirdPartyService"
+      responses:
+        "204":
+          description: Successfully updated.
+    parameters:
+      - $ref: "#/components/parameters/GroupId"
+      - $ref: "#/components/parameters/AppId"
+
   "/groups/{groupId}/apps/{appId}/services/{serviceId}":
     get:
       tags:
         - services
       operationId: adminGetService
       summary: Get a data source or third-party service
-      description: |-
+      description: >-
         Get a [data source](https://www.mongodb.com/docs/atlas/app-services/mongodb/)
         or [third-party service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
       responses:
@@ -5528,6 +5578,72 @@ components:
     AtlasCluster:
       type: object
       properties:
+        config:
+          type: object
+          properties:
+            clusterId:
+              type: number
+              example: 05e821b3975d271289f372e3a
+              description: The service ID.
+            clusterName:
+              type: string
+              example: Cluster0
+              description: |-
+                The cluster name of the data source within. The name may be at 
+                most 64 characters long and must only contain ASCII letters, numbers,
+                underscores, and hyphens.
+            clusterType:
+              type: string
+              enum:
+                - atlas
+                - serverless
+              example: atlas
+              description: The type of service.
+            flexible_sync:
+              $ref: "#/components/schemas/FlexibleSync"
+            groupName:
+              type: string
+              example: Project 0
+              description: The name of the group that contains the service.
+            orgName:
+              type: string
+              example: MongoDB_Org
+              description: The name of the organization that contains the service.
+            readPreference:
+              type: string
+              enum:
+                - primary
+                - primaryPreferred
+                - secondary
+                - secondaryPreferred
+                - nearest
+              description: >-
+                The [read preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
+                mode for read requests to the data source.
+            wireProtocolEnabled:
+              type: boolean
+              description: >-
+                If true, clients may [connect to the app over the
+                MongoDB Wire Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+        secret_config:
+          type: object
+          description: "[Deprecated] The configuration for a third-party service."
+    ServiceResponse:
+      type: object
+      properties:
+        _id: string;
+        name: string;
+        type: string;
+        version: number;
+        last_modified: number;
+    ReadPreferencesTagSet:
+      type: string
+      enum:
+        - server1
+        - server2
+    CreateDataSource:
+      type: object
+      properties:
         name:
           type: string
           example: mongodb-atlas
@@ -5540,34 +5656,47 @@ components:
             - mongodb-atlas
         config:
           type: object
-          required:
-            - clusterName
           properties:
             clusterName:
               type: string
               example: Cluster0
               description: |-
-                The service name used to refer to the data source within
-                this Atlas app. The name may be at most 64 characters
-                long and must only contain ASCII letters, numbers,
+                The name of the service to create. The name may be at most 64 
+                characters long and must only contain ASCII letters, numbers,
                 underscores, and hyphens.
+            clusterType:
+              type: string
+              example: atlas
+              description: The type of service.
+            flexible_sync:
+              $ref: "#/components/schemas/FlexibleSync"
+            groupName:
+              type: string
+              example: Project 0
+              description: The name of the group that contains the service.
+            orgName:
+              type: string
+              example: MongoDB_Org
+              description: The name of the organization that contains the service.
             readPreference:
               type: string
               enum:
-                - primary
-                - primaryPreferred
                 - secondary
                 - secondaryPreferred
                 - nearest
-              description: |-
+              description: >-
                 The [read
                 preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
                 mode for read requests to the data source.
+            readPreferenceTagSets:
+              type: array
+              items:
+                $ref: "#/components/schemas/ReadPreferencesTagSet"
+              description: Target read operations to specific members of a replica set.
             wireProtocolEnabled:
               type: boolean
-              description: |-
-                If true, clients may [connect to the app over the
-                MongoDB Wire
+              description: >-
+                If true, clients may [connect to the app over the MongoDB Wire
                 Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
     AtlasFederatedInstance:
       type: object
@@ -6649,52 +6778,7 @@ components:
           type: string
           description: The service type of the linked cluster ("atlas" by default)
         flexible_sync:
-          type: object
-          properties:
-            state:
-              type: string
-              description: The state of the sync service ("enabled", "disabled", or empty if Sync is not configured).
-            queryable_fields_names:
-              type: array
-              description: |-
-                An array of 
-                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
-                names on **any collection**.
-              items:
-                type: string
-            collection_queryable_fields_names:
-              type: object
-              description:  |-
-                An array of 
-                [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
-                names on the specified collection.
-              additionalProperties:
-                type: object
-                additionalProperties:
-                  description: The name of the queryable field.
-                  type: string
-            queryable_fields_version:
-              type: string
-              description: The version of the queryable field.
-            permissions:
-              type: object
-              description: |- 
-                **Deprecated**
-            last_disabled:
-              type: string
-              description: The last time Sync was disabled, represented by the number of seconds since the UNIX epoch.
-            client_max_offline_days:
-              type: integer
-              description: |-
-                 The number of days the client can be offline before a client 
-                 [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/) 
-                 is required.
-            is_recovery_mode_disabled:
-              type: boolean
-              description: |-
-                 Specifies whether the 
-                 [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes) 
-                 is disabled. By default, client reset mode is enabled and this value is **false**.
+          $ref: "#/components/schemas/FlexibleSync"
         groupName:
           type: string
           description: The name of the App's Atlas Project.
@@ -6715,6 +6799,53 @@ components:
                 If true, clients may [connect to the app over the
                 MongoDB Wire
                 Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+    FlexibleSync:
+      type: object
+      properties:
+        state:
+          type: string
+          description: The state of the sync service ("enabled", "disabled", or empty if Sync is not configured).
+        queryable_fields_names:
+          type: array
+          description: |-
+            An array of 
+            [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
+            names on **any collection**.
+          items:
+            type: string
+        collection_queryable_fields_names:
+          type: object
+          description:  |-
+            An array of 
+            [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
+            names on the specified collection.
+          additionalProperties:
+            type: object
+            additionalProperties:
+              description: The name of the queryable field.
+              type: string
+        queryable_fields_version:
+          type: string
+          description: The version of the queryable field.
+        permissions:
+          type: object
+          description: |- 
+            **Deprecated**
+        last_disabled:
+          type: string
+          description: The last time Sync was disabled, represented by the number of seconds since the UNIX epoch.
+        client_max_offline_days:
+          type: integer
+          description: |-
+              The number of days the client can be offline before a client 
+              [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/) 
+              is required.
+        is_recovery_mode_disabled:
+          type: boolean
+          description: |-
+              Specifies whether the 
+              [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes) 
+              is disabled. By default, client reset mode is enabled and this value is **false**.
     AnyTrigger:
       oneOf:
         - $ref: "#/components/schemas/DatabaseTrigger"
@@ -6926,7 +7057,13 @@ components:
                     processing events at the next relevant change stream event.
                     All change stream events from when the Trigger was suspended until the Trigger
                     resumes execution do not have the Trigger fire for them.
-
+                maximum_throughput: 
+                  type: boolean
+                  default: false
+                  description: |-
+                    If `true`, the trigger will use the [maximize 
+                    throughput](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#std-label-triggers-maximum-throughput) 
+                    option. 
                 unordered:
                   type: boolean
                   description: |-

@@ -1,3 +1,28 @@
+# October 20, 2023
+
+## Define a Data Model
+
+- Schemas/Schema Types: Document Device Sync support for geospatial data, including GeoJSON Points and querying. 
+
+## Reference 
+
+- App Services Admin API
+  - Add adminListServices endpoint and update response objects for several endpoints.
+  - Add ``maximum_throughput`` to Create Trigger and Get a Trigger. 
+
+# October 13, 2023
+
+## Triggers
+
+- Landing Page: Add note about increased maximum throughput for M10+ clusters. 
+- Database Triggers
+ - Add configuration information about increased maximum throughput. 
+ - Add note about disabling Event Ordering to enable maximum throughput.
+
+## Internal
+
+- Update CLI config file documentation and internal references to reflect new configuration file version (20230101).
+
 # October 6, 2023
 
 ## Edge Server 
