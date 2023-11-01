@@ -105,22 +105,26 @@ on it.
    .. tab:: App Services CLI
       :tabid: cli
 
-      From {+cli+}, you can run the :ref:`realm-cli apps create 
-      <realm-cli-apps-create>` command to set up the backend and create the 
-      Dart (Flutter) base app. The following command creates a new app based on the 
-      ``flutter.todo.flex`` template. With the options flags we can pass during 
-      creation, the command below creates an app:
+      The :ref:`{+cli-bin+} apps create <appservices-apps-create>`
+      command sets up the backend and creates a Flutter template
+      app for you to use as a base for this tutorial.
 
-      - Named "MyTutorialApp"
-      - Deployed in the US-VA region
-      - With the environment set to "development" (instead of production or QA)
+      Run the following command in a terminal window to create an app
+      named "MyTutorialApp" that is deployed in the ``US-VA`` region
+      with its environment set to "development" (instead of production
+      or QA).
 
       .. code-block:: shell
 
-         realm-cli apps create -n MyTutorialApp --template flutter.todo.flex \
-            --deployment-model global --location us-va --environment development
+         {+cli-bin+} app create \
+           --name MyTutorialApp \
+           --template flutter.todo.flex \
+            --deployment-model global \
+            --location us-va \
+            --environment development
 
-      You can find the downloaded Flutter app in the directory :file:`frontend/flutter.todo.flex`.
+      The command creates a new directory in your current path with the
+      same name as the value of the ``--name`` flag.
 
    .. tab:: GitHub Repository
       :tabid: github

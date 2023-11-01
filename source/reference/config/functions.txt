@@ -57,42 +57,42 @@ in the function manifest file: ``/functions/config.json``.
      - Description
     
    * - | ``name``
-       | String
+       | ``string``
      - The name of the function. The name must match the file name of a
        :ref:`source code file <function-source-code-file>` and be unique among
        all functions in your application.
    
    * - | ``private``
-       | Boolean
+       | ``boolean``
      - If ``true``, this function may only be called from other functions or in
        :json-operator:`%function` rule expressions. You cannot call a private
        function directly from a client application or with an SDK.
    
    * - | ``can_evaluate``
-       | JSON Expression (default: ``true``)
+       | ``object``
      - A :ref:`JSON expression <expressions>` that evaluates to ``true`` if the
        function is allowed to execute. App Services evaluates this
        expression for every incoming request.
    
    * - | ``disable_arg_logs``
-       | Boolean
+       | ``boolean``
      - If ``true``, App Services omits the arguments provided to the
        function from the :ref:`function execution log entry <logs-function>`.
    
    * - | ``run_as_system``
-       | Boolean
+       | ``boolean``
      - If ``true``, this function :ref:`runs as the system user
        <system-functions>`. This overrides any values defined for
        ``run_as_user_id`` and ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id``
-       | String
+       | ``string``
      - The unique ID of a :doc:`App Services User </users>` that the
        function always executes as. Cannot be used with
        ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id_script_source``
-       | String
+       | ``string``
      - A stringified :doc:`function </functions>` that runs whenever the
        function is called and returns the unique ID of a :doc:`App Services
        User </users>` that the function executes as. Cannot be used with

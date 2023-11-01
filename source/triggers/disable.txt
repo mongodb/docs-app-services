@@ -26,7 +26,7 @@ fire.
    project owner an email alerting them of the issue. 
 
 You can suspend a Trigger from the Atlas App Services UI or by
-importing an application directory with {+cli-bin+}.
+importing an application directory with the {+cli-ref+}.
 
 .. tabs-realm-admin-interfaces::
    
@@ -70,7 +70,7 @@ importing an application directory with {+cli-bin+}.
 
             .. code-block:: shell
 
-               realm-cli pull --remote=<App ID>
+               {+cli-bin+} pull --remote=<App ID>
 
 
          .. step:: Verify that the Trigger Configuration File Exists
@@ -109,8 +109,7 @@ importing an application directory with {+cli-bin+}.
 
             .. code-block:: shell
 
-               realm-cli push
-
+               {+cli-bin+} push
 
 Restoring from a Snapshot
 -------------------------
@@ -121,19 +120,19 @@ Consider the following scenario:
 
 #. New documents are added while the trigger is disabled.
 
-#. The database is restored from a snapshot to a time prior to the new documents 
+#. The database is restored from a snapshot to a time prior to the new documents
    being added.
 
 #. The database trigger is restarted.
 
-In this case, the trigger picks up all of the newly-added documents and fires 
-for each document. It will not fire again for events that have already been 
+In this case, the trigger picks up all of the newly-added documents and fires
+for each document. It will not fire again for events that have already been
 processed.
 
 .. note::
 
-   If a previously-enabled database trigger is running during snapshot restoration, 
-   you will see an error in the Edit Trigger section of the Atlas UI because the 
+   If a previously-enabled database trigger is running during snapshot restoration,
+   you will see an error in the Edit Trigger section of the Atlas UI because the
    trigger cannot connect to the Atlas cluster during the restore process. Once
    snapshot restoration completes, the error disappears and the trigger continues
    to execute normally.

@@ -44,16 +44,16 @@ application in ``hosting/config.json``.
      - Description
    
    * - | ``enabled``
-       | Boolean
+       | ``boolean``
      - If ``true``, :doc:`static hosting </hosting>` is enabled for your app.
    
    * - | ``custom_domain``
-       | String
+       | ``string``
      - The :doc:`custom domain name </hosting/use-a-custom-domain-name>` for
        your application's hosted files.
    
    * - | ``app_default_domain``
-       | String
+       | ``string``
      - The default domain for your application's hosted files. Atlas App Services
        automatically sets this value and you cannot change it.
 
@@ -88,11 +88,11 @@ You can define metadata for any hosted file by adding an entry to
      - Description
 
    * - | ``path``
-       | String
+       | ``string``
      - The :ref:`resource path <hosting-resource-path>` of the file.
 
    * - | ``attrs``
-       | Array<Document>
+       | ``object[]``
      - An array of documents where each document represents a single
        metadata attribute. Attribute documents have the following form:
 
@@ -112,13 +112,13 @@ You can define metadata for any hosted file by adding an entry to
             - Description
 
           * - | ``name``
-              | String
+              | ``string``
             - The name of the metadata attribute. This should be one of
               the :doc:`file metadata attributes
               </hosting/file-metadata-attributes>` that App Services supports.
 
           * - | ``value``
-              | String
+              | ``string``
             - The value of the metadata attribute.
 
 .. include:: /hosting/includes/note-infer-content-type.rst
