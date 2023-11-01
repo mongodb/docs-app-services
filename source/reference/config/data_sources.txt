@@ -53,7 +53,7 @@ MongoDB Clusters
      - Description
    
    * - | ``name``
-       | String
+       | ``string``
      - Required. Default: ``mongodb-atlas``
        
        The service name used to refer to the cluster within this Atlas App Services
@@ -61,15 +61,15 @@ MongoDB Clusters
        contain ASCII letters, numbers, underscores, and hyphens.
    
    * - | ``type``
-       | String
+       | ``string``
      - Required. For MongoDB Atlas clusters, this value is always ``"mongodb-atlas"``.
    
    * - | ``config.clusterName``
-       | String
+       | ``string``
      - Required. The name of the cluster in Atlas.
 
    * - | ``config.readPreference``
-       | String
+       | ``string``
      - The :ref:`read preference <read-preference>` mode for queries sent
        through the service.
        
@@ -104,7 +104,7 @@ MongoDB Clusters
      - Description
    
    * - | ``name``
-       | String
+       | ``string``
      - Required. Default: ``mongodb-datafederation``
        
        The service name used to refer to the {+adf-instance+} within this App Services
@@ -112,11 +112,11 @@ MongoDB Clusters
        contain ASCII letters, numbers, underscores, and hyphens.
    
    * - | ``type``
-       | String
+       | ``string``
      - Required. For a {+adf-instance+}, this value is always ``"datalake"``.
    
    * - | ``config.dataLakeName``
-       | String   
+       | ``string``
      - Required. The name of the {+adf-instance+} in Atlas.
 
 Databases & Collections
@@ -170,7 +170,7 @@ Relationships
      - Description
    
    * - | ``ref``
-       | String
+       | ``string``
      - A JSON schema ``$ref`` string that specifies the foreign collection. The
        string has the following form:
        
@@ -179,14 +179,14 @@ Relationships
           #/relationship/<Data Source Name>/<Database Name>/<Collection Name>
    
    * - | ``source_key``
-       | String
+       | ``string``
      - The name of the field in this collection's schema that specifies which
        documents in the foreign collection to include in the relationship. A
        foreign document is included if ``source_key`` contains the value of its
        ``foreign_key`` field.
    
    * - | ``foreign_key``
-       | String
+       | ``string``
      - The name of the field in the foreign collection's schema that contains
        the value referenced by ``source_key``.
    
@@ -251,11 +251,11 @@ configuration file at ``data_sources/<data-source-name>/default_rule.json``.
 
    * - | ``roles``
        | Array<Role>
-     - An array of :ref:`Role <role-config>` configurations.
+     - An array of :ref:`Role <config-role>` configurations.
 
    * - | ``filters``
        | Array<Filter>
-     - An array of :ref:`Filter <filter-config>` configurations.
+     - An array of :ref:`Filter <config-filter>` configurations.
 
 .. _config-collection-rules:
 
@@ -284,27 +284,27 @@ configuration file.
      - Description
    
    * - | ``database``
-       | String
+       | ``string``
      - The name of the database that holds the collection.
    
    * - | ``collection``
-       | String
+       | ``string``
      - The name of the collection.
 
    * - | ``roles``
-       | Array<Role>
-     - An array of :ref:`Role <role-config>` configurations.
+       | ``Role[]``
+     - An array of :ref:`Role <config-role>` configurations.
 
    * - | ``filters``
-       | Array<Filter>
-     - An array of :ref:`Filter <filter-config>` configurations.
+       | ``Filter[]``
+     - An array of :ref:`Filter <config-filter>` configurations.
 
-.. _rule-config:
+.. _config-rule:
 
 Rule Configurations
 -------------------
 
-.. _role-config:
+.. _config-role:
 
 Roles
 ~~~~~
@@ -312,7 +312,7 @@ Roles
 .. include:: /mongodb/tables/role-configuration.rst
 
 
-.. _filter-config:
+.. _config-filter:
 
 Filters
 ~~~~~~~
