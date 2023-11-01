@@ -1537,6 +1537,56 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
+
+
+  "/groups/{groupId}/apps/{appId}/pull":
+    get:
+      tags:
+        - apps
+      operationId: adminPullAppConfiguration
+      summary: Pull App Configuration Files
+      description: |
+        Download the current App configuration as a configuration file directory
+      responses:
+        200:
+          description: Pull successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PushPullAppConfig"
+            application/zip:
+              schema:
+                type: string
+                format: binary
+                description: A zip file containing the App configuration file directory
+        400:
+          description: Invalid request
+        500:
+          description: Error pulling configuration
+
+  "/groups/{groupId}/apps/{appId}/push":
+    patch:
+      tags:
+        - apps
+      operationId: adminPushAppConfiguration
+      summary: Push App Configuration Files
+      description: |
+        Upload a configuration file directory to update the App configuration.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PushPullAppConfig"
+      responses:
+        204:
+          description: Push successful
+        400:
+          description: Invalid request
+        500:
+          description: Error pulling configuration
+
+
+
   "/groups/{groupId}/apps/{appId}/push/notifications/{messageId}":
     get:
       tags:
@@ -8184,6 +8234,40 @@ components:
         service_name:
           type: string
           example: com.amazonaws.vpce.us-east-1.vpce-svc-0f24fc6e6de007e5e
+    PushPullAppConfig:
+      type: object
+      properties:
+
+        app_id:
+          type: string
+          description: The App's public Client App ID.
+        name:
+          type: string
+          description: The App's name.
+        provider_region:
+          $ref: "#/components/schemas/CloudProviderRegionId"
+        deployment_model:
+          $ref: "#/components/schemas/DeploymentModel"
+        environment:
+          $ref: "#/components/schemas/AppEnvironment"
+        auth_providers:
+        custom_user_data:
+        data_api_config:
+        data_sources:
+        endpoints:
+        environments:
+        functions:
+        graphql:
+        hosting:
+        https_endpoints:
+        log_forwarders:
+        schemas:
+        services:
+        sync:
+        triggers:
+        value:
+
+
 
   securitySchemes:
     tokenAuth:
