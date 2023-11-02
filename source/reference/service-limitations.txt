@@ -249,6 +249,26 @@ response status code of `429 - Too Many Requests
 request a higher limit by `filing a support ticket
 <https://support.mongodb.com/welcome>`__.
 
+.. _connection_pooling:
+
+Connection Pooling
+------------------
+
+App Services uses connection pooling to reduce the overhead of frequently 
+opening and closing connections between requests and trigger executions. 
+Connections are opened as needed. Connection pooling is dependent on 
+several factors:
+
+- Cluster Tier. The higher the cluster tier, the more connections available in
+  the pool.
+
+- Deployment Mode. Global deployments use multiple servers in each region, and 
+  therefore have an overall larger connection pool. 
+
+- Services. Each service has an independent connection pool, so the number of 
+  services in your app does not impact the number of connections available. 
+
+
 .. _mongodb-service-limitations-rules:
 
 Rules
