@@ -2596,6 +2596,34 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/PrivateEndpointServiceInfo"
+
+  "/groups/{groupId}/apps/{appId}/security/allow_non_vpc_client_requests":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+    post:
+      operationId: allNonVpcClientRequests
+      tags:
+        - security
+      summary: Toggle Non-VPC Requests
+      description: |
+        Toggle whether all Private Endpoints access non-VPC requests.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                allow_non_vpc_client_requests:
+                type: boolean
+                description: |
+                  Set to `true` to allow non-VPC requests.
+                  Set to `false` to restrict non-VPC requests.
+      responses:
+        204:
+          description: |
+            Successfully enabled/disabled non-VPC access.
+
   "/groups/{groupId}/apps/{appId}/security/refresh_token_expiration":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
