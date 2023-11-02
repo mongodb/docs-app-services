@@ -113,8 +113,19 @@ server, or hardware that you provision on-site.
 Required Network Access
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-The host that runs the Edge Server must allow access to port 80 via HTTP 
-to the general internet. 
+To accept connections from sync clients or connections via the wireprotocol, 
+the host that runs the Edge Server must allow access to incoming connections.
+
+While Edge Server is in Preview, you can stand up a demo using EC2 or another 
+cloud provider by opening port 80 via HTTP to the general internet. 
+In production, we recommend opening port 443 with SSL.
+
+If you run Edge Server on your own infrastructure, you don't need to open
+the instance to the general internet. You only need to ensure your client 
+devices can access it.
+
+Edge Server supports TLS. You can find configuration details in the 
+"Complete the Edge Server Configuration Details" section.
 
 .. _edge-server-os-support:
 
