@@ -164,18 +164,18 @@ The CLI stores identifiers and configuration metadata in the
 CLI Profiles
 ------------
 
-The CLI stores information about its users in a profile. This lets it
-remember information between commands. For example, when you log in with
+The CLI stores information about its users in a profile. This lets you
+run commands in a given context. For example, when you log in with
 an Atlas Admin API Key, the CLI stores the API Key and the current
 session access token. Then it reuses that token for subsequent commands
 until it expires.
 
 You can set up multiple named profiles and choose a profile to use for
 any given CLI command. If you don't specify one, the CLI uses the
-**default profile**, which is just a regular profile named ``default``.
+**default profile**, which is a profile named ``default``.
 
 To specify a profile, add the ``--profile`` argument on any command. For
-example, to log in with a new profile named ``my-profile``, you would
+example, to log in with a new profile named ``my-profile``,
 run the following:
 
 .. code-block::
