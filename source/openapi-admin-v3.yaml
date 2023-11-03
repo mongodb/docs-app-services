@@ -623,7 +623,7 @@ paths:
                 type: array
                 description: A list of all database, authentication, and scheduled triggers defined for the app.
                 items:
-                  "$ref": "#/components/schemas/AnyTrigger"
+                  "$ref": "#/components/schemas/Trigger"
     post:
       tags:
         - triggers
@@ -644,7 +644,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Trigger"
-  
+
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -698,7 +698,7 @@ paths:
             application/json:
               schema:
                 properties: {}
-  
+
   "/groups/{groupId}/apps/{appId}/triggers/{triggerId}/resume":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -736,7 +736,7 @@ paths:
                   error:
                     type: string
                     description: A description of the error that App Services encountered.
-  
+
   "/groups/{groupId}/apps/{appId}/values":
     get:
       tags:
@@ -784,7 +784,7 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  
+
   "/groups/{groupId}/apps/{appId}/values/{valueId}":
     get:
       tags:
@@ -834,7 +834,7 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ValueId"
-  
+
   "/groups/{groupId}/apps/{appId}/services":
     get:
       tags:
@@ -884,7 +884,7 @@ paths:
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
-  
+
   "/groups/{groupId}/apps/{appId}/services/config":
     get:
       tags:
@@ -1458,8 +1458,8 @@ paths:
       operationId: adminGetFlexSync
       summary: Get Flexible Sync information
       description: |-
-         Retrieve sync data for a specific Atlas App Services App when using 
-         [Flexible Sync](https://www.mongodb.com/docs/atlas/app-services/sync/get-started/).
+        Retrieve sync data for a specific Atlas App Services App when using
+        [Flexible Sync](https://www.mongodb.com/docs/atlas/app-services/sync/get-started/).
       responses:
         "200":
           description: Successfully retrieved.
@@ -1476,7 +1476,7 @@ paths:
         - sync
       operationId: adminGetSync
       summary: Get Partition-Based Sync information
-      description: |- 
+      description: |-
         Retrieve partition field data when using 
         [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
       responses:
@@ -1538,7 +1538,6 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
 
-
   "/groups/{groupId}/apps/{appId}/pull":
     get:
       tags:
@@ -1584,8 +1583,6 @@ paths:
           description: Invalid request
         500:
           description: Error pulling configuration
-
-
 
   "/groups/{groupId}/apps/{appId}/push/notifications/{messageId}":
     get:
@@ -4174,14 +4171,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    _id:
-                      type: string
-                    schema:
-                      type: object
-                    metadata:
-                      "$ref": "#/components/schemas/SchemaMetadata"
+                  $ref: "#/components/schemas/SchemaMetadataInstance"
     post:
       tags:
         - schemas
@@ -4193,29 +4183,17 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - schema
-                - metadata
-              properties:
-                _id:
-                  type: string
-                schema:
-                  type: object
-                  description: A valid [schema](https://www.mongodb.com/docs/realm/schemas) for the collection.
-                metadata:
-                  "$ref": "#/components/schemas/SchemaMetadata"
+              allOf:
+                - required:
+                    - metadata
+                - $ref: "#/components/schemas/FullSchema"
       responses:
         "200":
           description: "Ok"
           content:
             application/json:
               schema:
-                properties:
-                  _id:
-                    type: string
-                  metadata:
-                    "$ref": "#/components/schemas/SchemaMetadata"
+                $ref: "#/components/schemas/SchemaMetadataInstance"
   "/groups/{groupId}/apps/{appId}/schemas/{schemaId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4233,11 +4211,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  _id:
-                    type: string
-                  schema:
-                    type: object
+                $ref: "#/components/schemas/FullSchema"
     put:
       tags:
         - schemas
@@ -4249,22 +4223,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - schema
-              properties:
-                _id:
-                  type: string
-                schema:
-                  type: object
-                  description: A valid [schema](https://www.mongodb.com/docs/realm/schemas) for the collection.
-                relationships:
-                  type: object
-                  description: Relationships to foreign collections. Each field name is a property in the schema. The corresponding value is a [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition for that field.
-                  additionalProperties:
-                    "$ref": "#/components/schemas/Relationship"
-                metadata:
-                  "$ref": "#/components/schemas/SchemaMetadata"
+              $ref: "#/components/schemas/FullSchema"
       responses:
         "204":
           description: No Content
@@ -5567,6 +5526,33 @@ components:
                   $ref: "#/components/schemas/AnyValue"
                 production:
                   $ref: "#/components/schemas/AnyValue"
+    SpecificEnvironmentValues:
+      type: object
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/AnyValue"
+    AllEnvironmentValues:
+      type: object
+      properties:
+        values:
+          type: object
+          description: |-
+            An object that maps each possible environment name to
+            definitions of the environment values available in that
+            environment.
+          properties:
+            none:
+              $ref: "#/components/schemas/SpecificEnvironmentValues"
+            development:
+              $ref: "#/components/schemas/SpecificEnvironmentValues"
+            testing:
+              $ref: "#/components/schemas/SpecificEnvironmentValues"
+            qa:
+              $ref: "#/components/schemas/SpecificEnvironmentValues"
+            production:
+              $ref: "#/components/schemas/SpecificEnvironmentValues"
     AnyValue:
       description: Any valid JSON value
     DataApiVersion:
@@ -5870,7 +5856,7 @@ components:
       description: |-
         A subscription to a change event stream.
       oneOf:
-        - "$ref": "#/components/schemas/AnyTrigger"
+        - "$ref": "#/components/schemas/Trigger"
         - title: SyncTranslator
           type: object
           properties:
@@ -6615,14 +6601,14 @@ components:
           description: |-
             If `true`, the function executes with full privileges, bypassing rules
             on all services.
-        run_as_user_id: 
-          type: string 
+        run_as_user_id:
+          type: string
           description: |-
             An application user's account ID. If defined, endpoints will always 
             run as the specified user. Cannot be used with 
             `run_as_user_id_script_source`.
         run_as_user_id_script_source:
-          type: string 
+          type: string
           description: |-
             The stringified source code for a 
             [function](https://www.mongodb.com/docs/atlas/app-services/functions/#std-label-functions)
@@ -6633,7 +6619,6 @@ components:
         - name
         - private
         - source
-        - run_as_system
     Function:
       properties:
         _id:
@@ -6671,7 +6656,8 @@ components:
           type: string
         private:
           type: boolean
-        value: {}
+        value:
+          $ref: "#/components/schemas/AnyValue"
       required:
         - name
         - private
@@ -6684,7 +6670,13 @@ components:
           type: string
         private:
           type: boolean
-        value: {}
+        from_secret:
+          type: boolean
+          description: |-
+            If `true`, the value is a reference by name to a
+            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/).
+        value:
+          $ref: "#/components/schemas/AnyValue"
     ProviderType:
       type: string
       enum:
@@ -6818,10 +6810,10 @@ components:
             schemas.
     SyncDataResponse:
       properties:
-        clusterId: 
+        clusterId:
           type: string
           description: The Service ID for the linked cluster.
-        clusterName: 
+        clusterName:
           type: string
           description: The name of the linked cluster
         clusterType:
@@ -6833,22 +6825,22 @@ components:
           type: string
           description: The name of the App's Atlas Project.
         orgName:
-            type: string
-            description: The name of the App's Atlas Organization.
+          type: string
+          description: The name of the App's Atlas Organization.
         readPreference:
-            type: string
-            enum:
-              - primary
-              - primaryPreferred
-              - secondary
-              - secondaryPreferred
-              - nearest
+          type: string
+          enum:
+            - primary
+            - primaryPreferred
+            - secondary
+            - secondaryPreferred
+            - nearest
         wireProtocolEnabled:
-              type: boolean
-              description: |-
-                If true, clients may [connect to the app over the
-                MongoDB Wire
-                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+          type: boolean
+          description: |-
+            If true, clients may [connect to the app over the
+            MongoDB Wire
+            Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
     FlexibleSync:
       type: object
       properties:
@@ -6865,7 +6857,7 @@ components:
             type: string
         collection_queryable_fields_names:
           type: object
-          description:  |-
+          description: |-
             An array of 
             [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
             names on the specified collection.
@@ -6879,7 +6871,7 @@ components:
           description: The version of the queryable field.
         permissions:
           type: object
-          description: |- 
+          description: |-
             **Deprecated**
         last_disabled:
           type: string
@@ -6887,20 +6879,15 @@ components:
         client_max_offline_days:
           type: integer
           description: |-
-              The number of days the client can be offline before a client 
-              [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/) 
-              is required.
+            The number of days the client can be offline before a client
+            [reset](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/)
+            is required.
         is_recovery_mode_disabled:
           type: boolean
           description: |-
-              Specifies whether the 
-              [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes) 
-              is disabled. By default, client reset mode is enabled and this value is **false**.
-    AnyTrigger:
-      oneOf:
-        - $ref: "#/components/schemas/DatabaseTrigger"
-        - $ref: "#/components/schemas/AuthenticationTrigger"
-        - $ref: "#/components/schemas/ScheduledTrigger"
+            Specifies whether the
+            [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes)
+            is disabled. By default, client reset mode is enabled and this value is **false**.
     Trigger:
       oneOf:
         - $ref: "#/components/schemas/DatabaseTrigger"
@@ -7065,7 +7052,7 @@ components:
                     expression filters change events. The trigger will only
                     fire if the expression evaluates to true for a given
                     change event.
-                project: 
+                project:
                   type: object
                   description: |-
                     A [$project](https://www.mongodb.com/docs/manual/reference/operator/aggregation/project/) 
@@ -7107,13 +7094,13 @@ components:
                     processing events at the next relevant change stream event.
                     All change stream events from when the Trigger was suspended until the Trigger
                     resumes execution do not have the Trigger fire for them.
-                maximum_throughput: 
+                maximum_throughput:
                   type: boolean
                   default: false
                   description: |-
                     If `true`, the trigger will use the [maximize 
                     throughput](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#std-label-triggers-maximum-throughput) 
-                    option. 
+                    option.
                 unordered:
                   type: boolean
                   description: |-
@@ -7312,6 +7299,9 @@ components:
 
             - the relationship may point to many foreign documents.
             - the local field must be defined as an array in the collection schema.
+    SchemaDefinition:
+      type: object
+      description: A valid [schema](https://www.mongodb.com/docs/realm/schemas) for the collection.
     SchemaMetadata:
       type: object
       description: Metadata the describes which linked collection the schema applies to.
@@ -7325,6 +7315,36 @@ components:
         collection:
           type: string
           description: The collection name.
+    SchemaRelationships:
+      type: object
+      description: Relationships to foreign collections. Each field name is a property in the schema. The corresponding value is a [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition for that field.
+      additionalProperties:
+        "$ref": "#/components/schemas/Relationship"
+    SchemaMetadataInstance:
+      required:
+        - id
+        - metadata
+      properties:
+        id:
+          type: string
+        metadata:
+          $ref: "#/components/schemas/SchemaMetadata"
+    FullSchema:
+      type: object
+      properties:
+        metadata:
+          "$ref": "#/components/schemas/SchemaMetadata"
+        schema:
+          $ref: "#/components/schemas/SchemaDefinition"
+        relationships:
+          $ref: "#/components/schemas/SchemaRelationships"
+    FullSchemaInstance:
+      allOf:
+        - type: object
+          properties:
+            _id:
+              type: string
+        - $ref: "#/components/schemas/FullSchema"
     GraphQLConfig:
       type: object
       properties:
@@ -7342,8 +7362,7 @@ components:
             This value is `true` for all new Apps.**
         disable_schema_introspection:
           type: boolean
-          description:
-            If `true`, the GraphQL API blocks [introspection
+          description: If `true`, the GraphQL API blocks [introspection
             queries](https://graphql.org/learn/introspection/) from
             clients.
     CustomResolver:
@@ -7664,20 +7683,25 @@ components:
           properties:
             rule_metrics:
               type: object
-              example: {
-                "namespaces_metrics": {
-                  "chat.messages": {
-                    "roles": {
-                      "sender": {
-                        "matching_documents": 12,
-                        "evaluated_fields": 4,
-                        "discarded_fields": 0
-                      }
+              example:
+                {
+                  "namespaces_metrics":
+                    {
+                      "chat.messages":
+                        {
+                          "roles":
+                            {
+                              "sender":
+                                {
+                                  "matching_documents": 12,
+                                  "evaluated_fields": 4,
+                                  "discarded_fields": 0,
+                                },
+                            },
+                          "no_matching_role": 0,
+                        },
                     },
-                    "no_matching_role": 0
-                  }
                 }
-              }
               properties:
                 namespaces_metrics:
                   type: object
@@ -7709,22 +7733,21 @@ components:
           properties:
             sync_query:
               type: object
-              example: {
-                "Item": "(owner_id == \"641cb3d99e425c794ef69315\")"
-              }
+              example: { "Item": '(owner_id == "641cb3d99e425c794ef69315")' }
               description: |
                 The current subscription queries for this Device Sync
                 session. This object maps object type names to the query for
                 that type.
             sync_session_metrics:
               type: object
-              example: {
-                "uploads": 2,
-                "downloads": 6,
-                "downloaded_changesets": 4,
-                "downloaded_changesets_size": 5352,
-                "changesets": 2
-              }
+              example:
+                {
+                  "uploads": 2,
+                  "downloads": 6,
+                  "downloaded_changesets": 4,
+                  "downloaded_changesets_size": 5352,
+                  "changesets": 2,
+                }
               description: |
                 Usage metrics for the current Device Sync session.
         FunctionCall:
@@ -7868,7 +7891,7 @@ components:
           - title: API
             properties:
               type:
-                const:  "API"
+                const: "API"
       APIKey:
         allOf:
           - $ref: "#/components/schemas/Logs/Parts/BaseLog"
@@ -7876,7 +7899,7 @@ components:
           - title: API_KEY
             properties:
               type:
-                const:  "API_KEY"
+                const: "API_KEY"
       TriggerFailure:
         allOf:
           - $ref: "#/components/schemas/Logs/Parts/BaseLog"
@@ -8004,21 +8027,26 @@ components:
                 type: string
                 description: |
                   The endpoint request's HTTP headers, parameters, and body serialized to EJSON.
-                example: {
-                  "query": {},
-                  "headers": {
-                    "Accept": ["application/json"],
-                    "Api-key": [
-                      "NmYQlv7Eisqe9RjrkqFiBjgSii3wGLXWedDz4drbkQpzGkA93ZZcIMTUEIOqwCNN"
-                    ]
-                  },
-                  "body": {
-                      "$binary": {
-                          "base64": "eyJjb2xsZWN0aW9uIjoiSXRlbSIsImRhdGFTb3VyY2UiOiJtb25nb2RiLWF0bGFzIiwiZGF0YWJhc2UiOiJ0b2RvIiwiZmlsdGVyIjp7Il9pZCI6eyIkb2lkIjoiNjQxMTQ1OTgzYjAwN2RjYWJjZTkxNWFmIn19fQ==",
-                          "subType": "00"
-                      }
+                example:
+                  {
+                    "query": {},
+                    "headers":
+                      {
+                        "Accept": ["application/json"],
+                        "Api-key":
+                          [
+                            "NmYQlv7Eisqe9RjrkqFiBjgSii3wGLXWedDz4drbkQpzGkA93ZZcIMTUEIOqwCNN",
+                          ],
+                      },
+                    "body":
+                      {
+                        "$binary":
+                          {
+                            "base64": "eyJjb2xsZWN0aW9uIjoiSXRlbSIsImRhdGFTb3VyY2UiOiJtb25nb2RiLWF0bGFzIiwiZGF0YWJhc2UiOiJ0b2RvIiwiZmlsdGVyIjp7Il9pZCI6eyIkb2lkIjoiNjQxMTQ1OTgzYjAwN2RjYWJjZTkxNWFmIn19fQ==",
+                            "subType": "00",
+                          },
+                      },
                   }
-                }
       Push:
         allOf:
           - $ref: "#/components/schemas/Logs/Parts/BaseLog"
@@ -8237,7 +8265,6 @@ components:
     PushPullAppConfig:
       type: object
       properties:
-
         app_id:
           type: string
           description: The App's public Client App ID.
@@ -8251,6 +8278,9 @@ components:
         environment:
           $ref: "#/components/schemas/AppEnvironment"
         auth_providers:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuthProvider"
         custom_user_data:
         data_api_config:
         data_sources:
@@ -8266,8 +8296,6 @@ components:
         sync:
         triggers:
         value:
-
-
 
   securitySchemes:
     tokenAuth:
