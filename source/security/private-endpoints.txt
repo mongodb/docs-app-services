@@ -35,8 +35,12 @@ Private Endpoint Limitations
   connections over the MongoDB wire protocol <wire-protocol>`. If one is
   enabled, you cannot enable the other.
 
-- Private Endpoints only handle internal requests. Any outbound requests, such as 
-  an an App Services trigger calling an external API, go over the public internet. 
+- By default, private Endpoints only handle requests that originate from within your VPC.
+  You can configure your App to also accept requests from the public internet. To learn how,
+  see :ref:`Change Access Restrictions <change_access_restrictions>`.
+
+- All **outbound** requests, such as an an App Services trigger calling an 
+  external API, go over the public internet. 
 
 Set Up a Private Endpoint
 -------------------------
@@ -112,9 +116,6 @@ connection using either the App Services UI or the Admin API.
 
             #. Enter your **Subnet IDs** as a comma-separated list in the input box.
 
-            #. Optionally, enter a comment that describes the purpose of the
-               endpoint.
-
             Once you've entered this information, the fully constructed
             AWS CLI command is displayed in the UI. Copy the command and
             run it in your terminal. It should resemble the following:
@@ -139,21 +140,33 @@ connection using either the App Services UI or the Admin API.
             value starts with ``vpce-``.
 
             Once you have the **VPC Endpoint ID**, enter it in the input box.
-            Then, click :guilabel:`Next`.
+
+            Optionally, enter a comment that describes the purpose of the
+            endpoint. Then click :guilabel:`Next`.
 
          .. step:: Modify Your VPC Private DNS
 
-            Use the AWS CLI to modify your VPC private DNS settings. This
-            ensures that your App can resolve the private endpoint's DNS name
-            to the correct IP address.
+            a. Use the AWS CLI to modify your VPC private DNS settings. This
+               ensures that your App can resolve the private endpoint's DNS name
+               to the correct IP address.
+   
+               .. code-block:: sh
+   
+                  aws ec2 modify-vpc-endpoint \
+                    --region <your-aws-deployment-region> \
+                    --vpc-endpoint-id <your-vpc-endpoint-id> \
+                    --private-dns-enabled
+            
+            #. If this is the first Private Endpoint you are creating, you will 
+               see a toggle you can use to either restrict or open all access from 
+               requests outside your PrivateLink connection. By default, App 
+               Services blocks all requests coming from outside your PrivateLink 
+               connection. This setting applies to this endpoint and **all 
+               additional endpoints you create**. Refer to :ref:`change access 
+               restrictions <change_access_restrictions>` for more information.
 
-            .. code-block:: sh
-
-               aws ec2 modify-vpc-endpoint \
-                 --region <your-aws-deployment-region> \
-                 --vpc-endpoint-id <your-vpc-endpoint-id> \
-                 --private-dns-enabled
-
+            #. Click :guilabel:`Finish Endpoint Creation` to create the endpoint. 
+         
    .. tab::
       :tabid: api
 
@@ -216,3 +229,26 @@ connection using either the App Services UI or the Admin API.
                  --region <your-aws-deployment-region> \
                  --vpc-endpoint-id <your-vpc-endpoint-id> \
                  --private-dns-enabled
+
+.. _change_access_restrictions:
+
+Change Access Restrictions
+--------------------------
+By default, all private Endpoints only handle internal requests. You can choose 
+to open access from all requests outside your PrivateLink connection. 
+
+.. important::
+  
+   This setting is global to all of your endpoints.
+
+You can toggle this setting in three ways:
+
+- In the UI, from the list of endpoints on the :guilabel:`Private Endpoints` 
+  tab, click the :guilabel:`Restrict Access` button.
+
+- In the UI, when creating your first Private Endpoint, you have the option to 
+  toggle this setting in the :guilabel:`Modify Your VPC Private DNS` step. 
+
+- In the Admin API, call the :admin-api-endpoint:`Toggle Non-VPC Requests
+  <operation/allNonVpcClientRequests>` with a boolean value (``true`` to remove
+  the default restriction, or ``false`` to reinstate it.)
