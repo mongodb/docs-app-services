@@ -35,9 +35,9 @@ Private Endpoint Limitations
   connections over the MongoDB wire protocol <wire-protocol>`. If one is
   enabled, you cannot enable the other.
 
-- By default, private Endpoints only handle internal requests. You can  
-  :ref:`change access restrictions <change_access_restrictions>` from all 
-  requests outside your PrivateLink connection.
+- By default, private Endpoints only handle requests that originate from within your VPC.
+  You can configure your App to also accept requests from the public internet. To learn how,
+  see :ref:`Change Access Restrictions <change_access_restrictions>`.
 
 - All **outbound** requests, such as an an App Services trigger calling an 
   external API, go over the public internet. 
