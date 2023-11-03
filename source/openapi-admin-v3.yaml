@@ -5186,17 +5186,9 @@ components:
           items:
             $ref: "#/components/schemas/DeploymentModel"
           example: ["GLOBAL", "LOCAL"]
-    CustomUserDataConfig:
+    BaseCustomUserDataConfig:
       type: object
       properties:
-        mongo_service_id:
-          type: string
-          description: |-
-            The `_id` value of the linked MongoDB data source that contains
-            custom user data.
-
-            See [Get a Data Source](#operation/adminGetService).
-          example: "63c060ed32043ef4c93c2a9c"
         database_name:
           type: string
           description: |-
@@ -5214,17 +5206,48 @@ components:
             document and that contains the user account ID of each
             document's corresponding user.
           example: "user_account_id"
-        on_user_creation_function_id:
-          type: string
-          description: |-
-            The `_id` value of a [user creation
-            function](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/#std-label-user-creation-function)
-            that runs whenever a new user registers.
-          example: "63c055d8019a6ab879f661d6"
         enabled:
           type: boolean
           description: |-
             If `true`, custom user data is enabled.
+    CustomUserDataConstructor:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomUserDataConfig"
+        - type: object
+          properties:
+            mongo_service_name:
+              type: string
+              description: |-
+                The name of the linked MongoDB data source that contains
+                custom user data.
+              example: "mongodb-atlas"
+            on_user_creation_function_name:
+              type: string
+              description: |-
+                The name of a [user creation
+                function](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/#std-label-user-creation-function)
+                that runs whenever a new user registers.
+              example: "myFunction"
+    CustomUserDataConfig:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomUserDataConfig"
+        - type: object
+          properties:
+            mongo_service_id:
+              type: string
+              description: |-
+                The `_id` value of the linked MongoDB data source that contains
+                custom user data.
+
+                See [Get a Data Source](#operation/adminGetService).
+              example: "63c060ed32043ef4c93c2a9c"
+            on_user_creation_function_id:
+              type: string
+              description: |-
+                The `_id` value of a [user creation
+                function](https://www.mongodb.com/docs/atlas/app-services/users/enable-custom-user-data/#std-label-user-creation-function)
+                that runs whenever a new user registers.
+              example: "63c055d8019a6ab879f661d6"
     BasicError:
       type: object
       properties:
@@ -5443,10 +5466,54 @@ components:
                 description: |-
                   A list where each element is the name of a file that was changed in the
                   draft.
+
+
+    CustomResolver:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomResolver"
+        - properties:
+            _id:
+              type: string
+              description: The custom resolver's unique ID.
+            function_id:
+              type: string
+              description: The resolver function's unique ID.
+    CustomResolverConstructor:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomResolver"
+        - required:
+            - function_name
+
+          properties:
+            function_name:
+              type: string
+              description: The resolver function's name.
+
+
+
     Endpoint:
+      allOf:
+        - $ref: "#/components/schemas/BaseEndpoint"
+        - required:
+            - function_id
+          properties:
+            _id:
+              type: string
+              description: The endpoint's unique ID.
+            function_id:
+              type: string
+              description: The endpoint function's unique ID.
+    EndpointConstructor:
+      allOf:
+        - $ref: "#/components/schemas/BaseEndpoint"
+        - required:
+            - function_name
+          properties:
+            function_name:
+              type: string
+              description: The endpoint functions's name.
+    BaseEndpoint:
       type: object
-      required:
-        - function_id
       properties:
         route:
           type: string
@@ -5611,6 +5678,16 @@ components:
         error_code:
           type: string
           description: The error type.
+    AtlasClusterWithRules:
+      allOf:
+        - $ref: "#/components/schemas/AtlasCluster"
+        - properties:
+            default_rule:
+              $ref: "#/components/schemas/DefaultRule"
+            rules:
+              type: array
+              items:
+                $ref: "#/components/schemas/Rule"
     AtlasCluster:
       type: object
       properties:
@@ -7366,6 +7443,25 @@ components:
             queries](https://graphql.org/learn/introspection/) from
             clients.
     CustomResolver:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomResolver"
+        - properties:
+            _id:
+              type: string
+              description: The custom resolver's unique ID.
+            function_id:
+              type: string
+              description: The resolver function's unique ID.
+    CustomResolverConstructor:
+      allOf:
+        - $ref: "#/components/schemas/BaseCustomResolver"
+        - required:
+            - function_name
+          properties:
+            function_name:
+              type: string
+              description: The resolver function's name.
+    BaseCustomResolver:
       type: object
       required:
         - _id
@@ -7373,12 +7469,6 @@ components:
         - on_type
         - field_name
       properties:
-        _id:
-          type: string
-          description: The custom resolver's unique ID.
-        function_id:
-          type: string
-          description: The resolver function's unique ID.
         on_type:
           type: string
           description: |-
