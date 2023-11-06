@@ -1,23 +1,51 @@
+# November 3, 2023
+
+## Triggers
+
+- Database Triggers
+  - Note that document preimages are supported on sharded clusters running 5.3 or later.
+  - Add documentation for new database trigger options to target clusters or DBs, in addition to related changes.
+
+## Secure Your App
+
+- Use a VPC Private Endpoint: New "Change Access Restrictions" section with details about how to open access to requests from outside your PrivateLink connection.
+
+## Reference
+
+- App Configuration Files/Triggers: Update Database Triggers reference information with details about new valid operations.
+- App Services Admin API: New "Toggle Non-VPC Requests" endpoint to allow or restrict non-VPC requests.
+- App Services CLI:
+  - New generated API reference documentation for App Services CLI. Replaces the deprecated Realm CLI.
+  - New "CLI Profiles" section with information about adding and using profiles.
+- Service Limitations
+  - New "Connection Pooling" section with details about what determines connection pool size.
+  - Remove the Device Sync Rules limitation that no longer applies.
+- Realm CLI: Move the reference down in the navigation menu, and note that it is deprecated.
+
+## Other
+
+- Change references and commands from Realm CLI to the new App Services CLI throughout the documentation.
+
 # October 20, 2023
 
 ## Define a Data Model
 
-- Schemas/Schema Types: Document Device Sync support for geospatial data, including GeoJSON Points and querying. 
+- Schemas/Schema Types: Document Device Sync support for geospatial data, including GeoJSON Points and querying.
 
-## Reference 
+## Reference
 
 - App Services Admin API
   - Add adminListServices endpoint and update response objects for several endpoints.
-  - Add ``maximum_throughput`` to Create Trigger and Get a Trigger. 
+  - Add `maximum_throughput` to Create Trigger and Get a Trigger.
 
 # October 13, 2023
 
 ## Triggers
 
-- Landing Page: Add note about increased maximum throughput for M10+ clusters. 
+- Landing Page: Add note about increased maximum throughput for M10+ clusters.
 - Database Triggers
- - Add configuration information about increased maximum throughput. 
- - Add note about disabling Event Ordering to enable maximum throughput.
+  - Add configuration information about increased maximum throughput.
+  - Add note about disabling Event Ordering to enable maximum throughput.
 
 ## Internal
 
@@ -25,7 +53,7 @@
 
 # October 6, 2023
 
-## Edge Server 
+## Edge Server
 
 - Configure Edge Server: Add details for upgrading the Edge Server.
 
@@ -35,7 +63,7 @@
 
 ## Functions
 
-- Landing Page: Add max async operations (1000 async operations) under "Constraints" section. 
+- Landing Page: Add max async operations (1000 async operations) under "Constraints" section.
 
 ## Authenticate & Manage Users
 
