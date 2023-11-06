@@ -18,10 +18,8 @@
   - New generated API reference documentation for App Services CLI. Replaces the deprecated Realm CLI.
   - New "CLI Profiles" section with information about adding and using profiles.
 - Service Limitations
-
   - New "Connection Pooling" section with details about what determines connection pool size.
   - Remove the Device Sync Rules limitation that no longer applies.
-
 - Realm CLI: Move the reference down in the navigation menu, and note that it is deprecated.
 
 ## Other
