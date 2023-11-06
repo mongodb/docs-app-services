@@ -46,8 +46,8 @@
 
 - Landing Page: Add note about increased maximum throughput for M10+ clusters.
 - Database Triggers
-- Add configuration information about increased maximum throughput.
-- Add note about disabling Event Ordering to enable maximum throughput.
+  - Add configuration information about increased maximum throughput.
+  - Add note about disabling Event Ordering to enable maximum throughput.
 
 ## Internal
 
