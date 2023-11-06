@@ -491,6 +491,10 @@ paths:
       operationId: adminExportApplication
       summary: Export an app as a zip file
       description: |-
+        **The Export Endpoint is deprecated. Instead, call the [Pull App
+        Configuration Files](#operation/adminPullAppConfiguration)
+        endpoint with an ``Accept: application/zip`` header.**
+
         [Export](https://www.mongodb.com/docs/atlas/app-services/apps/export/)
         an application as a zip file.
       responses:
@@ -8388,9 +8392,11 @@ components:
         data_api_config:
           $ref: "#/components/schemas/DataApiConfig"
         data_sources:
-          oneOf:
-            - $ref: "#/components/schemas/AtlasClusterWithRules"
-            - $ref: "#/components/schemas/AtlasFederatedInstance"
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/AtlasClusterWithRules"
+              - $ref: "#/components/schemas/AtlasFederatedInstance"
         endpoints:
           type: array
           items:
