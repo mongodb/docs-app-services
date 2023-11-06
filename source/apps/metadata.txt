@@ -106,35 +106,39 @@ or App Services CLI to find it programmatically.
          Make sure to replace ``<access_token>`` and ``{groupId}`` with
          your own values.
 
-..   .. tab::
+   .. tab::
       :tabid: cli
 
-..      To find an App ID, run :ref:`{+cli-bin+} apps list
+      To find an App ID, run :ref:`{+cli-bin+} apps list
       <appservices-apps-list>` and find the App you're interested in the
       list returned by the command.
 
-..      Each entry in the list contains two App ID values you may want:
+      Each entry in the list shows an App's project ID as well as two App
+      ID values you may want:
 
-..      - The Client App ID, which is a unique string that includes the
+      - The Client App ID, which is a unique string that includes the
         App name. Use this value to connect to your App through GraphQL,
         the Data API, or a Realm SDK.
 
-..      - The ``_id`` value, which is an internal ObjectId hex string. Use
+      - The ``_id`` value, which is an internal ObjectId hex string. Use
         this value in place of ``{appId}`` in Admin API endpoints.
 
-..      .. io-code-block::
+      .. io-code-block::
 
-..         .. input::
+         .. input::
             :language: bash
 
-..            {+cli-bin+} apps list
+            {+cli-bin+} apps list
 
-..         .. output::
+         .. output::
             :language: text
 
-..            Found 2 apps
-              myapp-abcde (63ea9328dddad2523e60fb59)
-              myapp-dev-uvxyz (63ea93318d947aff90351070)
+            Found 3 apps
+              Client App ID                    Project ID                _id
+              -------------------------------  ------------------------  ------------------------
+              myapp-abcde                      5b2ef33692f119212341b213  64343a2b2107b2523e60fb59
+              myapp-dev-uvxyz                  5b2ef33692f119212341b213  6526d3582b032aff90351070
+              my-other-app-abcde               5b2ef33692f119212341b213  674c19acef214b9ad99a0bbe
 
 .. _find-atlas-project-id:
 
@@ -196,6 +200,13 @@ or Atlas CLI to find it programmatically.
 
       The command returns a list of projects in JSON format. Find
       your project in the list and copy its ``id`` value.
+
+      .. tip::
+
+         The {+cli+} includes Project IDs when you list Apps. If you
+         want to find the Project ID of an existing App, you can run
+         ``{+cli-bin+} apps list``. To learn more, see
+         :ref:`find-app-id`.
 
       .. io-code-block::
 
