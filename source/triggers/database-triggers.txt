@@ -10,8 +10,10 @@ Database Triggers
    :depth: 2
    :class: singlecol
 
-Database Triggers allow you to execute server-side logic whenever a
-document is added, updated, or removed in a linked MongoDB Atlas cluster.
+Database Triggers allow you to execute server-side logic whenever a database 
+change occurs on a linked MongoDB Atlas cluster. You can configure triggers on 
+individual collections, entire databases, and on an entire cluster.
+
 Unlike SQL data triggers, which run on the database server, triggers run
 on a serverless compute layer that scales independently of the database
 server. Triggers automatically call :ref:`Atlas Functions <functions>`
@@ -30,18 +32,6 @@ single change stream for each collection with at least one enabled
 trigger. If multiple triggers are enabled for a collection they all
 share the same change stream.
 
-You control which operations cause a trigger to fire as well as what
-happens when it does. For example, you can run a function whenever a
-specific field of a document is updated. The function can access the
-entire change event, so you always know what changed. You can also pass
-the change event to :ref:`AWS EventBridge <aws-eventbridge>` to handle
-the event outside of Atlas.
-
-Triggers support :manual:`$match
-</reference/operator/aggregation/match>` expressions to filter change
-events and :manual:`$project </reference/operator/aggregation/project>`
-expressions to limit the data included in each event.
-
 .. important:: Change Stream Limitations
    
    There are limits on the total number of change streams you can open
@@ -53,6 +43,27 @@ expressions to limit the data included in each event.
    <serverless-caveats>` or :ref:`{+adf-instance+}
    <data-federation-caveats>` because they do not support change streams.
 
+You control which operations cause a trigger to fire as well as what
+happens when it does. For example, you can run a function whenever a
+specific field of a document is updated. The function can access the
+entire change event, so you always know what changed. You can also pass
+the change event to :ref:`AWS EventBridge <aws-eventbridge>` to handle
+the event outside of Atlas.
+
+Triggers support :manual:`$match </reference/operator/aggregation/match>` 
+expressions to filter change events and :manual:`$project </reference/operator/aggregation/project>` 
+expressions to limit the data included in each event.
+
+.. _trigger-recursion:
+
+.. warning::
+
+   In deployment and database level triggers, it is possible to configure triggers 
+   in a way that causes other triggers to fire, resulting in recursion. 
+   Examples include a database-level trigger writing to a collection within the 
+   same database, or a cluster-level logger or log forwarder writing logs to 
+   another database in the same cluster.
+   
 .. _create-a-database-trigger:
 
 Create a Database Trigger
@@ -103,6 +114,9 @@ Configuration
 
 Database Triggers have the following configuration options:
 
+Trigger Details
+~~~~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
    :widths: 15 30
@@ -136,83 +150,189 @@ Database Triggers have the following configuration options:
 
        .. include:: /includes/trigger-event-ordering.rst
 
-Within the :guilabel:`Trigger Source Details` section, the following configuration 
-options are available:
+Trigger Source Details
+~~~~~~~~~~~~~~~~~~~~~~
+
+Within the :guilabel:`Trigger Source Details` section, you first select the 
+:guilabel:`Watch Against`, based on the level of granularity you want. Your 
+options are:
+
+- :guilabel:`Collection`, when a change occurs on a specified collection
+- :guilabel:`Database`, when a change occurs on any collection in a 
+  specified database
+- :guilabel:`Deployment`, when deployment changes occur on a specified 
+  cluster. If you select the Deployment source type, the following 
+  databases are **not watched** for changes:
+
+  - The admin databases ``admin``, ``local``, and ``config``
+  - The sync databases ``__realm_sync`` and ``__realm_sync_<app_id>``
+
+  .. important::
+
+     The deployment-level source type is only available on dedicated tiers.
+
+Depending on which source type you are using, the additional options differ. The 
+following table describes these options.
 
 .. list-table::
    :header-rows: 1
    :widths: 15 30
 
-   * - Field
-     - Description
+   * - Source Type
+     - Options
 
-   * - :guilabel:`Cluster Name`
+   * - :guilabel:`Collection`
+     - | 
 
-     - The name of the MongoDB Service that the Trigger is
-       associated with.
+       - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+           Trigger is associated with.
+      
+       - :guilabel:`Database Name`. The MongoDB database that contains the watched
+         collection.
 
-   * - :guilabel:`Database Name`
+       - :guilabel:`Collection Name`. The MongoDB collection to watch. Optional.
+         If you leave this option blank, the Source Type changes to "Database."
 
-     - The MongoDB database that contains the watched
-       collection.
+       - :guilabel:`Operation Type`. The The :ref:`operation types 
+         <database-event-operation-types>` that cause the Trigger to fire. 
+         Select the operation types you want the trigger to respond to. Options 
+         include:
+       
+         - Insert
+         - Update 
+         - Replace
+         - Delete
 
-   * - :guilabel:`Collection Name`
+         .. note::
+       
+           Update operations executed from MongoDB Compass or the MongoDB Atlas
+           Data Explorer fully replace the previous document. As a result,
+           update operations from these clients will generate **Replace**
+           change events rather than **Update** events.
+       
+       - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         the latest :manual:`majority-committed </reference/read-concern-majority/>`
+         version of the modified document *after* the change was applied in
+         the ``fullDocument`` field.
+       
+         .. note::
+       
+            Regardless of this setting, **Insert** and **Replace** events always 
+            include the ``fullDocument`` field. **Delete** events never include 
+            the ``fullDocument`` field.
+       
+       - :guilabel:`Document Preimage`. When enabled, change events include a 
+         copy of the modified document from immediately *before* the change was 
+         applied in the ``fullDocumentBeforeChange`` field. This has 
+         :ref:`performance considerations <pre-image-perf>`. All change events 
+         except for **Insert** events include the document preimage. 
 
-     - The name of the collection that the Trigger watches for
-       change events.
+   * - :guilabel:`Database`
+     - | 
 
-   * - :guilabel:`Operation Type`
+       - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+         Trigger is associated with.
+       
+       - :guilabel:`Database Name`. The MongoDB database to watch. Optional. 
+         If you leave this option blank, the Source Type changes to "Deployment," 
+         unless you are on a shared tier, in which case App Services will not 
+         let you save the trigger.
 
-     - Checkboxes of :ref:`database operation types <database-event-operation-types>` 
-       that cause the Trigger to fire. Select the operation types you want the 
-       trigger to respond to.
+       - :guilabel:`Operation Type`. The :ref:`operation types 
+         <database-event-operation-types>` that cause the Trigger to fire. 
+         Select the operation types you want the  trigger to respond to. 
+         Options include:
+       
+         - Create Collection
+         - Modify Collection
+         - Rename Collection
+         - Drop Collection
+         - Shard Collection
+         - Reshard Collection
+         - Refine Collection Shard Key
+       
+         .. note::
+       
+           Update operations executed from MongoDB Compass or the MongoDB Atlas
+           Data Explorer fully replace the previous document. As a result,
+           update operations from these clients will generate **Replace**
+           change events rather than **Update** events.
+       
+       - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         the latest :manual:`majority-committed </reference/read-concern-majority/>`
+         version of the modified document *after* the change was applied in
+         the ``fullDocument`` field.
+       
+         .. note::
+       
+            Regardless of this setting, **Insert** and **Replace** events always 
+            include the ``fullDocument`` field. **Delete** events never include 
+            the ``fullDocument`` field.
+       
+       - :guilabel:`Document Preimage`. When enabled, change events include a 
+         copy of the modified document from immediately *before* the change was 
+         applied in the ``fullDocumentBeforeChange`` field. This has 
+         :ref:`performance considerations <pre-image-perf>`. All change events 
+         except for **Insert** events include the document preimage. Disabled 
+         for Database and Deployment sources to limit unnecessary watches on the 
+         cluster for a new collection being created.
 
-       .. warning::
+   * - :guilabel:`Deployment`
+     - | 
 
-          Update operations executed from MongoDB Compass or the MongoDB Atlas
-          Data Explorer fully replace the previous document. As a result,
-          update operations from these clients will generate **Replace**
-          change events rather than **Update** events.
+       - :guilabel:`Cluster Name`. The name of the MongoDB cluster that the 
+         Trigger is associated with.
+       
+       - :guilabel:`Operation Type`. The The :ref:`operation types 
+         <database-event-operation-types>` that occur in the cluster that cause 
+         the Trigger to fire. Select the operation types you want the  trigger 
+         to respond to. Options include:
 
-   * - :guilabel:`Full Document`
+         - Drop Database
 
-     - If enabled, **Update** change events include the latest
-       :manual:`majority-committed </reference/read-concern-majority/>`
-       version of the modified document *after* the change was applied in
-       the ``fullDocument`` field.
+       - :guilabel:`Full Document`. If enabled, **Update** change events include 
+         the latest :manual:`majority-committed </reference/read-concern-majority/>`
+         version of the modified document *after* the change was applied in
+         the ``fullDocument`` field.
+       
+         .. note::
+       
+            Regardless of this setting, **Insert** and **Replace** events always 
+            include the ``fullDocument`` field. **Delete** events never include 
+            the ``fullDocument`` field.
 
-       .. note::
+       - :guilabel:`Document Preimage`. When enabled, change events include a 
+         copy of the modified document from immediately *before* the change was 
+         applied in the ``fullDocumentBeforeChange`` field. This has 
+         :ref:`performance considerations <pre-image-perf>`. All change events 
+         except for **Insert** events include the document preimage. Disabled 
+         for Database and Deployment sources to limit unnecessary watches on the 
+         cluster for a new collection being created.
 
-          Regardless of this setting:
-          
-          - **Insert** and **Replace** events always include the
-            ``fullDocument`` field.
-          
-          - **Delete** events never include the ``fullDocument`` field.
+.. _pre-image-perf:
 
-   * - :guilabel:`Document Preimage`
+.. tip:: Preimages and Performance Optimization
 
-     - If enabled, change events include a copy of the modified document
-       from immediately *before* the change was applied in the
-       ``fullDocumentBeforeChange`` field. All change events except for
-       **Insert** events include the document preimage.
+   Preimages require additional storage overhead that may affect
+   performance. If you're not using preimages on a collection,
+   you should disable preimages. To learn more, see :ref:`Disable
+   Collection-Level Preimages
+   <database-triggers-disable-collection-level-preimages>`.
 
-       .. tip:: Performance Optimization
+   Document preimages are supported on non-sharded Atlas clusters running 
+   MongoDB 4.4+, and on sharded Atlas clusters running MongoDB 5.3 and later.
+   You can upgrade a non-sharded cluster (with preimages) to a 
+   sharded cluster, as long as the cluster is running 5.3 or later.
 
-          Preimages require additional storage overhead that may affect
-          performance. If you're not using preimages on a collection,
-          you should disable preimages. To learn more, see :ref:`Disable
-          Collection-Level Preimages
-          <database-triggers-disable-collection-level-preimages>`.
-
-       Document preimages are supported on non-sharded Atlas clusters running 
-       MongoDB 4.4+, and on sharded Atlas clusters running MongoDB 5.3 and later.
-       You can upgrade a non-sharded cluster (with preimages) to a 
-       sharded cluster, as long as the cluster is running 5.3 or later.
+Function
+~~~~~~~~
 
 Within the :guilabel:`Function` section, you choose what action is taken when 
 the trigger fires. You can choose to run a :ref:`function <functions>` or use 
 :ref:`AWS EventBridge <aws-eventbridge>`. 
+
+Advanced
+~~~~~~~~
 
 Within the :guilabel:`Advanced` section, the following **optional** configuration 
 options are available:
@@ -257,8 +377,8 @@ options are available:
 
 .. _database-events:
 
-Database Change Events
-----------------------
+Change Event Types
+------------------
 
 .. _database-event-operation-types:
 
@@ -272,23 +392,52 @@ following operation types:
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 30
+   :widths: 30 15
 
    * - Operation Type
      - Description
 
-   * - **Insert**
+   * - **Insert Document** (All trigger types)
      - Represents a new document added to the collection.
 
-   * - **Update**
+   * - **Update Document** (All trigger types)
      - Represents a change to an existing document in the collection.
 
-   * - **Delete**
+   * - **Delete Document** (All trigger types)
      - Represents a document deleted from the collection.
 
-   * - **Replace**
+   * - **Replace Document** (All trigger types)
      - Represents a new document that replaced a document in the collection.
 
+   * - **Create Collection** (Database and Deployment trigger types only)
+     - Represents the creation of a new collection.
+   
+   * - **Modify Collection** (Database and Deployment trigger types only)
+     - Represents the modification collection.
+
+   * - **Rename Collection** (Database and Deployment trigger types only)
+     - Represents collection being renamed.
+
+   * - **Drop Collection** (Database and Deployment trigger types only)
+     - Represents a collection being dropped.
+
+   * - **Shard Collection** (Database and Deployment trigger types only)
+     - Represents a collection changing from unsharded to sharded.
+
+   * - **Reshard Collection** (Database and Deployment trigger types only)
+     - Represents a change to a collection's sharding.
+
+   * - **Refine Collection Shard Key** (Database and Deployment trigger types only)
+     - Represents a change in the shard key of a collection.
+   
+   * - **Create Indexes** (Database and Deployment trigger types only)
+     - Represents the creation of a new index.
+
+   * - **Drop Indexes** (Database and Deployment trigger types only)
+     - Represents an index being dropped.
+
+   * - **Drop Database** (Deployment trigger type only)
+     - Represents a database being dropped.
 
 Database change event objects have the following general form:
 
@@ -334,7 +483,7 @@ collection as a document that resembles the following:
 
 To automate this process, the store creates a Database Trigger that
 listens for **Update** change events in the ``store.orders`` collection.
-When the trigger observes an **Update** event, it passes the
+When the trigger observes an **Update** event, it passes the 
 :ref:`change event object <database-events>` to its associated Function,
 ``textShippingUpdate``. The Function checks the change event for any
 changes to the ``shippingLocation`` field and, if it was updated, sends
@@ -675,8 +824,14 @@ the trigger to fire. For details, see the reference for each event type:
 - :manual:`update </reference/change-events/update>`
 - :manual:`replace </reference/change-events/replace>`
 - :manual:`delete </reference/change-events/delete>`
-
-
+- :manual:`create </reference/change-events/create>`
+- :manual:`modify </reference/change-events/modify>`
+- :manual:`rename </reference/change-events/rename>`
+- :manual:`drop </reference/change-events/drop>`
+- :manual:`shardCollection </reference/change-events/shardCollection>`
+- :manual:`reshardCollection </reference/change-events/reshardCollection>`
+- :manual:`refineCollectionShardKey </reference/change-events/refineCollectionShardKey>`
+- :manual:`dropDatabase </reference/change-events/dropDatabase>`
 
 .. example::
    

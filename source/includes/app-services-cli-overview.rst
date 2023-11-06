@@ -158,3 +158,69 @@ The CLI stores identifiers and configuration metadata in the
    * - | ``client_app_id``
        | ``string``
      - The human-readable Client App ID.
+
+.. _cli-profiles:
+
+CLI Profiles
+------------
+
+The CLI stores information about its users in a profile. This lets you
+run commands in a given context. For example, when you log in with
+an Atlas Admin API Key, the CLI stores the API Key and the current
+session access token. Then it reuses that token for subsequent commands
+until it expires.
+
+You can set up multiple named profiles and choose a profile to use for
+any given CLI command. If you don't specify one, the CLI uses the
+**default profile**, which is a profile named ``default``.
+
+To specify a profile, add the ``--profile`` argument on any command. For
+example, to log in with a new profile named ``my-profile``,
+run the following:
+
+.. code-block::
+
+   {+cli-bin+} login --profile my-profile
+
+Once logged in, you can run other commands with the same profile:
+
+.. code-block::
+
+   {+cli-bin+} pull --remote=myapp-abcde --profile my-profile
+
+You can list all profiles on your system with a CLI command:
+
+.. io-code-block::
+
+   .. input::
+      :language: shell
+
+      {+cli-bin+} profiles list
+
+   .. output::
+      :language: text
+
+      Found 2 profile(s)
+        Profile     API Key
+        ----------  -----------------------------------------------
+        my-profile  rjxerfwi (********-****-****-****-f00b471ec015)
+        default     xkwwtlmj (********-****-****-****-f03b321dae23)
+
+The CLI stores profiles on your computer in individual configuration
+files named after the profile. The location of the profile definitions
+depends on your system:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Operating System
+     - Profile Directory
+
+   * - Unix / Linux
+     - ``$XDG_CONFIG_HOME/<profile>.yaml`` or ``$HOME/.config/<profile>.yaml``
+
+   * - macOS
+     - ``Library/Application Support/appservices-cli/<profile>.yaml``
+
+   * - Windows
+     - ``%AppData%/<profile>.yaml``
