@@ -885,53 +885,6 @@ paths:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
 
-  "/groups/{groupId}/apps/{appId}/services/config":
-    get:
-      tags:
-        - services
-      operationId: adminGetServiceConfig
-      summary: Get configuration of sources and third-party services
-      description: >-
-        Get configuration of [data
-        sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) 
-        and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
-      responses:
-        "200":
-          description: Successfully returned service configuration.
-          content:
-            application/json:
-              schema:
-                items:
-                  anyOf:
-                    - $ref: "#/components/schemas/AtlasCluster"
-                    - $ref: "#/components/schemas/AtlasFederatedInstance"
-                    - $ref: "#/components/schemas/ThirdPartyService"
-    patch:
-      tags:
-        - services
-      operationId: adminUpdateServiceConfig
-      summary: Update configuration settings of sources and third-party services
-      description: >-
-        Update the [data
-        source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or
-        [third-party
-        service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/) 
-        configuration.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - $ref: "#/components/schemas/CreateDataSource"
-                - $ref: "#/components/schemas/AtlasFederatedInstance"
-                - $ref: "#/components/schemas/ThirdPartyService"
-      responses:
-        "204":
-          description: Successfully updated.
-    parameters:
-      - $ref: "#/components/parameters/GroupId"
-      - $ref: "#/components/parameters/AppId"
-
   "/groups/{groupId}/apps/{appId}/services/{serviceId}":
     get:
       tags:
@@ -1098,30 +1051,50 @@ paths:
               schema:
                 "$ref": "#/components/schemas/BuildInfo"
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/config":
-    get:
-      tags:
-        - services
-      operationId: adminGetServiceConfig
-      summary: Retrieve a service's configuration
-      description: |-
-        Retrieve a [service's](https://www.mongodb.com/docs/realm/services#std-label-services)
-        configuration.
-      responses:
-        "200":
-          description: Successfully retrieved.
-    patch:
-      tags:
-        - services
-      operationId: adminUpdateServiceConfig
-      summary: Update a service's configuration
-      description: Update a [service's](https://www.mongodb.com/docs/realm/services#std-label-services) configuration.
-      responses:
-        "200":
-          description: Successfully updated.
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ServiceId"
+    get:
+      tags:
+        - services
+      operationId: adminGetServiceConfig
+      summary: Get a Service Configuration
+      description: |-
+        Get configuration of [data
+        sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/)
+        and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/).
+      responses:
+        "200":
+          description: Successfully retrieved.
+          content:
+            application/json:
+              schema:
+                items:
+                  anyOf:
+                    - $ref: "#/components/schemas/AtlasCluster"
+                    - $ref: "#/components/schemas/AtlasFederatedInstance"
+                    - $ref: "#/components/schemas/ThirdPartyService"
+    patch:
+      tags:
+        - services
+      operationId: adminUpdateServiceConfig
+      summary: Update a Service Configuration
+      description: |
+        Update a [Data Source](https://www.mongodb.com/docs/atlas/app-services/mongodb/) or
+        [Third-Party Service [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/)
+        configuration.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/CreateDataSource"
+                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/ThirdPartyService"
+      responses:
+        "204":
+          description: Successfully updated.
   "/groups/{groupId}/apps/{appId}/services/{serviceId}/rules":
     get:
       tags:
@@ -5466,31 +5439,6 @@ components:
                 description: |-
                   A list where each element is the name of a file that was changed in the
                   draft.
-
-
-    CustomResolver:
-      allOf:
-        - $ref: "#/components/schemas/BaseCustomResolver"
-        - properties:
-            _id:
-              type: string
-              description: The custom resolver's unique ID.
-            function_id:
-              type: string
-              description: The resolver function's unique ID.
-    CustomResolverConstructor:
-      allOf:
-        - $ref: "#/components/schemas/BaseCustomResolver"
-        - required:
-            - function_name
-
-          properties:
-            function_name:
-              type: string
-              description: The resolver function's name.
-
-
-
     Endpoint:
       allOf:
         - $ref: "#/components/schemas/BaseEndpoint"
@@ -5844,6 +5792,27 @@ components:
       oneOf:
         - $ref: "#/components/schemas/AtlasCluster"
         - $ref: "#/components/schemas/AtlasFederatedInstance"
+    ThirdPartyServiceConstructor:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The service name.
+        type:
+          type: string
+          description: The type of service.
+          enum:
+            - aws
+            - twilio
+            - github
+            - gcm
+            - http
+        incoming_webhooks:
+          type: array
+          items:
+            $ref: "#/components/schemas/IncomingWebhook"
+        version:
+          type: integer
     ThirdPartyService:
       type: object
       description: |-
@@ -7288,6 +7257,21 @@ components:
         hash:
           type: string
           description: The MD5 checksum hash for the asset
+    HostingConstructor:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          example: true
+        custom_domain:
+          type: string
+          example: "eggcorn.com"
+        default_error_path:
+          type: string
+          example: "/404.html"
+        default_error_code:
+          type: string
+          example: "404"
     HostingConfiguration:
       properties:
         enabled:
@@ -8372,21 +8356,61 @@ components:
           items:
             $ref: "#/components/schemas/AuthProvider"
         custom_user_data:
+          $ref: "#/components/schemas/CustomUserDataConstructor"
         data_api_config:
+          $ref: "#/components/schemas/DataApiConfig"
         data_sources:
+          oneOf:
+            - $ref: "#/components/schemas/AtlasClusterWithRules"
+            - $ref: "#/components/schemas/AtlasFederatedInstance"
         endpoints:
+          type: array
+          items:
+            $ref: "#/components/schemas/EndpointConstructor"
         environments:
+          $ref: "#/components/schemas/AllEnvironmentValues"
         functions:
+          type: array
+          items:
+            $ref: "#/components/schemas/NewFunction"
         graphql:
+          type: object
+          properties:
+            config:
+              $ref: "#/components/schemas/GraphQLConfig"
+            validation_settings:
+              $ref: "#/components/schemas/GraphQLValidationSettings"
+            custom_resolvers:
+              type: array
+              items:
+                $ref: "#/components/schemas/CustomResolverConstructor"
         hosting:
+          $ref: "#/components/schemas/HostingConstructor"
         https_endpoints:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThirdPartyServiceConstructor"
         log_forwarders:
+          type: array
+          items:
+            $ref: "#/components/schemas/LogForwarder"
         schemas:
+          type: array
+          items:
+            $ref: "#/components/schemas/FullSchema"
         services:
+          type: array
+          items:
+            $ref: "#/components/schemas/ThirdPartyService"
         sync:
         triggers:
-        value:
-
+          type: array
+          items:
+            $ref: "#/components/schemas/Trigger"
+        values:
+          type: array
+          items:
+            $ref: "#/components/schemas/Value"
   securitySchemes:
     tokenAuth:
       type: http
