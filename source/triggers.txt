@@ -29,7 +29,7 @@ can respond to events or use pre-defined schedules.
 Triggers listen for events of a configured type. Each Trigger links to a
 specific :doc:`Atlas Function </functions>`.
 When a Trigger observes an event that matches your
-configuration, it *"fires."* The Trigger passes this event object as the
+configuration, it *"fires"*. The Trigger passes this event object as the
 argument to its linked Function.
 
 A Trigger might fire on:
@@ -39,7 +39,7 @@ A Trigger might fire on:
 - A scheduled time.
 
 App Services keeps track of the latest execution time for each
-Trigger.
+Trigger and guarantees that each event is processed at least once.
 
 .. _trigger-types:
 
@@ -76,26 +76,34 @@ constraints as all Atlas Functions.
 Event Processing Throughput
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Trigger events are added to a queue and processed when capacity becomes
-available. The rate at which a Trigger processes events depends on the
-Trigger's configuration as well as the logic in the Trigger function.
+Triggers process events when capacity becomes available. A Trigger's
+capacity is determined by its event ordering configuration:
 
-Ordered triggers process events from the queue one at a time. An
-unordered trigger can process up to 10,000 events concurrently.
+- Ordered triggers process events from the change stream one at a time
+  in sequence. The next event begins processing only after the previous
+  event finishes processing.
 
-.. note::
+- Unordered triggers can process multiple events concurrently, up to
+  10,000 at once by default. If your Trigger data source is an M10+
+  Atlas cluster, you can configure individual unordered triggers to
+  exceed the 10,000 concurrent event threshold. To learn more, see
+  :ref:`Maximum Throughput Triggers <triggers-maximum-throughput>`.
 
-   If the linked data source is a dedicated server (M10+ Tier), 
-   you can configure individual triggers to process up to 50,000 events concurrently.
+Trigger capacity is not a direct measure of throughput or a guaranteed
+execution rate. Instead, it is a threshold for the maximum number of
+events that a Trigger can process at one time. In practice, the rate at
+which a Trigger can process events depends on the Trigger function's run
+time logic and the number of events that it receives in a given
+timeframe.
 
 To increase the throughput of a Trigger, you can try to:
 
-- Optimize the Trigger function's run time. For example, you might
-  reduce the number of network calls that you make.
+- Optimize the Trigger function's run time behavior. For example, you
+  might reduce the number of network calls that you make.
 
 - Reduce the size of each event object with the Trigger's projection
-  filter. For the best performance, we recommend limiting the size of
-  each change event to 2KB or less.
+  filter. For the best performance, limit the size of each change event
+  to 2KB or less.
 
 - Use a match filter to reduce the number of events that the Trigger
   processes. For example, you might want to do something only if a
