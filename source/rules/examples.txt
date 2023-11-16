@@ -263,11 +263,12 @@ To prevent the role from inserting new documents, set the document-level
 The Role Cannot Write to Specific Fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To allow a role to write to any field except for those you specify, set
-the corresponding field-level ``write`` fields to ``false`` in the
-``fields`` document and set the ``additional_fields.write`` field to
-``true``. Document-level writes require read
-permission, so the role will be able to read all additional fields.
+To allow a role to write to any field except for those you specify, 
+set the document-level ``read`` field to ``true``. Set
+the corresponding field-level ``write`` fields to ``false`` and 
+``read`` fields to ``true`` in the
+``fields`` document. Lastly, set the ``additional_fields.write`` field to
+``true``. 
 
 .. list-table::
    :widths: 50 50
@@ -277,6 +278,7 @@ permission, so the role will be able to read all additional fields.
           :width: 350px
 
      - .. code-block:: json
+          :emphasize-lines: 7, 10-11, 15
 
           {
             "name": "<Role Name>",
