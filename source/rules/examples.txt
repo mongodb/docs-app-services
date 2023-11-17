@@ -140,8 +140,9 @@ the document they can read and write.
 
 This section contains templates that define roles for common scenarios. To apply
 a set of permissions to a role, find the scenario that most closely matches your
-use case. Update the role's permissions table to match the provided screenshot
-or copy and paste the provided template into the collection's :doc:`advanced
+use case. Update the Field Permissions, Document Permissions, and/or the role's permissions table 
+to match the provided screenshot or copy and paste the provided 
+template into the collection's :doc:`advanced
 mode </mongodb/configure-advanced-rules>` configuration. Make sure that you
 modify any placeholder values (denoted by ``<angle brackets>``) in the template
 to match your needs.
@@ -150,24 +151,26 @@ The Role Can Read All Fields but Cannot Write
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To allow a role to read any field, set the document-level ``read`` field
-to ``true``.
+to ``true`` and ``write`` field to ``false``.
 
 .. list-table::
    :widths: 50 50
 
-   * - .. figure:: /images/role-template-read-all-data.png
+   * - .. figure:: /images/role-template-read-all.png
           :alt: A role with permission to read all document fields
           :width: 350px
 
      - .. code-block:: json
-          :emphasize-lines: 6
+          :emphasize-lines: 7-8
 
           {
             "name": "<Role Name>",
-            "apply_when": <JSON Expression>,
+            "apply_when": {<JSON Expression>},
+            "document_filters": {<JSON Expression>},
             "insert": <boolean>,
             "delete": <boolean>,
             "read": true,
+            "write": false
           }
 
 The Role Can Read & Write All Fields
@@ -180,16 +183,17 @@ permission, so the role will be able to read all fields.
 .. list-table::
    :widths: 50 50
 
-   * - .. figure:: /images/role-template-read-write-all-data.png
+   * - .. figure:: /images/role-template-read-and-write-all.png
           :alt: A role with permission to read and write all document fields
           :width: 350px
 
      - .. code-block:: json
-          :emphasize-lines: 6
+          :emphasize-lines: 7
 
           {
             "name": "<Role Name>",
-            "apply_when": <JSON Expression>,
+            "apply_when": {<JSON Expression>},
+            "document_filters": {<JSON Expression>},
             "insert": <boolean>,
             "delete": <boolean>,
             "write": true,
@@ -199,26 +203,28 @@ The Role Can Read All Fields & Write to Specific Fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To allow a role to read all fields, set the document-level ``read``
-field to ``true``. To specify a field that the role can write to, set
+field to ``true`` and the ``write`` field to ``false``. To specify a field that the role can write to, set
 the ``write`` field to ``true`` in the field's configuration document,
 which is embedded in the ``fields`` document.
 
 .. list-table::
    :widths: 50 50
 
-   * - .. figure:: /images/role-template-write-specific-fields.png
+   * - .. figure:: /images/role-template-can-write-some-fields.png
           :alt: A role with permission to write to specific fields
           :width: 350px
 
      - .. code-block:: json
-          :emphasize-lines: 6, 8
+          :emphasize-lines: 7, 8, 10
 
           {
             "name": "<Role Name>",
-            "apply_when": <JSON Expression>,
+            "apply_when": {<JSON Expression>},
+            "document_filters": {<JSON Expression>},
             "insert": <boolean>,
             "delete": <boolean>,
             "read": true,
+            "write": false,
             "fields": {
               "<Field Name>": { "write": true },
               ...
@@ -238,20 +244,17 @@ To prevent the role from inserting new documents, set the document-level
 .. list-table::
    :widths: 50 50
 
-   * - .. figure:: /images/role-template-no-insert.png
+   * - .. figure:: /images/role-template-cannot-insert-new-docs.png
           :alt: A role that lacks permission to insert new documents
-          :width: 350px
-       
-       .. figure:: /images/role-template-read-write-all-data.png
-          :alt: A role with permission to read and write all document fields
           :width: 350px
 
      - .. code-block:: json
-          :emphasize-lines: 4, 6
+          :emphasize-lines: 5, 7
 
           {
             "name": "<Role Name>",
-            "apply_when": <JSON Expression>,
+            "apply_when": {<JSON Expression>},
+            "document_filters": {<JSON Expression>},
             "insert": false,
             "delete": <boolean>,
             "write": true,
@@ -260,23 +263,27 @@ To prevent the role from inserting new documents, set the document-level
 The Role Cannot Write to Specific Fields
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To allow a role to write to any field except for those you specify, set
-the corresponding field-level ``write`` fields to ``false`` in the
-``fields`` document and set the ``additional_fields.write`` field to
-``true``.
+To allow a role to write to any field except for those you specify, 
+set the document-level ``read`` field to ``true``. Set
+the corresponding field-level ``write`` fields to ``false`` and 
+``read`` fields to ``true`` in the
+``fields`` document. Lastly, set the ``additional_fields.write`` field to
+``true``. 
 
 .. list-table::
    :widths: 50 50
 
-   * - .. figure:: /images/role-template-cannot-write-some-fields.png
+   * - .. figure:: /images/role-template-cannot-write-to-specific-fields.png
           :alt: A role with permission to write to some but not all fields
           :width: 350px
 
      - .. code-block:: json
+          :emphasize-lines: 7, 10-11, 15
 
           {
             "name": "<Role Name>",
-            "apply_when": <JSON Expression>,
+            "apply_when": {<JSON Expression>},
+            "document_filters": {<JSON Expression>},
             "insert": <boolean>,
             "delete": <boolean>,
             "read": true,
