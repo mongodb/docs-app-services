@@ -1522,7 +1522,20 @@ paths:
       operationId: adminPullAppConfiguration
       summary: Pull App Configuration Files
       description: |
-        Download the current App configuration as a configuration file directory
+        Download the current App configuration. You can choose to
+        download in two different formats:
+
+        - A compressed zip file that contains the configuration file
+          directory. This is most useful when you're working with the
+          CLI, a version control system, or another environment based on
+          the file system.
+
+        - A single JSON object that contains the entire configuration.
+          This is most useful when you're working with the API or
+          another environment that can parse JSON.
+
+        You specify which format to download by setting the `Accept`
+        header.
       responses:
         200:
           description: Pull successful
