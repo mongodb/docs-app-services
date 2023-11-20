@@ -1,3 +1,13 @@
+# November 17, 2023
+
+## Define Data Access Permissions
+
+- Data Access Role Examples: Update CRUD Permissions example screenshots and copyable JSON.
+
+## Release Notes
+
+- Update external change log with release notes for dark mode, disabling PBS in the UI, and more. 
+
 # November 10, 2023
 
 ## Edge Server
