@@ -1,20 +1,30 @@
 ## Pull Request Info
 
-### Jira
-
-- https://jira.mongodb.org/browse/DOCSP-NNNNN
-
-### Staged Changes
+Jira ticket: https://jira.mongodb.org/browse/DOCSP-NNNNN
+Staged changes:
 
 - [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/)
 
+<!--
+- Write a summary of the changes and the related issue
+- Include relevant motivation and context
+- List any required dependencies for this change
+-->
+
 ### Reminder Checklist
 
-You might need to also update some corresponding pages. Check if completed or N/A.
+Before merging your PR, make sure to check a few things.
 
-- [ ] Create Jira ticket for corresponding docs-realm update(s), if any
-- [ ] Checked/updated Admin API
-- [ ] Checked/updated CLI reference
+- [ ] Describe your PR's changes in the Release Notes section
+- [ ] Create a Jira ticket for corresponding docs-realm updates, if any
+
+### Release Notes
+
+<!--
+- **Define Data Access Permissions**
+  - Data Access Role Examples: Update CRUD Permissions example screenshots and
+    copyable JSON
+-->
 
 ### Review Guidelines
 
