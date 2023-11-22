@@ -80,7 +80,9 @@ value passed in from the client application.
       } catch (err) {
         console.error("failed to open realm", err.message);
       }
-      
+
+Device Sync requires MongoDB Atlas clusters to run specific versions of MongoDB.
+Partition-Based Sync requires MongoDB 4.4.0 or greater.
 
 Key Terms
 ---------
@@ -1679,6 +1681,30 @@ terminating and re-enabling Device Sync will trigger a client reset. To learn
 more about handling client resets, read the :ref:`client reset <client-resets>`
 documentation.
 
+.. _partition-based-sync-errors:
+
+Partition-Based Sync Errors
+---------------------------
+
+The following errors may occur when your App uses :ref:`Partition-Based Sync 
+<partition-based-sync>`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 35 65
+
+   * - Error Name
+     - Description
+
+   * - ErrorIllegalRealmPath
+     - This error indicates that the client attempted to open a realm with a
+       partition value of the wrong type. For example, you might see the error
+       message "attempted to bind on illegal realm partition: expected partition
+       to have type objectId but found string".
+       
+       To recover from this error, ensure that the type of the partition value
+       used to open the realm matches the partition key type in your
+       Device Sync configuration.
 .. _backend-compaction:
 
 Backend Compaction
