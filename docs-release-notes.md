@@ -1,3 +1,43 @@
+# November 24, 2023
+
+## Get Started
+
+- [All Tutorials]: Remove the --location flag from the App Services CLI procedure in the 'Start with the Template' section.
+
+## Develop & Deploy Apps
+
+- Create an App: Update App Services CLI procedure to use the new --provider-region flag instead of --location flag.
+- Copy an App: Update App Services CLI example to use the new --provider-region flag instead of --location flag.
+
+# November 17, 2023
+
+## Define Data Access Permissions
+
+- Data Access Role Examples: Update CRUD Permissions example screenshots and copyable JSON.
+
+## Release Notes
+
+- Update external change log with release notes for dark mode, disabling PBS in the UI, and more.
+
+# November 10, 2023
+
+## Edge Server
+
+- Configure Edge Server: Clarify "Required Network Access" details.
+
+## Functions
+
+- Query MongoDB Atlas/Write: Fix discrepancy in output for the array update example.
+
+## Triggers
+
+- Landing Page: Refer to change stream instead of queue. Clarify wording and limitations. Link to maximum throughput documentation.
+- Database Triggers: Refer to change stream instead of queue. Change maximum throughput from "up to 50,000" to "more than 10,000."
+
+## Develop & Deploy Apps
+
+- Get App Metadata: Re-add the "Find Your App" CLI procedure to the page with App Services CLI naming.
+
 # November 3, 2023
 
 ## Triggers
