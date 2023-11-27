@@ -158,12 +158,13 @@ computer:
 
       .. code-block:: shell
          
+         cd ios
          npx pod-install
 
    .. step:: Build the App
 
       At this point, you should have a fully functional React Native app
-      that can run on both iOS and Android.
+      that can run on iOS, Android, or both.
 
       .. tabs::
 
@@ -192,15 +193,16 @@ computer:
                   
                   npm run android
 
-      .. tip::
-         
-         If you're encountering an error or otherwise having issues,
-         it's likely an issue with how your local environment is set up.
-         Check out the official React Native
-         `development environment setup
-         <https://reactnative.dev/docs/environment-setup>`_
-         guide and ensure that you've followed all the steps for
-         your Development OS and Target OS.
+               If you encounter an error or otherwise haveissues, make sure that
+               your React Native environment is set up correctly. Refer to the
+               official React Native `development environment setup
+               <https://reactnative.dev/docs/environment-setup>`_
+               guide. Follow all the steps for your Development OS and Target OS.
+
+               One common error is ``Error: spawn ./gradlew EACCES``. This means
+               the project file permissions aren't what they need to be. On
+               MacOS, you can fix this by entering ``chmod 755 android/gradlew``
+               in your terminal.
 
    .. step:: Test the App
       
@@ -263,18 +265,16 @@ It also includes the following pre-defined configurations:
 React Native App
 ~~~~~~~~~~~~~~~~
 
-The React Native app is a fully configured mobile client that can run on
+The React Native app is a fully-configured mobile client that can run on
 iOS and Android devices.
 
-The app uses the official :npm:`@realm/react` library. The library
-includes React hooks and components that let you connect to your Atlas
-App, read and write data, and automatically sync changes from other
-devices.
+The app uses the :npm:`@realm/react` library. The library includes React hooks
+and components that streamline working with your Atlas backend and Realm
+database.
 
 The app contains some configuration files and directories, but you can
 ignore those unless you want to customize the app. For this tutorial,
-you'll want to be familiar with the React components in the ``src/``
-directory:
+you should be familiar with the React components in the ``source/`` directory:
 
 .. list-table::
    :header-rows: 1
@@ -287,18 +287,15 @@ directory:
    * - ``ItemSchema.tsx``
        
      - The ``Item`` class, including its object data model. We import this
-       class in ``RealmContext.ts`` to include it in the app's overall Realm
+       class in ``AppWrapper.tsx`` to include it in the app's overall Realm
        schema.
-     
-   * - ``RealmContext.ts``
-       
-     - The Realm hooks and providers that we create and export to work
-       with Realm throughout the app.
      
    * - ``App.tsx``
        
-     - The root component of the app, which we wrap with the Realm hook
-       providers from ``RealmContext.ts``.
+     - Most of the app's functionality is contained in this component and its
+       children. Because the ``@realm/react`` providers are wrapped around this
+       component, it can access an instance of your Atlas backend, user objects,
+       and interact with the Realm database.
      
    * - ``WelcomeView.tsx``
        
@@ -347,7 +344,7 @@ are and allow us to focus only on the most important ones.
       priority.
       
       Add the following code directly under the import statements in
-      ``src/ItemSchema.tsx``:
+      ``source/ItemSchema.tsx``:
 
       .. literalinclude:: /examples/generated/react-native/ItemSchema.snippet.create-priority-enum.tsx
         :language: javascript
@@ -364,12 +361,12 @@ are and allow us to focus only on the most important ones.
       ``priority`` field. However, we still have to define the
       ``priority`` field in the ``Item`` class.
 
-      Add the following lines to your code in ``src/ItemSchema.tsx`` to
+      Add the following lines to your code in ``source/ItemSchema.tsx`` to
       add ``priority`` to the ``Item`` data model:
 
       .. literalinclude:: /examples/generated/react-native/ItemSchema.snippet.define-item-class.tsx
         :language: javascript
-        :caption: src/ItemSchema.tsx
+        :caption: source/ItemSchema.tsx
         :emphasize-lines: 6, 18-22
       
       .. note:: Why Didn't This Break Sync
@@ -432,7 +429,7 @@ are and allow us to focus only on the most important ones.
       Now that the package is fully installed, let's update the new
       to-do creation prompt component to use the picker.
       
-      Add the following imports to the top of ``src/CreateToDoPrompt.tsx``:
+      Add the following imports to the top of ``source/CreateToDoPrompt.tsx``:
 
       .. code-block:: javascript
          
@@ -448,15 +445,15 @@ are and allow us to focus only on the most important ones.
 
       .. literalinclude:: /examples/generated/react-native/CreateToDoPrompt.snippet.create-todo-prompt.tsx
         :language: javascript
-        :caption: src/CreateToDoPrompt.tsx
+        :caption: source/CreateToDoPrompt.tsx
         :emphasize-lines: 2, 8, 20-31, 35
 
-      In ``src/ItemListView.tsx``, modify the ``createItem()`` function
+      In ``source/ItemListView.tsx``, modify the ``createItem()`` function
       to accept and use ``priority``:
 
       .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.create-item.tsx
         :language: javascript
-        :caption: src/ItemListView.tsx
+        :caption: source/ItemListView.tsx
         :emphasize-lines: 2, 7
 
       Then, modify the create to-do submission handler to accept the
@@ -464,7 +461,7 @@ are and allow us to focus only on the most important ones.
 
       .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.instantiate-create-todo-prompt.tsx
         :language: javascript
-        :caption: src/ItemListView.tsx
+        :caption: source/ItemListView.tsx
         :emphasize-lines: 2, 4
 
       Finally, modify the list item template to render the to-do's ``priority``
@@ -472,7 +469,7 @@ are and allow us to focus only on the most important ones.
 
       .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.define-list-item.tsx
         :language: javascript
-        :caption: src/ItemListView.tsx
+        :caption: source/ItemListView.tsx
         :emphasize-lines: 7
 
    .. step:: Run and Test the App
@@ -497,7 +494,7 @@ built-in subscription to items that the current user owns:
 
 .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.set-owner-subscription.tsx
   :language: javascript
-  :caption: src/ItemListView.tsx
+  :caption: source/ItemListView.tsx
 
 You can customize the subscription during runtime to sync only the data that
 your app needs. Let's add a feature to demonstrate how.
@@ -523,7 +520,7 @@ only syncs important ones with a ``priority`` of High or Severe.
 
       .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.important-only-button.tsx
         :language: javascript
-        :caption: src/ItemListView.tsx
+        :caption: source/ItemListView.tsx
 
    .. step:: Update the Sync Subscription
 
@@ -539,7 +536,7 @@ only syncs important ones with a ``priority`` of High or Severe.
 
       .. literalinclude:: /examples/generated/react-native/ItemListView.snippet.mutable-subs.tsx
         :language: javascript
-        :caption: src/ItemListView.tsx
+        :caption: source/ItemListView.tsx
         :emphasize-lines: 7-15, 24
 
       .. important::
