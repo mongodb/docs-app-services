@@ -456,7 +456,6 @@ paths:
       - in: query
         name: source_control
         required: false
-        default: false
         description: |-
           If `true`, the exported directory is suitable for automatic
           deployment from GitHub or other source control.
@@ -464,10 +463,10 @@ paths:
           Cannot be used with the `template` query parameter.
         schema:
           type: boolean
+          default: false
       - in: query
         name: template
         required: false
-        default: false
         description: |-
           If `true`, the exported directory does not include any
           identifiers or other data that would tie the app to a specific
@@ -476,6 +475,7 @@ paths:
           Cannot be used with the `source_control` query parameter.
         schema:
           type: boolean
+          default: false
       - in: query
         name: version
         required: false
@@ -855,7 +855,7 @@ paths:
             application/json:
               schema:
                 items:
-                  - $ref: "#/components/schemas/ServiceResponse"
+                  $ref: "#/components/schemas/ServiceResponse"
     post:
       tags:
         - services
@@ -870,7 +870,7 @@ paths:
             schema:
               oneOf:
                 - $ref: "#/components/schemas/AtlasCluster"
-                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/AtlasFederatedInstanceConstructor"
                 - $ref: "#/components/schemas/ThirdPartyService"
 
       responses:
@@ -1093,7 +1093,7 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/CreateDataSource"
+                - $ref: "#/components/schemas/AtlasClusterConstructor"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyService"
       responses:
@@ -1237,7 +1237,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/DefaultRule"
+              "$ref": "#/components/schemas/DefaultRuleConstructor"
       responses:
         "201":
           description: Created default rule.
@@ -1516,6 +1516,9 @@ paths:
       - "$ref": "#/components/parameters/AppId"
 
   "/groups/{groupId}/apps/{appId}/pull":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
     get:
       tags:
         - apps
@@ -1554,6 +1557,9 @@ paths:
           description: Error pulling configuration
 
   "/groups/{groupId}/apps/{appId}/push":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
     patch:
       tags:
         - apps
@@ -2233,7 +2239,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/AuthProvider"
+              "$ref": "#/components/schemas/AuthProviderConstructor"
       responses:
         "201":
           description: Successfully created.
@@ -2283,7 +2289,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/AuthProvider"
+              "$ref": "#/components/schemas/AuthProviderConstructor"
       responses:
         "204":
           description: Successfully updated.
@@ -2536,6 +2542,7 @@ paths:
         Get a list of all private endpoints configured for the App.
       responses:
         200:
+          description: A list of private endpoints.
           content:
             application/json:
               schema:
@@ -2599,7 +2606,10 @@ paths:
       responses:
         200:
           description: Updated
-          $ref: "#/components/schemas/PrivateEndpoint"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrivateEndpoint"
         404:
           description: Not Found
     delete:
@@ -2627,6 +2637,7 @@ paths:
         Get a list of all private endpoint services configured for the App.
       responses:
         200:
+          description: A list of private endpoint services.
           content:
             application/json:
               schema:
@@ -2971,7 +2982,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateLogForwarderRequest"
+              $ref: "#/components/schemas/LogForwarderConstructor"
       responses:
         201:
           description: Created
@@ -3005,7 +3016,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateLogForwarderRequest"
+              $ref: "#/components/schemas/LogForwarderConstructor"
       responses:
         200:
           description: OK
@@ -3311,11 +3322,7 @@ paths:
             application/json:
               schema:
                 items:
-                  properties:
-                    _id:
-                      type: string
-                    name:
-                      type: string
+                  $ref: "#/components/schemas/FunctionSummary"
     post:
       tags:
         - functions
@@ -3328,7 +3335,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/NewFunction"
+              "$ref": "#/components/schemas/FunctionConstructor"
       responses:
         "201":
           description: The function was successfully created.
@@ -3380,7 +3387,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/NewFunction"
+                "$ref": "#/components/schemas/FunctionConstructor"
     parameters:
       - "$ref": "#/components/parameters/GroupId"
       - "$ref": "#/components/parameters/AppId"
@@ -5681,17 +5688,24 @@ components:
         error_code:
           type: string
           description: The error type.
-    AtlasClusterWithRules:
+    AtlasClusterConstructorWithRules:
       allOf:
-        - $ref: "#/components/schemas/AtlasCluster"
+        - $ref: "#/components/schemas/AtlasClusterConstructor"
         - properties:
             default_rule:
-              $ref: "#/components/schemas/DefaultRule"
+              $ref: "#/components/schemas/DefaultRuleConstructor"
             rules:
               type: array
               items:
-                $ref: "#/components/schemas/Rule"
+                $ref: "#/components/schemas/RuleConstructor"
     AtlasCluster:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The cluster's unique ID.
+        - $ref: "#/components/schemas/AtlasClusterConstructor"
+    AtlasClusterConstructor:
       type: object
       properties:
         config:
@@ -5736,6 +5750,11 @@ components:
               description: >-
                 The [read preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
                 mode for read requests to the data source.
+            readPreferenceTagSets:
+              type: array
+              items:
+                $ref: "#/components/schemas/ReadPreferencesTagSet"
+              description: Target read operations to specific members of a replica set.
             wireProtocolEnabled:
               type: boolean
               description: >-
@@ -5747,74 +5766,29 @@ components:
     ServiceResponse:
       type: object
       properties:
-        _id: string;
-        name: string;
-        type: string;
-        version: number;
-        last_modified: number;
+        _id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        version:
+          type: number
+        last_modified:
+          type: number
     ReadPreferencesTagSet:
       type: string
       enum:
         - server1
         - server2
-    CreateDataSource:
-      type: object
-      properties:
-        name:
-          type: string
-          example: mongodb-atlas
-          enum:
-            - mongodb-atlas
-        type:
-          type: string
-          example: mongodb-atlas
-          enum:
-            - mongodb-atlas
-        config:
-          type: object
-          properties:
-            clusterName:
-              type: string
-              example: Cluster0
-              description: |-
-                The name of the service to create. The name may be at most 64 
-                characters long and must only contain ASCII letters, numbers,
-                underscores, and hyphens.
-            clusterType:
-              type: string
-              example: atlas
-              description: The type of service.
-            flexible_sync:
-              $ref: "#/components/schemas/FlexibleSync"
-            groupName:
-              type: string
-              example: Project 0
-              description: The name of the group that contains the service.
-            orgName:
-              type: string
-              example: MongoDB_Org
-              description: The name of the organization that contains the service.
-            readPreference:
-              type: string
-              enum:
-                - secondary
-                - secondaryPreferred
-                - nearest
-              description: >-
-                The [read
-                preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
-                mode for read requests to the data source.
-            readPreferenceTagSets:
-              type: array
-              items:
-                $ref: "#/components/schemas/ReadPreferencesTagSet"
-              description: Target read operations to specific members of a replica set.
-            wireProtocolEnabled:
-              type: boolean
-              description: >-
-                If true, clients may [connect to the app over the MongoDB Wire
-                Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+
     AtlasFederatedInstance:
+      allOf:
+        - properties:
+            _id:
+              type: string
+        - $ref: "#/components/schemas/AtlasFederatedInstanceConstructor"
+    AtlasFederatedInstanceConstructor:
       type: object
       properties:
         name:
@@ -5839,6 +5813,12 @@ components:
                 instance within this Atlas app. The name may be at most
                 64 characters long and must only contain ASCII letters,
                 numbers, underscores, and hyphens.
+
+    DataSourceConstructor:
+      oneOf:
+        - $ref: "#/components/schemas/AtlasClusterConstructorWithRules"
+        - $ref: "#/components/schemas/AtlasFederatedInstanceConstructor"
+
     DataSource:
       required:
         - name
@@ -5891,14 +5871,15 @@ components:
             - gcm
         version:
           type: integer
-    CreateLogForwarderRequest:
-      $ref: "#/components/schemas/LogForwarder"
-    UpdateLogForwarderRequest:
-      $ref: "#/components/schemas/LogForwarder"
     LogForwarder:
+      allOf:
+        - type: object
+          properties:
+            _id: { type: string }
+        - $ref: "#/components/schemas/LogForwarderConstructor"
+    LogForwarderConstructor:
       type: object
       properties:
-        _id: { type: string }
         name: { type: string }
         disabled: { type: boolean }
         log_types:
@@ -5992,32 +5973,60 @@ components:
         - type: object
         - type: boolean
     DefaultRule:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The default rule's unique ObjectId identifier.
+            roles:
+              type: array
+              description: An ordered list of default user roles.
+              items:
+                "$ref": "#/components/schemas/Role"
+            filters:
+              type: array
+              description: A list of default [query filters](https://www.mongodb.com/docs/atlas/app-services/reference/config/data_sources/#filters).
+              items:
+                "$ref": "#/components/schemas/Filter"
+        - $ref: "#/components/schemas/DefaultRuleConstructor"
+    DefaultRuleConstructor:
       type: object
       description: A data access rule that define defines fallback user roles and query filters for collection's that don't have more specific permissions defined.
       properties:
-        _id:
-          type: string
-          description: The default rule's unique ObjectId identifier.
         roles:
           type: array
           description: An ordered list of default user roles.
           items:
-            "$ref": "#/components/schemas/Role"
+            "$ref": "#/components/schemas/RoleConstructor"
         filters:
           type: array
           description: A list of default [query filters](https://www.mongodb.com/docs/atlas/app-services/reference/config/data_sources/#filters).
           items:
-            "$ref": "#/components/schemas/Filter"
+            "$ref": "#/components/schemas/FilterConstructor"
     Rule:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The rule's unique ObjectId identifier.
+            roles:
+              type: array
+              description: A list of data access roles.
+              items:
+                $ref: "#/components/schemas/Role"
+            filters:
+              type: array
+              description: A list of filters for incoming operations.
+              items:
+                $ref: "#/components/schemas/Filter"
+        - $ref: "#/components/schemas/RuleConstructor"
+    RuleConstructor:
       type: object
       description: A data access rule that defines user roles and query filters for a collection in a linked data source.
       required:
         - database
         - collection
       properties:
-        _id:
-          type: string
-          description: The rule's unique ObjectId identifier.
         database:
           type: string
           description: The name of a database in the linked data source.
@@ -6028,19 +6037,23 @@ components:
           type: array
           description: A list of data access roles.
           items:
-            $ref: "#/components/schemas/Role"
+            $ref: "#/components/schemas/RoleConstructor"
         filters:
           type: array
           description: A list of filters for incoming operations.
           items:
-            $ref: "#/components/schemas/Filter"
+            $ref: "#/components/schemas/FilterConstructor"
     Role:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The role's unique ObjectId identifier.
+        - $ref: "#/components/schemas/RoleConstructor"
+    RoleConstructor:
       type: object
       description: A data access role that assigns read and write permissions to a user for each document
       properties:
-        _id:
-          type: string
-          description: The role's unique ObjectId identifier.
         name:
           type: string
           description: The role's name.
@@ -6089,12 +6102,16 @@ components:
           description: A rule expression that evaluates to `true` if the role can write the field's value.
           $ref: "#/components/schemas/Expression"
     Filter:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The filter's unique ObjectId identifier.
+        - $ref: "#/components/schemas/FilterConstructor"
+    FilterConstructor:
       type: object
       description: A filter that conditionally modifies incoming query operations before they run.
       properties:
-        _id:
-          type: string
-          description: The filter's unique ObjectId identifier.
         name:
           type: string
           description: The filter's name.
@@ -6155,9 +6172,6 @@ components:
         - name
         - type
       properties:
-        _id:
-          type: string
-          description: The authentication provider's unique ID.
         name:
           type: string
           description: The name of the authentication provider. This value must be the same as the value of `type`.
@@ -6168,6 +6182,14 @@ components:
           description: If `true`, the auth provider is disabled. Users cannot log in through the provider until it is enabled.
 
     AuthProvider:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The authentication provider's unique ID.
+        - $ref: "#/components/schemas/AuthProviderConstructor"
+
+    AuthProviderConstructor:
       anyOf:
         - $ref: "#/components/schemas/AnonymousAuthProvider"
         - $ref: "#/components/schemas/EmailPasswordAuthProvider"
@@ -6676,7 +6698,20 @@ components:
               group_id:
                 type: string
 
-    NewFunction:
+    FunctionSummary:
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        last_modified:
+          type: number
+
+    FunctionConstructor:
+      required:
+        - name
+        - private
+        - source
       properties:
         can_evaluate:
           type: object
@@ -6716,33 +6751,14 @@ components:
             that returns an application user's account ID. If defined, endpoints 
             execute the function on every request and run as the user with the 
             ID returned from the function. Cannot be used with `run_as_user_id`.
-      required:
-        - name
-        - private
-        - source
+
     Function:
-      properties:
-        _id:
-          type: string
-        can_evaluate:
-          type: object
-          description: |-
-            A JSON expression that evaluates to `true` if the Function is allowed to
-            run in response to an incoming request.
-        name:
-          type: string
-          description: A unique name for the Function.
-        private:
-          type: boolean
-          description: |-
-            If `true`, the function is hidden from client applications. You can
-            still call a private function from JSON expressions and other functions,
-            including incoming webhooks and triggers.
-        source:
-          type: string
-          description: |-
-            The stringified source code for the function. The code must be valid
-            ES6.
+      allOf:
+        - properties:
+            _id:
+              type: string
+        - $ref: "#/components/schemas/FunctionConstructor"
+
     ValueSummary:
       properties:
         _id:
@@ -6764,9 +6780,13 @@ components:
         - private
         - value
     Value:
+      allOf:
+        - properties:
+            _id:
+              type: string
+        - $ref: "#/components/schemas/ValueConstructor"
+    ValueConstructor:
       properties:
-        _id:
-          type: string
         name:
           type: string
         private:
@@ -6990,6 +7010,13 @@ components:
             [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes)
             is disabled. By default, client reset mode is enabled and this value is **false**.
     Trigger:
+      allOf:
+        - properties:
+            _id:
+              type: string
+              description: The trigger's unique ID.
+        - $ref: "#/components/schemas/TriggerConstructor"
+    TriggerConstructor:
       oneOf:
         - $ref: "#/components/schemas/DatabaseTrigger"
         - $ref: "#/components/schemas/AuthenticationTrigger"
@@ -7001,9 +7028,6 @@ components:
         - type
         - config
       properties:
-        _id:
-          type: string
-          description: The trigger's unique ID.
         name:
           type: string
           description: The trigger's name.
@@ -7461,6 +7485,19 @@ components:
             _id:
               type: string
         - $ref: "#/components/schemas/FullSchema"
+
+    GraphQLConstructor:
+      type: object
+      properties:
+        config:
+          $ref: "#/components/schemas/GraphQLConfig"
+        validation_settings:
+          $ref: "#/components/schemas/GraphQLValidationSettings"
+        custom_resolvers:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomResolverConstructor"
+
     GraphQLConfig:
       type: object
       properties:
@@ -8360,6 +8397,7 @@ components:
                 example: "myApp.logs"
                 description: |
                   The `database.collection` namespace of the forwarded log collection.
+
     PrivateEndpoint:
       type: object
       properties:
@@ -8407,7 +8445,7 @@ components:
         auth_providers:
           type: array
           items:
-            $ref: "#/components/schemas/AuthProvider"
+            $ref: "#/components/schemas/AuthProviderConstructor"
         custom_user_data:
           $ref: "#/components/schemas/CustomUserDataConstructor"
         data_api_config:
@@ -8415,9 +8453,7 @@ components:
         data_sources:
           type: array
           items:
-            oneOf:
-              - $ref: "#/components/schemas/AtlasClusterWithRules"
-              - $ref: "#/components/schemas/AtlasFederatedInstance"
+            $ref: "#/components/schemas/DataSourceConstructor"
         endpoints:
           type: array
           items:
@@ -8427,46 +8463,39 @@ components:
         functions:
           type: array
           items:
-            $ref: "#/components/schemas/NewFunction"
+            $ref: "#/components/schemas/FunctionConstructor"
         graphql:
-          type: object
-          properties:
-            config:
-              $ref: "#/components/schemas/GraphQLConfig"
-            validation_settings:
-              $ref: "#/components/schemas/GraphQLValidationSettings"
-            custom_resolvers:
-              type: array
-              items:
-                $ref: "#/components/schemas/CustomResolverConstructor"
+          $ref: "#/components/schemas/GraphQLConstructor"
         hosting:
           $ref: "#/components/schemas/HostingConstructor"
         https_endpoints:
+          description: "[Deprecated] A list of legacy HTTP services. This is for backwards compatibility only."
           type: array
           items:
             $ref: "#/components/schemas/ThirdPartyServiceConstructor"
         log_forwarders:
           type: array
           items:
-            $ref: "#/components/schemas/LogForwarder"
+            $ref: "#/components/schemas/LogForwarderConstructor"
         schemas:
           type: array
           items:
             $ref: "#/components/schemas/FullSchema"
         services:
+          description: "[Deprecated] A list of legacy third-party non-HTTP services. This is for backwards compatibility only."
           type: array
           items:
-            $ref: "#/components/schemas/ThirdPartyService"
+            $ref: "#/components/schemas/ThirdPartyServiceConstructor"
         sync:
           $ref: "#/components/schemas/FlexibleSync"
         triggers:
           type: array
           items:
-            $ref: "#/components/schemas/Trigger"
+            $ref: "#/components/schemas/TriggerConstructor"
         values:
           type: array
           items:
-            $ref: "#/components/schemas/Value"
+            $ref: "#/components/schemas/ValueConstructor"
   securitySchemes:
     tokenAuth:
       type: http
