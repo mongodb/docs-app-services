@@ -1,3 +1,14 @@
+# November 24, 2023
+
+## Get Started
+
+- [All Tutorials]: Remove the --location flag from the App Services CLI procedure in the 'Start with the Template' section.
+
+## Develop & Deploy Apps
+
+- Create an App: Update App Services CLI procedure to use the new --provider-region flag instead of --location flag.
+- Copy an App: Update App Services CLI example to use the new --provider-region flag instead of --location flag.
+
 # November 17, 2023
 
 ## Define Data Access Permissions
@@ -6,7 +17,7 @@
 
 ## Release Notes
 
-- Update external change log with release notes for dark mode, disabling PBS in the UI, and more. 
+- Update external change log with release notes for dark mode, disabling PBS in the UI, and more.
 
 # November 10, 2023
 
