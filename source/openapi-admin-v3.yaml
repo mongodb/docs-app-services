@@ -3622,7 +3622,7 @@ paths:
               type: object
               properties:
                 environment:
-                  $ref: "#/components/schemas/AppEnvironment"
+                  $ref: "#/components/schemas/NullableAppEnvironment"
       responses:
         "200":
           description: Success
@@ -5069,7 +5069,7 @@ components:
         deployment_model:
           $ref: "#/components/schemas/DeploymentModel"
         environment:
-          $ref: "#/components/schemas/AppEnvironment"
+          $ref: "#/components/schemas/NullableAppEnvironment"
     AppConstructor:
       description: An object that describes a new app to create
       allOf:
@@ -5122,12 +5122,22 @@ components:
                 - standard
                 - atlas
                 - data-api
+    NullableAppEnvironment:
+      allOf:
+        - type: string
+          description: The application's environment. An empty string indicates that the app does not have a specified environment.
+          enum:
+            - ""
+            - "development"
+            - "testing"
+            - "qa"
+            - "production"
+        - $ref: "#/components/schemas/AppEnvironment"
     AppEnvironment:
       type: string
-      description: The application's environment. An empty string indicates that the app does not have a specified environment.
+      description: The application's environment.
       example: "production"
       enum:
-        - ""
         - "development"
         - "testing"
         - "qa"
@@ -8384,9 +8394,6 @@ components:
     PushPullAppConfig:
       type: object
       properties:
-        app_id:
-          type: string
-          description: The App's public Client App ID.
         name:
           type: string
           description: The App's name.
@@ -8395,6 +8402,7 @@ components:
         deployment_model:
           $ref: "#/components/schemas/DeploymentModel"
         environment:
+          description: The App's environment tag. If not specified, the App has no environment tag.
           $ref: "#/components/schemas/AppEnvironment"
         auth_providers:
           type: array
