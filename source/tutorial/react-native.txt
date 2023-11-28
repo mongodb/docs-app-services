@@ -173,6 +173,12 @@ computer:
       At this point, you should have a fully functional React Native app
       that can run on iOS, Android, or both.
 
+      If you encounter an error or otherwise haveissues, make sure that your
+      React Native environment is set up correctly. Refer to the official React
+      Native `development environment setup
+      <https://reactnative.dev/docs/environment-setup>`_ guide. Follow all the
+      steps for your Development OS and Target OS.
+
       .. tabs::
 
          .. tab:: iOS
@@ -199,12 +205,6 @@ computer:
                .. code-block:: shell
                   
                   npm run android
-
-               If you encounter an error or otherwise haveissues, make sure that
-               your React Native environment is set up correctly. Refer to the
-               official React Native `development environment setup
-               <https://reactnative.dev/docs/environment-setup>`_
-               guide. Follow all the steps for your Development OS and Target OS.
 
                One common error is ``Error: spawn ./gradlew EACCES``. This means
                the project file permissions aren't what they need to be. On
@@ -296,6 +296,14 @@ you should be familiar with the React components in the ``source/`` directory:
      - The ``Item`` class, including its object data model. We import this
        class in ``AppWrapper.tsx`` to include it in the app's overall Realm
        schema.
+
+   * - ``AppWrapper.tsx``
+       
+     - This is the root component for the app. It functions as a wrapper
+       component and contains all of the ``@realm/react`` providers. This is
+       where you configure your realm and your connection to your Atlas
+       backend.
+       
      
    * - ``App.tsx``
        
