@@ -1566,7 +1566,13 @@ paths:
       operationId: adminPushAppConfiguration
       summary: Push App Configuration Files
       description: |
-        Upload a configuration file directory to update the App configuration.
+        Upload a new full App configuration. This operation overwrites
+        the entire existing App configuration.
+
+        **Note:** If your App configuration includes any references to a
+        Secret, you must [create the
+        Secret](#operation/adminCreateASecret) before you push the
+        configuration.
       requestBody:
         content:
           application/json:
@@ -5162,6 +5168,7 @@ components:
         - $ref: "#/components/schemas/GcpDeploymentRegion"
     AwsDeploymentRegion:
       type: string
+      title: AwsDeploymentRegion
       enum:
         - "aws-us-east-1"
         - "aws-us-west-2"
@@ -5175,6 +5182,7 @@ components:
         - "aws-sa-east-1"
     AzureDeploymentRegion:
       type: string
+      title: AzureDeploymentRegion
       enum:
         - "azure-eastus2"
         - "azure-westus"
@@ -5183,6 +5191,7 @@ components:
         - "azure-southeastasia"
     GcpDeploymentRegion:
       type: string
+      title: GcpDeploymentRegion
       enum:
         - "gcp-us-central1"
         - "gcp-us-east4"
