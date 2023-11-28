@@ -869,9 +869,9 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/AtlasCluster"
-                - $ref: "#/components/schemas/AtlasFederatedInstanceConstructor"
-                - $ref: "#/components/schemas/ThirdPartyService"
+                - $ref: "#/components/schemas/AtlasClusterConstructor"
+                - $ref: "#/components/schemas/AtlasFederatedInstance"
+                - $ref: "#/components/schemas/ThirdPartyServiceConstructor"
 
       responses:
         "201":
@@ -1095,7 +1095,7 @@ paths:
               oneOf:
                 - $ref: "#/components/schemas/AtlasClusterConstructor"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
-                - $ref: "#/components/schemas/ThirdPartyService"
+                - $ref: "#/components/schemas/ThirdPartyServiceConstructor"
       responses:
         "204":
           description: Successfully updated.
@@ -5769,9 +5769,6 @@ components:
               description: >-
                 If true, clients may [connect to the app over the
                 MongoDB Wire Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
-        secret_config:
-          type: object
-          description: "[Deprecated] The configuration for a third-party service."
     ServiceResponse:
       type: object
       properties:
