@@ -1,3 +1,17 @@
+# December 1, 2023
+
+## Get Started
+
+- Device Sync Tutorial - React Native: Update tutorial to match upgrades to the template app.
+
+## Reference
+
+- Service Limitations: Add reasoning for request traffic limitations and assure that App Services can handle more requests than the set limits.
+
+## Other
+
+- Pages throughout the docs set: Partition-Based Sync (PBS) has been removed from the App services UI. As a result, remove mentions of PBS throughout the docs and move relevant PBS content to the Partition-Based Sync Mode reference page.
+
 # November 24, 2023
 
 ## Get Started
