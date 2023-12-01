@@ -4,6 +4,10 @@
 Service Limitations
 ===================
 
+.. facet::
+   :name: genre 
+   :values: reference
+
 .. default-domain:: mongodb
 
 .. contents:: On this page
@@ -236,16 +240,18 @@ your query.
 Request Traffic
 ---------------
 
-App Services limits traffic as follows:
+App Services limits request traffic to the following defaults:
 
-- {+max-concurrent-requests+} concurrent requests.
+- {+max-concurrent-requests+} concurrent requests. Any requests made beyond 
+  the non-Sync concurrent request limit receive an HTTP response status 
+  code of `429 - Too Many Requests <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429>`_.
 - {+max-concurrent-sync-connections+} concurrent Device Sync connections.
 
-Any requests made beyond the non-Sync concurrent request limit receive an HTTP
-response status code of `429 - Too Many Requests
-<https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429>`_. You can
-request a higher limit by `filing a support ticket
-<https://support.mongodb.com/welcome>`__.
+App Services can handle requests many times the above limits. However, these limits are 
+put in place to ensure applications scale responsibly and to prevent DOS attacks 
+and unintended billing charges. 
+
+You can request a higher limit by `filing a support ticket <https://support.mongodb.com/welcome>`__.
 
 .. _connection_pooling:
 
