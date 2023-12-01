@@ -24,8 +24,10 @@ Sync Type
 ~~~~~~~~~
 
 Atlas Device Sync has two sync modes: Flexible Sync and the older
-Partition-Based Sync. We recommend using Flexible Sync. For information about
-Partition-Based Sync, refer to :ref:`partition-based-sync`.
+Partition-Based Sync. Partition-Based Sync has 
+been deprecated and is disallowed for new Sync configurations. If you have 
+an existing app that uses Partition-Based Sync, you can migrate 
+to Flexible Sync. For more information, refer to :ref:`realm-sync-migrate-modes`.
 
 Flexible Sync lets you define a query in the client and sync only the objects
 that match the query. With client-side subscriptions, client applications can:
@@ -451,8 +453,7 @@ directory of an :ref:`exported <export-app>` app:
        └── config.json
 
 For example, the following Sync configuration applies to apps using Flexible
-Sync (recommended). If you are using the older Partition-Based Sync, refer to
-:ref:`partition-based-sync-config-object`.
+Sync.
 
 .. code-block:: json
    :caption: sync/config.json
