@@ -4163,7 +4163,11 @@ paths:
         - schemas
       operationId: adminCreateSchema
       summary: Create a schema
-      description: Define a new [schema](https://www.mongodb.com/docs/realm/schemas) for a linked collection.
+      description: |-
+        Define a new [schema](https://www.mongodb.com/docs/realm/schemas) 
+        for a linked collection. When creating a schema with this endpoint, 
+        ensure that the JSON payload is completely unescaped. Incorrectly 
+        escaped JSON formats can lead to errors.
       requestBody:
         required: true
         content:
