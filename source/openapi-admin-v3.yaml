@@ -345,6 +345,7 @@ paths:
               - standard
               - atlas
               - data-api
+              - device-sync
           style: simple
           explode: false
           description: |-
@@ -352,10 +353,11 @@ paths:
             this endpoint only returns Apps of the specified product type(s).
 
             Most apps use the `standard` product type, which this
-            endpoint returns by default. The `atlas` and `data-api`
+            endpoint returns by default. The `atlas`, `data-api`, and `device-sync`
             product types represent special apps for
-            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers) and
-            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/)
+            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers),
+            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/),
+            and [Atlas Device Sync](https://www.mongodb.com/docs/atlas/app-services/sync/)
             that you can access through the Atlas UI.
 
             You can specify multiple product types as a comma-separated list:
@@ -393,15 +395,18 @@ paths:
               - standard
               - atlas
               - data-api
+              - device-sync
           description: |-
             The App's product type. Apps use the `standard` product type
             by default. For most apps, you do not need to specify a
             `product` at all, or should specify `standard`.
 
-            The `atlas` and `data-api` product types represent special,
-            apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
-            and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
-            can access through the Atlas UI.
+            The `atlas`, `data-api`, and `device-sync`
+            product types represent special apps for
+            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers),
+            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/),
+            and [Atlas Device Sync](https://www.mongodb.com/docs/atlas/app-services/sync/)
+            that you can access through the Atlas UI.
       requestBody:
         description: The application to create.
         required: true
@@ -3487,7 +3492,7 @@ paths:
       summary: Create a Deployment Draft
       description: Create a new application deployment draft, if none exists.
       responses:
-        "200":
+        "201":
           description: Successfully created draft.
           content:
             application/json:
@@ -4156,8 +4161,6 @@ paths:
                   properties:
                     _id:
                       type: string
-                    schema:
-                      type: object
                     metadata:
                       "$ref": "#/components/schemas/SchemaMetadata"
     post:
@@ -4165,7 +4168,11 @@ paths:
         - schemas
       operationId: adminCreateSchema
       summary: Create a schema
-      description: Define a new [schema](https://www.mongodb.com/docs/realm/schemas) for a linked collection.
+      description: |-
+        Define a new [schema](https://www.mongodb.com/docs/realm/schemas) 
+        for a linked collection. When creating a schema with this endpoint, 
+        ensure that the JSON payload is completely unescaped. Incorrectly 
+        escaped JSON formats can lead to errors.
       requestBody:
         required: true
         content:
@@ -5123,6 +5130,7 @@ components:
                 - standard
                 - atlas
                 - data-api
+                - device-sync
     AppEnvironment:
       type: string
       description: The application's environment. An empty string indicates that the app does not have a specified environment.
