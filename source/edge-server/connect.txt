@@ -4,6 +4,10 @@
 Connect to an Edge Server
 =========================
 
+.. facet::
+   :name: genre 
+   :values: tutorial
+
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -161,3 +165,37 @@ modifications you can make to the :github:`Swift template app
          In a console app, delete the ``mongodb-realm`` directory. If you're
          using an iOS or Android simulator or device, uninstall and reinstall
          the app.
+
+.. _edge-server-wireprotocol-connect:
+
+Connect to the Edge Server with a MongoDB URI
+---------------------------------------------
+
+You can connect to the Edge Server using standard MongoDB Drivers and tools.
+Clients use a specialized MongoDB URI connection string to connect to 
+Edge Server and send requests.
+
+The wire protocol server is on by default. You can connect to it via the 
+host machine using this MongoDB URI:
+
+.. code:: console
+
+   mongodb://EDGE_SERVER_HOSTNAME:27021
+
+The ``EDGE_SERVER_HOSTNAME`` is the public DNS of your Edge Server host. 
+For more information, refer to :ref:`edge-server-install-and-configure`.
+
+You must make port 27021 accessible to the client through port mapping or
+firewall rules.
+
+.. example::
+
+   A wire protocol connection URI for an Edge Server hosted on Amazon EC2 
+   might look similar to:
+
+   .. code:: console
+
+      mongodb://ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021
+
+For information about the supported MongoDB APIs, refer to 
+:ref:`edge-server-mongodb`.
