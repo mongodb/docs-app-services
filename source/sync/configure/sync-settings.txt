@@ -310,6 +310,11 @@ if your indexed queryable field is ``store_id``, the client cannot change
 this value directly. Changing it from the client is not supported because 
 it may conflict with other updates made to the object in the same timeframe. 
 
+If you attempt to change an indexed queryable field's value on the device,
+this triggers a compensating write error. For more information about this
+error and the behavior it entails, refer to ``ErrorCompensatingWrite`` in
+the :ref:`flexible-sync-errors` documentation.
+
 You can still change this value directly in the Atlas database. 
 
 .. warning::

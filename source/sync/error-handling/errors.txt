@@ -138,6 +138,9 @@ The following errors may occur when your App uses :ref:`Flexible Sync
          does not have write permissions to.
        - Modifying an object in such a way that client would no longer have
          write permissions on that object or field after the write.
+       - Updating an object's :ref:`indexed queryable field <fs-indexed-queryable-fields>` 
+         value from a device results in a compensating write which undoes 
+         the update on the device.
          
        Because the local realm has no concept of "illegal" writes, the write
        will always succeed locally. Upon sync, the server will notice the
