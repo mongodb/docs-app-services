@@ -1,9 +1,7 @@
 ## Pull Request Info
 
 Jira ticket: https://jira.mongodb.org/browse/DOCSP-NNNNN
-Staged changes:
-
-- [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/)
+Staged changes: [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/)
 
 ### Description
 
@@ -15,17 +13,20 @@ Staged changes:
 
 Before merging your PR, make sure to check a few things.
 
-- [ ] Did you tag pages appropriately? (genre, programming_language, keywords)
-      Refer to "Manual tagging" in the (tagging instructions)[https://wiki.corp.mongodb.com/display/DE/Taxonomy+tagging+instructions]
+- [ ] Did you tag pages appropriately?
+  - genre
+  - programming_language
+  - meta.keywords
+  - meta.description
 - [ ] Describe your PR's changes in the Release Notes section
-- [ ] Create a Jira ticket for corresponding docs-realm updates, if any
+- [ ] Create a Jira ticket for related docs-realm work, if any
 
 ### Release Notes
 
 <!--
-- **Define Data Access Permissions**
-  - Data Access Role Examples: Update CRUD Permissions example screenshots and
-    copyable JSON
+- **Kotlin** SDK
+  - Realm/Manage Realm Files/Encrypt a Realm: Add information on encryption for
+    local and synced realms.
 -->
 
 ### Review Guidelines
