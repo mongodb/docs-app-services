@@ -1,22 +1,20 @@
 ## Pull Request Info
 
 Jira ticket: https://jira.mongodb.org/browse/DOCSP-NNNNN
-Staged changes:
 
-- [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/)
-
-<!--
-- Write a summary of the changes and the related issue
-- Include relevant motivation and context
-- List any required dependencies for this change
--->
+- [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/): description of changes
 
 ### Reminder Checklist
 
 Before merging your PR, make sure to check a few things.
 
+- [ ] Did you tag pages appropriately?
+  - genre
+  - programming_language
+  - meta.keywords
+  - meta.description
 - [ ] Describe your PR's changes in the Release Notes section
-- [ ] Create a Jira ticket for corresponding docs-realm updates, if any
+- [ ] Create a Jira ticket for related docs-realm work, if any
 
 ### Release Notes
 
