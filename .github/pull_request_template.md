@@ -1,13 +1,8 @@
 ## Pull Request Info
 
 Jira ticket: https://jira.mongodb.org/browse/DOCSP-NNNNN
-Staged changes: [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/)
 
-### Description
-
-- Write a summary of the changes and the related issue
-- Include relevant motivation and context
-- List any required dependencies for this change
+- [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/): description of changes
 
 ### Reminder Checklist
 
@@ -24,9 +19,9 @@ Before merging your PR, make sure to check a few things.
 ### Release Notes
 
 <!--
-- **Kotlin** SDK
-  - Realm/Manage Realm Files/Encrypt a Realm: Add information on encryption for
-    local and synced realms.
+- **Define Data Access Permissions**
+  - Data Access Role Examples: Update CRUD Permissions example screenshots and
+    copyable JSON
 -->
 
 ### Review Guidelines
