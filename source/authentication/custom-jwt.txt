@@ -75,12 +75,13 @@ JWT authentication with App Services follows these general steps:
    #. App Services checks if the signature in the JWK matches the JWT's 
       signature. If so, the user is authenticated.
 
-.. note:: Access Token Expires after 30 Minutes
+.. important:: Access Token Always Expires after 30 Minutes
 
-  App Services specifies a 30 minute access token expiry even if the
+  App Services always specifies a 30-minute access token expiry even if the
   custom JWT token specifies a different expiry through the ``exp`` key. 
   App Services will check the custom JWT token ``exp`` to ensure that the token
-  is still valid before issuing the 30 minute expiry. 
+  is still valid before issuing the 30-minute expiry. For more information on 
+  App Services access tokens, refer to :ref:`manage-user-sessions`.
 
 .. _custom-jwt-authentication-configuration:
 .. _config-custom-jwt:
