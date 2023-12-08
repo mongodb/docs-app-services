@@ -1,3 +1,37 @@
+# December 8, 2023
+
+## Device Sync
+
+- Configure Sync/Sync Settings
+  - Add Flutter SDK to the list of SDKs that support Data Ingest.
+  - Note that attempting to change an indexed queryable field value on device causes a compensating write error. Link to the compensating write error documentation for more information.
+- Handle Errors/Sync Errors: Add attempting to change an indexed queryable field value to the list of conditions that can trigger a compensating write error.
+
+## Edge Server
+
+- Connect to Edge Server: Move the "connect" section from the "Use MongoDB APIs with Edge Server" page. Add details about the different ways you can connect - via Device SDK or the MongoDB connection URI.
+- Use MongoDB APIs with Edge Server: Remove the "connect" section. Link to its new location on the "Connect to Edge Server" page.
+
+## Data API
+
+- Data API Endpoints: Include that HTTP/1.1 is a requirement when making requests.
+- Custom HTTPS Endpoints: Include that HTTP/1.1 is a requirement when making requests.
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Fix typo in diagram.
+
+## Reference
+
+- App Services Admin API
+  - Schemas
+    - List Schemas: Remove schema object from documentation to match the API implementation.
+    - Create a Schema: Add details about JSON escaping to avoid errors when creating a schema.
+  - Deployment/Create a Deployment Draft: Correct the 200 response code to 201 to match API implementation.
+  - Applications/Create a New App and Get an App: Add device-sync to the product types for the GET and POST endpoints.
+- Service Limitations: Add section for HTTP/1.1 requirement for Data API and HTTPS endpoints.
+- Third Part Services (Deprecated)/Webhook Requests and Responses: Include that HTTP/1.1 is a requirement when making requests.
+
 # December 1, 2023
 
 ## Get Started
