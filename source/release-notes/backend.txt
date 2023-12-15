@@ -18,29 +18,19 @@ Atlas App Services Changelog
 13 December 2023 Release
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Added support for passing in user's new metadata from a request using JWT authentication to the function context.
-
-- Apps, users, and refresh token are now pruned at the 30 day mark.
-
-- Fixed webpack production yarn build warnings, such as "asset size limit" and "entrypoint size warnings", by reducing bundle size. 
+- Requests authenticated through the Custom JWT provider now update the user's profile data (e.g. ``context.user.data``) based on information from the JWT.
 
 - Updated App Services schema UI to display the difference between a 64-bit ``long`` and 32-bit ``integer``.
 
 - Disallowed creating schemas with invalid database or collection names, such as names including spaces.
 
-- Left default for ``allowDiskUse`` as true unless user specifies it as false. 
+- MongoDB aggregation operations no longer specify a default value for ``allowDiskUse``.
 
 - Fixed bug where a read document filter set to false is not unioned with a write filter.
 
-- Created a private endpoint for enabling tiered sync.
-
 - Added ``integer`` as a supported type for indexed queryable fields.
 
-- Updated the merge window filtering to use indexed queryable fields if possible.
-
-- Distributed translators evenly within the sync pool.
-
-- If one of several sync translators has failed, the failed subscription banner will now show up on the sync page.
+- Device Sync permissions now properly union a read filter set to ``false`` with its corresponding write filter.
 
 .. _backend_20231129:
 
