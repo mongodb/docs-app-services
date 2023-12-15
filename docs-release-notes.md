@@ -2,7 +2,7 @@
 
 ## Authenticate and Manage Users
 
-- Authentication Providers/Custom JWT: Note that App Services specifies a 30 minute expiry for the access token even if expiry is defined by the Custom JWT's exp key.
+- Authentication Providers/Custom JWT: Note that App Services specifies a 30 minute expiry for the access token even if expiry is defined by the Custom JWT's ``exp`` key.
 
 ## Reference 
 
