@@ -13,6 +13,23 @@ Atlas App Services Changelog
 2023 Releases
 -------------
 
+.. _backend_20231213:
+
+13 December 2023 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Requests authenticated through the Custom JWT provider now update the user's profile data (e.g. ``context.user.data``) based on information from the JWT.
+
+- Updated App Services schema UI to display the difference between a 64-bit ``long`` and 32-bit ``integer``.
+
+- Disallowed creating schemas with invalid database or collection names, such as names including spaces.
+
+- MongoDB aggregation operations no longer specify a default value for ``allowDiskUse``.
+
+- Added ``integer`` as a supported type for indexed queryable fields.
+
+- Device Sync permissions now properly union a read filter set to ``false`` with its corresponding write filter.
+
 .. _backend_20231129:
 
 29 November 2023 Release
