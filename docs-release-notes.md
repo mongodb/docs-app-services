@@ -1,3 +1,13 @@
+# December 15, 2023
+
+## Authenticate and Manage Users
+
+- Authentication Providers/Custom JWT: Note that App Services specifies a 30 minute expiry for the access token even if expiry is defined by the Custom JWT's ``exp`` key.
+
+## Reference 
+
+- App Services Admin API: Fix broken links in Endpoints/Create, Endpoints/Modify, Data API/Enable, Data API/Modify.
+
 # December 8, 2023
 
 ## Device Sync
