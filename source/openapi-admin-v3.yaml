@@ -874,7 +874,7 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/AtlasClusterConstructor"
+                - $ref: "#/components/schemas/AtlasClusterServiceConstructor"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyServiceConstructor"
 
@@ -1098,7 +1098,7 @@ paths:
           application/json:
             schema:
               oneOf:
-                - $ref: "#/components/schemas/AtlasClusterConstructor"
+                - $ref: "#/components/schemas/AtlasClusterServiceConfigInstance"
                 - $ref: "#/components/schemas/AtlasFederatedInstance"
                 - $ref: "#/components/schemas/ThirdPartyServiceConstructor"
       responses:
@@ -5268,6 +5268,8 @@ components:
       allOf:
         - $ref: "#/components/schemas/BaseCustomUserDataConfig"
         - type: object
+          required:
+            - mongo_service_name
           properties:
             mongo_service_name:
               type: string
@@ -5543,6 +5545,14 @@ components:
               description: The endpoint functions's name.
     BaseEndpoint:
       type: object
+      required:
+        - disabled
+        - function_id
+        - http_method
+        - respond_result
+        - return_type
+        - route
+        - validation_method
       properties:
         route:
           type: string
@@ -5658,6 +5668,11 @@ components:
         - v1
     DataApiConfig:
       type: object
+      required:
+        - disabled
+        - versions
+        - return_type
+        - validation_method
       properties:
         disabled:
           type: boolean
@@ -5707,10 +5722,15 @@ components:
         error_code:
           type: string
           description: The error type.
-    AtlasClusterConstructorWithRules:
+    AtlasClusterConstructor:
       allOf:
-        - $ref: "#/components/schemas/AtlasClusterConstructor"
-        - properties:
+        - $ref: "#/components/schemas/ServiceConfig"
+        - required:
+            - config
+            - rules
+          properties:
+            config:
+              $ref: "#/components/schemas/AtlasClusterServiceConfig"
             default_rule:
               $ref: "#/components/schemas/DefaultRuleConstructor"
             rules:
@@ -5723,75 +5743,91 @@ components:
             _id:
               type: string
               description: The cluster's unique ID.
-        - $ref: "#/components/schemas/AtlasClusterConstructor"
-    AtlasClusterConstructor:
+        - $ref: "#/components/schemas/AtlasClusterServiceConstructor"
+
+    AtlasClusterServiceConfig:
       type: object
       properties:
+        clusterName:
+          type: string
+          example: Cluster0
+          description: |-
+            The cluster name of the data source within. The name may be at
+            most 64 characters long and must only contain ASCII letters, numbers,
+            underscores, and hyphens.
+        clusterType:
+          type: string
+          enum:
+            - atlas
+            - serverless
+          example: atlas
+          description: The type of service.
+        readPreference:
+          type: string
+          enum:
+            - primary
+            - primaryPreferred
+            - secondary
+            - secondaryPreferred
+            - nearest
+          description: >-
+            The [read preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
+            mode for read requests to the data source.
+        readPreferenceTagSets:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReadPreferencesTagSet"
+          description: Target read operations to specific members of a replica set.
+        wireProtocolEnabled:
+          type: boolean
+          description: >-
+            If true, clients may [connect to the app over the
+            MongoDB Wire Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
+
+    AtlasClusterServiceConfigInstance:
+      $ref: "#/components/schemas/AtlasClusterServiceConfig"
+      properties:
+        clusterId:
+          type: number
+          example: 05e821b3975d271289f372e3a
+          description: The service ID.
+        groupName:
+          type: string
+          example: Project 0
+          description: The name of the group that contains the service.
+        orgName:
+          type: string
+          example: MongoDB_Org
+          description: The name of the organization that contains the service.
+
+    AtlasClusterServiceConstructor:
+      $ref: "#/components/schemas/ServiceConstructor"
+      properties:
         config:
-          type: object
-          properties:
-            clusterId:
-              type: number
-              example: 05e821b3975d271289f372e3a
-              description: The service ID.
-            clusterName:
-              type: string
-              example: Cluster0
-              description: |-
-                The cluster name of the data source within. The name may be at 
-                most 64 characters long and must only contain ASCII letters, numbers,
-                underscores, and hyphens.
-            clusterType:
-              type: string
-              enum:
-                - atlas
-                - serverless
-              example: atlas
-              description: The type of service.
-            flexible_sync:
-              $ref: "#/components/schemas/FlexibleSync"
-            groupName:
-              type: string
-              example: Project 0
-              description: The name of the group that contains the service.
-            orgName:
-              type: string
-              example: MongoDB_Org
-              description: The name of the organization that contains the service.
-            readPreference:
-              type: string
-              enum:
-                - primary
-                - primaryPreferred
-                - secondary
-                - secondaryPreferred
-                - nearest
-              description: >-
-                The [read preference](https://www.mongodb.com/docs/atlas/app-services/mongodb/read-preference/)
-                mode for read requests to the data source.
-            readPreferenceTagSets:
-              type: array
-              items:
-                $ref: "#/components/schemas/ReadPreferencesTagSet"
-              description: Target read operations to specific members of a replica set.
-            wireProtocolEnabled:
-              type: boolean
-              description: >-
-                If true, clients may [connect to the app over the
-                MongoDB Wire Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
-    ServiceResponse:
+          $ref: "#/components/schemas/AtlasClusterServiceConfigInstance"
+
+    ServiceConstructor:
       type: object
+      properties:
+        name:
+          type: string
+          description: The service name.
+        type:
+          type: string
+          description: The type of service.
+    ServiceConfig:
+      $ref: "#/components/schemas/ServiceConstructor"
+      properties:
+        version:
+          type: number
+    ServiceResponse:
+      $ref: "#/components/schemas/ServiceConfig"
       properties:
         _id:
           type: string
-        name:
-          type: string
-        type:
-          type: string
-        version:
-          type: number
         last_modified:
           type: number
+
     ReadPreferencesTagSet:
       type: string
       enum:
@@ -5800,12 +5836,18 @@ components:
 
     AtlasFederatedInstance:
       allOf:
-        - properties:
+        - required:
+            _id
+          properties:
             _id:
               type: string
         - $ref: "#/components/schemas/AtlasFederatedInstanceConstructor"
     AtlasFederatedInstanceConstructor:
       type: object
+      required:
+        - name
+        - type
+        - config
       properties:
         name:
           type: string
@@ -5832,7 +5874,7 @@ components:
 
     DataSourceConstructor:
       oneOf:
-        - $ref: "#/components/schemas/AtlasClusterConstructorWithRules"
+        - $ref: "#/components/schemas/AtlasClusterConstructor"
         - $ref: "#/components/schemas/AtlasFederatedInstanceConstructor"
 
     DataSource:
@@ -5895,9 +5937,18 @@ components:
         - $ref: "#/components/schemas/LogForwarderConstructor"
     LogForwarderConstructor:
       type: object
+      required:
+        - action
+        - disabled
+        - log_statuses
+        - log_types
+        - name
+        - policy
       properties:
-        name: { type: string }
-        disabled: { type: boolean }
+        name:
+          type: string
+        disabled:
+          type: boolean
         log_types:
           type: array
           items:
@@ -6802,6 +6853,11 @@ components:
               type: string
         - $ref: "#/components/schemas/ValueConstructor"
     ValueConstructor:
+      required:
+        - name
+        - private
+        - from_secret
+        - value
       properties:
         name:
           type: string
@@ -7145,7 +7201,10 @@ components:
           full_document: true
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
-        - properties:
+        - required:
+            - config
+            - type
+          properties:
             type:
               type: string
               description: The trigger type. For database triggers, this value is always `"DATABASE"`.
@@ -7261,7 +7320,10 @@ components:
             - api-key
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
-        - properties:
+        - required:
+            - config
+            - type
+          properties:
             type:
               type: string
               description: The trigger type. For authentication triggers, this value is always `"AUTHENTICATION"`.
@@ -7299,7 +7361,10 @@ components:
           schedule: "0 8 * * *"
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
-        - properties:
+        - required:
+            - config
+            - type
+          properties:
             type:
               type: string
               description: The trigger type. For scheduled triggers, this value is always `"SCHEDULED"`.
@@ -7354,6 +7419,8 @@ components:
           description: The MD5 checksum hash for the asset
     HostingConstructor:
       type: object
+      required:
+        - enabled
       properties:
         enabled:
           type: boolean
@@ -7504,6 +7571,10 @@ components:
 
     GraphQLConstructor:
       type: object
+      required:
+        - config
+        - validation_settings
+        - custom_resolvers
       properties:
         config:
           $ref: "#/components/schemas/GraphQLConfig"
@@ -8447,6 +8518,26 @@ components:
           example: com.amazonaws.vpce.us-east-1.vpce-svc-0f24fc6e6de007e5e
     PushPullAppConfig:
       type: object
+      required:
+        - auth_providers
+        - custom_user_data
+        - data_api_config
+        - data_sources
+        - deployment_model
+        - endpoints
+        - environments
+        - functions
+        - graphql
+        - hosting
+        - https_endpoints
+        - log_forwarders
+        - name
+        - provider_region
+        - schemas
+        - services
+        - sync
+        - triggers
+        - values
       properties:
         name:
           type: string
