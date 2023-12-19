@@ -4,6 +4,10 @@
 Sync Settings
 =============
 
+.. facet::
+   :name: genre 
+   :values: reference
+
 .. default-domain:: mongodb
 
 .. contents:: On this page
@@ -24,8 +28,10 @@ Sync Type
 ~~~~~~~~~
 
 Atlas Device Sync has two sync modes: Flexible Sync and the older
-Partition-Based Sync. We recommend using Flexible Sync. For information about
-Partition-Based Sync, refer to :ref:`partition-based-sync`.
+Partition-Based Sync. Partition-Based Sync has 
+been deprecated and is disallowed for new Sync configurations. If you have 
+an existing app that uses Partition-Based Sync, you can migrate 
+to Flexible Sync. For more information, refer to :ref:`realm-sync-migrate-modes`.
 
 Flexible Sync lets you define a query in the client and sync only the objects
 that match the query. With client-side subscriptions, client applications can:
@@ -308,6 +314,11 @@ if your indexed queryable field is ``store_id``, the client cannot change
 this value directly. Changing it from the client is not supported because 
 it may conflict with other updates made to the object in the same timeframe. 
 
+If you attempt to change an indexed queryable field's value on the device,
+this triggers a compensating write error. For more information about this
+error and the behavior it entails, refer to ``ErrorCompensatingWrite`` in
+the :ref:`flexible-sync-errors` documentation.
+
 You can still change this value directly in the Atlas database. 
 
 .. warning::
@@ -410,8 +421,9 @@ After you have enabled Data Ingest, you implement it in the client app via
 the client SDKs. Currently, the following Realm SDKs support Data Ingest:
 
 - C++ SDK: :ref:`cpp-stream-data-to-atlas`
-- .NET SDK: :ref:`dotnet-data-ingest`
+- Flutter SDK: :ref:`flutter-stream-data-to-atlas`
 - Kotlin SDK: :ref:`kotlin-stream-data-to-atlas`
+- .NET SDK: :ref:`dotnet-data-ingest`
 - Node.js SDK: :ref:`node-define-an-asymmetric-object`
 - React Native SDK: :ref:`react-native-define-an-asymmetric-object`
 - Swift SDK: :ref:`swift-stream-data-to-atlas`
@@ -451,8 +463,7 @@ directory of an :ref:`exported <export-app>` app:
        └── config.json
 
 For example, the following Sync configuration applies to apps using Flexible
-Sync (recommended). If you are using the older Partition-Based Sync, refer to
-:ref:`partition-based-sync-config-object`.
+Sync.
 
 .. code-block:: json
    :caption: sync/config.json

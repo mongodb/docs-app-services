@@ -4,6 +4,10 @@
 Connect to an Edge Server
 =========================
 
+.. facet::
+   :name: genre 
+   :values: tutorial
+
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -14,15 +18,26 @@ Once the Edge Server is :ref:`configured <edge-server-configure>` and
 :ref:`running <start-and-stop-edge-server>`, you can connect to it from 
 a client application.
 
+There are two ways you can connect to the Edge Server from a client:
+
+- Using the Device SDKs
+- Using MongoDB Drivers and tools
+
+When you connect to Edge Server using a Device SDK, Device Sync automatically
+synchronizes data across devices and with the Edge Server. If you connect
+to Edge Server using MongoDB Drivers or tools, you can perform CRUD operations 
+with a subset of supported MongoDB APIs.
+
 .. _edge-server-connect-from-client:
 
-Connect to the Edge Server from a Client
-----------------------------------------
+Connect to the Edge Server from the Device SDK
+----------------------------------------------
 
-To connect to the Edge Server from a client, your app must:
+To connect to the Edge Server from a Device SDK client, your app must:
 
-- Set the Sync URL to the public-accessible DNS address you set in the 
-  Edge Server :ref:`config's <edge-server-install-and-configure>` ``hostname`` 
+- Set the Sync URL on the App configuration to the public-accessible DNS 
+  address you set in the Edge Server 
+  :ref:`config's <edge-server-install-and-configure>` ``hostname`` 
   field.
 - If TLS is not enabled, use HTTP over port 80.
 
@@ -32,6 +47,18 @@ To connect to the Edge Server from a client, your app must:
    with HTTP over port 80 for simplicity. Before moving to production, 
    you can coordinate with your Product or Account Representative to configure
    HTTPS with a self-signed certificate.
+
+For information about customizing the App configuration, refer to the 
+documentation for your preferred SDK:
+
+- C++ SDK: :ref:`cpp-connect-to-backend`
+- Flutter SDK: :ref:`flutter-connect-to-backend`
+- Java SDK: :ref:`java-init-appclient`
+- Kotlin SDK: :ref:`kotlin-connect-to-backend`
+- .NET SDK: :ref:`dotnet-init-appclient`
+- Node.js SDK: :ref:`node-connect-to-mongodb-realm-backend-app`
+- React Native SDK: :ref:`react-native-connect-to-mongodb-realm-backend-app`
+- Swift SDK: :ref:`ios-init-appclient`
 
 Example: SwiftUI Template App
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -161,3 +188,37 @@ modifications you can make to the :github:`Swift template app
          In a console app, delete the ``mongodb-realm`` directory. If you're
          using an iOS or Android simulator or device, uninstall and reinstall
          the app.
+
+.. _edge-server-wireprotocol-connect:
+
+Connect to the Edge Server with a MongoDB URI
+---------------------------------------------
+
+You can connect to the Edge Server using standard MongoDB Drivers and tools.
+Clients use a specialized MongoDB URI connection string to connect to 
+Edge Server and send requests.
+
+The wire protocol server is on by default. You can connect to it via the 
+host machine using this MongoDB URI:
+
+.. code:: console
+
+   mongodb://EDGE_SERVER_HOSTNAME:27021
+
+The ``EDGE_SERVER_HOSTNAME`` is the public DNS of your Edge Server host. 
+For more information, refer to :ref:`edge-server-install-and-configure`.
+
+You must make port 27021 accessible to the client through port mapping or
+firewall rules.
+
+.. example::
+
+   A wire protocol connection URI for an Edge Server hosted on Amazon EC2 
+   might look similar to:
+
+   .. code:: console
+
+      mongodb://ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021
+
+Edge Server currently supports a subset of the MongoDB APIs. For information 
+about the supported APIs, refer to :ref:`edge-server-mongodb`.

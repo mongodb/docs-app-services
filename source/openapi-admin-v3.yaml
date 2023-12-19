@@ -345,6 +345,7 @@ paths:
               - standard
               - atlas
               - data-api
+              - device-sync
           style: simple
           explode: false
           description: |-
@@ -352,10 +353,11 @@ paths:
             this endpoint only returns Apps of the specified product type(s).
 
             Most apps use the `standard` product type, which this
-            endpoint returns by default. The `atlas` and `data-api`
+            endpoint returns by default. The `atlas`, `data-api`, and `device-sync`
             product types represent special apps for
-            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers) and
-            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/)
+            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers),
+            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/),
+            and [Atlas Device Sync](https://www.mongodb.com/docs/atlas/app-services/sync/)
             that you can access through the Atlas UI.
 
             You can specify multiple product types as a comma-separated list:
@@ -393,15 +395,18 @@ paths:
               - standard
               - atlas
               - data-api
+              - device-sync
           description: |-
             The App's product type. Apps use the `standard` product type
             by default. For most apps, you do not need to specify a
             `product` at all, or should specify `standard`.
 
-            The `atlas` and `data-api` product types represent special,
-            apps for [Atlas Triggers](https://docs.mongodb.com/atlas/triggers)
-            and [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/) that you
-            can access through the Atlas UI.
+            The `atlas`, `data-api`, and `device-sync`
+            product types represent special apps for
+            [Atlas Triggers](https://docs.mongodb.com/atlas/triggers),
+            [Atlas Data API](https://docs.mongodb.com/atlas/api/data-api/),
+            and [Atlas Device Sync](https://www.mongodb.com/docs/atlas/app-services/sync/)
+            that you can access through the Atlas UI.
       requestBody:
         description: The application to create.
         required: true
@@ -3537,7 +3542,7 @@ paths:
       summary: Create a Deployment Draft
       description: Create a new application deployment draft, if none exists.
       responses:
-        "200":
+        "201":
           description: Successfully created draft.
           content:
             application/json:
@@ -4208,7 +4213,11 @@ paths:
         - schemas
       operationId: adminCreateSchema
       summary: Create a schema
-      description: Define a new [schema](https://www.mongodb.com/docs/realm/schemas) for a linked collection.
+      description: |-
+        Define a new [schema](https://www.mongodb.com/docs/realm/schemas) 
+        for a linked collection. When creating a schema with this endpoint, 
+        ensure that the JSON payload is completely unescaped. Incorrectly 
+        escaped JSON formats can lead to errors.
       requestBody:
         required: true
         content:
@@ -4300,7 +4309,7 @@ paths:
       summary: Create an endpoint
       description: Create a new [endpoint](https://www.mongodb.com/docs/realm/endpoints/).
       requestBody:
-        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints/) for the new endpoint.
+        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/https_endpoints/) for the new endpoint.
         required: true
         content:
           application/json:
@@ -4349,7 +4358,7 @@ paths:
       summary: Modify an endpoint
       description: Modify an existing [endpoint](https://www.mongodb.com/docs/realm/endpoints/) configuration.
       requestBody:
-        description: A valid, updated [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints/) for the endpoint.
+        description: A valid, updated [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/https_endpoints/) for the endpoint.
         required: true
         content:
           application/json:
@@ -4404,7 +4413,7 @@ paths:
       summary: Enable the Data API
       description: Create your app's [Data API](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/) configuration.
       requestBody:
-        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints#std-label-appconfig-data-api-endpoints) for the endpoint.
+        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/https_endpoints/#data-api-configuration) for the endpoint.
         required: true
         content:
           application/json:
@@ -4424,7 +4433,7 @@ paths:
       summary: Modify the Data API
       description: Update your app's [Data API](https://www.mongodb.com/docs/atlas/app-services/data-api/generated-endpoints/) configuration.
       requestBody:
-        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/http_endpoints#std-label-appconfig-data-api-endpoints) for the endpoint.
+        description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/https_endpoints/#data-api-configuration) for the endpoint.
         required: true
         content:
           application/json:
@@ -5135,6 +5144,7 @@ components:
                 - standard
                 - atlas
                 - data-api
+                - device-sync
     NullableAppEnvironment:
       allOf:
         - type: string
@@ -7450,7 +7460,7 @@ components:
       description: A valid [schema](https://www.mongodb.com/docs/realm/schemas) for the collection.
     SchemaMetadata:
       type: object
-      description: Metadata the describes which linked collection the schema applies to.
+      description: Metadata that describes which linked collection the schema applies to.
       properties:
         data_source:
           type: string
@@ -7468,13 +7478,13 @@ components:
         "$ref": "#/components/schemas/Relationship"
     SchemaMetadataInstance:
       required:
-        - id
+        - _id
         - metadata
       properties:
-        id:
+        _id:
           type: string
         metadata:
-          $ref: "#/components/schemas/SchemaMetadata"
+          "$ref": "#/components/schemas/SchemaMetadata"
     FullSchema:
       type: object
       properties:

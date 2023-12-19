@@ -4,6 +4,10 @@
 Sync Errors
 ===========
 
+.. facet::
+   :name: genre 
+   :values: reference
+
 .. default-domain:: mongodb
 
 .. contents:: On this page
@@ -80,31 +84,6 @@ errors and how to handle them. Atlas App Services reports errors in your
        specific error. For example, this might occur when you hit the storage
        limit of a free tier Atlas cluster.
 
-.. _partition-based-sync-errors:
-
-Partition-Based Sync Errors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The following errors may occur when your App uses :ref:`Partition-Based Sync 
-<partition-based-sync>`.
-
-.. list-table::
-   :header-rows: 1
-   :widths: 35 65
-
-   * - Error Name
-     - Description
-
-   * - ErrorIllegalRealmPath
-     - This error indicates that the client attempted to open a realm with a
-       partition value of the wrong type. For example, you might see the error
-       message "attempted to bind on illegal realm partition: expected partition
-       to have type objectId but found string".
-       
-       To recover from this error, ensure that the type of the partition value
-       used to open the realm matches the partition key type in your
-       Device Sync configuration.
-
 .. _flexible-sync-errors:
 
 Flexible Sync Errors
@@ -154,15 +133,17 @@ The following errors may occur when your App uses :ref:`Flexible Sync
      - This non-fatal error occurs when a client attempts an "illegal" write.
        The following are considered illegal writes:
 
-       - Creating an object before opening a subscription
+       - Creating an object before opening a subscription.
        - Creating an object that would be outside of the client's query view.
          "Query view" includes both the client's subscriptions and the client's
          read permissions.
-       - Modifying an object that is outside of the client's query view
+       - Modifying an object that is outside of the client's query view.
        - Creating, deleting, or modifying an object or field that the client
          does not have write permissions to.
        - Modifying an object in such a way that client would no longer have
          write permissions on that object or field after the write.
+       - Updating an existing object's :ref:`indexed queryable field <fs-indexed-queryable-fields>` 
+         value.
          
        Because the local realm has no concept of "illegal" writes, the write
        will always succeed locally. Upon sync, the server will notice the
