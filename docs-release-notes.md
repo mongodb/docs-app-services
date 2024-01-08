@@ -1,3 +1,17 @@
+# January 5, 2024
+
+## Functions
+
+- Landing Page: Remove the note that nested functions are unsupported when using GitHub deployment.
+
+## Define a Data Model
+
+- Schemas/Schema Types: Add Flutter SDK to the list of SDKs that support geospatial data.
+
+## Monitor App Activity
+
+- Activity Feed & Alerts: Replace the Project Activity Feed screenshot with one that does not show a "Download to JSON" button.
+
 # December 15, 2023
 
 ## Authenticate and Manage Users
