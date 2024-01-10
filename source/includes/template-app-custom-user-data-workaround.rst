@@ -2,7 +2,7 @@
 generator does not copy the custom user data configuration to the new app
 correctly. You can fix this as follows: the ``{+cli-bin+} apps create`` command
 should have output some JSON about the app you just created. From this JSON,
-copy the "url" value (something like ``https://realm.mongodb.com/groups/...``)
+copy the "url" value (something like ``https://services.cloud.mongodb.com/groups/...``)
 and visit that URL in your browser. Log in if prompted. From the app dashboard,
 in the left-hand panel, click :guilabel:`App Users`. Click :guilabel:`Custom
 User Data`. Ensure :guilabel:`Enable Custom User Data` is ``ON``. If it was not

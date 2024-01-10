@@ -71,7 +71,7 @@ following information:
       .. input::
         :language: sh
 
-        curl https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos \
+        curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos \
           -H "Authorization: Bearer <access_token>"
 
       .. output::
@@ -82,7 +82,7 @@ following information:
           {
             "cloud_provider_region": "aws-us-east-1",
             "name": "eps_baas-pl-prod_us-east-1_cloud",
-            "dns": "*.aws.realm.mongodb.com",
+            "dns": "*.aws.services.cloud.mongodb.com",
             "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0f12ab34cd56ef789"
           },
           ...
@@ -208,7 +208,7 @@ connection using either the App Services UI or the Admin API.
 
             .. code-block:: sh
 
-               curl https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoints \
+               curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoints \
                  -X POST \
                  -H "Authorization: Bearer <accessToken>" \
                  -H "Content-Type: application/json" \

@@ -88,7 +88,7 @@ You can use the App Services UI, CLI, or Admin API to manually remove a user acc
 
          curl --request DELETE \
            --header 'Authorization: Bearer <access_token>' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>
       
       If you want to delete a :ref:`pending <confirm-user>`
       email/password user, create a request in the following format: 
@@ -97,7 +97,7 @@ You can use the App Services UI, CLI, or Admin API to manually remove a user acc
 
          curl --request DELETE \
             --header 'Authorization: Bearer <access_token>' \
-            https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/by_email/<email>
+            https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/user_registrations/by_email/<email>
 
       .. seealso::
       
@@ -150,7 +150,7 @@ take any arguments, and deletes the user who calls the function.
 
 .. code-block:: javascript
 
-   const apiUrl = "https://realm.mongodb.com/api/admin/v3.0/groups/{insert-your-project-id}/apps/{insert-your-app-id}";
+   const apiUrl = "https://services.cloud.mongodb.com/api/admin/v3.0/groups/{insert-your-project-id}/apps/{insert-your-app-id}";
 
    exports = async function(){
 
@@ -163,7 +163,7 @@ take any arguments, and deletes the user who calls the function.
       const username = context.values.get("adminApiPublicKey");
       const apiKey = context.values.get("adminApiPrivateKey");
       const response = await context.http.post({
-         url: "https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login",
+         url: "https://services.cloud.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login",
          body: {username, apiKey},
          encodeBodyAsJSON: true,
       });
@@ -246,7 +246,7 @@ invalidates any of the user's existing access and refresh tokens. You can
 
          curl --request PUT \
            --header 'Authorization: Bearer <access_token>' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/disable
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/disable
 
       .. seealso::
       
@@ -311,7 +311,7 @@ You can enable a :ref:`disabled user <disable-user>` to let them log in again.
 
          curl --request PUT \
            --header 'Authorization: Bearer <access_token>' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/enable
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/users/<userId>/enable
 
       .. seealso::
       

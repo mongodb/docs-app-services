@@ -210,7 +210,7 @@ DNS Filtering
 You can use DNS filtering to specifically allow connections from client
 applications, including Device Sync clients, to the server.
 
-Access ``*.realm.mongodb.com`` via HTTPS or port 443.
+Access ``*.services.cloud.mongodb.com`` via HTTPS or port 443.
 
 .. _security-allowed-request-origins:
 
@@ -294,7 +294,7 @@ View IP Access List Entries
 
          curl --request GET \
            --header 'Authorization: Bearer <access_token>' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list
 
       .. seealso::
       
@@ -350,7 +350,7 @@ Create an IP Access List Entry
          curl --request POST \
            --header 'Authorization: Bearer <access_token>' \
            --data '{ "address": "<IP Address>" }' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list
 
       .. seealso::
       
@@ -408,7 +408,7 @@ Edit an IP Access List Entry
          curl --request PATCH \
            --header 'Authorization: Bearer <access_token>' \
            --data '{ "address": "<IP Address>" }' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list/<ipID>
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list/<ipID>
 
       .. seealso::
       
@@ -452,7 +452,7 @@ Delete an IP Access List Entry
 
          curl --request DELETE \
            --header 'Authorization: Bearer <access_token>' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list/<ipID>
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/<groupId>/apps/<appId>/security/access_list/<ipID>
 
       .. seealso::
       
