@@ -127,7 +127,9 @@ info:
     to log in with credentials one time. After that you can use the
     refresh token to re-authenticate for as long as its valid.
 
-    Refresh tokens expire 60 days after being issued.
+    By default, refresh tokens expire 60 days after being issued. You can
+    customize refresh token expiration for a minimum of 30 minutes or a
+    maximum of 5 years.
 
     To refresh your authentication and get a new `access_token`, call
     the auth session endpoint with your `refresh_token` in the
@@ -7279,7 +7281,7 @@ components:
             valid for after it is issued. After this time, the token is
             expired and the user must re-authenticate.
 
-            The expiration time must be between 30 minutes and 180 days,
+            The expiration time must be between 30 minutes and 5 years,
             inclusive. The default expiration time is 60 days.
     Relationship:
       type: object
