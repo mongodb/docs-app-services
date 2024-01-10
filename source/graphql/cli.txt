@@ -37,7 +37,7 @@ Run a Query
       
       .. code-block:: shell
          
-         gq https://realm.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
+         gq https://services.cloud.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
              -H 'Authorization: Bearer <Valid Access Token>' \
              -q 'query AllMoviesFromYear($year: Int!) { movies(query: { year: $year }) { title year runtime } }' \
              -v 'year=2000'
@@ -47,7 +47,7 @@ Run a Query
       
       .. code-block:: shell
          
-         curl https://realm.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
+         curl https://services.cloud.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
            -X POST \
            -H 'Authorization: Bearer <Valid Access Token>' \
            -d '{ "query": "query AllMoviesFromYear($year: Int!) { movies(query: { year: $year }) { title year runtime } }",
@@ -63,7 +63,7 @@ Run a Mutation
       
       .. code-block:: shell
 
-         gq https://realm.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
+         gq https://services.cloud.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
              -H 'Authorization: Bearer <Valid Access Token>' \
              -q 'mutation UpdateMovieTitle($oldTitle: String!, $newTitle: String!) { updateOneMovie(query: { title: $oldTitle } set: { title: $newTitle }) { title year } }'
              -v 'oldTitle=The Matrix Reloaded'
@@ -74,7 +74,7 @@ Run a Mutation
       
       .. code-block:: shell
          
-         curl https://realm.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
+         curl https://services.cloud.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
            -X POST \
            -H 'Authorization: Bearer <Valid Access Token>' \
            -d '{ "query": "mutation UpdateMovieTitle($oldTitle: String!, $newTitle: String!) { updateOneMovie(query: { title: $oldTitle } set: { title: $newTitle }) { title year } }",

@@ -73,7 +73,7 @@ App Services connection strings have the following form:
 
 .. code-block:: shell
 
-   mongodb://<credentials>@<region>.realm.mongodb.com:27020/?<parameters>
+   mongodb://<credentials>@<region>.services.cloud.mongodb.com:27020/?<parameters>
 
 .. _wire-protocol-credentials:
 
@@ -186,7 +186,7 @@ Global Apps use the ``global`` region:
 
 .. code-block:: shell
 
-   mongodb://<credentials>@global.realm.mongodb.com:27020/?<parameters>
+   mongodb://<credentials>@global.services.cloud.mongodb.com:27020/?<parameters>
 
 Local Apps specify the cloud provider and region name using
 ``<region>.<cloud>`` format. For example, an app deployed to
@@ -194,7 +194,7 @@ Local Apps specify the cloud provider and region name using
 
 .. code-block:: shell
 
-   mongodb://<credentials>@us-east-1.aws.realm.mongodb.com:27020/?<parameters>
+   mongodb://<credentials>@us-east-1.aws.services.cloud.mongodb.com:27020/?<parameters>
 
 .. _wire-protocol-parameters:
 
@@ -364,14 +364,14 @@ with a regular :manual:`connection string
       
       .. code-block:: shell
      
-         $ mongo "mongodb://<user>:<password>@realm.mongodb.com:27020/?authMechanism=PLAIN&authSource=%24external&ssl=true&appName=realm-application-abcde:mongodb-atlas:local-userpass"
+         $ mongo "mongodb://<user>:<password>@services.cloud.mongodb.com:27020/?authMechanism=PLAIN&authSource=%24external&ssl=true&appName=realm-application-abcde:mongodb-atlas:local-userpass"
         
    .. tab::
       :tabid: python
       
       .. code-block:: python
      
-         client = pymongo.MongoClient("mongodb://<user>:<password>@realm.mongodb.com:27020/?authMechanism=PLAIN&authSource=%24external&ssl=true&appName=realm-application-abcde:mongodb-atlas:local-userpass")
+         client = pymongo.MongoClient("mongodb://<user>:<password>@services.cloud.mongodb.com:27020/?authMechanism=PLAIN&authSource=%24external&ssl=true&appName=realm-application-abcde:mongodb-atlas:local-userpass")
         
    .. tab::
       :tabid: cpp
@@ -379,7 +379,7 @@ with a regular :manual:`connection string
       .. code-block:: cpp
      
          mongocxx::instance instance{};
-         mongocxx::uri uri("mongodb://<user>:<password>@realm.mongodb.com:27020/?authMechanism=PLAIN&authSource=%24external&ssl=true&appName=realm-application-abcde:mongodb-atlas:local-userpass");
+         mongocxx::uri uri("mongodb://<user>:<password>@services.cloud.mongodb.com:27020/?authMechanism=PLAIN&authSource=%24external&ssl=true&appName=realm-application-abcde:mongodb-atlas:local-userpass");
          mongocxx::client client(uri);
 
 Read and Modify Data

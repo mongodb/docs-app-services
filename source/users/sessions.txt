@@ -56,7 +56,7 @@ access token.
 
             .. code-block:: text
 
-               https://realm.mongodb.com/api/client/v2.0/app/<App ID>
+               https://services.cloud.mongodb.com/api/client/v2.0/app/<App ID>
 
             Replace ``<AppID>`` with your client App ID. For example,
             ``myapp-abcde``.
@@ -66,7 +66,7 @@ access token.
 
             .. code-block:: text
 
-               https://<Region>.<Cloud>.realm.mongodb.com/api/client/v2.0/app/<AppID>/auth/providers/<ProviderType>/login
+               https://<Region>.<Cloud>.services.cloud.mongodb.com/api/client/v2.0/app/<AppID>/auth/providers/<ProviderType>/login
 
             - Replace ``<Region>`` with the region where your app is hosted. For example, ``us-east-1``.
 
@@ -83,7 +83,7 @@ access token.
          .. input::
             :language: shell
 
-            curl 'https://realm.mongodb.com/api/client/v2.0/app/<AppID>/location'
+            curl 'https://services.cloud.mongodb.com/api/client/v2.0/app/<AppID>/location'
 
          .. output::
             :language: json
@@ -92,8 +92,8 @@ access token.
             {
               "deployment_model": "LOCAL",
               "location": "US-VA",
-              "hostname": "https://us-east-1.aws.realm.mongodb.com",
-              "ws_hostname": "wss://ws.us-east-1.aws.realm.mongodb.com"
+              "hostname": "https://us-east-1.aws.services.cloud.mongodb.com",
+              "ws_hostname": "wss://ws.us-east-1.aws.services.cloud.mongodb.com"
             }
 
    .. step:: Authenticate a User
@@ -120,7 +120,7 @@ access token.
 
             .. code-block:: shell
 
-               curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/anon-user/login'
+               curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/anon-user/login'
 
          .. tab::
             :tabid: local-userpass
@@ -128,7 +128,7 @@ access token.
             .. code-block:: shell
                :emphasize-lines: 4-5
 
-               curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/local-userpass/login' \
+               curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/local-userpass/login' \
                  --header 'Content-Type: application/json' \
                  --data-raw '{
                    "username": "test@example.com",
@@ -141,7 +141,7 @@ access token.
             .. code-block:: shell
                :emphasize-lines: 4
 
-               curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/api-key/login' \
+               curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/api-key/login' \
                  --header 'Content-Type: application/json' \
                  --data-raw '{
                    "key": "hScMWZyOKnjQMbfDPMJ1qHgtdGT2raQXdVDDvlC2SzKEBKlHKV8FK9SPCSTnODPg"
@@ -153,7 +153,7 @@ access token.
             .. code-block:: shell
                :emphasize-lines: 4
 
-               curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/custom-token/login' \
+               curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/custom-token/login' \
                  --header 'Content-Type: application/json' \
                  --data-raw '{
                  	 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0ZXN0ZGV2LWJwcWVsIiwiZXhwIjoxNTE2MjM5MDIyLCJzdWIiOiIyNDYwMSIsInVzZXJfZGF0YSI6eyJuYW1lIjoiSmVhbiBWYWxqZWFuIiwiYWxpYXNlcyI6WyJNb25zaWV1ciBNYWRlbGVpbmUiLCJVbHRpbWUgRmF1Y2hlbGV2ZW50IiwiVXJiYWluIEZhYnJlIl19fQ.mVWr4yFf8nD1EhuhrJbgKfY7BEpMab38RflXzUxuaEI"
@@ -165,7 +165,7 @@ access token.
             .. code-block:: shell
                :emphasize-lines: 4
 
-               curl -X POST 'https://realm.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/custom-function/login' \
+               curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/custom-function/login' \
                  --header 'Content-Type: application/json' \
                  --data-raw '{
                  	 "someCustomFunctionArg": "<Login Info>"
@@ -239,7 +239,7 @@ depends on your App's deployment model.
             :language: shell
             :emphasize-lines: 3
 
-            curl -X POST 'https://realm.mongodb.com/api/client/v2.0/auth/session' \
+            curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/auth/session' \
               --header 'Content-Type: application/json' \
               --header 'Authorization: Bearer <RefreshToken>'
 
@@ -263,7 +263,7 @@ depends on your App's deployment model.
             :language: shell
             :emphasize-lines: 3
 
-            curl -X POST 'https://<Region>.<Cloud>.realm.mongodb.com/api/client/v2.0/auth/session' \
+            curl -X POST 'https://<Region>.<Cloud>.services.cloud.mongodb.com/api/client/v2.0/auth/session' \
               --header 'Content-Type: application/json' \
               --header 'Authorization: Bearer <RefreshToken>'
 
@@ -342,7 +342,7 @@ set to your desired expiration time.
 .. code-block:: bash
 
    curl -X PUT \
-     https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/refresh_token_expiration \
+     https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/refresh_token_expiration \
      --data-raw '{
        "expiration_time_seconds": 864000
      }'
@@ -367,7 +367,7 @@ token in the ``token`` field of the request body.
       :language: bash
 
       curl -X POST \
-        https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/users/verify_token \
+        https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/users/verify_token \
         --data-raw '{
           "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJiYWFzX2RldmljZV9pZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsImJhYXNfZG9tYWluX2lkIjoiNWNkYjEyNDA4ZTIzMmFjNGY5NTg3ZmU4IiwiZXhwIjoxNjc2NTExMjgyLCJpYXQiOjE2NzY1MDk0ODIsImlzcyI6IjYzZWQ4MTJhNDNiZTcyYzE3NmFhNWQyMyIsInN0aXRjaF9kZXZJZCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMCIsInN0aXRjaF9kb21haW5JZCI6IjVjZGIxMjQwOGUyMzJhYzRmOTU4N2ZlOCIsInN1YiI6IjYzZWQ4MTJhNDNiZTcyYzE3NmFhNWQyMSIsInR5cCI6ImFjY2VzcyJ9.7kHO9wjWvIaD3VewDyPhLyb-oRc7wTYZdD9-hroF-H4"
         }'
@@ -498,4 +498,4 @@ then all of the user's sessions are automatically revoked.
 
          curl -X PUT \
            -H 'Authorization: Bearer {access_token}' \
-           https://realm.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/users/{userId}/logout
+           https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/users/{userId}/logout

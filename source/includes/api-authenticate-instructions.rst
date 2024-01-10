@@ -4,7 +4,7 @@ key pair:
 .. code-block:: shell
 
    curl -X POST \
-     https://realm.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login \
+     https://services.cloud.mongodb.com/api/admin/v3.0/auth/providers/mongodb-cloud/login \
      -H 'Content-Type: application/json' \
      -H 'Accept: application/json' \
      -d '{
