@@ -1,3 +1,17 @@
+# January 12, 2024
+
+## Device Sync
+
+- Configure & Update Your Data Model/Data Model Mapping: Add C++ Set to the list of SDK Set documentation links.
+- Configure Sync/Sync Settings: Update dev mode breaking changes section to mention support can enable the feature for older Apps. Add more SDK versions.
+- Handle Errors/Client Reset: Add the new C++ Client Reset page to the list of SDK pages for handling client resets.
+
+## Other
+
+- Domain Migration: Add new page that contains information about the base URL changes.
+- Throughout Docs
+  - Update base URL (realm.mongodb.com) to new App Services base URL (services.cloud.mongodb.com).
+
 # January 5, 2024
 
 ## Functions
