@@ -220,7 +220,7 @@ depends on your system:
      - ``$XDG_CONFIG_HOME/<profile>.yaml`` or ``$HOME/.config/<profile>.yaml``
 
    * - macOS
-     - ``Library/Application Support/appservices-cli/<profile>.yaml``
+     - ``$HOME/Library/Application\ Support/appservices-cli/<profile>.yaml``
 
    * - Windows
      - ``%AppData%/<profile>.yaml``
