@@ -320,11 +320,13 @@ from the App Services UI or by deploying configuration files with Realm CLI:
   While :ref:`Role-based Permissions <roles>` and Filters can hide specific 
   documents and fields within a collection there is a potential that 
   data can be exposed if the system allows arbitrary 
-  queries to access the collection. For example, queries or functions that 
+  queries to access the collection. 
+  For example, queries or functions that 
   raise errors depending on the values stored in a collection (such 
   as division-by-zero errors) may reveal information about documents, even if 
   a role or filter prevents the querying user from viewing 
   documents directly. Users may also make inferences about the underlying data 
   in other ways (such as by measuring query execution time, which can be affected 
-  by the data's distribution). Be aware that this is possible and audit your 
+  by the data's distribution). 
+  Be aware that this is possible and audit your 
   data access patterns where neccessary.
