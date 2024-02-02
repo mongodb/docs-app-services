@@ -1,3 +1,23 @@
+# February 2, 2024
+
+## Device Sync
+
+- Migrate Device Sync Modes: Remove duplicate sentence.
+
+## Edge Server
+
+- Configure Edge Server: Update the config object to remove fields that are no longer present and add new fields.
+- Connect to Edge Server: Update instructions to connect to the Edge Server to refer to `baseURL` instead of `hostname`.
+
+## Define Data Access Permissions
+
+- Role-based Permissions: Add note about security consideration for roles and filters for queries.
+- Filter Incoming Queries: Add note about security consideration for roles and filters for queries.
+
+## Reference
+
+- App Services CLI: Updated the profile configuration file path in the "CLI Profiles" section to be nested under `$HOME` on macOS
+
 # January 12, 2024
 
 ## Device Sync
