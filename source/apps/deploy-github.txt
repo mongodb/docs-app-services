@@ -15,7 +15,7 @@ Deploy Automatically with GitHub
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 1
    :class: singlecol
 
 Overview
@@ -273,45 +273,47 @@ the {+cli+}, or the App Services Admin API.
    .. tab::
       :tabid: api
 
-      .. step:: Authenticate a MongoDB Atlas User
+      .. procedure::
 
-         .. include:: /includes/api-authenticate-instructions.rst
+         .. step:: Authenticate a MongoDB Atlas User
 
-      .. step:: Get an Existing Deployment Configuration (Optional)
+            .. include:: /includes/api-authenticate-instructions.rst
 
-         You can get the existing deployment configuration for your App by 
-         making a ``GET`` request to the :admin-api-endpoint:`Get the 
-         Deployment Configuration <operation/adminGetDeploymentConfig>`
-         endpoint. 
+         .. step:: Get an Existing Deployment Configuration (Optional)
 
-         .. code-block:: bash
+            You can get the existing deployment configuration for your App by 
+            making a ``GET`` request to the :admin-api-endpoint:`Get the 
+            Deployment Configuration <operation/adminGetDeploymentConfig>`
+            endpoint. 
 
-            curl -X GET \
-               https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/deploy/config \
-               -H 'Authorization: Bearer <access_token>'
+            .. code-block:: bash
 
-      .. step:: Update the Deployment Configuration
+               curl -X GET \
+                  https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/deploy/config \
+                  -H 'Authorization: Bearer <access_token>'
 
-         You can get the existing deployment configuration for your App by 
-         making a ``PATCH`` request to the :admin-api-endpoint:`Configure
-         Deployment <operation/adminConfigureDeployment>` endpoint.
+         .. step:: Update the Deployment Configuration
 
-         .. code-block:: bash
+            You can get the existing deployment configuration for your App by 
+            making a ``PATCH`` request to the :admin-api-endpoint:`Configure
+            Deployment <operation/adminConfigureDeployment>` endpoint.
 
-            curl -X PATCH \
-               https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/deploy/config \
-               -H 'Authorization: Bearer <access_token>' \
-               -d '{
-                  "ui_drafts_disabled": true,
-                  "automatic_deployment": {
-                     "enabled": true,
-                     "provider": "github",
-                     "installation_ids": [
-                        "string"
-                     ]
-                  },
-                  "last_modified": 0
-                  }'
+            .. code-block:: bash
+
+               curl -X PATCH \
+                  https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/deploy/config \
+                  -H 'Authorization: Bearer <access_token>' \
+                  -d '{
+                     "ui_drafts_disabled": true,
+                     "automatic_deployment": {
+                        "enabled": true,
+                        "provider": "github",
+                        "installation_ids": [
+                           "string"
+                        ]
+                     },
+                     "last_modified": 0
+                     }'
 
 .. _deploy-github-make-changes-ui:
 
