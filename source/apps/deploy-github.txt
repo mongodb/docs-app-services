@@ -243,7 +243,7 @@ the {+cli+}, or the App Services Admin API.
             this command. You don't need to run the ``enable`` command as
             an additional step.
 
-            .. tip:: This functionality relies on a GitHub beta feature
+            .. tip:: Configuring automatic deployment via CLI relies on a GitHub beta feature
 
                The ability to configure automatic deployment using {+cli+}
                relies on a GitHub feature that is currently in beta. If 
@@ -266,7 +266,7 @@ the {+cli+}, or the App Services Admin API.
 
                {+cli-bin+} deploy describe
 
-            You can disable and enable automatic deployment using the {+cli+}. 
+            You can also disable and enable automatic deployment using the {+cli+}. 
             For more information about these commands and their options, refer 
             to :ref:`appservices-deploy`.
 
@@ -294,7 +294,7 @@ the {+cli+}, or the App Services Admin API.
 
          .. step:: Update the Deployment Configuration
 
-            You can get the existing deployment configuration for your App by 
+            You can update the existing deployment configuration for your App by 
             making a ``PATCH`` request to the :admin-api-endpoint:`Configure
             Deployment <operation/adminConfigureDeployment>` endpoint.
 
@@ -351,20 +351,20 @@ bot appears as the commit author.
 Make Changes from the CLI
 -------------------------
 
-Previously, we have recommended avoiding avoid making changes to your app 
+Previously, we have recommended that you avoid making changes to your app 
 with {+cli+} after configuring automatic deployment. Starting with 
-{+cli+} v1.1.0 and newer, you can safely use the {+cli+} to make changes to 
+{+cli+} v1.1.0 and later, you can safely use the {+cli+} to make changes to 
 your app.
 
-**{+cli+} version 1.1.0 and newer**
+**{+cli+} version 1.1.0 and later**
 
-In {+cli+} v1.1.0 and newer, a push from the {+cli+} automatically generates
+In {+cli+} v1.1.0 and earlier, a push from the {+cli+} automatically generates
 a corresponding commit in GitHub. This keeps your code changes synchronized
 with your version-controlled GitHub source of truth.
 
-**{+cli+} version 1.0.3 and older**
+**{+cli+} version 1.0.3 and earlier**
 
-In {+cli+} v1.0.3 and older, avoid making changes to your app with the {+cli+}
+In {+cli+} v1.0.3 and earlier, avoid making changes to your app with the {+cli+}
 after configuring automatic deployment, because:
 
 - If you push changes with the CLI while GitHub deployment is enabled, App Services 
@@ -391,4 +391,4 @@ Summary
   linked repository.
 
 - If you would like to use {+cli+} to update configuration files after enabling 
-  Automatic GitHub Deployment, use {+cli+} v1.1.0 or newer.
+  Automatic GitHub Deployment, use {+cli+} v1.1.0 or later.
