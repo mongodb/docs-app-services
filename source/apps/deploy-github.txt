@@ -45,160 +45,267 @@ Prerequisites
 Enable Automatic Deployment with GitHub
 ---------------------------------------
 
-.. procedure::
+You can enable automatic deployment with GitHub using the App Services UI,
+the {+cli+}, or the App Services Admin API.
 
-   .. step:: Install the Atlas App Services GitHub App
+.. tabs-realm-admin-interfaces::
+   
+   .. tab::
+      :tabid: ui
 
-      In order to automatically deploy based on a GitHub repository,
-      Atlas App Services requires that you install a GitHub app that has, at minimum,
-      read access to the repository.
+      .. procedure::
 
-      To install the app, click :guilabel:`Deployment` in the left navigation menu of the App Services UI.
-      Select the :guilabel:`Configuration` tab and then click :guilabel:`Install
-      App Services on GitHub`. A new browser window will open to the GitHub application
-      installation flow.
+         .. step:: Install the Atlas App Services GitHub App
 
-      .. note:: GitHub Authentication
+            In order to automatically deploy based on a GitHub repository,
+            Atlas App Services requires that you install a GitHub app that has, at minimum,
+            read access to the repository.
 
-         GitHub may require you to provide your GitHub account credentials before
-         you can install the app.
+            To install the app, click :guilabel:`Deployment` in the left navigation menu of the App Services UI.
+            Select the :guilabel:`Configuration` tab and then click :guilabel:`Install
+            App Services on GitHub`. A new browser window will open to the GitHub application
+            installation flow.
 
-      Select the GitHub account or organization for which you want to install the
-      app:
+            .. note:: GitHub Authentication
 
-      .. figure:: /images/github-app-install-location.png
-         :alt: GitHub Application install location screen
+               GitHub may require you to provide your GitHub account credentials before
+               you can install the app.
 
-      Specify one or more repositories for which you want to grant App Services read
-      access. You can either select specific repositories or grant access to all of
-      your repositories on GitHub. Select the repositories you want to use and then
-      click :guilabel:`Install`.
+            Select the GitHub account or organization for which you want to install the
+            app:
 
-      .. figure:: /images/github-app-install-permissions.png
-         :alt: GitHub Application permissions request screen
+            .. figure:: /images/github-app-install-location.png
+               :alt: GitHub Application install location screen
 
-      After you install the application, return to the :guilabel:`Configuration` 
-      tab and click the :guilabel:`Authorize` button to finish connecting 
-      App Services to GitHub. This leads you to a github permissions screen. 
-      Click :guilabel:`Authorize MongoDB Atlas App Services`.
+            Specify one or more repositories for which you want to grant App Services read
+            access. You can either select specific repositories or grant access to all of
+            your repositories on GitHub. Select the repositories you want to use and then
+            click :guilabel:`Install`.
 
-      .. figure:: /images/authorize-mdb-realm-github.png
-         :alt: GitHub Application authorization request screen
+            .. figure:: /images/github-app-install-permissions.png
+               :alt: GitHub Application permissions request screen
 
-      .. note:: GitHub Permissions
+            After you install the application, return to the :guilabel:`Configuration` 
+            tab and click the :guilabel:`Authorize` button to finish connecting 
+            App Services to GitHub. This leads you to a github permissions screen. 
+            Click :guilabel:`Authorize MongoDB Atlas App Services`.
 
-         You can manage permissions for the App Services GitHub application from
-         the :github:`Installed GitHub Apps <settings/installations>` page in your
-         GitHub settings.
+            .. figure:: /images/authorize-mdb-realm-github.png
+               :alt: GitHub Application authorization request screen
 
+            .. note:: GitHub Permissions
 
-   .. step:: Specify a GitHub Repository
-
-      Once you have linked your GitHub account to your App, you can specify a
-      repository that App Services should automatically deploy. Specify the
-      :guilabel:`Repository`, :guilabel:`Branch`, and :guilabel:`Directory` that
-      contain the App's configuration files and then click :guilabel:`Save`.
-
-      .. figure:: /images/automatic-deploy-select-repo.png
-         :alt: GitHub repository selection
-         :width: 750px
-
-      .. note::
-
-         The list of repositories will only contain repos that you have
-         granted App Services read access to.
+               You can manage permissions for the App Services GitHub application from
+               the :github:`Installed GitHub Apps <settings/installations>` page in your
+               GitHub settings.
 
 
-   .. step:: Initialize the Repository
+         .. step:: Specify a GitHub Repository
 
-      Clone a local copy of the Git repository that you specified:
+            Once you have linked your GitHub account to your App, you can specify a
+            repository that App Services should automatically deploy. Specify the
+            :guilabel:`Repository`, :guilabel:`Branch`, and :guilabel:`Directory` that
+            contain the App's configuration files and then click :guilabel:`Save`.
 
-      .. code-block:: shell
+            .. figure:: /images/automatic-deploy-select-repo.png
+               :alt: GitHub repository selection
+               :width: 750px
 
-         git clone https://github.com/<organization>/<repo>.git
+            .. note::
 
-      The configured branch and directory must contain configuration
-      files that define your application. You can create the
-      configuration manually or :ref:`export the application directory
-      <export-app>` of an existing app.
-
-      Add the application directory to the repository and then commit the changes:
-
-      .. code-block:: shell
-
-         git add -A
-         git commit -m "Adds App Services Application Directory"
-
-      Once you have committed the latest version of the application to the
-      repository, push it to your GitHub repository:
-
-      .. code-block:: shell
-
-         git push origin <branch name>
+               The list of repositories will only contain repos that you have
+               granted App Services read access to.
 
 
-   .. step:: Enable Automatic Deployment
+         .. step:: Initialize the Repository
 
-      After you have specified a repository to deploy and initialized it with the
-      latest version of your app, you need to enable automatic deployment to begin
-      deploying it. On the :guilabel:`Configuration` tab of the :guilabel:`Deploy`
-      page, click :guilabel:`Enable Automatic Deployment`. In the modal that
-      appears, click :guilabel:`Enable Automatic Deployment` to confirm your
-      selection.
+            Clone a local copy of the Git repository that you specified:
 
-      .. figure:: /images/enable-automatic-deployment.png
-         :alt: Enable Automatic GitHub Deployment in the App Services UI
+            .. code-block:: shell
 
+               git clone https://github.com/<organization>/<repo>.git
 
-   .. step:: Make Changes to Your Application
+            The configured branch and directory must contain configuration
+            files that define your application. You can create the
+            configuration manually or :ref:`export the application directory
+            <export-app>` of an existing app.
 
-      A deployment contains one or more changes that you have made to your
-      application since the previous deployment. Make any additions, modifications,
-      or deletions to the repository that you want to include in your deployment.
+            Add the application directory to the repository and then commit the changes:
 
-      Refer to the :ref:`app-configuration` reference page and individual component
-      reference pages for details on the structure and schema of your application
-      directory.
+            .. code-block:: shell
 
-      .. important:: Do not make breaking schema changes via automated deploy
+               git add -A
+               git commit -m "Adds App Services Application Directory"
 
-         Because :ref:`breaking - also called destructive - schema changes
-         <destructive-changes-synced-schema>` require special handling, App Services
-         does not support making breaking schema changes via automated deploy
-         with GitHub. Instead, you should make breaking changes from the
-         App Services UI.
+            Once you have committed the latest version of the application to the
+            repository, push it to your GitHub repository:
+
+            .. code-block:: shell
+
+               git push origin <branch name>
 
 
-   .. step:: Commit and Push Your Changes
+         .. step:: Enable Automatic Deployment
 
-      Once you have updated your application configuration, you can deploy the
-      updates as a new version of your App by pushing them to the GitHub repo
-      that you specified. If Automatic GitHub Deployment is enabled,
-      App Services immediately deploys the latest commit for the configured
-      branch and directory.
+            After you have specified a repository to deploy and initialized it with the
+            latest version of your app, you need to enable automatic deployment to begin
+            deploying it. On the :guilabel:`Configuration` tab of the :guilabel:`Deploy`
+            page, click :guilabel:`Enable Automatic Deployment`. In the modal that
+            appears, click :guilabel:`Enable Automatic Deployment` to confirm your
+            selection.
 
-      When you are ready to deploy, commit all of the files that you want to include
-      and then push them to GitHub:
+            .. figure:: /images/enable-automatic-deployment.png
+               :alt: Enable Automatic GitHub Deployment in the App Services UI
 
-      .. code-block:: sh
 
-         git add -A
-         git commit -m "<commit message>"
-         git push origin <branch name>
+         .. step:: Make Changes to Your Application
 
-      Once you successfully push your changes to GitHub, App Services
-      immediately deploys a new version of your application that matches the state
-      of the latest commit. Client applications will automatically use the newest
-      version, so make sure that you also update your client code to use the new
-      version if necessary.
+            A deployment contains one or more changes that you have made to your
+            application since the previous deployment. Make any additions, modifications,
+            or deletions to the repository that you want to include in your deployment.
 
-      .. note:: Deployment History
+            Refer to the :ref:`app-configuration` reference page and individual component
+            reference pages for details on the structure and schema of your application
+            directory.
 
-         You can see the currently deployed version of your
-         application as well as a historical log of previous
-         deployments in the :ref:`Deployment History
-         <deployment-history>` table in the App Services UI.
+            .. important:: Do not make breaking schema changes via automated deploy
 
+               Because :ref:`breaking - also called destructive - schema changes
+               <destructive-changes-synced-schema>` require special handling, App Services
+               does not support making breaking schema changes via automated deploy
+               with GitHub. Instead, you should make breaking changes from the
+               App Services UI.
+
+
+         .. step:: Commit and Push Your Changes
+
+            Once you have updated your application configuration, you can deploy the
+            updates as a new version of your App by pushing them to the GitHub repo
+            that you specified. If Automatic GitHub Deployment is enabled,
+            App Services immediately deploys the latest commit for the configured
+            branch and directory.
+
+            When you are ready to deploy, commit all of the files that you want to include
+            and then push them to GitHub:
+
+            .. code-block:: sh
+
+               git add -A
+               git commit -m "<commit message>"
+               git push origin <branch name>
+
+            Once you successfully push your changes to GitHub, App Services
+            immediately deploys a new version of your application that matches the state
+            of the latest commit. Client applications will automatically use the newest
+            version, so make sure that you also update your client code to use the new
+            version if necessary.
+
+            .. note:: Deployment History
+
+               You can see the currently deployed version of your
+               application as well as a historical log of previous
+               deployments in the :ref:`Deployment History
+               <deployment-history>` table in the App Services UI.
+
+   .. tab::
+      :tabid: cli
+
+      .. versionadded:: 1.1.0
+
+      You can use the CLI to configure, enable, or disable automatic deployment.
+
+      .. procedure::
+      
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/cli-login.rst
+
+         .. step:: Run the Deploy Configure Command
+
+            The {+cli+} can walk you through the process of configuring automatic
+            deployment. This is an interactive command.
+
+            .. code-block:: shell
+
+               {+cli-bin+} deploy configure
+
+            The command also supports additional flags that you can optionally 
+            include. For information on these flags, refer to 
+            :ref:`appservices-deploy-configure`.
+
+            {+cli+} immediately enables automatic deployment when you complete
+            this command. You don't need to run the ``enable`` command as
+            an additional step.
+
+            .. tip:: This functionality relies on a GitHub beta feature
+
+               The ability to configure automatic deployment using {+cli+}
+               relies on a GitHub feature that is currently in beta. If 
+               GitHub makes breaking changes to this feature, you may be unable
+               to configure automatic deployment using the {+cli+}. In this
+               case, use the App Services UI or Admin API to configure 
+               automatic deployment.
+
+               This only applies to configuring automatic deployment. If you 
+               have previously configured it for your application, the
+               functionality to enable or disable it using the {+cli+}
+               does not rely on this beta GitHub feature.
+
+         .. step:: Disable, Enable, or View Configuration Details (Optional)
+
+            You can use the {+cli+} to view configuration details after you have
+            configured automatic deployment.
+
+            .. code-block:: shell
+
+               {+cli-bin+} deploy describe
+
+            You can disable and enable automatic deployment using the {+cli+}. 
+            For more information about these commands and their options, refer 
+            to :ref:`appservices-deploy`.
+
+   .. tab::
+      :tabid: api
+
+      .. step:: Authenticate a MongoDB Atlas User
+
+         .. include:: /includes/api-authenticate-instructions.rst
+
+      .. step:: Get an Existing Deployment Configuration (Optional)
+
+         You can get the existing deployment configuration for your App by 
+         making a ``GET`` request to the :admin-api-endpoint:`Get the 
+         Deployment Configuration <operation/adminGetDeploymentConfig>`
+         endpoint. 
+
+         .. code-block:: bash
+
+            curl -X GET \
+               https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/deploy/config \
+               -H 'Authorization: Bearer <access_token>'
+
+      .. step:: Update the Deployment Configuration
+
+         You can get the existing deployment configuration for your App by 
+         making a ``PATCH`` request to the :admin-api-endpoint:`Configure
+         Deployment <operation/adminConfigureDeployment>` endpoint.
+
+         .. code-block:: bash
+
+            curl -X PATCH \
+               https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/deploy/config \
+               -H 'Authorization: Bearer <access_token>' \
+               -d '{
+                  "ui_drafts_disabled": true,
+                  "automatic_deployment": {
+                     "enabled": true,
+                     "provider": "github",
+                     "installation_ids": [
+                        "string"
+                     ]
+                  },
+                  "last_modified": 0
+                  }'
 
 .. _deploy-github-make-changes-ui:
 
@@ -233,11 +340,24 @@ bot appears as the commit author.
 
 .. _deploy-github-make-changes-cli:
 
-Avoid Making Changes from the CLI
----------------------------------
+Make Changes from the CLI
+-------------------------
 
-With automatic GitHub deployment enabled, avoid making changes to your app 
-with {+cli+} because:
+Previously, we have recommended avoiding avoid making changes to your app 
+with {+cli+} after configuring automatic deployment. Starting with 
+{+cli+} v1.1.0 and newer, you can safely use the {+cli+} to make changes to 
+your app.
+
+**{+cli+} version 1.1.0 and newer**
+
+In {+cli+} v1.1.0 and newer, a push from the {+cli+} automatically generates
+a corresponding commit in GitHub. This keeps your code changes synchronized
+with your version-controlled GitHub source of truth.
+
+**{+cli+} version 1.0.3 and older**
+
+In {+cli+} v1.0.3 and older, avoid making changes to your app with the {+cli+}
+after configuring automatic deployment, because:
 
 - If you push changes with the CLI while GitHub deployment is enabled, App Services 
   deploys the changes but does not commit them back to your linked repository.
@@ -262,5 +382,5 @@ Summary
   GitHub Deployment, those changes are automatically committed back to your 
   linked repository.
 
-- Do not use {+cli+} to update configuration files after enabling 
-  Automatic GitHub Deployment.
+- If you would like to use {+cli+} to update configuration files after enabling 
+  Automatic GitHub Deployment, use {+cli+} v1.1.0 or newer.
