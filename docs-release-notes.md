@@ -1,3 +1,24 @@
+# February 9, 2024
+
+## Device Sync
+- Get Started: Add info to the "Create queries in your client application" section about Sync ignoring custom collation when evaluating subscriptions.
+
+## Develop & Deploy Apps
+
+- Deploy Automatically with GitHub: Add tabs for CLI and API procedures. Update details about making changes from the CLI.
+
+## Define Data Access Permissions
+Device Sync-Compatible Permissions: Add information about Sync ignoring custom collation when evaluating permissions.
+
+## Reference
+
+- App Services CLI
+  - appservices deploy: New section with details for the new CLI commands that enable you to manage automatic deployments of your app: `appservices deploy configure`, `appservices deploy describe,` `appservices deploy disable`, `appservices deploy enable`.
+
+## Release Notes
+
+- Update external change log with release notes for the Data Services logs UI, object model generation for dictionaries, and more. 
+
 # February 2, 2024
 
 ## Device Sync
