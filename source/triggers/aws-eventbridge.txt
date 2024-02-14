@@ -189,10 +189,10 @@ Create a New Custom Error Function
    .. tab::
       :tabid: ui
 
-      .. procedure::
+      .. figure:: /images/eventbridge-custom-function.png
+         :alt: The EventBridge custom error handling configuration.
 
-         .. figure:: /images/eventbridge-custom-function.png
-               :alt: The EventBridge custom error handling configuration.
+      .. procedure::
 
          .. step:: Create a New Error Handling Function
 
@@ -259,19 +259,19 @@ If an error was recevied from EventBridge, the event processor will parse the
 error as either ``DOCUMENT_TOO_LARGE`` or ``OTHER``. This parsed error is passed
 to the error handle function. 
 
-``DOCUMENT_TOO_LARGE``
-``````````````````````
+DOCUMENT_TOO_LARGE
+``````````````````
 If the put entry for an EventBridge trigger event is larger
 than 256 KB, Eventbridge will throw an error. The error will either contain:
 
-1.  ``total size of the entries in the request is over the limit.`` and `status
-code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_
+1.  `status code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_ and 
+``total size of the entries in the request is over the limit``.
 
 2. `status code: 413 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413>`_, 
 which indicates a too large payload. 
 
-``OTHER``
-`````````
+OTHER
+`````
 The default bucket for all other errors.
 
 .. _event_processor_example:
