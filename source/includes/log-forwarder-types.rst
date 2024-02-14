@@ -7,4 +7,4 @@
 - ``service``
 - ``sync``
 - ``trigger``
-- ``errorhandler``
+- ``error_handler``
