@@ -26,7 +26,8 @@ MongoDB offers an `AWS Eventbridge
 <https://aws.amazon.com/eventbridge/>`_ partner event source that lets
 you send Atlas Trigger events to an event bus instead of
 calling an Atlas Function. You can configure any Trigger to send events to
-EventBridge.
+EventBridge. You can also configure custom error handling for the Trigger,
+to cut down on trigger suspensions due to non-critical errors. 
 
 All you need to send Trigger events to EventBridge is an AWS account ID.
 This guide walks through finding your account ID, configuring the
@@ -51,7 +52,7 @@ Procedure
 
 .. procedure::
 
-   .. step:: Begin Setup of the MongoDB Partner Event Source
+   .. step:: Setup the MongoDB Partner Event Source 
 
       To send trigger events to AWS EventBridge, you need the :guilabel:`AWS
       account ID` of the account that should receive the events.
@@ -196,7 +197,7 @@ Create a New Custom Error Function
 
          .. step:: Create a New Error Handling Function
 
-            In the :guilabel:`Configure Error Fucntion` section, select 
+            In the :guilabel:`Configure Error Function` section, select 
             :guilabel:`+ New Function`.
 
          .. step:: Name the New Function
@@ -213,8 +214,13 @@ Create a New Custom Error Function
          .. step:: Test the Function
 
             In the :guilabel:`Testing Console` tab beneath the function editor, you can
-            test the function by passing in an example ``error`` and ``changeEvent``. Click
-            :guilabel:`Run` to run the test. 
+            test the function by passing in example values to the ``error`` and 
+            ``changeEvent`` parameters, as shown in the comments of the testing console. 
+
+            For more information on these paramaters, see the below section on 
+            :ref:`Error Handler Parameters <eventbridge-error-handler-parameters>`.
+
+            Click :guilabel:`Run` to run the test. 
 
          .. step:: Save the Function
 
@@ -224,33 +230,113 @@ Create a New Custom Error Function
    .. tab::
       :tabid: cli
 
-      Add an ``error_handler`` attribute to your trigger configuration file. 
-      The trigger configuration file should resemble the following:
+      In order to update your trigger's configuration with an error handler, 
+      follow these steps to :ref:`Update an App  <deploy-cli>`. For step 3, update the 
+      following configuration files:
 
-      .. code-block:: json
+      .. procedure::
 
-               {
-                 "name": "...",
-                 "type": "...",
-                 "event_processors": {
-                    "AWS_EVENTBRIDGE": {
-                        "config": {
-                           "account_id": "<AWS Account ID>",
-                           "region": "<AWS Region>",
-                           "extended_json_enabled": <boolean>
+         .. step:: Create an Error Handler Function File
+
+            Add a .js file to your ``Functions`` folder to house your custom
+            error handler. The name of the file will be the name of your function. 
+            For the error handler, you can edit the following template error handler:
+
+            .. code-block:: js
+               
+               exports = async function(error, changeEvent) {
+                  // This sample function will log additional details if the error is not
+                  // a DOCUMENT_TOO_LARGE error
+                  if (error.code === 'DOCUMENT_TOO_LARGE') {
+                     console.log('Document too large error');
+
+                     // Comment out the line below in order to skip this event and not suspend the Trigger
+                     throw new Error(`Encountered error: ${error.code}`);
+                  }
+
+                  console.log('Error sending event to EventBridge');
+                  console.log(`DB: ${changeEvent.ns.db}`);
+                  console.log(`Collection: ${changeEvent.ns.coll}`);
+                  console.log(`Operation type: ${changeEvent.operationType}`);
+
+                  // Throw an error in your function to suspend the trigger and stop processing additional events
+                  throw new Error(`Encountered error: ${error.message}`);
+               };
+
+         .. step:: Add the Function to the ``config.json``
+
+            Add the function's configuration to the ``Function`` folder's 
+            ``config.json`` file. The file should resemble the following:
+
+            .. code-block:: json
+
+               [
+                  {
+                     "name": "<Error Handler Function Name>",
+                     "private": <boolean>
+                  }
+               ]
+
+            For more information on function configuration files, 
+            see :ref:`Function Configuration Files <appconfig-functions>`.
+
+         .. step:: Add an Error Handler to Your Trigger Configuration
+
+            Add an ``error_handler`` attribute to your trigger configuration file
+            in the ``Triggers`` folder. The trigger configuration file should 
+            resemble the following:
+
+            .. code-block:: json
+
+                     {
+                     "name": "...",
+                     "type": "...",
+                     "event_processors": {
+                        "AWS_EVENTBRIDGE": {
+                              "config": {
+                                 "account_id": "<AWS Account ID>",
+                                 "region": "<AWS Region>",
+                                 "extended_json_enabled": <boolean>
+                              }
+                           }
+                        },
+                        "error_handler": {
+                           "config": {
+                              "enabled": <boolean>,
+                              "function_name": "<Error Handler Function Name>"
+                           }
                         }
                      }
-                  },
-                  "error_handler": {
-                     "config": {
-                        "enabled": <boolean>,
-                        "function_name": "<Error Handler Function Name>"
-                     }
-                  }
-               }
+            
+            For more information on trigger configuration files, see
+            :ref:`Trigger Configuration Files <appconfig-triggers>`.
 
-      To learn how to update your app with this new configuration, see
-      :ref:`Update an App <deploy-cli>`.
+.. _eventbridge-error-handler-parameters:
+
+Error Handler Parameters
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The default error handler has two parameters: ``error`` and ``changeEvent``.
+
+``error`` 
+`````````
+Has two attributes: ``code`` and ``message``.
+
+- ``code``: For a list of error codes 
+used by the error handler, see the below section on :ref:`Error 
+Codes <eventbridge-error-codes>`. 
+
+- ``message``: The unfiltered error message from an errored Eventbridge
+put request.
+
+``changeEvent``
+```````````````
+
+The requested change to your data made by EventBridge. For more information
+on types of change events and their configurations, see 
+:manual:`Change Events </reference/change-events>`.
+
+.. _eventbridge-error-codes:
 
 Error Codes
 ~~~~~~~~~~~
@@ -274,8 +360,8 @@ which indicates a too large payload.
 `````````
 The default bucket for all other errors.
 
-Error Logs
-~~~~~~~~~~
+Error Handler Logs
+~~~~~~~~~~~~~~~~~~
 
 You can view error logs for your Event Bridge Trigger error handler in the 
 application logs. 
@@ -287,22 +373,28 @@ application logs.
 
       1. Click ``Logs`` in the left navigation of the App Services UI.
       2. Click the :guilabel:`Filter by Type` dropdown and select
-      both :guilabel:`Triggers` and :guilabel:`Error Handlers` to view
-      logs for the Trigger error handler.
+      :guilabel:`Error Handlers` to view logs for the Trigger error handler.
 
    .. tab::
       :tabid: cli
 
-      Use the ``trigger`` and ``errorhandler`` ``--type`` flags to 
+      Use the ``error_handler`` ``--type`` flag to 
       view logs for the Trigger error handler.
 
       .. code-block:: shell
          
-         {+cli-bin+} logs list --type=trigger --type=errorhandler
+         {+cli-bin+} logs list --type=error_handler
 
 
 To learn more about viewing application logs,
 see :ref:`View Application Logs <view-logs>`.
+
+Optimization
+~~~~~~~~~~~~
+
+By keeping track of the most common error messages you receive in ``error.message``,
+you can optimize your error handling by making special error handling cases for 
+your most common error messages. 
 
 .. _event_processor_example:
 
