@@ -7,3 +7,4 @@
 - ``service``
 - ``sync``
 - ``trigger``
+- ``errorhandler``
