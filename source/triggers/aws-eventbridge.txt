@@ -4,6 +4,13 @@
 Send Trigger Events to AWS EventBridge
 ======================================
 
+.. facet::
+   :name: genre 
+   :values: tutorial
+
+.. meta:: 
+   :description: Learn how to set up AWS EventBridge to handle Atlas Trigger events.
+
 .. default-domain:: mongodb
 
 .. contents:: On this page
@@ -74,10 +81,14 @@ Procedure
             :guilabel:`EventBridge` event type.
 
             Paste in the :guilabel:`AWS Account ID` that you copied from
-            EventBridge and select an AWS Region to send the trigger events
+            EventBridge and select an :guilabel:`AWS Region` to send the trigger events
             to.
 
-            .. figure:: /images/eventbridge-trigger-configuration.png
+            Optionally, you can configure an error function for custom error handling.
+            For more details, see the next section on 
+            :ref:`Custom Error Handling <eventbridge_error_handling>`.
+
+            .. figure:: /images/eventbridge-trigger-config.png
                :alt: The EventBridge input boxes in the trigger configuration.
 
             By default, triggers convert the BSON types in event objects into 
@@ -152,6 +163,117 @@ Procedure
       rules that trigger on events from that partner event source. For more
       information, see :aws-docs:`Creating a Rule That Triggers on a SaaS Partner Event </eventbridge/latest/userguide/create-rule-partner-events.html>`.
 
+.. _eventbridge_error_handling:
+
+Custom Error Handling
+---------------------
+
+.. note:: Custom Error Handling Does Not Support Authentication and Scheduled Triggers
+
+   Custom error handling supports only database triggers. 
+   Authentication triggers and scheduled triggers are not supported. 
+
+.. figure:: /images/eventbridge-error-handling-diagram.png
+   :alt: EventBridge Custom Error Handling Flow Diagram.
+
+You can create an error function to be executed on a trigger failure, 
+when retry does not succeed. Custom error handling allows you to determine
+whether an error from AWS EventBridge is critical enough to suspend the Trigger,
+or if it is acceptable to ignore the error and continue processing other events.
+
+Create a New Custom Error Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. procedure::
+
+         .. figure:: /images/eventbridge-custom-function.png
+               :alt: The EventBridge custom error handling configuration.
+
+         .. step:: Create a New Error Handling Function
+
+            In the :guilabel:`Configure Error Fucntion` section, select 
+            :guilabel:`+ New Function`.
+
+         .. step:: Name the New Function
+
+            Enter a unique, identifying name for the function in the :guilabel:`Name` field. 
+            This name must be distinct from all other functions in the application.
+
+         .. step:: Write the Function Code
+
+            In the :guilabel:`Function` section, write the function in the function editor.
+            In the function editor, you will see a default function. You can edit
+            the function as needed. 
+
+         .. step:: Test the Function
+
+            In the :guilabel:`Testing Console` tab beneath the function editor, you can
+            test the function by passing in an example ``error`` and ``changeEvent``. Click
+            :guilabel:`Run` to run the test. 
+
+         .. step:: Save the Function
+
+            Once you are satisfied with the custom error handling function, click
+            :guilabel:`Save`. 
+
+   .. tab::
+      :tabid: cli
+
+      Add an ``error_handler`` attribute to your trigger configuration file. 
+      The trigger configuration file should resemble the following:
+
+      .. code-block:: json
+
+               {
+                 "name": "...",
+                 "type": "...",
+                 "event_processors": {
+                    "AWS_EVENTBRIDGE": {
+                        "config": {
+                           "account_id": "<AWS Account ID>",
+                           "region": "<AWS Region>",
+                           "extended_json_enabled": <boolean>
+                        }
+                     }
+                  },
+                  "error_handler": {
+                     "config": {
+                        "enabled": <boolean>,
+                        "function_name": "<Error Handler Function Name>"
+                     }
+                  }
+               }
+
+      To learn how to update your app with this new configuration, see
+      :ref:`Update an App <deploy-cli>`.
+
+Error Codes
+~~~~~~~~~~~
+
+If an error was recevied from EventBridge, the event processor will parse the 
+error as either ``DOCUMENT_TOO_LARGE`` or ``OTHER``. This parsed error is passed
+to the error handle function. 
+
+``DOCUMENT_TOO_LARGE``
+``````````````````````
+If the put entry for an EventBridge trigger event is larger
+than 256 KB, Eventbridge will throw an error. The error will either contain:
+
+1.  ``total size of the entries in the request is over the limit.`` and `status
+code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_
+
+2. `status code: 413 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413>`_, 
+which indicates a too large payload. 
+
+``OTHER``
+`````````
+The default bucket for all other errors.
+
 .. _event_processor_example:
 
 Example Event
@@ -178,6 +300,3 @@ This expression lets you include only specified fields, reducing document size.
 
 :ref:`Learn more in the Database Trigger Project Expression documentation. 
 <database-triggers-project-expression>`
-
-
-
