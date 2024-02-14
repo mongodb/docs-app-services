@@ -259,8 +259,8 @@ If an error was recevied from EventBridge, the event processor will parse the
 error as either ``DOCUMENT_TOO_LARGE`` or ``OTHER``. This parsed error is passed
 to the error handle function. 
 
-DOCUMENT_TOO_LARGE
-``````````````````
+``DOCUMENT_TOO_LARGE``
+``````````````````````
 If the put entry for an EventBridge trigger event is larger
 than 256 KB, Eventbridge will throw an error. The error will either contain:
 
@@ -270,9 +270,37 @@ than 256 KB, Eventbridge will throw an error. The error will either contain:
 2. `status code: 413 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413>`_, 
 which indicates a too large payload. 
 
-OTHER
-`````
+``OTHER``
+`````````
 The default bucket for all other errors.
+
+Error Logs
+~~~~~~~~~~
+
+You can view error logs for your Event Bridge Trigger error handler in the 
+application logs. 
+
+ .. tab::
+      :tabid: ui
+
+      1. Click ``Logs`` in the left navigation of the App Services UI.
+
+      2. Click the :guilabel:`Filter by Type` dropdown and select
+      both :guilabel:`Triggers` and :guilabel:`Error Handlers` to view
+      logs for the Trigger error handler.
+
+      :tabid: cli
+
+      Use the ``trigger`` and ``errorhandler`` ``--type`` flags to 
+      view logs for the Trigger error handler.
+
+      .. code-block:: shell
+         
+         {+cli-bin+} logs list --type=trigger --type=errorhandler
+
+
+To learn more about viewing application logs,
+see :ref:`View Application Logs <view-logs>`.
 
 .. _event_processor_example:
 
