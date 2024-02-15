@@ -2850,6 +2850,7 @@ paths:
             type: string
             enum:
               - TRIGGER_FAILURE
+              - TRIGGER_ERROR_HANDLER
               - DB_TRIGGER
               - AUTH_TRIGGER
               - SCHEDULED_TRIGGER
@@ -5818,6 +5819,7 @@ components:
       type: string
       enum:
         - auth
+        - endpoint
         - function
         - graphql
         - push
@@ -5825,6 +5827,7 @@ components:
         - service
         - sync
         - trigger
+        - trigger_error_handler
     LogStatus:
       type: string
       enum:
@@ -7614,6 +7617,7 @@ components:
         - $ref: "#/components/schemas/Logs/API"
         - $ref: "#/components/schemas/Logs/APIKey"
         - $ref: "#/components/schemas/Logs/TriggerFailure"
+        - $ref: "#/components/schemas/Logs/TriggerErrorHandler"
         - $ref: "#/components/schemas/Logs/DBEventTrigger"
         - $ref: "#/components/schemas/Logs/AuthEventTrigger"
         - $ref: "#/components/schemas/Logs/ScheduledEventTrigger"
@@ -7879,6 +7883,17 @@ components:
               error:
                 type: string
                 description: An error message that describes the failure.
+      TriggerErrorHandler:
+        allOf:
+          - $ref: "#/components/schemas/Logs/Parts/TriggerLog"
+          - title: "TRIGGER_ERROR_HANDLER"
+            properties:
+              type:
+                const: "TRIGGER_ERROR_HANDLER"
+              parent_co_id: 
+                type: string
+                example: "641ca0b87649edd250f7536c"
+                description: The ID of the original TRIGGER_FAILURE log that invoked the error handler.                
       DBEventTrigger:
         allOf:
           - $ref: "#/components/schemas/Logs/Parts/TriggerLog"

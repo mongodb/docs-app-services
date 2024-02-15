@@ -1,15 +1,15 @@
-.. _logs-event-handler:
+.. _logs-trigger-error-handler:
 
-==================
-Error Handler Logs
-==================
+==========================
+Trigger Error Handler Logs
+==========================
 
 .. facet::
    :name: genre 
    :values: reference
 
 .. meta:: 
-   :description: Error handler logs are created whenever Atlas executes a custom error handler via an AWS EventBridge Trigger that failed and could not be successfully retried.
+   :description: Trigger error handler logs are created whenever Atlas executes a custom error handler via an AWS EventBridge database Trigger that failed and could not be successfully retried.
 
 .. contents:: On this page
    :local:
@@ -20,15 +20,19 @@ Error Handler Logs
 Overview
 --------
 
-Error handler logs are created whenever Atlas executes a custom error 
+Trigger error handler logs are created whenever Atlas executes a custom error 
 handler via an :ref:`AWS EventBridge Trigger <aws-eventbridge>`
 that failed and could not be successfully retried.
 
+.. note:: Only Supported for Database EventBridge Triggers
+
+   Currently, custom error handling is only supported for database-type 
+   EventBridge triggers.
 
 Log Format
 ----------
 
-Trigger log entries have the following form:
+Trigger error handler log entries have the following form:
 
 .. code-block:: javascript
 
