@@ -32,9 +32,13 @@ trigger type. The following fields exist in *all* trigger configuration files:
    {
      "name": "<Trigger Name>",
      "type": "<Trigger Type>",
+     "disabled": <Boolean>,
      "config": {},
-     "function_name": "<Trigger Function Name>",
-     "disabled": <Boolean>
+     "event_processors": {
+       "<Type of Event Processor>": {
+         "config": {}
+       }
+     }
    }
 
 .. list-table::
@@ -61,6 +65,11 @@ trigger type. The following fields exist in *all* trigger configuration files:
        - ``"AUTHENTICATION"``
        - ``"SCHEDULED"``
 
+   * - | ``disabled``
+       | ``boolean``
+     - If ``true``, the trigger will not listen for any events and will
+       not fire.
+
    * - | ``config``
        | ``object``
      - A document with fields that map to additional configuration options for
@@ -71,23 +80,29 @@ trigger type. The following fields exist in *all* trigger configuration files:
        - :ref:`Authentication Triggers <config-authentication-trigger>`
        - :ref:`Scheduled Triggers <config-scheduled-trigger>`
 
-   * - | ``function_name``
-       | ``string``
-     - The name of the :ref:`Atlas Function <functions>` that the
-       trigger executes whenever it fires.
-
    * - | ``event_processors``
        | ``object``
-     - A document that configures the trigger to send events to external event
-       processors whenever it fires. Cannot be used with ``function_name``.
+     - A document that configures the trigger to send events to an event
+       processor whenever it fires.
 
-       For more information, see :ref:`Send Trigger Events to AWS EventBridge
+       Valid Options:
+
+       - "FUNCTION"
+       - "AWS_EVENTBRIDGE"
+
+       For more information on Functions, see :ref:`Atlas Functions <functions>`. 
+
+       For more information on AWS EventBridge, see :ref:`Send Trigger Events to AWS EventBridge
        <aws-eventbridge>`.
 
-   * - | ``disabled``
-       | ``boolean``
-     - If ``true``, the trigger will not listen for any events and will
-       not fire.
+   * - | ``event_processors.config``
+       | ``object``
+     - A document with fields that map to additional configuration options for
+       the event processor. The exact configuration fields depend on the event
+       processor type: 
+
+       - :ref:`Function <trigger-function-event-processor>`
+       - :ref:`AWS EventBridge <trigger-eventbridge-event-processor>`
 
 .. _config-database-trigger:
 
@@ -96,15 +111,26 @@ Database Triggers
 
 Database trigger configurations conform to the base trigger schema with
 additional configuration options that specify which collection to watch and when
-to fire the trigger. The following fields exist in *database* and *deployment* 
-trigger configuration files:
+to fire the trigger. 
 
+Below are two configurations: one configuration is 
+for a trigger with a Function event processor and the other is for a trigger with 
+an AWS EventBridge event processor. The only difference between the two configuraitons
+is the type of ``event_processor`` and the presence of an ``error_handler`` in the trigger
+with AWS EventBridge. The following fields exist in *database* and *deployment* 
+trigger configuration files. 
+
+.. _trigger-function-event-processor:
+
+Database Trigger with a Function Event Processor
+````````````````````````````````````````````````
 .. code-block:: json
    :caption: triggers/<trigger name>.json
    
    {
      "name": "<Trigger Name>",
      "type": "DATABASE",
+     "disabled": <boolean>,
      "config": {
        "service_name": "<MongoDB Service Name>",
        "database": "<Database Name>",
@@ -117,9 +143,54 @@ trigger configuration files:
        "match": { <Match Filter> },
        "project": { <Projection Filter> },
      },
-     "function_name": "<Trigger Function Name>",
-     "disabled": <Boolean>
+     "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "<Function Name>"  
+            }
+        }
+     }
    }
+
+.. _trigger-eventbridge-event-processor:
+
+Database Trigger with an AWS EventBridge Event Processor
+````````````````````````````````````````````````````````
+.. code-block:: json
+   :caption: triggers/<trigger name>.json
+   
+   {
+     "name": "<Trigger Name>",
+     "type": "DATABASE",
+     "disabled": <boolean>,
+     "config": {
+       "service_name": "<MongoDB Service Name>",
+       "database": "<Database Name>",
+       "collection": "<Collection Name>",
+       "operation_types": ["<Operation Type>", ...],
+       "full_document": <boolean>,
+       "full_document_before_change": <boolean>,
+       "tolerate_resume_errors": <boolean>,
+       "unordered": <boolean>,
+       "match": { <Match Filter> },
+       "project": { <Projection Filter> },
+     },
+     "event_processors": {
+        "AWS_EVENTBRIDGE": {
+            "config": {
+                "account_id": "<AWS Account ID>",
+                "region": "<AWS Region>",
+                "extended_json_enabled": <boolean>
+            }
+        }
+    },
+    "error_handler": {
+        "config": {
+            "enabled": <boolean>,
+            "function_name": "<Error Handler Function Name>"
+        }
+    }
+  }
 
 .. list-table::
    :widths: 10 30
@@ -241,6 +312,34 @@ trigger configuration files:
        | ``object``
      - .. include:: /includes/trigger-project-expression.rst
 
+   * - | ``event_processors.config.account_id``
+       | ``string``
+     - An AWS account ID. For more information on how to find the account ID,
+       see step 1 (Setup the MongoDB Partner Event Source) of the procedure on the 
+       :ref:`Send Trigger Events to AWS EventBridge <aws-eventbridge>` page.
+
+   * - | ``event_processors.config.region``
+       | ``string``
+     - An AWS region.
+
+   * - | ``event_processors.config.extended_json_enabled``
+       | ``boolean``
+     - False by default. If true, entended JSON is enabled.
+       
+       Triggers convert the BSON types in event objects into standard JSON types. 
+       To preserve BSON type information, you can serialize event objects into 
+       :manual:`Extended JSON format </reference/mongodb-extended-json>`instead. 
+       Extended JSON preserves type information at the expense of readability and 
+       interoperability.
+
+   * - | ``error_handler.config.enabled``
+       | ``boolean``
+     - If true, the error handler is enabled. 
+
+   * - | ``error_handler.config.function_name``
+       | ``string``
+     - The name of the error handler function.
+     
 .. _config-authentication-trigger:
 
 Authentication Triggers
