@@ -8,6 +8,10 @@ Trigger Configuration Files
    :name: genre 
    :values: reference
 
+.. facet::
+  :name: programming_language
+  :values: json
+
 .. meta::
   :description: Learn about Atlas Trigger configuration parameters. 
 
@@ -74,7 +78,7 @@ trigger type. The following fields exist in *all* trigger configuration files:
 
    * - | ``disabled``
        | ``boolean``
-     - If ``true``, the trigger will not listen for any events and will
+     - Defaults to ``false`` If ``true``, the trigger will not listen for any events and will
        not fire.
 
    * - | ``config``
@@ -120,12 +124,11 @@ Database trigger configurations conform to the base trigger schema with
 additional configuration options that specify which collection to watch and when
 to fire the trigger. 
 
-Below are two configurations: one configuration is 
-for a trigger with a Function event processor and the other is for a trigger with 
-an AWS EventBridge event processor. The only difference between the two configuraitons
-is the type of ``event_processor`` and the presence of an ``error_handler`` in the trigger
-with AWS EventBridge. The following fields exist in *database* and *deployment* 
-trigger configuration files. 
+The following fields exist in *database* trigger configuration files. There are
+two possible configurations depending on the event processor type:
+
+- ``FUNCTION``
+- ``AWS_EVENTBRIDGE``
 
 .. _trigger-function-event-processor:
 
@@ -148,6 +151,8 @@ trigger configuration files.
        "tolerate_resume_errors": <boolean>,
        "unordered": <boolean>,
        "match": { <Match Filter> },
+       "maximum_throughput": <boolean>,
+       "skip_catchup_events": <boolean>,
        "project": { <Projection Filter> },
      },
      "event_processors": {
@@ -180,6 +185,8 @@ trigger configuration files.
        "tolerate_resume_errors": <boolean>,
        "unordered": <boolean>,
        "match": { <Match Filter> },
+       "maximum_throughput": <boolean>,
+       "skip_catchup_events": <boolean>,
        "project": { <Projection Filter> },
      },
      "event_processors": {
@@ -314,7 +321,19 @@ trigger configuration files.
    * - | ``config.match``
        | ``object``
      - .. include:: /includes/trigger-match-expression.rst
+
+   * - | ``config.maximum_throughput``
+       | ``boolean``
+     - Defaults to ``false``. If ``true``, you can increase the maximum throughput
+       beyond the default 10,000 concurrent processes. For more information,
+       see `Maximize Throughput Triggers 
+       <https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#std-label-triggers-maximum-throughput>`_.
    
+   * - | ``config.skip_catchup_events``
+       | ``boolean``
+     - Defaults to ``false``. If ``true``, enabling the Trigger after it was disabled
+       will not invoke events that occurred while the Trigger was disabled.
+
    * - | ``config.project``
        | ``object``
      - .. include:: /includes/trigger-project-expression.rst
@@ -322,8 +341,8 @@ trigger configuration files.
    * - | ``event_processors.config.account_id``
        | ``string``
      - An AWS account ID. For more information on how to find the account ID,
-       see step 1 (Setup the MongoDB Partner Event Source) of the procedure on the 
-       :ref:`Send Trigger Events to AWS EventBridge <aws-eventbridge>` page.
+       refer to the :ref:`Setup the MongoDB Partner Event Source <setup_eventbridge>` 
+       step on the :ref:`Send Trigger Events to AWS EventBridge <aws-eventbridge>` page.
 
    * - | ``event_processors.config.region``
        | ``string``
@@ -335,13 +354,15 @@ trigger configuration files.
        
        Triggers convert the BSON types in event objects into standard JSON types. 
        To preserve BSON type information, you can serialize event objects into 
-       :manual:`Extended JSON format </reference/mongodb-extended-json>`instead. 
+       :manual:`Extended JSON format </reference/mongodb-extended-json>` instead. 
        Extended JSON preserves type information at the expense of readability and 
        interoperability.
 
    * - | ``error_handler.config.enabled``
        | ``boolean``
-     - If true, the error handler is enabled. 
+     - If true, the error handler is enabled. For more information on
+       creating an ``error_handler``, see this section on
+       :ref:`Custom Error Handling <eventbridge-error-handling>`.
 
    * - | ``error_handler.config.function_name``
        | ``string``
