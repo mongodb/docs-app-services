@@ -23,7 +23,7 @@ info:
 
     The Admin API is for application development, configuration, and
     deployment. To actually use the features you configure with the
-    Admin API, client applications connect with a [Realm
+    Admin API, client applications connect with an [Atlas Device
     SDK](https://mongodb.com/docs/realm/) or over an HTTPS API specific
     to your App.
 
@@ -609,7 +609,7 @@ paths:
 
                       If the value of `cluster_time` is significantly
                       earlier than the `completed_at` time, the event
-                      processor (e.g. Device Sync) is lagging behind the event .
+                      processor (e.g. Device Sync) is lagging behind the event.
 
   "/groups/{groupId}/apps/{appId}/triggers":
     parameters:
@@ -7112,6 +7112,24 @@ components:
                     can process events in parallel. If `false`, event
                     ordering is enabled and the Trigger executes events
                     serially.
+            error_handler:
+              type: object
+              description: |-
+                An object that defines custom error handling for an AWS 
+                EventBridge trigger. Valid only for `"DATABASE"` type triggers 
+                with `"AWS_EVENTBRIDGE"` event processors. 
+              properties:
+                config:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                      description: If 'true', custom error handling is enabled for the AWS EventBridge trigger. 
+                    function_id:
+                      type: string
+                      description: |-
+                        The ID of the function invoked when the AWS EventBridge 
+                        trigger fails and cannot be successfully retried.
     AuthenticationTrigger:
       example:
         name: onNewApiKey
