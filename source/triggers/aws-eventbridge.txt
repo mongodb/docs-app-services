@@ -86,8 +86,9 @@ Procedure
             EventBridge and select an :guilabel:`AWS Region` to send the trigger events
             to.
 
-            Optionally, you can configure an error function for custom error handling.
-            For more details, refer to :ref:`Custom Error Handling <eventbridge_error_handling>`
+            Optionally, you can configure a function for handling trigger errors.
+            Custom error handling is only valid for database triggers. 
+            For more details, refer to the :ref:`Custom Error Handling <eventbridge_error_handling>`
             section on this page.
 
             .. figure:: /images/eventbridge-trigger-config.png
@@ -188,7 +189,7 @@ You can create an error handler to be executed on a trigger failure,
 when retry does not succeed. Custom error handling allows you to determine
 whether an error from AWS EventBridge is critical enough to suspend the Trigger,
 or if it is acceptable to ignore the error and continue processing other events.
-For more information on suspended databse triggers, refer to 
+For more information on suspended database triggers, refer to 
 :ref:`Suspended Triggers <suspended_triggers>`.
 
 Create a New Custom Error Handler
@@ -198,6 +199,10 @@ Create a New Custom Error Handler
 
    .. tab::
       :tabid: ui
+
+      You can create the new function directly in the Create a Trigger page, as below, 
+      or from the Functions tab. For more information on how to define functions in 
+      App Services, refer to :ref:`Define a Function <define-a-function>`.
 
       .. figure:: /images/eventbridge-custom-function.png
          :alt: The EventBridge custom error handling configuration in the UI.
@@ -210,8 +215,7 @@ Create a New Custom Error Handler
             :guilabel:`+ New Function`.
 
             You can also select an existing Function, if one is already defined,  
-            from the dropdown. For more information, see 
-            :ref:`Define a Function <define-a-function>`.
+            from the dropdown.
 
          .. step:: Name the New Function
 
@@ -220,9 +224,10 @@ Create a New Custom Error Handler
 
          .. step:: Write the Function Code
 
-            In the :guilabel:`Function` section, write the function in the function editor.
-            In the function editor, you will see a default function. You can edit
-            the function as needed. 
+            In the :guilabel:`Function` section, write the JavaScript code directly in 
+            the function editor. The function editor contains a default function that 
+            you can edit as needed. For more information on creating functions, refer 
+            to the :ref:`Functions <functions>` documentation.
 
          .. step:: Test the Function
 
@@ -287,6 +292,7 @@ Create a New Custom Error Handler
 
             .. code-block:: json
                :emphasize-lines: 13-18
+               :caption: <triggerName>.json
 
                      {
                      "name": "...",
@@ -449,11 +455,11 @@ to the error handler function through the ``error`` parameter.
 If the put entry for an EventBridge trigger event is larger
 than 256 KB, EventBridge will throw an error. The error will contain either:
 
-- `status code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_ and ``total size of the entries 
-   in the request is over the limit``.
+- `status code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_ and 
+  ``total size of the entries in the request is over the limit``.
 
 - `status code: 413 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413>`_, 
-   which indicates a too large payload. 
+  which indicates a too large payload. 
 
 For more information on reducing put entry size, see the below :ref:`Performance 
 Optimization <send-aws-eventbridge-performance-optimization>` section.
@@ -473,8 +479,8 @@ The default bucket for all other errors.
 Error Handler Logs
 ~~~~~~~~~~~~~~~~~~
 
-You can view logs for your EventBridge Trigger error handler in the 
-application logs. 
+You can view :ref:`Trigger Error Handler logs <logs-trigger-error-handler>` for 
+your EventBridge Trigger error handler in the application logs. 
 
 .. tabs-realm-admin-interfaces::
 
@@ -500,7 +506,7 @@ application logs.
    .. tab::
       :tabid: api
 
-      Retrieve error handler logs via a ``GET`` request to
+      Retrieve ``TRIGGER_ERROR_HANDLER`` type logs via a ``GET`` request to
       the :admin-api-endpoint:`Retreive App Services Logs
       <operation/adminGetLogs>` endpoint:
 
