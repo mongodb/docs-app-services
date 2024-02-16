@@ -5750,7 +5750,6 @@ components:
       type: object
       required:
         - clusterName
-        - clusterType
         - readPreference
         - wireProtocolEnabled
       properties:
@@ -5761,13 +5760,6 @@ components:
             The cluster name of the data source within. The name may be at
             most 64 characters long and must only contain ASCII letters, numbers,
             underscores, and hyphens.
-        clusterType:
-          type: string
-          enum:
-            - atlas
-            - serverless
-          example: atlas
-          description: The type of service.
         readPreference:
           type: string
           enum:
@@ -6124,35 +6116,40 @@ components:
               description: The role's unique ObjectId identifier.
         - $ref: "#/components/schemas/RoleConstructor"
     RoleConstructor:
-      type: object
-      description: A data access role that assigns read and write permissions to a user for each document
-      properties:
-        name:
-          type: string
-          description: The role's name.
-        apply_when:
-          description: A rule expression that evaluates to `true` when this role applies to a user for a specific document.
-          $ref: "#/components/schemas/Expression"
-        write:
-          description: A rule expression that evaluates to `true` if the role has permission to add, modify, or remove all fields in the document.
-          $ref: "#/components/schemas/Expression"
-        insert:
-          description: A rule expression that evaluates to `true` if the role has permission to insert a new document into the collection.
-          $ref: "#/components/schemas/Expression"
-        delete:
-          description: A rule expression that evaluates to `true` if the role has permission to delete a document from the collection.
-          $ref: "#/components/schemas/Expression"
-        search:
-          description: A rule expression that evaluates to `true` if the role has permission to search the collection using [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/).
-          $ref: "#/components/schemas/Expression"
-        fields:
-          type: object
-          description: Field-level rules for any fields that are not explicitly configured in the role's `properties`.
-          $ref: "#/components/schemas/NestableFieldLevelPermissions"
-        additional_fields:
-          type: object
-          description: Field-level rules for any fields that are not explicitly configured in the role's `properties`.
-          $ref: "#/components/schemas/FieldLevelPermissions"
+      allOf:
+        - $ref: "#/components/schemas/SyncDocumentFiltersPermissions"
+        - type: object
+          description: A data access role that assigns read and write permissions to a user for each document
+          properties:
+            name:
+              type: string
+              description: The role's name.
+            apply_when:
+              description: A rule expression that evaluates to `true` when this role applies to a user for a specific document.
+              $ref: "#/components/schemas/Expression"
+            read:
+              description: A rule expression that evaluates to `true` if the role has permission to read all fields in the document. If Device Sync is enabled, use `document_filters.read` instead.
+              $ref: "#/components/schemas/Expression"
+            write:
+              description: A rule expression that evaluates to `true` if the role has permission to add, modify, or remove all fields in the document. If Device Sync is enabled, use `document_filters.write` instead.
+              $ref: "#/components/schemas/Expression"
+            insert:
+              description: A rule expression that evaluates to `true` if the role has permission to insert a new document into the collection.
+              $ref: "#/components/schemas/Expression"
+            delete:
+              description: A rule expression that evaluates to `true` if the role has permission to delete a document from the collection.
+              $ref: "#/components/schemas/Expression"
+            search:
+              description: A rule expression that evaluates to `true` if the role has permission to search the collection using [Atlas Search](https://www.mongodb.com/docs/atlas/atlas-search/).
+              $ref: "#/components/schemas/Expression"
+            fields:
+              type: object
+              description: Field-level rules for any fields that are not explicitly configured in the role's `properties`.
+              $ref: "#/components/schemas/NestableFieldLevelPermissions"
+            additional_fields:
+              type: object
+              description: Field-level rules for any fields that are not explicitly configured in the role's `properties`.
+              $ref: "#/components/schemas/FieldLevelPermissions"
     NestableFieldLevelPermissions:
       description: An object that maps document field names to read and write permissions for the field and its children.
       additionalProperties:
@@ -6161,6 +6158,22 @@ components:
           - properties:
               fields:
                 $ref: "#/components/schemas/NestableFieldLevelPermissions"
+    SyncDocumentFiltersPermissions:
+      type: object
+      description: Document-level read and write permissions for Device Sync.
+      properties:
+        document_filters:
+          type: object
+          required:
+            - read
+            - write
+          properties:
+            read:
+              description: A rule expression that evaluates to `true` if the role can read the document.
+              $ref: "#/components/schemas/Expression"
+            write:
+              description: A rule expression that evaluates to `true` if the role can write to the document.
+              $ref: "#/components/schemas/Expression"
     FieldLevelPermissions:
       type: object
       description: Read and write permissions for a field.
@@ -7017,6 +7030,9 @@ components:
           description: The name of the linked cluster
         clusterType:
           type: string
+          enum:
+            - atlas
+            - serverless
           description: The service type of the linked cluster ("atlas" by default)
         flexible_sync:
           $ref: "#/components/schemas/FlexibleSync"
@@ -7531,6 +7547,51 @@ components:
     SchemaDefinition:
       type: object
       description: A valid [schema](https://www.mongodb.com/docs/realm/schemas) for the collection.
+      properties:
+        bsonType:
+          type: string
+          description: The [BSON type](https://www.mongodb.com/docs/atlas/app-services/schemas/types/#std-label-schema-types) of the field.
+          enum:
+            - object
+            - array
+            - string
+            - number
+            - int
+            - long
+            - double
+            - decimal
+            - date
+            - timestamp
+            - bool
+            - null
+            - regex
+            - objectId
+            - binary
+            - uuid
+            - function
+            - javascript
+            - symbol
+            - minKey
+            - maxKey
+        title:
+          type: string
+          description: A human-readable title for the schema.
+        required:
+          type: array
+          items:
+            type: string
+          description: |-
+            For `object` schemas, an array of field names that are
+            required in instances of the object.
+        properties:
+          type: object
+          description: |-
+            An object where each field name is a property in the schema.
+            The corresponding value is a
+            [schema](https://www.mongodb.com/docs/atlas/app-services/schemas/types/#std-label-schema-types)
+            definition for that field.
+          additionalProperties:
+            "$ref": "#/components/schemas/SchemaDefinition"
     SchemaMetadata:
       type: object
       description: Metadata that describes which linked collection the schema applies to.
@@ -8526,8 +8587,6 @@ components:
       type: object
       required:
         - auth_providers
-        - custom_user_data
-        - data_api_config
         - data_sources
         - deployment_model
         - endpoints
@@ -8560,9 +8619,13 @@ components:
           items:
             $ref: "#/components/schemas/AuthProviderConstructor"
         custom_user_data:
-          $ref: "#/components/schemas/CustomUserDataConstructor"
+          oneOf:
+            - $ref: "#/components/schemas/CustomUserDataConstructor"
+            - type: null
         data_api_config:
-          $ref: "#/components/schemas/DataApiConfig"
+          oneOf:
+            - $ref: "#/components/schemas/DataApiConfig"
+            - type: null
         data_sources:
           type: array
           items:
