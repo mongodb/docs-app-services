@@ -1,7 +1,7 @@
 client_api_login() {
   local app_id="$1"
   local provider="$2"
-  local client_api_base_url="https://realm.mongodb.com/api/client/v2.0/app/$app_id"
+  local client_api_base_url="https://services.cloud.mongodb.com/api/client/v2.0/app/$app_id"
   local client_api_login_url="$client_api_base_url/auth/providers/$provider/login"
   case $provider in
     "anon-user")

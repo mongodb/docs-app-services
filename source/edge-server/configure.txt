@@ -4,6 +4,14 @@
 Configure Edge Server
 =====================
 
+.. meta::
+   :keywords: code example
+   :description: Learn how to download, install, configure, and run a MongoDB Edge Server.
+
+.. facet::
+   :name: genre 
+   :values: tutorial
+
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -166,7 +174,7 @@ Set up and run the Edge Server on the host.
 
       .. code-block:: shell
 
-         wget --content-disposition https://realm.mongodb.com/api/client/v2.0/tiered-sync/package/latest
+         wget --content-disposition https://services.cloud.mongodb.com/api/client/v2.0/tiered-sync/package/latest
 
       Unzip the tar to get the files.
 
@@ -187,7 +195,8 @@ Set up and run the Edge Server on the host.
            "clientAppId": "YOUR-APP-ID",
            "query": "*",
            "cloudSyncServerAuthSecret": "YOUR-AUTH-SECRET",
-           "hostname": "YOUR-EDGE-SERVER-DOMAIN",
+           "httpListenPort": 80,
+           "wireprotocolListenPort": 27021,
            "tls" : {
              "enabled": false,
              "certificates": [
@@ -254,10 +263,14 @@ Set up and run the Edge Server on the host.
              Representative provided when you contacted them to get 
              Edge Server enabled for your App.
 
-         * - ``hostname``
-           - The public DNS of your host. This should resemble something
-             like ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``. 
-             For localhost, set this value to ``localhost:80``.
+         * - ``httpListenPort``
+           - The port on which Edge Server listens for HTTP connections. The
+             default value is ``80``. 
+
+         * - ``wireprotocolListenPort``
+           - The port on which Edge Server listens for MongoDB wireprotocol
+             connections, such as connections from a MongoDB Driver. The
+             default value is ``27021``.
          
          * - ``tls``
            - A configuration object that includes the Transport Layer 
@@ -282,7 +295,6 @@ Set up and run the Edge Server on the host.
 
          The following example shows an Edge Server configuration file that:
 
-         - Runs on an EC2 instance.
          - Syncs data with two collections: ``Item`` and ``Project``. 
            The ``Project`` collection has a list property that represents 
            a :ref:`to-many relationship <relationships-to-many>` to the 
@@ -299,7 +311,8 @@ Set up and run the Edge Server on the host.
                   "Project": "truepredicate"
                },
                "cloudSyncServerAuthSecret": "3814f3fb7befe2eef66ee01781ae245a",
-               "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+               "httpListenPort": 80,
+               "wireprotocolListenPort": 27021,
                "tls" : {
                  "enabled": true,
                  "certificates": [
@@ -331,6 +344,26 @@ Set up and run the Edge Server on the host.
       The Edge Server requires several dependencies, which are listed 
       in the :file:`README.md` in the ``edge_server`` directory. Follow the 
       instructions to install the required dependencies.
+
+   .. step:: Specify Additional Configuration Details (Optional)
+
+      You can run ``make`` to build the Edge Server. This creates a 
+      ``build/`` directory that contains an :file:`edge_config.json`
+      file. This configuration contains many additional fields you can change
+      if you need to customize Edge Server configuration details.
+
+      For example, an Edge Server running on EC2 would set the ``"baseURL"`` 
+      for applications to connect to the Edge Server to the public DNS of the 
+      EC2 instance, similar to 
+      ``"http://ec2-13-58-70-88.us-east-2.compute.amazonaws.com"``.
+
+      The default configuration values let you run an Edge Server instance
+      on local hardware, and connect to it through ``http://localhost:80``.
+
+      While Edge Server is still in Private Preview, the configuration and 
+      accepted values are expected to change. When Edge Server is available
+      for Public Preview, the configuration details are expected to be more
+      stable and documentation will be added with these details.
 
 .. _start-and-stop-edge-server:
 

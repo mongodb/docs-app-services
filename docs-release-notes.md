@@ -1,3 +1,72 @@
+# February 9, 2024
+
+## Device Sync
+- Get Started: Add info to the "Create queries in your client application" section about Sync ignoring custom collation when evaluating subscriptions.
+
+## Develop & Deploy Apps
+
+- Deploy Automatically with GitHub: Add tabs for CLI and API procedures. Update details about making changes from the CLI.
+
+## Define Data Access Permissions
+Device Sync-Compatible Permissions: Add information about Sync ignoring custom collation when evaluating permissions.
+
+## Reference
+
+- App Services CLI
+  - appservices deploy: New section with details for the new CLI commands that enable you to manage automatic deployments of your app: `appservices deploy configure`, `appservices deploy describe,` `appservices deploy disable`, `appservices deploy enable`.
+
+## Release Notes
+
+- Update external change log with release notes for the Data Services logs UI, object model generation for dictionaries, and more. 
+
+# February 2, 2024
+
+## Device Sync
+
+- Migrate Device Sync Modes: Remove duplicate sentence.
+
+## Edge Server
+
+- Configure Edge Server: Update the config object to remove fields that are no longer present and add new fields.
+- Connect to Edge Server: Update instructions to connect to the Edge Server to refer to `baseURL` instead of `hostname`.
+
+## Define Data Access Permissions
+
+- Role-based Permissions: Add note about security consideration for roles and filters for queries.
+- Filter Incoming Queries: Add note about security consideration for roles and filters for queries.
+
+## Reference
+
+- App Services CLI: Updated the profile configuration file path in the "CLI Profiles" section to be nested under `$HOME` on macOS
+
+# January 12, 2024
+
+## Device Sync
+
+- Configure & Update Your Data Model/Data Model Mapping: Add C++ Set to the list of SDK Set documentation links.
+- Configure Sync/Sync Settings: Update dev mode breaking changes section to mention support can enable the feature for older Apps. Add more SDK versions.
+- Handle Errors/Client Reset: Add the new C++ Client Reset page to the list of SDK pages for handling client resets.
+
+## Other
+
+- Domain Migration: Add new page that contains information about the base URL changes.
+- Throughout Docs
+  - Update base URL (realm.mongodb.com) to new App Services base URL (services.cloud.mongodb.com).
+
+# January 5, 2024
+
+## Functions
+
+- Landing Page: Remove the note that nested functions are unsupported when using GitHub deployment.
+
+## Define a Data Model
+
+- Schemas/Schema Types: Add Flutter SDK to the list of SDKs that support geospatial data.
+
+## Monitor App Activity
+
+- Activity Feed & Alerts: Replace the Project Activity Feed screenshot with one that does not show a "Download to JSON" button.
+
 # December 15, 2023
 
 ## Authenticate and Manage Users
