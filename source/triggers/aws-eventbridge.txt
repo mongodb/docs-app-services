@@ -311,6 +311,106 @@ Create a New Custom Error Handler
             For more information on trigger configuration files, see
             :ref:`Trigger Configuration Files <appconfig-triggers>`.
 
+   .. tab::
+      :tabid: api
+
+      .. procedure::
+
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/api-authenticate-instructions.rst
+
+         .. step:: Create a Deployment Draft (Optional)
+
+            A draft represents a group of application changes that you
+            can deploy or discard as a single unit. If you don't create
+            a draft, updates automatically deploy individually.
+
+            To create a draft, send a ``POST`` request with no body to
+            the :admin-api-endpoint:`Create a new deployment draft
+            <tag/deploy/operation/adminCreateDeploymentDraft>` endpoint:
+
+            .. code-block:: bash
+
+               curl -X POST 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/drafts' \
+               -H 'Content-Type: application/json' \
+               -H 'Authorization: Bearer <access_token>'
+         
+         .. step:: Create the Error Handler Function
+
+            Create the function to handle errors for a failed AWS 
+            EventBridge trigger via a ``POST`` request to the 
+            :admin-api-endpoint:`Create a new
+            Function <operation/adminCreateFunction>` endpoint.
+
+            .. code-block:: bash
+
+               curl -X POST \
+                  https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/functions \
+                  -H 'Authorization: Bearer <access_token>' \
+                  -d '{
+                     "name": "string",
+                     "private": true,
+                     "source": "string",
+                     "run_as_system": true
+                     }'      
+                     
+         .. step:: Create the AWS EventBridge Trigger
+
+            Create the AWS EventBridge Trigger with error handling 
+            enabled via a ``POST`` request to the 
+            :admin-api-endpoint:`Create a Trigger <operation/
+            adminCreateTrigger>` endpoint.
+
+            .. code-block:: bash
+
+               curl -X POST \
+                  https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/triggers \
+                  -H 'Authorization: Bearer <access_token>' \
+                  -d '{
+                     "name": "string",
+                     "type": "DATABASE",
+                     "config": [
+                        "service_id": "string",
+                        "database": "string",
+                        "collection": "string",
+                        "operation_types": {
+                           "string"
+                        },
+                        "match": ,
+                        "full_document": false,
+                        "full_document_before_change": false,
+                        "unordered": true
+                     ],
+                     "event_processors": [
+                        "AWS_EVENTBRIDGE": {
+                           "account_id": "string",
+                           "region": "string",
+                           "extended_json_enabled": false
+                        },
+                     ],
+                     "error_handler": [
+                        "enabled": true,
+                        "function_id": "string"
+                     ]
+                     }'                        
+
+         .. step:: Deploy the Draft
+
+            If you created a draft, you can deploy all changes in
+            the draft by sending a ``POST`` request with no body to the
+            :admin-api-endpoint:`Deploy a deployment draft
+            <tag/deploy/operation/adminDeployDraft>` endpoint.
+            If you did not create a draft as a first step, the 
+            individual function and trigger requests deployed automatically.
+
+            .. code-block:: shell
+
+               curl -X POST \
+               'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/drafts/{draftId}/deployment' \
+               --header 'Content-Type: application/json' \
+               --header 'Authorization: Bearer <access_token>' \
+
 .. _eventbridge-error-handler-parameters:
 
 Error Handler Parameters
@@ -397,9 +497,23 @@ application logs.
          
          {+cli-bin+} logs list --type=trigger_error_handler
 
+   .. tab::
+      :tabid: api
 
-To learn more about viewing application logs,
-see :ref:`View Application Logs <view-logs>`.
+      Retrieve error handler logs via a ``GET`` request to
+      the :admin-api-endpoint:`Retreive App Services Logs
+      <operation/adminGetLogs>` endpoint:
+
+      .. code-block:: shell
+
+         curl -X GET 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/logs' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer <access_token>'
+            -d '{
+               "type": "TRIGGER_ERROR_HANDLER"
+               }'
+
+To learn more about viewing application logs, see :ref:`View Application Logs <view-logs>`.
 
 .. _event_processor_example:
 
