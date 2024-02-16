@@ -341,8 +341,7 @@ two possible configurations depending on the event processor type:
    * - | ``event_processors.config.account_id``
        | ``string``
      - An AWS account ID. For more information on how to find the account ID,
-       refer to the :ref:`Setup the MongoDB Partner Event Source <setup_eventbridge>` 
-       step on the :ref:`Send Trigger Events to AWS EventBridge <aws-eventbridge>` page.
+       refer to :ref:`Setup the MongoDB Partner Event Source <setup_eventbridge>`.
 
    * - | ``event_processors.config.region``
        | ``string``
@@ -350,7 +349,7 @@ two possible configurations depending on the event processor type:
 
    * - | ``event_processors.config.extended_json_enabled``
        | ``boolean``
-     - False by default. If true, entended JSON is enabled.
+     - ``false`` by default. If ``true``, extended JSON is enabled.
        
        Triggers convert the BSON types in event objects into standard JSON types. 
        To preserve BSON type information, you can serialize event objects into 
@@ -360,13 +359,13 @@ two possible configurations depending on the event processor type:
 
    * - | ``error_handler.config.enabled``
        | ``boolean``
-     - If true, the error handler is enabled. For more information on
-       creating an ``error_handler``, see this section on
-       :ref:`Custom Error Handling <eventbridge-error-handling>`.
+     - If ``true``, error handling is enabled for the AWS EventBridge trigger. For more information on
+       configuring error handling, refer to :ref:`Custom Error Handling <eventbridge-error-handling>`.
 
    * - | ``error_handler.config.function_name``
        | ``string``
-     - The name of the error handler function.
+     - The name of the error handler function invoked when the AWS EventBridge 
+       trigger fails and cannot be successfully retried.
      
 .. _config-authentication-trigger:
 
