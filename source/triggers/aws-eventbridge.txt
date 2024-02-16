@@ -31,7 +31,8 @@ to reduce trigger suspensions due to non-critical errors.
 
 All you need to send Trigger events to EventBridge is an AWS account ID.
 This guide walks through finding your account ID, configuring the
-Trigger, and associating the Trigger event source with an event bus.
+Trigger, associating the Trigger event source with an event bus, and setting
+up custom error handling.
 
 .. note:: Official AWS Partner Event Source Guide
    
@@ -121,8 +122,9 @@ Procedure
             
             To enable Extended JSON, set the ``extended_json_enabled`` field to ``true``.
 
-            Optionally, you can configure an error function for custom error handling.
-            For more details, refer to :ref:`Custom Error Handling <eventbridge_error_handling>`
+            Optionally, you can configure a function for handling trigger errors.
+            Custom error handling is only valid for database triggers. 
+            For more details, refer to the :ref:`Custom Error Handling <eventbridge_error_handling>`
             section on this page.
 
             The trigger configuration file should resemble the following:
@@ -244,7 +246,7 @@ Create a New Custom Error Handler
 
       In order to update your trigger's configuration with an error handler, 
       follow these steps to :ref:`Update an App  <deploy-cli>`. When you
-      reach Step 3: Update Your Application, do the following:
+      update your configuration files in Step 3, do the following:
 
       .. procedure::
 
@@ -318,12 +320,12 @@ The default error handler has two parameters: ``error`` and ``changeEvent``.
 
 ``error`` 
 `````````
-Has two attributes: ``code`` and ``message``.
+Has the following two attributes:
 
-- ``code``: For a list of error codes used by the error handler, see the below section on
-  :ref:`Error Codes <eventbridge-error-codes>`. 
+- ``code``: The code for the errored EventBridge put request. For a list of 
+  error codes used by the error handler, see the below section. 
 
-- ``message``: The unfiltered error message from an errored Eventbridge
+- ``message``: The unfiltered error message from an errored EventBridge
   put request.
 
 ``changeEvent``
@@ -347,15 +349,26 @@ to the error handler function through the ``error`` parameter.
 If the put entry for an EventBridge trigger event is larger
 than 256 KB, EventBridge will throw an error. The error will contain either:
 
-1. `status code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_ and ``total size of the entries 
+- `status code: 400 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400>`_ and ``total size of the entries 
    in the request is over the limit``.
 
-2. `status code: 413 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413>`_, 
+- `status code: 413 <https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/413>`_, 
    which indicates a too large payload. 
+
+For more information on reducing put entry size, see the below :ref:`Performance 
+Optimization <send-aws-eventbridge-performance-optimization>` section.
 
 ``OTHER``
 `````````
 The default bucket for all other errors.
+
+.. tip:: Optimize Error Handling for Errors with ``OTHER`` Code
+
+   You can make special error handling cases for 
+   your most common error messages to optimize your error handling for 
+   errors with an ``OTHER`` code. To determine which errors need 
+   special cases, we recommended keeping track of 
+   the most common error messages you receive in ``error.message``. 
 
 Error Handler Logs
 ~~~~~~~~~~~~~~~~~~
@@ -371,13 +384,14 @@ application logs.
       1. Click ``Logs`` in the left navigation of the App Services UI.
 
       2. Click the :guilabel:`Filter by Type` dropdown and select
-         :guilabel:`Triggers Error Handlers` to view logs for the Trigger error handler.
+         :guilabel:`Triggers Error Handlers` to view all error handler 
+         logs for the App.
 
    .. tab::
       :tabid: cli
 
-      Use  the ``error_handler`` type on the ``--type`` flag to 
-      view logs for the Trigger error handler.
+      Pass the ``trigger_error_handler`` value to the ``--type`` flag to 
+      view all error handler logs for the App.
 
       .. code-block:: shell
          
@@ -387,21 +401,13 @@ application logs.
 To learn more about viewing application logs,
 see :ref:`View Application Logs <view-logs>`.
 
-Optimization
-~~~~~~~~~~~~
-
-It is recommended to keep track of the most common error messages you receive 
-in ``error.message``. You can make special error handling cases for 
-your most common error messages to optimize your error handling for 
-errors with an ``OTHER`` code. 
-
 .. _event_processor_example:
 
 Example Event
 -------------
 
 The following object configures a trigger to send events to AWS
-Eventbridge:
+Eventbridge and handle errors:
 
 .. include:: /includes/event-processor-example.rst
 
