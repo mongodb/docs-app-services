@@ -90,7 +90,7 @@ Procedure
 
             Optionally, you can configure a function for handling trigger errors.
             Custom error handling is only valid for database triggers. 
-            For more details, refer to the :ref:`Custom Error Handling <eventbridge_error_handling>`
+            For more details, refer to the :ref:`Custom Error Handling <eventbridge-error-handling>`
             section on this page.
 
             .. figure:: /images/eventbridge-trigger-config.png
@@ -127,7 +127,7 @@ Procedure
 
             Optionally, you can configure a function for handling trigger errors.
             Custom error handling is only valid for database triggers. 
-            For more details, refer to the :ref:`Custom Error Handling <eventbridge_error_handling>`
+            For more details, refer to the :ref:`Custom Error Handling <eventbridge-error-handling>`
             section on this page.
 
             The trigger configuration file should resemble the following:
@@ -183,9 +183,6 @@ Custom Error Handling
    Currently, only database triggers support custom error handling. 
    Authentication triggers and scheduled triggers do not support 
    custom error handling at this time. 
-
-.. figure:: /images/eventbridge-error-handling-diagram.png
-   :alt: EventBridge Custom Error Handling Flow Diagram.
 
 You can create an error handler to be executed on a trigger failure, 
 when retry does not succeed. Custom error handling allows you to determine
@@ -297,10 +294,10 @@ Create a New Custom Error Handler
                :caption: <triggerName>.json
 
                      {
-                     "name": "...",
-                     "type": "...",
-                     "event_processors": {
-                        "AWS_EVENTBRIDGE": {
+                        "name": "...",
+                        "type": "DATABASE",
+                        "event_processors": {
+                           "AWS_EVENTBRIDGE": {
                               "config": {
                                  "account_id": "<AWS Account ID>",
                                  "region": "<AWS Region>",
@@ -376,31 +373,31 @@ Create a New Custom Error Handler
                   https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/triggers \
                   -H 'Authorization: Bearer <access_token>' \
                   -d '{
-                     "name": "string",
-                     "type": "DATABASE",
-                     "config": [
-                        "service_id": "string",
-                        "database": "string",
-                        "collection": "string",
-                        "operation_types": {
-                           "string"
+                        "name": "string",
+                        "type": "DATABASE",
+                        "config": {
+                           "service_id": "string",
+                           "database": "string",
+                           "collection": "string",
+                           "operation_types": {
+                              "string"
+                           },
+                           "match": ,
+                           "full_document": false,
+                           "full_document_before_change": false,
+                           "unordered": true
                         },
-                        "match": ,
-                        "full_document": false,
-                        "full_document_before_change": false,
-                        "unordered": true
-                     ],
-                     "event_processors": [
-                        "AWS_EVENTBRIDGE": {
-                           "account_id": "string",
-                           "region": "string",
-                           "extended_json_enabled": false
+                        "event_processors": {
+                           "AWS_EVENTBRIDGE": {
+                              "account_id": "string",
+                              "region": "string",
+                              "extended_json_enabled": false
+                           },
                         },
-                     ],
-                     "error_handler": [
-                        "enabled": true,
-                        "function_id": "string"
-                     ]
+                        "error_handler": {
+                           "enabled": true,
+                           "function_id": "string"
+                        }
                      }'                        
 
          .. step:: Deploy the Draft
