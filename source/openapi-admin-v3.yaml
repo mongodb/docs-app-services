@@ -173,7 +173,7 @@ paths:
                 items:
                   "$ref": "#/components/schemas/BaseAuthProvider"
       security: []
-  "/auth/providers/{provider}/login":
+  "/auth/providers/mongodb-cloud/login":
     post:
       tags:
         - admin
@@ -220,13 +220,6 @@ paths:
                   device_id:
                     type: string
       security: []
-    parameters:
-      - name: provider
-        description: The authentication provider to use.
-        in: path
-        required: true
-        schema:
-          "$ref": "#/components/schemas/ProviderType"
   "/auth/profile":
     get:
       tags:
