@@ -463,7 +463,6 @@ paths:
       - in: query
         name: source_control
         required: false
-        default: false
         description: |-
           If `true`, the exported directory is suitable for automatic
           deployment from GitHub or other source control.
@@ -471,10 +470,10 @@ paths:
           Cannot be used with the `template` query parameter.
         schema:
           type: boolean
+          default: false
       - in: query
         name: template
         required: false
-        default: false
         description: |-
           If `true`, the exported directory does not include any
           identifiers or other data that would tie the app to a specific
@@ -483,6 +482,7 @@ paths:
           Cannot be used with the `source_control` query parameter.
         schema:
           type: boolean
+          default: false
       - in: query
         name: version
         required: false
