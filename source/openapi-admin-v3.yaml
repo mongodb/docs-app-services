@@ -858,7 +858,7 @@ paths:
             application/json:
               schema:
                 items:
-                  - $ref: "#/components/schemas/ServiceResponse"
+                  "$ref": "#/components/schemas/ServiceResponse"
     post:
       tags:
         - services
@@ -2506,12 +2506,13 @@ paths:
         Get a list of all private endpoints configured for the App.
       responses:
         200:
+          description: Successfully listed endpoints.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PrivateEndpoint"
+                  "$ref": "#/components/schemas/PrivateEndpoint"
         404:
           description: Not Found
     post:
@@ -2569,7 +2570,10 @@ paths:
       responses:
         200:
           description: Updated
-          $ref: "#/components/schemas/PrivateEndpoint"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrivateEndpoint"
         404:
           description: Not Found
     delete:
@@ -2597,6 +2601,7 @@ paths:
         Get a list of all private endpoint services configured for the App.
       responses:
         200:
+          description: Successfully listed services.
           content:
             application/json:
               schema:
