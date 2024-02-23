@@ -14,6 +14,7 @@
 - Send Trigger Events to AWS EventBridge: Update page with new sections on error handling for Database Triggers.
 
 ## Monitor App Activity
+
 - View Application Logs: Update page with new `trigger_error_handler` CLI log type in support of AWS EventBridge custom error handling.
 - Forward Logs to a Service: Update list of supported CLI log types with new `trigger_error_handler` type in support of AWS EventBridge custom error handling.
 - Log Types/Trigger Error Handler Logs: New page documenting the trigger error handler log type in support of AWS EventBridge custom error handling.
