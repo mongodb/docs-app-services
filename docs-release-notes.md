@@ -27,7 +27,7 @@
   - Add the new `error_handler` object property to Database type Trigger payloads in all relevant Trigger endpoints.
   - Update "Authenticate as an App Services adminstrator" endpoint with `mongodb-cloud` as the `ProviderType`, as `mongodb-cloud` is the only supported provider for this endpoint. 
   - Fix syntax of schema for `ServiceResponse` and refine endpoint descriptions.
-  -  Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema defintions. 
+  -  Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema definitions. 
 - App Services CLI/logs/list: Add `trigger_error_handler` as value for the `--type` flag in the Options table.
 - Billing: Update App Services Requests section to include the new custom error function as an example of a Function Execution billing.
 
