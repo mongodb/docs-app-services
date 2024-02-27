@@ -1,3 +1,40 @@
+# February 23, 2024
+
+## Device Sync
+
+- Configure Sync/Sync Settings: Fix typo.
+
+## Functions
+
+- Landing Page: Fix typo.
+- Test Function: Fix typo.
+
+## Triggers
+
+- Send Trigger Events to AWS EventBridge: Update page with new sections on error handling for Database Triggers.
+
+## Monitor App Activity
+
+- View Application Logs: Update page with new `trigger_error_handler` CLI log type in support of AWS EventBridge custom error handling.
+- Forward Logs to a Service: Update list of supported CLI log types with new `trigger_error_handler` type in support of AWS EventBridge custom error handling.
+- Log Types/Trigger Error Handler Logs: New page documenting the trigger error handler log type in support of AWS EventBridge custom error handling.
+
+## Reference
+
+- App Configuration Files/Triggers: Update database trigger configuration, including adding `event_processors` and `error_handler` configuration.
+- App Services Admin API
+  - Update `/adminGetLogs` endpoint with new `TRIGGER_ERROR_HANDLER` log type schema in support of AWS EventBridge custom error handling.
+  - Add the new `error_handler` object property to Database type Trigger payloads in all relevant Trigger endpoints.
+  - Update "Authenticate as an App Services adminstrator" endpoint with `mongodb-cloud` as the `ProviderType`, as `mongodb-cloud` is the only supported provider for this endpoint. 
+  - Fix syntax of schema for `ServiceResponse` and refine endpoint descriptions.
+  -  Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema definitions. 
+- App Services CLI/logs/list: Add `trigger_error_handler` as value for the `--type` flag in the Options table.
+- Billing: Update App Services Requests section to include the new custom error function as an example of a Function Execution billing.
+
+## Release Notes
+
+- Update external change log with release notes for custom user data parsing and AWS EventBridge error handling. 
+
 # February 9, 2024
 
 ## Device Sync
