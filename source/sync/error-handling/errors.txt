@@ -210,19 +210,21 @@ and MongoDB Atlas.
      - Description
 
    * - MaxIntegrationAttempts
-     - This error occurs when a transaction fails to commit after the 
-       translator reaches the maximum number of tries to integrate the 
-       changeset. This is usually caused by insufficient cluster size. 
-       This can be due to an exceptionally large transaction that 
-       exceeds the current cluster's available resources (for example, a 
-       device that was offline for a long period of time attempts to 
-       sync an abnormal amount of batched transactions), or that the 
-       current cluster size is simply not sufficient for the app. The 
-       error can be resolved by upgrading the cluster tier.   
-      
+     - When the MongoDB translator cannot integrate a changeset, it 
+       retries for a fixed number of times. This error occurs when the 
+       translator reaches the maximum number of retries and could not 
+       commit changes. This is usually caused by insufficient cluster 
+       size. This can be due to a very large transaction that exceeds 
+       the cluster's available resources. For example, a device is 
+       offline for a long time and tries to sync an atypical quantity of 
+       batched transactions. Or the cluster resources are generally
+       insufficient for the app's needs.
+       
+       You can resolve this error by upgrading the cluster tier.
+
        To avoid this error, ensure the linked MongoDB cluster meets the 
-       needs of your app and that your app uses best practices for 
-       reading and writing data. Refer to 
+       needs of your app. Also, make sure your app uses best practices 
+       for reading and writing data. Refer to 
        `Atlas Cluster Sizing and Tier Selection <https://www.mongodb.com/docs/atlas/sizing-tier-selection>`__ 
        for more information.
 
