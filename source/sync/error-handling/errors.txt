@@ -4,11 +4,12 @@
 Sync Errors
 ===========
 
+.. meta:: 
+   :description: Common errors encountered when using Atlas Device Sync and how to handle them. 
+
 .. facet::
    :name: genre 
    :values: reference
-
-.. default-domain:: mongodb
 
 .. contents:: On this page
    :local:
@@ -20,7 +21,7 @@ Overview
 --------
 
 While you develop applications using Atlas Device Sync, you may run into errors. This
-section lists common errors and describes how to and handle them.
+section lists common Sync errors and describes how to handle them.
 
 .. note::
    
@@ -207,6 +208,23 @@ and MongoDB Atlas.
 
    * - Error Name
      - Description
+
+   * - MaxIntegrationAttempts
+     - This error occurs when a transaction fails to commit after the 
+       translator reaches the maximum number of tries to integrate the 
+       changeset. This is usually caused by insufficient cluster size. 
+       This can be due to an exceptionally large transaction that 
+       exceeds the current cluster's available resources (for example, a 
+       device that was offline for a long period of time attempts to 
+       sync an abnormal amount of batched transactions), or that the 
+       current cluster size is simply not sufficient for the app. The 
+       error can be resolved by upgrading the cluster tier.   
+      
+       To avoid this error, ensure the linked MongoDB cluster meets the 
+       needs of your app and that your app uses best practices for 
+       reading and writing data. Refer to 
+       `Atlas Cluster Sizing and Tier Selection <https://www.mongodb.com/docs/atlas/sizing-tier-selection>`__ 
+       for more information.
 
    * - MongoEncodingError
      - This error occurs when a MongoDB Atlas write (i.e. not a Sync client)
