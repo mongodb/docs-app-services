@@ -1,3 +1,18 @@
+# March 1, 2024
+
+## Authenticate & Manage Users
+
+- Read User Metadata: Update procedure wording to match UI changes.
+- Manage User Sessions
+  - Fix the base URL to not include auth provider information.
+  - Tweak placeholder spacing to be consistent.
+  - Convert tab to space for correct spacing on some curl request examples.
+
+## Reference
+
+- App Services Admin API
+  - Correct /redeploy operation type from `Get` to `Post`.
+
 # February 23, 2024
 
 ## Device Sync
