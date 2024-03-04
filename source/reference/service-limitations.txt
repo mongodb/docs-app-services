@@ -4,11 +4,12 @@
 Service Limitations
 ===================
 
+.. meta:: 
+   :description: Follow these guidelines to avoid issues related to service limitations.
+
 .. facet::
    :name: genre 
    :values: reference
-
-.. default-domain:: mongodb
 
 .. contents:: On this page
    :local:
@@ -188,6 +189,23 @@ Reading:
    
    When you intend to have many concurrent writers, have each writer
    work on a separate document. 
+
+.. _mongodb-service-limitations-sync-default-message-size-limit:
+
+Default Message Size Limit
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Device Sync has a default message size limit of {+sync-default-message-size-limit+}
+compressed for any messages sent from the client application. The message size
+depends on the compressed size of changes sent from the client device. This is 
+not directly equivalent to the size of any document in the upload. In practice,
+however, the changeset size is generally on the same order of magnitude of
+the size of documents in the upload.
+
+This limit acts as a countermeasure against connections hogging too many 
+resources.
+
+You can request a higher limit by `filing a support ticket <https://support.mongodb.com/welcome>`__.
 
 .. _mongodb-service-limitations-sync-inactive-pause:
 
