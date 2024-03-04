@@ -125,3 +125,25 @@ may not exceed the number of available change streams.
 
 :ref:`Learn more about the number of supported change streams for Atlas tiers.
 <mongodb-service-limitations-change-streams>`
+
+.. _trigger-diagnose-duplicate-events:
+
+Diagnose Duplicate Events
+-------------------------
+
+During normal Trigger operation, Triggers do not send duplicate events.
+However, when some failure or error conditions occur, Triggers may deliver 
+duplicate events. You may see a duplicate Trigger event when:
+
+- A server responsible for processing and tracking events experiences a 
+  failure. This failure prevents the server from recording its progress in a 
+  durable or long-term storage system, making it "forget" it has processed 
+  some of the latest events.
+- Using unordered processing where events 1-N are sent simultaneously. If 
+  event 9 fails and leads to Trigger suspension, events like event 10 might 
+  get processed again when the system resumes from event 9. This can lead to 
+  duplicates, as the system doesn't strictly follow the sequence of events and 
+  may reprocess already-handled events.
+
+If you notice duplicate Trigger events, check the :ref:`logs` for suspended 
+Triggers or server failures.
