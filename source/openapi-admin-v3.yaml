@@ -2755,6 +2755,69 @@ paths:
           schema:
             type: string
           required: true
+        - name: metrics
+          in: query
+          schema:
+            type: string
+            enum:
+              - ACTIVE_OPEN_SYNC_SESSIONS
+              - AUTH_EGRESS_BYTES
+              - AUTH_FAILED_REQUESTS
+              - AUTH_RESPONSE_MS
+              - AUTH_SUCCESSFUL_LOGIN
+              - AUTH_SUCCESSFUL_REQUESTS
+              - AUTH_TOTAL_USERS
+              - ENDPOINTS_COMPUTE_MS
+              - ENDPOINTS_EGRESS_BYTES
+              - ENDPOINTS_FAILED_REQUEST
+              - ENDPOINTS_RESPONSE_MS
+              - ENDPOINTS_SUCCESSFUL_REQUESTS
+              - GRAPHQL_RESPONSE_MS
+              - GRAPHQL_COMPUTE_MS
+              - GRAPHQL_EGRESS_BYTES
+              - GRAPHQL_FAILED_REQUESTS
+              - GRAPHQL_SUCCESSFUL_REQUESTS
+              - LF_RESPONSE_MS
+              - OVERALL_COMPUTE_MS
+              - OVERALL_EGRESS_BYTES
+              - OVERALL_FAILED_REQUESTS
+              - OVERALL_SUCCESSFUL_REQUESTS
+              - OVERALL_SYNC_MINUTES
+              - SDK_COMPUTE_MS
+              - SDK_EGRESS_BYTES
+              - SDK_FAILED_REQUESTS
+              - SDK_FNS_RESPONSE_MS
+              - SDK_MQL_COMPUTE_MS
+              - SDK_MQL_EGRESS_BYTES
+              - SDK_MQL_FAILED_REQUESTS
+              - SDK_MQL_RESPONSE_MS
+              - SDK_MQL_SUCCESSFUL_REQUESTS
+              - SDK_SUCCESSFUL_REQUESTS
+              - SYNC_CLIENT_BOOTSTRAP_MS
+              - SYNC_CLIENT_UPLOADS_INVALID
+              - SYNC_CURRENT_OPLOG_LAG_MS_SUM
+              - SYNC_EGRESS_BYTES
+              - SYNC_FAILED_REQUESTS
+              - SYNC_HISTORY_WRITE_MS
+              - SYNC_MINUTES
+              - SYNC_NUM_INTEGRATION_ATTEMPTS
+              - SYNC_NUM_UNSYNCABLE_DOC
+              - SYNC_OT_MS
+              - SYNC_SESSIONS_ENDED
+              - SYNC_SESSIONS_STARTED
+              - SYNC_SUCCESSFUL_REQUESTS
+              - SYNC_UPLOAD_PROPS_MS
+              - TRIGGERS_COMPUTE_MS
+              - TRIGGERS_CURRENT_OPLOG_LAG_MS_SUM
+              - TRIGGERS_EGRESS_BYTES
+              - TRIGGERS_FAILED_REQUESTS
+              - TRIGGERS_RESPONSE_MS
+              - TRIGGERS_SUCCESSFUL_REQUESTS
+          description: |-
+            The name of the metric to filter by. For detailed information 
+            on the available metrics and their units, see [App Services 
+            Metrics Reference](https://mongodb.com/docs/atlas/app-services/reference/metrics).
+          required: false
       responses:
         "200":
           description: Successfully retrieved.
