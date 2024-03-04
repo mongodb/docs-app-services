@@ -11,7 +11,7 @@
 ## Reference
 
 - App Services Admin API
-  - Correct /redeploy operation type from `Get` to `Post`.
+  - Correct `/redeploy` operation type from `Get` to `Post`.
 
 # February 23, 2024
 
