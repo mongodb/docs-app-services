@@ -350,8 +350,17 @@ collection.findOne()
    :hidden:
 
 Finds a single document from a collection or view. If multiple documents
-match the query, this returns the first matching document according to
-the query's sort order or natural order.
+match the query, this returns the first matching document in the collection.
+
+.. note:: ``findOne()`` cannot use sort
+
+  Use ``find()`` with ``sort()`` and ``next()`` cursor methods to return a 
+  single document from a sorted collection. 
+
+  .. code-block:: javascript
+
+    collection.find().sort().next()
+      .then(result => console.log("found document", result))
 
 .. include:: /functions/mongodb/api/snippets/findOne.rst
 
