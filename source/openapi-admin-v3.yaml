@@ -854,6 +854,7 @@ paths:
           application/json:
             schema:
               type: array
+              description: Limit of 25 linked data sources in the payload. 
               items:
                 $ref: "#/components/schemas/LinkingDataSourceConstructor"
 
@@ -861,7 +862,13 @@ paths:
         "201":
           description: No content
         "400":
-          description: Linking failed for at least one Data Source 
+          description: |-
+            Linking failed for at least one Data Source. May fail to link in these instances:
+            - Data Sources exceeds the limit of 25 in the payload
+            - Data Sources exceed the limit of 100 on the App
+            - Multiple Default Rules for a single Data Source 
+            - Type of Data Source is neither "mongodb-atlas" nor "datalake"
+            - Linking failed for at least one Data Source
           content:
             application/json:
               schema:
@@ -5923,7 +5930,9 @@ components:
         type: 
           type: string
           example: mongodb-atlas
-          description: The type of the data source you want to link.
+          description: |-
+            The type of the data source you want to link. Can be either
+            "mongodb-atlas" or "datalake". 
         config:
           $ref: "#/components/schemas/LinkingDataSourceConfig"
     LinkingDataSourceConfig:
