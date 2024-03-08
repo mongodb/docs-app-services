@@ -139,6 +139,51 @@ GraphQL API for you.
       You are finished setting up the connection between Hasura and MongoDB,
       each hosted on their respective Cloud instances.
 
+Migrate GraphQL Schema
+~~~~~~~~~~~~~~~~~~~~~~
+
+Migrate your MongoDB Atlas GraphQL schema to Hasura's GraphQL schema. This
+involves defining your types, queries, mutations, and subscriptions in the
+Hasura Console or the Hasura CLI.
+
+.. procedure::
+
+   .. step::
+
+      In the Hasura console click the Data tab and select your MongoDB database
+      from the left hand pane.
+
+      You'll see all the collections from your MongoDB database.
+
+      .. image:: /images/migration/collections.png
+         :alt: Atlas collections are listed in a table.
+
+   .. step::
+
+      To generate a schema for a collection, click on the :guilabel:`Track`
+      button next to the desired collection.
+
+      You have three options to infer the schema of a collection:
+
+      - Infer the schema from a sample document you copy and paste from your
+        collection.
+      - :guilabel:`Use Database Schema` allows you to use your database's
+        validation schema if one is present in your database (a GraphQL schema
+        will be automatically generated for you).
+      - :guilabel:`Use Existing Logical Model` allows you to select a previously
+        created logical model.
+
+      .. image:: /images/migration/generate-schema.png
+         :alt: Generate a new schema by using a sample document.
+
+   .. step::
+
+      Click the :guilabel:`Validate` button to validate the JSON document. In
+      the next step, you will see the models derived from this document.
+      Finally, click the :guilabel:`Track Collection` button.
+
+
+
 
 
 
