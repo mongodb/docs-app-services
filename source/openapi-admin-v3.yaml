@@ -848,7 +848,7 @@ paths:
       description: |-
         Call this endpoint to link multiple data sources to an App. The total 
         limit of linked data sources per App is 100. Data Sources linked by this
-        endpoint will have ReadAndWrite default rules. 
+        endpoint will have `ReadAndWrite` default rules. 
       requestBody:
         content:
           application/json:
@@ -857,7 +857,6 @@ paths:
               description: Limit of 25 linked data sources in the payload. 
               items:
                 $ref: "#/components/schemas/LinkingDataSourceConstructor"
-
       responses:
         "201":
           description: No content
@@ -5929,10 +5928,10 @@ components:
           description: Create a name to identify each cluster you want to link. 
         type: 
           type: string
+          enum: ["mongodb-atlas", "datalake"]
           example: mongodb-atlas
           description: |-
-            The type of the data source you want to link. Can be either
-            "mongodb-atlas" or "datalake". 
+            The type of the data source you want to link. 
         config:
           $ref: "#/components/schemas/LinkingDataSourceConfig"
     LinkingDataSourceConfig:
