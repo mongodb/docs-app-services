@@ -44,17 +44,19 @@ detailing each step, with a focus on authorization and role-based access control
 (RBAC) within Hasura. For more information, check out the `Hasura docs 
 <https://hasura.io/docs/latest/databases/mongodb/mongodb-atlas/>`_.
 
-#. Create a New Project in Hasura
+To migrate to Hasura:
+
+#. Create a new project in Hasura
 #. Authorize Hasura for MongoDB
-#. Migrate Schema
-#. Test Your GraphQL queries
-#. Authorization and Authentication
-#. Custom resolvers
+#. Migrate your GraphQL schema
+#. Test your GraphQL queries
+#. Handle authorization and authentication
+#. Set up custom resolvers
 #. Update client applications
 #. Shut down MongoDB Atlas App Services
 
 Create a New Project in Hasura
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 .. procedure::
 
@@ -92,7 +94,7 @@ Create a New Project in Hasura
 
 
 Authorize Hasura for MongoDB
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 Hasura can connect to a new or existing MongoDB Atlas database and generate the
 GraphQL API for you.
@@ -140,7 +142,7 @@ GraphQL API for you.
       each hosted on their respective Cloud instances.
 
 Migrate GraphQL Schema
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 Migrate your MongoDB Atlas GraphQL schema to Hasura's GraphQL schema. This
 involves defining your types, queries, mutations, and subscriptions in the
@@ -182,8 +184,8 @@ Hasura Console or the Hasura CLI.
       the next step, you will see the models derived from this document.
       Finally, click the :guilabel:`Track Collection` button.
 
-Test your GraphQL queries
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Test Your GraphQL Queries
+-------------------------
 
 After tracking a collection and getting a schema, you can navigate to the API
 Explorer page on the Hasura Console to test out some GraphQL queries.
@@ -195,7 +197,7 @@ queries in Atlas App Services.
    :alt: Use the GraphiQL interface to test queries.
 
 Authorization and Authentication
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------
 
 Hasura does not directly handle authentication. Instead, it relies on session
 variables provided by an external authentication service. These session
@@ -223,6 +225,40 @@ authentication in Hasura, refer to the documentation at:
 - `JWT Authentication <https://hasura.io/docs/latest/auth/authentication/jwt/>`_
 - `Webhook Authentication <https://hasura.io/docs/latest/auth/authentication/webhook/>`_
 
+Set Up Custom Resolvers
+-----------------------
 
+If your existing GraphQL API endpoints include custom resolvers or business
+logic, you'll need to implement these in Hasura. Hasura supports custom business
+logic using remote schemas, event triggers, and actions.
 
+Hasura Actions can be used to create custom resolvers. Custom queries and
+mutations including their payload type and input type can be defined within
+Hasura, and Hasura can integrate with the resolver function over HTTP. 
 
+.. image:: /images/migration/actions.png
+   :alt: Use Hasura Actions to create custom resolvers.
+
+The resolver function must be deployed somewhere and Hasura can generate the
+JavaScript code for the function.
+
+.. image:: /images/migration/resolver-codegen.png
+   :alt: Hasura auto generates Action code.
+
+Update Client Applications
+--------------------------
+
+Update any client applications that interact with your GraphQL API endpoints to
+point to the new Hasura endpoint URLs. Any existing Apollo client will work with
+Hasura.
+
+Update the GraphQL operations used by applications to match Hasura-style GraphQL
+operations. 
+
+Shut down MongoDB Atlas App Services
+------------------------------------
+
+Once you have verified that your GraphQL API endpoints are fully migrated
+and operational on Apollo Server, you can delete your MongoDB Atlas App
+Services app to avoid unnecessary costs. As a reminder, Atlas GraphQL
+endpoints will no longer be supported beginning March 12, 2025.
