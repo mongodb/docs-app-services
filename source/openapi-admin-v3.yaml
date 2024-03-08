@@ -839,6 +839,32 @@ paths:
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ValueId"
 
+  "/groups/{groupId}/apps/{appId}/multi_data_sources":
+    post:
+      tags:
+        - services
+      operationId: adminLinkMultiDataSources
+      summary: 
+      description: 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/LinkingDataSourceConstructor"
+
+      responses:
+        "201":
+          description: No content
+        "400":
+          description: Linking failed for at least one Data Source 
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/FailedLinkingDataSource" 
+
   "/groups/{groupId}/apps/{appId}/services":
     get:
       tags:
@@ -5885,7 +5911,32 @@ components:
         type: { type: string }
         version: { type: number }
         last_modified: { type: number }
-
+    LinkingDataSourceConstructor:
+      properties:
+        name: { type: string }
+        type: { type: string }
+        config:
+          $ref: "#/components/schemas/LinkingDataSourceConfig"
+    LinkingDataSourceConfig:
+      type: object
+      required:
+        - clusterName
+      properties:
+        clusterName:
+          type: string
+          example: Cluster0
+          description: |-
+            The cluster name of the data source within. The name may be at
+            most 64 characters long and must only contain ASCII letters, numbers,
+            underscores, and hyphens.
+    FailedLinkingDataSourceResponse:
+      properties:
+        _id: { type: string }
+        name: { type: string }
+        type: { type: string }
+        version: { type: number }
+        last_modified: { type: number }
+    
     ReadPreferencesTagSet:
       type: string
       enum:
