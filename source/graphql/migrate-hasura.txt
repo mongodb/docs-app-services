@@ -57,7 +57,6 @@ Create a New Project in Hasura
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. procedure::
-   :style: connected
 
    .. step::
 
@@ -95,22 +94,50 @@ Create a New Project in Hasura
 Authorize Hasura for MongoDB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-
-
+Hasura can connect to a new or existing MongoDB Atlas database and generate the
+GraphQL API for you.
 
 .. procedure::
 
+   .. step::
 
+      Go to ``cloud.mongodb.com`` and navigate to the Network Access page on the
+      Atlas dashboard.
 
+   .. step::
 
+      Click the :guilabel:`ADD IP ADDRESS` button and enter the Hasura Cloud IP
+      that you obtained from the Hasura Cloud dashboard earlier. Describe this
+      entry as Hasura. 
+      
+      Now, Hasura Cloud can communicate with your MongoDB Atlas instance.
 
+      .. image:: /images/migration/add-ip.png
+         :alt: Network access page.
 
+   .. step::
 
+      On the Database page, find the Atlas cluster that is connected to
+      your App Services app and click on :guilabel:`Connect`. Select the Drivers
+      option and copy the connection string.
 
+      .. image:: /images/migration/connection-string.png
+         :alt: Get Atlas clust connection string.
 
+   .. step::
 
+      Go back to the Hasura Cloud dashboard. On the Connect Existing Database
+      for MongoDB page, enter the name of the MongoDB database you want to
+      connect to and the connection string you copied from the previous step.
 
+      .. image:: /images/migration/add-connection-string.png
+         :alt: Add Atlas connection string to Hasura project.
+
+   .. step::
+
+      Click :guilabel:`Connect Database`.
+      You are finished setting up the connection between Hasura and MongoDB,
+      each hosted on their respective Cloud instances.
 
 
 
