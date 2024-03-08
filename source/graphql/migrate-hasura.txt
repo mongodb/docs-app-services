@@ -182,9 +182,46 @@ Hasura Console or the Hasura CLI.
       the next step, you will see the models derived from this document.
       Finally, click the :guilabel:`Track Collection` button.
 
+Test your GraphQL queries
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
+After tracking a collection and getting a schema, you can navigate to the API
+Explorer page on the Hasura Console to test out some GraphQL queries.
 
+Hasura also uses the GraphiQL interface, which is similar to how you test
+queries in Atlas App Services.
 
+.. image:: /images/migration/test-queries.png
+   :alt: Use the GraphiQL interface to test queries.
+
+Authorization and Authentication
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Hasura does not directly handle authentication. Instead, it relies on session
+variables provided by an external authentication service. These session
+variables include user, role, and organization information crucial for
+determining data access rights. For details, refer to the `Hasura authentication
+docs <https://hasura.io/docs/latest/auth/overview/>`_
+
+Data access permissions, including roles and rule expressions, can be converted
+into Hasura role-based permission rules.
+
+All Authentication methods that Atlas provides are compatible with Hasura's
+Webhook and JWT auth methods. If you are using Email/Pass, Anonymous, or API Key
+authentication, use Hasura Webhook. If you are using a Custom JWT, integrate
+directly with Hasura's JWT auth method.
+
+It is recommended to use an external IdP for managing authentication
+processes. For enhanced security and flexibility, organizations typically manage
+tokens and keys centrally rather than adjacent to the database.
+
+You can integrate Hasura with any authentication provider of your choice, such
+as Auth0, Firebase Auth, AWS Cognito, or even a custom solution, to verify the
+user and set the necessary session variables. For configuring JWT or webhook
+authentication in Hasura, refer to the documentation at:
+
+- `JWT Authentication <https://hasura.io/docs/latest/auth/authentication/jwt/>`_
+- `Webhook Authentication <https://hasura.io/docs/latest/auth/authentication/webhook/>`_
 
 
 
