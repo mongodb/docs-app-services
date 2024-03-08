@@ -839,6 +839,41 @@ paths:
       - "$ref": "#/components/parameters/AppId"
       - "$ref": "#/components/parameters/ValueId"
 
+  "/groups/{groupId}/apps/{appId}/multi_data_sources":
+    post:
+      tags:
+        - services
+      operationId: adminLinkMultiDataSources
+      summary: Link multiple data sources
+      description: |-
+        Call this endpoint to link multiple data sources to an App. The total 
+        limit of linked data sources per App is 100. Data Sources linked by this
+        endpoint will have `ReadAndWrite` default rules. 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              description: Limit of 25 linked data sources in the payload. 
+              items:
+                $ref: "#/components/schemas/LinkingDataSourceConstructor"
+      responses:
+        "201":
+          description: No content
+        "400":
+          description: |-
+            - Data Sources exceeds the limit of 25 in the payload
+            - Data Sources exceed the limit of 100 on the App
+            - Multiple Default Rules for a single Data Source 
+            - Type of Data Source is neither "mongodb-atlas" nor "datalake"
+            - Linking failed for at least one Data Source
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/FailedLinkingDataSourceResponse" 
+                  - $ref: "#/components/schemas/Error"
+
   "/groups/{groupId}/apps/{appId}/services":
     get:
       tags:
@@ -5885,7 +5920,43 @@ components:
         type: { type: string }
         version: { type: number }
         last_modified: { type: number }
-
+    LinkingDataSourceConstructor:
+      properties:
+        name:
+          type: string
+          example: first-cluster
+          description: Create a name to identify each cluster you want to link. 
+        type: 
+          type: string
+          enum: ["mongodb-atlas", "datalake"]
+          example: mongodb-atlas
+          description: |-
+            The type of the data source you want to link. 
+        config:
+          $ref: "#/components/schemas/LinkingDataSourceConfig"
+    LinkingDataSourceConfig:
+      type: object
+      required:
+        - clusterName
+      properties:
+        clusterName:
+          type: string
+          example: Cluster0
+          description: |-
+            The cluster name of the data source within. The name may be at
+            most 64 characters long and must only contain ASCII letters, numbers,
+            underscores, and hyphens.
+    FailedLinkingDataSourceResponse:
+      properties:
+        failedClusterNames: 
+          type: array 
+          description: |-
+            The names of any data sources that failed to link. This uses the `name` property
+            you assigned to the data source. 
+          items: 
+            type: string
+            example: first-cluster
+    
     ReadPreferencesTagSet:
       type: string
       enum:
