@@ -844,8 +844,11 @@ paths:
       tags:
         - services
       operationId: adminLinkMultiDataSources
-      summary: 
-      description: 
+      summary: Link multiple data sources
+      description: |-
+        Call this endpoint to link multiple data sources to an App. The total 
+        limit of linked data sources per App is 100. Data Sources linked by this
+        endpoint will have ReadAndWrite default rules. 
       requestBody:
         content:
           application/json:
@@ -5939,7 +5942,12 @@ components:
       properties:
         failedClusterNames: 
           type: array 
-          items: { type: string }
+          description: |-
+            The names of any data sources that failed to link. This uses the `name` property
+            you assigned to the data source. 
+          items: 
+            type: string
+            example: first-cluster
     
     ReadPreferencesTagSet:
       type: string
