@@ -863,7 +863,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: "#/components/schemas/FailedLinkingDataSource" 
+                  $ref: "#/components/schemas/FailedLinkingDataSourceResponse" 
 
   "/groups/{groupId}/apps/{appId}/services":
     get:
@@ -5913,8 +5913,14 @@ components:
         last_modified: { type: number }
     LinkingDataSourceConstructor:
       properties:
-        name: { type: string }
-        type: { type: string }
+        name:
+          type: string
+          example: first-cluster
+          description: Create a name to identify each cluster you want to link. 
+        type: 
+          type: string
+          example: mongodb-atlas
+          description: The type of the data source you want to link.
         config:
           $ref: "#/components/schemas/LinkingDataSourceConfig"
     LinkingDataSourceConfig:
@@ -5931,11 +5937,9 @@ components:
             underscores, and hyphens.
     FailedLinkingDataSourceResponse:
       properties:
-        _id: { type: string }
-        name: { type: string }
-        type: { type: string }
-        version: { type: number }
-        last_modified: { type: number }
+        failedClusterNames: 
+          type: array 
+          items: { type: string }
     
     ReadPreferencesTagSet:
       type: string
