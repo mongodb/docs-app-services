@@ -871,8 +871,9 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: "#/components/schemas/FailedLinkingDataSourceResponse" 
+                oneOf:
+                  - $ref: "#/components/schemas/FailedLinkingDataSourceResponse" 
+                  - $ref: "#/components/responses/BadRequest"
 
   "/groups/{groupId}/apps/{appId}/services":
     get:
