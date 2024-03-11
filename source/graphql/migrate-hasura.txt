@@ -45,14 +45,16 @@ detailing each step, with a focus on authorization and role-based access control
 
 To migrate to Hasura:
 
-#. Create a new project in Hasura
-#. Authorize Hasura for MongoDB
-#. Migrate your GraphQL schema
-#. Test your GraphQL queries
-#. Handle authorization and authentication
-#. Set up custom resolvers
-#. Update client applications
-#. Shut down MongoDB Atlas App Services
+#. :ref:`Create a new project in Hasura <hasura-create>`
+#. :ref:`Authorize Hasura for MongoDB <hasura-authorize-mongodb>`
+#. :ref:`Migrate your GraphQL schema <hasura-migrate-schema>`
+#. :ref:`Test your GraphQL queries <hasura-test>`
+#. :ref:`Handle authorization and authentication <hasura-auth>`
+#. :ref:`Set up custom resolvers <hasura-resolvers>`
+#. :ref:`Update client applications <hasura-client>`
+#. :ref:`Shut down MongoDB Atlas App Services <hasura-shutdown>`
+
+.. _hasura-create:
 
 Create a New Project in Hasura
 ------------------------------
@@ -91,6 +93,7 @@ Create a New Project in Hasura
       .. image:: /images/migration/connect-database.png
          :alt: Connect database page
 
+.. _hasura-authorize-mongodb:
 
 Authorize Hasura for MongoDB
 ----------------------------
@@ -140,6 +143,8 @@ GraphQL API for you.
       You are finished setting up the connection between Hasura and MongoDB,
       each hosted on their respective Cloud instances.
 
+.. _hasura-migrate-schema:
+
 Migrate GraphQL Schema
 ----------------------
 
@@ -183,6 +188,8 @@ Hasura Console or the Hasura CLI.
       the next step, you will see the models derived from this document.
       Finally, click the :guilabel:`Track Collection` button.
 
+.. _hasura-test:
+
 Test Your GraphQL Queries
 -------------------------
 
@@ -194,6 +201,8 @@ queries in Atlas App Services.
 
 .. image:: /images/migration/test-queries.png
    :alt: Use the GraphiQL interface to test queries.
+
+.. _hasura-auth:
 
 Authorization and Authentication
 --------------------------------
@@ -222,6 +231,8 @@ refer to the documentation at:
 - `JWT Authentication <https://hasura.io/docs/latest/auth/authentication/jwt/>`_
 - `Webhook Authentication <https://hasura.io/docs/latest/auth/authentication/webhook/>`_
 
+.. _hasura-resolvers:
+
 Set Up Custom Resolvers
 -----------------------
 
@@ -242,6 +253,8 @@ JavaScript code for the function.
 .. image:: /images/migration/resolver-codegen.png
    :alt: Hasura auto generates Action code.
 
+.. _hasura-client:
+
 Update Client Applications
 --------------------------
 
@@ -251,6 +264,8 @@ Hasura.
 
 Update the GraphQL operations used by applications to match Hasura-style GraphQL
 operations. 
+
+.. _hasura-shutdown:
 
 Shut down MongoDB Atlas App Services
 ------------------------------------
