@@ -39,8 +39,9 @@ below to migrate from using Atlas Hosting to using your own S3 bucket.
 
       Migrate your existing data from MongoDB Atlas Hosting to your S3 bucket.
       Depending on the amount of data and your specific requirements, this could
-      involve exporting data from MongoDB and uploading it to S3 using tools
-      like the AWS CLI or AWS SDK.
+      involve exporting data from MongoDB with the :ref:`App Services CLI 
+      <appservices-pull>` (``appservices pull --include-hosting``) and then
+      uploading the data to S3 using tools like the AWS CLI or AWS SDK.
 
    .. step:: Update Application Code
 
@@ -48,6 +49,13 @@ below to migrate from using Atlas Hosting to using your own S3 bucket.
       MongoDB Atlas Hosting. This includes updating code that handles file
       uploads or downloads, if you are using the App Services CLI commands to
       do so.
+
+   .. step:: Shut Down Atlas Hosting
+
+      Once you have verified that your files deploy successfully to your S3
+      bucket, delete your hosted files from your Atlas App Services app.
+      As a reminder, hosting domains on Atlas App Services will no longer run
+      starting on March 12, 2025.
 
 Access S3 Bucket from Atlas Functions
 -------------------------------------
