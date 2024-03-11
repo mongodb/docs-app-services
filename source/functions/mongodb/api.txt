@@ -6,6 +6,18 @@ MongoDB API Reference
 
 .. default-domain:: mongodb
 
+.. meta:: 
+   :keywords: code example
+   :description: Learn how to use Functions to query a MongoDB Atlas data source. 
+
+.. facet::
+   :name: programming_language
+   :values: javascript/typescript
+
+.. facet::
+  :name: genre
+  :values: reference
+
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -350,8 +362,17 @@ collection.findOne()
    :hidden:
 
 Finds a single document from a collection or view. If multiple documents
-match the query, this returns the first matching document according to
-the query's sort order or natural order.
+match the query, this returns the first matching document in the collection.
+
+.. note:: ``findOne()`` Cannot Use Sort
+
+  As a workaround, use ``find()`` with the ``sort()`` and ``next()`` cursor methods 
+  to return a single document from a sorted collection. 
+
+  .. code-block:: javascript
+
+    collection.find({}).sort({"<Field Name>": 1}).next()
+      .then(result => console.log("Found Document: ", result))
 
 .. include:: /functions/mongodb/api/snippets/findOne.rst
 

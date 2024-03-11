@@ -4,7 +4,12 @@
 Configure Network Security
 ==========================
 
-.. default-domain:: mongodb
+.. meta::
+   :description: Learn about the network security protocols used by Atlas App Services.
+
+.. facet::
+   :name: genre
+   :values: reference 
 
 .. contents:: On this page
    :local:
@@ -35,6 +40,8 @@ to secure all network requests to and from your application, including:
 - Queries and operations on a linked MongoDB Atlas data source.
 
 The TLS certificate is pre-defined and cannot be customized or disabled.
+
+.. include:: /includes/x509-encryption.rst
 
 .. _realm-public-ips:
 .. _firewall-configuration:
@@ -468,8 +475,3 @@ for project or organization access from the Realm CLI or the App Services
 Admin API, you can specify IP addresses that can use this API key. If you specify 
 an IP address, App Services blocks any request originating from an IP address that 
 is not on the access list.
-
-.. note:: Backend Encryption
-
-   All internal communication between App Services and Atlas is encrypted with 
-   x509 certificates.

@@ -65,7 +65,7 @@ access token.
 
                https://services.cloud.mongodb.com/api/client/v2.0/app/<App ID>
 
-            Replace ``<AppID>`` with your client App ID. For example,
+            Replace ``<App ID>`` with your client App ID. For example,
             ``myapp-abcde``.
 
          .. tab:: Local Deployment
@@ -73,13 +73,13 @@ access token.
 
             .. code-block:: text
 
-               https://<Region>.<Cloud>.services.cloud.mongodb.com/api/client/v2.0/app/<AppID>/auth/providers/<ProviderType>/login
+               https://<Region>.<Cloud>.services.cloud.mongodb.com/api/client/v2.0/app/<App ID>
 
             - Replace ``<Region>`` with the region where your app is hosted. For example, ``us-east-1``.
 
             - Replace ``<Cloud>`` with the cloud where your app is hosted. For example, ``aws``, ``azure``, or ``gcp``.
 
-            - Replace ``<AppID>`` with your client app ID. For example, ``myapp-abcde``.
+            - Replace ``<App ID>`` with your client app ID. For example, ``myapp-abcde``.
 
       You can find the base URL programmatically with the App
       location endpoint. The response body includes the base URL as
@@ -90,7 +90,7 @@ access token.
          .. input::
             :language: shell
 
-            curl 'https://services.cloud.mongodb.com/api/client/v2.0/app/<AppID>/location'
+            curl 'https://services.cloud.mongodb.com/api/client/v2.0/app/<App ID>/location'
 
          .. output::
             :language: json
@@ -163,7 +163,7 @@ access token.
                curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/custom-token/login' \
                  --header 'Content-Type: application/json' \
                  --data-raw '{
-                 	 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0ZXN0ZGV2LWJwcWVsIiwiZXhwIjoxNTE2MjM5MDIyLCJzdWIiOiIyNDYwMSIsInVzZXJfZGF0YSI6eyJuYW1lIjoiSmVhbiBWYWxqZWFuIiwiYWxpYXNlcyI6WyJNb25zaWV1ciBNYWRlbGVpbmUiLCJVbHRpbWUgRmF1Y2hlbGV2ZW50IiwiVXJiYWluIEZhYnJlIl19fQ.mVWr4yFf8nD1EhuhrJbgKfY7BEpMab38RflXzUxuaEI"
+                   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ0ZXN0ZGV2LWJwcWVsIiwiZXhwIjoxNTE2MjM5MDIyLCJzdWIiOiIyNDYwMSIsInVzZXJfZGF0YSI6eyJuYW1lIjoiSmVhbiBWYWxqZWFuIiwiYWxpYXNlcyI6WyJNb25zaWV1ciBNYWRlbGVpbmUiLCJVbHRpbWUgRmF1Y2hlbGV2ZW50IiwiVXJiYWluIEZhYnJlIl19fQ.mVWr4yFf8nD1EhuhrJbgKfY7BEpMab38RflXzUxuaEI"
                  }'
 
          .. tab::
@@ -175,7 +175,7 @@ access token.
                curl -X POST 'https://services.cloud.mongodb.com/api/client/v2.0/app/myapp-abcde/auth/providers/custom-function/login' \
                  --header 'Content-Type: application/json' \
                  --data-raw '{
-                 	 "someCustomFunctionArg": "<Login Info>"
+                   "someCustomFunctionArg": "<Login Info>"
                  }'
 
       If the authentication request succeeds, the response body includes

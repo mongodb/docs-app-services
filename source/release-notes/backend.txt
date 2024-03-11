@@ -13,6 +13,38 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_20240306:
+
+6 March 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Created a new endpoint to link multiple data sources to an existing App.
+
+- Updated the timeout variable, ``maxTimeMS``, to accept ``float64`` for ``db.aggregate``
+  and ``db.coll.aggregate`` commands. 
+
+- Added a check to ensure custom user data is not enabled before deleting a 
+  datasource. If custom user data is enabled, the user will get a 400 error.
+
+- If Sync is paused or terminated, schema version information will still be shown in App Services UI.
+
+- Fixed error where an empty App would sometimes fails if mutation custom resolvers 
+  were pushed to the App. 
+
+.. _backend_20240221:
+
+21 February 2024 Release
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fixed error to allow custom user data changes to be parsed when pushing or 
+  pulling an app even if custom user data is disabled. 
+
+- Configured :ref:`custom error handlers <eventbridge-error-handling>` for Database Triggers 
+  sending events to AWS EventBridge. 
+
+- Created new :ref:`trigger error handler log type <logs-trigger-error-handler>` in support 
+  of new AWS EventBridge custom error handling for Database Triggers.
+
 .. _backend_20240207:
 
 7 February 2024 Release
