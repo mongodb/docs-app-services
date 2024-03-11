@@ -14,19 +14,18 @@
 
 ## Connect to a MongoDB Data Sources
 
-- Landing Page: Added note about x509 security certificate between Atlas App Services and Atlas data sources.
+- Landing Page: Add note about x509 security certificate between Atlas App Services and Atlas data sources.
 
 ## Secure Your App
 
-- Configure Network Security: Moved note about x509 security certificate between Atlas App Services and Atlas data sources to a more appropriate spot higher up on the page.
+- Configure Network Security: Move note about x509 security certificate between Atlas App Services and Atlas data sources to a more appropriate spot higher up on the page.
 
 ## Reference
 
 - Admin API
   - Metrics/Retrieve App Services metrics: Update endpoint to include `metrics` and its available enums as a query parameter.
-  - Added new "Link multiple data sources" endpoint.
-- Service Limitations: Add information about the 20 MB Device Sync websocket read
-limit.
+  - Add new "Link multiple data sources" endpoint.
+- Service Limitations: Add information about the 20 MB Device Sync websocket read limit.
 
 ## Release Notes
 
