@@ -1,8 +1,8 @@
-.. _appservices-users:
+.. _appservices-users-count:
 
-=================
-appservices users
-=================
+=======================
+appservices users count
+=======================
 
 .. default-domain:: mongodb
 
@@ -12,7 +12,19 @@ appservices users
    :depth: 1
    :class: singlecol
 
-Manage the Users of your app (alias: user)
+Displays the total count of application users of your app.
+
+Displays the number of total application users of your app, across all Auth Provider types.
+
+Syntax
+------
+
+.. code-block::
+   :caption: Command Syntax
+
+   appservices users count [options]
+
+.. Code end marker, please don't delete this comment
 
 Options
 -------
@@ -25,10 +37,18 @@ Options
      - Type
      - Required
      - Description
+   * - -a, --app
+     - string
+     - false
+     - Specify the name or ID of an App Service to display number of users’
+   * - --project
+     - string
+     - false
+     - Specify the ID of a MongoDB Atlas project
    * - -h, --help
      - 
      - false
-     - help for users
+     - help for count
 
 Inherited Options
 -----------------
@@ -44,7 +64,7 @@ Inherited Options
    * - --profile
      - string
      - false
-     - Specify your profile (Default value: "default")
+     - Specify your profile (Default value: "default") [Learn more: https://www.mongodb.com/docs/atlas/app-services/cli/#cli-profiles]
    * - --telemetry
      - string
      - false
@@ -65,25 +85,3 @@ Inherited Options
      - 
      - false
      - Automatically proceed through CLI commands by agreeing to any required user prompts
-
-Related Commands
-----------------
-
-* :ref:`appservices-users-create` - Create an application user for your app
-* :ref:`appservices-users-delete` - Delete an application user from your app
-* :ref:`appservices-users-disable` - Disable an application User of your app
-* :ref:`appservices-users-enable` - Enable an application User of your app
-* :ref:`appservices-users-list` - List the application users of your app (alias: ls)
-* :ref:`appservices-users-revoke` - Revoke an application User’s sessions from your app
-
-
-.. toctree::
-   :titlesonly:
-
-   create </cli/appservices-users-create>
-   count </cli/appservices-users-count>
-   delete </cli/appservices-users-delete>
-   disable </cli/appservices-users-disable>
-   enable </cli/appservices-users-enable>
-   list </cli/appservices-users-list>
-   revoke </cli/appservices-users-revoke>
