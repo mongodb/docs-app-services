@@ -1,3 +1,37 @@
+# March 8, 2024
+
+## Device Sync
+
+- Handle Errors/Sync Errors: Update MongoDB Translator Errors section table to include `MaxIntegrationAttempts` error description and typical resolution.
+
+## Functions
+
+- MongoDB API Reference: Add note with example on finding one document in a sorted collection using `find()`, `sort()`, and `next()`.
+
+## Triggers
+
+- Landing Page: Add a section about diagnosing duplicate events.
+
+## Connect to a MongoDB Data Sources
+
+- Landing Page: Added note about x509 security certificate between Atlas App Services and Atlas data sources.
+
+## Secure Your App
+
+- Configure Network Security: Moved note about x509 security certificate between Atlas App Services and Atlas data sources to a more appropriate spot higher up on the page.
+
+## Reference
+
+- Admin API
+  - Metrics/Retrieve App Services metrics: Update endpoint to include `metrics` and its available enums as a query parameter.
+  - Added new "Link multiple data sources" endpoint.
+- Service Limitations: Add information about the 20 MB Device Sync websocket read
+limit.
+
+## Release Notes
+
+- Update external change log with release notes for new endpoint for linking multiple data sources and error fixes.
+
 # March 1, 2024
 
 ## Authenticate & Manage Users
