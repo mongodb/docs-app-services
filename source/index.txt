@@ -18,7 +18,6 @@ What are the Atlas Application Services?
    Get Started </get-started>
    Device Sync </sync>
    Edge Server </edge-server>
-   GraphQL API </graphql>
    Data API </data-api>
    Functions </functions>
    Triggers </triggers>
@@ -29,7 +28,6 @@ What are the Atlas Application Services?
    Define Data Access Permissions </rules>
    Secure Your App </security>
    Monitor App Activity </activity>
-   Host Files </hosting>
    Reference </reference>
    Release Notes </release-notes/backend>
    Realm SDKs <https://mongodb.com/docs/realm>
@@ -148,98 +146,6 @@ run virtually any app or backend service on top of Atlas.
 
       .. image:: /images/plp/connection.png
          :alt: Build a Secure HTTPS API
-
-   .. tab:: Access Data with GraphQL
-      :tabid: graphql
-
-      .. procedure::
-
-         .. step:: Define A JSON Schema For Your Data
-
-            The GraphQL API automatically generates a hosted endpoint
-            with GraphQL queries and mutations based on JSON schemas
-            for the documents in your database.
-
-            .. tabs::
-
-               .. tab:: EJSON Schema
-                  :tabid: json
-
-                  .. code-block:: json
-
-                     {
-                       "title": "Meeting",
-                       "required": ["start", "end", "location"],
-                       "properties": {
-                         "_id": { "bsonType": "objectId" },
-                         "start": { "bsonType": "date" },
-                         "end": { "bsonType": "date" },
-                         "location": { "bsonType": "string" }
-                       }
-                     }
-
-               .. tab:: GraphQL Schema
-                  :tabid: graphql
-
-                  .. code-block:: graphql
-
-                     type Meeting {
-                       _id: ObjectId
-                       start: DateTime!
-                       end: DateTime!
-                       location: String!
-                     }
-
-         .. step:: Secure Your API
-            
-            Generate an API key that you can use to authenticate
-            requests. Alternatively, you can use other authentication
-            provider credentials associated with your app.
-            
-            For details, see :ref:`Authenticate GraphQL Requests <graphql-authentication>`.
-
-         .. step:: Send Your First Request
-
-            Send your first GraphQL request from any server-side or
-            frontend environment that supports HTTPS. You can also use a
-            specialized GraphQL request tool or library.
-            
-            Learn how to :realm:`Send GraphQL Requests with Apollo
-            Client </web/graphql-apollo-react/>`.
-
-            .. tabs::
-
-               .. tab:: GraphQL
-                  :tabid: graphql
-
-                  .. code-block:: graphql
-
-                     query GetMeetingsInDateRange($start: DateTime!, $end: DateTime!) {
-                       meetings(query: {
-                         start_gte: $start,
-                         end_lte: $end
-                       }) {
-                         _id
-                         start
-                         end
-                         location
-                       }
-                     }
-
-               .. tab:: cURL
-                  :tabid: curl
-
-                  .. code-block:: bash
-
-                     curl -X POST https://services.cloud.mongodb.com/api/client/v2.0/app/<Your App ID>/graphql \
-                       -H 'apiKey: <YOUR API KEY>' \
-                       -d {
-                         "query": "query GetMeetingsInDateRange($start: DateTime!, $end: DateTime!) { meetings(query: { start_gte: $start, end_lte: $end }) { _id start end location } }"
-                         "variables": { "start": "2022-01-01T00:00:00.000Z", "end": "2022-03-31T23:59:59.999Z" }
-                       }
-
-      .. image:: /images/plp/connection.png
-         :alt: Build a Secure GraphQL API
 
    .. tab:: Respond to Events Automatically
       :tabid: triggers

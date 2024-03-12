@@ -4,7 +4,7 @@ title = "Atlas App Services"
 intersphinx = [
   "https://www.mongodb.com/docs/manual/objects.inv",
   "https://www.mongodb.com/docs/atlas/objects.inv",
-  "https://www.mongodb.com/docs/realm/objects.inv"
+  "https://www.mongodb.com/docs/realm/objects.inv",
 ]
 
 # These are the pages that open when you click on them (instead of just being containers)
@@ -57,7 +57,7 @@ toc_landing_pages = [
   # Reference
   "/reference/config",
   # Other
-  "/studio"
+  "/studio",
 ]
 
 [substitutions]
@@ -93,4 +93,18 @@ targets = ["*"]
 variant = "info"
 value = """\
     Realm is now Atlas Device SDK – `Learn More <http://www.mongodb.com/blog/post/realm-now-part-atlas-platform>`__ \
+    """
+
+[[banners]]
+targets = ["hosting/*.txt"]
+variant = "warning"
+value = """\
+     Static Hosting is deprecated. :ref:`Learn More <migrate-hosting-graphql>`.\
+    """
+
+[[banners]]
+targets = ["graphql/*.txt"]
+variant = "warning"
+value = """\
+     GraphQL is deprecated. :ref:`Learn More <migrate-hosting-graphql>`.\
     """

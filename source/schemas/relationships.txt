@@ -22,9 +22,8 @@ collections.
 
 You define a relationship for a "source" MongoDB collection and link to
 documents in a "foreign" collection. Atlas App Services automatically resolves
-relationships in synced SDK data models and GraphQL operations by
-replacing the values in a source field with the foreign documents that
-they reference.
+relationships in synced SDK data models by replacing the values in a source
+field with the foreign documents that they reference.
 
 Relationships are unidirectional and don't enforce uniqueness or other
 foreign key constraints. If you reference a non-existent foreign value in
@@ -93,21 +92,9 @@ relationships.
       }
    
    With this relationship defined, App Services can return a customer and all
-   of their accounts in the same GraphQL query. Without a relationship,
-   the query would return a list of just ``account_id`` values instead
+   of their accounts in client queries. Without a relationship,
+   the queries would return a list of just ``account_id`` values instead
    of the full ``Account`` objects.
-   
-   .. code-block:: text
-      
-      query CustomerAccounts {
-        customer(query: { username: "Elizabeth Ray" }) {
-          username
-          accounts {
-            account_id
-            products
-          }
-        }
-      }
 
 Cardinality
 -----------
@@ -140,42 +127,23 @@ To indicate that a relationship has "to-one" cardinality, set
    }
 
 App Services automatically replaces source values with the referenced objects
-or a null value in resolved GraphQL types and SDK models:
+or a null value in SDK models:
 
-.. tabs::
-
-   .. tab:: GraphQL
-      :tabid: graphql
-      
-      .. code-block:: graphql
-         
-         type Pet {
-           name: String!
-           owner: Person
-         }
-         
-         type Person {
-           name: String!
-         }
-
-   .. tab:: Realm SDK
-      :tabid: sdk
-      
-      .. code-block:: json
-         
-         {
-           "name": "Pet",
-           "properties": {
-             "name": "string",
-             "owner": "Person"
-           }
-         }
-         {
-           "name": "Person",
-           "properties": {
-             "name": "string"
-           }
-         }
+.. code-block:: json
+    
+    {
+      "name": "Pet",
+      "properties": {
+        "name": "string",
+        "owner": "Person"
+      }
+    }
+    {
+      "name": "Person",
+      "properties": {
+        "name": "string"
+      }
+    }
 
 .. _relationships-to-many:
 
@@ -201,42 +169,23 @@ To indicate that a relationship has "to-many" cardinality, set
    }
 
 App Services automatically replaces source values with the referenced objects
-or a null value in resolved GraphQL types and SDK models:
+or a null value in SDK models:
 
-.. tabs::
-
-   .. tab:: GraphQL
-      :tabid: graphql
-      
-      .. code-block:: graphql
-         
-         type Pet {
-           name: String!
-         }
-         
-         type Person {
-           name: String!
-           pets: [Pet]
-         }
-
-   .. tab:: Realm SDK
-      :tabid: sdk
-      
-      .. code-block:: json
-         
-         {
-           "name": "Pet",
-           "properties": {
-             "name": "string"
-           }
-         }
-         {
-           "name": "Person",
-           "properties": {
-             "name": "string",
-             "pets": "Pet[]"
-           }
-         }
+.. code-block:: json
+    
+    {
+      "name": "Pet",
+      "properties": {
+        "name": "string"
+      }
+    }
+    {
+      "name": "Person",
+      "properties": {
+        "name": "string",
+        "pets": "Pet[]"
+      }
+    }
 
 .. _relationships-embedded-object:
 
@@ -290,13 +239,6 @@ Embedded Object Within a List
 
 An embedded object that is within a list property can have a relationship
 with a foreign collection.
-
-.. important::
-
-   The GraphQL API does not currently support embedded object relationships.
-
-   You can resolve embedded object relationships with Atlas Device Sync and
-   in the Realm SDKs.
 
 .. code-block:: json
 
