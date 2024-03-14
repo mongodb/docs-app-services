@@ -4,7 +4,8 @@
 Introduction to Atlas App Services for Backend and Web Developers
 =================================================================
 
-.. default-domain:: mongodb
+.. meta:: 
+   :description: Discover how Atlas App Services can help you solve common server-client development challenges.
 
 .. contents:: On this page
    :local:
@@ -75,7 +76,7 @@ Simply secure:
 
 Synchronized:
   - Seamlessly sync data across devices with Atlas Device Sync .
-  - Avoid writing complex synchronization logic with the :ref:`Realm Database SDKs <realm-sdks>`.
+  - Avoid writing complex synchronization logic with the :ref:`Atlas Device SDK <realm-sdks>`.
 
 .. _intro-web-users:
 .. _intro-user-authentication:
@@ -133,7 +134,7 @@ also need to respond in real time when something happens in the app or in an ext
 App Services lets you define serverless JavaScript functions called Atlas Functions.
 You can use Atlas Functions for the following common backend use cases:
 
-- Call from client applications with the Realm Web SDK.
+- Call from client applications with the Atlas Device SDK for Web.
 - Execute Atlas Functions in response to trigger events, like an update to a document in MongoDB or at a scheduled time.
 - HTTPS endpoints that execute a function in response to external applications.
 
@@ -148,7 +149,7 @@ Secure Client-Side Queries
 Developers need efficient, secure data access.
 If the data is on a server, you need an API to access the data and prevent unauthorized access.
 
-The Realm SDKs provide a secure MongoDB client to interact with data
+The SDKs provide a secure MongoDB client to interact with data
 in your :ref:`MongoDB data sources <data-sources>`.
 
 App Services's server-side rules ensures that users only read and modify permitted documents.
@@ -165,13 +166,13 @@ Traditionally developers query the database on the server and access the server
 from the client through a HTTP API. This requires more developer resources and lacks
 the flexibility of directly querying a database.
 
-App Services and the Realm SDKs include MongoDB Data Access,
+App Services and the Atlas Device SDK includes MongoDB Data Access,
 an API that lets you access MongoDB Atlas from the client using
 the :manual:`Query API </tutorial/query-documents>`.
 You can query Atlas like you're using a database driver and App Services enforces
 :ref:`data access rules <intro-web-schema>` for all requests.
 
-The following Realm SDKs let you query Atlas with MongoDB Data Access from client apps:
+The following SDKs let you query Atlas with MongoDB Data Access from client apps:
 
 - :ref:`Query MongoDB - Java SDK <java-mongodb-data-access>`
 - :ref:`Query MongoDB - .NET SDK <dotnet-mongodb-data-access>`
@@ -187,11 +188,11 @@ Synchronize Data Across Devices
 
 Synchronizing data is a hard problem for mobile app developers. Device Sync
 provides offline-first sync capabilities for your mobile application. 
-Client applications use :ref:`Realm Database <intro-realm-database>` to 
-persist data to the local device. When the device has a network connection, 
-Sync seamlessly sends the data to the App. The app stores the data 
-to a linked :ref:`MongoDB Atlas data source <data-sources>`, and updates 
-the data on other client devices.
+Client applications use :ref:`an offline-first persistence layer 
+<intro-realm-database>` to persist data to the device. When the device 
+has a network connection, Sync seamlessly sends the data to the App. The App 
+stores the data to a linked :ref:`MongoDB Atlas data source <data-sources>`, 
+and updates the data on other client devices.
 
 Device Sync provides :ref:`conflict resolution <conflict-resolution>` to
 handle multiple users updating the same data. When combined with :ref:`user 
@@ -211,7 +212,7 @@ services to do things like:
 
 - Use Sync to synchronize data between mobile clients and the linked 
   MongoDB Atlas collection.
-- Host a Todo web app using the :ref:`Realm Web SDK <web-intro>`
+- Host a Todo web app using :ref:`Atlas Device SDK for Web <web-intro>`
 - Manage event-driven :ref:`Database Triggers <database-trigger>` 
   to update views in a separate collection
 
