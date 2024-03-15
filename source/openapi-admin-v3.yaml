@@ -7191,10 +7191,34 @@ components:
             Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
     FlexibleSync:
       type: object
+      required: 
+        - state
+        - development_mode_enabled
+
+
       properties:
         state:
           type: string
           description: The state of the sync service ("enabled", "disabled", or empty if Sync is not configured).
+        development_mode_enabled:
+          type: boolean
+          description: |- 
+            If `true`, :ref:`Development Mode <development-mode>` is enabled
+            for the application. While enabled, App Services automatically stores synced
+            objects in a specific database (specified in `database_name`) and
+            mirrors objects types in that database's collection schemas.
+        service_name:
+          type: string
+          description: |-
+            The name of the Atlas cluster :ref:`data source <appconfig-data_sources>`
+            to sync. You cannot use sync with a :ref:`serverless instance
+            <serverless-caveats>`.
+        database_name:
+          type: string
+          description: |-
+            The name of a database in the synced cluster where App Services stores 
+            data in Development Mode. App Services automatically generates a schema 
+            for each synced type and maps each object type to a collection within the database.
         queryable_fields_names:
           type: array
           description: |-
@@ -7221,6 +7245,16 @@ components:
           type: object
           description: |-
             **Deprecated**
+        indexed_queryable_fields_names:
+          type: array
+          description: |-
+            A list of field names to use as the indexed queryable field. While this property is an array, Sync 
+            currently supports only one one indexed queryable field. Therefore, this array may contain at most 
+            one element.
+
+            The indexed queryable field must be present in the schema and be the same eligible field type in 
+            every collection you sync. The indexed queryable field name must also appear in queryable_fields_names 
+            since this is a global queryable field.
         last_disabled:
           type: string
           description: The last time Sync was disabled, represented by the number of seconds since the UNIX epoch.
