@@ -1,3 +1,38 @@
+# March 15, 2024
+
+## GraphQL
+
+- Add GraphQL deprecation banner.
+- Move GraphQL docs into Reference. Note in the table of contents that the service is deprecated.
+- Add migration guides:
+  - Migrate GraphQL to Hasura.
+  - Migrate GraphQL to Apollo.
+
+## Host Files
+
+- Add static hosting deprecation banner.
+- Move Host Files docs into Reference. Note in the table of contents that the service is deprecated.
+- Add migration guides:
+  - Migrate Static Hosting to Netlify
+  - Migrate Static Hosting to Vercel
+  - Migrate to Your Own S3 Bucket
+
+## Reference
+
+App Services CLI
+- schema: New commands for validating and generating schemas: `appservices schema validate` and `appservices schema generate`.
+- users: New command to display total number of app users: `appservices users count`.
+
+## Other
+
+- Landing page: Change "Realm SDKs" entry in sidebar to "Atlas Device SDK." Update naming throughout landing page.
+- Introduction: Update Realm naming and positioning throughout landing page.
+- Migrate Static Hosting and GraphQL From App Services: New landing page for the deprecated service migration guides. Only available through the deprecation banner.
+
+Throughout the App Services docs:
+- Add deprecation banners for GraphQL and Static Hosting where needed.
+- Remove high-level references to our GraphQL API and Static Hosting service to make the features less discoverable.
+
 # March 8, 2024
 
 ## Device Sync
