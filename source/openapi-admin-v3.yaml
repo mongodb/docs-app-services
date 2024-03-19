@@ -7224,6 +7224,18 @@ components:
             names on **any collection**.
           items:
             type: string
+        indexed_queryable_fields_names:
+          type: array
+          description: |-
+            A list of field names to use as the indexed queryable field. While this property is an array, Sync 
+            currently supports only one one indexed queryable field. Therefore, this array may contain at most 
+            one element.
+
+            The indexed queryable field must be present in the schema and be the same eligible field type in 
+            every collection you sync. The indexed queryable field name must also appear in `queryable_fields_names` 
+            since this is a global queryable field.
+          items:
+            type: string
         collection_queryable_fields_names:
           type: object
           description: |-
@@ -7242,18 +7254,6 @@ components:
           type: object
           description: |-
             **Deprecated**
-        indexed_queryable_fields_names:
-          type: array
-          description: |-
-            A list of field names to use as the indexed queryable field. While this property is an array, Sync 
-            currently supports only one one indexed queryable field. Therefore, this array may contain at most 
-            one element.
-
-            The indexed queryable field must be present in the schema and be the same eligible field type in 
-            every collection you sync. The indexed queryable field name must also appear in queryable_fields_names 
-            since this is a global queryable field.
-          items:
-            type: string
         last_disabled:
           type: string
           description: The last time Sync was disabled, represented by the number of seconds since the UNIX epoch.
@@ -7268,7 +7268,15 @@ components:
           description: |-
             Specifies whether the
             [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes)
-            is disabled. By default, client reset mode is enabled and this value is **false**.
+            is disabled. By default, client reset mode is enabled and this value is `false`.
+        asymmetric_tables:
+          type: array
+          description: |-
+            An array of the names of collections that are defined as asymmetric 
+            with [Data Ingest](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#data-ingest), 
+            where clients can write data but not read. 
+          items:
+            type: string
     Trigger:
       allOf:
         - properties:
