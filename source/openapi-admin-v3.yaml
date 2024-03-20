@@ -7193,23 +7193,10 @@ components:
       type: object
       required: 
         - state
-        - development_mode_enabled
       properties:
         state:
           type: string
           description: The state of the sync service (`"enabled"`, `"disabled"`, or empty if Sync is not configured).
-        development_mode_enabled:
-          type: boolean
-          description: |- 
-            If `true`, [Development Mode](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#development-mode) 
-            is enabled for the application. While enabled, App Services automatically stores synced
-            objects in a specific database (specified in `database_name`) and
-            mirrors objects types in that database's collection schemas.
-        service_name:
-          type: string
-          description: |-
-            The name of the Atlas cluster [data source](https://www.mongodb.com/docs/atlas/app-services/reference/config/data_sources/) 
-            to sync. You cannot use sync with a [serverless instance](https://www.mongodb.com/docs/atlas/app-services/mongodb/#serverless-instances).
         database_name:
           type: string
           description: |-
