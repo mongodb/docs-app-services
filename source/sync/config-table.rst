@@ -89,11 +89,6 @@
      - A list of field names to use as :ref:`global queryable fields
        <queryable-fields>`.
 
-   * - | ``queryable_fields_version``
-       | ``string``
-
-     - The version of the queryable field. 
-
    * - | ``indexed_queryable_fields_names``
        | ``string[]``
 

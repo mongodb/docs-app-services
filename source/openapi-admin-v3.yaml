@@ -7214,9 +7214,10 @@ components:
         indexed_queryable_fields_names:
           type: array
           description: |-
-            A list of field names to use as the indexed queryable field. While this property is an array, Sync 
-            currently supports only one one indexed queryable field. Therefore, this array may contain at most 
-            one element.
+            A list of field names to use as the 
+            [indexed queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields). 
+            Although this property is an array, Sync currently supports only one indexed 
+            queryable field. Therefore, this array may contain at most one element.
 
             The indexed queryable field must be present in the schema and be the same eligible field type in 
             every collection you sync. The indexed queryable field name must also appear in `queryable_fields_names` 
@@ -7234,9 +7235,6 @@ components:
             additionalProperties:
               description: The name of the queryable field.
               type: string
-        queryable_fields_version:
-          type: string
-          description: The version of the queryable field.
         permissions:
           type: object
           description: |-
