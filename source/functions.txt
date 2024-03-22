@@ -87,7 +87,7 @@ and abstract away implementation details from your client applications.
 
 In addition to functions that you invoke directly, you also write
 functions for various services like HTTPS Endpoints, Triggers, and
-GraphQL custom resolvers. These services automatically call functions to
+GraphQL custom resolvers (deprecated). These services automatically call functions to
 handle specific events. For example, whenever a database trigger
 observes a change event it calls its associated function with the change
 event as an argument. In the trigger function, you can then access
@@ -97,7 +97,7 @@ information from the change event and respond appropriately.
    
    - :ref:`HTTPS Endpoints <https-endpoints>`
    - :ref:`Triggers <triggers>`
-   - :ref:`GraphQL Custom Resolvers <graphql-custom-resolvers>`
+   - :ref:`GraphQL Custom Resolvers <graphql-custom-resolvers>` (deprecated)
    - :ref:`Email/Password Registration <email-password-authentication>`
 
 How to Write a Function
@@ -560,7 +560,7 @@ Call from a Function
 You can call a function from another function through the
 :ref:`context.functions <context-functions>` interface, which is
 available as a global variable in any function. This include HTTPS
-endpoints, triggers, and GraphQL custom resolvers. The called function
+endpoints, triggers, and GraphQL custom resolvers (deprecated). The called function
 runs in the same context as the function that called it.
 
 .. code-block:: javascript
