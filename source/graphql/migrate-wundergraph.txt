@@ -1,0 +1,78 @@
+.. _migrate-wundergraph:
+
+Migrate GraphQL to WunderGraph
+==============================
+
+.. meta::
+  :description: Learn how to migrate your GraphQL host from Atlas App Services to WunderGraph.
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+.. important::
+
+   Always refer to the official documentation of both MongoDB Atlas and 
+   `WunderGraph <https://docs.wundergraph.com/docs/supported-data-sources/mongodb-atlas>`_
+   for the most up-to-date and accurate information. Specific steps may vary
+   depending on the details of your project and the technologies used.
+
+`WunderGraph <https://wundergraph.com/>`_ is a comprehensive developer platform
+that comes equipped with an extensive variety of open-source tools and Software
+Development Kits (SDKs).
+
+One of these integral tools is a `Backend For Frontend (BFF) Framework 
+<https://docs.wundergraph.com/docs/use-cases/backend-for-frontend>`_. This BFF
+Framework serves as a robust, specification-compliant server library ready to be
+implemented in production environments. The notable feature of this library is
+its ability to integrate data from any source whatsoever. This includes, but is
+not limited to, data from MongoDB Atlas. Also, if you plan on using GraphQL
+Federation, take a look at `WunderGraph Cosmo <https://cosmo-docs.wundergraph.com/>`_.
+
+Migrate to WunderGraph
+----------------------
+
+.. procedure::
+
+   .. step:: Create a WunderGraph Application
+
+      The WunderGraph BFF is an open source gateway that bundles up your data
+      and generates type-safe clients for your frontend framework. If you
+      plan on using GraphQL Federation, take a look at WunderGraph Cosmo.
+
+      If you are starting from scratch, follow the `MongoDB / Atlas Data source
+      documentation <https://docs.wundergraph.com/docs/wundergraph-config-ts-reference/configure-mongodb-atlas-data-source>`_.
+      For more details, refer to the `WunderGraph docs page for Atlas 
+      <https://docs.wundergraph.com/docs/supported-data-sources/mongodb-atlas>`_.
+
+   .. step:: Update Client Applications
+
+      Update any client applications that interact with your GraphQL API
+      endpoints to point to the new WunderGraph endpoint URLs.
+
+   .. step:: Shut Down Atlas App Services Endpoints
+
+      Once you have verified that your GraphQL API endpoints are fully migrated
+      and operational on WunderGraph, you can delete your MongoDB Atlas App
+      Services app to avoid unnecessary costs. As a reminder, Atlas GraphQL
+      endpoints will no longer be supported beginning March 12, 2025.
+
+Next Steps
+----------
+
+Check out the `WunderGraph Cosmo docs <https://cosmo-docs.wundergraph.com/>`_ to
+learn how to build a distributed GraphQL architecture that combines multiple
+GraphQL APIs to create a unified graph.
+
+Cosmo enables teams and Organizations to manage and scale (federated) GraphQL
+Architectures with ease. Quickly iterate without breaking anything through
+composition checks.
+
+WunderGraph Cosmo can easily run locally, on-premises, or in the cloud as a
+managed service. Cosmo is a batteries-included solution, covering everything
+from routing to analytics with the whole platform.
+
+Cosmo supports monolithic GraphQL APIs as well as Federation v1 and v2 including
+Subscriptions.
