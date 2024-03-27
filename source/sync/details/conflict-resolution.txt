@@ -91,6 +91,17 @@ the merge can reach the correct result. You have the choice to
 update the entire value or edit it in a way that conveys more meaning,
 allowing you to get more precise control of the conflict resolution.
 
+Collections in Mixed Types
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For mixed type fields that contain nested arrays or objects, updates to 
+the parent object will always win in a conflict resolution. 
+
+If two clients set a field to a list, the last update wins and overwrites the
+first cient's created list. If 
+those same clients update that same nested list, Device Sync uses 
+normal conflict resolution rules to incorporate both changes. 
+
 Strings
 ~~~~~~~
 

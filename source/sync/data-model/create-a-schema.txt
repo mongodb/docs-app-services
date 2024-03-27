@@ -5,7 +5,12 @@
 Create a Data Model
 ===================
 
-.. default-domain:: mongodb
+.. meta:: 
+  :description: Learn how to create a data model to use Device Sync with Atlas Device SDK.
+
+.. facet::
+  :name: genre
+  :values: reference
 
 .. contents:: On this page
    :local:
@@ -32,18 +37,21 @@ You can create a schema for your App in one of two ways:
   Atlas App Services can then translate that schema into a Realm Object Schema
   to use in your mobile application with the Realm SDK.
 
+Prerequisites
+-------------
+
+Your App must have at least one :ref:`linked data source
+<data-sources>` in order to create a schema.
+However, it *cannot* be a :ref:`serverless instance
+<serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
+
+
+
 .. _create-schema-from-rom:
 
 Create an App Services Schema from a Realm Object Model
 -------------------------------------------------------
 
-.. note:: Link a MongoDB Atlas Data Source
-   
-   Your App must have at least one :ref:`linked data source
-   <data-sources>` in order to create a schema.
-   
-   You cannot use Device Sync with a :ref:`serverless instance
-   <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
 
 .. procedure::
 
@@ -146,14 +154,6 @@ Create an App Services Schema from a Realm Object Model
 Create a Realm Object Schema from an App Services Schema
 --------------------------------------------------------
 
-.. note:: Link a MongoDB Atlas Data Source
-   
-   Your app must have at least one :ref:`linked data source
-   <data-sources>` in order to define an App Services data model.
-   
-   You cannot use sync with a :ref:`serverless instance
-   <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
-
 .. procedure::
 
    .. step:: Define an App Services Schema
@@ -162,22 +162,12 @@ Create a Realm Object Schema from an App Services Schema
       will translate this App Services Schema into a Realm Object Schema to be
       configured and utilized in your mobile application.
 
-      .. important:: Primary Key _id Required
+      Note the following requirements: 
 
-         To work with Atlas Device Sync, your data model **must** have a primary key field
-         called ``_id``. ``_id`` can be of type ``string``, ``int``, ``uuid``, ``ObjectId``, or
-         ``objectId``.
-      
-      .. important:: 
-
-         To work with Atlas Device Sync, your schema object :ref:`type names <sync-type-name>` 
-         cannot exceed {+name-char-limit+} UTF-8 characters.
-
-      .. note::
-
-         To learn how to define a schema for a collection in the synced cluster, see
-         :ref:`enforce-a-schema`.
-
+      - The App Services Schema *must* have a primary key field called ``_id``.
+        ``_id`` can be of type ``string``, ``int``, or ``objectId``.
+      - Your schema object :ref:`type names <sync-type-name>` 
+        cannot exceed {+name-char-limit+} UTF-8 characters.
 
    .. step:: View the Realm Object Schema
 
@@ -199,10 +189,14 @@ Create a Realm Object Schema from an App Services Schema
       client application. In order to begin enforcing data validation with
       your data model, you can open a realm with the Realm Object Schema.
       This will prevent improper data from entering your database from your
-      mobile client. Click :guilabel:`Copy` on the right-hand side of the
+      mobile client. 
+      
+      Click :guilabel:`Copy` on the right-hand side of the
       Realm Object Schema for the Object Model you want to integrate into
       your mobile application code. This will copy the Realm Object Schema
-      code for the SDK of your choice into your clipboard. Open your mobile
+      code for the SDK of your choice into your clipboard. 
+      
+      Open your mobile
       application code in your IDE and paste the Realm Object Schema code in.
 
       .. tabs-realm-languages::
@@ -245,3 +239,4 @@ Further Reading
   refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
 - To update an existing Sync data model, refer to :ref:`Update Your Data Model
   <synced-schema-overview>`.
+-  To learn how to define a schema for a collection in your synced cluster, see :ref:`enforce-a-schema`.
