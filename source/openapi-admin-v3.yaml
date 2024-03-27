@@ -3,7 +3,7 @@ openapi: 3.1.0
 info:
   description: |-
     The App Services Admin API lets you programmatically perform
-    administrative tasks over HTTPS, including defining &
+    administrative tasks over HTTPS. This includes defining &
     configuring things like:
 
     - App Deployment & Security
@@ -7191,8 +7191,6 @@ components:
             Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
     FlexibleSync:
       type: object
-      required: 
-        - state
       properties:
         state:
           type: string
@@ -7262,6 +7260,8 @@ components:
             where clients can write data but not read.
           items:
             type: string
+      required: 
+        - state      
     Trigger:
       allOf:
         - properties:
