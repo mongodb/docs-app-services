@@ -1,3 +1,28 @@
+# March 29, 2024
+
+## Device Sync
+
+- Configure Sync/Pause or Terminate Sync: Remove `queryable_fields_version` field from the example configuration files, as the option is not user-editable.
+
+## Reference
+
+- App Services Admin API: Update "Get Flexible Sync information" endpoint with missing response fields.
+- Configuration Files/Atlas Device Sync: Add `asymmetric_tables` to
+  configuration file for Device Sync.
+
+## Release Notes
+
+- Update external change log with release notes for increased JWT token length
+  limit, new `users count` CLI command, and several bug fixes.
+
+## Other
+
+- Throughout the docs: Add deprecation notes for GraphQL and Static Hosting where needed.
+
+## Internal
+
+- Add the `:orphan:` directive to several flagged pages to prevent build errors.
+
 # March 15, 2024
 
 ## GraphQL
@@ -19,9 +44,9 @@
 
 ## Reference
 
-App Services CLI
-- schema: New commands for validating and generating schemas: `appservices schema validate` and `appservices schema generate`.
-- users: New command to display total number of app users: `appservices users count`.
+- App Services CLI:
+  - schema: New commands for validating and generating schemas: `appservices schema validate` and `appservices schema generate`.
+  - users: New command to display total number of app users: `appservices users count`.
 
 ## Other
 
