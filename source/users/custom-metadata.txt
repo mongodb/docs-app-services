@@ -4,7 +4,12 @@
 Define Custom User Metadata
 ===========================
 
-.. default-domain:: mongodb
+.. facet::
+   :name: genre 
+   :values: procedure
+
+.. meta:: 
+   :description: Learn how to define custom user metadata and read user metadata from authentication providers. 
 
 .. contents:: On this page
    :local:
@@ -74,8 +79,7 @@ When you use custom user data, keep the following things in mind:
   authentication access token. If a user's metadata is updated after the 
   access token is issued, requests using the previously created access 
   token will not have the newly updated metadata. Their user metadata 
-  in that session does not update until they refresh their access 
-  token or re-authenticate.
+  will update when they refresh their access token or re-authenticate.
 
 Create and Manage Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -732,6 +736,8 @@ Configure Authentication Provider Metadata
     providers. For example, both JWT and API Key authentication providers have 
     a ``name`` metadata field. There will be a delay to update the ``name`` field 
     in the user's table if the user authenticates with JWT and then with an API key. 
+    The request is always guaranteed to have the most up-to-date metadata associated 
+    with the authentication provider used.
 
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
