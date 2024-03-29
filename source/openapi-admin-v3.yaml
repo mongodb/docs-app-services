@@ -7191,16 +7191,37 @@ components:
             Protocol](https://www.mongodb.com/docs/atlas/app-services/mongodb/wire-protocol/#connect-over-the-wire-protocol).
     FlexibleSync:
       type: object
+      required: 
+        - state
       properties:
         state:
           type: string
-          description: The state of the sync service ("enabled", "disabled", or empty if Sync is not configured).
+          description: The state of the sync service (`"enabled"`, `"disabled"`, or empty if Sync is not configured).
+        database_name:
+          type: string
+          description: |-
+            The name of a database in the synced cluster where App Services stores 
+            data in Development Mode. App Services automatically generates a schema 
+            for each synced type and maps each object type to a collection within the database.
         queryable_fields_names:
           type: array
           description: |-
             An array of 
             [queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields) 
             names on **any collection**.
+          items:
+            type: string
+        indexed_queryable_fields_names:
+          type: array
+          description: |-
+            A list of field names to use as the 
+            [indexed queryable field](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#queryable-fields). 
+            Although this property is an array, Sync currently supports only one indexed 
+            queryable field. Therefore, this array may contain at most one element.
+
+            The indexed queryable field must be present in the schema and be the same eligible field type in 
+            every collection you sync. The indexed queryable field name must also appear in `queryable_fields_names` 
+            since this is a global queryable field.
           items:
             type: string
         collection_queryable_fields_names:
@@ -7214,9 +7235,6 @@ components:
             additionalProperties:
               description: The name of the queryable field.
               type: string
-        queryable_fields_version:
-          type: string
-          description: The version of the queryable field.
         permissions:
           type: object
           description: |-
@@ -7235,7 +7253,15 @@ components:
           description: |-
             Specifies whether the
             [client reset mode](https://www.mongodb.com/docs/atlas/app-services/sync/error-handling/client-resets/#recover-unsynced-changes)
-            is disabled. By default, client reset mode is enabled and this value is **false**.
+            is disabled. By default, client reset mode is enabled and this value is `false`.
+        asymmetric_tables:
+          type: array
+          description: |-
+            An array of the names of collections that are defined as asymmetric 
+            with [Data Ingest](https://www.mongodb.com/docs/atlas/app-services/sync/configure/sync-settings/#data-ingest), 
+            where clients can write data but not read.
+          items:
+            type: string
     Trigger:
       allOf:
         - properties:
