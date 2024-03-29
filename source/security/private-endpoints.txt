@@ -17,6 +17,15 @@ AWS PrivateLink. To learn more, see `What is AWS PrivateLink?
 <https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html>`__
 in the AWS documentation.
 
+Definitions
+-----------
+
+There are three kinds of Private Endpoints:
+
+- Legacy: Endpoints that use ``realm.mogodb.com``
+- General: TODO: Add definition
+- Sync: TODO: Add definition
+
 Private Endpoint Limitations
 ----------------------------
 
@@ -40,7 +49,47 @@ Private Endpoint Limitations
   see :ref:`Change Access Restrictions <change_access_restrictions>`.
 
 - All **outbound** requests, such as an an App Services trigger calling an 
-  external API, go over the public internet. 
+  external API, go over the public internet.
+
+Add a General Endpoint
+----------------------
+
+#. Click :guilabel:`Add Private Endpoint`
+#. Click :guilabel:`General`
+#. Add VPC ID
+#. Add Subnet IDs
+#. Click :guilabel:`Next`
+#. Create VPC Endpoint with generated command
+#. Add VPC Endpoint ID
+#. (optional) Add comment describing your VPC Endpoint
+#. Click :guilabel:`Next`
+#. Restrict outside requests
+#. Click :guilabel:`Finish Endpoint Creation`
+
+Add a Sync Endpoint
+-------------------
+
+Sync requires a general endpoint too!
+
+Supported SDK Versions
+~~~~~~~~~~~~~~~~~~~~~~
+
+- C++ SDK: version TBD
+- Flutter SDK: version TBD
+- Java SDK: version TBD
+- Kotlin SDK: version TBD
+- .NET SDK: version TBD
+- Node.js SDK: version TBD
+- React Native SDK: version TBD
+- Swift SDK: version TBD
+
+Set Up a Private Hosted Zone
+----------------------------
+
+To use a private hosted zone, you must set the following VPC attributes to true:
+enableDnsHostnames and enableDnsSupport.
+
+Use ModifyVpcAttribute to set the VPC attributes.
 
 Set Up a Private Endpoint
 -------------------------
@@ -252,3 +301,11 @@ You can toggle this setting in three ways:
 - In the Admin API, call the :admin-api-endpoint:`Toggle Non-VPC Requests
   <operation/allNonVpcClientRequests>` with a boolean value (``true`` to remove
   the default restriction, or ``false`` to reinstate it.)
+
+Migrate a Legacy Endpoint
+-------------------------
+
+TODO: Add a bit about when migration is needed and why.
+
+TODO: Add procedure for migrating
+
