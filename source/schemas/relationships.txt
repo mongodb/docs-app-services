@@ -4,7 +4,17 @@
 Relationships
 =============
 
-.. default-domain:: mongodb
+.. meta:: 
+   :keywords: code example
+   :description: Learn about relationship types and how to define them in an Atlas App Services Schema.
+
+.. facet::
+  :name: genre
+  :values: reference
+
+.. facet::
+   :name: programming_language
+   :values: json, shell
 
 .. contents:: On this page
    :local:
@@ -259,7 +269,7 @@ with a foreign collection.
      }
    }
 
-To access a embedded object property contained in a list, use: 
+To access an embedded object property contained in a list, use: 
 ``field1.[].field2``, e.g. ``pets.[].favoriteToyBrand``. From there, 
 you can specify the foreign collection details and foreign key field.
 
@@ -296,104 +306,102 @@ When you define a relationship, keep these limitations in mind:
 - The reference field must not be a ``required`` field
 - The foreign key must be the ``_id`` field of the collection the field is referencing
 
-1. Define Schemas
-~~~~~~~~~~~~~~~~~
+.. procedure::
 
-In order to define a relationship, you must have a schema defined for
-both the source collection and the foreign collection. To learn how to
-define schemas, see :ref:`enforce-a-schema`.
+  .. step:: Define Schemas
 
-2. Create a New Relationship
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      In order to define a relationship, you must have a schema defined for
+      both the source collection and the foreign collection. To learn how to
+      define schemas, see :ref:`enforce-a-schema`.
 
-You define a relationship for collections in a linked MongoDB data
-source alongside the schema.
+  .. step:: Create a New Relationship
 
-.. tabs-realm-admin-interfaces::
+      You define a relationship for collections in a linked MongoDB data
+      source alongside the schema.
 
-   .. tab::
-      :tabid: ui
+      .. tabs-realm-admin-interfaces::
 
-      To create a new relationship:
-      
-      1. Click :guilabel:`Schema` in the left navigation menu
+        .. tab::
+            :tabid: ui
 
-      2. Click the :guilabel:`Relationships` tab
+            To create a new relationship:
+            
+            1. Click :guilabel:`Schema` in the left navigation menu
 
-      3. Click :guilabel:`Add Relationship`
-     
-   .. tab::
-      :tabid: cli
+            2. Click the :guilabel:`Relationships` tab
 
-      To create a new relationship, add a relationship configuration
-      object to the source collection's ``relationships.json`` file:
+            3. Click :guilabel:`Add Relationship`
+          
+        .. tab::
+            :tabid: cli
 
-      .. code-block:: json
-   
-         {
-           "<source field>": {
-             "ref": "#/relationship/<data source>/<db>/<collection>",
-             "foreign_key": "<foreign field>",
-             "is_list": <boolean>
-           }
-         }
+            To create a new relationship, add a relationship configuration
+            object to the source collection's ``relationships.json`` file:
 
-3. Configure the Relationship
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-A relationship definition maps from a field included in the source
-collection's schema and points to a field of the same type in the
-foreign collection's schema.
-
-.. tabs-realm-admin-interfaces::
-
-   .. tab::
-      :tabid: ui
-      
-      To configure the relationship:
-      
-      1. Specify a field in the source collection to create the relationship on
-      
-      2. Specify the foreign database, collection, and a field in the
-         foreign collection to match with the source field
-      
-      3. Click :guilabel:`Add`
-     
-   .. tab::
-      :tabid: cli
-      
-      To configure the relationship, specify the source field name as a
-      root-level field in ``relationships.json`` and then add the
-      following configuration options in the field's value:
-
-      - Specify the foreign collection in the ``ref`` field using the
-        following format:
+            .. code-block:: json
         
-        .. code-block:: text
-           
-           #/relationship/<data source>/<db>/<collection>
+              {
+                "<source field>": {
+                  "ref": "#/relationship/<data source>/<db>/<collection>",
+                  "foreign_key": "<foreign field>",
+                  "is_list": <boolean>
+                }
+              }
 
-      - Specify the field to match in the ``foreign_key`` field
+  .. step:: Configure the Relationship
 
-      - If the source field contains an array, set ``is_list`` to
-        ``true``, otherwise set it to ``false``.
+      A relationship definition maps from a field included in the source
+      collection's schema and points to a field of the same type in the
+      foreign collection's schema.
 
-4. Deploy the Relationship
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+      .. tabs-realm-admin-interfaces::
 
-.. tabs-realm-admin-interfaces::
+        .. tab::
+            :tabid: ui
+            
+            To configure the relationship:
+            
+            1. Specify a field in the source collection to create the relationship on
+            
+            2. Specify the foreign database, collection, and a field in the
+            foreign collection to match with the source field
+            
+            3. Click :guilabel:`Add`
+          
+        .. tab::
+            :tabid: cli
+            
+            To configure the relationship, specify the source field name as a
+            root-level field in ``relationships.json`` and then add the
+            following configuration options in the field's value:
 
-   .. tab::
-      :tabid: ui
-      
-      Click :guilabel:`Save` and then deploy your updated application.
-     
-   .. tab::
-      :tabid: cli
-      
-      Save the relationship configuration file and push your changes to
-      deploy them:
+            - Specify the foreign collection in the ``ref`` field using the
+              following format:
+              
+              .. code-block:: text
+                
+                #/relationship/<data source>/<db>/<collection>
 
-      .. code-block:: sh
-         
-         {+cli-bin+} push
+            - Specify the field to match in the ``foreign_key`` field
+
+            - If the source field contains an array, set ``is_list`` to
+              ``true``, otherwise set it to ``false``.
+
+  .. step:: Deploy the Relationship
+
+      .. tabs-realm-admin-interfaces::
+
+        .. tab::
+            :tabid: ui
+            
+            Click :guilabel:`Save` and then deploy your updated application.
+          
+        .. tab::
+            :tabid: cli
+            
+            Save the relationship configuration file and push your changes to
+            deploy them:
+
+            .. code-block:: sh
+              
+              {+cli-bin+} push

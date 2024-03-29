@@ -5,7 +5,7 @@
     nest collections within other collections, and store complex data
     structures in a single property.
 
-    To use feature with Atlas Device SDKs, you must use:ref:`Flutter SDK v2.0.0 or later <flutter-realm-value>`. Support for other SDKs will be added in future releases.
+    To use feature with Atlas Device SDK, you must use :ref:`Flutter SDK v2.0.0 or later <flutter-realm-value>`. Support for other SDKs will be added in future releases.
 
     If your App was created before March XX, 2024, you can contact support to
     learn more about enabling this feature.  

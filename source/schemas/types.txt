@@ -201,16 +201,15 @@ Mixed
 .. include:: /includes/note-collections-in-mixed-sync.rst
 
 A ``mixed`` field may contain any schema type except for :ref:`embedded objects
-<schema-type-object>`, :ref:`sets <schema-type-set>`, or any SDK-supported counter
-data type. App Services does not enforce a consistent type across
+<schema-type-object>`, :ref:`sets <schema-type-set>`, or any SDK-supported :ref:`counters
+<schema-type-counter>`. App Services does not enforce a consistent type across
 documents, so two different documents may have values of different types.
 
 Mixed fields can store :ref:`arrays <schema-type-array>` and 
 :ref:`dictionaries <schema-type-dictionary>` of mixed data. Sync translates 
 these to MongoDB as arrays and objects. These collections can contain other 
 collections, with a :manual:`maximum depth of 100 levels
-<reference/limits/#mongodb-limit-Nested-Depth-for-BSON-Documents>`.
-.. TODO: test the link to the MongoDB documentation
+<reference/limits>`.
 
 Mixed fields can represent relationships. Sync translates these relationships
 to MongoDB as a :manual:`DBRef </reference/database-references/>` to preserve
@@ -593,7 +592,9 @@ contain a third:
    server checks that the coordinates field is present and meets the 
    requirements.
 
-To store a GeoPoint in Atlas for later querying with :ref:`Atlas Device Sync <sync>`, 
+If you are not using Device Sync, you can query your geospatial data with regular 
+:manual:`geospatial operators </geospatial-queries>`. However, if you are 
+using :ref:`Atlas Device Sync <sync>`, 
 the following rules also apply to the GeoPoint object:
 
 - It must be of type ``object``.
@@ -647,8 +648,6 @@ single embedded GeoPoint object named "location".
       }
    }
 
-If you are not using Device Sync, you can query your geospatial data with regular 
-:manual:`geospatial operators </geospatial-queries>`. However, if you are 
-using Device Sync, there are additional requirements in how you store and 
-query the data. For more information, refer to :ref:`Device Sync Data Model
+For more information on modeling and querying geospatial data
+with Device Sync, refer to :ref:`Device Sync Data Model
 Mapping - Geospatial Data <geospatial-data-modeling>`.

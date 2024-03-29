@@ -4,7 +4,12 @@
 Conflict Resolution
 ===================
 
-.. default-domain:: mongodb
+.. meta:: 
+   :description: A high-level overview of how Atlas Device Sync resolves synced data conflicts.
+
+.. facet::
+  :name: genre
+  :values: reference
 
 .. contents:: On this page
    :local:
@@ -91,16 +96,20 @@ the merge can reach the correct result. You have the choice to
 update the entire value or edit it in a way that conveys more meaning,
 allowing you to get more precise control of the conflict resolution.
 
-Collections in Mixed Types
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Nested Collections
+~~~~~~~~~~~~~~~~~~
 
-For mixed type fields that contain nested arrays or objects, updates to 
+Nested collections are treated similarly to embedded objects - 
+they are considered child objects with a specific parent object. Any updates to 
 the parent object will always win in a conflict resolution. 
 
-If two clients set a field to a list, the last update wins and overwrites the
-first cient's created list. If 
-those same clients update that same nested list, Device Sync uses 
-normal conflict resolution rules to incorporate both changes. 
+If two clients *create* new collections nested in the same 
+parent object (for example, both create a list under parent ``foo``), the "last
+update wins" rule applies, and Device Sync overwrites the first
+client's collection. 
+
+If two clients *update* the same existing nested collection, Device Sync uses
+normal conflict resolution rules to incorporate both changes.
 
 Strings
 ~~~~~~~

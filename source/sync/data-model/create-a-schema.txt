@@ -21,55 +21,71 @@ Create a Data Model
 Overview
 --------
 
-You can create a schema for your App in one of two ways:
+The Device Sync data model consists of two consistent schemas: the Realm Object Schema and the App Services Schema. 
+
+You can create the data model for your App through the Realm Object Schema first or
+through the App Services Schema first:
 
 - :ref:`Create an App Services Schema from a Realm Object Schema <create-schema-from-rom>`:
-  Alternatively, if you are developing mobile-first and do not already have
+  If you are developing mobile-first and do not already have
   data in your Atlas cluster, you can translate your Realm Object Schema into
-  a schema for use with Atlas. Regardless of the approach that you take,
-  when you configure both your Atlas cluster and Mobile application to use
-  the respective data model, changes to the data model between the server
-  and client are auto-updated.
+  a schema for use with Atlas. 
 - :ref:`Create a Realm Object Schema from an Atlas App Services Schema <create-rom-from-schema>`: 
   If you have data in your 
   `MongoDB Atlas <https://www.mongodb.com/docs/atlas?tck=docs_realm>`_ 
   cluster already, MongoDB generates a schema by sampling your data.
   Atlas App Services can then translate that schema into a Realm Object Schema
-  to use in your mobile application with the Realm SDK.
+  to use in your mobile application with the Atlas Device SDK.
+
+Regardless of the approach that you take,
+when you configure both your Atlas cluster and mobile application to use
+the respective data model, changes to the data model between the server
+and client are automatically updated.
 
 Prerequisites
 -------------
 
 Your App must have at least one :ref:`linked data source
 <data-sources>` in order to create a schema.
+
 However, it *cannot* be a :ref:`serverless instance
 <serverless-caveats>` or :ref:`{+adf-instance+} <data-federation-caveats>`.
-
-
 
 .. _create-schema-from-rom:
 
 Create an App Services Schema from a Realm Object Model
 -------------------------------------------------------
 
+You can alter or define a Realm Object Schema through your mobile client SDK.
+Changes to your Realm Object Schema are only allowed when 
+:ref:`Development Mode <development-mode>` is enabled.
+App Services will
+reflect any changes to your Realm Object Schema in your App Services Schema used for
+Atlas. 
+
+Refer to the Atlas Device SDK-specific documentation for creating Realm Object Schemas.
+
+- :ref:`Realm C++ SDK <cpp-object-models>`
+- :ref:`Realm Flutter SDK <flutter-define-realm-object-schema>`
+- :ref:`Realm Java SDK <java-define-a-realm-object-schema>`
+- :ref:`Realm Kotlin SDK <kotlin-supported-types>`
+- :ref:`Realm .NET SDK <dotnet-sync-changes-between-devices>`
+- :ref:`Realm Node.js SDK <node-define-a-realm-object-schema>`
+- :ref:`Realm React Native SDK <react-native-define-a-realm-object-schema>`
+- :ref:`Realm Swift SDK <swift-object-models>`
 
 .. procedure::
 
    .. step:: Enable Development Mode Sync
 
-      First,  :ref:`enable Development Mode <development-mode>`.
+      Development Mode is set in the App Services UI. 
 
-      You can alter or define a Realm Object Schema through your mobile client SDK.
-      Changes to your Realm Object Schema are only allowed when
-      :guilabel:`Development Mode` is on in the App Services UI. App Services will
-      reflect these changes to your Realm Object Schema in your App Services Schema used for
-      Atlas. To enable Development Mode, click the slider to the right of 
+      To enable Development Mode, click the slider to the right of 
       :guilabel:`Development Mode`.
 
       .. figure:: /images/turn-on-dev-mode.png
          :alt: The UI to enable Development Mode
          :lightbox:
-
 
    .. step:: Edit Your Realm Object Schema
 
@@ -117,16 +133,7 @@ Create an App Services Schema from a Realm Object Model
                // ... use the realm instance to read and modify data
              })
 
-      Refer to the Realm SDK-specific documentation for creating Realm Object Schemas.
 
-      - :ref:`Realm C++ SDK <cpp-object-models>`
-      - :ref:`Realm Flutter SDK <flutter-define-realm-object-schema>`
-      - :ref:`Realm Java SDK <java-define-a-realm-object-schema>`
-      - :ref:`Realm Kotlin SDK <kotlin-supported-types>`
-      - :ref:`Realm .NET SDK <dotnet-sync-changes-between-devices>`
-      - :ref:`Realm Node.js SDK <node-define-a-realm-object-schema>`
-      - :ref:`Realm React Native SDK <react-native-define-a-realm-object-schema>`
-      - :ref:`Realm Swift SDK <swift-object-models>`
 
    .. step:: Update Your App Services Schema with the Realm Object Schema Changes
 
@@ -173,7 +180,7 @@ Create a Realm Object Schema from an App Services Schema
 
       The Realm Object Schema defines and validates your data in your mobile
       client application. To view your Realm Object Schema, navigate to the
-      :guilabel:`Realm SDKs` page and then click the :guilabel:`Realm Object Models` 
+      :guilabel:`Atlas Device SDKs` page and then click the :guilabel:`Realm Object Models` 
       tab. On this page, you can view your App Services Schema as a
       generated Realm Object Schema in your language of choice.
 
@@ -222,7 +229,7 @@ Create a Realm Object Schema from an App Services Schema
                   // ... use the realm instance to read and modify data
                 })
 
-Refer to the Realm SDK-specific documentation to use the generated Realm Object Schema.
+Refer to the Atlas Device SDK-specific documentation to use the generated Realm Object Schema.
 
 - :ref:`Realm Flutter SDK <flutter-sync>`
 - :ref:`Realm Java SDK <java-sync-data>`

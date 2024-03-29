@@ -24,10 +24,12 @@ Overview
 This page contains information on how the App Services Schema used by
 Atlas Device Sync maps to the Realm Object Schema used by the Atlas Device SDKs.
 
+You can generate 
 To generate Atlas Device SDK Schemas from your App Services Schemas,
 refer to :ref:`Generate SDK Object Models <generate-sdk-object-models>`.
 To generate App Services Schemas from Atlas Device SDK client code,
-refer to :ref:`Development Mode <development-mode>`.
+refer to :ref:`Generate App Services Schema from a Realm Object 
+Model <create-schema-from-rom>`.
 
 To learn more about how Device Sync uses these two schemas,
 refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
@@ -42,7 +44,7 @@ When you configure Device Sync, you :ref:`specify the data source
 may contain multiple databases, and each database may contain multiple 
 collections.
 
-The :ref:`App Services schema <schemas>` maps your Realm Database object 
+The :ref:`App Services schema <schemas>` maps your Realm database object 
 names to collections in databases in your Device Sync data source. The 
 ``title`` field in an App Services schema maps to the object type name in 
 Realm Database. Because the ``title`` name determines the mapping between 
@@ -109,7 +111,7 @@ Database object and the new collection.
    then sync it, App Services creates a new collection for this 
    ``Person`` object in the ``Pets`` database. If you wanted to create a 
    collection for the ``Person`` object in a different database, you 
-   could :ref:`define a schema <enforce-a-schema>` for the ``Person`` object
+   could :ref:`enforce-a-schema` for the ``Person`` object
    in a different database. Or you could disable and re-enable Development 
    Mode, and select a different database in which to create new collections.
 
@@ -238,6 +240,39 @@ refer to :ref:`BSON Types - Array <schema-type-array>`.
 App Services Schemas support certain constraints that Realm Object Schemas do not,
 such as specifying the minimum and maximum number of items.
 
+.. _mixed-properties:
+
+Mixed Properties
+~~~~~~~~~~~~~~~~
+
+Both Realm Object Schemas and App Services Schemas support mixed
+type properties.
+
+A mixed field can contain any supported data type and 
+functionally acts as an object or document without a pre-defined
+structure. For more information on modeling mixed properties in 
+an App Services Schema, refer to :ref:`Mixed - Schema Types <schema-type-mixed>`.
+
+Collections in Mixed Properties
+```````````````````````````````
+
+.. include:: /includes/note-collections-in-mixed-sync.rst
+
+You can leverage collections (arrrays or dictionaries) in mixed properties to store data that does not fit into a
+pre-defined schema. Because collections of mixed data can contain other collections of
+mixed data, you can nest data into JSON-like structures. 
+For an example, refer to the :ref:`nested-collections-data-model-example` on this page.
+
+Currently, App Services Schemas and Realm Object Schemas in the following SDKs 
+support collections in mixed data types:
+
+- Flutter SDK v2.0.0 or later: :ref:`RealmValue - Flutter SDK
+  <flutter-realm-value>`
+
+Other SDKs will support collections in mixed data types in future releases.
+
+.. TODO: Add links to other SDKs when available.
+
 Embedded Objects
 ~~~~~~~~~~~~~~~~
 
@@ -300,30 +335,6 @@ Atlas Device SDK dictionary documentation:
 
 For more information on modeling dictionaries in an App Services Schema,
 refer to :ref:`Dictionary <schema-type-dictionary>`.
-
-.. _mixed-properties:
-
-Collections in Mixed Properties
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. include:: /includes/note-collections-in-mixed-sync.rst
-
-Collections in mixed properties let you store a collection (an array or
-dictionary) of mixed data within a 
-mixed data type property. Collections can also contain other collections of
-mixed data, enabling you to nest data in JSON-like structures. 
-This is a mixed field that functionally acts as an object or document without a pre-defined structure.
-For an example, refer to the :ref:`nested-collections-data-model-example` on this page.
-
-Currently, App Services Schemas and Realm Object Schemas in the following SDKs 
-support collections in mixed data types:
-
-- Flutter SDK v2.0.0 or later: :ref:`RealmValue - Flutter SDK
-  <flutter-realm-value>`
-  
-.. TODO: Add links to other SDKs when available.
-
-For more information on modeling collections in mixed properties in an App Services Schema, refer to :ref:`Mixed - Schema Types <schema-type-mixed>`.
 
 Relationships
 -------------
