@@ -721,18 +721,17 @@ Configure Authentication Provider Metadata
          If you successfully configure the provider's metadata
          fields, App Services returns a ``204`` response.
 
-.. note:: Users Should Re-authenticate after Switching Between Authentication Providers
+.. note:: Tips for Users with Multiple Linked Authentication Providers  
 
-  To ensure the most up-to-date metadata, users should re-authenticate after 
-  switching to a different authentication provider. Failure to do so may result 
-  in outdated metadata reflected in the user's table and for requests 
-  using authentication providers.
-
-.. note::
-
-  For users with multiple authentcation providers, requests can be made using each of the 
-  authentication providers. The request will have the most up to date metadate associated with
-  the authentcation provider. However, there may be a 30 minute delay.  
+  - To ensure the most up-to-date metadata, users should re-authenticate after 
+    switching to a different authentication provider. Failure to do so may result 
+    in outdated metadata reflected in the user's table and for requests 
+    using authentication providers.
+  - If a user switches between authentication providers, there may be a 30 minute delay 
+    to update metadata that has the same field name for both authentication 
+    providers. For example, both JWT and API Key authentication providers have 
+    a ``name`` metadata field. There will be a delay to update the ``name`` field 
+    in the user's table if the user authenticates with JWT and then with an API key. 
 
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
