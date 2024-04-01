@@ -21,8 +21,7 @@ Migrate GraphQL to WunderGraph
    depending on the details of your project and the technologies used.
 
 `WunderGraph <https://wundergraph.com/>`__ is a comprehensive developer platform
-that comes equipped with an extensive variety of open-source tools and Software
-Development Kits (SDKs).
+that comes equipped with an extensive variety of open-source tools and SDKs.
 
 One of these tools is a `Backend for Frontend (BFF) Framework 
 <https://docs.wundergraph.com/docs/use-cases/backend-for-frontend>`__. This BFF
@@ -37,17 +36,21 @@ Migrate to WunderGraph
 ----------------------
 
 The WunderGraph BFF is an open source gateway that bundles up your data
-and generates type-safe clients for your frontend framework. If you
-plan on using GraphQL Federation, take a look at `WunderGraph Cosmo <https://cosmo-docs.wundergraph.com/>`__
+and generates type-safe clients for your frontend framework. You can also use
+hooks to add additional business logic, or `custom GraphQL resolvers 
+<https://docs.wundergraph.com/docs/features/custom-graphql-resolvers>`__ to
+decouple the clients from the database.
 
-If you are starting from scratch, follow the `MongoDB / Atlas Data Source
-documentation <https://docs.wundergraph.com/docs/wundergraph-config-ts-reference/configure-mongodb-atlas-data-source>`__.
-For more details, refer to the `WunderGraph docs page for Atlas 
-<https://docs.wundergraph.com/docs/supported-data-sources/mongodb-atlas>`__.
+The following is an overview of how to migrate your GraphQL host from Atlas App
+Services to WunderGraph. Specific steps may vary depending on the details of
+your project and the technologies used.
 
-You can also use hooks to add additional business logic, or `custom GraphQL 
-resolvers <https://docs.wundergraph.com/docs/features/custom-graphql-resolvers>`__
-to decouple the clients from the database.
+- If you are starting from scratch, follow the `MongoDB / Atlas Data Source
+  documentation <https://docs.wundergraph.com/docs/wundergraph-config-ts-reference/configure-mongodb-atlas-data-source>`__.
+  For more details, refer to the `WunderGraph docs page for Atlas 
+  <https://docs.wundergraph.com/docs/supported-data-sources/mongodb-atlas>`__.
+- If you plan on using GraphQL Federation, take a look at `WunderGraph Cosmo 
+  <https://cosmo-docs.wundergraph.com/>`__
 
 .. procedure::
 
@@ -126,7 +129,7 @@ to decouple the clients from the database.
             }
          }
 
-   .. step:: Browse Data with GraphiQL
+   .. step:: Browse Data with the GraphiQL UI
 
       After you get your WunderGraph server running and add query operations,
       you can use the GraphiQL user interface to explore your Atlas data through
