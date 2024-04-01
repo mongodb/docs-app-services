@@ -76,10 +76,10 @@ When you use custom user data, keep the following things in mind:
 
 - **Custom Data May Be Stale**: A user's custom data is *sourced* from a
   MongoDB collection but is stored in and read from a user's
-  authentication access token. If a user's metadata is updated after the 
-  access token is issued, requests using the previously created access 
-  token will not have the newly updated metadata. Their user metadata 
-  will update when they refresh their access token or re-authenticate.
+  authentication access token. If a user has a valid access token when
+  the underlying document changes, their custom data in that session
+  does not update until they refresh their access token or
+  re-authenticate.
 
 Create and Manage Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -437,13 +437,21 @@ the user's account. These metadata fields vary depending on provider.
        <custom-jwt-authentication-configuration-metadata-fields>`
        configuration.
 
-.. important:: Security and Authentication Provider Metadata 
+.. important:: Avoid Stale Authentication Provider Metadata
 
-  Authentication provider metadata is externally-defined by clients and
+  A user's authentication provider metadata is read from a user's
+  authentication access token. If a user's metadata is updated after 
+  the access token is issued, requests using the previously created 
+  access token will not have the newly updated metadata. Their user metadata 
+  will update when they refresh their access token or re-authenticate.
+
+.. note:: Security and Authentication Provider Metadata 
+
+  Authentication provider metadata can be externally-defined by clients and
   external authentication providers and should be regarded with caution. You should 
   not rely solely on authentication provider metadata for security-related 
   decisions, such as using this metadata in rule expressions for data access 
-  permssions.
+  permissions.
 
 .. _enable-user-metadata-procedure:
 .. _configure-user-metadata-on-the-backend:
@@ -725,19 +733,18 @@ Configure Authentication Provider Metadata
          If you successfully configure the provider's metadata
          fields, App Services returns a ``204`` response.
 
+
+
 .. note:: Tips for Users with Multiple Linked Authentication Providers  
 
   - To ensure the most up-to-date metadata, users should re-authenticate after 
     switching to a different authentication provider. Failure to do so may result 
-    in outdated metadata reflected in the user's table and for requests 
+    in outdated metadata reflected in the user's data and for requests 
     using authentication providers.
   - If a user switches between authentication providers, there may be a 30 minute delay 
-    to update metadata that has the same field name for both authentication 
-    providers. For example, both JWT and API Key authentication providers have 
-    a ``name`` metadata field. There will be a delay to update the ``name`` field 
-    in the user's table if the user authenticates with JWT and then with an API key. 
-    The request is always guaranteed to have the most up-to-date metadata associated 
-    with the authentication provider used.
+    in propagating metadata to the ``user`` collection and requests using 
+    authentication providers. The request is always guaranteed to have the 
+    most up-to-date metadata associated with the authentication provider used.
 
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
