@@ -115,13 +115,12 @@ Updates to a nested collection are resolved as follows:
   
 For example, client details in Sarah and Matt's dog walking app are modeled as
 arrays nested in the parent ``client`` property. Sarah - and then later, Matt -
-each create a new details entry about a new client on their
-devices. When the devices sync, Device Sync keeps the entry created
-by Matt because his update (creating a new nested details array) was the last
+each create a new details collection for the same client on their
+devices while offline. When the devices sync, Device Sync keeps the entry created
+by Matt because his update (creating a new nested details collection) was the last
 one made.
 
-Later, Sarah and Matt each update the newly created details entry with 
-different information. Device Sync will merge these updates according to
+Later, Sarah and Matt each make unique updates the newly created details entry. Device Sync will merge these updates according to
 normal conflict resolution rules, inserting the new or modified items to the
 list in chronological order. 
 
