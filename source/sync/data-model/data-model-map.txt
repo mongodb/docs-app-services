@@ -24,12 +24,12 @@ Overview
 This page contains information on how the App Services Schema used by
 Atlas Device Sync maps to the Realm Object Schema used by the Atlas Device SDKs.
 
-You can generate 
-To generate Atlas Device SDK Schemas from your App Services Schemas,
-refer to :ref:`Generate SDK Object Models <generate-sdk-object-models>`.
-To generate App Services Schemas from Atlas Device SDK client code,
-refer to :ref:`Generate App Services Schema from a Realm Object 
-Model <create-schema-from-rom>`.
+To learn how to generate these schemas, refer to the following pages:
+
+- To generate Atlas Device SDK Schemas from your App Services Schemas, refer to :ref:`Generate SDK Object Models <generate-sdk-object-models>`.
+- To generate App Services Schemas from Atlas Device SDK client code, refer to
+  :ref:`Generate App Services Schema from a Realm Object Model
+  <create-schema-from-rom>`.
 
 To learn more about how Device Sync uses these two schemas,
 refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
@@ -44,7 +44,7 @@ When you configure Device Sync, you :ref:`specify the data source
 may contain multiple databases, and each database may contain multiple 
 collections.
 
-The :ref:`App Services schema <schemas>` maps your Realm database object 
+The :ref:`App Services schema <schemas>` maps your Realm Database object 
 names to collections in databases in your Device Sync data source. The 
 ``title`` field in an App Services schema maps to the object type name in 
 Realm Database. Because the ``title`` name determines the mapping between 
@@ -250,7 +250,9 @@ type properties.
 
 A mixed field can contain any supported data type and 
 functionally acts as an object or document without a pre-defined
-structure. For more information on modeling mixed properties in 
+structure. 
+
+For more information on modeling mixed properties in 
 an App Services Schema, refer to :ref:`Mixed - Schema Types <schema-type-mixed>`.
 
 Collections in Mixed Properties
@@ -259,8 +261,8 @@ Collections in Mixed Properties
 .. include:: /includes/note-collections-in-mixed-sync.rst
 
 You can leverage collections (arrrays or dictionaries) in mixed properties to store data that does not fit into a
-pre-defined schema. Because collections of mixed data can contain other collections of
-mixed data, you can nest data into JSON-like structures. 
+pre-defined schema, such as variable JSON data or complex MongoDB documents. Because collections of mixed data can contain other collections of
+mixed data, you can nest data into complex structures. 
 For an example, refer to the :ref:`nested-collections-data-model-example` on this page.
 
 Currently, App Services Schemas and Realm Object Schemas in the following SDKs 

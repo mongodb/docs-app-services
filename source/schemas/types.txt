@@ -207,11 +207,14 @@ documents, so two different documents may have values of different types.
 
 Mixed fields can store :ref:`arrays <schema-type-array>` and 
 :ref:`dictionaries <schema-type-dictionary>` of mixed data. Sync translates 
-these to MongoDB as arrays and objects. These collections can contain other 
-collections, with a :manual:`maximum depth of 100 levels
-<reference/limits>`. 
+these to MongoDB as arrays and objects, respectively. These collections of mixed
+data can also contain other 
+collections of mixed data, with a :manual:`maximum depth of 100 levels
+<reference/limits>`. You can leverage this flexibility to store complex data
+structures that wouldn't otherwise fit into a pre-defined schema, such as 
+variable JSON data or complex MongoDB documents.
 
-Mixed fields can represent relationships. Sync translates these relationships
+Mixed fields can also represent relationships. Sync translates these relationships
 to MongoDB as a :manual:`DBRef </reference/database-references/>` to preserve
 the database name, collection name, and primary key of the link.
 
