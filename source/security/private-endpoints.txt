@@ -5,7 +5,7 @@ Use a VPC Private Endpoint (Preview)
 ====================================
 
 .. meta:: 
-   :description: Learn how to set up a VPC Private Endpoint for your Atlas Cluster.
+   :description: Learn how to set up a VPC Private Endpoint for your app.
 
 .. contents:: On this page
    :depth: 2
@@ -64,9 +64,8 @@ You will also need to gather the following information:
       [
         {
           "cloud_provider_region": "aws-us-east-1",
-          "name": "eps_baas-pl-prod_us-east-1_cloud",
-          "dns": "*.aws.services.cloud.mongodb.com",
-          "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0f12ab34cd56ef789"
+          "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0718bec2c0bdeab5c",
+          "endpoint_type": "general"
         },
         ...
       ]
@@ -272,7 +271,7 @@ the Sync Endpoint.
             Now that you've created the interface endpoint in your VPC, you
             need to add it to your App. 
 
-            a. Find the Sync and General **VPC Endpoint IDs**, either in the
+            a. Find the Sync **VPC Endpoint ID**, either in the
                output of the CLI commands you ran in the previous step or on the
                endpoint details screen of the AWS VPC dashboard. This value
                starts with ``vpce-``.
@@ -331,9 +330,9 @@ Definitions
 
 There are three kinds of Private Endpoints:
 
-- Legacy: Endpoints that use ``realm.mogodb.com``
-- General: TODO: Add definition
-- Sync: TODO: Add definition
+- Legacy: Endpoints that use the legacy ``realm.mongodb.com`` domain. Apps with legacy endpoints must migrate their endpoints to use the new domain.
+- General: Endpoints that use ``services.cloud.mongodb.com`` for Client HTTP requests.
+- Sync: Endpoints that use ``services.cloud.mongodb.com`` for Sync WebSocket connections.
 
 Supported SDK Versions
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -365,7 +364,7 @@ Private Endpoint Limitations
   connections over the MongoDB wire protocol <wire-protocol>`. If one is
   enabled, you can't enable the other.
 
-- By default, private Endpoints only handle requests that originate from within your VPC.
+- By default, Private Endpoints only handle requests that originate from within your VPC.
   You can configure your App to also accept requests from the public internet. To learn how,
   see :ref:`Change Access Restrictions <change_access_restrictions>`.
 
