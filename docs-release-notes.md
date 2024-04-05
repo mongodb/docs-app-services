@@ -1,3 +1,21 @@
+# April 5, 2024
+
+## Get Started
+
+- Device Sync Tutorial - Flutter: Rename lib/realm/schemas.g.dart to lib/realm/schemas.realm.dart to reflect the new file extension generated in the upgraded Flutter Template App.
+
+## Develop & Deploy Apps
+
+- Create an App: Update the noted minimum MongoDB version from v4.4 to v5.0.
+
+## Refernce
+
+- GraphQL API (Deprecated)/Migrate to WunderGraph: New page that helps current GraphQL API users migrate to WunderGraph.
+
+## Release Notes
+
+- Update external changelog with release notes for sorted apps in the App Services UI and the service name for a data source now defaulting to the cluster name.
+
 # March 29, 2024
 
 ## Device Sync
