@@ -1,4 +1,4 @@
-.. note:: Collections in Mixed fields supported in Apps created after March XX, 2024
+.. note:: Collections in Mixed Fields supported in Apps created after March XX, 2024
     
     App Services Apps created *after* March XX, 2024 can store collections
     (arrays and dictionaries) in mixed data properties. You can 
@@ -6,7 +6,7 @@
     structures such as JSON or MongoDB documents without having to define a 
     strict data model.
 
-    To use feature with Atlas Device SDK, you must use :ref:`Flutter SDK v2.0.0 or later <flutter-realm-value>`. Support for other SDKs will be added in future releases.
+    To use this feature with Atlas Device SDK, you must use :ref:`Flutter SDK v2.0.0 or later <flutter-realm-value>`. Support for other SDKs will be added in future releases.
 
     If your App was created before March XX, 2024, you can contact support to
     learn more about enabling this feature.  
