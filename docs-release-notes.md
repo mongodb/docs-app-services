@@ -2,7 +2,7 @@
 
 ## Get Started
 
-- Device Sync Tutorial - Flutter: Rename lib/realm/schemas.g.dart to lib/realm/schemas.realm.dart to reflect the new file extension generated in the upgraded Flutter Template App.
+- Device Sync Tutorial - Flutter: Rename `lib/realm/schemas.g.dart` to `lib/realm/schemas.realm.dart` to reflect the new file extension generated in the upgraded Flutter Template App.
 
 ## Develop & Deploy Apps
 
