@@ -5,8 +5,12 @@ Use a VPC Private Endpoint (Preview)
 ====================================
 
 .. meta:: 
-   :description: Learn how to set up a VPC Private Endpoint for your app.
+   :description: Learn how to set up a Virtual Private Cloud (VPC) Private Endpoint for your app.
 
+.. facet::
+  :name: genre
+  :values: tutorial
+  
 .. contents:: On this page
    :depth: 2
 
@@ -23,7 +27,7 @@ in the AWS documentation.
 Before You Begin
 ----------------
 
-You should set up a Private Hosted Zone. To do so, use `ModifyVpcAttribute 
+Set up a private hosted zone for your VPC. To do so, use `ModifyVpcAttribute 
 <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyVpcAttribute.html>`__
 to set the following VPC attributes to true:
 
@@ -60,7 +64,7 @@ You will also need to gather the following information:
 
     .. output::
       :language: json
-      :emphasize-lines: 6
+      :emphasize-lines: 4-5
 
       [
         {
@@ -93,7 +97,7 @@ Add a General Endpoint
 
          .. step:: Create an Interface Endpoint in Your VPC
 
-            a. In the App Services UI, navigate to :guilabel:`App Settings` and
+            a. In the App Services UI, navigate to :guilabel:`App Settings`,
                then click the :guilabel:`Private Endpoints` tab.
             #. Click :guilabel:`Add Private Endpoint`, then click
                :guilabel:`General`.
@@ -362,7 +366,7 @@ Private Endpoint Limitations
   have a Private Endpoint enabled. All requests must come through the
   Private Endpoint.
 
-- If you :ref:`change your deployment model <change-deployment-models>`
+- If you :ref:`change your deployment model <change-deployment-models>`,
   then your existing Private Endpoints will not continue to work. You
   will have to create new Private Endpoints for the App's new region.
 
@@ -374,5 +378,5 @@ Private Endpoint Limitations
   You can configure your App to also accept requests from the public internet. To learn how,
   see :ref:`Change Access Restrictions <change_access_restrictions>`.
 
-- All **outbound** requests, such as an an App Services trigger calling an 
+- All **outbound** requests, such as an App Services trigger calling an 
   external API, go over the public internet.
