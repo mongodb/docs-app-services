@@ -16,13 +16,24 @@ Use a VPC Private Endpoint (Preview)
 
 You can use a Private Endpoint to access Atlas App Services from within
 your Virtual Private Cloud (VPC). This is a private connection to Atlas
-App Services that does not go over the public internet.
+App Services that does not go over the public internet. Requests from outside of
+your VPC return a ``404`` error.
 
 Private Endpoints are only available for Atlas App Services Apps
 deployed locally to a region in AWS. They connect to your AWS VPC using
 AWS PrivateLink. To learn more, see `What is AWS PrivateLink?
 <https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html>`__
 in the AWS documentation.
+
+There are three kinds of App Services Private Endpoints:
+
+- Legacy: Endpoints that use the legacy ``realm.mongodb.com`` domain. Apps with
+  legacy endpoints must migrate their endpoints to use the new domain. Legacy
+  endpoints can't be created.
+- General: Endpoints that use ``services.cloud.mongodb.com`` for Client HTTP
+  requests.
+- Sync: Endpoints that use ``services.cloud.mongodb.com`` for Sync WebSocket
+  connections.
 
 Before You Begin
 ----------------
@@ -46,35 +57,6 @@ You will also need to gather the following information:
   </cli/latest/reference/ec2/describe-subnets>` command in the AWS
   CLI.
 
-- The App Services **Endpoint Service Name** for your region. If
-  you're using the App Services UI, this value will be provided to
-  you. If you're using the Admin API, you can find this value by
-  calling the :admin-api-endpoint:`List VPC Private Endpoint Services
-  <operation/adminListPrivateEndpointServiceInfo>` endpoint and
-  then locating the entry for your App's deployment region and the endpoint type
-  you want to create in the response.
-
-  .. io-code-block::
-
-    .. input::
-      :language: sh
-
-      curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos \
-        -H "Authorization: Bearer <access_token>"
-
-    .. output::
-      :language: json
-      :emphasize-lines: 4-5
-
-      [
-        {
-          "cloud_provider_region": "aws-us-east-1",
-          "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0718bec2c0bdeab5c",
-          "endpoint_type": "general"
-        },
-        ...
-      ]
-
 Add a Private Endpoint
 ----------------------
 
@@ -95,26 +77,27 @@ Add a General Endpoint
 
       .. procedure::
 
-         .. step:: Create an Interface Endpoint in Your VPC
+         .. step:: Create a VPC Interface Endpoint
 
             a. In the App Services UI, navigate to :guilabel:`App Settings`,
                then click the :guilabel:`Private Endpoints` tab.
             #. Click :guilabel:`Add Private Endpoint`, then click
                :guilabel:`General`.
-            #. Add your VPC ID and Subnet IDs (comma-separated list), then click
-               :guilabel:`Next`.
-            #. In your terminal, create a VPC Endpoint with the command generated
-               by the App Services UI. The command should look something like
-               this:
-                  
-            .. code-block:: sh
+            #. Add your VPC ID and Subnet IDs (comma-separated list) in their
+               separate fields, then click :guilabel:`Next`.
+            #. Copy the generated :guilabel:`VPC Interface Endpoint Command`.
+               The command should look something like this:
+            
+               .. code-block:: sh
 
-              aws ec2 create-vpc-endpoint \
-                --vpc-endpoint-type Interface
-                --service-name <App Services Endpoint Service Name> \
-                --vpc-id <your-vpc-id> \
-                --region <your-aws-deployment-region> \
-                --subnet-ids <your-subnet-ids>
+                 aws ec2 create-vpc-endpoint \
+                   --vpc-endpoint-type Interface
+                   --service-name <App Services Endpoint Service Name> \
+                   --vpc-id <your-vpc-id> \
+                   --region <your-aws-deployment-region> \
+                   --subnet-ids <your-subnet-ids>
+            #. In your terminal, create a Sync VPC Endpoint with the generated
+               command.
          
          .. step:: Add the Private Endpoint to Your App
 
@@ -141,11 +124,35 @@ Add a General Endpoint
 
       .. procedure::
 
-         .. step:: Create an Interface Endpoint in Your VPC
+         .. step:: Create a VPC Interface Endpoint
 
-            a. Get an endpoint service name from the App Services Admin API's
-               :admin-api-endpoint:`List VPC Private Endpoint Services
-               <operation/adminListPrivateEndpointServiceInfo>`.
+            a. Call the :admin-api-endpoint:`List VPC Private Endpoint Services
+               <operation/adminListPrivateEndpointServiceInfo>` endpoint.
+            #. Filter the response object to find the entry for your App's
+               deployment region and the endpoint type you want to create.
+
+               .. io-code-block::
+
+                  .. input::
+                     :language: sh
+
+                     curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos \
+                     -H "Authorization: Bearer <access_token>"
+
+                  .. output::
+                     :language: json
+                     :emphasize-lines: 4-5
+
+                     [
+                     {
+                        "cloud_provider_region": "aws-us-east-1",
+                        "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0718bec2c0bdeab5c",
+                        "endpoint_type": "general"
+                     },
+                     ...
+                     ]
+            #. Get the ``service_name`` field from the desired entry in the
+               previous step.
             #. Create a VPC Endpoint using the AWS CLI `create-vpc-endpoint 
                <https://docs.aws.amazon.com/cli/latest/reference/ec2/create-vpc-endpoint.html>`__
                command. You need an App Services endpoint service name, VPC ID,
@@ -201,17 +208,16 @@ the Sync Endpoint.
 
       .. procedure::
 
-         .. step:: Create an Interface Endpoint in Your VPC
+         .. step:: Create a VPC Interface Endpoint
 
             a. In the App Services UI, navigate to :guilabel:`App Settings` and
                then click the :guilabel:`Private Endpoints` tab.
             #. Click :guilabel:`Add Private Endpoint`, then click
                :guilabel:`Sync`.
-            #. Add your VPC ID and Subnet IDs (comma-separated list), then click
-               :guilabel:`Next`.
-            #. In your terminal, create a Sync VPC Endpoint with the command
-               generated by the App Services UI. The command should look
-               something like this:
+            #. Add your VPC ID and Subnet IDs (comma-separated list) in their
+               separate fields, then click :guilabel:`Next`.
+            #. Copy the generated :guilabel:`VPC Interface Endpoint Command`.
+               The command should look something like this:
             
                .. code-block:: sh
 
@@ -221,6 +227,8 @@ the Sync Endpoint.
                    --vpc-id <your-vpc-id> \
                    --region <your-aws-deployment-region> \
                    --subnet-ids <your-subnet-ids>
+            #. In your terminal, create a Sync VPC Endpoint with the generated
+               command.
             #. You must also create a General VPC Endpoint using the command
                App Services generates for the General Endpoint.
          
@@ -250,11 +258,35 @@ the Sync Endpoint.
 
       .. procedure::
 
-         .. step:: Create an Interface Endpoint in Your VPC
+         .. step:: Create a VPC Interface Endpoint
 
-            a. Get an endpoint service name from the App Services Admin API's
-               :admin-api-endpoint:`private_endpoint_service_infos endpoint 
-               <tag/security/operation/adminListPrivateEndpointServices>`.
+            a. Call the :admin-api-endpoint:`List VPC Private Endpoint Services
+               <operation/adminListPrivateEndpointServiceInfo>` endpoint.
+            #. Filter the response object to find the entry for your App's
+               deployment region and the endpoint type you want to create.
+
+               .. io-code-block::
+
+                  .. input::
+                     :language: sh
+
+                     curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/security/private_endpoint_service_infos \
+                     -H "Authorization: Bearer <access_token>"
+
+                  .. output::
+                     :language: json
+                     :emphasize-lines: 4-5
+
+                     [
+                     {
+                        "cloud_provider_region": "aws-us-east-1",
+                        "service_name": "com.amazonaws.vpce.us-east-1.vpce-svc-0718bec2c0bdeab5c",
+                        "endpoint_type": "sync"
+                     },
+                     ...
+                     ]
+            #. Get the ``service_name`` field from the desired entry in the
+               previous step.
             #. Create a VPC Endpoint using the AWS CLI `create-vpc-endpoint 
                <https://docs.aws.amazon.com/cli/latest/reference/ec2/create-vpc-endpoint.html>`__
                command. You need an App Services endpoint service name, VPC ID,
@@ -335,19 +367,6 @@ You can toggle this setting in three ways:
 - In the Admin API, call the :admin-api-endpoint:`Toggle Non-VPC Requests
   <operation/allNonVpcClientRequests>` with a boolean value (``true`` to remove
   the default restriction, or ``false`` to reinstate it.)
-
-Definitions
------------
-
-There are three kinds of Private Endpoints:
-
-- Legacy: Endpoints that use the legacy ``realm.mongodb.com`` domain. Apps with
-  legacy endpoints must migrate their endpoints to use the new domain. Legacy
-  endpoints can't be created.
-- General: Endpoints that use ``services.cloud.mongodb.com`` for Client HTTP
-  requests.
-- Sync: Endpoints that use ``services.cloud.mongodb.com`` for Sync WebSocket
-  connections.
 
 Supported SDK Versions
 ----------------------
