@@ -25,15 +25,15 @@ AWS PrivateLink. To learn more, see `What is AWS PrivateLink?
 <https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html>`__
 in the AWS documentation.
 
-There are three kinds of App Services Private Endpoints:
+There are two kinds of App Services Private Endpoints:
 
-- Legacy: Endpoints that use the legacy ``realm.mongodb.com`` domain. Apps with
-  legacy endpoints must migrate their endpoints to use the new domain. Legacy
-  endpoints can't be created.
 - General: Endpoints that use ``services.cloud.mongodb.com`` for Client HTTP
   requests.
 - Sync: Endpoints that use ``services.cloud.mongodb.com`` for Sync WebSocket
   connections.
+
+Endpoints that use the ``realm.mongodb.com`` domain must migrate to use the new
+``services.cloud.mongodb.com`` domain.
 
 Before You Begin
 ----------------
@@ -41,20 +41,22 @@ Before You Begin
 Gather the following information:
 
 - Your **VPC ID**, which you can find in the AWS VPC dashboard or
-  by running the :aws:`describe-vpcs
-  </cli/latest/reference/ec2/describe-vpcs>` command in the AWS
-  CLI.
+by running the :aws:`describe-vpcs
+</cli/latest/reference/ec2/describe-vpcs>` command in the AWS
+CLI.
 - Your **Subnet IDs**, which you can find in the AWS VPC dashboard
-  or by running the :aws:`describe-subnets
-  </cli/latest/reference/ec2/describe-subnets>` command in the AWS
-  CLI.
+or by running the :aws:`describe-subnets
+</cli/latest/reference/ec2/describe-subnets>` command in the AWS
+CLI.
 
 Set up a private hosted zone for your VPC. You need your VPC ID for this.
 Use `ModifyVpcAttribute <https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyVpcAttribute.html>`__
 to set the following VPC attributes to true:
 
-- ``enableDnsHostnames``
-- ``enableDnsSupport``
+- ``EnableDnsHostnames``
+- ``EnableDnsSupport``
+
+You must also install and authenticate the AWS CLI.
 
 Add a Private Endpoint
 ----------------------
@@ -93,8 +95,8 @@ Add a General Endpoint
                    --vpc-id <your-vpc-id> \
                    --region <your-aws-deployment-region> \
                    --subnet-ids <your-subnet-ids>
-            #. In your terminal, create a General VPC Endpoint with the generated
-               command.
+            #. In your terminal, execute the generated AWS CLI command to create
+               a VPC Endpoint.
          
          .. step:: Add the Private Endpoint to Your App
 
@@ -126,7 +128,8 @@ Add a General Endpoint
             a. Call the :admin-api-endpoint:`List VPC Private Endpoint Services
                <operation/adminListPrivateEndpointServiceInfo>` endpoint.
             #. Filter the response object to find the entry for your App's
-               deployment region and the endpoint type you want to create.
+               :ref:`deployment region <deployment-regions>` and the endpoint
+               type you want to create.
 
                .. io-code-block::
 
@@ -195,8 +198,7 @@ Add a General Endpoint
 Add a Sync Endpoint
 ~~~~~~~~~~~~~~~~~~~
 
-Sync Endpoints require that you also have a General Endpoint associated with
-the Sync Endpoint.
+Every Sync Endpoint must be paired with a General Endpoint.
 
 .. tabs-realm-admin-interfaces::
 
@@ -224,10 +226,10 @@ the Sync Endpoint.
                    --vpc-id <your-vpc-id> \
                    --region <your-aws-deployment-region> \
                    --subnet-ids <your-subnet-ids>
-            #. In your terminal, create a Sync VPC Endpoint with the generated
-               command.
-            #. You must also create a General VPC Endpoint using the command
-               App Services generates for the General Endpoint.
+            #. In your terminal, execute the generated AWS CLI command to create
+               a VPC Endpoint.
+            #. You must also create a General Endpoint using the command
+               App Services generates.
          
          .. step:: Add the Private Endpoints to Your App
 
@@ -248,6 +250,8 @@ the Sync Endpoint.
                connection. This setting applies to this endpoint and **all 
                additional endpoints you create**. Refer to :ref:`change access 
                restrictions <change_access_restrictions>` for more information.
+            #. You must also create a General Private Endpoint by following the
+               steps for creating a General Private Endpoint on this page.
             #. Click :guilabel:`Finish Endpoint Creation`.
 
    .. tab::
@@ -260,7 +264,8 @@ the Sync Endpoint.
             a. Call the :admin-api-endpoint:`List VPC Private Endpoint Services
                <operation/adminListPrivateEndpointServiceInfo>` endpoint.
             #. Filter the response object to find the entry for your App's
-               deployment region and the endpoint type you want to create.
+               :ref:`deployment region <deployment-regions>` and the endpoint
+               type you want to create.
 
                .. io-code-block::
 
@@ -323,7 +328,7 @@ the Sync Endpoint.
                      "cloud_provider_region": "<your-cloud-deployment-region>",
                      "cloud_provider_endpoint_id": "<your-vpc-endpoint-id>",
                      "endpoint_type": "sync",
-                     "comment": "<comment-about-endpoint>"
+                     "comment": "Optional: add a comment describing the endpoint."
                   }'
             #. You must also create a General Private Endpoint by following the
                steps for creating a General Private Endpoint on this page.
@@ -337,7 +342,8 @@ create new legacy endpoints.
 
 **To migrate a Legacy Endpoint:** 
 
-#. Create new endpoints to replace existing VPC endpoints
+#. Following the procedures on this page, create new VPC endpoints to replace
+   existing VPC endpoints
 #. Update Atlas Device SDK to a :ref:`version that supports the new domain 
    <domain-migration-sdk-versions>`
 #. Update client API calls to use new services domain
