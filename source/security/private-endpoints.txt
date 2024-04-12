@@ -59,9 +59,7 @@ to set the following VPC attributes to true:
 Add a Private Endpoint
 ----------------------
 
-After you've done everything in the Before You Begin section on this page,
-you can add a new Private Endpoint. You can do this with the App Services
-UI or the Admin API.
+You can add a new Private Endpoint with the App Services UI or the Admin API.
 
 You can add a new General Endpoint or a new Sync Endpoint. You can also
 migrate a Legacy Endpoint to either a new General or Sync Endpoint.
@@ -95,7 +93,7 @@ Add a General Endpoint
                    --vpc-id <your-vpc-id> \
                    --region <your-aws-deployment-region> \
                    --subnet-ids <your-subnet-ids>
-            #. In your terminal, create a Sync VPC Endpoint with the generated
+            #. In your terminal, create a General VPC Endpoint with the generated
                command.
          
          .. step:: Add the Private Endpoint to Your App
@@ -190,7 +188,7 @@ Add a General Endpoint
                    "cloud_provider_region": "<your-cloud-deployment-region>",
                    "cloud_provider_endpoint_id": "<your-vpc-endpoint-id>",
                    "endpoint_type": "general",
-                   "comment": "<comment-about-endpoint>"
+                   "comment": "Optional: add a comment describing the endpoint."
                  }'
 
 
@@ -233,8 +231,8 @@ the Sync Endpoint.
          
          .. step:: Add the Private Endpoints to Your App
 
-            Now that you've created the interface endpoint in your VPC, you
-            need to add it to your App. 
+            Now that you've created the interface endpoints in your VPC, you
+            need to add them to your App. 
 
             a. Find the Sync and General **VPC Endpoint IDs**, either in the
                output of the CLI commands you ran in the previous step or on the
@@ -334,7 +332,7 @@ Migrate a Legacy Endpoint
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you have an endpoint that uses the legacy ``realm.mongodb.com`` domain, you
-must migrate it to use the new ``services.cloud.mongodb.com`` domain. You can't
+must migrate it to use the ``services.cloud.mongodb.com`` domain. You can't
 create new legacy endpoints.
 
 **To migrate a Legacy Endpoint:** 
@@ -385,8 +383,7 @@ Private Endpoint Limitations
   Private Endpoint.
 
 - If you :ref:`change your deployment model <change-deployment-models>`,
-  then your existing Private Endpoints will not continue to work. You
-  will have to create new Private Endpoints for the App's new region.
+  then you must create new Private Endpoints for the App's new region.
 
 - You can't simultaneously use Private Endpoints and :ref:`allow
   connections over the MongoDB wire protocol <wire-protocol>`. If one is
