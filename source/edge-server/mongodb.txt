@@ -4,6 +4,9 @@
 Edge Server MongoDB API Support
 ===============================
 
+.. meta:: 
+   :description: Edge Server natively supports a subset of MongoDB CRUD APIs.
+
 .. facet::
    :name: genre 
    :values: reference
@@ -71,6 +74,11 @@ matching documents.
   ``collection.updateOne()`` method.
 - You can update multiple documents in a collection using the
   ``collection.updateMany()`` method.
+- You can find and update a document or documents in a collection using the
+  ``collection.findAndModify()`` method. This action allows you to atomically 
+  find, modify, and return one or more documents with the same command. This 
+  avoids the risk of other update operations changing the documents between 
+  separate find and update operations.
 
 .. note:: 
 
