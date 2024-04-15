@@ -1,0 +1,746 @@
+.. _migrate-schema-partner-collection:
+.. _partner_collections:
+
+============================
+Manually Update a Data Model  
+============================
+
+.. meta::
+   :description: Breaking schema changes to your Device Sync data model are destructive changes that require additional handling.
+
+.. facet::
+  :name: genre
+  :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+
+
+
+.. important:: 
+
+   This page describes how to manually update  as they apply to App Services Apps that
+   do *not* support current Device Sync functionality for breaking changes.
+
+   For information on how to update a data model using Device Sync's current
+   features, refer to :ref:`synced-schema-overview`.
+
+This page describes how to manually update a data model. It applies to App Services Apps
+that do not support automatic updates through Development Mode or with schema versioning. For information on how
+to automatically update a data model, refer to :ref:`synced-schema-overview`.
+
+We recommend that eligible apps take advantage of Device Sync's
+automatic schema updates, as described in the
+:ref:`update-data-model-development-mode` and
+:ref:`update-data-model-production-apps` pages.  
+
+- **Automatic Client-Side Updates with Development Mode:** 
+
+  Apps in development (Development Mode is enabled) can make breaking changes
+  from client code, and Device
+  Sync automatically handles the updates to the server-side App Services schema.
+  
+  Apps must meet the following requirements: 
+   - Created after September 13, 2023
+   - Minimum Device SDK version  
+
+  For more information, refer to :ref:`update-data-model-development-mode`.
+
+- **Automatic Server-Side Updates with Schema Versioning:** 
+
+  Apps in production (Development Mode is disabled) can make breaking changes to
+  the server-side App Services schema
+  from the App Services UI. Device Sync increments the schema version and
+  automatically handles the updates to the client object models. 
+  
+  App must meet the following requirements: 
+- Created after [DATE TBD], 2024 
+
+  For more information, refer to :ref:`update-data-model-production-apps`.
+
+You can contact support to enable either of these features.
+
+.. TODO: Update with the correct date once it is available. 
+.. TODO: Update to note support for changes from the client code once SDKs roll out versioning.
+
+Breaking vs. Non-Breaking Changes
+---------------------------------
+
+A **breaking change** is a change that requires additional action to handle
+before it can be implemented. 
+
+Brea
+you make in your server-side
+App Services schema that 
+A breaking server-side schema change requires you to :ref:`terminate sync 
+<terminating-realm-sync>` in the backend, and then :ref:`re-enable 
+<enable-sync>` sync. 
+
+If you need to make a breaking schema change, you have two choices: 
+
+- :ref:`Terminate Sync <terminating-realm-sync>` in the backend, then 
+  :ref:`re-enable Sync <enable-sync>` it from the start.
+
+- Create a partner collection, copy the old 
+  data to the new (updated) collection, then set up triggers to ensure data 
+  consistency. This process is described in the :ref:`schema-partner_collection-strategy` section on this page.
+
+.. note:: Make Breaking Schema Changes in the Atlas App Services UI
+
+   Because breaking schema changes require special handling, 
+   App Services does not support making these changes using the {+cli+} CLI or 
+   automated deploy with GitHub. Instead, you must make breaking changes in 
+   the App Services UI.
+
+
+Breaking schema changes are tricky to implement and manage because clients that 
+have not been updated to the updated schema still need to access
+the data using old schema definitions, but updated clients need to 
+work with the new schema changes as well.
+As a result, breaking schema changes often mean that older clients can't 
+to open a synced realm or they can give the appearance of data loss when server-side documents 
+are unable to sync to client-side applications. Breaking changes can also 
+prevent applications from automatically recovering from a 
+:ref:`client reset <handle-a-client-reset>`.
+
+A **non-breaking change** is a change that you can make in your server-side
+schema or your object model without requiring additional handling in your
+app. Also known as additive changes, they apply automatically to synced realms.
+
+.. note:: Applying non-breaking changes to the client may require migration
+
+   When you *only* make non-breaking changes to the server-side schema, 
+   no additional action is required. However, if you then try to apply 
+   these changes to your client object model, you may need to perform 
+   a migration. If the client device has an existing realm file, you must
+   perform a migration. For details, see the Modify an Object Schema
+   page in your preferred SDK.
+
+
+Client vs. Server-Side Changes
+------------------------------
+
+Because the Device Sync data model consists of a client-side SDK object model
+and a server-side App Services schema, you can make your data model changes in
+either location.
+
+
+Changes with Development Mode
+-----------------------------
+
+.. list-table::
+   :stub-columns: 1
+   :header-rows: 2
+   :widths: 20 20 20 20 20
+
+   * - Change Description
+     - Auto - Dev Mode
+     - Auto - Prod
+     - Manual 
+     - 
+   * - 
+     - 
+     - 
+     - Server-Side
+     - Client-Side
+   * - :ref:`Add object type <schema-update-add-object-type>`
+     - Non-breaking
+     - Non-breaking
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Add default property value <schema-update-add-a-default-value>`
+     - Non-breaking
+     - Non-breaking
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Add optional property <schema-update-add-optional-property>`
+     - Non-breaking
+     - Non-breaking
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Remove object type <schema-update-remove-object-type>`
+     - Non-breaking
+     - Breaking (Compatible)
+     - Breaking
+     - Non-breaking
+   * - :ref:`Remove property <schema-update-remove-property>`
+     - Non-breaking
+     - Breaking (Compatible)
+     - Breaking
+     - Non-breaking
+   * - :ref:`Rename object type <schema-update-change-object-type-name>`
+     - Breaking
+     - Breaking (Compatible)
+     - Breaking
+     - Breaking
+   * - :ref:`Rename property <schema-update-change-property-name>`
+     - Breaking
+     - Breaking (Compatible)
+     - Breaking
+     - Breaking
+   * - :ref:`Change property optionality <schema-update-change-property-status>`
+     - Breaking
+     - Breaking (Compatible)
+     - Breaking
+     - Breaking
+   * - :ref:`Change property type <schema-update-change-property-type-but-keep-name>`
+     - Breaking
+     - Breaking (Incompatible)
+     - Breaking
+     - Breaking
+
+
+.. _breaking-change-quick-reference:
+
+Change Types
+------------
+
+The following diagram shows the types of schema changes you can make and the 
+process you go through to perform the change. Each of these changes is explained 
+in more detail in the table and sections below.
+
+.. figure:: /images/schema_changes.png
+   :alt: Flow chart of schema changes
+   :lightbox:
+
+This table summarizes each type of change, and whether it is considered a breaking or 
+non-breaking change when made to the server-side schema or the client-side
+object model. 
+
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
+
+   * - Type of Change
+     - Server-Side Schema
+     - Client-Side Object Model
+   * - :ref:`Add an object type <schema-update-add-object-type>`
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Add a default value on a property <schema-update-add-a-default-value>`
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Add a required property <schema-update-add-required-property>`
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Add an optional property <schema-update-add-optional-property>`
+     - Non-breaking
+     - Non-breaking
+   * - :ref:`Remove an object type <schema-update-remove-object-type>`
+     - **Breaking**
+     - Non-breaking
+   * - :ref:`Remove an optional or required property <schema-update-remove-property>`
+     - **Breaking**
+     - Non-breaking
+   * - :ref:`Change an object type name <schema-update-change-object-type-name>`
+     - **Breaking**
+     - **Breaking**
+   * - :ref:`Change a property name <schema-update-change-property-name>`
+     - **Breaking**
+     - **Breaking**
+   * - :ref:`Change property type but keep the name <schema-update-change-property-type-but-keep-name>`
+     - **Breaking**
+     - **Breaking**
+   * - :ref:`Change property's status between optional and required <schema-update-change-property-status>`
+     - **Breaking**
+     - **Breaking**
+
+.. tip:: Remap a Name Instead of Renaming
+
+   Because renaming a property or object type is a breaking change, several Device 
+   SDKs support remapping a property or class name as a non-breaking workaround. For more
+   details, refer to the
+   :ref:`schema-update-change-property-name` section on this page.
+
+.. _schema-update-add-object-type:
+
+Add an Object Type
+~~~~~~~~~~~~~~~~~~
+
+You can add an object type to either the server-side schema or the client 
+object model without doing any additional handling. 
+
+If you want to add an object type to both the server-side schema and the 
+client object model, you can add the object type to the object model, and 
+use :ref:`Development Mode <development-mode>` to let App Services handle the 
+server-side schema updates. Or you can manually add the object type to both 
+the model and the schema.
+
+.. note:: These changes may trigger a resync
+
+   When you add a new object type, we retrieve the documents for the 
+   collection and re-insert them into App Services to get the new values. This
+   is expected behavior, but it does cause a temporary halt to propagating 
+   changes while this process is underway.
+
+.. _schema-update-add-a-default-value:
+
+Add a Default Value on a Property
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can add a default value on an object's required property. When you 
+insert an Atlas document missing this required property into the 
+collection, the Device SDK clients set the property to the default value. However, 
+the same property on the Atlas document remains empty until a client makes 
+changes to the property or updates the document directly in Atlas.
+
+For more information on how default values are helpful when modifying 
+existing Atlas documents, see :ref:`<schema-update-add-required-property>`.
+
+.. warning:: Ensure the default value type and property's type are the same
+
+   The default field does not have type validation. If the default field's type
+   and the property's type are not the same, the error will indicate that
+   the document is missing a required field. 
+
+.. _schema-update-add-required-property:
+
+Add a Required Property
+~~~~~~~~~~~~~~~~~~~~~~~
+
+You can add a required property to the client's object model, and 
+use :ref:`Development Mode <development-mode>` to let App Services infer the 
+server-side schema updates. Or you can manually add the 
+required property to both the client model and the Atlas schema. 
+However, you should consider making the property optional to avoid the need to 
+modify existing Atlas documents. 
+
+.. note:: Required Properties Missing in a Schema Subset Will Default to Zero
+
+   Clients can open the Realm with a schema subset that doesn't 
+   include a required property. The server populates the 
+   missing required value field with a zero or blank value
+   (like 0, "", or 0.0 depending on the property type) when the document syncs.
+
+Modify Existing Atlas Documents
+```````````````````````````````
+
+When you add a new required property, you must update existing documents with 
+the new property or they do not sync to the client. This may give client 
+users the impression that the data has been lost. Resolve this issue by
+adding the new property to each impacted document and populating it with a 
+value. After you update the documents to match the client schema, they 
+sync to the client application.
+
+When you add a new required property, App Services retrieves the documents for 
+the collection that have new values per the updated schema. App Services iterates 
+through those documents and re-inserts them to get the new values. This is
+expected behavior, but it does cause a temporary halt to propagating changes 
+while this process is underway.
+
+.. important::
+
+   App Services uses a ``__realm_sync.unsynced_documents`` collection to track 
+   unsynced documents. When you add a required property, the re-sync process can 
+   push this collection over the limit of 100,000 documents. In this case, you must 
+   :ref:`terminate and re-enable sync <terminating-realm-sync>`, even though the 
+   change you're making is a non-breaking change. 
+
+.. _schema-update-add-optional-property:
+
+Add an Optional Property
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to add an optional property to both the server-side schema and 
+the client object model, you can add the optional property to the object 
+model, and use :ref:`Development Mode <development-mode>` to let 
+App Services infer the server-side schema updates. Or you can manually add the 
+optional property to both the model and the schema.
+
+.. note:: These changes may trigger a resync
+
+   When you add a new optional property, we retrieve the documents for the 
+   collection that have new values per the updated schema. We iterate 
+   through those documents and re-insert them into App Services to get 
+   the new values. This is expected behavior, but it does cause a temporary 
+   halt to propagating changes while this process is underway.
+
+.. _schema-update-remove-object-type:
+
+Remove an Object Type
+---------------------
+
+You can remove an object from the client's object model as a non-breaking change. 
+If you remove the object from the server-side schema, it is a breaking change.
+For this reason, we recommend you remove the object type from the client-side 
+object model only and leave it in place on the server-side schema. 
+
+.. _schema-update-remove-property:
+
+Remove a Property
+~~~~~~~~~~~~~~~~~
+
+You can remove an optional or required property from the client-side object model and 
+leave it in place on the server-side schema. This is a 
+non-breaking change to the object model.
+
+If you remove a property from the server-side schema, it is a breaking change. 
+For this reason, we recommend that you remove the property from the client-side 
+object model only and leave it in place on the server-side schema. 
+
+To maintain backward compatibility, removing a property from a client-side 
+object model does not delete the property from the database. Instead, 
+new objects retain the removed property, and App Services sets the value to an 
+appropriate empty value, such as ``null`` for nullable properties, a 0 for 
+integer values, or an empty string for string values. 
+
+.. _schema-update-change-object-type-name:
+
+Change an Object's Name
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Changing an object's name on both the server-side schema and the client-side 
+object model is a breaking change. However, some SDKs offer an API to 
+map a new object name to an existing name in the schema. This allows you to 
+rename an object on the client but not change the object name on the server. 
+In this way, you avoid triggering a migration. Object name 
+mapping is supported in the following SDKs:
+
+- :ref:`Flutter SDK - Remap a Class <flutter-map-property>`
+- :ref:`Java SDK - Rename a Class <java-rename-field>`
+- :ref:`Kotlin SDK - Remap a Class <kotlin-remap-a-property>`
+- :ref:`.NET SDK - Rename a Class <dotnet-rename-property>`
+- :ref:`Node.js SDK - Remap a PClass <node-remap-a-property>`
+
+.. TODO: Add RN once docs are updated in DOCSP-32466 
+.. :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+
+If name mapping is not an option, consider implementing a  
+:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
+you keep the existing collection and schema, and create a new collection 
+with the new schema. 
+
+If you choose to change the object's name instead of using the partner collection 
+strategy, you must terminate sync, manually update the schema, 
+and re-enable sync. In addition, your client 
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
+
+.. note::
+
+   :ref:`Development Mode <development-mode>` 
+   does not automatically update your schema for these changes. 
+
+.. _schema-update-change-property-name:
+
+Change a Property Name
+~~~~~~~~~~~~~~~~~~~~~~
+
+Changing a property's name on both the server-side schema and the client-side 
+object model is a breaking change. However, some SDKs offer an API to 
+map a new property name to an existing name in the schema. This allows you to 
+rename a property on the client but not change the property name on the server. 
+In this way, you avoid triggering a migration. Property name 
+mapping is supported in the following SDKs:
+
+- :ref:`Flutter SDK - Remap a Property <flutter-map-property>`
+- :ref:`Java SDK - Rename a Field <java-rename-field>`
+- :ref:`Kotlin SDK - Remap a Property <kotlin-remap-a-property>`
+- :ref:`.NET SDK - Rename a Property <dotnet-rename-property>`
+- :ref:`Node.js SDK - Remap a Property <node-remap-a-property>`
+- :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+- :ref:`Swift SDK - Remap a Property <swift-rename-property>`
+
+.. warning:: Update existing documents
+
+   If you change a property name in the server-side schema, you must 
+   update existing documents with that new property name or they do not sync 
+   to the client. This may give client users the impression that the data 
+   has been lost.
+
+If name mapping is not an option, consider implementing a  
+partner collection strategy, in which 
+you keep the existing collection and schema, and create a new collection 
+with the new schema. This strategy is described in the :ref:`schema-partner_collection-strategy` section on this page.
+
+If you choose to change the property's name, you must terminate sync, manually update the schema, 
+and re-enable sync. In addition, your client 
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
+
+When you terminate and re-enable sync, you must also update existing Atlas 
+documents to enable them to Sync with your client applications. 
+Without this additional handling, those documents do not Sync and it may 
+appear in the client that the data has been lost. You could resolve this issue 
+in two ways:
+
+- Change the old field name on each document to match the new schema
+- Add a new field to each document with a name that matches the new schema, 
+  and copy the value from the old field into it
+
+After you've made these changes, the appropriate documents sync to the client 
+application.
+
+.. _schema-update-change-property-type-but-keep-name:
+
+Change a Property Type but Keep the Name
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Changing a property's type is a breaking change to both the server-side 
+schema and the client-side object model.
+
+.. warning:: Update existing documents
+
+   If you change a property's type in the server-side schema, you must 
+   update existing documents with that new property type or they do not sync 
+   to the client. This may give client users the impression that the data 
+   has been lost.
+
+Instead of changing a property's type, consider implementing the 
+partner collection strategy, in which 
+you keep the existing collection and schema, and create a new collection 
+with the new schema. This strategy is described in the :ref:`schema-partner_collection-strategy` section on this page.
+
+If you choose to change the property's type instead of using the partner collection 
+strategy, you must terminate sync, manually update the schema, 
+and re-enable sync. In addition, your client 
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
+
+.. note::
+
+   :ref:`Development Mode <development-mode>` 
+   does not automatically update your schema for these changes. 
+
+When you terminate and re-enable sync, you must also update existing Atlas 
+documents to enable them to Sync with your client applications. 
+Without this additional handling, those documents do not Sync and it may 
+appear in the client that the data has been lost. You could resolve this issue 
+in two ways:
+
+- Change the old field type on each document to match the new schema
+- Add a new field to each document with the type that matches the new schema, 
+  and copy the value from the old field into it, transforming its type
+
+After you've made these changes, the appropriate documents should once again 
+sync to the client application.
+
+.. _schema-update-change-property-status:
+
+Change a Property's Status Between Optional and Required
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Changing a property's status between optional and required 
+is a breaking change to both the server-side schema and the client-side object model.
+
+.. warning:: Update existing documents
+
+   If you change a property's status in the server-side schema, you must 
+   update existing documents with that new property type or they do not sync 
+   to the client. This may give client users the impression that the data 
+   has been lost.
+
+Instead of changing a property's status, consider implementing the 
+:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
+you keep the existing collection and schema, and create a new collection 
+with the new schema. 
+
+If you choose to change the property's status instead of using the partner collection 
+strategy, you must terminate sync, manually update the schema, 
+and re-enable sync. In addition, your client 
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
+
+
+
+.. _schema-partner_collection-strategy:
+
+Partner Collections Strategy
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When you need to make a breaking schema change, you can use the partner
+collection strategy to ensure that data flows in both directions.
+
+A **partner collection** is a collection that contains the same data as
+the original collection, but has the new schema definition in place. Partner
+collections use database triggers to ensure that data flows in both directions,
+meaning that when one collection is written to, the other is also written to 
+(with the data modifications required for the new schema).
+
+.. include:: /includes/warn-terminate-sync-client-reset.rst
+
+Example
+```````
+
+The following demonstrates how to implement a breaking schema change using the
+partner collection strategy for an updated ``Task`` collection schema. 
+
+The JSON schema below is the initial collection. Note the ``_id`` field of type ``objectId``:
+
+.. code-block:: json
+    :caption: Initial Task Schema
+    :emphasize-lines: 9-10
+
+    {
+        "title": "Task",
+        "bsonType": "object",
+        "required": [
+            "_id",
+            "name"
+        ],
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "_partition": {
+                "bsonType": "string"
+            },
+            "name": {
+                "bsonType": "string"
+            }
+        }
+    }
+
+The *new* schema is the same, except we want the ``_id`` field to be a string:
+
+.. code-block:: json
+    :caption: New Task Schema 
+    :emphasize-lines: 9-10
+
+    {
+        "title": "Task",
+        "bsonType": "object",
+        "required": [
+            "_id",
+            "name"
+        ],
+        "properties": {
+            "_id": {
+                "bsonType": "string"
+            },
+            "_partition": {
+                "bsonType": "string"
+            },
+            "name": {
+                "bsonType": "string"
+            }
+        }
+    }
+
+.. procedure::
+
+   .. step:: Initialize Partner Collection with an Aggregation Pipeline
+
+      Since breaking changes cannot be performed directly on a synced object
+      schema, you must create a partner collection with a schema containing the
+      required changes. You must ensure that the partner collection has the same
+      data as the original collection so that newer clients can synchronize with
+      older clients.
+
+      The recommended approach to copying the data from your original collection to
+      the new partner collection is to use the :manual:`Aggregation Framework
+      </aggregation/>`.
+
+      You can create and run an aggregation pipeline from the 
+      `mongo shell <https://www.mongodb.com/docs/mongodb-shell/>`__,
+      by using the :compass:`</aggregation-pipeline-builder/>`, or with the
+      :atlas:`</data-explorer/cloud-agg-pipeline/>`.
+
+      The pipeline will have the following stages:
+
+      1. Match all the documents in the initial collection by passing
+         an empty filter to the :manual:`$match operator
+         </reference/operator/aggregation/match/>`.
+
+      2. Modify the fields of the initial collection by using an
+         :manual:`aggregation pipeline operator </reference/operator/aggregation/>`. In
+         the following example, the data is transformed using the :manual:`$addFields
+         operator </reference/operator/aggregation/addFields/>`. The ``_id`` field is
+         transformed to a ``string`` type with the :manual:`$toString operator
+         </reference/operator/aggregation/toString/>`.
+
+      3. Write the transformed data to the partner collection by using the
+         :manual:`$out operator </reference/operator/aggregation/out/>` and specifying
+         the partner collection name. In this example, we wrote the data to a new
+         collection named ``TaskV2``.
+
+      Here the same pipeline as represented in the Atlas and Compass UIs. Note that
+      both of these tools provide a preview of the changes; in this case, the
+      conversion the ``_id`` field from an ObjectId to a string:
+
+      .. figure:: /images/agg-in-atlas.png
+         :alt: Atlas UI for Aggregation Builder
+
+      The following example shows the complete aggregation pipeline as it would
+      look if you used :mongosh:`mongosh </>` to do the conversion:
+
+      .. code-block:: shell
+         :caption: Match All Documents in the Initial Collection and Output Them to the Partner Collection
+
+         use "<database-name>" // switch the current db to the db that the Task collection is stored in
+         collection = db.Task;
+         collection.aggregate([
+           { $match: {} }, // match all documents in the Task collection
+           {
+             $addFields: { // transform the data
+               _id: { $toString: "$_id" }, // change the _id field of the data to a string type
+             },
+           },
+           { $out: "TaskV2" }, // output the data to a partner collection, TaskV2
+         ]);
+
+   .. step:: Set up Database Triggers for Partner Collection
+
+      Once your partner collection is set up, you can use it to read existing data.
+      However, any new writes to the data of *either collection* will not be
+      in the other collection. This causes the old clients to be out of sync with the
+      new clients.
+
+      To ensure that data is reflected in both collections, you set up a
+      :ref:`database trigger <create-a-database-trigger>` on each collection. When
+      data is written to one collection, the trigger's function performs the write
+      to the partner collection.
+
+      Follow the steps in the :ref:`database trigger <create-a-database-trigger>`
+      documentation to create a trigger that copies data from the ``Task`` collection to
+      the ``TaskV2`` collection for all operation types. Repeat these steps to create
+      a second trigger that copies data from the ``TaskV2`` collection to the
+      ``Task`` collection. 
+
+   .. step:: Add Trigger Functions
+
+      Triggers require backing functions that run when the trigger fires. In this
+      case, we need to create two functions: a forward-migration function and a
+      reverse-migration function.
+
+      The forward migration trigger listens for inserts, updates, and deletes in the
+      Task collection, modifies them to reflect the TaskV2 collection's schema, and
+      then applies them to the TaskV2 collection.
+
+      To listen for changes to the TaskV2 collection and apply them to the Task
+      collection, write a reverse-migration function for the TaskV2 collection's
+      trigger. The reverse migration follows the same idea as the previous step.
+
+      In the forward-migration function, we check which operation has triggered the
+      function: if the operation type is ``Delete`` (meaning a document
+      has been deleted in the Task collection), the document is also deleted in the
+      TaskV2 collection. If the operation type is a ``Write`` (inserted or modified)
+      event, an aggregation pipeline is created. In the pipeline, the inserted or
+      modified document in the Task collection is extracted using the
+      :manual:`$match operator </reference/operator/aggregation/match/>`. The
+      extracted document is then transformed to adhere to the
+      ``TaskV2`` collection's schema. Finally, the transformed data is written to the
+      ``TaskV2`` collection by using the
+      :manual:`$merge operator </reference/operator/aggregation/merge/>`:
+
+      .. literalinclude:: /examples/generated/functions/copyTaskObjectToTaskV2.codeblock.copyTaskObject.js
+         :language: javascript
+         :caption: copyTaskObjectToTaskV2 function
+
+      The reverse-migration function goes through similar steps as the example in the
+      prior step. If a document has been deleted in one collection, the document is
+      also deleted in the other collection. If the operation type is a write event,
+      the changed document from ``TaskV2`` is extracted, transformed to match the
+      Task collection's schema, and written into the ``Task`` collection:
+
+      .. literalinclude:: /examples/generated/functions/copyTaskV2ObjectToTask.codeblock.copyTaskV2Object.js
+         :language: javascript
+         :caption: copyTaskV2ObjectToTask function

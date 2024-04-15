@@ -1,0 +1,199 @@
+.. _update-data-model-development-mode:
+.. _dev-mode-breaking-changes:
+
+================================
+Update Data Model in Development
+================================
+
+.. meta::
+   :description: Update your Device Sync data model from your client app using Development Mode.
+
+.. facet::
+  :name: genre
+  :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 3
+   :class: singlecol
+
+While your app is in development, you can leverage Development Mode to simplify
+the process of updating your Device Sync data model.
+Instead of having to terminate and re-enable Sync or manually handle client
+resets, you can make breaking changes from your client-side Object Model and
+Development Mode automatically applies the updates to your server-side App Services schema.
+
+Development Mode is only intended for apps in development. For information on how to update data models for apps in production
+(when Development Mode is disabled), refer to :ref:`update-data-model-production-apps`.
+
+.. note:: Only Supported In Apps Created After September 13, 2023
+
+   The ability to apply breaking changes from your client code with Development
+   Mode is only supported in App Services Apps created *after* September 13,
+   2023. You can contact support to enable this feature.
+
+   For Apps in development created before September 13, 2023, you must update your
+   object schema in the App Services UI. For more information, refer to :ref:`migrate-schema-partner-collection`.
+
+Development Mode
+----------------
+
+**Development Mode** is a Device Sync configuration
+setting that lets Sync automatically infer and update the server-side App Services
+Schema based on your client-side changes.
+
+When you enable Development Mode for your app, the following occurs:
+
+- The schema version is cleared, and any schema versioning history is deleted.
+  This is becuase Development Mode does *not* support schema versioning. After
+  you disable Development Mode, schema versioning is enabled automatically.
+  Refer to :ref:`schema-versioning` for more information.
+- Anonymous authentication is enabled. However, you can manually disable
+  anonymous authentication for
+  your app, even while
+  Development Mode is enabled. Refer to :ref:`anonymous-authentication`
+  for more information.
+- Deployment drafts are disabled. You *cannot* re-enable deployment drafts in the
+  UI while Development Mode is enabled. However, you can still manually create
+  deployment drafts through the CLI or the Admin API. Refer to
+  :ref:`deployment-drafts` for more information.
+
+For more information on Development Mode and other Device Sync settings available in the
+App Services UI, refer to :ref:`sync-settings`.
+
+.. include:: /includes/note-dev-mode-production.rst
+
+Data Model Changes in Development Mode
+--------------------------------------
+
+Changes to a Device Sync data model are considered either breaking or
+non-breaking. 
+
+Non-Breaking Changes
+~~~~~~~~~~~~~~~~~~~~
+
+Non-breaking changes are handled the same regardless of whether Development Mode is enabled or disabled. You can make these changes in your server-side App
+Services schema or in your client-side object model, and they apply automatically.
+
+Non-breaking changes in Development Mode include:
+
+- Add an object type
+- Add a default value on a property
+- Add a required property
+- Add an optional property
+
+Breaking Changes
+~~~~~~~~~~~~~~~~
+
+When Development Mode is enabled, you can make breaking changes from
+your client-side object model, and Sync will attempt to apply the updates to the server-side App Services
+schema the next time your app connects.
+
+Breaking changes in Development Mode include:
+
+- Remove an object type *(non-breaking change only if made from the client-side object
+  model)*
+- Remove a property *(non-breaking change only if made from the client-side object
+  model)*
+- Rename an object type
+- Rename a property
+- Change the property type
+- Make a required property optional
+- Make an optional property required
+
+.. tip:: Remap a Name Instead of Renaming
+
+   Several Device SDKs support remapping a property or class name. Depending on
+   your use case, renaming
+   through the client code
+   can be a convenient
+   alternative to renaming your properties or classes. To learn how, refer to the following SDK documentation:
+
+   - C++ SDK - not currently supported
+   - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
+   - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
+   - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
+   - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
+   - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
+   - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+   - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
+
+Make Breaking Changes from Your Client-Side Object Model
+--------------------------------------------------------
+
+The following describes how to make breaking changes to your client-side object model using Development Mode.
+
+.. Prerequisites
+.. ~~~~~~~~~~~~~
+
+Your app must meet the following requirements:
+
+- an App Services App created *after* September 13, 2023 with Device Sync
+  enabled.
+- MongoDB version 5.0 or later (required to use Flexible Sync)
+- Minimum SDK version:
+
+  - C++ SDK v1.0.0
+  - Flutter SDK v1.6.0
+  - Java SDK v10.16.2
+  - Kotlin SDK v11.1.1
+  - .NET SDK v11.6.0
+  - Node.js SDK v12.2.0
+  - React Native SDK v12.2.0
+  - Swift SDK v10.42.2
+
+- Development Mode enabled. To learn how to enable Development Mode in the App
+  Services UI, refer to :ref:`enable-development-mode`.
+
+.. Procedure
+.. ~~~~~~~~~
+
+.. procedure::
+
+   .. step:: Delete Client Data
+
+      To ensure that Sync can overwrite the current server-side schema and apply
+      all changes received from the client, you must connect to Sync with an
+      empty synced realm. This means that you must delete all local data before
+      updating your data model:
+
+      1. Sync any local data to the backend that you don't want to lose.
+      2. Delete your local realm file and client data. This deletes any local
+         changes that were not already synced; these local changes are unrecoverable.
+
+      To learn how to delete your local realm file, refer to the following SDK documentation:
+
+      - C++ SDK - not currently supported
+      - :ref:`Flutter SDK - Delete a Realm <flutter-delete-realm>`
+      - :ref:`Kotlin SDK - Delete a Realm <kotlin-delete-a-realm>`
+      - :ref:`Java SDK - deleteRealm method <io_realm_Realm_deleteRealm>`
+      - :ref:`.NET SDK - Delete a Realm <dotnet-delete-a-realm>`
+      - :js-sdk:`Node.js SDK - Realm.deleteFile method<Realm.html#.deleteFile>`
+      - :js-sdk:`React Native SDK - Realm.deleteFile method <Realm.html#.deleteFile>`
+      - :ref:`Swift SDK - Delete a Realm <swift-delete-a-realm>`
+
+   .. step:: Edit Your Realm Object Model
+
+      Make the desired changes to your client-side Realm objects. Updates can
+      include both breaking and non-breaking schema
+      changes.
+
+   .. step:: Open Synced Realm and Sync Your Changes
+
+      Open an empty synced realm, then run your
+      client app to sync your updated data model to the backend.
+
+      Once your client app connects, Sync overwrites the existing server-side
+      App Services schema with the updated client-side object
+      model.
+
+      You might encounter the following errors:
+
+      - If any documents stored in Atlas do *not* match the uploaded client-side
+        object model, they cannot be synced to the client. An
+        error message is sent to the client with instructions on how to sync.
+      - If the client still has data in its local realm file after you make a
+        breaking change, the app will fail at startup with an error indicating
+        that the ``changes cannot be made in additive-only schema mode``. Ensure
+        that you delete all local data before re-attempting.
