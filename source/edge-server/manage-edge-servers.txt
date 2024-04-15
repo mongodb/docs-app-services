@@ -25,14 +25,14 @@ Before You Begin
    .. tab::
       :tabid: ui
 
-      You will need the following to manage Edge Servers in the Atlas UI:
+      You need the following to manage Edge Servers in the Atlas UI:
 
       - .. include:: /includes/prereqs/atlas-account.rst
 
    .. tab::
       :tabid: api
 
-      You will need the following to manage Edge Servers with the Admin API:
+      You need the following to manage Edge Servers with the Admin API:
 
       - .. include:: /includes/prereqs/atlas-account.rst
 
@@ -53,19 +53,26 @@ There are two types of services that enable you to use Edge Server:
 - Edge Server Service: use this option if you want clients to connect to the 
   Edge Server with MongoDB Drivers and tools. It infers and updates the schema 
   from the documents you insert, and provides a developer experience familiar 
-  to MongoDB developers.
+  to MongoDB developers. The Edge Server Service rejects incoming Atlas Device
+  SDK connections.
 - Device Sync Service, adding Edge Servers: use this option if you want to 
   develop client apps using Atlas Device SDK. This option involves more strict 
   schema enforcement, which the SDKs use to automatically sync objects 
   across devices and handle conflict resolution.
 
-.. important:: You can't add Device Sync later to an Edge Server Service
+Regardless of which type of service you choose, Edge Servers use Device Sync 
+to sync data between the Edge Server instance and Atlas. Even when you choose 
+an Edge Server Service, you must first enable Device Sync before you can create 
+Edge Server instances.
 
-   You can always add Edge Servers to a Device Sync Service. But you can't add
-   Device Sync to an Edge Server Service. Users are not portable between
-   services. If you start with an Edge Server Service, but later want to use
-   the same users with an Atlas Device SDK application, there is no way to 
-   transfer those users to a new Device Sync Service.
+.. important:: You can't add Atlas Device SDK Apps later to an Edge Server Service
+
+   You can always add Edge Servers to a Device Sync Service. But you can't use
+   Atlas Device SDK connections with an Edge Server Service. 
+   
+   Users are not portable between services. If you start with an Edge Server 
+   Service, but later want to add an Atlas Device SDK application, there is no 
+   way to transfer any users in your Edge Service to a new Device Sync Service.
 
 You can create an Edge Server-compatible service in Data Services or App 
 Services. 
@@ -81,7 +88,12 @@ Services.
    .. tab:: Create a Data Service
       :tabid: atlas-service
 
-      [DECIDE LATER WHETHER TO ADD SOMETHING FOR THIS OPTION, OR REMOVE THE TABS]
+      .. include:: /includes/create-service-data-services.rst
+
+      .. important:: Enable Device Sync
+
+         Make sure to enable Device Sync, even if you choose an ``Edge Server``
+         Service.
 
    .. tab:: Create an App Service
       :tabid: app-service
@@ -89,6 +101,11 @@ Services.
       Refer to the documentation to :ref:`create-app`.
 
       When you choose your App type, select ``Edge Server`` or ``Device Sync``. 
+
+      .. important:: Enable Device Sync
+
+         Make sure to enable Device Sync, even if you choose an ``Edge Server``
+         Service.
 
 .. _create-edge-server-instance:
 
