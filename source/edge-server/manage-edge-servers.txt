@@ -367,6 +367,62 @@ You can delete an individual Edge Server instance from your Edge Server Service.
 
                INSERT API DETAILS HERE
 
+.. _update-edge-server-data-model:
+
+Update an Edge Server's Data Model
+----------------------------------
+
+The process to update a data model varies depending on whether you're using
+an Edge Server Service or a Device Sync Service with Edge Server.
+
+Edge Server Service
+~~~~~~~~~~~~~~~~~~~
+
+When you're using an Edge Server Service, the service automatically updates
+properties in a collection when you make changes to the documents you sync.
+However, some types of changes cause an Edge Server instance to reboot and
+wipe itself.
+
+If you're adding a new collection you haven't synced before, you must define
+a new schema that contains only the collection's name.
+
+Add a Collection
+````````````````
+
+When you want to add a collection to an Edge Server Service, you must add
+a schema containing only the collection's name. Do not add any properties
+to the schema. The Edge Server Service automatically infers the properties
+from the shape of the documents you sync or the documents in the collection.
+
+For information about how to add a schema, refer to :ref:`enforce-a-schema`.
+
+Change Properties in a Collection
+`````````````````````````````````
+
+When you change the properties in a collection using an Edge Server Service,
+the service automatically changes the schema to match the new properties.
+
+Some changes are considered "breaking" schema changes. When a "breaking"
+schema change occurs, any Edge Server instance with the old schema reboots
+and wipes itself. The wipe process erases any unsynced data. Edge Server will 
+get the ability to recover local unsynced data in a future release.
+
+For details about which types of changes are considered "breaking" changes,
+refer to :ref:`breaking-change-quick-reference`.
+
+Device Sync Service
+~~~~~~~~~~~~~~~~~~~
+
+An Edge Server running in a Device Sync Service uses Device Sync rules for
+updating a data model.
+
+When a "breaking" schema change occurs, any Edge Server instance with the old 
+schema reboots and wipes itself. The wipe process erases any unsynced data. 
+Edge Server will get the ability to recover local unsynced data in a future 
+release.
+
+For more information, refer to :ref:`synced-schema-overview`.
+
 .. _troubleshoot-edge-server-instance:
 
 Troubleshoot an Edge Server Instance
