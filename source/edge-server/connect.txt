@@ -63,6 +63,26 @@ documentation for your preferred SDK:
 - React Native SDK: :ref:`react-native-connect-to-mongodb-realm-backend-app`
 - Swift SDK: :ref:`ios-init-appclient`
 
+.. _edge-server-device-sdk-roaming:
+
+Roaming Between Edge Servers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SDK clients can roam between Edge Servers, or between an Edge Server and Atlas.
+
+Roaming requires changing the base URL in the client's App configuration.
+For details, refer to the SDK documentation linked above.
+
+Roaming Users and Anonymous Authentication
+``````````````````````````````````````````
+
+When roaming between Edge Servers or an Edge Server and Atlas, anonymous users
+do not persist across servers. Atlas creates a new anonymous user for each 
+server the client connects to, and does not persist local data across servers.
+
+For all other supported authentication providers, users persist and have 
+access to the expected data across servers.
+
 Example: SwiftUI Template App
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -206,13 +226,43 @@ host machine using this MongoDB URI:
 
 .. code:: console
 
-   mongodb://EDGE_SERVER_HOSTNAME:27021
+   mongodb://<username>:<password>@<hostname>:<port>?authMechanism=PLAIN&appName=::<auth-type>
 
-The ``EDGE_SERVER_HOSTNAME`` is the public DNS of your Edge Server host. 
-For more information, refer to :ref:`edge-server-install-and-configure`.
+.. list-table::
+   :header-rows: 1
 
-You must make port 27021 accessible to the client through port mapping or
-firewall rules.
+   * - Element
+     - Description
+
+   * - ``<username>``
+     - The username of the Atlas user. For an 
+       :ref:`email/password user <email-password-authentication>`, this 
+       might look similar to ``first.last@example.com``.
+
+   * - ``<password>``
+     - The password of the Atlas user. This might look similar to 
+       ``myPassword123456``.
+
+   * - ``<hostname>``
+     - The public DNS of your Edge Server host. While in local development, 
+       this might be ``localhost``. Otherwise, it might look similar to
+       ``ec2-13-58-70-88.us-east-2.compute.amazonaws.com``. For more 
+       information, refer to :ref:`edge-server-install-and-configure`.
+
+   * - ``<port>``
+     - The Edge Server wireprotocol listen port. The default port is ``27021``.
+       For more details, refer to :ref:`edge-server-install-and-configure`.
+
+   * - ``authMechanism=PLAIN``
+     - The auth mechanism. Currently, the only supported value is ``PLAIN``.
+
+   * - ``appName``
+     - Optional string ``appName``. You may omit the value and/or key.
+
+   * - ``<auth-type>``
+     - The type of authentication provider. For example, ``local-userpass`` 
+       for email/password authentication. Currently, the only supported type
+       is ``local-userpass``.
 
 .. example::
 
@@ -221,7 +271,32 @@ firewall rules.
 
    .. code:: console
 
-      mongodb://ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021
+      mongodb://example-user:my-password@ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021?authMechanism=PLAIN&appName=::local-userpass
 
 Edge Server currently supports a subset of the MongoDB APIs. For information 
 about the supported APIs, refer to :ref:`edge-server-mongodb`.
+
+.. _edge-server-compass-connect:
+
+Connect to the Edge Server with Compass
+---------------------------------------
+
+You can connect to the Edge Server using :ref:`MongoDB Compass <compass-index>`.
+Compass enables you to explore the documents syncing to Edge Server, and 
+make updates to those documents.
+
+Connect with Compass
+~~~~~~~~~~~~~~~~~~~~
+
+[PLACEHOLDER - not sure exactly what URI to use to connect with Compass - 
+complete this with info from engineering or after we can test this ourselves]
+
+Limitations
+~~~~~~~~~~~
+
+The Edge Server support for Compass is limited. You can use it to:
+
+- Browse databases, collections, and documents in the Edge Server
+- Perform basic CRUD operations on documents in the Edge Server
+
+Edge Server does not support aggregation with Compass at this time.
