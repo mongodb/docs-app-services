@@ -58,6 +58,42 @@ server, or hardware that you provision on-site.
    Ubuntu Server 18.x. Under Network settings, add a rule to allow access 
    via HTTP/Port 80. Free tier settings are sufficient for small PoC projects.
 
+.. _edge-server-hardware-requirements:
+
+Required Hardware
+~~~~~~~~~~~~~~~~~
+
+Edge Server benchmarking is not yet complete, so the required hardware
+may change. Currently, the minimum requirements are:
+
+- CPU: 64-bit, quad-core processor
+- RAM: 8GB memory
+- Storage: 32GB disk space
+
+.. _edge-server-os-support:
+
+OS Compatibility
+~~~~~~~~~~~~~~~~
+
+The Edge Server has been verified with the following operating systems:
+
+- Ubuntu Server 18+
+- macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
+
+Other operating systems may be possible, but have not yet been verified.
+
+.. _edge-server-required-software:
+
+Required Software
+~~~~~~~~~~~~~~~~~
+
+Edge Server uses Docker in Swarm mode for development. In production 
+environments, we recommend using Kubernetes to manage your Edge Server 
+containers.
+
+If you do not have Docker installed and Swarm enabled, you will be prompted
+to resolve these dependencies prior to running the Edge Server.
+
 .. _edge-server-required-network-access:
 
 Required Network Access
@@ -76,32 +112,10 @@ EC2, you must open ports to accept incoming connections:
 - Development: Use HTTP on port 80 for simplicity and speed of development.
 - Production: Use SSL with port 443 to secure access to production data.
 
-Edge Server supports TLS. You can find configuration details in the 
-"Complete the Edge Server Configuration Details" section on this page.
+Edge Server supports TLS.
 
-.. _edge-server-os-support:
-
-OS Compatibility
-~~~~~~~~~~~~~~~~
-
-The Edge Server has been verified with the following operating systems:
-
-- Ubuntu Server 18+
-- macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
-
-Other operating systems may be possible, but have not yet been verified.
-
-.. _edge-server-hardware-requirements:
-
-Hardware Requirements
-~~~~~~~~~~~~~~~~~~~~~
-
-Edge Server benchmarking is not yet complete, so minimum required hardware
-requirements may change. Currently, the minimum requirements are:
-
-- 64-bit, quad-core processor
-- 8GB memory
-- 32GB disk space
+[PLACEHOLDER: Add a link to details about configuring TLS once engineering
+decides how/where to do that.]
 
 .. _edge-server-install-and-configure:
 
@@ -112,7 +126,7 @@ After creating an Edge Server Service, you must create an Edge Server instance.
 Each service may have many Edge Server instances. When you create an 
 Edge Server instance, you get an installation script you can use to download
 the Edge Server code, and a token you can use to register the Edge Server
-instance.
+instance. For more details, refer to :ref:`create-edge-server-instance`.
 
 Use the installation script to set up and run the Edge Server on the host.
 
@@ -126,22 +140,22 @@ Use the installation script to set up and run the Edge Server on the host.
       the Edge Server instance on the host hardware. This includes an install
       script to manage the installation and install required dependencies.
 
-      When you create an Edge Server instance, you get a copy of this command
-      pre-populated with your metadata. Alternately, you can use this command
-      to install the command-line tool and the Edge Server code:
+      When you create an Edge Server instance, you get a copy of this command. 
+      Use this command to install the command-line tool and the Edge Server 
+      code:
 
       .. code-block:: shell
 
-         curl -s http://localhost:8080/edge/install.sh | bash -s -- --app-id=foo --platform=compose
+         curl -s http://localhost:8080/edge/install.sh | bash -s -- --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
 
       - ``http://localhost:8080/edge/install.sh``: This assumes you are 
         executing the command on the device where you want to install the
         Edge Server code, and want to use ``localhost:8080`` as the port
         to access the Edge Server. Change this as needed for your requirements.
-      - ``app-id``: Provide your Edge Server App ID. For example, 
-        ``--app-id=edge-server-vtoyh``. For more information, refer to 
+      - ``--app-id``: Provide your Edge Server App ID. For example, 
+        ``--app-id="edge-server-vtoyh"``. For more information, refer to 
         :ref:`find-app-id`. 
-      - ``platform``: You can use Docker Compose to install and manage your
+      - ``--platform``: You can use Docker Compose to install and manage your
         Edge Server in a development environment, or Kubernetes to manage
         Edge Server in a production environment. Valid values are either
         ``compose`` or ``kubernetes``.
@@ -154,7 +168,7 @@ Use the installation script to set up and run the Edge Server on the host.
 
       .. code-block:: shell
 
-         edgectl configure --app-id=foo --platform=compose
+         edgectl configure --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
 
       The minimum required parameters are the ``app-id`` and the ``platform``.
 
@@ -163,6 +177,7 @@ Use the installation script to set up and run the Edge Server on the host.
 
       .. list-table::
          :header-rows: 1
+         :widths: 25 10 65
 
          * - Field name
            - Type
@@ -292,6 +307,39 @@ server, as well as errors that may have occurred.
          }
       }
 
+.. list-table::
+   :header-rows: 1
+
+   * - Field name
+     - Type
+     - Value
+
+   * - ``status``
+     - String
+     - The current status of the Edge Server. Possible values include:
+       ``"ACTIVE"``, ``"FAILED"``. 
+       
+       ``"ACTIVE"`` means that the Edge Server is running, listening for
+       connections, and attempting to sync.
+
+   * - ``cloud_connected``
+     - Boolean
+     - If ``true``, the Edge Server instance is currently connected to Atlas.
+       If ``false``, the Edge Server instance is not connected to Atlas. When
+       the Edge Server is not connected to Atlas, it can still receive local
+       connections and sync data with local clients. When it reconnects with
+       Atlas, it attempts to sync data that changed while it was not connected.
+
+   * - ``num_local_clients``
+     - Int
+     - The number of clients that are currently connected to the Edge Server
+       through wireprotocol or Atlas Device SDK.
+
+   * - ``query``
+     - Object
+     - The current Edge Server Sync query, presented as a JSON object. For
+       more information, refer to :ref:`specify-edge-server-query`.
+
 .. _upgrade-edge-server-version:
 
 Upgrade the Edge Server Version
@@ -413,7 +461,7 @@ To cycle the Edge Server API key:
 
    .. step:: Supply the New Token from the Edge Server Instance
 
-      Use ``edgectl`` to be re-prompted for a token from the Edge Server 
+      Use ``edgectl`` to be prompted for a new token from the Edge Server 
       instance:
 
       .. code-block:: shell
@@ -445,7 +493,7 @@ two options:
 - Pass an object containing one or more collections and queries to sync a 
   subset of your data with Edge Server. 
 
-The queries must use :ref:`realm-query-language`. This may resemble:
+This may resemble:
 
 .. code-block:: json
 
