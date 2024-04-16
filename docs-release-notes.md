@@ -1,3 +1,17 @@
+# April 12, 2024
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Update page to note updated behavior for handling cached user authentication metadata.
+
+## Data API
+
+- Add new Constraints section documenting request timeout and response payload size limits.
+
+## Functions
+
+- Update existing Constraints section to increase the noted amount of memory a function may use from 256MB to 350MB.
+
 # April 5, 2024
 
 ## Get Started
