@@ -1,3 +1,22 @@
+# April 12, 2024
+
+## Edge Server
+
+- Edge Server MongoDB API Support: Add `findAndModify` command to `update` options.
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Increase token character limit from 2048 to 4096.
+- Define User Metadata: Update page to note updated behavior for handling cached user authentication metadata.
+
+## Data API
+
+- Add new Constraints section documenting request timeout and response payload size limits.
+
+## Functions
+
+- Update Constraints section to increase the noted amount of memory a function may use from 256MB to 350MB.
+
 # April 5, 2024
 
 ## Get Started
