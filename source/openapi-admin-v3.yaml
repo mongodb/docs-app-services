@@ -2658,11 +2658,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PrivateEndpoint"
-        404:
+        400:
           description: |-
-            - Not Found
             - VPC endpoint id (`cloud_provider_endpoint_id`) is invalid
             - Attempted to change endpoint type ??????
+        404:
+          description: Not Found
+
     delete:
       operationId: adminDeletePrivateEndpoint
       tags:
