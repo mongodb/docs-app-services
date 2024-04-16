@@ -2612,7 +2612,11 @@ paths:
         201:
           description: Created
         400:
-          description: Bad Request
+          description: |-
+           - Bad Request
+           - VPC endpoint id (`cloud_provider_endpoint_id`) is invalid
+           - Endpoint type is `legacy` ????????????
+
   "/groups/{groupId}/apps/{appId}/security/private_endpoints/{privateEndpointId}":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -2655,7 +2659,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/PrivateEndpoint"
         404:
-          description: Not Found
+          description: |-
+            - Not Found
+            - VPC endpoint id (`cloud_provider_endpoint_id`) is invalid
+            - Attempted to change endpoint type ??????
     delete:
       operationId: adminDeletePrivateEndpoint
       tags:
@@ -8766,15 +8773,12 @@ components:
         cloud_provider_region:
           type: string
           example: "aws-us-east-1"
-        name:
-          type: string
-          example: eps_baas-pl-prod_us-east-1_cloud
-        dns:
-          type: string
-          example: "*.aws.services.cloud.mongodb.com"
         service_name:
           type: string
           example: com.amazonaws.vpce.us-east-1.vpce-svc-0f24fc6e6de007e5e
+        endpoint_type:
+          type: string
+          example: "sync"
     PushPullAppConfig:
       type: object
       required:
