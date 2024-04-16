@@ -309,6 +309,7 @@ server, as well as errors that may have occurred.
 
 .. list-table::
    :header-rows: 1
+   :widths: 20 10 70
 
    * - Field name
      - Type
@@ -321,6 +322,10 @@ server, as well as errors that may have occurred.
        
        ``"ACTIVE"`` means that the Edge Server is running, listening for
        connections, and attempting to sync.
+
+       ``"Failed"`` means that the Edge Server has encountered an error
+       condition that needs intervention. For more information, refer to
+       :ref:`troubleshoot-edge-server-instance`.
 
    * - ``cloud_connected``
      - Boolean
@@ -482,34 +487,35 @@ To cycle the Edge Server API key:
 Specify the Edge Server's Query
 -------------------------------
 
-The ``query`` for an Edge Server instance defaults to ``"*"``, which 
+You can use the ``--query`` argument with the ``edgectl configure`` command
+to specify the Edge Server's Sync query.
+
+The ``--query`` for an Edge Server instance defaults to ``"*"``, which 
 automatically syncs all data in all of the collections in your 
 :ref:`schema <schemas>`.
 
 If you would like to filter the data that syncs to your Edge Server, you have
 two options:
 
-- Pass a simple string query
+- Pass a simple string query. For example, ``--query="truepredicate"``.
 - Pass an object containing one or more collections and queries to sync a 
-  subset of your data with Edge Server. 
+  subset of your data with Edge Server. This may resemble:
 
-This may resemble:
+  .. code-block:: json
 
-.. code-block:: json
+     {
+        "YOUR-COLLECTION-NAME": "YOUR-QUERY",
+        "YOUR-COLLECTION-NAME": "YOUR-QUERY"
+     }
 
-   {
-      "YOUR-COLLECTION-NAME": "YOUR-QUERY",
-      "YOUR-COLLECTION-NAME": "YOUR-QUERY"
-   }
+  - ``YOUR-COLLECTION-NAME``: This is the name of a collection in your database. 
+    If you're using a template app, this is the ``Item`` collection. Your Edge 
+    Server query may contain many collections.
 
-- ``YOUR-COLLECTION-NAME``: This is the name of a collection in your database. 
-  If you're using a template app, this is the ``Item`` collection. Your Edge 
-  Server query may contain many collections.
-               
-- ``YOUR-QUERY``: This is the query that determines what documents the Edge 
-  Server can sync with a collection. You can use :ref:`Realm Query Language <rql>` 
-  to define this query, with the same caveats around :ref:`Flexible Sync RQL 
-  Limitations <flexible-sync-rql-limitations>`.
+  - ``YOUR-QUERY``: This is the query that determines what documents the Edge 
+    Server can sync with a collection. You can use :ref:`Realm Query Language <rql>` 
+    to define this query, with the same caveats around :ref:`Flexible Sync RQL 
+    Limitations <flexible-sync-rql-limitations>`.
 
 .. _edge-server-query-examples:
 
