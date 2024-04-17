@@ -56,22 +56,20 @@ There are two types of services that enable you to use Edge Server:
   to MongoDB developers. The Edge Server Service rejects incoming Atlas Device
   SDK connections.
 - Device Sync Service, adding Edge Servers: use this option if you want to 
-  develop client apps using Atlas Device SDK. This option involves more strict 
-  schema enforcement, which the SDKs use to automatically sync objects 
-  across devices and handle conflict resolution.
+  develop client apps using Atlas Device SDK and MongoDB Drivers and tools. 
+  This option involves more strict schema enforcement, which the SDKs use to 
+  automatically sync objects across devices and handle conflict resolution.
 
 Regardless of which type of service you choose, Edge Servers use Device Sync 
-to sync data between the Edge Server instance and Atlas. Even when you choose 
-an Edge Server Service, you must first enable Device Sync before you can create 
-Edge Server instances.
+to sync data between the Edge Server instance and Atlas.
 
-.. important:: You can't add Atlas Device SDK Apps later to an Edge Server Service
+.. important:: You can't add Atlas Device SDK later to an Edge Server Service
 
    You can always add Edge Servers to a Device Sync Service. But you can't use
    Atlas Device SDK connections with an Edge Server Service. 
    
    Users are not portable between services. If you start with an Edge Server 
-   Service, but later want to add an Atlas Device SDK application, there is no 
+   Service, but later want to develop apps using Atlas Device SDK, there is no 
    way to transfer any users in your Edge Service to a new Device Sync Service.
 
 You can create an Edge Server-compatible service in Data Services or App 
@@ -90,29 +88,42 @@ Services.
 
       .. include:: /includes/create-service-data-services.rst
 
-      .. include:: /includes/edge-server-enable-device-sync.rst
-
    .. tab:: Create an App Service
       :tabid: app-service
 
       Refer to the documentation to :ref:`create-app`.
 
-      When you choose your App type, select ``Edge Server`` or ``Device Sync``. 
+      When you choose your App type, select ``Device Sync``. You can add
+      Edge Server to your Device Sync App after you configure Device Sync.
 
-      .. include:: /includes/edge-server-enable-device-sync.rst
+      [PLACEHOLDER: Add steps for adding Edge Server to a Device Sync App.
+      It's not 100% clear to me what the flow is from the Figma designs.
+      Populate the rest of this procedure when we are able to test this flow.]
 
 Supported Authentication Providers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Edge Server supports a subset of authentication providers:
+Edge Server supports a subset of authentication providers. Supported 
+authentication providers vary depending on whether you're connecting with
+Atlas Device SDK or using a MongoDB URI to connect with a MongoDB Driver 
+or tool.
+
+You must enable at least one of these providers to enable clients to connect
+to the Edge Server.
+
+Supported Atlas Device SDK Authentication Providers
+```````````````````````````````````````````````````
 
 - :ref:`anonymous-authentication`
 - :ref:`email-password-authentication`
 - :ref:`custom-jwt-authentication`
 - :ref:`api-key-authentication`
 
-You must enable at least one of these providers to enable clients to connect
-to the Edge Server.
+Supported MongoDB URI Authentication Providers
+``````````````````````````````````````````````
+
+- :ref:`anonymous-authentication`
+- :ref:`email-password-authentication`
 
 .. _create-edge-server-instance:
 
@@ -132,15 +143,8 @@ registration key.
 
          .. step:: Add a server
 
-            Click the :guilabel:`Add a server` button to walk through the 
-            process of configuring your new Edge Server instance.
-
-            If this is the first server in your service, you're prompted to 
-            select a cluster, connect a data source, and optionally specify 
-            which collections to sync to the Edge Server. This configuration
-            applies to all Edge Servers in this service.
-
-            For subsequent servers, you're prompted to name you Edge Server.
+            Click the :guilabel:`Add a server`. You're prompted to name your 
+            Edge Server.
 
             The UI provides an installation script, which you can copy and 
             paste into the terminal on the device where you want to install 
@@ -379,33 +383,42 @@ Edge Server Service
 ~~~~~~~~~~~~~~~~~~~
 
 When you're using an Edge Server Service, the service automatically updates
-properties in a collection when you make changes to the documents you sync.
-However, some types of changes cause an Edge Server instance to reboot and
-wipe itself.
+fields in the schema when you make changes to the documents you sync.
+
+If you update your schema manually using the UI, and those schema changes
+trigger a schema version change, this causes the Edge Server instance to
+reboot and wipe itself.
 
 If you're adding a new collection you haven't synced before, you must define
-a new schema that contains only the collection's name.
+a new schema.
 
 Add a Collection
 ````````````````
 
 When you want to add a collection to an Edge Server Service, you must add
-a schema containing only the collection's name. Do not add any properties
-to the schema. The Edge Server Service automatically infers the properties
-from the shape of the documents you sync or the documents in the collection.
+a schema containing:
+
+- The collection's name
+- An ``_id`` field that is an ``ObjectID`` type.
+
+The Edge Server Service automatically infers the other fields from the shape 
+of the documents you sync or the documents in the collection.
 
 For information about how to add a schema, refer to :ref:`enforce-a-schema`.
 
-Change Properties in a Collection
-`````````````````````````````````
+Change Fields in a Document
+```````````````````````````
 
-When you change the properties in a collection using an Edge Server Service,
-the service automatically changes the schema to match the new properties.
+When you change the fields in a document using an Edge Server Service,
+the service automatically changes the schema to add new fields.
 
-Some changes are considered "breaking" schema changes. When a "breaking"
-schema change occurs, any Edge Server instance with the old schema reboots
-and wipes itself. The wipe process erases any unsynced data. Edge Server will 
-get the ability to recover local unsynced data in a future release.
+Some changes that you can make through the UI are considered "breaking" 
+schema changes. When a "breaking" schema change occurs, any Edge Server 
+instance with the old schema reboots and wipes itself. The wipe process 
+erases any unsynced data.
+
+Edge Server will get the ability to recover local unsynced data in a future 
+release.
 
 For details about which types of changes are considered "breaking" changes,
 refer to :ref:`breaking-change-quick-reference`.
@@ -418,6 +431,14 @@ updating a data model.
 
 When a "breaking" schema change occurs, any Edge Server instance with the old 
 schema reboots and wipes itself. The wipe process erases any unsynced data. 
+
+If that data was written by an Atlas Device SDK client, the client itself
+can handle data recovery. This enables local unsynced data written by the 
+client to eventually make its way to Atlas.
+
+If the data was written by a MongoDB Driver or tool using the wireprotocol,
+the unsynced data is unrecoverable.
+
 Edge Server will get the ability to recover local unsynced data in a future 
 release.
 
@@ -459,6 +480,13 @@ will have the option to recover local data when this error occurs.
 
 You can change the length of the client maximum offline time in the 
 :ref:`sync-settings`.
+
+.. important:: Edge Server Offline Limit is 60 Days
+
+   An Edge Server instance cannot be offline longer than 60 days, no matter
+   what setting you set for the client maximum offline time. If the setting
+   is ``nil`` or greater than 60 days, the Edge Server offline limit is
+   60 days.
 
 .. _edge-server-more-than-one-major-version-behind:
 
