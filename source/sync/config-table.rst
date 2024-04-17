@@ -116,3 +116,10 @@
      - The date and time that sync was last paused or disabled, represented by
        the number of seconds since the Unix epoch (January 1, 1970, 00:00:00
        UTC).
+
+   * - | ``asymmetric_tables``
+       | ``string[]``
+
+     - An array of the names of collections that are defined as asymmetric 
+       with :ref:`Data Ingest <optimize-data-ingest>`, where clients can write 
+       data but not read. 

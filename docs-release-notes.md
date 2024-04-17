@@ -1,3 +1,60 @@
+# April 12, 2024
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Update page to note updated behavior for handling cached user authentication metadata.
+
+## Data API
+
+- Add new Constraints section documenting request timeout and response payload size limits.
+
+## Functions
+
+- Update existing Constraints section to increase the noted amount of memory a function may use from 256MB to 350MB.
+
+# April 5, 2024
+
+## Get Started
+
+- Device Sync Tutorial - Flutter: Rename `lib/realm/schemas.g.dart` to `lib/realm/schemas.realm.dart` to reflect the new file extension generated in the upgraded Flutter Template App.
+
+## Develop & Deploy Apps
+
+- Create an App: Update the noted minimum MongoDB version from v4.4 to v5.0.
+
+## Refernce
+
+- GraphQL API (Deprecated)/Migrate to WunderGraph: New page that helps current GraphQL API users migrate to WunderGraph.
+
+## Release Notes
+
+- Update external changelog with release notes for sorted apps in the App Services UI and the service name for a data source now defaulting to the cluster name.
+
+# March 29, 2024
+
+## Device Sync
+
+- Configure Sync/Pause or Terminate Sync: Remove `queryable_fields_version` field from the example configuration files, as the option is not user-editable.
+
+## Reference
+
+- App Services Admin API: Update "Get Flexible Sync information" endpoint with missing response fields.
+- Configuration Files/Atlas Device Sync: Add `asymmetric_tables` to
+  configuration file for Device Sync.
+
+## Release Notes
+
+- Update external change log with release notes for increased JWT token length
+  limit, new `users count` CLI command, and several bug fixes.
+
+## Other
+
+- Throughout the docs: Add deprecation notes for GraphQL and Static Hosting where needed.
+
+## Internal
+
+- Add the `:orphan:` directive to several flagged pages to prevent build errors.
+
 # March 15, 2024
 
 ## GraphQL
@@ -19,9 +76,9 @@
 
 ## Reference
 
-App Services CLI
-- schema: New commands for validating and generating schemas: `appservices schema validate` and `appservices schema generate`.
-- users: New command to display total number of app users: `appservices users count`.
+- App Services CLI:
+  - schema: New commands for validating and generating schemas: `appservices schema validate` and `appservices schema generate`.
+  - users: New command to display total number of app users: `appservices users count`.
 
 ## Other
 
