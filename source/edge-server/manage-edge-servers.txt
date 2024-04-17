@@ -5,7 +5,7 @@ Manage Edge Servers in Atlas
 ============================
 
 .. meta::
-   :description: Learn how to create an Edge Server Service, and create, delete, or check the status of Edge Servers.
+   :description: Learn how to add Edge Server to your project, and create, delete, or check the status of Edge Servers.
 
 .. facet::
    :name: genre 
@@ -16,6 +16,33 @@ Manage Edge Servers in Atlas
    :backlinks: none
    :depth: 1
    :class: singlecol
+
+An Edge Server-compatible service is your Atlas destination to create, delete, 
+or check on your Edge Server instances. 
+
+There are two types of services that enable you to use Edge Server:
+
+- Edge Server Service: use this option if you want clients to connect to the 
+  Edge Server with MongoDB Drivers and tools. It infers and updates the schema 
+  from the documents you insert, and provides a developer experience familiar 
+  to MongoDB developers. The Edge Server Service rejects incoming Atlas Device
+  SDK connections.
+- Device Sync Service, adding Edge Servers: use this option if you want to 
+  develop client apps using Atlas Device SDK and MongoDB Drivers and tools. 
+  This option involves more strict schema enforcement, which the SDKs use to 
+  automatically sync objects across devices and handle conflict resolution.
+
+Regardless of which type of service you choose, Edge Servers use Device Sync 
+to sync data between the Edge Server instance and Atlas.
+
+.. important:: You can't add Atlas Device SDK later to an Edge Server Service
+
+   You can always add Edge Servers to a Device Sync Service. But you can't use
+   Atlas Device SDK connections with an Edge Server Service. 
+   
+   Users are not portable between services. If you start with an Edge Server 
+   Service, but later want to develop apps using Atlas Device SDK, there is no 
+   way to transfer any users in your Edge Service to a new Device Sync Service.
 
 Before You Begin
 ----------------
@@ -45,41 +72,16 @@ Before You Begin
 Create an Edge Server Service
 -----------------------------
 
-The Edge Server Service is your Atlas destination to create, delete, or check
-on your Edge Server instances. 
-
-There are two types of services that enable you to use Edge Server:
-
-- Edge Server Service: use this option if you want clients to connect to the 
-  Edge Server with MongoDB Drivers and tools. It infers and updates the schema 
-  from the documents you insert, and provides a developer experience familiar 
-  to MongoDB developers. The Edge Server Service rejects incoming Atlas Device
-  SDK connections.
-- Device Sync Service, adding Edge Servers: use this option if you want to 
-  develop client apps using Atlas Device SDK and MongoDB Drivers and tools. 
-  This option involves more strict schema enforcement, which the SDKs use to 
-  automatically sync objects across devices and handle conflict resolution.
-
-Regardless of which type of service you choose, Edge Servers use Device Sync 
-to sync data between the Edge Server instance and Atlas.
-
-.. important:: You can't add Atlas Device SDK later to an Edge Server Service
-
-   You can always add Edge Servers to a Device Sync Service. But you can't use
-   Atlas Device SDK connections with an Edge Server Service. 
-   
-   Users are not portable between services. If you start with an Edge Server 
-   Service, but later want to develop apps using Atlas Device SDK, there is no 
-   way to transfer any users in your Edge Service to a new Device Sync Service.
-
 You can create an Edge Server-compatible service in Data Services or App 
 Services. 
 
 - You might select Data Services when you just want to get started building
   with Edge Server or Device Sync and Edge Server, and don't need other 
-  App Services.
+  App Services. You can create an Edge Server Service from Data Services.
 - You might select App Services when you want to bundle your service with 
   authentication, Functions, Triggers, HTTPS Endpoints, or Values and Secrets.
+  You can create a Device Sync Service from App Services, and add Edge Server
+  to it.
 
 .. tabs::
 
@@ -109,7 +111,7 @@ Atlas Device SDK or using a MongoDB URI to connect with a MongoDB Driver
 or tool.
 
 You must enable at least one of these providers to enable clients to connect
-to the Edge Server.
+to an Edge Server instance.
 
 Supported Atlas Device SDK Authentication Providers
 ```````````````````````````````````````````````````
@@ -130,8 +132,8 @@ Supported MongoDB URI Authentication Providers
 Create an Edge Server Instance
 ------------------------------
 
-After creating an Edge Server Service, you can add Edge Servers to it. The
-service can handle multiple Edge Servers, each of which has its own 
+After creating an Edge Server-compatible service, you can add Edge Servers 
+to it. The service can handle multiple Edge Servers, each of which has its own 
 registration key.
 
 .. tabs-realm-admin-interfaces::
@@ -143,21 +145,21 @@ registration key.
 
          .. step:: Add a server
 
-            Click the :guilabel:`Add a server`. You're prompted to name your 
+            Click :guilabel:`Add a server`. You're prompted to name your 
             Edge Server.
 
             The UI provides an installation script, which you can copy and 
             paste into the terminal on the device where you want to install 
-            the Edge Server. You also get a token, which you will use in the 
+            the Edge Server code. You also get a token, which you will use 
             when you configure the Edge Server instance.
 
          .. step:: Install and Configure the Edge Server code
 
             Copy and paste the installation script into the terminal on the
-            device where you want to install the Edge Server. For more details,
-            refer to :ref:`edge-server-install-and-configure`.
+            device where you want to install the Edge Server code. For more 
+            details, refer to :ref:`edge-server-install-and-configure`.
 
-            After you configure and start the Edge Server, its 
+            After you configure and start the Edge Server instance, its 
             :guilabel:`Health` status in the Edge Server dashboard changes
             from :guilabel:`Pending` to :guilabel:`Active`.
 
@@ -185,8 +187,8 @@ registration key.
          .. step:: Install the Edge Server code
 
             Copy and paste the installation script into the terminal on the
-            device where you want to install the Edge Server. For more details,
-            refer to :ref:`edge-server-install-and-configure`.
+            device where you want to install the Edge Server code. For more 
+            details, refer to :ref:`edge-server-install-and-configure`.
 
 .. _list-edge-server-instances:
 
@@ -201,18 +203,18 @@ or from the Admin API.
    .. tab::
       :tabid: ui
 
-      The Edge Server dashboard lists a brief summary for each Edge Server, 
-      including the date and time of the last connection, and a snapshot of 
-      its status. You can optionally view details for each Edge Server, or 
-      view the logs for each server instance.
+      The Edge Server dashboard lists a brief summary for each Edge Server
+      instance, including the date and time of the last connection, and a 
+      snapshot of its status. You can optionally view details or logs for each 
+      instance.
 
       To view the Edge Server dashboard, choose :guilabel:`Edge Server` in
       the left navigation sidebar.
 
-      To view the details for a specific Edge Server, click the 
-      :guilabel:`View Details` button for that Edge Server. Alternately,
+      To view the details for a specific Edge Server instance, click 
+      :guilabel:`View Details` for that Edge Server instance. Alternately,
       click the :guilabel:`App Logs` button to browse logs associated with 
-      that Edge Server instance.
+      the instance.
 
    .. tab::
       :tabid: api
@@ -223,7 +225,7 @@ or from the Admin API.
 
             .. include:: /includes/api-authenticate-instructions.rst
 
-         .. step:: Get the List of Edge Servers
+         .. step:: Get the List of Edge Server Instances
 
             Call the <LIST EDGE SERVER> endpoint to get a list of all the 
             Edge Servers instances:
@@ -232,12 +234,12 @@ or from the Admin API.
 
                INSERT API DETAILS HERE
 
-            Find the ID of the Edge Server whose details you want to view.
+            Find the ID of the instance whose details you want to view.
 
          .. step:: Call the Edge Server Info Endpoint
 
-            Call the <GET EDGE SERVER INFO> endpoint with the ID of the Edge
-            Server instance whose details you want to view.
+            Call the <GET EDGE SERVER INFO> endpoint with the ID of the 
+            instance whose details you want to view.
 
             .. code-block:: shell
 
@@ -245,8 +247,8 @@ or from the Admin API.
 
 .. _edge-server-details:
 
-Edge Server Details
-~~~~~~~~~~~~~~~~~~~
+Edge Server Instance Details
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The information available in the Edge Server details varies depending on 
 whether the Edge Server has been configured and connected to Atlas, or whether
@@ -257,15 +259,15 @@ configuration and connection are still pending.
 Pending Edge Server Instances
 `````````````````````````````
 
-When an Edge Server has not yet connected to Atlas for the first time, the
-Edge Server's :guilabel:`Health` status is :guilabel:`Pending`.
+When an Edge Server instance has not yet connected to Atlas for the first time, 
+the instance's :guilabel:`Health` status is :guilabel:`Pending`.
 
 While an Edge Server instance is in :guilabel:`Pending` state, the detail
 view includes:
 
-- A button you can use to rename the Edge Server.
-- An alert noting that you have not completed setting up the Edge Server
-- The Edge Server's ID
+- A button you can use to rename the instance.
+- An alert noting that you have not completed setting up the instance
+- The instance's ID
 - The Install command that you can use in the terminal to install the 
   Edge Server code
 - A button to regenerate the registration token
@@ -279,29 +281,30 @@ the detail view changes to provide additional details about the instance.
 Active or Failed Edge Server Instances
 ``````````````````````````````````````
 
-After you have connected an Edge Server to Atlas for the first time, the 
-Edge Server's :guilabel:`Health` status changes to :guilabel:`Active`. 
+After you have connected an Edge Server instance to Atlas for the first time, 
+the instance's :guilabel:`Health` status changes to :guilabel:`Active`. 
 
 If the Edge Server instance encounters a fatal error, its :guilabel:`Health`
 status changes to :guilabel:`Failed`.
 
 The details available for active or failed instances include:
 
-- A button you can use to rename the Edge Server.
-- Any active alerts about the Edge Server.
+- A button you can use to rename the instance.
+- Any active alerts about the instance.
 - The date and time of the last connection.
-- The Edge Server's ID. You can use this to set permissions for this specific 
-  Edge Server.
-- The Edge Server's query. This determines what data is synced between the 
-  Edge Server and Atlas, and what data clients can write to the Edge Server.
+- The instance's ID. You can use this to set permissions for this specific 
+  instance.
+- The instance's query. This determines what data is synced between the 
+  instance and Atlas, and what data clients can write to the instance.
   Clients can only write data that falls within their permissions, **and**
-  the Edge Server's query. For more information, refer to 
+  the instance's query. For more information, refer to 
   :ref:`specify-edge-server-query`.
-- Metrics about the Edge Server. For more information, refer to [ADD REF LATER].
-- A button to view the Edge Server's Logs. For more information, refer to 
+- Metrics about the Edge Server instance. For more information, refer to 
   [ADD REF LATER].
-- Versions. This page lists the Edge Server's current version, and the latest
-  available version. If the Edge Server falls more than one major version 
+- A button to view the instance Logs. For more information, refer to 
+  [ADD REF LATER].
+- Versions. This page lists the current version, and the latest
+  available version. If the instance falls more than one major version 
   behind the latest available, it enters a :guilabel:`Failed` state and cannot
   sync with Atlas until it is upgraded. For more information, refer to 
   :ref:`upgrade-edge-server-version`.
@@ -315,7 +318,7 @@ The details available for active or failed instances include:
 Delete an Edge Server Instance
 ------------------------------
 
-You can delete an individual Edge Server instance from your Edge Server Service.
+You can delete an individual Edge Server instance from Atlas.
 
 .. tabs-realm-admin-interfaces::
 
@@ -354,13 +357,14 @@ You can delete an individual Edge Server instance from your Edge Server Service.
          .. step:: Get the ID of the Edge Server to Delete
 
             Call the <LIST EDGE SERVER> endpoint to get a list of all the 
-            Edge Servers instances:
+            Edge Server instances:
 
             .. code-block:: shell
 
                INSERT API DETAILS HERE
 
-            Find the ID of the Edge Server that you want to delete in the list.
+            Find the ID of the Edge Server instance that you want to delete 
+            in the list.
 
          .. step:: Call the Delete Endpoint
 
@@ -386,8 +390,8 @@ When you're using an Edge Server Service, the service automatically updates
 fields in the schema when you make changes to the documents you sync.
 
 If you update your schema manually using the UI, and those schema changes
-trigger a schema version change, this causes the Edge Server instance to
-reboot and wipe itself.
+trigger a schema version change, this causes an Edge Server instance with the 
+old schema to reboot and wipe itself.
 
 If you're adding a new collection you haven't synced before, you must define
 a new schema.
@@ -398,8 +402,8 @@ Add a Collection
 When you want to add a collection to an Edge Server Service, you must add
 a schema containing:
 
-- The collection's name
-- An ``_id`` field that is an ``ObjectID`` type.
+- The collection name.
+- An ``_id`` field that is of ``ObjectID`` type.
 
 The Edge Server Service automatically infers the other fields from the shape 
 of the documents you sync or the documents in the collection.
@@ -460,7 +464,7 @@ A few conditions can cause an Edge Server instance to enter a ``Failed`` state:
 Edge Server is Offline Longer than Client Maximum Offline Time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Edge Server uses Device Sync to sync data between the on-premise hardware and
+Edge Server uses Device Sync to sync data between the Edge Server instance and
 Atlas. Device Sync has a 
 :ref:`Client Maximum Offline Time <client-maximum-offline-time>` setting.
 
@@ -469,11 +473,12 @@ storage required in the backing Atlas cluster. The longer the client maximum
 offline time, the more storage Atlas requires to keep historical records that
 support Sync.
 
-If an Edge Server is offline longer than this setting, this is an unrecoverable
-error. You must wipe and restart the Edge Server. Alternately, when you bring
-the Edge Server back online, it will be wiped and restarted automatically.
+If an Edge Server instance is offline longer than this setting, this is an 
+unrecoverable error. You must wipe and restart the instance. Alternately, when 
+you bring the instance back online, it will be wiped and restarted 
+automatically.
 
-**This process erases all local unsynced data on the Edge Server.**
+**This process erases all local unsynced data on the Edge Server instance.**
 
 Before Edge Server moves from Public Preview to General Availability, you
 will have the option to recover local data when this error occurs.
@@ -490,8 +495,8 @@ You can change the length of the client maximum offline time in the
 
 .. _edge-server-more-than-one-major-version-behind:
 
-Edge Server is More than One Major Version Behind
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Edge Server Instance is More than One Major Version Behind
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Edge Server does not support instances that fall more than one major version
 behind the current latest version. If your Edge Server instance falls further 
@@ -505,8 +510,8 @@ For information about upgrading an Edge Server instance, refer to
 Edge Server Token is Invalid
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the Edge Server token is regenerated, and you do not update the API Key
-in the Edge Server itself, it can enter a ``Failed`` state.
+If the Edge Server instance token is regenerated, and you do not update the 
+API Key on the instance itself, it can enter a ``Failed`` state.
 
 For more details about how to update the API Key on the Edge Server instance
 after regenerating the Edge Server token, refer to 
