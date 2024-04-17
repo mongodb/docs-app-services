@@ -6,7 +6,7 @@ Configure Edge Server
 
 .. meta::
    :keywords: code example
-   :description: Learn how to download, install, configure, and run a MongoDB Edge Server.
+   :description: Learn how to download, install, configure, and run a MongoDB Edge Server instance.
 
 .. facet::
    :name: genre 
@@ -18,29 +18,31 @@ Configure Edge Server
    :depth: 2
    :class: singlecol
 
-After you create an Edge Server instance in your Edge Server Service, you must 
-configure the hardware that runs the Edge Server instance. For most use cases, 
-you'll provision hardware on-premises to host the Edge Server. While you're 
-developing your Edge Server application, you may host it on a cloud server for 
-convenience.
+After you create an Edge Server instance in Atlas, you must configure the 
+hardware that runs the Edge Server instance. For most use cases, you'll 
+provision hardware on-premises to host the Edge Server instance. While you're 
+developing your Edge Server application, you may host it on a cloud server 
+for convenience.
 
-Client devices on-prem connect to Edge Server. Your Edge Server connects 
-to the Edge Server Service. Clients do not connect to MongoDB Atlas directly.
+Client devices on-prem connect to the Edge Server instance. Your instance 
+connects to the Edge Server Service or Device Sync Service, depending on
+how you create it. Clients do not connect to MongoDB Atlas directly.
 
 .. image:: /images/edge-server-in-action.png
    :alt: Architecture diagram showing devices connected to an Edge Server, which is connected to Atlas
 
-This page details how to configure and perform operations on the Edge Server.
+This page details how to configure and perform operations on the Edge Server
+instance.
 
 .. _edge-server-create-device-sync-app:
 
 Prerequisites
 -------------
 
-Each Edge Server instance connects to an Edge Server Service. Before you can 
-use an Edge Server instance, you must create an Edge Server Service, enable
-Device Sync, and configure an authentication provider and permissions
-for your Edge Server instance.
+Each Edge Server instance connects to a service in your Atlas project. Before 
+you can use an Edge Server instance, you must create the relevant service, and 
+configure an authentication provider and permissions for your Edge Server 
+instance.
 
 For more information, refer to :ref:`create-edge-server-service`.
 
@@ -49,7 +51,7 @@ For more information, refer to :ref:`create-edge-server-service`.
 Edge Server Host Requirements
 -----------------------------
 
-The host that runs Edge Server may be an EC2 instance or other cloud 
+The host that runs Edge Server instance may be an EC2 instance or other cloud 
 server, or hardware that you provision on-site.
 
 .. tip::
@@ -63,19 +65,20 @@ server, or hardware that you provision on-site.
 Required Hardware
 ~~~~~~~~~~~~~~~~~
 
-Edge Server benchmarking is not yet complete, so the required hardware
-may change. Currently, the minimum requirements are:
+The current minimum hardware requirements to run an Edge Server instance are:
 
 - CPU: 64-bit, quad-core processor
 - RAM: 8GB memory
 - Storage: 32GB disk space
+
+These requirements may change after Edge Server benchmarking is complete.
 
 .. _edge-server-os-support:
 
 OS Compatibility
 ~~~~~~~~~~~~~~~~
 
-The Edge Server has been verified with the following operating systems:
+Edge Server has been verified with the following operating systems:
 
 - Ubuntu Server 18+
 - macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
@@ -99,10 +102,10 @@ to resolve these dependencies prior to running the Edge Server.
 Required Network Access
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-To accept connections from sync clients or connections via the wireprotocol, 
+To accept connections from sync clients or connections using a MongoDB URI, 
 the host that runs the Edge Server must allow access to incoming connections.
 
-If you run Edge Server on your own infrastructure, you don't need to open
+If you run the Edge Server on your own infrastructure, you don't need to open
 the instance to the general internet. You only need to ensure your client 
 devices can access it.
 
@@ -122,13 +125,15 @@ decides how/where to do that.]
 Install and Configure the Edge Server Instance
 ----------------------------------------------
 
-After creating an Edge Server Service, you must create an Edge Server instance.
-Each service may have many Edge Server instances. When you create an 
-Edge Server instance, you get an installation script you can use to download
-the Edge Server code, and a token you can use to register the Edge Server
-instance. For more details, refer to :ref:`create-edge-server-instance`.
+After creating an Edge Server Service or Device Sync Service, you must create 
+an Edge Server instance. Each service may have many Edge Server instances. When 
+you create an Edge Server instance, you get an installation script you can use 
+to download the Edge Server code, and a token you can use to register the 
+Edge Server instance. For more details, refer to 
+:ref:`create-edge-server-instance`.
 
-Use the installation script to set up and run the Edge Server on the host.
+Use the installation script to set up and run the Edge Server instance on the 
+host.
 
 .. include:: /includes/important-stop-tiered-sync-server.rst
 
@@ -140,7 +145,6 @@ Use the installation script to set up and run the Edge Server on the host.
       the Edge Server instance on the host hardware. This includes an install
       script to manage the installation and install required dependencies.
 
-      When you create an Edge Server instance, you get a copy of this command. 
       Use this command to install the command-line tool and the Edge Server 
       code:
 
@@ -151,20 +155,20 @@ Use the installation script to set up and run the Edge Server on the host.
       - ``http://localhost:8080/edge/install.sh``: This assumes you are 
         executing the command on the device where you want to install the
         Edge Server code, and want to use ``localhost:8080`` as the port
-        to access the Edge Server. Change this as needed for your requirements.
+        to access the instance. Change this as needed for your requirements.
       - ``--app-id``: Provide your Edge Server App ID. For example, 
         ``--app-id="edge-server-vtoyh"``. For more information, refer to 
         :ref:`find-app-id`. 
       - ``--platform``: You can use Docker Compose to install and manage your
-        Edge Server in a development environment, or Kubernetes to manage
-        Edge Server in a production environment. Valid values are either
-        ``compose`` or ``kubernetes``.
+        Edge Server instance in a development environment, or Kubernetes to 
+        manage the instance in a production environment. Valid values are 
+        either ``compose`` or ``kubernetes``.
 
       Follow the prompts to download and install the Edge Server code.
 
-   .. step:: Complete the Edge Server Configuration Details
+   .. step:: Configure the Edge Server Instance
 
-      Use ``edgectl`` to configure the Edge Server.
+      Use ``edgectl`` to configure the Edge Server instance.
 
       .. code-block:: shell
 
@@ -191,24 +195,24 @@ Use the installation script to set up and run the Edge Server on the host.
          * - ``--query``
            - String
            - The query that defines what data to sync between the Edge
-             Server and Atlas. For information about populating this query,
-             refer to :ref:`specify-edge-server-query`.
+             Server instance and Atlas. For information about populating this 
+             query, refer to :ref:`specify-edge-server-query`.
 
          * - ``--http-port``
            - Int
-           - The port on which Edge Server listens for HTTP connections. The
+           - The port on which the instance listens for HTTP connections. The
              default value is ``80``. 
 
          * - ``--wireprotocol-port``
            - Int
-           - The port on which Edge Server listens for MongoDB wireprotocol
+           - The port on which the instance listens for MongoDB Wire Protocol
              connections, such as connections from a MongoDB Driver. The
              default value is ``27021``.
          
          * - ``--insecure-disable-auth``
            - Boolean
-           - If ``true``, users can connect anonymously to Edge Server through
-             wireprotocol or Atlas Device SDK clients. Defaults to ``false``.
+           - If ``true``, users can connect anonymously to the instance through
+             Wire Protocol or Atlas Device SDK clients. Defaults to ``false``.
 
          * - ``--no-user``
            - Boolean
@@ -221,8 +225,8 @@ Use the installation script to set up and run the Edge Server on the host.
 
          * - ``--disable-ui``
            - Boolean
-           - If true, Edge Server does not run a UI on the registered 
-             ``http-port``. Defaults to ``false``.
+           - If true, the Edge Server instance does not run a UI on the 
+             registered ``http-port``. Defaults to ``false``.
 
          * - ``--base-url``
            - String
@@ -239,12 +243,12 @@ Use the installation script to set up and run the Edge Server on the host.
 
    .. step:: Supply the Edge Server Token
 
-      When first configuring the Edge Server, you're prompted to supply the
-      Edge Server token. This is the token you got when you added the
-      Edge Server instance to your service.
+      When first configuring the Edge Server instance, you're prompted to 
+      supply the Edge Server token. This is the token you got when you added 
+      the instance to your service.
 
       If you no longer have the token, you can generate a new token from the
-      :ref:`edge-server-details` in your Edge Server Service.
+      :ref:`edge-server-details` in your service.
 
       The Edge Server instance exchanges this token for a secret. It uses the
       secret to authenticate with Atlas when it syncs data.
@@ -254,35 +258,29 @@ Use the installation script to set up and run the Edge Server on the host.
 Start and Stop the Edge Server
 ------------------------------
 
-Use ``edgectl`` to start and stop the Edge Server:
+Use ``edgectl`` to start and stop the Edge Server instance.
 
-Start the Edge Server
-~~~~~~~~~~~~~~~~~~~~~
-
-To start all Edge Server containers, use the ``start`` command:
+To start all Edge Server instance containers, use the ``start`` command:
 
 .. code-block:: shell
 
    edgectl start
 
-.. include:: /includes/important-stop-tiered-sync-server.rst
-
-Stop the Edge Server
-~~~~~~~~~~~~~~~~~~~~
-
-To stop all Edge Server containers, use the ``stop`` command:
+To stop all Edge Server instance containers, use the ``stop`` command:
 
 .. code-block:: shell
 
    edgectl stop
+
+.. include:: /includes/important-stop-tiered-sync-server.rst
 
 .. _check-edge-server-status:
 
 Check the Edge Server Status
 ----------------------------
 
-When the Edge Server is running, you can see the status of the 
-Edge Server with:
+When the Edge Server instance is running, you can see the status of the 
+instance with:
 
 .. code-block:: shell
 
@@ -291,21 +289,19 @@ Edge Server with:
 This gives you information about the number of clients connected to the 
 server, as well as errors that may have occurred.
 
-.. example::
+The status object of an Edge Server instance may look similar to:
 
-   The status object of an Edge Server may look similar to:
+.. code-block:: json
+   :copyable: false
 
-   .. code-block:: json
-      :copyable: false
-
-      {
-         "status": "ACTIVE",
-         "cloud_connected": true,
-         "num_local_clients": 1,
-         "query": {
-            "Item": "truepredicate"
-         }
+   {
+      "status": "ACTIVE",
+      "cloud_connected": true,
+      "num_local_clients": 1,
+      "query": {
+         "Item": "truepredicate"
       }
+   }
 
 .. list-table::
    :header-rows: 1
@@ -317,13 +313,13 @@ server, as well as errors that may have occurred.
 
    * - ``status``
      - String
-     - The current status of the Edge Server. Possible values include:
+     - The current status of the Edge Server instance. Possible values include:
        ``"ACTIVE"``, ``"FAILED"``. 
        
-       ``"ACTIVE"`` means that the Edge Server is running, listening for
+       ``"ACTIVE"`` means that the instance is running, listening for
        connections, and attempting to sync.
 
-       ``"Failed"`` means that the Edge Server has encountered an error
+       ``"FAILED"`` means that the instance has encountered an error
        condition that needs intervention. For more information, refer to
        :ref:`troubleshoot-edge-server-instance`.
 
@@ -331,18 +327,18 @@ server, as well as errors that may have occurred.
      - Boolean
      - If ``true``, the Edge Server instance is currently connected to Atlas.
        If ``false``, the Edge Server instance is not connected to Atlas. When
-       the Edge Server is not connected to Atlas, it can still receive local
+       the instance is not connected to Atlas, it can still receive local
        connections and sync data with local clients. When it reconnects with
        Atlas, it attempts to sync data that changed while it was not connected.
 
    * - ``num_local_clients``
      - Int
      - The number of clients that are currently connected to the Edge Server
-       through wireprotocol or Atlas Device SDK.
+       instance through Wire Protocol or Atlas Device SDK.
 
    * - ``query``
      - Object
-     - The current Edge Server Sync query, presented as a JSON object. For
+     - The Edge Server instance Sync query, presented as a JSON object. For
        more information, refer to :ref:`specify-edge-server-query`.
 
 .. _upgrade-edge-server-version:
@@ -353,60 +349,45 @@ Upgrade the Edge Server Version
 As the Edge Server evolves, you may want to upgrade your Edge Server 
 version to take advantage of new functionality.
 
-.. _edge-server-upgrade-commands:
-
-Upgrade Edge Server Commands
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can upgrade the Edge Server version using ``edgectl``:
-
-.. code-block:: shell
-
-   edgectl update
-
-You can optionally specify arguments to upgrade to a specific version:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Field name
-     - Type
-     - Value
-
-   * - ``--config-path``
-     - String
-     - The location on disk to store configuration files. Defaults to
-       ``~/.mongodb-edge/``.
-
-   * - ``--minor``
-     - Boolean
-     - Upgrade to the latest minor version for your current major version.
-       Defaults to ``true``.
-
-   * - ``--major``
-     - Boolean
-     - Upgrade to the next major version. Defaults to ``false``.
-
-   * - ``--to``
-     - String
-     - Upgrade (or downgrade) to an exact version. Default ``""``.
-
-Upgrade Edge Server Procedure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 .. procedure::
 
-   .. step:: Run the upgrade command
+   .. step:: Run the Upgrade Command
 
-      Run :ref:`the relevant upgrade command <edge-server-upgrade-commands>`
-      to upgrade to your preferred version of the Edge Server:
+      You can upgrade the Edge Server version using ``edgectl``:
 
       .. code-block:: shell
 
-         edgectl update --minor
+         edgectl update
 
       Depending on your hardware and network connection, the upgrade 
       process may take seconds to minutes.
+
+      You can optionally specify arguments to upgrade to a specific version:
+
+      .. list-table::
+         :header-rows: 1
+
+         * - Field name
+           - Type
+           - Value
+
+         * - ``--config-path``
+           - String
+           - The location on disk to store configuration files. Defaults to
+             ``~/.mongodb-edge/``.
+
+         * - ``--minor``
+           - Boolean
+           - Upgrade to the latest minor version for your current major version.
+             Defaults to ``true``.
+
+         * - ``--major``
+           - Boolean
+           - Upgrade to the next major version. Defaults to ``false``.
+
+         * - ``--to``
+           - String
+           - Upgrade (or downgrade) to an exact version. Default ``""``.
 
    .. step:: Configure the Edge Server
 
@@ -457,14 +438,14 @@ To cycle the Edge Server API key:
 
 .. procedure::
 
-   .. step:: Generate a new token in Atlas
+   .. step:: Generate a New Token in Atlas
 
       You can generate a new Edge Server token from the 
       :ref:`edge-server-details`. Use the :guilabel:`Regenerate Token`
       button to get a new token, and copy it. You won't be able to see this
       token again, and must generate a new token if you do not copy it.
 
-   .. step:: Supply the New Token from the Edge Server Instance
+   .. step:: Supply the New Edge Server Token
 
       Use ``edgectl`` to be prompted for a new token from the Edge Server 
       instance:
@@ -488,7 +469,7 @@ Specify the Edge Server's Query
 -------------------------------
 
 You can use the ``--query`` argument with the ``edgectl configure`` command
-to specify the Edge Server's Sync query.
+to specify the Edge Server instance Sync query.
 
 The ``--query`` for an Edge Server instance defaults to ``"*"``, which 
 automatically syncs all data in all of the collections in your 
@@ -508,11 +489,11 @@ two options:
         "YOUR-COLLECTION-NAME": "YOUR-QUERY"
      }
 
-  - ``YOUR-COLLECTION-NAME``: This is the name of a collection in your database. 
+  - ``YOUR-COLLECTION-NAME``: The name of a collection in your database. 
     If you're using a template app, this is the ``Item`` collection. Your Edge 
     Server query may contain many collections.
 
-  - ``YOUR-QUERY``: This is the query that determines what documents the Edge 
+  - ``YOUR-QUERY``: The query that determines what documents the Edge 
     Server can sync with a collection. You can use :ref:`Realm Query Language <rql>` 
     to define this query, with the same caveats around :ref:`Flexible Sync RQL 
     Limitations <flexible-sync-rql-limitations>`.
@@ -525,9 +506,9 @@ Edge Server Query Examples
 Sync All Documents
 ```````````````````
 
-You can sync all documents between Edge Server and Atlas. This uses the 
-``truepredicate`` query. Because this is a simple query, you can pass it
-as a string with the ``edgectl --query`` argument.
+You can sync all documents between Edge Server instance and Atlas. This uses 
+the ``truepredicate`` or ``"*"`` query. Because this is a simple query, you 
+can pass it as a string with the ``edgectl --query`` argument.
 
 .. code-block:: shell
 
@@ -536,8 +517,8 @@ as a string with the ``edgectl --query`` argument.
 Sync a Subset of Documents
 ``````````````````````````
 
-You might only want to sync a subset of documents with an Edge Server.
-For example, for an Edge Server located in a specific store, you might want to
+You might only want to sync a subset of documents with an Edge Server instance.
+For example, for an instance located in a specific store, you might want to
 sync only the documents relevant to that store. An RQL query for that might
 look similar to:
 
@@ -564,8 +545,8 @@ This query syncs data with two collections: ``Item`` and ``Project``. The
 ``Project`` collection has a list property that represents a 
 :ref:`to-many relationship <relationships-to-many>` to the ``Item`` collection.
 In this example, there is also a ``Team`` collection that we don't want to 
-sync to the Edge Server. By omitting this collection from the query, we don't 
-sync any of its data to the Edge Server.
+sync to the Edge Server instance. By omitting this collection from the query, 
+we don't sync any of its data to the instance.
 
 With these queries, we are only syncing ``Project`` documents for facility 42. 
 Additionally, we are only syncing ``Item`` documents where the ``priority`` 
