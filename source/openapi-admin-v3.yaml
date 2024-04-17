@@ -2618,7 +2618,7 @@ paths:
         400:
           description: |-
            - Bad Request
-           - VPC endpoint id is invalid
+           - cloud_provider_endpoint_id is invalid
            - Endpoint type is "legacy"
 
   "/groups/{groupId}/apps/{appId}/security/private_endpoints/{privateEndpointId}":
@@ -8775,7 +8775,11 @@ components:
           description: An optional comment that describes the endpoint.
         endpoint_type:
           type: string
-          description: The type of endpoint, either `"general"`, `"sync"`, or `"legacy"`.
+          example: "sync"
+          description: |-
+            The type of endpoint, either `"general"` or `"sync"`. For more information
+            on migrating deprecated `"legacy"` endpoints, see 
+            [Migrate Legacy Endpoints](https://www.mongodb.com/docs/atlas/app-services/security/private-endpoints/#migrate-a-legacy-endpoint).
     PrivateEndpointServiceInfo:
       type: object
       properties:
