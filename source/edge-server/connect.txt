@@ -6,7 +6,7 @@ Connect to an Edge Server
 
 .. meta::
    :keywords: code example
-   :description: Connect to a MongoDB Edge Server from Atlas Device SDK or a MongoDB Driver.
+   :description: Connect to a MongoDB Edge Server instance from Atlas Device SDK or a MongoDB Driver.
 
 .. facet::
    :name: genre 
@@ -18,21 +18,21 @@ Connect to an Edge Server
    :depth: 2
    :class: singlecol
 
-Once the Edge Server is :ref:`configured <edge-server-configure>` and 
+Once the Edge Server instance is :ref:`configured <edge-server-configure>` and 
 :ref:`running <start-and-stop-edge-server>`, you can connect to it from 
 a client application.
 
-There are two ways you can connect to the Edge Server from a client:
+There are two ways you can connect to the Edge Server instance from a client:
 
 - Using Atlas Device SDK
 - Using MongoDB Drivers and tools
 
-When you connect to Edge Server using an SDK, Device Sync automatically
-synchronizes data across devices and with the Edge Server. If you connect
-to Edge Server using MongoDB Drivers or tools, you can perform CRUD operations 
-with a subset of supported MongoDB APIs.
+When you connect to an Edge Server instance using an SDK, Device Sync 
+automatically synchronizes data across devices and with the Edge Server. If you 
+connect to an Edge Server instance using MongoDB Drivers or tools, you can 
+perform CRUD operations with a subset of supported MongoDB APIs.
 
-Additionally, you can connect to an Edge Server and perform limited 
+Additionally, you can connect to an Edge Server instance and perform limited 
 operations with Compass.
 
 .. _edge-server-connect-from-client:
@@ -40,7 +40,8 @@ operations with Compass.
 Connect to the Edge Server from Atlas Device SDK
 ------------------------------------------------
 
-To connect to the Edge Server from a Atlas Device SDK client, your app must:
+To connect to the Edge Server instance from an Atlas Device SDK client, your 
+app must:
 
 - Set the Sync URL on the App configuration to the public-accessible DNS 
   address you set in the Edge Server :file:`edge_config.json` ``baseURL`` 
@@ -71,7 +72,8 @@ documentation for your preferred SDK:
 Roaming Between Edge Servers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SDK clients can roam between Edge Servers, or between an Edge Server and Atlas.
+SDK clients can roam between Edge Server instances, or between an Edge Server
+instance and Atlas.
 
 Roaming requires changing the base URL in the client's App configuration.
 For details, refer to the SDK documentation linked above.
@@ -79,9 +81,10 @@ For details, refer to the SDK documentation linked above.
 Roaming Users and Anonymous Authentication
 ``````````````````````````````````````````
 
-When roaming between Edge Servers or an Edge Server and Atlas, anonymous users
-do not persist across servers. Atlas creates a new anonymous user for each 
-server the client connects to, and does not persist local data across servers.
+When roaming between Edge Server instances or an Edge Server instance and 
+Atlas, anonymous users do not persist across servers. Atlas creates a new 
+anonymous user for each server the client connects to, and does not persist 
+local data across servers.
 
 For all other supported authentication providers, users persist and have 
 access to the expected data across servers.
@@ -91,7 +94,7 @@ Example: SwiftUI Template App
 
 For a quick proof of concept using a template app, these are the 
 modifications you can make to the :github:`Swift template app 
-<mongodb/template-app-swiftui-todo>` to connect to the Edge Server:
+<mongodb/template-app-swiftui-todo>` to connect to the Edge Server instance:
 
 .. procedure::
 
@@ -106,10 +109,10 @@ modifications you can make to the :github:`Swift template app
            - Value
 
          * - ``baseUrl``
-           - The public-accessible DNS of your Edge Server's host.
+           - The public-accessible DNS of your Edge Server instance host.
              This is ``http://``, or if TLS is enabled, ``https://``, 
-             followed by the same value you set in your Edge Server 
-             :file:`edge_config.json` ``baseURL`` field.
+             followed by the same value you set in your Edge Server
+             instance configuration.
           
          * - ``appId``
            - The App ID of your App Services App that has Edge Server 
@@ -193,23 +196,23 @@ modifications you can make to the :github:`Swift template app
    .. step:: Run the App
 
       Now you can build and run the app. When you log in, the app connects 
-      to the Edge Server. When you create new Items, those sync with the 
-      Edge Server. The Edge Server then syncs with the Atlas App Services App.
+      to the Edge Server instance. When you create new Items, those sync with 
+      the instance. The instance then syncs with the Atlas App Services App.
 
-      You can check the status of the Edge Server from your host.
+      You can check the status of the Edge Server instance from your host.
       With the client running, you can see ``"num_local_clients": 1`` in 
-      the Edge Server status. You can also see error messages reflected
+      the instance status. You can also see error messages reflected
       in the sync status.
 
-      After the next time the Edge Server syncs with your App Services App,
-      you can see synced changes reflected in the linked Atlas collection.
+      After the next time the Edge Server instance syncs with your App Services 
+      App, you can see synced changes reflected in the linked Atlas collection.
 
       .. important::
 
          If you have previously connected directly from the client to your 
          App Services App with Device Sync, you may need to clear state on the 
          simulator or device. Resetting your cache enables your client to 
-         connect to the Edge Server.
+         connect to the Edge Server instance.
 
          In a console app, delete the ``mongodb-realm`` directory. If you're
          using an iOS or Android simulator or device, uninstall and reinstall
@@ -224,8 +227,8 @@ You can connect to the Edge Server using standard MongoDB Drivers and tools.
 Clients use a specialized MongoDB URI connection string to connect to 
 Edge Server and send requests.
 
-The wire protocol server is on by default. You can connect to it via the 
-host machine using this MongoDB URI:
+The Wire Protocol server accepts these incoming connections, and is on by 
+default. You can connect to it via the host machine using this MongoDB URI:
 
 .. code:: console
 
@@ -253,7 +256,7 @@ host machine using this MongoDB URI:
        information, refer to :ref:`edge-server-install-and-configure`.
 
    * - ``<port>``
-     - The Edge Server wireprotocol listen port. The default port is ``27021``.
+     - The Edge Server Wire Protocol listen port. The default port is ``27021``.
        For more details, refer to :ref:`edge-server-install-and-configure`.
 
    * - ``authMechanism=PLAIN``
@@ -269,8 +272,8 @@ host machine using this MongoDB URI:
 
 .. example::
 
-   A wire protocol connection URI for an Edge Server hosted on Amazon EC2 
-   might look similar to:
+   A Wire Protocol connection URI for an Edge Server instance hosted on Amazon 
+   EC2 might look similar to:
 
    .. code:: console
 
@@ -284,9 +287,9 @@ about the supported APIs, refer to :ref:`edge-server-mongodb`.
 Connect to the Edge Server with Compass
 ---------------------------------------
 
-You can connect to the Edge Server using :ref:`MongoDB Compass <compass-index>`.
-Compass enables you to explore the documents syncing to Edge Server, and 
-make updates to those documents.
+You can connect to the Edge Server instance using 
+:ref:`MongoDB Compass <compass-index>`. Compass enables you to explore the 
+documents syncing to Edge Server instance, and make updates to those documents.
 
 Connect with Compass
 ~~~~~~~~~~~~~~~~~~~~
@@ -297,9 +300,9 @@ complete this with info from engineering or after we can test this ourselves]
 Limitations
 ~~~~~~~~~~~
 
-The Edge Server support for Compass is limited. You can use it to:
+Edge Server support for Compass is limited. You can use it to:
 
-- Browse databases, collections, and documents in the Edge Server.
-- Perform basic CRUD operations on documents in the Edge Server.
+- Browse databases, collections, and documents in the Edge Server instance.
+- Perform basic CRUD operations on documents in the Edge Server instance.
 
 Edge Server does not support aggregation with Compass at this time.
