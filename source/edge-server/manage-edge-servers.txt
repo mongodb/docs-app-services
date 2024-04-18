@@ -18,16 +18,16 @@ Manage Edge Servers in Atlas
    :class: singlecol
 
 An Edge Server-compatible service is your Atlas destination to create, delete, 
-or check on your Edge Server instances. 
+or monitor your Edge Server instances. 
 
 There are two types of services that enable you to use Edge Server:
 
-- Edge Server Service: use this option if you want clients to connect to the 
-  Edge Server with MongoDB Drivers and tools. It infers and updates the schema 
-  from the documents you insert, and provides a developer experience familiar 
-  to MongoDB developers. The Edge Server Service rejects incoming Atlas Device
-  SDK connections.
-- Device Sync Service, adding Edge Servers: use this option if you want to 
+- **Edge Server Service**: use this option if you want clients to connect to an
+  Edge Server instance with MongoDB Drivers and tools. It infers and updates 
+  the schema from the documents you insert, and provides a developer experience
+  familiar to MongoDB developers. This service is incompatible with 
+  Atlas Device SDK; it rejects incoming Atlas Device SDK connections.
+- **Device Sync Service (with Edge Server)**: use this option if you want to 
   develop client apps using Atlas Device SDK and MongoDB Drivers and tools. 
   This option involves more strict schema enforcement, which the SDKs use to 
   automatically sync objects across devices and handle conflict resolution.
@@ -69,8 +69,8 @@ Before You Begin
 
 .. _create-edge-server-service:
 
-Create an Edge Server Service
------------------------------
+Create a Service for Edge Server
+--------------------------------
 
 You can create an Edge Server-compatible service in Data Services or App 
 Services. 
@@ -101,6 +101,12 @@ Services.
       [PLACEHOLDER: Add steps for adding Edge Server to a Device Sync App.
       It's not 100% clear to me what the flow is from the Figma designs.
       Populate the rest of this procedure when we are able to test this flow.]
+
+.. important:: Required Field
+
+   Documents that you want to sync with Edge Server must contain an ``_id`` 
+   field of type ``ObjectID``. Any documents without this field cannot sync 
+   to an Edge Server.
 
 Supported Authentication Providers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -262,19 +268,20 @@ Pending Edge Server Instances
 When an Edge Server instance has not yet connected to Atlas for the first time, 
 the instance's :guilabel:`Health` status is :guilabel:`Pending`.
 
-While an Edge Server instance is in :guilabel:`Pending` state, the detail
-view includes:
+While an Edge Server instance is in :guilabel:`Pending` state, you can perform
+the following actions from the detail view:
 
-- A button you can use to rename the instance.
-- An alert noting that you have not completed setting up the instance
-- The instance's ID
-- The Install command that you can use in the terminal to install the 
-  Edge Server code
-- A button to regenerate the registration token
-- A button to delete the Edge Server instance
+- Rename the instance.
+- Review alerts about the instance status.
+- Get the instance ID. You can use this to set permissions for this specific 
+  instance.
+- View the Install command that you can use in the terminal to install the 
+  Edge Server code.
+- Regenerate the registration token.
+- Delete the Edge Server instance.
 
 Once you have successfully configured and connected an Edge Server instance,
-the detail view changes to provide additional details about the instance.
+the detail view changes to provide additional information.
 
 .. _edge-server-active-or-failed:
 
@@ -287,31 +294,31 @@ the instance's :guilabel:`Health` status changes to :guilabel:`Active`.
 If the Edge Server instance encounters a fatal error, its :guilabel:`Health`
 status changes to :guilabel:`Failed`.
 
-The details available for active or failed instances include:
+You can perform the following actions for active or failed instances:
 
-- A button you can use to rename the instance.
-- Any active alerts about the instance.
-- The date and time of the last connection.
-- The instance's ID. You can use this to set permissions for this specific 
+- Rename the instance.
+- Review alerts about the instance status.
+- View the date and time of the last connection.
+- Get the instance ID. You can use this to set permissions for this specific 
   instance.
-- The instance's query. This determines what data is synced between the 
+- View the instance query. This determines what data syncs between the 
   instance and Atlas, and what data clients can write to the instance.
   Clients can only write data that falls within their permissions, **and**
   the instance's query. For more information, refer to 
   :ref:`specify-edge-server-query`.
-- Metrics about the Edge Server instance. For more information, refer to 
+- View Metrics about the Edge Server instance. For more information, refer to 
   [ADD REF LATER].
-- A button to view the instance Logs. For more information, refer to 
+- View the instance Logs. For more information, refer to 
   [ADD REF LATER].
-- Versions. This page lists the current version, and the latest
+- View version information. This page lists the current version, and the latest
   available version. If the instance falls more than one major version 
   behind the latest available, it enters a :guilabel:`Failed` state and cannot
   sync with Atlas until it is upgraded. For more information, refer to 
   :ref:`upgrade-edge-server-version`.
-- The Install command that you can use in the terminal to install the 
+- View the Install command that you can use in the terminal to install the 
   Edge Server code.
-- A button to regenerate the registration token.
-- A button to delete the Edge Server instance.
+- Regenerate the registration token.
+- Delete the Edge Server instance.
 
 .. _delete-edge-server-instance:
 
@@ -421,8 +428,7 @@ schema changes. When a "breaking" schema change occurs, any Edge Server
 instance with the old schema reboots and wipes itself. The wipe process 
 erases any unsynced data.
 
-Edge Server will get the ability to recover local unsynced data in a future 
-release.
+.. include:: /includes/important-wipe-and-restart-edge-server-data-loss.rst
 
 For details about which types of changes are considered "breaking" changes,
 refer to :ref:`breaking-change-quick-reference`.
@@ -434,17 +440,9 @@ An Edge Server running in a Device Sync Service uses Device Sync rules for
 updating a data model.
 
 When a "breaking" schema change occurs, any Edge Server instance with the old 
-schema reboots and wipes itself. The wipe process erases any unsynced data. 
+schema reboots and wipes itself. 
 
-If that data was written by an Atlas Device SDK client, the client itself
-can handle data recovery. This enables local unsynced data written by the 
-client to eventually make its way to Atlas.
-
-If the data was written by a MongoDB Driver or tool using the Wire Protocol,
-the unsynced data is unrecoverable.
-
-Edge Server will get the ability to recover local unsynced data in a future 
-release.
+.. include:: /includes/important-wipe-and-restart-edge-server-data-loss.rst
 
 For more information, refer to :ref:`synced-schema-overview`.
 
@@ -478,10 +476,7 @@ unrecoverable error. You must wipe and restart the instance. Alternately, when
 you bring the instance back online, it will be wiped and restarted 
 automatically.
 
-**This process erases all local unsynced data on the Edge Server instance.**
-
-Before Edge Server moves from Public Preview to General Availability, you
-will have the option to recover local data when this error occurs.
+.. include:: /includes/important-wipe-and-restart-edge-server-data-loss.rst
 
 You can change the length of the client maximum offline time in the 
 :ref:`sync-settings`.
@@ -490,7 +485,7 @@ You can change the length of the client maximum offline time in the
 
    An Edge Server instance cannot be offline longer than 60 days, no matter
    what setting you set for the client maximum offline time. If the setting
-   is ``nil`` or greater than 60 days, the Edge Server offline limit is
+   is unsert or greater than 60 days, the Edge Server offline limit is
    60 days.
 
 .. _edge-server-more-than-one-major-version-behind:
