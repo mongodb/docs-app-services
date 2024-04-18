@@ -26,9 +26,8 @@ Atlas Edge Server
    Edge Server runs on-premises and handles sync between local devices,
    and bi-directional sync between the Edge Server and Atlas.
 
-   Edge Server is currently in Private Preview. Learn more about previewing
-   the 
-   `Atlas Device Sync Edge Server <https://www.mongodb.com/products/platform/atlas-edge-server>`__.
+   Edge Server is now in Public Preview. Read our blog to learn about what's 
+   new. [INSERT LINK HERE WHEN IT IS PUBLISHED]
 
 .. image:: /images/plp/Technical_SOFTWARE_DataSync_Spot.png
    :alt: Atlas Data Sync Illustration
@@ -48,10 +47,9 @@ Key Features
       :icon: /images/icons/General_CLOUD_Transfer10x.png
       :icon-alt: An icon depicting a cloud with a two-way transfer icon
 
-      Edge server is a local instance of MongoDB paired with a Device Sync 
-      server that runs on-premises. It brings real-time sync, disconnection 
-      tolerance, and conflict resolution to the location's devices. It 
-      seamlessly syncs with Atlas when it has a network connection.
+      Edge Server is a local instance of MongoDB paired with a Device Sync 
+      server that runs on-premises. It seamlessly syncs with Atlas when it has 
+      a network connection.
 
    .. card::
       :headline: Optimize Bandwidth
@@ -79,28 +77,26 @@ Edge Server Setup
 
 .. procedure::
 
-   .. step:: Create a Device Sync-Enabled App
+   .. step:: Create an Edge Server Service
 
-      Create an :ref:`App Services App <create-app>` with 
-      :ref:`Device Sync enabled <enable-sync>`. To get started quickly, 
+      You can use Edge Server with MongoDB Drivers and tools in an Edge 
+      Server Service. Or you can use Edge Server with Atlas Device SDK to
+      develop mobile and edge applications with Device Sync, and get the
+      benefits of conflict resolution and roaming between servers.
+
+      To get started quickly, 
       :ref:`create a template app <create-template-app>`.
-
-      Once your App is created, coordinate with your Product or Account 
-      Representative to enable Edge Server.
 
    .. step:: Install and Configure the Edge Server
 
       Configure hardware on-site or a cloud server to host your Edge Server.
-      Install the Edge Server on your hardware, complete a basic 
-      ``config.json`` with your configuration details, and install required
-      dependencies.
-
-      Add an authorization provider, and start the Edge Server.
+      Use our command line tool, ``edgectl``, to install and configure an 
+      Edge Server instance on your hardware.
 
    .. step:: Connect to the Edge Server from a Client
 
-      Configure your client to connect to the Edge Server instead of directly
-      to your Atlas App. Local clients can sync data through the Edge Server
+      Connect to an Edge Server with a MongoDB Driver or an Atlas Device SDK
+      client. Local clients can sync data through the Edge Server
       even without network connectivity. When the Edge Server connects
       with Atlas, it syncs data from the local clients.
 
@@ -129,7 +125,8 @@ Secure, Powerful, Fast
 
       Edge Server uses the Device Sync engine to handle conflicts. You don't 
       have to write complex custom code to resolve conflicting writes from 
-      multiple clients.
+      multiple Edge Servers. When you pair Edge Server with Atlas Device SDK,
+      you get conflict resolution on the clients, too.
 
    .. card::
       :headline: Reduce Latency
