@@ -599,20 +599,11 @@ App Services supports all :manual:`aggregation pipeline operators
 </reference/operator/aggregation/>` when you :ref:`run an aggregation pipeline
 <mongodb-aggregate>` in the :ref:`system user
 <system-functions>` context. App Services supports all pipeline operators
-in an :ref:`application user <user-accounts>` context with the following
-exceptions:
+in an :ref:`application user <user-accounts>` context except for the following
+operators:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 10 10
-
-   * - Operator
-     - User Context
-     - System Context
-
-   * - :manual:`$function </reference/operator/aggregation/function/>`
-     - No
-     - Yes
+- :manual:`$function </reference/operator/aggregation/function/>`
+- :manual:`$setIsSubset </reference/operator/aggregation/setIsSubset/>`
 
 .. _mongodb-crud-and-aggregation-apis-database-commands:
 
