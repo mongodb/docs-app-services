@@ -22,18 +22,14 @@ Once the Edge Server instance is :ref:`configured <edge-server-configure>` and
 :ref:`running <start-and-stop-edge-server>`, you can connect to it from 
 a client application.
 
-There are two ways you can connect to the Edge Server instance from a client:
+There are three ways you can connect to the Edge Server instance from a client:
 
-- Using Atlas Device SDK
-- Using MongoDB Drivers and tools
-
-When you connect to an Edge Server instance using an SDK, Device Sync 
-automatically synchronizes data across devices and with the Edge Server. If you 
-connect to an Edge Server instance using MongoDB Drivers or tools, you can 
-perform CRUD operations with a subset of supported MongoDB APIs.
-
-Additionally, you can connect to an Edge Server instance and perform limited 
-operations with Compass.
+- Atlas Device SDK: Device Sync automatically synchronizes data across devices 
+  and with the Edge Server.
+- MongoDB Drivers and tools: Perform CRUD operations with a subset of supported 
+  MongoDB APIs.
+- MongoDB Compass: Explore documents syncing to Edge Server instance, and make 
+  updates to those documents.
 
 .. _edge-server-connect-from-client:
 
@@ -66,6 +62,17 @@ documentation for your preferred SDK:
 - Node.js SDK: :ref:`node-connect-to-mongodb-realm-backend-app`
 - React Native SDK: :ref:`react-native-connect-to-mongodb-realm-backend-app`
 - Swift SDK: :ref:`ios-init-appclient`
+
+Supported Authentication Providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server currently supports a subset of authentication providers when
+connecting with an SDK:
+
+- :ref:`anonymous-authentication`
+- :ref:`email-password-authentication`
+- :ref:`api-key-authentication`
+- :ref:`custom-function-authentication`
 
 .. _edge-server-device-sdk-roaming:
 
@@ -220,15 +227,15 @@ modifications you can make to the :github:`Swift template app
 
 .. _edge-server-wireprotocol-connect:
 
-Connect to the Edge Server with a MongoDB URI
----------------------------------------------
+Connect to the Edge Server with MongoDB Drivers and Tools
+---------------------------------------------------------
 
 You can connect to the Edge Server using standard MongoDB Drivers and tools.
 Clients use a specialized MongoDB URI connection string to connect to 
 Edge Server and send requests.
 
 The Wire Protocol server accepts these incoming connections, and is on by 
-default. You can connect to it via the host machine using this MongoDB URI:
+default. You can connect to it using the host machine using this MongoDB URI:
 
 .. code:: console
 
@@ -267,8 +274,8 @@ default. You can connect to it via the host machine using this MongoDB URI:
 
    * - ``<auth-type>``
      - The type of authentication provider. For example, ``local-userpass`` 
-       for email/password authentication. Currently, the only supported type
-       is ``local-userpass``.
+       for email/password authentication. Currently, the only supported types
+       are ``anonymous`` or ``local-userpass``.
 
 .. example::
 
@@ -278,6 +285,18 @@ default. You can connect to it via the host machine using this MongoDB URI:
    .. code:: console
 
       mongodb://example-user:my-password@ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021?authMechanism=PLAIN&appName=::local-userpass
+
+Supported Authentication Providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server currently supports a subset of authentication providers when
+connecting over the Wire Protocol:
+
+- :ref:`anonymous-authentication`
+- :ref:`email-password-authentication`
+
+Supported MongoDB APIs
+~~~~~~~~~~~~~~~~~~~~~~
 
 Edge Server currently supports a subset of the MongoDB APIs. For information 
 about the supported APIs, refer to :ref:`edge-server-mongodb`.
@@ -290,9 +309,6 @@ Connect to the Edge Server with Compass
 You can connect to the Edge Server instance using 
 :ref:`MongoDB Compass <compass-index>`. Compass enables you to explore the 
 documents syncing to Edge Server instance, and make updates to those documents.
-
-Connect with Compass
-~~~~~~~~~~~~~~~~~~~~
 
 [PLACEHOLDER - not sure exactly what URI to use to connect with Compass - 
 complete this with info from engineering or after we can test this ourselves]
