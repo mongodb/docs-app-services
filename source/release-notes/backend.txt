@@ -13,6 +13,33 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_2024-017:
+
+17 April 2024 Release
+~~~~~~~~~~~~~~~~~~~~~
+
+- Fixed GCP ``us-central1`` label to read "Iowa" instead of "Ohio" in App Services Deployment
+  Region settings.
+
+- Improved user caching for authentication provider user metadata. For more information, refer to
+  notes in :ref:`Authentication Provider Metadata <auth-provider-metadata>`.
+
+- There are now three types of private endpoints: general, sync, and legacy. Legacy endpoints must migrate
+  to either general or sync. For more information, refer to :ref:`Use a VPC Private Endpoint <private_endpoints>`.
+
+- For the CLI, added a prompt to pick from available app users when using the ``--user`` flag. 
+
+- App Services now uses the ``services.cloud.mongodb.com`` domain rather than the ``realm.mongodb.com`` domain.
+
+- Improved the App Services UI function editor with new features such as dark mode and auto-formatting.
+
+- Added a schema version selector to the Sync Models page for SDK object models in the UI. 
+
+- Updated C++ SDK Model generation to support sets and remove ``experimental`` namespace.
+
+- New applications now use the :manual:`$changeStreamSplitLargeEvent stage </reference/operator/aggregation/changeStreamSplitLargeEvent>`
+  for large events that exceed 16 MB in a change stream.
+
 .. _backend_20240403:
 
 3 April 2024 Release
