@@ -4458,18 +4458,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EdgeServerInfo"
-              example:
-                id: 6622b8f5118368b943d228a9
-                created: 2024-04-19T09:51:00Z
-                name: Edge-Store-42
-                user_id: 6622b8f5118368b943d2288a
-                status: active
-                hostname: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
-                last_connection: 2024-04-19T09:51:00Z
-                query: { "Item": '(owner_id == "641cb3d99e425c794ef69315")' }
-                packageVersion: v0.21.2
-                latestPackageVersion: v0.22.2
-                metrics: {}
 
     delete:
       tags:
@@ -5854,6 +5842,18 @@ components:
                 The latest version of the Edge Server code that is available.
             metrics:
               $ref: "#/components/schemas/EdgeServerMetrics"
+          example:
+            id: 6622b8f5118368b943d228a9
+            created: 2024-04-19T09:51:00Z
+            name: Edge-Store-42
+            user_id: 6622b8f5118368b943d2288a
+            status: active
+            hostname: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
+            last_connection: 2024-04-19T09:51:00Z
+            query: { "Item": '(owner_id == "641cb3d99e425c794ef69315")' }
+            packageVersion: v0.21.2
+            latestPackageVersion: v0.22.2
+            metrics: {}
     EdgeServerMetrics:
       type: object
       description: |-
