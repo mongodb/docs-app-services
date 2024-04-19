@@ -4408,9 +4408,84 @@ paths:
               schema:
                 properties:
                   edge_servers:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/EdgeServerInstance"
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EdgeServerInstance"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminCreateEdgeServerInstance
+      summary: Create an Edge Server instance
+      description: Create a new Edge Server instance.
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    description: A human-readable name for the Edge Server instance.
+                    required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    get:
+      tags:
+        - edge-server
+      operationId: adminGetEdgeServerInstance
+      summary: Get Edge Server information
+      description: |-
+        Get information about a specific Edge Server instance.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerInfo"
+
+    delete:
+      tags:
+        - edge-server
+      operationId: adminDeleteEdgeServerInstance
+      summary: Delete an Edge Server instance
+      responses:
+        "201":
+          description: No content
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}/regenerate-registration-key": 
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminRegenerateEdgeServerRegistrationKey
+      summary: Regenerate registration key
+      description: |-
+        Regenerate the Edge Server instance registration key.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
 
   "/groups/{groupId}/apps/{appId}/endpoints":
     parameters:
