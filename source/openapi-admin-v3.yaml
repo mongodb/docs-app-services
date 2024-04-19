@@ -5780,28 +5780,33 @@ components:
       properties:
         id:
           type: string
+          example: 6622b8f5118368b943d228a9
           description: |-
             A unique identifier for the Edge Server, of type ObjectID, as a 
             string. You can use this identifier when configuring permissions.
         created:
           type: string
+          example: 2024-04-19T08:51:00Z
           description: |-
             A string representing the time at which the Edge Server instance 
             was created, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
             (number of seconds since January 1, 1970 at 00:00 UTC).
         name:
           type: string
+          example: Edge-Store-42
           description: |-
             The human-readable name supplied when 
             [creating the Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/manage-edge-servers/#create-an-edge-server-instance) 
             instance.
         user_id:
           type: string
+          example: 6622b8f5118368b943d2288a
           description: |-
             The Edge Server itself is a user. This is the unique identifier of 
             the Edge Server user, of type ObjectId, as a string.
         status:
           type: string
+          example: "active"
           enum:
             - "active"
             - "deleted"
@@ -5812,9 +5817,11 @@ components:
             The current status of the Edge Server instance.
         hostname:
           type: string
+          example: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
           description: The public-addressable DNS of the Edge Server instance.
         last_connection:
           type: string
+          example: 2024-04-19T09:51:00Z
           description: |-
             A string representing the time at which the Edge Server instance 
             last connected to Atlas, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
@@ -5844,7 +5851,7 @@ components:
               $ref: "#/components/schemas/EdgeServerMetrics"
           example:
             id: 6622b8f5118368b943d228a9
-            created: 2024-04-19T09:51:00Z
+            created: 2024-04-19T08:51:00Z
             name: Edge-Store-42
             user_id: 6622b8f5118368b943d2288a
             status: active
