@@ -4387,6 +4387,106 @@ paths:
         "204":
           description: No Content
 
+  "/groups/{groupId}/apps/{appId}/edge":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+
+    get:
+      tags:
+        - edge-server
+      operationId: adminGetAllEdgeServerInstances
+      summary: List Edge Servers
+      description: |-
+        List all [Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/) 
+        instances for the given App.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  edge_servers:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/EdgeServerInstance"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminCreateEdgeServerInstance
+      summary: Create an Edge Server instance
+      description: Create a new Edge Server instance.
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    description: A human-readable name for the Edge Server instance.
+                    required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    get:
+      tags:
+        - edge-server
+      operationId: adminGetEdgeServerInstance
+      summary: Get Edge Server information
+      description: |-
+        Get information about a specific Edge Server instance.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerInfo"
+
+    delete:
+      tags:
+        - edge-server
+      operationId: adminDeleteEdgeServerInstance
+      summary: Delete an Edge Server instance
+      responses:
+        "201":
+          description: No content
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}/regenerate-registration-key": 
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminRegenerateEdgeServerRegistrationKey
+      summary: Regenerate registration key
+      description: |-
+        Regenerate the Edge Server instance registration key.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
+
   "/groups/{groupId}/apps/{appId}/endpoints":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4921,6 +5021,14 @@ components:
       name: deploymentId
       description: |-
         The `_id` value of an application deployment.
+      in: path
+      required: true
+      schema:
+        type: string
+    EdgeServerId:
+      name: edgeServerId
+      description: |-
+        The `id` value of an Edge Server instance.
       in: path
       required: true
       schema:
@@ -5632,6 +5740,94 @@ components:
                 description: |-
                   A list where each element is the name of a file that was changed in the
                   draft.
+    EdgeServerInstance:
+      allOf:
+        - $ref: "#/components/schemas/BaseEdgeServerInstance"
+        - required:
+            - function_id
+          properties:
+            _id:
+              type: string
+              description: The endpoint's unique ID.
+            function_id:
+              type: string
+              description: The endpoint function's unique ID.
+    BaseEdgeServerInstance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The Edge Server instance ID, of type ObjectID, as a string.
+        name:
+          type: string
+          description: |-
+            The human-readable name supplied when 
+            [creating the Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/manage-edge-servers/#create-an-edge-server-instance) 
+            instance.
+        userId:
+          type: string
+          description: No idea - figure this out!
+        status:
+          type: string
+          enum:
+            - "PENDING"
+            - "ACTIVE"
+            - "FAILED"
+          description: |-
+            The current health of the Edge Server instance.
+        hostname:
+          type: string
+          description: The public-addressable DNS of the Edge Server instance.
+        lastConnection:
+          type: integer
+          description: |-
+            The time at which the Edge Server instance last connected to Atlas, 
+            in [Unix time](https://en.wikipedia.org/wiki/Unix_time) (number of 
+            seconds since January 1, 1970 at 00:00 UTC).
+    EdgeServerInfo:
+      allOf:
+        - $ref: "#/components/schemas/BaseEdgeServerInstance"
+          properties:
+            query: 
+              type: object
+              example: { "Item": '(owner_id == "641cb3d99e425c794ef69315")' }
+              description: |-
+                The current [Sync queries](https://www.mongodb.com/docs/atlas/app-services/edge-server/configure/#specify-the-edge-server-s-query) 
+                for this Edge Server instance. This object maps collection 
+                names to the query for that collection.
+            packageVersion:
+              type: string
+              description: |-
+                The version of the Edge Server code that the instance is
+                currently running. If this is more than one major version
+                behind the latest version, the Edge Server instance enters
+                a "FAILED" state.
+            latestPackageVersion:
+              type: string
+              description: |-
+                The latest version of the Edge Server code that is available.
+            metrics:
+              $ref: "#/components/schemas/EdgeServerMetrics"
+    EdgeServerMetrics:
+      type: object
+      description: |-
+        The metrics for this Edge Server instance. [PLACEHOLDER: Provide more
+        details about metrics when available.]
+    EdgeServerCreateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the new Edge Server instance.
+        user_id:
+          type: string
+          description: No idea - figure this out!
+        registration_key:
+          type: string
+          description: |-
+            Save this information. When you install the Edge Server code on the
+            host, enter this registration key. The Edge Server exchanges this 
+            for an API Key that it uses to authenticate with Atlas.
     Endpoint:
       allOf:
         - $ref: "#/components/schemas/BaseEndpoint"
