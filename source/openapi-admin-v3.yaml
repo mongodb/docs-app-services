@@ -4467,7 +4467,7 @@ paths:
       operationId: adminDeleteEdgeServerInstance
       summary: Delete an Edge Server instance
       responses:
-        "201":
+        "200":
           description: No content
 
   "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}/regenerate-registration-key": 
@@ -4516,11 +4516,7 @@ paths:
                     description: A human-readable name for the Edge Server instance.
       responses:
         "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/EdgeServerCreateResponse"
+          description: No content
 
   "/groups/{groupId}/apps/{appId}/endpoints":
     parameters:
@@ -5873,14 +5869,14 @@ components:
             The current [Sync queries](https://www.mongodb.com/docs/atlas/app-services/edge-server/configure/#specify-the-edge-server-s-query) 
             for this Edge Server instance. This object maps collection 
             names to the query for that collection.
-        packageVersion:
+        package_version:
           type: string
           description: |-
             The version of the Edge Server code that the instance is
             currently running. If this is more than one major version
             behind the latest version, the Edge Server instance enters
             a "failed" state.
-        latestPackageVersion:
+        latest_package_version:
           type: string
           description: |-
             The latest version of the Edge Server code that is available.
@@ -5895,8 +5891,8 @@ components:
         hostname: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
         last_connection: 2024-04-19T09:51:00Z
         query: { "Item": '(owner_id == "641cb3d99e425c794ef69315")' }
-        packageVersion: v0.21.2
-        latestPackageVersion: v0.22.2
+        package_version: v0.21.2
+        latest_package_version: v0.22.2
         metrics: {}
     EdgeServerMetrics:
       type: object
