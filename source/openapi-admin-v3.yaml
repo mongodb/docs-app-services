@@ -4427,6 +4427,7 @@ paths:
                 properties:
                   name:
                     type: string
+                    example: Edge-Store-42
                     description: A human-readable name for the Edge Server instance.
                     required: true
       responses:
@@ -4477,9 +4478,39 @@ paths:
       tags:
         - edge-server
       operationId: adminRegenerateEdgeServerRegistrationKey
-      summary: Regenerate registration key
+      summary: Regenerate Edge Server registration key
       description: |-
         Regenerate the Edge Server instance registration key.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}/rename": 
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminRenameEdgeServerInstance
+      summary: Rename an Edge Server instance
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                properties:
+                  name:
+                    type: string
+                    example: Edge-Store-41
+                    description: A human-readable name for the Edge Server instance.
+                    required: true
       responses:
         "200":
           description: OK
@@ -5750,7 +5781,9 @@ components:
         id:
           type: string
           example: 6622b8f5118368b943d228a9
-          description: The Edge Server instance ID, of type ObjectID, as a string.
+          description: |-
+            A unique identifier for the Edge Server, of type ObjectID, as a 
+            string. You can use this identifier when configuring permissions.
         created:
           type: string
           example: "2024-04-19T09:51:00Z"
@@ -5768,16 +5801,19 @@ components:
         user_id:
           type: string
           example: 6622b8f5118368b943d2288a
-          description: No idea - figure this out!
+          description: |-
+            The Edge Server itself is a user. This is the unique identifier of 
+            the Edge Server user, of type ObjectId, as a string.
         status:
           type: string
           enum:
-            - "PENDING"
-            - "ACTIVE"
-            - "FAILED"
+            - "active"
+            - "deleted"
+            - "failed"
+            - "registered"
             - "unregistered"
           description: |-
-            The current health of the Edge Server instance.
+            The current status of the Edge Server instance.
         hostname:
           type: string
           example: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
@@ -5830,7 +5866,9 @@ components:
         user_id:
           type: string
           example: 6622b8f5118368b943d2288a
-          description: No idea - figure this out!
+          description: |-
+            The Edge Server itself is a user. This is the unique identifier of 
+            the Edge Server user, of type ObjectId, as a string.
         registration_key:
           type: string
           example: Qi4GgpvVduwwt4k1w77ZzaQ1n4SdTWC8rLBD9vyTib1w9G3CX2ta8WrJvt3giEK7
