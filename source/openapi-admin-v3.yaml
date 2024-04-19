@@ -4424,6 +4424,8 @@ paths:
         content:
             application/json:
               schema:
+                type: object
+                required: ["name"]
                 properties:
                   name:
                     type: string
@@ -4505,12 +4507,13 @@ paths:
         content:
             application/json:
               schema:
+                type: object
+                required: ["name"]
                 properties:
                   name:
                     type: string
                     example: Edge-Store-41
                     description: A human-readable name for the Edge Server instance.
-                    required: true
       responses:
         "200":
           description: OK
@@ -5783,9 +5786,8 @@ components:
         created:
           type: string
           description: |-
-            A string representing the time at which the Edge Server instance 
-            was created, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
-            (number of seconds since January 1, 1970 at 00:00 UTC).
+            A string representing the timestamp at which the Edge Server 
+            instance was created.
         name:
           type: string
           description: |-
@@ -5813,9 +5815,8 @@ components:
         last_connection:
           type: string
           description: |-
-            A string representing the time at which the Edge Server instance 
-            last connected to Atlas, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
-            (number of seconds since January 1, 1970 at 00:00 UTC).
+            A string representing the timestamp at which the Edge Server 
+            instance last connected to Atlas.
       example:
         id: 6622b8f5118368b943d228a9
         created: 2024-04-19T08:51:00Z
@@ -5835,9 +5836,8 @@ components:
         created:
           type: string
           description: |-
-            A string representing the time at which the Edge Server instance 
-            was created, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
-            (number of seconds since January 1, 1970 at 00:00 UTC).
+            A string representing the timestamp at which the Edge Server 
+            instance was created.
         name:
           type: string
           description: |-
@@ -5865,9 +5865,8 @@ components:
         last_connection:
           type: string
           description: |-
-            A string representing the time at which the Edge Server instance 
-            last connected to Atlas, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
-            (number of seconds since January 1, 1970 at 00:00 UTC).
+            A string representing the timestamp at which the Edge Server 
+            instance last connected to Atlas.
         query: 
           type: object
           description: |-
@@ -5880,7 +5879,7 @@ components:
             The version of the Edge Server code that the instance is
             currently running. If this is more than one major version
             behind the latest version, the Edge Server instance enters
-            a "FAILED" state.
+            a "failed" state.
         latestPackageVersion:
           type: string
           description: |-
@@ -5910,7 +5909,10 @@ components:
         id:
           type: string
           example: 6622b8f5118368b943d228a9
-          description: The ID of the Edge Server instance.
+          description: |-
+            The unique identifier of the Edge Server instance, of type 
+            ObjectId, as a string. You can use this identifier when configuring
+            permissions.
         user_id:
           type: string
           example: 6622b8f5118368b943d2288a
