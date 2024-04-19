@@ -5744,29 +5744,30 @@ components:
     EdgeServerInstance:
       allOf:
         - $ref: "#/components/schemas/BaseEdgeServerInstance"
-        - required:
-            - function_id
-          properties:
-            _id:
-              type: string
-              description: The endpoint's unique ID.
-            function_id:
-              type: string
-              description: The endpoint function's unique ID.
     BaseEdgeServerInstance:
       type: object
       properties:
         id:
           type: string
+          example: 6622b8f5118368b943d228a9
           description: The Edge Server instance ID, of type ObjectID, as a string.
+        created:
+          type: string
+          example: "2024-04-19T09:51:00Z"
+          description: |-
+            A string representing the time at which the Edge Server instance 
+            was created, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
+            (number of seconds since January 1, 1970 at 00:00 UTC).
         name:
           type: string
+          example: Edge-Store-42
           description: |-
             The human-readable name supplied when 
             [creating the Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/manage-edge-servers/#create-an-edge-server-instance) 
             instance.
-        userId:
+        user_id:
           type: string
+          example: 6622b8f5118368b943d2288a
           description: No idea - figure this out!
         status:
           type: string
@@ -5774,17 +5775,20 @@ components:
             - "PENDING"
             - "ACTIVE"
             - "FAILED"
+            - "unregistered"
           description: |-
             The current health of the Edge Server instance.
         hostname:
           type: string
+          example: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
           description: The public-addressable DNS of the Edge Server instance.
-        lastConnection:
-          type: integer
+        last_connection:
+          type: string
+          example: "2024-04-19T09:51:00Z"
           description: |-
-            The time at which the Edge Server instance last connected to Atlas, 
-            in [Unix time](https://en.wikipedia.org/wiki/Unix_time) (number of 
-            seconds since January 1, 1970 at 00:00 UTC).
+            A string representing the time at which the Edge Server instance 
+            last connected to Atlas, in [Unix time](https://en.wikipedia.org/wiki/Unix_time) 
+            (number of seconds since January 1, 1970 at 00:00 UTC).
     EdgeServerInfo:
       allOf:
         - $ref: "#/components/schemas/BaseEdgeServerInstance"
@@ -5798,6 +5802,7 @@ components:
                 names to the query for that collection.
             packageVersion:
               type: string
+              example: v0.21.2
               description: |-
                 The version of the Edge Server code that the instance is
                 currently running. If this is more than one major version
@@ -5805,6 +5810,7 @@ components:
                 a "FAILED" state.
             latestPackageVersion:
               type: string
+              example: v0.22.2
               description: |-
                 The latest version of the Edge Server code that is available.
             metrics:
@@ -5819,12 +5825,15 @@ components:
       properties:
         id:
           type: string
+          example: 6622b8f5118368b943d228a9
           description: The ID of the new Edge Server instance.
         user_id:
           type: string
+          example: 6622b8f5118368b943d2288a
           description: No idea - figure this out!
         registration_key:
           type: string
+          example: Qi4GgpvVduwwt4k1w77ZzaQ1n4SdTWC8rLBD9vyTib1w9G3CX2ta8WrJvt3giEK7
           description: |-
             Save this information. When you install the Edge Server code on the
             host, enter this registration key. The Edge Server exchanges this 
