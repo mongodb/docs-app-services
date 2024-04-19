@@ -104,9 +104,13 @@ Services.
 
 .. important:: Required Field
 
-   Documents that you want to sync with Edge Server must contain an ``_id`` 
-   field of type ``ObjectID``. Any documents without this field cannot sync 
-   to an Edge Server.
+   Documents that you want to sync with an Edge Server must contain an ``_id`` 
+   field whose type varies depending on the service type: 
+   
+   - Edge Server Service: Type ``ObjectId``
+   - Device Sync Service: Type ``ObjectId``, ``String``, ``Long``, ``Int``, ``UUID``
+
+   Any documents without this field cannot sync to an Edge Server.
 
 Supported Authentication Providers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
