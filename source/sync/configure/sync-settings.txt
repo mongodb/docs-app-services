@@ -60,6 +60,22 @@ to its own collection in the database specified by
 side, App Services updates the collection schema to match. This lets you update
 objects in your client code as you develop your app.
 
+When you enable Development Mode for your app, the following occurs:
+
+- For apps that support schema versioning, the schema version is cleared, and any schema versioning history is deleted.
+  This is because Development Mode does *not* support schema versioning. After
+  you disable Development Mode, schema versioning is enabled automatically.
+  Refer to :ref:`schema-versioning` for more information.
+- Anonymous authentication is enabled. However, you can manually disable
+  anonymous authentication for
+  your app, even while
+  Development Mode is enabled. Refer to :ref:`anonymous-authentication`
+  for more information.
+- Deployment drafts are disabled. You *cannot* re-enable deployment drafts in the
+  UI while Development Mode is enabled. However, you can still manually create
+  deployment drafts through the CLI or the Admin API. Refer to
+  :ref:`deployment-draft` for more information.
+
 You can use :ref:`data access rules <sync-rules>` with Development Mode. Note
 that schema changes ignore data access rules. This means that any client can
 update the backend schema by changing the client model.
@@ -71,21 +87,6 @@ For more information about updating your schema in Development Mode, refer to
 :ref:`update-data-model-development-mode`.
 
 .. include:: /includes/note-dev-mode-production.rst
-
-Side Effects of Enabling Development Mode
-`````````````````````````````````````````
-
-Enabling Development Mode has two side effects:
-
-- *Enabling* :ref:`anonymous authentication <anonymous-authentication>`.
-- *Disabling* :ref:`deployment drafts <deployment-draft>`.
-
-If your app does not need anonymous authentication, you may want to 
-disable it after enabling Development Mode.
-
-You cannot re-enable deployment drafts in the UI until Development Mode 
-is disabled. However, you can still manually create deployment drafts 
-through the CLI or the Admin API.
 
 .. _sync-config-data-source:
 
