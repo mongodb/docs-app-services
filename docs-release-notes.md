@@ -15,7 +15,7 @@
 ## Reference
 
 - Admin API: 
-  - Update references for VPC private endpoints due to domain migration to services.cloud.mongodb.com.
+  - Update references for VPC private endpoints due to domain migration to `services.cloud.mongodb.com`.
   - Fix errors in the Admin API spec caught by the openapi linter.
 - Release Notes: Update external changelog with release notes for new schema version selector, the service.cloud.mongodb.com domain change, and more.
 
