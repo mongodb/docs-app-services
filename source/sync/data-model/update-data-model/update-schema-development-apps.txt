@@ -18,23 +18,36 @@ Automatically Update a Data Model with Development Mode
    :depth: 2
    :class: singlecol
 
-While your app is in development, you can leverage Development Mode to simplify
+While your app is in development, you can use Development Mode to simplify
 the process of updating your Device Sync data model in an eligible app. 
 
 **Development Mode** is a Device Sync configuration setting that lets Sync
 automatically infer and update the server-side App Services schema based on your
-client-side changes. Instead of having to manually
-handle breaking changes to your data model, you can update your SDK object
-models and let Device
-Sync automatically handle the server-side updates.
+client-side changes - including breaking changes. 
 
 For more information on Development Mode and other Device Sync settings, refer 
 to :ref:`sync-settings`. 
 
 .. include:: /includes/note-dev-mode-production.rst
 
-For information on how to update data models once your app is in production
-(Development Mode is disabled), refer to :ref:`update-data-model-production-apps`.
+For information on how to update data models when Development Mode is disabled, refer to :ref:`update-data-model-production-apps`.
+
+Breaking Changes in Development Mode
+------------------------------------
+
+Non-breaking changes (or additive changes) don't require any additional handling, even with
+Development Mode disabled. You can make these change to your server-side App
+Services schema or to your client-side object model.
+
+Breaking changes (or destructive changes), however, require additional handling
+depending on where they are made. When Development Mode is enabled, and you make
+breaking changes to your client-side SDK object model, then Device Sync
+automatically handles the server-side updates for you.
+You *must* make your updates to the client for Sync to automatically update the
+server-side schema with the breaking changes. 
+
+For more information on the types of data model changes and how
+Device Sync handles them, refer to :ref:`synced-schema-overview`.
 
 .. _update-data-model-development-mode-prerequisites:
 
@@ -68,53 +81,6 @@ object schema in the App Services UI. For more information, refer to
    
    You can contact support if you are interested in enabling this feature in an 
    app created before September 13, 2023 that can meet the other requirements.
-
-Breaking Changes in Development Mode
-------------------------------------
-
-Non-breaking changes don't require any additional handling, even with
-Development Mode disabled. You can make these change to your server-side App
-Services schema or to your client-side object model.
-
-However, breaking changes (or destructive changes) require additional handling
-depending on where they are made. When Development Mode is enabled, and you make
-breaking changes to your client-side SDK object model, then Device Sync
-automatically handles the server-side updates for you.
-You *must* make your updates to the client for Sync to automatically update the
-server-side schema with the breaking changes.
-
-.. TODO: Add links to changes once they're available in the refactored Update Data Model page
-
-.. list-table::
-   :header-rows: 1
-   :stub-columns: 1
-   :widths: 30 60
-
-   * - Description of Change
-     - Breaking or Non-Breaking Change
-   * - Add a new object type
-     - Non-breaking
-   * - Add a new property
-     - Non-breaking
-   * - Add default value to a property
-     - Non-breaking
-   * - Remove an object type 
-     - Non-breaking *only* if made from client-side object model 
-   * - Remove a property 
-     - Non-breaking *only* if made from client-side object model 
-   * - Change optional property to required
-     - Breaking 
-   * - Change required property to optional
-     - Breaking 
-   * - Rename an object type 
-     - Breaking 
-   * - Rename a property 
-     - Breaking 
-   * - Change property type
-     - Breaking 
-
-For more information on the types of data model changes and how
-Device Sync handles them, refer to :ref:`synced-schema-overview`.
 
 Make Breaking Changes From Client-Side Object Model
 ---------------------------------------------------
