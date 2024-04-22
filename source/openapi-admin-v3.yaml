@@ -4418,7 +4418,10 @@ paths:
         - edge-server
       operationId: adminCreateEdgeServerInstance
       summary: Create an Edge Server instance
-      description: Create a new Edge Server instance.
+      description: |- 
+        Create a new Edge Server instance. The response returns a 
+        registration token that you use to configure the Edge Server
+        instance on the host.
       requestBody:
         required: true
         content:
@@ -4430,7 +4433,10 @@ paths:
                   name:
                     type: string
                     example: Edge-Store-42
-                    description: A human-readable name for the Edge Server instance.
+                    description: |-
+                      A human-readable name for the Edge Server instance. This
+                      value must be unique within the Edge Server or Device
+                      Sync Service.
                     required: true
       responses:
         "201":
@@ -4479,10 +4485,10 @@ paths:
     post:
       tags:
         - edge-server
-      operationId: adminRegenerateEdgeServerRegistrationKey
-      summary: Regenerate Edge Server registration key
+      operationId: adminRegenerateEdgeServerRegistrationToken
+      summary: Regenerate Edge Server registration token
       description: |-
-        Regenerate the Edge Server instance registration key.
+        Regenerate the Edge Server instance registration token.
       responses:
         "200":
           description: OK
@@ -5778,7 +5784,8 @@ components:
           type: string
           description: |-
             A unique identifier for the Edge Server, of type ObjectID, as a 
-            string. You can use this identifier when configuring permissions.
+            string. You can use this identifier to delete or update the Edge 
+            Server instance.
         created:
           type: string
           description: |-
@@ -5794,7 +5801,8 @@ components:
           type: string
           description: |-
             The Edge Server itself is a user. This is the unique identifier of 
-            the Edge Server user, of type ObjectId, as a string.
+            the Edge Server user, of type ObjectId, as a string. You can use 
+            this identifier when configuring permissions.
         status:
           type: string
           enum:
@@ -5828,7 +5836,8 @@ components:
           type: string
           description: |-
             A unique identifier for the Edge Server, of type ObjectID, as a 
-            string. You can use this identifier when configuring permissions.
+            string. You can use this identifier to delete or
+            update the Edge Server instance.
         created:
           type: string
           description: |-
@@ -5844,7 +5853,8 @@ components:
           type: string
           description: |-
             The Edge Server itself is a user. This is the unique identifier of 
-            the Edge Server user, of type ObjectId, as a string.
+            the Edge Server user, of type ObjectId, as a string. You can use 
+            this identifier when configuring permissions.
         status:
           type: string
           enum:
@@ -5907,21 +5917,23 @@ components:
           example: 6622b8f5118368b943d228a9
           description: |-
             The unique identifier of the Edge Server instance, of type 
-            ObjectId, as a string. You can use this identifier when configuring
-            permissions.
+            ObjectId, as a string. You can use this identifier to delete or
+            update the Edge Server instance.
         user_id:
           type: string
           example: 6622b8f5118368b943d2288a
           description: |-
             The Edge Server itself is a user. This is the unique identifier of 
-            the Edge Server user, of type ObjectId, as a string.
+            the Edge Server user, of type ObjectId, as a string. You can use 
+            this identifier when configuring permissions.
         registration_key:
           type: string
           example: Qi4GgpvVduwwt4k1w77ZzaQ1n4SdTWC8rLBD9vyTib1w9G3CX2ta8WrJvt3giEK7
           description: |-
             Save this information. When you install the Edge Server code on the
-            host, enter this registration key. The Edge Server exchanges this 
-            for an API Key that it uses to authenticate with Atlas.
+            host, enter this registration token. The Edge Server exchanges this 
+            for an API Key that it uses to authenticate with Atlas. You can
+            only use this registration token once.
     Endpoint:
       allOf:
         - $ref: "#/components/schemas/BaseEndpoint"
