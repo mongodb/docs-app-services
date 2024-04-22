@@ -96,6 +96,10 @@ local data across servers.
 For all other supported authentication providers, users persist and have 
 access to the expected data across servers.
 
+When an SDK user roams, the client app must perform a client reset upon
+connecting to the new server. For more information about client resets, refer 
+to :ref:`client-resets`.
+
 Example: SwiftUI Template App
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -118,8 +122,8 @@ modifications you can make to the :github:`Swift template app
          * - ``baseUrl``
            - The public-accessible DNS of your Edge Server instance host.
              This is ``http://``, or if TLS is enabled, ``https://``, 
-             followed by the same value you set in your Edge Server
-             instance configuration.
+             followed by the IP address exposed in your Edge Server
+             container configuration.
           
          * - ``appId``
            - The App ID of your App Services App that has Edge Server 
@@ -235,11 +239,14 @@ Clients use a specialized MongoDB URI connection string to connect to
 Edge Server and send requests.
 
 The Wire Protocol server accepts these incoming connections, and is on by 
-default. You can connect to it using the host machine using this MongoDB URI:
+default. You can connect to the host machine with a MongoDB URI.
+
+This URI may vary depending on the authentication type. Broadly, it resembles
+this form:
 
 .. code:: console
 
-   mongodb://<username>:<password>@<hostname>:<port>?authMechanism=PLAIN&appName=::<auth-type>
+   mongodb://<username>:<password>@<hostname>:<port>?authMechanism=PLAIN
 
 .. list-table::
    :header-rows: 1
@@ -250,7 +257,9 @@ default. You can connect to it using the host machine using this MongoDB URI:
    * - ``<username>``
      - The username of the Atlas user. For an 
        :ref:`email/password user <email-password-authentication>`, this 
-       might look similar to ``first.last@example.com``.
+       might look similar to ``first.last@example.com``. If this username
+       contains an ``@`` symbol, you must escape the ``@`` symbol. For example,
+       ``john.doe@example.com`` becomes ``john.doe%40example.com``.
 
    * - ``<password>``
      - The password of the Atlas user. This might look similar to 
@@ -269,14 +278,6 @@ default. You can connect to it using the host machine using this MongoDB URI:
    * - ``authMechanism=PLAIN``
      - The auth mechanism. Currently, the only supported value is ``PLAIN``.
 
-   * - ``appName``
-     - Optional string ``appName``. You may omit the value and/or key.
-
-   * - ``<auth-type>``
-     - The type of authentication provider. For example, ``local-userpass`` 
-       for email/password authentication. Currently, the only supported types
-       are ``anonymous`` or ``local-userpass``.
-
 .. example::
 
    A Wire Protocol connection URI for an Edge Server instance hosted on Amazon 
@@ -284,7 +285,55 @@ default. You can connect to it using the host machine using this MongoDB URI:
 
    .. code:: console
 
-      mongodb://example-user:my-password@ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021?authMechanism=PLAIN&appName=::local-userpass
+      mongodb://example-user:my-password@ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021?authMechanism=PLAIN
+
+.. _anonymous-connection-URI:
+
+Anonymous Connections
+~~~~~~~~~~~~~~~~~~~~~
+
+You can enable anonymous connections and connect without specifying a username 
+or password. This option is disabled by default.
+
+.. procedure::
+
+   .. step:: Configure Edge Server with the Relevant Flag
+
+      To enable anonymous connections, start the Edge Server with the
+      ``--insecure-disable-auth`` flag set to ``true``. This allows you to
+      connect without specifying a username and password.
+
+      This setting is ``false`` by default. Setting this to ``true`` enables
+      connections to bypass authentication.
+
+      For more information about using ``edgectl`` to configure and start
+      the Edge Server instance, refer to 
+      :ref:`edge-server-install-and-configure`.
+
+   .. step:: Omit Authentication Details from MongoDB URI
+
+      When connecting without authentication, the MongoDB URI omits the 
+      authentication-related parameters. This simplfied URI is:
+
+      .. code:: console
+
+         mongodb://<hostname>:<port>
+
+      .. example::
+
+         An anonymous Wire Protocol connection URI for an Edge Server instance 
+         hosted on Amazon EC2 might look similar to:
+
+         .. code:: console
+
+            mongodb://ec2-13-58-70-88.us-east-2.compute.amazonaws.com:27021
+        
+         An anonymous connection to an Edge Server instance running on your
+         machine during development may resemble:
+
+         .. code:: console
+
+            mongodb://localhost:27021
 
 Supported Authentication Providers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -303,18 +352,15 @@ about the supported APIs, refer to :ref:`edge-server-mongodb`.
 
 .. _edge-server-compass-connect:
 
-Connect to the Edge Server with Compass
----------------------------------------
+Connect with MongoDB Compass
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can connect to the Edge Server instance using 
+You can connect to the Edge Server instance using the MongoDB URI through 
 :ref:`MongoDB Compass <compass-index>`. Compass enables you to explore the 
 documents syncing to Edge Server instance, and make updates to those documents.
 
-[PLACEHOLDER - not sure exactly what URI to use to connect with Compass - 
-complete this with info from engineering or after we can test this ourselves]
-
 Limitations
-~~~~~~~~~~~
+```````````
 
 Edge Server support for Compass is limited. You can use it to:
 
