@@ -124,7 +124,12 @@ When you make a breaking change to the server-side App Services schema, you
 must either:  
 
 - :ref:`Terminate <terminating-realm-sync>`, then :ref:`re-enable  <enable-sync>` Device Sync in the backend. 
-- Create a partner collection with the desired changes, copy the old data to the collection, then set up triggers to ensure data consistency. This process is described in the :ref:`schema-partner_collection-strategy` section on this page.
+- Create a partner collection with the desired changes, copy the old data to the
+  collection, then set up triggers to ensure data consistency. This process is
+  described in the :ref:`schema-partner_collection-strategy` section on this
+  page.
+
+.. include:: /includes/warn-terminate-sync-client-reset.rst
 
 .. note:: Breaking Schema Changes Unsupported in CLI or Automated Deploy
 
@@ -462,8 +467,6 @@ the original collection, but has the new schema definition in place. Partner
 collections use database triggers to ensure that data flows in both directions,
 meaning that when one collection is written to, the other is also written to 
 (with the data modifications required for the new schema).
-
-.. include:: /includes/warn-terminate-sync-client-reset.rst
 
 Example
 ~~~~~~~
