@@ -80,8 +80,9 @@ OS Compatibility
 
 Edge Server has been verified with the following operating systems:
 
-- Ubuntu Server 18+
 - macOS 11.x and newer running on M1 or Intel 2018+ MacBook Pros
+- Raspberry Pi OS 12
+- Ubuntu Server 18+
 
 Other operating systems may be possible, but have not yet been verified.
 
@@ -117,8 +118,10 @@ EC2, you must open ports to accept incoming connections:
 
 Edge Server supports TLS.
 
-[PLACEHOLDER: Add a link to details about configuring TLS once engineering
-decides how/where to do that.]
+We recommend setting up TLS termination for HTTP access, including Device SDK 
+traffic, through a Kubernetes controller.
+
+Connections through MongoDB URIs can configure TLS through ``edgectl``.
 
 .. _edge-server-install-and-configure:
 
@@ -146,23 +149,11 @@ host.
       script to manage the installation and install required dependencies.
 
       Use this command to install the command-line tool and the Edge Server 
-      code:
+      code on the device where you want to run the Edge Server instance:
 
       .. code-block:: shell
 
-         curl -s http://localhost:8080/edge/install.sh | bash -s -- --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
-
-      - ``http://localhost:8080/edge/install.sh``: This assumes you are 
-        executing the command on the device where you want to install the
-        Edge Server code, and want to use ``localhost:8080`` as the port
-        to access the instance. Change this as needed for your requirements.
-      - ``--app-id``: Provide your Edge Server App ID. For example, 
-        ``--app-id="edge-server-vtoyh"``. For more information, refer to 
-        :ref:`find-app-id`. 
-      - ``--platform``: You can use Docker Compose to install and manage your
-        Edge Server instance in a development environment, or Kubernetes to 
-        manage the instance in a production environment. Valid values are 
-        either ``compose`` or ``kubernetes``.
+         curl -s https://services.cloud.mongodb.com/edge/install.sh | bash
 
       Follow the prompts to download and install the Edge Server code.
 
@@ -172,9 +163,17 @@ host.
 
       .. code-block:: shell
 
-         edgectl configure --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
+         edgectl config --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
 
       The minimum required parameters are the ``app-id`` and the ``platform``.
+
+      - ``--app-id``: Provide your Edge Server App ID. For example, 
+        ``--app-id="edge-server-vtoyh"``. For more information, refer to 
+        :ref:`find-app-id`. 
+      - ``--platform``: You can use Docker Compose to install and manage your
+        Edge Server instance in a development environment, or Kubernetes to 
+        manage the instance in a production environment. Valid values are 
+        either ``compose`` or ``kubernetes``.
 
       You can provide the following optional flags to specify additional
       configuration details:
@@ -347,7 +346,15 @@ Upgrade the Edge Server Version
 -------------------------------
 
 As the Edge Server evolves, you may want to upgrade your Edge Server 
-version to take advantage of new functionality.
+version to take advantage of new functionality. Additionally, an Edge Server
+instance must be no more than one major version behind the latest available, 
+or it enters a ``FAILED`` state and cannot connect to Atlas.
+
+.. important:: Required network access
+
+   To upgrade the Edge Server version, ``edgectl`` must have network
+   access. You cannot upgrade the Edge Server version if ``edgectl`` is not 
+   online.
 
 .. procedure::
 
