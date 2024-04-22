@@ -1,3 +1,28 @@
+# April 19, 2024
+
+## Develop & Deploy Apps
+
+- Deployment Models & Regions: Correct GCP deployment region "Ohio" to "Iowa" per engineering updates. Remove AWS-style abbreviations.
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Increase token character limit from 2048 to 4096.
+
+## Security
+
+- Use a VPC Private Endpoint: Rewrite page to account for new Endpoint creation process with Legacy, General, and Sync Endpoints.
+
+## Reference
+
+- Admin API: 
+  - Update references for VPC private endpoints due to domain migration to services.cloud.mongodb.com.
+  - Fix errors in the Admin API spec caught by the openapi linter.
+- Release Notes: Update external changelog with release notes for new schema version selector, the service.cloud.mongodb.com domain change, and more.
+
+# Other
+
+- Domain Migration: Add SDK versions that use the new baseURL by default.
+
 # April 12, 2024
 
 ## Authenticate & Manage Users
