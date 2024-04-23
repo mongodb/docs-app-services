@@ -72,7 +72,6 @@ connecting with an SDK:
 - :ref:`anonymous-authentication`
 - :ref:`email-password-authentication`
 - :ref:`api-key-authentication`
-- :ref:`custom-function-authentication`
 - :ref:`custom-jwt-authentication`
 
 .. _edge-server-device-sdk-roaming:
@@ -86,6 +85,10 @@ instance and Atlas.
 Roaming requires changing the base URL in the client's App configuration.
 For details, refer to the SDK documentation linked above.
 
+When an SDK user roams, the client app must perform a client reset upon
+connecting to the new server. For more information about client resets, refer 
+to :ref:`client-resets`.
+
 Roaming Users and Anonymous Authentication
 ``````````````````````````````````````````
 
@@ -96,10 +99,6 @@ local data across servers.
 
 For all other supported authentication providers, users persist and have 
 access to the expected data across servers.
-
-When an SDK user roams, the client app must perform a client reset upon
-connecting to the new server. For more information about client resets, refer 
-to :ref:`client-resets`.
 
 Example: SwiftUI Template App
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -239,8 +238,8 @@ You can connect to the Edge Server using standard MongoDB Drivers and tools.
 Clients use a specialized MongoDB URI connection string to connect to 
 Edge Server and send requests.
 
-The Wire Protocol server accepts these incoming connections, and is on by 
-default. You can connect to the host machine with a MongoDB URI.
+The Wire Protocol server accepts these incoming connections. You can connect 
+to the host machine with a MongoDB URI.
 
 This URI may vary depending on the authentication type. Broadly, it resembles
 this form:
@@ -295,6 +294,12 @@ Anonymous Connections
 
 You can enable anonymous connections and connect without specifying a username 
 or password. This option is disabled by default.
+
+.. important:: Disable Anonymous Connections in Production
+   
+   Enabling anonymous connections can streamline development by bypassing
+   authentication flows. This is only intended as a development aid; do not 
+   bypass authentication flows in production environments.
 
 .. procedure::
 
