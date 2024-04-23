@@ -91,9 +91,9 @@ Other operating systems may be possible, but have not yet been verified.
 Required Software
 ~~~~~~~~~~~~~~~~~
 
-Edge Server uses Docker in Swarm mode for development. In production 
-environments, we recommend using Kubernetes to manage your Edge Server 
-containers.
+For convenience, you can manage an Edge Server instance with Docker in Swarm 
+mode during development. In production environments, use Kubernetes to manage 
+your Edge Server containers.
 
 If you do not have Docker installed and Swarm enabled, you will be prompted
 to resolve these dependencies prior to running the Edge Server.
@@ -131,14 +131,14 @@ Install and Configure the Edge Server Instance
 After creating an Edge Server Service or Device Sync Service, you must create 
 an Edge Server instance. Each service may have many Edge Server instances. When 
 you create an Edge Server instance, you get an installation script you can use 
-to download the Edge Server code, and a token you can use to register the 
-Edge Server instance. For more details, refer to 
-:ref:`create-edge-server-instance`.
+to download a tool to install and manage the Edge Server instance, ``edgectl``. 
+You also get a token you can use to register the Edge Server instance. For more
+details, refer to :ref:`create-edge-server-instance`.
 
 Use the installation script to set up and run the Edge Server instance on the 
 host.
 
-.. include:: /includes/important-stop-tiered-sync-server.rst
+.. include:: /includes/important-stop-edge-server.rst
 
 .. procedure::
 
@@ -227,19 +227,6 @@ host.
            - If true, the Edge Server instance does not run a UI on the 
              registered ``http-port``. Defaults to ``false``.
 
-         * - ``--base-url``
-           - String
-           - The URL of the Sync server to connect to. The default is 
-             ``https://services.cloud.mongodb.com``.
-
-         * - ``--package-version``
-           - String
-           - The semantic version of the Edge Server package to run. If the
-             version is higher than the current ``edgectl`` version, it prompts
-             to update the ``edgectl`` version. Defaults to the highest minor
-             version that has the same major version as this binary, according
-             to Atlas.
-
    .. step:: Supply the Edge Server Token
 
       When first configuring the Edge Server instance, you're prompted to 
@@ -271,7 +258,7 @@ To stop all Edge Server instance containers, use the ``stop`` command:
 
    edgectl stop
 
-.. include:: /includes/important-stop-tiered-sync-server.rst
+.. include:: /includes/important-stop-edge-server.rst
 
 .. _check-edge-server-status:
 
@@ -285,22 +272,40 @@ instance with:
 
    edgectl status
 
-This gives you information about the number of clients connected to the 
-server, as well as errors that may have occurred.
-
-The status object of an Edge Server instance may look similar to:
+This gives you information about the state of the Edge Server containers, and
+a detailed status for the Sync server with a breakdown of important 
+information. It may look similar to:
 
 .. code-block:: json
    :copyable: false
 
    {
-      "status": "ACTIVE",
-      "cloud_connected": true,
-      "num_local_clients": 1,
-      "query": {
-         "Item": "truepredicate"
+      "mongoContainerStatus": {
+         "message": "running"
+      },
+      "mongoDBStatus": {
+         "message": "ready"
+      },
+      "syncServerContainerStatus": {
+         "message": "running"
+      },
+      "syncServerStatus": {
+         "message": "ACTIVE"
+      },
+      "syncServerDetailedStatus": {
+         "version": "v0.22.3",
+         "status": "ACTIVE",
+         "cloud_connected": true,
+         "num_local_clients": 0,
+         "query": {
+            "Item": "truepredicate"
+         }
       }
    }
+
+The ``syncServerDetailedStatus`` contains information about the state of the
+Edge Server instance. This includes details about its connection to
+Atlas, and the clients connected to it, as follows:
 
 .. list-table::
    :header-rows: 1
@@ -309,6 +314,14 @@ The status object of an Edge Server instance may look similar to:
    * - Field name
      - Type
      - Value
+
+   * - ``version``
+     - String
+     - The current version of the Edge Server code that the instance is 
+       running. If the Edge Server instance falls more than one major version
+       behind the latest available version, it is unable to connect to Atlas
+       and must be wiped and updated. For more information, refer to 
+       :ref:`upgrade-edge-server-version`.
 
    * - ``status``
      - String
@@ -486,6 +499,8 @@ automatically syncs all data in all of the collections in your
 If you would like to filter the data that syncs to your Edge Server, you have
 two options:
 
+[PLACEHOLDER - query handling is changing so this will need to be updated
+based on the final implementation]
 - Pass a simple string query. For example, ``--query="truepredicate"``.
 - Pass an object containing one or more collections and queries to sync a 
   subset of your data with Edge Server. This may resemble:
@@ -493,13 +508,16 @@ two options:
   .. code-block:: json
 
      {
-        "YOUR-COLLECTION-NAME": "YOUR-QUERY",
-        "YOUR-COLLECTION-NAME": "YOUR-QUERY"
+        "YOUR-SCHEMA-TITLE": "YOUR-QUERY",
+        "YOUR-SCHEMA-TITLE": "YOUR-QUERY"
      }
 
-  - ``YOUR-COLLECTION-NAME``: The name of a collection in your database. 
-    If you're using a template app, this is the ``Item`` collection. Your Edge 
-    Server query may contain many collections.
+  - ``YOUR-SCHEMA-TITLE``: The ``title`` field of a :ref:`schema <schemas>`, 
+    which typically matches the name of a collection in your database. If 
+    you're using a template app, this is the ``Item`` collection. Your linked
+    Atlas data source may contain many collections, each with a matching 
+    schema. If you do not use the default Edge Server query ``"*"`` that syncs
+    everything, each schema that you want to sync must have its own query.
 
   - ``YOUR-QUERY``: The query that determines which documents the Edge 
     Server can sync with a collection. You can use :ref:`Realm Query Language <rql>` 
@@ -539,7 +557,7 @@ Specify Different Queries for Multiple Collections
 
 For a more complex query, where you want to pass different queries for 
 multiple collections, you might want to pass the query as JSON. This enables
-you to pass a different query for each collection as a key-value pair. For
+you to pass a different query for each schema title as a key-value pair. For
 example:
 
 .. code-block:: shell
@@ -550,11 +568,11 @@ example:
       }
 
 This query syncs data with two collections: ``Item`` and ``Project``. The 
-``Project`` collection has a list property that represents a 
-:ref:`to-many relationship <relationships-to-many>` to the ``Item`` collection.
-In this example, there is also a ``Team`` collection that we don't want to 
-sync to the Edge Server instance. By omitting this collection from the query, 
-we don't sync any of its data to the instance.
+``Project`` collection, whose schema title is also ``Project``, has a list 
+property that represents a :ref:`to-many relationship <relationships-to-many>`
+to the ``Item`` collection. In this example, there is also a ``Team`` collection 
+that we don't want to sync to the Edge Server instance. By omitting this schema
+title from the query, we don't sync any of its data to the instance.
 
 With these queries, we are only syncing ``Project`` documents for facility 42. 
 Additionally, we are only syncing ``Item`` documents where the ``priority`` 
