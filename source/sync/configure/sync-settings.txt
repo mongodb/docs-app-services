@@ -9,9 +9,7 @@ Sync Settings
    :values: reference
 
 .. meta:: 
-  :description: Learn about Atlas Device Sync settings and how to use them.
-
-.. default-domain:: mongodb
+  :description: Learn about Atlas Device Sync settings and how to configure them in your App Services App.
 
 .. contents:: On this page
    :local:
@@ -51,17 +49,32 @@ Development Mode
 ~~~~~~~~~~~~~~~~
 
 **Development Mode** is a configuration setting that allows Device Sync
-to infer and update schemas based on client-side data models. This 
-streamlines development, but should not be used in production.
+to infer and update schemas based on client-side data models. This feature 
+speeds up development by allowing you to design :ref:`schemas
+<configure-your-data-model>` directly in client application code. However, 
+Development Mode should *not* be used in production.
 
-Development Mode speeds up development by allowing you to design :ref:`schemas
-<configure-your-data-model>` directly in client application code.
-
-When you sync a realm, Atlas App Services maps every synced object type
+When you sync a client database, App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`. If you update the object model on the client
 side, App Services updates the collection schema to match. This lets you update
 objects in your client code as you develop your app.
+
+When you enable Development Mode for your app, the following occurs:
+
+- For apps that support schema versioning, the schema version is cleared, and any schema versioning history is deleted.
+  This is because Development Mode does *not* support schema versioning. After
+  you disable Development Mode, schema versioning is enabled automatically.
+  Refer to :ref:`schema-versioning` for more information.
+- Anonymous authentication is enabled. However, you can manually disable
+  anonymous authentication for
+  your app, even while
+  Development Mode is enabled. Refer to :ref:`anonymous-authentication`
+  for more information.
+- Deployment drafts are disabled. You *cannot* re-enable deployment drafts in the
+  UI while Development Mode is enabled. However, you can still manually create
+  deployment drafts through the CLI or the Admin API. Refer to
+  :ref:`deployment-draft` for more information.
 
 You can use :ref:`data access rules <sync-rules>` with Development Mode. Note
 that schema changes ignore data access rules. This means that any client can
@@ -70,81 +83,10 @@ update the backend schema by changing the client model.
 To learn more about how the Realm Object Schemas map to the App Services Schemas
 when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
 
-For more information about modifying synced object schemas, see:
-:ref:`<synced-schema-overview>`.
+For more information about updating your schema in Development Mode, refer to
+:ref:`update-data-model-development-mode`.
 
-.. important:: Disable Development Mode for Production Apps
-   
-   Development mode is a development utility that is not suitable for 
-   production use. Make sure that you turn off Development Mode before you 
-   make your app accessible in a production environment.
-
-.. _dev-mode-breaking-changes:
-
-Breaking Changes
-````````````````
-
-App Services Apps in Development Mode that were created after September 13, 2023
-can make :ref:`breaking changes <breaking-change-quick-reference>` to synced
-object schemas from client code.
-
-If your App was created before September 13, 2023, you can contact support to
-enable this feature.
-
-**Prerequisites** 
-
-- App Services App created after September 13, 2023
-- MongoDB 5.0 or later for Flexible Sync compatibility
-- Minimum SDK version:
-
-  - Realm C++ SDK v1.0.0
-  - Realm Flutter SDK v1.6.0
-  - Realm Java SDK v10.16.2
-  - Realm Kotlin SDK v11.1.1
-  - Realm .NET SDK v11.6.0
-  - Realm Node.js SDK v12.2.0
-  - Realm React Native SDK v12.2.0
-  - Realm Swift SDK v10.42.2
-
-.. note:: Apps created before September 13, 2023
-   
-   For Apps created before September 13, 2023, you need to update your
-   object schema in the App Services UI. For details, see
-   :ref:`<synced-schema-overview>`
-
-To make a breaking change from client code:
-
-#. Delete your local realm and data.
-   This will not affect data synced to the backend. Local changes that have not
-   been synced will be removed and are unrecoverable.
-#. Change your local object model.
-#. Open a realm with your updated object model.
-#. Run your client app to sync your changes to the backend.
-
-To delete a Realm file use the Realm SDK-specific methods:
-
-- :ref:`Realm Kotlin SDK <kotlin-delete-a-realm>`
-- :ref:`Realm Flutter SDK <flutter-delete-realm>`
-- :ref:`Realm Java SDK <io_realm_Realm_deleteRealm>`
-- :ref:`Realm .NET SDK <dotnet-delete-a-realm>`
-- :js-sdk:`Realm Node.js SDK <Realm.html#.deleteFile>`
-- :js-sdk:`Realm React Native SDK <Realm.html#.deleteFile>`
-- :ref:`Realm Swift SDK <swift-delete-a-realm>`
-
-Side Effects of Enabling Development Mode
-`````````````````````````````````````````
-
-Enabling Development Mode has two side effects:
-
-- *Enabling* :ref:`anonymous authentication <anonymous-authentication>`.
-- *Disabling* :ref:`deployment drafts <deployment-draft>`.
-
-If your app does not need anonymous authentication, you may want to 
-disable it after enabling Development Mode.
-
-You cannot re-enable deployment drafts in the UI until Development Mode 
-is disabled. However, you can still manually create deployment drafts 
-through the CLI or the Admin API.
+.. include:: /includes/note-dev-mode-production.rst
 
 .. _sync-config-data-source:
 
