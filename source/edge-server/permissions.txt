@@ -14,7 +14,7 @@ Edge Server Permissions Guide
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 1
+   :depth: 2
    :class: singlecol
 
 Edge Server data access is governed by the intersection of:
@@ -24,18 +24,18 @@ Edge Server data access is governed by the intersection of:
 - The query used to sync data to the Edge Server instance
 - If using Atlas Device SDK, the query used to sync data with the client
 
-This page explores high-level permissions configuration, and provides examples
-to illustrate basic permissions principles.
+This page explores high-level Edge Server and client permissions configuration,
+and provides examples to illustrate basic permissions principles.
 
-If you are new to role-based permissions in Atlas, get an overview of 
-the permissions engine at :ref:`permissions`.
+Related documentation:
 
-For information about how to define roles & permissions, refer to 
-:ref:`define-roles-and-permissions`.
-
-Edge Server uses Device Sync to sync data between the Edge Server instances
-and Atlas. Edge Server and client roles must use 
-:ref:`Device Sync-compatible permissions <device-sync-compatibility>`.
+- If you are new to role-based permissions in Atlas, get an overview of 
+  the permissions engine at :ref:`permissions`.
+- For information about how to define roles & permissions, refer to 
+  :ref:`define-roles-and-permissions`.
+- Edge Server uses Device Sync to sync data between the Edge Server instances
+  and Atlas. Edge Server and client roles must use 
+  :ref:`Device Sync-compatible permissions <device-sync-compatibility>`.
 
 .. _edge-server-permissions:
 
@@ -69,9 +69,9 @@ an ``applyWhen`` :ref:`rule expression <expressions>` where the
      ...customize the permissions for Edge Servers...
    }
 
-For example, if your data set is something that does not contain sensitive 
-data, such as a weather service, you might add a role stating that Edge 
-Servers can read and write all data:
+For example, if your data set does not contain sensitive data, such as a 
+weather service, you might add a role stating that Edge Servers can read and 
+write all data:
 
 .. code-block:: json
 
@@ -79,7 +79,7 @@ Servers can read and write all data:
      "name": "readAndWriteAll",
      "apply_when": {
        "%%user.type": {
-         "$eq": "mtss"
+         "$eq": "edge"
        }
      },
      "document_filters": {
@@ -97,19 +97,19 @@ A Specific Edge Server
 ``````````````````````
 
 If your data set contains sensitive information that should not sync to
-an Edge Server instance, you can use permissions to filter the data so a 
+every Edge Server instance, you can use permissions to filter the data so a 
 specific instance can only access a subset of the data. Or you can use 
 permissions to configure an Edge Server instance to read data, but not write
 it.
 
 Because every Edge Server instance is a user, you can use the Edge Server's
 ``user_id`` to configure permissions for a given instance. You can create a 
-role that applies to a specific Edge Server instances with
-a :ref:`rule expression <expressions>` where the 
+role that restricts the data that syncs with a specific Edge Server instance
+using a :ref:`rule expression <expressions>` where the 
 :ref:`%%user_id <rule-expression-user-expansion>` is the Edge Server's 
 ``user_id``. You can get the Edge Server instance ``user_id`` from the
 :ref:`edge-server-details`, or from the Admin API. [PLACEHOLDER - Add link 
-to the relevant Admin API endpoint when it is merged.]
+to the relevant Admin API endpoint when the docs PR is merged.]
 
 Read/Write Own Documents
 ++++++++++++++++++++++++
@@ -117,12 +117,7 @@ Read/Write Own Documents
 You can restrict an Edge Server instance to read and write only its own 
 documents using the ``user_id``. For example, if an Edge Server instance 
 represents a health care clinic, you might only want to sync data relevant to 
-that clinic's patients. 
-
-You can create a role that applies to a specific Edge Server instances with
-a :ref:`rule expression <expressions>` where the 
-:ref:`%%user_id <rule-expression-user-expansion>` is the Edge Server's 
-``user_id``:
+that clinic's patients:
 
 .. code-block:: json
 
@@ -155,7 +150,7 @@ You can configure an Edge Server instance to be able to read all data, but
 write only its own data. For example, in a retail setting, an Edge Server 
 instance might represent a store inventory system. You might want the store to
 have the ability to search across all inventory for an item, but only sell 
-items in its own store.
+items in its own inventory.
 
 .. code-block:: json
 
@@ -164,7 +159,7 @@ items in its own store.
      "apply_when": {},
      "document_filters": {
        "write": {
-         "facility_id": "%%user.id"
+         "store_id": "%%user.id"
        },
        "read": true
      },
@@ -182,13 +177,12 @@ Clients that connect to an Edge Server instance have their own permissions.
 You can think of an Edge Server instance's permissions as a filter between the
 data in Atlas and the data that a client can read and write.
 
-For example, in a healthcare setting similar to the Read/Write Own Data example
-detailed on this page, an Edge Server instance may only be able to read and
-write data that is relevant to its own facility. A client may then further
-restrict the permissions. For example, a patient in the facility may only be 
-able to view their own data.
+In a healthcare setting similar to the Edge server instance example above, the
+Edge Server instance may only read and write data that is relevant to its own 
+facility. A client may then further restrict the permissions. For example, a 
+patient in the facility may only view their own data.
 
-You would represent these as independent roles within the ``roles`` array.
+You represent these as independent roles within the ``roles`` array.
 For example:
 
 .. code-block:: json
