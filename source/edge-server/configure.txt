@@ -567,12 +567,14 @@ example:
          "Item": "priority >= 3" \
       }
 
-This query syncs data with two collections: ``Item`` and ``Project``. The 
-``Project`` collection, whose schema title is also ``Project``, has a list 
-property that represents a :ref:`to-many relationship <relationships-to-many>`
-to the ``Item`` collection. In this example, there is also a ``Team`` collection 
-that we don't want to sync to the Edge Server instance. By omitting this schema
-title from the query, we don't sync any of its data to the instance.
+In this example, we have three collections: ``Project``, ``Item``, and 
+``Team``, whose collection names match their schema titles. This query syncs 
+data with two of the collections: ``Item`` and ``Project``. The 
+``Project`` collection has a list property that represents a 
+:ref:`to-many relationship <relationships-to-many>` to the ``Item`` 
+collection. We don't want to sync the ``Team`` collection to the Edge Server 
+instance. By omitting this schema title from the query, we don't sync any of 
+its data to the instance.
 
 With these queries, we are only syncing ``Project`` documents for facility 42. 
 Additionally, we are only syncing ``Item`` documents where the ``priority`` 
