@@ -1,8 +1,16 @@
 .. _flutter-tutorial:
 
-================
-Flutter Tutorial
-================
+=======================================
+Tutorial: Atlas Device Sync for Flutter
+=======================================
+
+.. meta::
+   :keywords: code example
+   :description: Learn how to build, modify, and run a demo Flutter application using Atlas Device SDK for Flutter and Atlas Device Sync.
+
+.. facet::
+  :name: genre
+  :values: tutorial
 
 .. contents:: On this page
    :local:
@@ -10,7 +18,9 @@ Flutter Tutorial
    :depth: 3
    :class: singlecol
 
-The Realm Flutter SDK allows you to create a multi-platform
+*Estimated time to complete: 30 minutes, depending on your experience with Flutter*
+
+The Atlas Device SDK for Flutter allows you to create a multi-platform
 applications with Dart and Flutter. This tutorial is based on the
 Flutter Flexible Sync Template App, named ``flutter.todo.flex``, which illustrates
 the creation of a Todo application. This application enables users to:
@@ -29,9 +39,6 @@ This tutorial adds on to the template app. You will add a new ``priority`` field
 to the existing ``Item`` model and update the :ref:`Flexible Sync subscription
 <queryable-fields>` to only show items within a range of priorities.
 
-Depending on your experience with Flutter, this tutorial should take
-around 30 minutes.
-
 Learning Objectives
 -------------------
 
@@ -49,7 +56,7 @@ In this tutorial, you will learn how to:
 If you prefer to get started with your own application rather than follow a
 guided tutorial, check out the :ref:`Flutter Quick Start <flutter-quick-start>`.
 It includes copyable code examples and the essential information that you
-need to set up a Realm Flutter SDK application.
+need to set up a Flutter SDK application.
 
 Prerequisites
 -------------
@@ -69,7 +76,7 @@ Prerequisites
    - Windows
    - Linux
 
-   The Realm Flutter SDK does **not** support building web applications.
+   The Flutter SDK does *not* support building web applications.
 
 Start with the Template
 -----------------------
@@ -160,9 +167,8 @@ Set up the Template App
       In your code editor, take a few minutes to explore how the project is
       organized. This is a standard multi-platform Flutter application
       that has been modified for our specific use. Specifically, the following
-      files contain important uses of the Realm Flutter SDK:
+      files contain important uses of the Flutter SDK:
 
-      .. cssclass:: config-table
       .. list-table::
          :header-rows: 1
          :widths: 35 65
@@ -176,7 +182,7 @@ Set up the Template App
          * - :file:`lib/realm/schemas.dart`
            - Defines Realm Database schema.
 
-         * - :file:`lib/realm/schemas.g.dart`
+         * - :file:`lib/realm/schemas.realm.dart`
            - Generated Realm object class.
 
          * - :file:`lib/realm/app_services.dart`

@@ -1,3 +1,60 @@
+# April 19, 2024
+
+## Develop & Deploy Apps
+
+- Deployment Models & Regions: Correct GCP deployment region "Ohio" to "Iowa" per engineering updates. Remove AWS-style abbreviations.
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Increase token character limit from 2048 to 4096.
+
+## Security
+
+- Use a VPC Private Endpoint: Rewrite page to account for new Endpoint creation process with Legacy, General, and Sync Endpoints.
+
+## Reference
+
+- Admin API: 
+  - Update references for VPC private endpoints due to domain migration to `services.cloud.mongodb.com`.
+  - Fix errors in the Admin API spec caught by the openapi linter.
+- Release Notes: Update external changelog with release notes for new schema version selector, the service.cloud.mongodb.com domain change, and more.
+
+# Other
+
+- Domain Migration: Add SDK versions that use the new baseURL by default.
+
+# April 12, 2024
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Update page to note updated behavior for handling cached user authentication metadata.
+
+## Data API
+
+- Add new Constraints section documenting request timeout and response payload size limits.
+
+## Functions
+
+- Update existing Constraints section to increase the noted amount of memory a function may use from 256MB to 350MB.
+
+# April 5, 2024
+
+## Get Started
+
+- Device Sync Tutorial - Flutter: Rename `lib/realm/schemas.g.dart` to `lib/realm/schemas.realm.dart` to reflect the new file extension generated in the upgraded Flutter Template App.
+
+## Develop & Deploy Apps
+
+- Create an App: Update the noted minimum MongoDB version from v4.4 to v5.0.
+
+## Refernce
+
+- GraphQL API (Deprecated)/Migrate to WunderGraph: New page that helps current GraphQL API users migrate to WunderGraph.
+
+## Release Notes
+
+- Update external changelog with release notes for sorted apps in the App Services UI and the service name for a data source now defaulting to the cluster name.
+
 # March 29, 2024
 
 ## Device Sync

@@ -13,6 +13,7 @@ Atlas Data API
    :values: tutorial
 
 .. meta:: 
+   :description: Learn about the MongoDB App Services Data API and when to use it.
    :keywords: json web token
 
 .. toctree::
@@ -144,5 +145,14 @@ We recommend using the Data API when:
 - You want to integrate Atlas data access into a federated API gateway.
 
 - You want to connect to App Services from an environment not currently
-  supported by a Realm SDK and don't want to use a driver to connect
+  supported by an Atlas Device SDK and don't want to use a driver to connect
   over the :ref:`wire protocol <wire-protocol>`.
+
+
+Constraints
+-----------
+The following constraints apply to Data API requests and responses: 
+
+- Requests will time out after 300 seconds of runtime.
+
+- Data API response payloads are limited to 350 MB in size.
