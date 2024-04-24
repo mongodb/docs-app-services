@@ -258,18 +258,17 @@ Collections in Mixed Properties
 
 .. include:: /includes/note-collections-in-mixed-sync.rst
 
-You can leverage collections (arrrays or dictionaries) in mixed properties to store data that does not fit into a
+You can leverage collections (arrays or dictionaries) in mixed properties to store data that does not fit into a
 pre-defined schema, such as variable JSON data or complex MongoDB documents. Because collections of mixed data can contain other collections of
 mixed data, you can nest data into complex structures. 
 For an example, refer to the :ref:`nested-collections-data-model-example` on this page.
 
-Currently, App Services Schemas and Realm Object Schemas in the following SDKs 
-support collections in mixed data types:
+You can store collections in mixed data types in an App Services schema or in an object models for the following Device SDKs:
 
-- Flutter SDK v2.0.0 or later: :ref:`RealmValue - Flutter SDK
-  <flutter-realm-value>`
-
-Other SDKs will support collections in mixed data types in future releases.
+- :ref:`Flutter SDK - RealmValue <flutter-realm-value>` (v2.0.0 or later)
+- :ref:`.NET SDK - RealmValue <dotnet-realm-value>` (v12.0.0 or later)
+   
+Support for other SDKs will be added in future releases.
 
 .. TODO: Add links to other SDKs when available.
 
@@ -650,9 +649,8 @@ Example Document
 Example Document: Nested Collections of Mixed Data
 ``````````````````````````````````````````````````
 
-An application created after March XX, 2024 supports collections in mixed
-data types. Nested collections of mixed data are stored in a mixed data type 
-and can look like the following example:
+Nested collections of mixed data are dictionaries or arrays stored in a mixed
+data type. This can resemble the following example:
 
 .. code-block:: js
    :caption: Dog document in MongoDB with mixed data
@@ -679,3 +677,5 @@ and can look like the following example:
        ]
      }
    }
+
+.. include:: /includes/note-collections-in-mixed-sync.rst
