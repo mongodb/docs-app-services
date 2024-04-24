@@ -29,7 +29,8 @@ Edge Server data access is governed by the intersection of:
 - The query used to sync data to the Edge Server instance
 - If using Atlas Device SDK, the query used to sync data with the client
 
-Edge Server supports role-based permissions at the document and field level. This page explores high-level Edge Server and client permissions configuration,
+Edge Server supports role-based permissions at the document and field level. 
+This page explores high-level Edge Server and client permissions configuration,
 and provides examples to illustrate basic permissions principles.
 
 Related documentation:
@@ -122,9 +123,12 @@ Read/Write Own Documents
 You can restrict an Edge Server instance to read and write only its own 
 documents using the ``user_id``. 
 
-For example, if an Edge Server instance 
-represents a healthcare clinic, you might only want to sync data relevant to 
-that clinic's patients:
+For example, if an Edge Server instance represents a healthcare clinic, you 
+might only want to sync data relevant to that clinic's patients.
+
+In this example, every document has a ``facility_id`` property whose value is
+the Edge Server's ``user_id``. This role means that the Edge Server can only
+read and write documents with a ``facility_id`` matching its own ``user_id``.
 
 .. code-block:: json
 
@@ -145,10 +149,6 @@ that clinic's patients:
      "delete": true,
      "search": true
    }
-
-In this example, every document has a ``facility_id`` property whose value is
-the Edge Server's ``user_id``. This role means that the Edge Server can only
-read and write documents with a ``facility_id`` matching its own ``user_id``.
 
 Read All, Write Own Documents
 +++++++++++++++++++
@@ -191,7 +191,17 @@ facility. A client may then further restrict the permissions. For example, a
 patient in the facility may only view their own data.
 
 You represent these as independent roles within the ``roles`` array.
-For example:
+
+In this example, a ``PatientRecords`` database has a ``Visits`` collection.
+The two roles determine which documents the Edge Server instance can sync,
+and which documents an individual client connected to the instance can sync:
+
+- The ``facilityItemsOnly`` role filters items that sync to the Edge Server
+  instance. The only items that sync to the facility are records where the
+  ``facility_id`` matches the Edge Server instance ``user_id``.
+- The ``patientOwnRecordsOnly`` role filters items that can sync to a connected
+  client device. The only items that sync to a connected client are visits 
+  where the ``patient_id`` is the client's ``user_id``.
 
 .. code-block:: json
 
@@ -240,17 +250,6 @@ For example:
      ]
    }
 
-In this example, a ``PatientRecords`` database has a ``Visits`` collection.
-The two roles determine which documents the Edge Server instance can sync,
-and which documents an individual client connected to the instance can sync:
-
-- The ``facilityItemsOnly`` role filters items that sync to the Edge Server
-  instance. The only items that sync to the facility are records where the
-  ``facility_id`` matches the Edge Server instance ``user_id``.
-- The ``patientOwnRecordsOnly`` role filters items that can sync to a connected
-  client device. The only items that sync to a connected client are visits 
-  where the ``patient_id`` is the client's ``user_id``.
-
 In a setting where you have many different types of clients that should each
 have access to a subset of the data, you may define many different client 
 roles. For example, in a healthcare setting, you may use different roles for:
@@ -269,6 +268,7 @@ roles. For example, in a healthcare setting, you may use different roles for:
 Field-Level Permissions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Edge Server also supports :ref:`field-level-permissions`, which determine read or write access to specific fields in a document. You can define 
+Edge Server also supports :ref:`field-level-permissions`, which determine read 
+or write access to specific fields in a document. You can define 
 field-level permissions for the Edge Server instance, for the clients that
 connect to the Edge Server instance, or both.
