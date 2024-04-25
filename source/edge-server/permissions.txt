@@ -68,9 +68,7 @@ an ``applyWhen`` :ref:`rule expression <expressions>` where the
    {
      "name": "edgeServerRole",
      "apply_when": {
-       "%%user.type": {
-         "$eq": "edge"
-       }
+       "%%user.type": "edge"
      },
      ...customize the permissions for all Edge Server instances...
    }
@@ -84,9 +82,7 @@ write all data:
    {
      "name": "readAndWriteAll",
      "apply_when": {
-       "%%user.type": {
-         "$eq": "edge"
-       }
+       "%%user.type": "edge"
      },
      "document_filters": {
        "read": true,
@@ -102,11 +98,22 @@ write all data:
 A Specific Edge Server
 ``````````````````````
 
-If your data set contains sensitive information that should not sync to
-every Edge Server instance, you can use permissions to filter a 
-specific instance's access to a subset of the data. Or you can use 
-permissions to configure an Edge Server instance to read data, but not write
-it.
+In some cases, your business logic means you only want to sync a subset of the
+data to a given Edge Server instance. For example, you might want to restrict
+an Edge Server to a subset of the data when:
+
+- The data set contains PII or other sensitive data that should not sync to 
+  every Edge Server instance
+- It's a large data set that you don't want to sync to resource-constrained 
+  devices
+- The Edge Server host is untrusted hardware that should have the minimum data
+  required to complete a task
+- Data is region-constrained for legal or regulatory purposes, and you only 
+  want to sync the data relevant to the Edge Server's region
+
+You can use permissions to filter a specific instance's access to a subset of 
+the data. Or you can use permissions to configure an Edge Server instance to 
+read data, but not write it.
 
 Because every Edge Server instance is a user, you can use the Edge Server's
 ``user_id`` to configure permissions for a given instance. You can create a 
@@ -134,7 +141,9 @@ read and write documents with a ``facility_id`` matching its own ``user_id``.
 
    {
      "name": "facilityItemsOnly",
-     "apply_when": {},
+     "apply_when": {
+       "%%user.type": "edge"
+     },
      "document_filters": {
        "write": {
          "facility_id": "%%user.id"
@@ -164,7 +173,9 @@ items in its own inventory.
 
    {
      "name": "readAllWriteOnlyStoreItems",
-     "apply_when": {},
+     "apply_when": {
+       "%%user.type": "edge"
+     },
      "document_filters": {
        "write": {
          "store_id": "%%user.id"
@@ -187,10 +198,14 @@ data in Atlas and the data that a client can read and write.
 
 In a healthcare setting similar to the Edge server instance example above, the
 Edge Server instance may only read and write data that is relevant to its own 
-facility. A client may then further restrict the permissions. For example, a 
-patient in the facility may only view their own data.
+facility. A second role may then further restrict the permissions for connected
+clients. For example, a patient in the facility may only view their own data.
 
 You represent these as independent roles within the ``roles`` array.
+
+The rules engine evaluates each role's ``apply_when`` expression in the order
+that you specify them. The first role whose ``apply_when`` expression evaluates
+to ``true`` becomes the assigned role. When no role matches, access is denied.
 
 In this example, a ``PatientRecords`` database has a ``Visits`` collection.
 The two roles determine which documents the Edge Server instance can sync,
@@ -212,9 +227,7 @@ and which documents an individual client connected to the instance can sync:
        {
          "name": "facilityItemsOnly",
          "apply_when": { 
-           "%%user.type": {
-             "$eq": "edge"
-           }
+           "%%user.type": "edge"
          },
          "document_filters": {
            "write": {
@@ -249,6 +262,17 @@ and which documents an individual client connected to the instance can sync:
        }
      ]
    }
+
+.. important:: Role order matters
+
+   In this example, the first entry in the ``roles`` array is the
+   Edge Server role, whose ``apply_when`` expression only applies to the Edge 
+   Server. When the client is evaluating roles, the first role evaluates to 
+   ``false`` for the client, so it proceeds to the next role. If the first 
+   entry was the client role, with an empty ``apply_when`` expression, that 
+   role would evaluate to ``true`` for the Edge Server. Since the Edge 
+   Server's ``user_id`` would never match a ``patient_id``, no documents would
+   sync to the Edge Server.
 
 In a setting where you have many different types of clients that should each
 have access to a subset of the data, you may define many different client 
