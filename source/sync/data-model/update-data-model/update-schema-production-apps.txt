@@ -17,8 +17,13 @@ Update Data Model in Production
    :depth: 2
    :class: singlecol
 
+
+.. _schema-versioning:
+
 Schema Versioning
 -----------------
+
+[DRAFT]
 
 Device Sync supports schema versioning, which allows you to make changes to your
 
@@ -28,13 +33,11 @@ Schema versions:
 Are persisted in a client file with version change history. 
 Can be upgraded or downgraded rolled back. Users can change their schema version from the UI.
 Note: We don't really have a built-in rollback mechanism on the server. 
-DOCS RECOMMENDATION: Recommend users make another schema change that is the inverse of the one they’re reverting
+DOCS RECOMMENDATION: Recommend users make another schema change that is the inverse of the one theyre reverting
 Can be manually deprecated through the UI. Useful for blocking clients from connecting if using an old, incompatible version. NOTE: Cut from project scope
 Are backward- and forward-compatible across multiple, non-sequential versions (client on schema v1 is compatible with schema v0 and future schema v10)
 Compatibility dictated by “earliest allowed schema version” (i.e. the version of the latest INCOMPATIBLE change). Any clients connecting at a prior version will be rejected with the “invalid schema version” error.
 
-
-Breaking Changes with Schema Versioning
 
 When you make a breaking change to your schema, you must increment the schema
 version. This is because Device Sync uses the schema version to determine if a
