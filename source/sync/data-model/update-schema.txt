@@ -297,13 +297,11 @@ adding the new property to each impacted document and populating it with a
 value. After you update the documents to match the client schema, they 
 sync to the client application.
 
-When you add a new required property, App Services retrieves the documents for 
-the collection that have new values per the updated schema. App Services iterates 
-through those documents and re-inserts them to get the new values. This is
-expected behavior, but it does cause a temporary halt to propagating changes 
-while this process is underway.
+.. _schema-versioning:
 
-.. important::
+Schema versioning
+-----------------
+
 
    App Services uses a ``__realm_sync.unsynced_documents`` collection to track 
    unsynced documents. When you add a required property, the re-sync process can 

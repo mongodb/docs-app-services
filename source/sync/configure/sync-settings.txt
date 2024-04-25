@@ -9,9 +9,7 @@ Sync Settings
    :values: reference
 
 .. meta:: 
-  :description: Learn about Atlas Device Sync settings and how to use them.
-
-.. default-domain:: mongodb
+  :description: Learn about Atlas Device Sync settings and how to configure them in your App Services App.
 
 .. contents:: On this page
    :local:
@@ -59,7 +57,7 @@ client application code.
 Development Mode speeds up development by allowing you to design :ref:`schemas
 <configure-your-data-model>` directly in client application code.
 
-When you sync a realm, Atlas App Services maps every synced object type
+When you sync a client database, App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`, which becomes the server-side schema. As you develop your app and make changes to
 your client-side object model, App Services automatically updates the server-side schema to
@@ -77,6 +75,22 @@ When you enable Development Mode for your app, the following occurs:
 - Anonymous authentication is enabled automatically if not already. If you don't
   want anonymous authentication enabled, you can manually disable it for
   your app while Development Mode is enabled. Refer to :ref:`anonymous-authentication` for more information.
+- Deployment drafts are disabled. You *cannot* re-enable deployment drafts in the
+  UI while Development Mode is enabled. However, you can still manually create
+  deployment drafts through the CLI or the Admin API. Refer to
+  :ref:`deployment-draft` for more information.
+
+When you enable Development Mode for your app, the following occurs:
+
+- For apps that support schema versioning, the schema version is cleared, and any schema versioning history is deleted.
+  This is because Development Mode does *not* support schema versioning. After
+  you disable Development Mode, schema versioning is enabled automatically.
+  Refer to :ref:`schema-versioning` for more information.
+- Anonymous authentication is enabled. However, you can manually disable
+  anonymous authentication for
+  your app, even while
+  Development Mode is enabled. Refer to :ref:`anonymous-authentication`
+  for more information.
 - Deployment drafts are disabled. You *cannot* re-enable deployment drafts in the
   UI while Development Mode is enabled. However, you can still manually create
   deployment drafts through the CLI or the Admin API. Refer to
@@ -160,9 +174,7 @@ Enabling Development Mode has two side effects:
 If your app does not need anonymous authentication, you may want to 
 disable it after enabling Development Mode.
 
-You cannot re-enable deployment drafts in the UI until Development Mode 
-is disabled. However, you can still manually create deployment drafts 
-through the CLI or the Admin API.
+.. include:: /includes/note-dev-mode-production.rst
 
 .. _sync-config-data-source:
 

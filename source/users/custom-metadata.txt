@@ -4,7 +4,12 @@
 Define Custom User Metadata
 ===========================
 
-.. default-domain:: mongodb
+.. facet::
+   :name: genre 
+   :values: tutorial
+
+.. meta:: 
+   :description: Learn how to define custom user metadata and read user metadata from authentication providers. 
 
 .. contents:: On this page
    :local:
@@ -432,6 +437,21 @@ the user's account. These metadata fields vary depending on provider.
        <custom-jwt-authentication-configuration-metadata-fields>`
        configuration.
 
+.. important:: Avoid Stale Authentication Provider Metadata
+
+  If a user's metadata is updated after the access token is issued, requests 
+  using the previously created access token will not have the newly 
+  updated metadata. Their user metadata will update when they refresh 
+  their access token or re-authenticate.
+
+.. note:: Security and Authentication Provider Metadata 
+
+  Authentication provider metadata can be externally-defined by clients and
+  external authentication providers and should be regarded with caution. You should 
+  not rely solely on authentication provider metadata for security-related 
+  decisions, such as using this metadata in rule expressions for data access 
+  permissions.
+
 .. _enable-user-metadata-procedure:
 .. _configure-user-metadata-on-the-backend:
 
@@ -589,129 +609,142 @@ Configure Authentication Provider Metadata
    .. tab::
       :tabid: api
 
-      .. step:: Authenticate a MongoDB Atlas User
+      .. procedure::
 
-         .. include:: /includes/api-authenticate-instructions.rst
+        .. step:: Authenticate a MongoDB Atlas User
 
-      .. step:: Configure Metadata Fields
+          .. include:: /includes/api-authenticate-instructions.rst
 
-         Send a request to the :admin-api-endpoint:`Update an
-         authentication provider <operation/adminUpdateAuthProvider>`
-         endpoint. In the request body, define ``metadata_fields``
-         for the provider.
+        .. step:: Configure Metadata Fields
 
-         Make sure to include your Admin API ``access_token``, the
-         ``groupId`` of the Atlas project containing your App, the
-         App's internal ``appId`` hex string, and the ``_id`` value
-         of the authentication provider:
+          Send a request to the :admin-api-endpoint:`Update an
+          authentication provider <operation/adminUpdateAuthProvider>`
+          endpoint. In the request body, define ``metadata_fields``
+          for the provider.
 
-         .. tabs::
+          Make sure to include your Admin API ``access_token``, the
+          ``groupId`` of the Atlas project containing your App, the
+          App's internal ``appId`` hex string, and the ``_id`` value
+          of the authentication provider:
 
-            .. tab:: Facebook OAuth
-               :tabid: facebook
+          .. tabs::
 
-               .. code-block:: shell
-                  :emphasize-lines: 15-25
+              .. tab:: Facebook OAuth
+                :tabid: facebook
 
-                  curl --request PATCH 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
-                    --header 'Authorization:  Bearer <access_token>' \
-                    --header 'Content-Type: application/json' \
-                    --data '{
-                      "_id": "<Provider ID>",
-                      "name": "oauth2-facebook",
-                      "type": "oauth2-facebook",
-                      "redirect_uris": ["https://example.com/"],
+                .. code-block:: shell
+                    :emphasize-lines: 15-25
+
+                    curl --request PATCH 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
+                      --header 'Authorization:  Bearer <access_token>' \
+                      --header 'Content-Type: application/json' \
+                      --data '{
+                        "_id": "<Provider ID>",
+                        "name": "oauth2-facebook",
+                        "type": "oauth2-facebook",
+                        "redirect_uris": ["https://example.com/"],
+                        "config": {
+                          "clientId": "<Facebook Client ID>"
+                        },
+                        "secret_config": {
+                          "clientSecret": "<Facebook Client Secret Name>"
+                        },
+                        "metadata_fields": [
+                          { "required": false, "name": "name" },
+                          { "required": true, "name": "first_name" },
+                          { "required": true, "name": "last_name" },
+                          { "required": false, "name": "picture" },
+                          { "required": false, "name": "gender" },
+                          { "required": false, "name": "birthday" },
+                          { "required": false, "name": "min_age" },
+                          { "required": false, "name": "max_age" },
+                          { "required": false, "name": "email" }
+                        ],
+                        "disabled": false
+                      }'
+
+              .. tab:: Google OAuth
+                :tabid: google
+
+                .. code-block:: shell
+                    :emphasize-lines: 15-25
+
+                    curl --request PATCH 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
+                      --header 'Authorization:  Bearer <access_token>' \
+                      --header 'Content-Type: application/json' \
+                      --data '{
+                        "_id": "<Provider ID>",
+                        "name": "oauth2-google",
+                        "type": "oauth2-google",
+                        "redirect_uris": ["https://example.com/"],
+                        "config": {
+                          "clientId": "<Google Client ID>"
+                        },
+                        "secret_config": {
+                          "clientSecret": "<Google Client Secret Name>"
+                        },
+                        "metadata_fields": [
+                          { "required": false, "name": "name" },
+                          { "required": true, "name": "first_name" },
+                          { "required": true, "name": "last_name" },
+                          { "required": false, "name": "picture" },
+                          { "required": false, "name": "gender" },
+                          { "required": false, "name": "birthday" },
+                          { "required": false, "name": "min_age" },
+                          { "required": false, "name": "max_age" },
+                          { "required": false, "name": "email" }
+                        ],
+                        "disabled": false
+                      }'
+
+              .. tab:: Custom JWT
+                :tabid: custom-jwt
+
+                .. code-block:: shell
+                    :emphasize-lines: 8-14
+
+                    curl --request PATCH 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
+                      --header 'Authorization:  Bearer <access_token>' \
+                      --header 'Content-Type: application/json' \
+                      --data '{
+                        "_id": "<Provider ID>",
+                      "name": "custom-token",
+                      "type": "custom-token",
+                      "metadata_fields": [
+                        {
+                          "required": true,
+                          "name": "jwt.field.path",
+                          "field_name": "metadataFieldName"
+                        }
+                      ],
                       "config": {
-                         "clientId": "<Facebook Client ID>"
+                        "audience": [],
+                        "requireAnyAudience": false,
+                        "signingAlgorithm": "HS256",
+                        "useJWKURI": false
                       },
                       "secret_config": {
-                         "clientSecret": "<Facebook Client Secret Name>"
+                        "signingKeys": [
+                          "<JWT Signing Key>"
+                        ]
                       },
-                      "metadata_fields": [
-                        { "required": false, "name": "name" },
-                        { "required": true, "name": "first_name" },
-                        { "required": true, "name": "last_name" },
-                        { "required": false, "name": "picture" },
-                        { "required": false, "name": "gender" },
-                        { "required": false, "name": "birthday" },
-                        { "required": false, "name": "min_age" },
-                        { "required": false, "name": "max_age" },
-                        { "required": false, "name": "email" }
-                      ],
-                      "disabled": false
-                    }'
+                      "disabled": true
+                      }'
 
-            .. tab:: Google OAuth
-               :tabid: google
+          If you successfully configure the provider's metadata
+          fields, App Services returns a ``204`` response.
 
-               .. code-block:: shell
-                  :emphasize-lines: 15-25
 
-                  curl --request PATCH 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
-                    --header 'Authorization:  Bearer <access_token>' \
-                    --header 'Content-Type: application/json' \
-                    --data '{
-                      "_id": "<Provider ID>",
-                      "name": "oauth2-google",
-                      "type": "oauth2-google",
-                      "redirect_uris": ["https://example.com/"],
-                      "config": {
-                         "clientId": "<Google Client ID>"
-                      },
-                      "secret_config": {
-                         "clientSecret": "<Google Client Secret Name>"
-                      },
-                      "metadata_fields": [
-                        { "required": false, "name": "name" },
-                        { "required": true, "name": "first_name" },
-                        { "required": true, "name": "last_name" },
-                        { "required": false, "name": "picture" },
-                        { "required": false, "name": "gender" },
-                        { "required": false, "name": "birthday" },
-                        { "required": false, "name": "min_age" },
-                        { "required": false, "name": "max_age" },
-                        { "required": false, "name": "email" }
-                      ],
-                      "disabled": false
-                    }'
 
-            .. tab:: Custom JWT
-               :tabid: custom-jwt
+.. note:: Tips for Users with Multiple Linked Authentication Providers  
 
-               .. code-block:: shell
-                  :emphasize-lines: 8-14
-
-                  curl --request PATCH 'https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/auth_providers/{providerId}' \
-                    --header 'Authorization:  Bearer <access_token>' \
-                    --header 'Content-Type: application/json' \
-                    --data '{
-                      "_id": "<Provider ID>",
-	                   "name": "custom-token",
-	                   "type": "custom-token",
-	                   "metadata_fields": [
-	                   	{
-	                   		"required": true,
-	                   		"name": "jwt.field.path",
-	                   		"field_name": "metadataFieldName"
-	                   	}
-	                   ],
-	                   "config": {
-	                   	"audience": [],
-	                   	"requireAnyAudience": false,
-	                   	"signingAlgorithm": "HS256",
-	                   	"useJWKURI": false
-	                   },
-	                   "secret_config": {
-	                   	"signingKeys": [
-	                   		"<JWT Signing Key>"
-	                   	]
-	                   },
-	                   "disabled": true
-                    }'
-
-         If you successfully configure the provider's metadata
-         fields, App Services returns a ``204`` response.
-
+  - To ensure the most up-to-date metadata, users should re-authenticate after 
+    switching to a different authentication provider. Failure to do so may result 
+    in outdated metadata reflected in the :guilabel:`Users` table in 
+    the UI's :guilabel:`App Users` page and for requests using authentication providers.
+  - If a user switches between authentication providers, it may take up to 30 minutes 
+    for metadata to propagate. The request is always guaranteed to have the 
+    most up-to-date metadata associated with the authentication provider used.
 
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
