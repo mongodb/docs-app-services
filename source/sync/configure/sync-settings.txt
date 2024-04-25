@@ -51,27 +51,45 @@ Development Mode
 ~~~~~~~~~~~~~~~~
 
 **Development Mode** is a configuration setting that allows Device Sync
-to infer and update schemas based on client-side data models. This 
-streamlines development, but should not be used in production.
+to infer and update the server-side App Services schemas based on your
+client-side SDK object models. This feature 
+speeds up development by allowing you to design your data model directly in
+client application code. 
 
 Development Mode speeds up development by allowing you to design :ref:`schemas
 <configure-your-data-model>` directly in client application code.
 
 When you sync a realm, Atlas App Services maps every synced object type
 to its own collection in the database specified by
-:ref:`sync-config-database-name`. If you update the object model on the client
-side, App Services updates the collection schema to match. This lets you update
-objects in your client code as you develop your app.
+:ref:`sync-config-database-name`, which becomes the server-side schema. As you develop your app and make changes to
+your client-side object model, App Services automatically updates the server-side schema to
+match. 
+
+When you enable Development Mode for your app, the following occurs:
+
+- For apps that support schema versioning, schema versioning is automatically
+  disabled. Any defined schema version or versioning history is
+  cleared and is unrecoverable.
+  This is because Development Mode does *not* support schema versioning. When
+  you disable Development Mode, schema versioning is enabled automatically for
+  eligible apps, but any previous versioning history is lost.
+  Refer to :ref:`schema-versioning` for more information.
+- Anonymous authentication is enabled automatically if not already. If you don't
+  want anonymous authentication enabled, you can manually disable it for
+  your app while Development Mode is enabled. Refer to :ref:`anonymous-authentication` for more information.
+- Deployment drafts are disabled. You *cannot* re-enable deployment drafts in the
+  UI while Development Mode is enabled. However, you can still manually create
+  deployment drafts through the CLI or the Admin API. Refer to
+  :ref:`deployment-draft` for more information.
 
 You can use :ref:`data access rules <sync-rules>` with Development Mode. Note
 that schema changes ignore data access rules. This means that any client can
 update the backend schema by changing the client model.
 
-To learn more about how the Realm Object Schemas map to the App Services Schemas
-when using Development Mode, refer to :ref:`Data Model Mapping <sync-data-model-mapping>`.
+Learn more about: 
 
-For more information about modifying synced object schemas, see:
-:ref:`<synced-schema-overview>`.
+- :ref:`Creating a data model with Development Mode <create-schema-from-rom>`.
+- :ref:`Updating your data model with Development Mode <update-data-model-development-mode>`.
 
 .. important:: Disable Development Mode for Production Apps
    
