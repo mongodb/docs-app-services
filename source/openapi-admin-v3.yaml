@@ -4387,6 +4387,143 @@ paths:
         "204":
           description: No Content
 
+  "/groups/{groupId}/apps/{appId}/edge":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+
+    get:
+      tags:
+        - edge-server
+      operationId: adminGetAllEdgeServerInstances
+      summary: List Edge Servers
+      description: |-
+        List all [Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/) 
+        instances for the given App.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  edge_servers:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/EdgeServerInstance"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminCreateEdgeServerInstance
+      summary: Create an Edge Server instance
+      description: |- 
+        Create a new Edge Server instance. The response returns a 
+        registration token that you use to configure the Edge Server
+        instance on the host.
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: object
+                required: ["name"]
+                properties:
+                  name:
+                    type: string
+                    example: Edge-Store-42
+                    description: |-
+                      A human-readable name for the Edge Server instance. This
+                      value must be unique within the Edge Server or Device
+                      Sync Service.
+                    required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}":
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    get:
+      tags:
+        - edge-server
+      operationId: adminGetEdgeServerInstance
+      summary: Get Edge Server information
+      description: |-
+        Get information about a specific Edge Server instance.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerInfo"
+
+    delete:
+      tags:
+        - edge-server
+      operationId: adminDeleteEdgeServerInstance
+      summary: Delete an Edge Server instance
+      responses:
+        "200":
+          description: No content
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}/regenerate-registration-key": 
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminRegenerateEdgeServerRegistrationToken
+      summary: Regenerate Edge Server registration token
+      description: |-
+        Regenerate the Edge Server instance registration token.
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EdgeServerCreateResponse"
+
+  "/groups/{groupId}/apps/{appId}/edge/{edgeServerId}/rename": 
+    parameters:
+      - "$ref": "#/components/parameters/GroupId"
+      - "$ref": "#/components/parameters/AppId"
+      - "$ref": "#/components/parameters/EdgeServerId"
+
+    post:
+      tags:
+        - edge-server
+      operationId: adminRenameEdgeServerInstance
+      summary: Rename an Edge Server instance
+      requestBody:
+        required: true
+        content:
+            application/json:
+              schema:
+                type: object
+                required: ["name"]
+                properties:
+                  name:
+                    type: string
+                    example: Edge-Store-41
+                    description: A human-readable name for the Edge Server instance.
+      responses:
+        "204":
+          description: No content
+
   "/groups/{groupId}/apps/{appId}/endpoints":
     parameters:
       - "$ref": "#/components/parameters/GroupId"
@@ -4921,6 +5058,14 @@ components:
       name: deploymentId
       description: |-
         The `_id` value of an application deployment.
+      in: path
+      required: true
+      schema:
+        type: string
+    EdgeServerId:
+      name: edgeServerId
+      description: |-
+        The `id` value of an Edge Server instance.
       in: path
       required: true
       schema:
@@ -5632,6 +5777,287 @@ components:
                 description: |-
                   A list where each element is the name of a file that was changed in the
                   draft.
+    EdgeServerInstance:
+      type: object
+      properties:
+        id:
+          type: string
+          description: |-
+            A unique identifier for the Edge Server, of type ObjectID, as a 
+            string. You can use this identifier to delete or update the Edge 
+            Server instance.
+        created:
+          type: string
+          description: |-
+            A string representing the timestamp at which the Edge Server 
+            instance was created.
+        name:
+          type: string
+          description: |-
+            The human-readable name supplied when 
+            [creating the Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/manage-edge-servers/#create-an-edge-server-instance) 
+            instance.
+        user_id:
+          type: string
+          description: |-
+            The Edge Server itself is a user. This is the unique identifier of 
+            the Edge Server user, of type ObjectId, as a string. You can use 
+            this identifier when configuring permissions.
+        status:
+          type: string
+          enum:
+            - "active"
+            - "deleted"
+            - "failed"
+            - "registered"
+            - "unregistered"
+          description: |-
+            The current status of the Edge Server instance.
+        hostname:
+          type: string
+          description: |-
+            The public-addressable DNS of the Edge Server instance. The 
+            API does not currently populate this field; it returns an
+            empty string.
+        last_connection:
+          type: string
+          description: |-
+            A string representing the timestamp at which the Edge Server 
+            instance last connected to Atlas.
+      example:
+        id: 6622b8f5118368b943d228a9
+        created: "2024-04-19T08:51:00Z"
+        name: Edge-Store-42
+        user_id: 6622b8f5118368b943d2288a
+        status: active
+        hostname: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
+        last_connection: "2024-04-19T09:51:00Z"
+    EdgeServerInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          description: |-
+            A unique identifier for the Edge Server, of type ObjectID, as a 
+            string. You can use this identifier to delete or
+            update the Edge Server instance.
+        created:
+          type: string
+          description: |-
+            A string representing the timestamp at which the Edge Server 
+            instance was created.
+        name:
+          type: string
+          description: |-
+            The human-readable name supplied when 
+            [creating the Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/manage-edge-servers/#create-an-edge-server-instance) 
+            instance.
+        user_id:
+          type: string
+          description: |-
+            The Edge Server itself is a user. This is the unique identifier of 
+            the Edge Server user, of type ObjectId, as a string. You can use 
+            this identifier when configuring permissions.
+        status:
+          type: string
+          enum:
+            - "active"
+            - "deleted"
+            - "failed"
+            - "registered"
+            - "unregistered"
+          description: |-
+            The current status of the Edge Server instance.
+        hostname:
+          type: string
+          description: |-
+            The public-addressable DNS of the Edge Server instance. The 
+            API does not currently populate this field; it returns an
+            empty string.
+        last_connection:
+          type: string
+          description: |-
+            A string representing the timestamp at which the Edge Server 
+            instance last connected to Atlas.
+        query: 
+          type: object
+          description: |-
+            The current [Sync queries](https://www.mongodb.com/docs/atlas/app-services/edge-server/configure/#specify-the-edge-server-s-query) 
+            for this Edge Server instance. This object maps collection 
+            names to the query for that collection.
+        package_version:
+          type: string
+          description: |-
+            The version of the Edge Server code that the instance is
+            currently running. If this is more than one major version
+            behind the latest version, the Edge Server instance enters
+            a "failed" state.
+        latest_package_version:
+          type: string
+          description: |-
+            The latest version of the Edge Server code that is available.
+        metrics:
+          $ref: "#/components/schemas/EdgeServerMetrics"
+      example:
+        id: 6622b8f5118368b943d228a9
+        created: "2024-04-19T08:51:00Z"
+        name: Edge-Store-42
+        user_id: 6622b8f5118368b943d2288a
+        status: active
+        hostname: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
+        last_connection: "2024-04-19T09:51:00Z"
+        query: { "Item": '(store_id == "641cb3d99e425c794ef69315")' }
+        package_version: v0.21.2
+        latest_package_version: v0.22.2
+        metrics: [
+          {
+            "key": "edge_host_memory_percent",
+            "name": "Memory Usage",
+            "category": "host",
+            "detail": "Percentage of memory used by the edge container",
+            "value": 15,
+            "unit": "%"
+          },
+          {
+            "key": "edge_host_cpu_percent",
+            "name": "CPU Usage",
+            "category": "host",
+            "detail": "Percentage of CPU used by the edge container",
+            "value": 2,
+            "unit": "%"
+          },
+          {
+            "key": "overall_request_success",
+            "name": "Successful Requests",
+            "category": "overall",
+            "detail": "Total number of successful requests",
+            "value": 19,
+            "unit": ""
+          },
+          {
+            "key": "overall_request_fail",
+            "name": "Failed Requests",
+            "category": "overall",
+            "detail": "Total number of failed requests",
+            "value": 1,
+            "unit": ""
+          },
+          {
+            "key": "wire_protocol_request_success",
+            "name": "Successful Wire Protocol Requests",
+            "category": "wire_protocol",
+            "detail": "Total number of successful wire protocol requests",
+            "value": 14,
+            "unit": ""
+          },
+          {
+            "key": "wire_protocol_request_fail",
+            "name": "Failed Wire Protocol Requests",
+            "category": "wire_protocol",
+            "detail": "Total number of failed wire protocol requests",
+            "value": 1,
+            "unit": ""
+          },
+          {
+            "key": "wire_protocol_egress_bytes",
+            "name": "Wire Protocol Data Transfer",
+            "category": "wire_protocol",
+            "detail": "Total number of bytes returned by wire protocol server",
+            "value": 3965,
+            "unit": "bytes"
+          },
+          {
+            "key": "edge_wire_protocol_connection_count",
+            "name": "Wire Protocol Connection Count",
+            "category": "wire_protocol",
+            "detail": "Total number of clients currently connected",
+            "value": 2,
+            "unit": ""
+          },
+          {
+            "key": "sync_requests_success",
+            "name": "Successful Sync Requests",
+            "category": "sync",
+            "detail": "Total number of successful sync requests",
+            "value": 5,
+            "unit": ""
+          }
+        ]
+    EdgeServerMetrics:
+      description: |-
+        The metrics for this Edge Server instance.
+      type: array
+      items:
+        $ref: "#/components/schemas/EdgeServerMetricConstructor"
+    EdgeServerMetricConstructor:
+      type: object
+      properties:
+        key:
+          type: string
+          description: |-
+            An identifier key for the given metric.
+          enum:
+            - "edge_host_memory_percent"
+            - "edge_host_cpu_percent"
+            - "overall_request_success"
+            - "overall_request_fail"
+            - "wire_protocol_request_success"
+            - "wire_protocol_request_fail"
+            - "wire_protocol_egress_bytes"
+            - "edge_wire_protocol_connection_count"
+            - "sync_requests_success"
+        name:
+          type: string
+          description: |-
+            The name of the metric.
+        category:
+          type: string
+          description: |-
+            A category describing the subset of Edge Server functionality that
+            the metric measures.
+          enum:
+            - "host"
+            - "overall"
+            - "wire_protocol"
+            - "sync"
+        detail:
+          type: string
+          description: |-
+            A description providing information about what the metric measures.
+        value:
+          type: int
+          description: |-
+            A value of the measurement in the unit specified by the metric's 
+            `unit` property.
+        unit:
+          type: string
+          description: |-
+            The unit of each data point's `value` property.
+    EdgeServerCreateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6622b8f5118368b943d228a9
+          description: |-
+            The unique identifier of the Edge Server instance, of type 
+            ObjectId, as a string. You can use this identifier to delete or
+            update the Edge Server instance.
+        user_id:
+          type: string
+          example: 6622b8f5118368b943d2288a
+          description: |-
+            The Edge Server itself is a user. This is the unique identifier of 
+            the Edge Server user, of type ObjectId, as a string. You can use 
+            this identifier when configuring permissions.
+        registration_key:
+          type: string
+          example: Qi4GgpvVduwwt4k1w77ZzaQ1n4SdTWC8rLBD9vyTib1w9G3CX2ta8WrJvt3giEK7
+          description: |-
+            Save this information. When you install the Edge Server code on the
+            host, enter this registration token. The Edge Server exchanges this 
+            for an API Key that it uses to authenticate with Atlas. You can
+            only use this registration token once.
     Endpoint:
       allOf:
         - $ref: "#/components/schemas/BaseEndpoint"
@@ -9097,6 +9523,9 @@ tags:
   - name: dependencies
     x-displayName: Dependencies
     description: Manage your application's [external dependencies](https://www.mongodb.com/docs/atlas/app-services/functions/dependencies/).
+  - name: edge-server
+    x-displayName: Edge Server
+    description: View and manage [Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/) instances.
   - name: endpoints
     x-displayName: Endpoints
     description: |-
