@@ -157,13 +157,13 @@ host.
 
       Follow the prompts to download and install the Edge Server code.
 
-   .. step:: Configure the Edge Server Instance
+   .. step:: Initialize the Edge Server Instance
 
-      Use ``edgectl`` to configure the Edge Server instance.
+      Use ``edgectl`` to set up the Edge Server instance.
 
       .. code-block:: shell
 
-         edgectl config --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
+         edgectl init --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
 
       The minimum required parameters are the ``app-id`` and the ``platform``.
 
@@ -238,6 +238,25 @@ host.
 
       The Edge Server instance exchanges this token for a secret. It uses the
       secret to authenticate with Atlas when it syncs data.
+
+   .. step:: (Optional) Create a New User
+
+      If you'd like to connect to the Edge Server instance using a MongoDB
+      Driver or tool, you must have a username/password credential, or bypass
+      authentication.
+
+      For more information, refer to :ref:`edge-server-wireprotocol-connect`.
+
+      If you don't already have a username/password credential, you can create
+      one by following the prompts during ``edgectl init``.
+
+      Otherwise, you can manually :ref:`create-email-password-user` later
+      using the App Services UI, the App Services CLI, or the App Services
+      Admin API.
+
+      If you already have a username/password credential, or don't plan to
+      connect to the Edge Server instance using a MongoDB Driver or tool, you
+      can skip this step.
 
 .. _start-and-stop-edge-server:
 
@@ -490,40 +509,63 @@ To cycle the Edge Server API key:
 Specify the Edge Server's Query
 -------------------------------
 
-You can use the ``--query`` argument with the ``edgectl configure`` command
-to specify the Edge Server instance Sync query.
+If you don't specify a query, an Edge Server instance defaults to a global 
+query of ``"*"``, which automatically syncs all data in all of the collections
+in your linked data source.
 
-The ``--query`` for an Edge Server instance defaults to ``"*"``, which 
-automatically syncs all data in all of the collections in your linked data 
-source.
+You can use a few arguments with the ``edgectl configure`` command
+to specify the Edge Server instance Sync query:
 
-If you would like to filter the data that syncs to your Edge Server, you have
-two options:
+- Pass a simple string query:
 
-[PLACEHOLDER - query handling is changing so this will need to be updated
-based on the final implementation]
-- Pass a simple string query. For example, ``--query="truepredicate"``.
-- Pass an object containing one or more collections and queries to sync a 
-  subset of your data with Edge Server. This may resemble:
+  .. code-block:: console
 
-  .. code-block:: json
+     edgectl config --query="Store: store_id == 42"
 
-     {
-        "YOUR-SCHEMA-TITLE": "YOUR-QUERY",
-        "YOUR-SCHEMA-TITLE": "YOUR-QUERY"
-     }
+- Pass multiple query flags to supply queries for multiple collections:
+
+  .. code-block:: console
+
+     edgectl config --query="Person: age > 10" --query "Pet: type = 'cat'"
+
+- Pass a path to a file containing a JSON object mapping more complex queries:
+
+  .. code-block:: console
+
+     edgectl config --query-file="/Users/my.user/edge-server/query.json"
+
+- Pass a global query to use the same query for all collections:
+
+  .. code-block:: console
+
+     edgectl config --global-query="shouldSync == true"
+
+Unless you're using a global query, Edge Server queries take the form of 
+``YOUR-SCHEMA-TITLE: YOUR-QUERY``:
 
   - ``YOUR-SCHEMA-TITLE``: The ``title`` field of a :ref:`schema <schemas>`, 
     which typically matches the name of a collection in your database. If 
     you're using a template app, this is the ``Item`` collection. Your linked
     Atlas data source may contain many collections, each with a matching 
-    schema. If you do not use the default Edge Server query ``"*"`` that syncs
-    everything, each schema that you want to sync must have its own query.
+    schema. If you do not use the default Edge Server query ``"*"`` or a global
+    query that syncs everything, each schema that you want to sync must have 
+    its own query.
 
   - ``YOUR-QUERY``: The query that determines which documents the Edge 
     Server can sync with a collection. You can use :ref:`Realm Query Language <rql>` 
     to define this query, with the same caveats around :ref:`Flexible Sync RQL 
     Limitations <flexible-sync-rql-limitations>`.
+
+.. note:: Queryable Fields
+
+   Because Edge Servers use Device Sync to sync data with Atlas, the query you
+   use on the Edge Server instance must use a **queryable field**. If you use
+   an Edge Server Service, we automatically add fields that you use in Edge
+   Server instance queries to the queryable fields. If you use a Device Sync
+   service with Edge Servers, we only add queryable fields when Development
+   Mode is enabled.
+
+   For more information, refer to :ref:`queryable-fields`.
 
 .. _edge-server-query-examples:
 
@@ -534,15 +576,15 @@ Sync All Documents
 ```````````````````
 
 You can sync all documents between Edge Server instance and Atlas. This uses 
-the ``truepredicate`` or ``"*"`` query. Because this is a simple query, you 
-can pass it as a string with the ``edgectl --query`` argument.
+the ``truepredicate`` or ``"*"`` query. Because this is a global query, you 
+can pass it as a string with the ``edgectl --global-query`` argument.
 
 .. code-block:: shell
 
-   edgectl --query="truepredicate"
+   edgectl config --global-query="truepredicate"
 
-Sync a Subset of Documents
-``````````````````````````
+Sync a Subset of Documents from All Collections
+```````````````````````````````````````````````
 
 You might only want to sync a subset of documents with an Edge Server instance.
 For example, for an instance located in a specific store, you might want to
@@ -551,30 +593,45 @@ look similar to:
 
 .. code-block:: shell
 
-   edgectl --query="store_id == 42"
+   edgectl config --global-query="store_id == 42"
+
+Sync a Subset of Documents from One Collection
+``````````````````````````````````````````````
+
+If the data source linked to your Edge Server-compatible service contains more
+than one collection, and you want to define a query for a specific collection,
+you can provide a mapping of the schema title for the collection, and a 
+relevant query. In this example, we set a query for the ``Inventory`` 
+collection, whose schema title is also ``Inventory``. The Edge Server
+instance only syncs documents from that collection where ``store_id`` matches
+``42``, which is the store number where the Edge Server instance is located.
+
+.. code-block:: console
+
+   edgectl config --query="Inventory: store_id == 42"
+
+The linked data source also contains a ``Customers`` collection. But since
+there is no query from the Edge Server instance for that collection, none of 
+the documents in the collection sync to the Edge Server instance - even if
+they contain a ``store_id`` field whose value matches the ``42`` from the
+Edge Server query.
 
 Specify Different Queries for Multiple Collections
 ``````````````````````````````````````````````````
 
 For a more complex query, where you want to pass different queries for 
-multiple collections, you might want to pass the query as JSON. This enables
-you to pass a different query for each schema title as a key-value pair. For
-example:
+multiple collections, you have two options:
 
-.. code-block:: shell
+- Pass multiple ``--query`` flags, one for each collection
+- Pass a path to a file where you define the queries as JSON
 
-   edgectl --query={ \
-         "Project": "facility_id == 42", \
-         "Item": "priority >= 3" \
-      }
-
-In this example, we have three collections: ``Project``, ``Item``, and 
-``Team``, whose collection names match their schema titles. This query syncs 
+In these examples, we have three collections: ``Project``, ``Item``, and 
+``Team``, whose collection names match their schema titles. These queries sync 
 data with two of the collections: ``Item`` and ``Project``. The 
 ``Project`` collection has a list property that represents a 
 :ref:`to-many relationship <relationships-to-many>` to the ``Item`` 
 collection. We don't want to sync the ``Team`` collection to the Edge Server 
-instance. By omitting this schema title from the query, we don't sync any of 
+instance. By omitting this schema title from the queries, we don't sync any of 
 its data to the instance.
 
 With these queries, we are only syncing ``Project`` documents for facility 42. 
@@ -582,3 +639,65 @@ Additionally, we are only syncing ``Item`` documents where the ``priority``
 field's value is greater than or equal to ``3``. In this way, you can combine 
 queries to sync only the documents that are relevant to a given Edge Server 
 instance.
+
+Pass Multiple Query Flags
++++++++++++++++++++++++++
+
+You can pass multiple query flags with ``edgectl config`` to provide queries
+for multiple collections.
+
+.. code-block:: console
+
+   edgectl config --query="Project: facility_id == 42" --query "Item: priority >= 3"
+
+Pass Queries as a JSON File
++++++++++++++++++++++++++++
+
+You can pass a path to a JSON file that defines many different queries. For
+example:
+
+.. code-block:: console
+
+   edgectl config --query-file="/Users/my.user/edge-server/query.json"
+
+Where the JSON file contains:
+
+.. code-block:: json
+
+   {
+     "Project": "facility_id == 42",
+     "Item": "priority >= 3"
+   }
+
+.. _multiple-edge-servers-on-host:
+
+Run Multiple Edge Server Instances on a Host
+--------------------------------------------
+
+While your Edge Server architecture is in development, you may want to run
+multiple Edge Server instances on a single host - for example, your local
+machine. You can do this using the ``edgectl`` profile functionality.
+
+When you create an Edge Server instance, ``edgectl`` automatically creates
+a default profile for you. You never have to specify the profile while there
+is only one profile.
+
+You can view the profiles, and their associated configuration files, in:
+
+.. code-block:: console
+
+   ~/.mongodb-edge/profiles/
+
+If you try to create a second Edge Server instance on the same machine, you
+must use the ``--profile`` flag with each command you issue. This maps the 
+command to a specific Edge Server instance.
+
+.. code-block:: console
+
+   edgectl start --profile=instance1 
+
+You can explicitly create a profile when using the ``edgectl init`` command:
+
+.. code-block:: console
+
+   edgectl init --profile=instance1
