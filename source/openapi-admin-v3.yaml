@@ -5900,21 +5900,140 @@ components:
           $ref: "#/components/schemas/EdgeServerMetrics"
       example:
         id: 6622b8f5118368b943d228a9
-        created: "2024-04-19T08:51:00Z"
+        created: 2024-04-19T08:51:00Z
         name: Edge-Store-42
         user_id: 6622b8f5118368b943d2288a
         status: active
         hostname: ec2-13-58-70-88.us-east-2.compute.amazonaws.com
-        last_connection: "2024-04-19T09:51:00Z"
+        last_connection: 2024-04-19T09:51:00Z
         query: { "Item": '(owner_id == "641cb3d99e425c794ef69315")' }
         package_version: v0.21.2
         latest_package_version: v0.22.2
-        metrics: {}
+        metrics: [
+          {
+            "key": "edge_host_memory_percent",
+            "name": "Memory Usage",
+            "category": "host",
+            "detail": "Percentage of memory used by the edge container",
+            "value": 15,
+            "unit": "%"
+          },
+          {
+            "key": "edge_host_cpu_percent",
+            "name": "CPU Usage",
+            "category": "host",
+            "detail": "Percentage of CPU used by the edge container",
+            "value": 2,
+            "unit": "%"
+          },
+          {
+            "key": "overall_request_success",
+            "name": "Successful Requests",
+            "category": "overall",
+            "detail": "Total number of successful requests",
+            "value": 19,
+            "unit": ""
+          },
+          {
+            "key": "overall_request_fail",
+            "name": "Failed Requests",
+            "category": "overall",
+            "detail": "Total number of failed requests",
+            "value": 1,
+            "unit": ""
+          },
+          {
+            "key": "wire_protocol_request_success",
+            "name": "Successful Wire Protocol Requests",
+            "category": "wire_protocol",
+            "detail": "Total number of successful wire protocol requests",
+            "value": 14,
+            "unit": ""
+          },
+          {
+            "key": "wire_protocol_request_fail",
+            "name": "Failed Wire Protocol Requests",
+            "category": "wire_protocol",
+            "detail": "Total number of failed wire protocol requests",
+            "value": 1,
+            "unit": ""
+          },
+          {
+            "key": "wire_protocol_egress_bytes",
+            "name": "Wire Protocol Data Transfer",
+            "category": "wire_protocol",
+            "detail": "Total number of bytes returned by wire protocol server",
+            "value": 3965,
+            "unit": "bytes"
+          },
+          {
+            "key": "edge_wire_protocol_connection_count",
+            "name": "Wire Protocol Connection Count",
+            "category": "wire_protocol",
+            "detail": "Total number of clients currently connected",
+            "value": 2,
+            "unit": ""
+          },
+          {
+            "key": "sync_requests_success",
+            "name": "Successful Sync Requests",
+            "category": "sync",
+            "detail": "Total number of successful sync requests",
+            "value": 5,
+            "unit": ""
+          }
+        ]
     EdgeServerMetrics:
-      type: object
       description: |-
         The metrics for this Edge Server instance. [PLACEHOLDER: Provide more
         details about metrics when available.]
+      type: array
+      items:
+        $ref: "#/components/schemas/EdgeServerMetricConstructor"
+    EdgeServerMetricConstructor:
+      type: object
+      properties:
+        key:
+          type: string
+          description: |-
+            An identifier key for the given metric.
+          enum:
+            - "edge_host_memory_percent"
+            - "edge_host_cpu_percent"
+            - "overall_request_success"
+            - "overall_request_fail"
+            - "wire_protocol_request_success"
+            - "wire_protocol_request_fail"
+            - "wire_protocol_egress_bytes"
+            - "edge_wire_protocol_connection_count"
+            - "sync_requests_success"
+        name:
+          type: string
+          description: |-
+            The name of the metric.
+        category:
+          type: string
+          description: |-
+            A category describing the subset of Edge Server functionality that
+            the metric measures.
+          enum:
+            - "host"
+            - "overall"
+            - "wire_protocol"
+            - "sync"
+        detail:
+          type: string
+          description: |-
+            A description providing information about what the metric measures.
+        value:
+          type: int
+          description: |-
+            A value of the measurement in the unit specified by the metric's 
+            `unit` property.
+        unit:
+          type: string
+          description: |-
+            The unit of each data point's `value` property.
     EdgeServerCreateResponse:
       type: object
       properties:
