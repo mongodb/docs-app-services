@@ -15,7 +15,7 @@ Configure Edge Server
 .. contents:: On this page
    :local:
    :backlinks: none
-   :depth: 2
+   :depth: 1
    :class: singlecol
 
 After you create an Edge Server instance in Atlas, you must configure the 
@@ -178,54 +178,7 @@ host.
       You can provide the following optional flags to specify additional
       configuration details:
 
-      .. list-table::
-         :header-rows: 1
-         :widths: 25 10 65
-
-         * - Field name
-           - Type
-           - Value
-
-         * - ``--config-path``
-           - String
-           - The location on disk to store configuration files. Defaults to
-             ``~/.mongodb-edge/``.
-
-         * - ``--query``
-           - String
-           - The query that defines what data to sync between the Edge
-             Server instance and Atlas. For information about populating this 
-             query, refer to :ref:`specify-edge-server-query`.
-
-         * - ``--http-port``
-           - Int
-           - The port on which the instance listens for HTTP connections. The
-             default value is ``80``. 
-
-         * - ``--wireprotocol-port``
-           - Int
-           - The port on which the instance listens for MongoDB Wire Protocol
-             connections, such as connections from a MongoDB Driver. The
-             default value is ``27021``.
-         
-         * - ``--insecure-disable-auth``
-           - Boolean
-           - If ``true``, users can connect anonymously to the instance through
-             Wire Protocol or Atlas Device SDK clients. Defaults to ``false``.
-
-         * - ``--no-user``
-           - Boolean
-           - If ``true``, Edge Server does not prompt for user creation. If
-             ``false``, Edge Server connects to Atlas to check if an 
-             :ref:`email/password user <email-password-authentication>` exists
-             in the service. If a corresponding email/password user does not 
-             exist, it interactively prompts for a username and password to
-             create a user. Defaults to ``false``.
-
-         * - ``--disable-ui``
-           - Boolean
-           - If true, the Edge Server instance does not run a UI on the 
-             registered ``http-port``. Defaults to ``false``.
+      .. include:: /includes/edge/edgectl-init-flags.rst
 
    .. step:: Supply the Edge Server Token
 
@@ -243,7 +196,9 @@ host.
 
       If you'd like to connect to the Edge Server instance using a MongoDB
       Driver or tool, you must have a username/password credential, or bypass
-      authentication.
+      authentication. If you already have a username/password credential, or 
+      don't plan to connect to the Edge Server instance using a MongoDB Driver
+      or tool, you can skip this step.
 
       For more information, refer to :ref:`edge-server-wireprotocol-connect`.
 
@@ -254,9 +209,12 @@ host.
       using the App Services UI, the App Services CLI, or the App Services
       Admin API.
 
-      If you already have a username/password credential, or don't plan to
-      connect to the Edge Server instance using a MongoDB Driver or tool, you
-      can skip this step.
+      Alternately, if you plan to implement an authorization flow later, you
+      can bypass authorization with the following command and flag:
+
+      .. code-block:: console
+
+         edgectl config --insecure-disable-auth
 
 .. _start-and-stop-edge-server:
 
@@ -372,6 +330,41 @@ Atlas, and the clients connected to it, as follows:
      - Object
      - The Edge Server instance Sync query, presented as a JSON object. For
        more information, refer to :ref:`specify-edge-server-query`.
+
+.. _update-edge-server-instance-config:
+
+Update the Edge Server Instance Configuration
+---------------------------------------------
+
+You can make changes to an existing Edge Server instance using ``edgectl``.
+After you change the configuration, restart the instance to apply the updates.
+
+.. procedure::
+
+   .. step:: Update the Edge Server Configuration
+
+      Use the ``edgectl config`` command with the appropriate flags to update
+      the instance:
+
+      .. code-block:: console
+
+         edgectl config --YOUR-FLAG-HERE
+
+      .. include:: includes/edge/edgectl-config-flags.rst
+
+   .. step:: Restart the Edge Server Instance
+
+      After you update the configuration, stop the instance:
+
+      .. code-block:: console
+
+         edgectl stop
+
+      And start it again to apply the updates:
+
+      .. code-block:: console
+
+         edgectl start
 
 .. _upgrade-edge-server-version:
 
@@ -493,7 +486,7 @@ To cycle the Edge Server API key:
 
       .. code-block:: shell
 
-         edgectl --update-registration-token
+         edgectl config --update-registration-token
 
       This triggers ``edgectl`` to prompt you for the token. When you provide 
       it, the Edge Server instance exchanges this token for a secret. It uses 
@@ -513,7 +506,7 @@ If you don't specify a query, an Edge Server instance defaults to a global
 query of ``"*"``, which automatically syncs all data in all of the collections
 in your linked data source.
 
-You can use a few arguments with the ``edgectl configure`` command
+You can use a few arguments with the ``edgectl config`` command
 to specify the Edge Server instance Sync query:
 
 - Pass a simple string query:
@@ -544,12 +537,17 @@ Unless you're using a global query, Edge Server queries take the form of
 ``YOUR-SCHEMA-TITLE: YOUR-QUERY``:
 
 - ``YOUR-SCHEMA-TITLE``: The ``title`` field of a :ref:`schema <schemas>`, 
-  which typically matches the name of a collection in your database. If 
-  you're using a template app, this is the ``Item`` collection. Your linked
-  Atlas data source may contain many collections, each with a matching 
-  schema. If you do not use the default Edge Server query ``"*"`` or a global
-  query that syncs everything, each schema that you want to sync must have 
-  its own query.
+  which typically matches the name of a collection in your database. In the 
+  event of two collections with identical names in different databases, we 
+  prepend the collection name with the database name; for example,
+  ``databaseName_collectionName``.
+  
+  Your linked Atlas data source may contain many collections, each with a 
+  matching schema. If you do not use the default Edge Server query ``"*"`` or 
+  a global query that syncs everything, each schema that you want to sync must
+  have its own query. 
+  
+  If you're using a template app, this is the ``Item`` collection.
 
 - ``YOUR-QUERY``: The query that determines which documents the Edge 
   Server can sync with a collection. You can use :ref:`Realm Query Language <rql>` 
@@ -562,7 +560,7 @@ Unless you're using a global query, Edge Server queries take the form of
    use on the Edge Server instance must use a **queryable field**. If you use
    an Edge Server Service, we automatically add fields that you use in Edge
    Server instance queries to the queryable fields. If you use a Device Sync
-   service with Edge Servers, we only add queryable fields when Development
+   Service with Edge Servers, we only add queryable fields when Development
    Mode is enabled.
 
    For more information, refer to :ref:`queryable-fields`.
@@ -578,6 +576,9 @@ Sync All Documents
 You can sync all documents between Edge Server instance and Atlas. This uses 
 the ``truepredicate`` or ``"*"`` query. Because this is a global query, you 
 can pass it as a string with the ``edgectl --global-query`` argument.
+
+If you do not provide a query when you configure your Edge Server instance,
+this is the default query.
 
 .. code-block:: shell
 
@@ -601,10 +602,12 @@ Sync a Subset of Documents from One Collection
 If the data source linked to your Edge Server-compatible service contains more
 than one collection, and you want to define a query for a specific collection,
 you can provide a mapping of the schema title for the collection, and a 
-relevant query. In this example, we set a query for the ``Inventory`` 
-collection, whose schema title is also ``Inventory``. The Edge Server
-instance only syncs documents from that collection where ``store_id`` matches
-``42``, which is the store number where the Edge Server instance is located.
+relevant query. 
+
+In this example, we set a query for the ``Inventory`` collection, whose schema 
+title is also ``Inventory``. The Edge Server instance only syncs documents from
+that collection where ``store_id`` matches ``42``, which is the store number 
+where the Edge Server instance is located.
 
 .. code-block:: console
 
@@ -689,14 +692,16 @@ You can view the profiles, and their associated configuration files, in:
    ~/.mongodb-edge/profiles/
 
 If you try to create a second Edge Server instance on the same machine, you
-must use the ``--profile`` flag with each command you issue. This maps the 
-command to a specific Edge Server instance.
+can use the ``--profile`` flag with each command you issue. This maps the 
+command to a specific Edge Server instance. If you do not supply a 
+``--profile`` when issuing commands, ``edgectl`` uses the default profile.
 
 .. code-block:: console
 
    edgectl start --profile=instance1 
 
-You can explicitly create a profile when using the ``edgectl init`` command:
+You can name the profile with the ``--profile`` flag when you issue the 
+``edgectl init`` command:
 
 .. code-block:: console
 
