@@ -8,5 +8,5 @@ the left navigation sidebar.
 
 To view the details for a specific Edge Server instance, click 
 :guilabel:`View Details` for that Edge Server instance. Alternately,
-click the :guilabel:`App Logs` button to browse logs associated with 
+click :guilabel:`App Logs` to browse logs associated with 
 the instance.
