@@ -26,121 +26,145 @@ Update Your Data Model
    Update Production Apps </sync/data-model/update-data-model/update-schema-production-apps>
    Manually Update </sync/data-model/update-data-model/migrate-schema-partner-collection>
 
+.. TODO: Update [DATE TBD] 
 
 When developing an application using Atlas Device Sync, you may need to make 
 changes to the Device Sync data model that you initially created. For example,
 you might need a new object type or decide that an optional property should be 
 required.
 
-In general, we discuss data model updates in the following terms: 
+In general, we refer to data model updates in the following terms: 
 
-- *The type of change* 
+- *What type of change are you making?* 
   We broadly categorize changes to a Device Sync data model
   as being either breaking or non-breaking. Breaking changes, such as changing
   the data type of an existing property, are considered destructive and require
-  additional handling to apply. Refer to the
-  :ref:`breaking-and-non-breaking-changes` section on this page for more
-  information. 
+  additional handling to apply. These are discussed further in the
+  :ref:`breaking-and-non-breaking-changes` section on this page. 
 
-- *Where you are making the change* 
+- *Where are you making the change?* 
   Because the Device Sync data model consists of a client-side SDK object model
   and a server-side App Services schema, we distinguish between making changes
   to the client side (updating the SDK object models defined in your client
   code) or the server side (updating the collection schema through the App
   Services UI or Admin API). Regardles of where you make your
-  changes, though, the end result must be that both
-  sides reflect the changes to ensure clients can continue to sync data with
-  Atlas. The implications of where you make your changes are discussed in more detail below.
+  changes, though, you must apply those same changes to the other side to ensure
+  both sides remain consistent. The implications of where you make your changes are discussed in more detail below.
 
-- *Automatic or manual updates* 
+- *Is Development Mode or schema versioning enabled?* 
   When possible, we recommend that apps use one of the following Device Sync
-  features, which automatically handle applying breaking changes to your data
-  model:  
+  features, which simplify how you make changes to your data model:  
   
-  - Automatic Client-Side Updates with Development Mode: Apps with Development
-    Mode enabled can make breaking changes from client code, and Device Sync
-    automatically handles the updates to the server-side App Services schema.
+  - **Automatic Client-Side Updates with Development Mode:** Development Mode is
+    a Device Sync configuration setting that lets you make breaking changes from the client side, and App Services
+    automatically handles updating the server-side schema.
     Apps must be created after September 13, 2023 and meet a minimum Device SDK
-    version. For more information, refer to :ref:`update-data-model-development-mode`.
-  - Automatic Server-Side Updates with Schema Versioning: Apps created after
-    [DATE TBD], 2024 can make breaking changes to the server-side App Services
-    schema. Device Sync creates a new schema version and automatically handles the
-    updates to the client object models. For more information, refer to :ref:`update-data-model-production-apps`.
+    version. For more information, refer to :ref:`update-data-model-development-mode-prerequisites`.
+  - **Automatic Server-Side Updates with Schema Versioning:** Schema versioning
+    lets you make changes to your server-side schema while an eligible app* is
+    in production. App Services creates a new schema version with your changes
+    and automatically handles upgrading the client-side model to the new
+    version. Apps must be created after [DATE TBD]. For more information, refer to
+    :ref:`<update-data-model-production-apps-prerequisites>`.
 
-  Otherwise, you must manually update your data model. For more information, refer to :ref:`migrate-schema-partner-collection`.
+  When automatic updates aren't possible, you must manually handle
+  changes to your data model. To learn more about manually updating a data model, refer to
+  :ref:`migrate-schema-partner-collection`.
 
 .. _breaking-and-non-breaking-changes:
 
-Breaking and Non-Breaking Changes
----------------------------------
+The following sections provide an overview of breaking and non-breaking changes.
+For a quick reference of these changes, refer to the
+:ref:`breaking-change-quick-reference`.
 
-**Non-breaking changes** are considered additive changes because they add new elements to your
-data model. You can make these changes in your server-side App Services schema or in your
-client-side SDK object model. No additional handling is required to apply these
-changes.
+Non-Breaking Changes
+--------------------
 
-**Breaking changes** are considered destructive changes because they modify
-or remove elements in your data model. These changes require additional handling to apply, depending on
-the type of breaking change, where you're making the breaking change, and
-whether your app supports automatically handling breaking changes through
-Development Mode or schema versioning: 
+**Non-breaking changes** are considered additive changes. They maintain
+compatibility with your existing data model rather than "breaking" it, which
+means that old clients can continue to sync data. No additional handling is
+required to apply these changes.
+
+You can typically make these changes in your server-side App Services schema
+or in your client-side SDK object model without additional handling:
+
+- Adding a new object type or property
+- Adding a default value on an existing property
+- Removing an existing object type or property (non-breaking change *only* when made from
+  the client side)
+
+.. _update-model-schema-versioning-changes:
+
+Schema Versioning Changes
+-------------------------
+
+**Schema versioning changes** are destructive changes that create a
+backward-compatible schema version. When you deploy a schema versioning change, App Services increments the schema version  
+and automatically handles upgrading the client-side model to the new version.
+Refer also to the :ref:`update-model-breaking-changes-schema-versioning` section
+on this page.
+
+Schema versioning changes *must* be made from the server side. If you are not using
+schema versioning, these are considered breaking changes. 
+
+- Removing an existing object type or property 
+- Changing whether an existing property is optional or required
+
+To learn more about schema versioning, refer to :ref:`update-data-model-production-apps`.
+
+.. _update-model-breaking-changes:
+
+Breaking Changes
+----------------
+
+**Breaking changes** are considered destructive changes. These changes "break"
+your data model and require additional handling to apply to ensure that clients
+can continue to connect and sync data. 
+
+Breaking changes include:
+
+- Removing an existing object type or property (if schema versioning is disabled)
+- Changing whether an existing property is optional or required (if schema versioning is disabled)
+- Renaming an existing object type or property
+- Changing the data type of an existing property
 
 .. important:: All Changes are Breaking While Sync is Terminated
 
    You can :ref:`terminate and re-enable Device Sync <terminating-realm-sync>` in your app. However, if you update your data
    model while Device Sync is terminated, *all* changes that you make are
    considered breaking changes - even if they are normally categorized as
-   non-breaking changes. 
+   non-breaking or schema versioning changes. 
+
+.. _update-model-breaking-changes-development-mode:
 
 Breaking Changes with Development Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Development Mode** is a Device Sync configuration setting that lets Sync
-automatically infer and update the server-side App Services schema based on your
-client-side changes - including breaking changes. 
+When Development Mode is enabled in an eligible app*, you can make breaking
+changes to your client-side object model, and App Services automatically
+applies the changes to your server-side schema. For more information on Development Mode and how to enable it in your app, refer to :ref:`sync-settings`.  
 
-When Development Mode is enabled in an eligible app*, you can make breaking changes to your client-side object model, and Device Sync automatically
-applies the changes to your server-side schema.  
-* (Your app must be created after September 13, 2023 and meet the minimum Device
-SDK version, as noted in :ref:`<update-data-model-development-mode-prerequisites>`.)
+* *(Your app must be created after September 13, 2023 and meet the minimum Device
+SDK version. See also: :ref:`<update-data-model-development-mode-prerequisites>`.)*
 
-To learn more, refer to :ref:`update-data-model-development-mode`.
-
-For more information on Development Mode and how to enable it in your app, refer to :ref:`sync-settings`. 
+To learn how to make breaking changes with Development Mode, refer to :ref:`update-data-model-development-mode`.
 
 .. include:: /includes/note-dev-mode-production.rst
+
+.. _update-model-breaking-changes-schema-versioning:
 
 Breaking Changes with Schema Versioning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Schema versioning** is an App Services feature that lets you make breaking
-changes to your server-side schema while an eligible app* is in production. 
-App Services creates a new schema version with your changes and automatically
-handles upgrading the client-side model to the new version.
-* (Your app must be created after [DATE TBD], as noted in :ref:`<update-data-model-production-apps-prerequisites>`.)
+When schema versioning is enabled in an eligible app*, you can make breaking
+changes to your server-side schema, and App Services creates a new schema
+version. However, the new schema becomes the new *minimum* version. This means that all previous
+schemas are invalidated, and
+clients *must* upgrade to the new schema version to continue syncing data.
 
-You *cannot* use schema versioning in Development Mode. If you enable
-Development Mode, then schema versioning is automatically disabled and any
-version is cleared. When you disable Development Mode, schema
-versioning is automatically re-enabled but any version history is unrecoverable.
+* *(Your app must be created after [DATE TBD]. See also: :ref:`<update-data-model-production-apps-prerequisites>`.)*
 
-- Non-breaking changes do *not* create a new schema version or write to the
-  version history. Updates from
-  non-breaking changes are always backward-compatible to the minimum allowed
-  schema version.
-- Breaking changes *always* create a new schema version, and the new version is
-  either compatible or incompatible with previous versions:
-
-  - **Compatible Breaking Changes:** Compatible breaking changes are changes that
-    you can make to your server-side schema that are backward-compatible with
-    previous schemas (to the earliest allowed schema version). 
-  - **Incompatible Breaking Changes:** Incompatible breaking changes are
-    changes that you can make to your server-side schema that are *not*
-    backward-compatible with any previous schemas. An incompatible breaking change
-    creates a new schema version that becomes the new earliest
-    allowed schema version. All previous schemas are invalidated.
-
-To learn more about schema versioning and how to make breaking changes with schema versioning, refer to
+To learn how to make breaking changes with schema versioning, refer to
 :ref:`update-data-model-production-apps`.
 
 Manually Handle Breaking Changes
@@ -157,19 +181,17 @@ model, refer to :ref:`migrate-schema-partner-collection`.
 Data Model Changes: Quick Reference
 -----------------------------------
 
-This table summarizes each type of change, and whether it is considered a breaking or 
-non-breaking change when made to the server-side App Services schema or the client-side
-SDK object model.
-
-After you've made these changes, the appropriate documents should once again 
-sync to the client application.
+This table summarizes each type of change, and whether it is considered a
+non-breaking, schema versioning, or 
+breaking change when made to the server-side App Services schema or the client-side
+SDK object model. 
 
 .. list-table::
    :header-rows: 1
    :stub-columns: 1
 
    * - Description of Change
-     - Server-Side Schema
+     - Server-Side Schema 
      - Client-Side Object Model
    * - :ref:`Add an object type <update-model-add-object-type>`
      - Non-breaking
@@ -178,35 +200,29 @@ sync to the client application.
      - Non-breaking
      - Non-breaking
    * - :ref:`Add default value on a property <update-model-add-a-default-value>`
-     - Non-breaking
+     - Non-breaking 
      - Non-breaking
    * - :ref:`Remove an object type <update-model-remove-object-type>`
-     - Breaking (Compatible)
+     - Schema Versioning*
      - Non-breaking
    * - :ref:`Remove a property <update-model-remove-property>`
-     - Breaking (Compatible)
+     - Schema Versioning*
      - Non-breaking
    * - :ref:`Change whether property is optional or required <update-model-change-property-status>`
-     - Breaking (Compatible)
+     - Schema Versioning*
      - Breaking
    * - :ref:`Rename an object type <update-model-change-object-type-name>`
-     - Breaking (Incompatible)
+     - Breaking 
      - Breaking 
    * - :ref:`Rename a property <update-model-change-property-name>`
-     - Breaking (Incompatible)
+     - Breaking
      - Breaking 
    * - :ref:`Change property type <update-model-change-property-type-but-keep-name>`
-     - Breaking (Incompatible)
+     - Breaking 
      - Breaking 
 
-The following diagram shows the types of changes you can make and the 
-process perform the change:
-
-.. TODO: UPDATE WITH NEW DIAGRAM
-
-.. .. figure:: /images/schema_changes_with_versioning.png
-..    :alt: Flow chart of schema changes
-..    :lightbox:
+* *Schema versioning changes are considered breaking changes when
+schema versioning is disabled.*
 
 .. tip:: Remap a Name Instead of Renaming
 
@@ -216,15 +232,23 @@ process perform the change:
    can be a convenient
    alternative to renaming your properties or classes. To learn how, refer to the following SDK documentation:
 
-     - C++ SDK - not currently supported
-     - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
-     - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
-     - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
-     - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
-     - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
-     - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
-     - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
+   - C++ SDK - not currently supported
+   - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
+   - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
+   - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
+   - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
+   - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
+   - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+   - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
 
+The following diagram shows the types of changes you can make and the 
+process perform the change:
+
+.. TODO: UPDATE WITH NEW DIAGRAM
+
+.. .. figure:: /images/schema_changes_with_versioning.png
+..    :alt: Flow chart of schema changes
+..    :lightbox:
 
 Data Model Changes
 ------------------ 
@@ -276,14 +300,18 @@ existing Atlas documents, see :ref:`<schema-update-add-required-property>`.
 .. _update-model-add-required-property:
 
 Add a Required Property
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
-You can add a required property to the client's object model, and
-use :ref:`Development Mode <development-mode>` to let App Services infer the
-server-side schema updates. Or you can manually add the
-required property to both the client model and the Atlas schema.
+You can add a required property to the client's object model, 
 However, you should consider making the property optional to avoid the need to
 modify existing Atlas documents.
+- use :ref:`Development Mode <development-mode>` to let App Services infer the
+server-side schema updates
+
+- manually add the
+required property to both the client model and the Atlas schema.
+
+
 
 .. note:: Required Properties Missing in a Schema Subset Will Default to Zero
 
@@ -292,9 +320,8 @@ modify existing Atlas documents.
    missing required value field with a zero or blank value
    (like 0, "", or 0.0 depending on the property type) when the document syncs.
 
-
 Modify Existing Atlas Documents
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+```````````````````````````````
 
 When you add a new required property, you must update existing documents with 
 the new property or they do not sync to the client. This may give client 
@@ -320,7 +347,7 @@ while this process is underway.
 .. _update-model-add-optional-property:
 
 Add an Optional Property
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you want to add an optional property to both the server-side schema and 
 the client object model, you can add the optional property to the object 
@@ -336,15 +363,10 @@ optional property to both the model and the schema.
    the new values. This is expected behavior, but it does cause a temporary 
    halt to propagating changes while this process is underway.
 
-Breaking Changes 
-~~~~~~~~~~~~~~~~
-
-Compatible Breaking Changes
-
 .. _update-model-remove-object-type:
 
 Remove an Object Type
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 You can remove an object from the client's object model as a non-breaking change. 
 If you remove the object from the server-side schema, it is a breaking change.
@@ -354,7 +376,8 @@ object model only and leave it in place on the server-side schema.
 .. _update-model-remove-property:
 
 Remove a Property
------------------
+~~~~~~~~~~~~~~~~~
+
 You can remove an optional or required property from the client-side object model and 
 leave it in place on the server-side schema. This is a 
 non-breaking change to the object model.
@@ -371,8 +394,8 @@ integer values, or an empty string for string values.
 
 .. _update-model-change-property-status:
 
-Change a Property's Status Between Optional and Required
---------------------------------------------------------
+Change Whether a Property is Optional or Required
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Changing a property's status between optional and required 
 is a breaking change to both the server-side schema and the client-side object model.
@@ -401,13 +424,55 @@ unsynced changes before resetting.
    :ref:`Development Mode <development-mode>` 
    does not automatically update your schema for breaking changes. 
 
-Incompatible Breaking Changes
+.. _update-model-change-property-type-but-keep-name:
 
+Change the Data Type of a Property
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Changing a property's type is a breaking change to both the server-side 
+schema and the client-side object model.
+
+.. warning:: Update existing documents
+
+   If you change a property's type in the server-side schema, you must 
+   update existing documents with that new property type or they do not sync 
+   to the client. This may give client users the impression that the data 
+   has been lost.
+
+Instead of changing a property's type, consider implementing the 
+:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
+you keep the existing collection and schema, and create a new collection 
+with the new schema. 
+
+If you choose to change the property's type instead of using the partner collection 
+strategy, you must terminate sync, manually update the schema, 
+and re-enable sync. In addition, your client 
+application must perform a :ref:`client reset <client-resets>` to restore Sync.
+In the default client reset mode, the client attempts to recover any 
+unsynced changes before resetting.
+
+.. note::
+
+   :ref:`Development Mode <development-mode>` 
+   does not automatically update your schema for breaking changes. 
+
+When you terminate and re-enable sync, you must also update existing Atlas 
+documents to enable them to Sync with your client applications. 
+Without this additional handling, those documents do not Sync and it may 
+appear in the client that the data has been lost. You could resolve this issue 
+in two ways:
+
+- Change the old field type on each document to match the new schema
+- Add a new field to each document with the type that matches the new schema, 
+  and copy the value from the old field into it, transforming its type
+
+After you've made these changes, the appropriate documents should once again 
+sync to the client application.
 
 .. _update-model-change-object-type-name:
 
-Change an Object's Name
-------------------------
+Rename an Object Type
+~~~~~~~~~~~~~~~~~~~~~
 
 Changing an object's name on both the server-side schema and the client-side 
 object model is a breaking change. However, some SDKs offer an API to 
@@ -440,8 +505,8 @@ unsynced changes before resetting.
 
 .. _update-model-change-property-name:
 
-Change a Property Name
-----------------------
+Rename a Property
+~~~~~~~~~~~~~~~~~
 
 Changing a property's name on both the server-side schema and the client-side 
 object model is a breaking change. However, some SDKs offer an API to 
@@ -490,47 +555,4 @@ in two ways:
 After you've made these changes, the appropriate documents sync to the client 
 application.
 
-.. _update-model-change-property-type-but-keep-name:
 
-Change a Property Type but Keep the Name
-----------------------------------------
-
-Changing a property's type is a breaking change to both the server-side 
-schema and the client-side object model.
-
-.. warning:: Update existing documents
-
-   If you change a property's type in the server-side schema, you must 
-   update existing documents with that new property type or they do not sync 
-   to the client. This may give client users the impression that the data 
-   has been lost.
-
-Instead of changing a property's type, consider implementing the 
-:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
-you keep the existing collection and schema, and create a new collection 
-with the new schema. 
-
-If you choose to change the property's type instead of using the partner collection 
-strategy, you must terminate sync, manually update the schema, 
-and re-enable sync. In addition, your client 
-application must perform a :ref:`client reset <client-resets>` to restore Sync.
-In the default client reset mode, the client attempts to recover any 
-unsynced changes before resetting.
-
-.. note::
-
-   :ref:`Development Mode <development-mode>` 
-   does not automatically update your schema for breaking changes. 
-
-When you terminate and re-enable sync, you must also update existing Atlas 
-documents to enable them to Sync with your client applications. 
-Without this additional handling, those documents do not Sync and it may 
-appear in the client that the data has been lost. You could resolve this issue 
-in two ways:
-
-- Change the old field type on each document to match the new schema
-- Add a new field to each document with the type that matches the new schema, 
-  and copy the value from the old field into it, transforming its type
-
-After you've made these changes, the appropriate documents should once again 
-sync to the client application.

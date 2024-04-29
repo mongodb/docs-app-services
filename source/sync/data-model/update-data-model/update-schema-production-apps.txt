@@ -1,11 +1,11 @@
 .. _update-data-model-production-apps:
 
-===============================
-Update Data Model in Production
-===============================
+===============================================
+Automatically Update a Data Model in Production
+===============================================
 
 .. meta::
-   :description: Update your Device Sync data model from your client app using Development Mode.
+   :description: Make breaking changes to your Device Sync data model from your App Services schema with schema versioning.
 
 .. facet::
    :name: genre
@@ -17,85 +17,337 @@ Update Data Model in Production
    :depth: 2
    :class: singlecol
 
+.. TODO: Update [DATE TBD] 
 
-Device Sync allows you to update your data model in production ...
+While your app is in production, you may need to update your Device Sync data
+model. 
+
+If you need to make a breaking change, App Services creates a new schema
+version. 
+
+If your app is still in development, we recommend that you use Development Mode.   
+To learn how to update your data model with Development Mode, refer to :ref:`update-data-model-development-mode`.
 
 .. _schema-versioning:
 
 Schema Versioning
 -----------------
 
-[DRAFT]
+**Schema versioning** is a Device Sync feature that lets you manage incremental 
+changes to your data model while your app is in production. 
+You can view, create, and manage schema versions from the App Services UI.
 
-Device Sync supports schema versioning, which allows you to make changes to your
+Schema version history persists 
+in App Services, allowing you to revert to a previous schema version if needed. 
 
-When enabled, a new base schema version (``v0``) is created. 
+When you make a breaking change, App Services creates a new schema version and
 
-Schema versions: 
-Are persisted in a client file with version change history. 
-Can be upgraded or downgraded rolled back. Users can change their schema version from the UI.
-Note: We don't really have a built-in rollback mechanism on the server. 
-DOCS RECOMMENDATION: Recommend users make another schema change that is the inverse of the one theyre reverting
-Can be manually deprecated through the UI. Useful for blocking clients from connecting if using an old, incompatible version. NOTE: Cut from project scope
-Are backward- and forward-compatible across multiple, non-sequential versions (client on schema v1 is compatible with schema v0 and future schema v10)
-Compatibility dictated by “earliest allowed schema version” (i.e. the version of the latest INCOMPATIBLE change). Any clients connecting at a prior version will be rejected with the “invalid schema version” error.
+Version Numbering and Compatibility
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The schema version defaults to 0 when versioning is enabled for your app. When
+you make a schema versioning change or a breaking change, the schema version
+increments by 1. 
 
 
-When you make a breaking change to your schema, you must increment the schema
-version. This is because Device Sync uses the schema version to determine if a
-client is compatible with the server. If the client is not compatible, the
-server will reject the connection.
+Schema versions are considered compatible or incompatible with previous schemas: 
 
-For apps that support schema versioning, breaking changes *always* create a new
-schema version. However, depending on the type of breaking change made, the new version
-might not be backward-compatible with previous schema versions:
+- **Compatible:** When you make a schema versioning change, the new schema
+  version is backward-compatible with all previous schema versions.
 
-- **Compatible Breaking Changes:** Compatible breaking changes are changes that you can make to your server-side schema that are backward-compatible with the earliest allowed schema version. These changes do not require additional handling in your app. 
+- **Incompatible:** When you make a breaking change, the new schema version is
+  *not* backward-compatible with previous schema versions. An incompatible
+  schema version invalidates all previous schemas and effectively becomes the
+  new minimum version. 
+
+Schema Versioning and Development Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Schema versioning is incompatible with Development Mode. 
+
+To use schema versioning, your app must use Device Sync with Development Mode
+*disabled*. While Development Mode is disabled, App Services persists your app's schema
+version history. However, if you enable Development Mode, schema versioning is
+automatically disabled and any version history is cleared.
+
+When you disable Development Mode, schema versioning is automatically re-enabled
+
+
+Types of Changes
+----------------
+
+
+
+App Services creates a new schema version with your changes and automatically
+handles upgrading the client-side model to the new version.
+
+When schema versioning is enabled, changes are categorized as the following:
+
+- **Non-Breaking (Additive):** Changes that are
+  applied to the current schema version. Additive changes do *not* create a new schema
+  version or write to the version history, unless they are applied at the same
+  time as schema
+  versioning or breaking changes.
   
-  Compatible breaking changes include: 
-  
-  - Removing an object type
-  - Removing a property
-  - Changing whether a property is required or optional
+  Additive changes include:
 
-- **Incompatible Breaking Changes:** Incompatible schema versioning changes are
-  changes that you can make to your server-side schema that are not
-  backward-compatible with any previous schemas. An incompatible breaking change
-  creates a new schema version *and* that version becomes the new earliest
-  allowed schema version. All previous schemas are invalidated.
+  - Adding a new object type or property
+  - Adding a default value on a property
 
-  Incompatible breaking changes include: 
-  
-  - Renaming an object type
-  - Renaming a property
-  - Changing the data type of a property
+- **Schema Versioning (Supported):** Changes that create a new schema
+  version and writes to the version history. The new schemas are
+  backward-compatible up to the minimum schema version, unless they are applied
+  at the same time as breaking changes.
+
+  Schema versioning changes include:
+
+  - Removing an existing object type or property 
+  - Changing whether an existing property is optional or required
+
+- **Breaking (Unsupported):** Changes that create a new minimum schema version and
+  writes to the version history. The new schema is *not* backward-compatible
+  with any previous schemas, even if they are applied at the same time as
+  non-breaking or schema versioning changes. The new minimum schema version
+  invalidates all previous schemas, and clients *must* upgrade to the new schema
+  version to continue syncing data. When you deploy breaking changes, Sync is
+  terminated and re-enabled.
+
+  Unsupported breaking changes include:
+
+  - Renaming an existing object type or property *
+  - Changing the data type of an existing property
+
+.. tip:: Remap a Name Instead of Renaming
+
+   Several Device SDKs support remapping a property or class name. Because
+   renaming is considered a breaking change, we recommend remapping
+   through the client code when possible. To learn how, refer to the following SDK documentation:
+
+   - C++ SDK - not currently supported
+   - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
+   - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
+   - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
+   - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
+   - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
+   - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+   - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
+
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
+
+   * - Description of Change
+     - Type of Change
+     - Increments Version? 
+     - Backward-Compatible?
+   * - :ref:`Add an object type <update-model-add-object-type>`
+     - Non-breaking (Additive)
+     - No
+     - N/A
+   * - :ref:`Add a property <update-model-add-required-property>`
+     - Non-breaking (Additive)
+     - No
+     - N/A
+   * - :ref:`Add default value on a property <update-model-add-a-default-value>`
+     - Non-breaking (Additive)
+     - No
+     - N/A
+   * - :ref:`Remove an object type <update-model-remove-object-type>`
+     - Schema Versioning (Supported)
+     - Yes
+     - Yes
+   * - :ref:`Remove a property <update-model-remove-property>`
+     - Schema Versioning (Supported)
+     - Yes
+     - Yes
+   * - :ref:`Change whether property is optional or required <update-model-change-property-status>`
+     - Schema Versioning (Supported)
+     - Yes
+     - Yes
+   * - :ref:`Rename an object type <update-model-change-object-type-name>`
+     - Breaking (Unsupported)
+     - Yes
+     - No
+   * - :ref:`Rename a property <update-model-change-property-name>`
+     - Breaking (Unsupported)
+     - Yes
+     - No
+   * - :ref:`Change property type <update-model-change-property-type-but-keep-name>`
+     - Breaking (Unsupported)
+     - Yes
+     - No
+
+
 
 .. _update-data-model-production-apps-prerequisites:
 
 Prerequisites
 -------------
 
-To make breaking changes to your server-side schema using schema versioning, your App Services App must meet the following requirements:
+To use schema versioning, your App Services App must meet the following requirements:
 
-- The App is created *after* [DATE TBD] with Device Sync enabled. To learn how, refer to :ref:`enable-sync`.
-- Development Mode must be disabled. To learn how, refer to :ref:`enable-development-mode`.
+- App is created *after* [DATE TBD] with Device Sync enabled. To learn how, refer to :ref:`enable-sync`.
+- Development Mode must be disabled. To learn how, refer to :ref:`Disable
+  Development Mode <enable-development-mode>`.
 
-- The App uses a minimum Device SDK version:
+.. TODO: confirm sdk versions
 
-  - C++ SDK v1.0.0
-  - Flutter SDK v1.6.0
-  - Java SDK v10.16.2
-  - Kotlin SDK v11.1.1
-  - .NET SDK v11.6.0
-  - Node.js SDK v12.2.0
-  - React Native SDK v12.2.0
-  - Swift SDK v10.42.2
+- App uses a minimum Device SDK version:
 
-For apps created *before* September 13, 2023, you must manually update your
+  - C++ SDK - unsupported 
+  - Flutter SDK v2.1.0
+  - Java SDK v10.18.0
+  - Kotlin SDK - unsupported
+  - .NET SDK v11.7.0
+  - Node.js SDK v12.6.0
+  - React Native SDK v12.6.0
+  - Swift SDK v10.46.0
+
+For apps created *before* [DATE TBD], you must manually update your
 object schema in the App Services UI. For more information, refer to
 :ref:`migrate-schema-partner-collection`.
 
 .. tip:: Contact Support to Enable in Older Apps
    
    You can contact support if you are interested in enabling this feature in an 
-   app created before September 13, 2023 that can meet the other requirements.
+   app created before [DATE TBD] that can meet the other requirements.
+
+.. warning:: Enabling Development Mode Deletes Schema Version History
+
+   You *cannot* use schema versioning in Development Mode. If you enable
+   Development Mode, then schema versioning is automatically disabled and any
+   version history is cleared. 
+   
+   When you disable Development Mode, schema versioning is automatically
+   re-enabled but any previous version history is unrecoverable.
+
+.. _update-data-model-production-app-procedure:
+
+Make Changes With Schema Versioning
+-----------------------------------
+
+The following describes how to make changes to your server-side schema through
+the App Services UI when schema versioning is enabled.
+
+DOCS RECOMMENDATION: Recommend users make another schema change that is the inverse of the one theyre reverting
+Can be manually deprecated through the UI. Useful for blocking clients from connecting if using an old, incompatible version. NOTE: Cut from project scope
+Are backward- and forward-compatible across multiple, non-sequential versions
+(client on schema v1 is compatible with schema v0 and future schema v10)
+
+      For information on the specific changes you can make, refer to 
+      :ref:`sync-schema-overview`.
+
+.. procedure::
+
+   .. step:: Make Schema Changes in App Services UI
+
+
+      In the App Services UI, navigate to the :guilabel:`Schema` page.
+
+      From the :guilabel:`Collections` tab, select the schema that you want to
+      modify.
+      
+      .. note:: Define Default values
+
+         If your changes impact the default values of a property, you can
+
+         define the default value in the App Services UI. To learn how, refer to
+
+      Click :guilabel:`Save`. A confirmation window displays with a summary
+      of your changes. 
+      
+   .. step:: Confirm and Deploy Changes
+
+      From the :guilabel:`Are you sure you want to deploy?` window, review your
+      changes. Depending on the type of changes you made, you will see the
+      following:
+
+      .. tabs::
+         
+         .. tab:: Non-Breaking 
+            :tabid: additive
+      
+            If your changeset *only* includes non-breaking changes (labeled as "ADDITIVE"),
+            your changes are applied to the current schema version without any
+            additional handling or versioning. 
+      
+            1. Review your changes and click :guilabel:`Deploy and re-initialize`.
+            2. Your changes are automatically applied to the current schema
+               version. The schema version is *not* incremented, there is
+               no compatibility impact on previous schemas, and nothing is written to the version history.
+
+         .. tab:: Schema Versioning
+            :tabid: supported
+
+            If your changeset includes at least one schema versioning change (labeled as
+            "SUPPORTED"), all changes - including any non-breaking changes - are applied to a new schema version. 
+        
+            1. Review your changes, which may include non-breaking changes. The window displays the current schema version number and the incremented number of the new minimum schema that is created upon deployment.
+            2. Click :guilabel:`Deploy`.
+            3. Your changes are applied to the new schema version. The new
+               version is compatible with previous schemas, and a record is written to the version history.
+
+      .. tab:: Breaking
+         :tabid: unsupported
+
+         If your changeset includes at least one breaking changes (labeled as
+         "UNSUPPORTED") all changes - including any non-breaking and schema
+         versioning changes - are
+         applied to a new minimum schema version. App Services also warns that
+         Sync will terminate and re-initialize upon deployment.
+              
+         1. Review your changes, which may include non-breaking and schema
+            versioning changes. The
+            window displays the current schema version number and the incremented number of
+            the new minimum schema that is created upon deployment.
+         2. Click :guilabel:`Deploy and re-initialize`.
+         3. After Device Sync terminates and re-initializes, your changes are
+            applied to the new minimum schema version. The new version is
+            incompatible with previous schemas, and a record is written to the
+            version history.
+
+   .. step:: Update Your Client-Side Model
+
+      From the :guilabel:`Are you sure you want to deploy?` window, review your
+
+Change Your Schema Version
+--------------------------
+
+Once you have multiple schema versions, you can select a specific version to use
+as your current schema.
+
+.. procedure::
+
+   .. step:: Select a Schema Version
+
+      In the App Services UI, navigate to the :guilabel:`Schema` page.
+
+      Select the :guilabel:`Sync Models` tab.
+
+      displays dropdown and timestamp 
+
+      :guilabel:`Sync schema version` field displays the currently
+      selected schema version, with a dropdown of all available schema versions.
+      
+      if you select a different version, the sync models update to reflect the
+      selected schema.
+
+      Schema versions are listed in descending order, with the most recent
+      version at the top.
+
+
+
+
+Troubleshooting 
+~~~~~~~~~~~~~~~
+
+You might encounter the following errors:
+
+- If any documents stored in Atlas do *not* match the uploaded client-side
+  object model, they cannot be synced to the client. An
+  error message is sent to the client with instructions on how to sync these 
+  documents.
+- If the client still has data in its local database file after you make a
+  breaking change, the app will fail at startup with an error indicating
+  that the ``changes cannot be made in additive-only schema mode``. Ensure
+  that you delete any existing local data before making your changes.

@@ -6,11 +6,11 @@ Automatically Update a Data Model with Development Mode
 =======================================================
 
 .. meta::
-   :description: Update your Device Sync data model from your client app using Development Mode.
+   :description: Make breaking changes to your Device Sync data model from your client app using Development Mode.
 
 .. facet::
-  :name: genre
-  :values: tutorial
+   :name: genre
+   :values: tutorial
 
 .. contents:: On this page
    :local:
@@ -36,11 +36,12 @@ Breaking Changes in Development Mode
 ------------------------------------
 
 Non-breaking changes (or additive changes) don't require any additional handling, even with
-Development Mode disabled. You can make these change to your server-side App
-Services schema or to your client-side object model.
+Development Mode disabled. You can typically make these change to your server-side App
+Services schema or to your client-side object model with some exceptions. For
+more information, refer to the :ref:`breaking-change-quick-reference`.
 
-Breaking changes (or destructive changes), however, require additional handling
-depending on where they are made. When Development Mode is enabled, and you make
+Breaking changes (or destructive changes) require additional handling
+depending on what the change is and where they are made. However, when Development Mode is enabled, and you make
 breaking changes to your client-side SDK object model, then Device Sync
 automatically handles the server-side updates for you.
 You *must* make your updates to the client for Sync to automatically update the
@@ -61,6 +62,15 @@ Mode, your App Services App must meet the following requirements:
   
   - Device Sync. To learn how, refer to :ref:`enable-sync`.
   - Development Mode. To learn how, refer to :ref:`enable-development-mode`.
+   
+    .. warning:: Enabling Development Mode Deletes Schema Version History
+
+      You *cannot* use schema versioning in Development Mode. If you enable
+      Development Mode for an existing app, schema versioning is automatically disabled and any
+      version history is cleared. 
+      
+      When you disable Development Mode, schema versioning is automatically
+      re-enabled but the app's previous version history is unrecoverable.
 
 - The App uses a minimum Device SDK version:
 
@@ -149,11 +159,14 @@ Troubleshooting
 
 You might encounter the following errors:
 
-- If any documents stored in Atlas do *not* match the uploaded client-side
+- **[ERROR TBD]**
+  If any documents stored in Atlas do *not* match the uploaded client-side
   object model, they cannot be synced to the client. An
   error message is sent to the client with instructions on how to sync these 
   documents.
-- If the client still has data in its local database file after you make a
+
+- **Changes cannot be made in additive-only schema mode**
+  If the client still has data in its local database file after you make a
   breaking change, the app will fail at startup with an error indicating
   that the ``changes cannot be made in additive-only schema mode``. Ensure
   that you delete any existing local data before making your changes.
