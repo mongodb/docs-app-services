@@ -14,7 +14,10 @@
 
 ## Reference
 
-- App Services CLI: Update CLI reference with the `--use-local-app` flag addition to the `functions run` command, the `--limit` flag addition to the `users list` commands, and the new `functions list` command.
+- App Services CLI
+  - `functions run`: Add `--use-local-app` flag.
+  - `users list`: Add `--limit` flag.
+  - `functions list`: New command to list all Functions in an app.
 
 # April 19, 2024
 
