@@ -1,0 +1,601 @@
+.. _edge-server-manage-atlas:
+
+============================
+Manage Edge Servers in Atlas
+============================
+
+.. meta::
+   :description: Learn how to add Edge Server to your project, and create, delete, or check the status of Edge Servers.
+
+.. facet::
+   :name: genre 
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+An Edge Server-compatible service is your Atlas destination to create, delete, 
+or monitor your Edge Server instances. 
+
+There are two types of services that enable you to use Edge Server:
+
+- **Edge Server Service**: use this option if you want clients to connect to an
+  Edge Server instance with MongoDB Drivers and tools. It infers and updates 
+  the schema from the documents you insert, and provides a developer experience
+  familiar to MongoDB developers. This service is incompatible with 
+  Atlas Device SDK; it rejects incoming Atlas Device SDK connections.
+- **Device Sync Service (with Edge Server)**: use this option if you want to 
+  develop client apps using Atlas Device SDK and MongoDB Drivers and tools. 
+  This option involves more strict schema enforcement, which the SDKs use to 
+  automatically sync objects across devices and handle conflict resolution.
+
+Regardless of which type of service you choose, Edge Servers use Device Sync 
+to sync data between the Edge Server instance and Atlas.
+
+.. important:: You can't add Atlas Device SDK later to an Edge Server Service
+
+   You can always add Edge Servers to a Device Sync Service. But you can't use
+   Atlas Device SDK connections with an Edge Server Service. 
+   
+   Users are not portable between services. If you start with an Edge Server 
+   Service, but later want to develop apps using Atlas Device SDK, there is no 
+   way to transfer any users in your Edge Service to a new Device Sync Service.
+
+Before You Begin
+----------------
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      You need the following to manage Edge Servers in the Atlas UI:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+
+   .. tab::
+      :tabid: api
+
+      You need the following to manage Edge Servers with the Admin API:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+
+      - .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+      - .. include:: /includes/prereqs/api-project-app-id.rst
+
+.. _create-edge-server-service:
+
+Create a Service for Edge Server
+--------------------------------
+
+You can create an Edge Server-compatible service in Data Services or App 
+Services. 
+
+- You might select Data Services when you just want to get started building
+  with Edge Server or Device Sync and Edge Server, and don't need other 
+  App Services. You can create an Edge Server Service from Data Services.
+- You might select App Services when you want to bundle your service with 
+  authentication, Functions, Triggers, HTTPS Endpoints, or Values and Secrets.
+  You can create a Device Sync Service from App Services, and add Edge Server
+  to it.
+
+.. tabs::
+
+   .. tab:: Create a Data Service
+      :tabid: atlas-service
+
+      .. procedure::
+
+         .. step:: Navigate to the Data Services UI
+
+            When you select a project in the Atlas UI Project dashboard, the
+            :guilabel:`Data Services` tab displays by default.
+
+            If you are in :guilabel:`App Services` or :guilabel:`Charts`,
+            select the :guilabel:`Data Services` tab.
+
+         .. step:: Choose Device & Edge Sync
+
+            In the left sidebar, browse to the :guilabel:`Services` section. 
+            Select :guilabel:`Device & Edge Sync`.
+
+         .. step:: Create a Service
+
+            Select the type of service you want to create, and follow the
+            prompts to create an Edge Server Service or Device Sync Service.
+
+            After creating an Edge Server Service, you're able to immediately
+            add Edge Server instances.
+
+            If you create a Device Sync Service, click :guilabel:`Edge Server` 
+            in the left navigation. This opens a list where you can add and 
+            view Edge Server instances.
+
+            Click the :guilabel:`Add a server` button, and follow the
+            prompts to name and create your new Edge Server instance.
+
+   .. tab:: Create an App Service
+      :tabid: app-service
+
+      .. procedure::
+
+         .. step:: Create a Device Sync App
+
+            Refer to the documentation to :ref:`create-app`.
+
+            When you choose your App type, select ``Device Sync``. You can add
+            Edge Servers to your Device Sync App after you configure 
+            Device Sync.
+
+         .. step:: Add Edge Server Instances to Your Device Sync Service
+
+            While viewing your Device Sync Service, click 
+            :guilabel:`Edge Server` in the left navigation. This opens a
+            list where you can add and view Edge Server instances.
+
+            Click the :guilabel:`Add a server` button, and follow the
+            prompts to name and create your new Edge Server instance.
+
+.. important:: Required Field
+
+   Documents that you want to sync with an Edge Server must contain an ``_id`` 
+   field whose type varies depending on the service type: 
+   
+   - Edge Server Service: Type ``ObjectId``
+   - Device Sync Service: Type ``ObjectId``, ``String``, ``Long``, ``Int``, ``UUID``
+
+   Any documents without this field cannot sync to an Edge Server.
+
+Supported Authentication Providers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server supports a subset of authentication providers. Supported 
+authentication providers vary depending on whether you're connecting with
+Atlas Device SDK or using a MongoDB URI to connect with a MongoDB Driver 
+or tool.
+
+You must enable at least one of these providers to enable clients to connect
+to an Edge Server instance.
+
+Supported Atlas Device SDK Authentication Providers
+```````````````````````````````````````````````````
+
+- :ref:`anonymous-authentication`
+- :ref:`email-password-authentication`
+- :ref:`custom-jwt-authentication`
+- :ref:`api-key-authentication`
+
+Supported MongoDB Driver Authentication Providers
+`````````````````````````````````````````````````
+
+- :ref:`anonymous-authentication`
+- :ref:`email-password-authentication`
+
+.. _create-edge-server-instance:
+
+Create an Edge Server Instance
+------------------------------
+
+After creating an Edge Server-compatible service, you can add Edge Servers 
+to it. The service can handle multiple Edge Servers, each of which has its own 
+registration key.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. procedure::
+
+         .. step:: Add a server
+
+            Click :guilabel:`Add a server`. You're prompted to name your 
+            Edge Server.
+
+            The UI provides an installation script, which you can copy and 
+            paste into the terminal on the device where you want to install 
+            the Edge Server code. You also get a token, which you will use 
+            when you configure the Edge Server instance.
+
+         .. step:: Install and Configure the Edge Server code
+
+            Copy and paste the installation script into the terminal on the
+            device where you want to install the Edge Server code. For more 
+            details, refer to :ref:`edge-server-install-and-configure`.
+
+            After you configure and start the Edge Server instance, its 
+            :guilabel:`Health` status in the Edge Server dashboard changes
+            from :guilabel:`Pending` to :guilabel:`Active`.
+
+   .. tab::
+      :tabid: api
+
+      .. procedure::
+
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/api-authenticate-instructions.rst
+
+         .. step:: Call the Create Edge Server Instance Endpoint
+
+            Call the 
+            :admin-api-endpoint:`Admin API Create an Edge Server instance <operation/adminCreateEdgeServerInstance>` 
+            endpoint to add an Edge Server instance to your service.
+
+            Your request must include:
+
+            - An ``Authorization`` header with your Admin API access
+              token as a :mdn:`Bearer token <Web/HTTP/Authentication>`.
+
+            - A ``name`` for the new Edge Server instance
+
+            .. code-block:: shell
+
+               curl -X POST \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>' \
+                 -d '{
+                   "name": "YOUR-EDGE-SERVER-INSTANCE-NAME"
+                 }'
+
+            A successful request returns a ``201`` code, as well as a JSON
+            object with information about the newly-created Edge Server 
+            instance:
+
+            .. code-block:: json
+
+               {
+                 "id": "6622b8f5118368b943d228a9",
+                 "user_id": "6622b8f5118368b943d2288a",
+                 "registration_key": "Qi4GgpvVduwwt4k1w77ZzaQ1n4SdTWC8rLBD9vyTib1w9G3CX2ta8WrJvt3giEK7"
+               }
+
+            - ``id``: The unique identifier of the Edge Server instance, of 
+              type ObjectId, as a string. You can use this identifier to delete
+              or update the Edge Server instance.
+
+            - ``user_id``: The Edge Server itself is a user. This is the unique
+              identifier of the Edge Server user, of type ObjectId, as a string.
+              You can use this identifier when configuring permissions.
+
+            - ``registration_key``: Save this information. When you install the
+              Edge Server code on the host, enter this registration token. The
+              Edge Server exchanges this for an API Key that it uses to 
+              authenticate with Atlas. You can only use this registration token
+              once.
+
+         .. step:: Install the Edge Server code
+
+            Copy and paste the installation script into the terminal on the
+            device where you want to install the Edge Server code. For more 
+            details, refer to :ref:`edge-server-install-and-configure`.
+
+.. _list-edge-server-instances:
+
+List Edge Server Instances
+--------------------------
+
+You can get a list of your Edge Server instances in the Atlas UI,
+or from the Admin API.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. include:: /includes/edge/atlas-ui-get-edge-server-list-details.rst
+
+   .. tab::
+      :tabid: api
+
+      .. include:: /includes/edge/admin-api-get-edge-server-status.rst
+
+.. _edge-server-details:
+
+Edge Server Instance Details
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The information available in the Edge Server details varies depending on 
+whether the Edge Server has been configured and connected to Atlas, or whether
+configuration and connection are still pending.
+
+.. _edge-server-pending:
+
+Pending Edge Server Instances
+`````````````````````````````
+
+When an Edge Server instance has not yet connected to Atlas for the first time, 
+the instance's :guilabel:`Health` status is :guilabel:`Pending`.
+
+While an Edge Server instance is in :guilabel:`Pending` state, you can perform
+the following actions from the detail view:
+
+- Rename the instance.
+- Review alerts about the instance status.
+- Get the instance ID. You can use this to set permissions for this specific 
+  instance.
+- View the Install command that you can use in the terminal to install the 
+  Edge Server code.
+- Regenerate the registration token.
+- Delete the Edge Server instance.
+
+Once you have successfully configured and connected an Edge Server instance,
+the detail view changes to provide additional information.
+
+.. _edge-server-active-or-failed:
+
+Active or Failed Edge Server Instances
+``````````````````````````````````````
+
+After you have connected an Edge Server instance to Atlas for the first time, 
+the instance's :guilabel:`Health` status changes to :guilabel:`Active`. 
+
+If the Edge Server instance encounters a fatal error, its :guilabel:`Health`
+status changes to :guilabel:`Failed`.
+
+You can perform the following actions for active or failed instances:
+
+- Rename the instance.
+- Review alerts about the instance status.
+- View the date and time of the last connection.
+- Get the instance ID. You can use this to set permissions for this specific 
+  instance.
+- View the instance query. This determines what data syncs between the 
+  instance and Atlas, and what data clients can write to the instance.
+  Clients can only write data that falls within their permissions, **and**
+  the instance's query. For more information, refer to 
+  :ref:`specify-edge-server-query`.
+- View Metrics about the Edge Server instance. For more information, refer to 
+  :ref:`edge-server-metrics`.
+- View the instance Logs. For more information, refer to 
+  :ref:`edge-server-logs`.
+- View version information. This page lists the current version, and the latest
+  available version. If the instance falls more than one major version 
+  behind the latest available, it enters a :guilabel:`Failed` state and cannot
+  sync with Atlas until it is upgraded. For more information, refer to 
+  :ref:`upgrade-edge-server-version`.
+- View the Install command that you can use in the terminal to install the 
+  Edge Server code.
+- Regenerate the registration token.
+- Delete the Edge Server instance.
+
+.. _delete-edge-server-instance:
+
+Delete an Edge Server Instance
+------------------------------
+
+You can delete an individual Edge Server instance from Atlas.
+
+.. tabs-realm-admin-interfaces::
+
+   .. tab::
+      :tabid: ui
+
+      .. procedure::
+
+         .. step:: Browse to the Edge Server Dashboard
+
+            Click the :guilabel:`Edge Server` option in the left navigation 
+            sidebar to open the Edge Server dashboard.
+
+         .. step:: View the Edge Server Instance Details
+
+            Find the Edge Server instance you want to delete in the list,
+            and click the :guilabel:`View Details` button.
+
+         .. step:: Delete the Edge Server Instance
+
+            Click the :guilabel:`Delete` button at the bottom of the Edge
+            Server details view.
+
+            You'll be prompted to confirm deletion. Follow the prompts to
+            confirm that you want to delete the Edge Server.
+
+   .. tab::
+      :tabid: api
+
+      .. procedure::
+
+         .. step:: Authenticate a MongoDB Atlas User
+
+            .. include:: /includes/api-authenticate-instructions.rst
+
+         .. step:: Get the ID of the Edge Server to Delete
+
+            Call the 
+            :admin-api-endpoint:`Admin API List Edge Servers <operation/adminGetAllEdgeServerInstances>`
+            endpoint to get a list of all the Edge Server instances.
+
+            Your request must include an ``Authorization`` header with your 
+            Admin API access token as a 
+            :mdn:`Bearer token <Web/HTTP/Authentication>`.
+
+            .. code-block:: shell
+
+               curl -X GET \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>'
+
+            A successful request returns a ``200`` code, and an 
+            ``edge_servers`` key whose values is an array of objects containing
+            summary details for each Edge Server instance associated with the 
+            ``appId``.
+
+            .. code-block:: json
+
+               {
+                 "edge_servers": [
+                   {
+                     "id": "6622b8f5118368b943d228a9",
+                     "created": "2024-04-19T08:51:00Z",
+                     "name": "Edge-Store-42",
+                     "user_id": "6622b8f5118368b943d2288a",
+                     "status": "active",
+                     "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+                     "last_connection": "2024-04-19T09:51:00Z"
+                   }
+                 ]
+               }
+
+            Find the ``id`` of the Edge Server instance that you want to delete 
+            in the array.
+
+         .. step:: Call the Delete Endpoint
+
+            Call the 
+            :admin-api-endpoint:`Admin API Delete an Edge Server instance <operation/adminDeleteEdgeServerInstance>`
+            endpoint with the ID of the Edge Server instance that you want to 
+            delete.
+
+            Your request must include an ``Authorization`` header with your 
+            Admin API access token as a 
+            :mdn:`Bearer token <Web/HTTP/Authentication>`.
+
+            .. code-block:: shell
+
+               curl -X DELETE \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge/{edgeServerId} \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>'
+
+            A successful request returns a ``200`` code.
+
+.. _update-edge-server-data-model:
+
+Update an Edge Server's Data Model
+----------------------------------
+
+The process to update a data model varies depending on whether you're using
+an Edge Server Service or a Device Sync Service with Edge Server.
+
+Edge Server Service
+~~~~~~~~~~~~~~~~~~~
+
+When you're using an Edge Server Service, the service automatically updates
+fields in the schema when you make changes to the documents you sync.
+
+If you update your schema manually using the UI, and those schema changes
+trigger a schema version change, this causes an Edge Server instance with the 
+old schema to reboot and wipe itself.
+
+If you're adding a new collection you haven't synced before, you must define
+a new schema.
+
+Add a Collection
+````````````````
+
+When you want to add a collection to an Edge Server Service, you must add
+a schema containing:
+
+- The collection name.
+- An ``_id`` field that is of ``ObjectID`` type.
+
+The Edge Server Service automatically infers the other fields from the shape 
+of the documents you sync or the documents in the collection.
+
+For information about how to add a schema, refer to :ref:`enforce-a-schema`.
+
+After adding a collection, you must stop and start the Edge Server instance
+to pick up the new collection details. For more information, refer to
+:ref:`start-and-stop-edge-server`.
+
+Change Fields in a Document
+```````````````````````````
+
+When you change the fields in a document using an Edge Server Service,
+the service automatically changes the schema to add new fields.
+
+Some changes that you can make through the UI are considered "breaking" 
+schema changes. When a "breaking" schema change occurs, any Edge Server 
+instance with the old schema reboots and wipes itself. The wipe process 
+erases any unsynced data.
+
+.. include:: /includes/important-wipe-and-restart-edge-server-data-loss.rst
+
+For details about which types of changes are considered "breaking" changes,
+refer to :ref:`breaking-change-quick-reference`.
+
+Device Sync Service
+~~~~~~~~~~~~~~~~~~~
+
+An Edge Server running in a Device Sync Service uses Device Sync rules for
+updating a data model.
+
+When a "breaking" schema change occurs, any Edge Server instance with the old 
+schema reboots and wipes itself. 
+
+.. include:: /includes/important-wipe-and-restart-edge-server-data-loss.rst
+
+For more information, refer to :ref:`synced-schema-overview`.
+
+.. _troubleshoot-edge-server-instance:
+
+Troubleshoot an Edge Server Instance
+------------------------------------
+
+A few conditions can cause an Edge Server instance to enter a ``Failed`` state:
+
+- :ref:`edge-server-exceeds-client-maximum-offline-time`
+- :ref:`edge-server-more-than-one-major-version-behind`
+- :ref:`edge-server-token-invalid`
+
+.. _edge-server-exceeds-client-maximum-offline-time:
+
+Edge Server is Offline Longer than Client Maximum Offline Time
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server uses Device Sync to sync data between the Edge Server instance and
+Atlas. Device Sync has a 
+:ref:`Client Maximum Offline Time <client-maximum-offline-time>` setting.
+
+This setting is enabled by default. It trims history to reduce the amount of
+storage required in the backing Atlas cluster. The longer the client maximum
+offline time, the more storage Atlas requires to keep historical records that
+support Sync.
+
+If an Edge Server instance is offline longer than this setting, this is an 
+unrecoverable error. You must wipe and restart the instance. Alternately, when 
+you bring the instance back online, it will be wiped and restarted 
+automatically.
+
+.. include:: /includes/important-wipe-and-restart-edge-server-data-loss.rst
+
+You can change the length of the client maximum offline time in the 
+:ref:`sync-settings`.
+
+.. important:: Edge Server Offline Limit is 60 Days
+
+   An Edge Server instance cannot be offline longer than 60 days, no matter
+   what setting you set for the client maximum offline time. If the setting
+   is unset or greater than 60 days, the Edge Server offline limit is
+   60 days.
+
+.. _edge-server-more-than-one-major-version-behind:
+
+Edge Server Instance is More than One Major Version Behind
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server does not support instances that fall more than one major version
+behind the current latest version. If your Edge Server instance falls further 
+behind in versions, you must upgrade it to resolve the ``Failed`` state.
+
+For information about upgrading an Edge Server instance, refer to 
+:ref:`upgrade-edge-server-version`.
+
+.. _edge-server-token-invalid:
+
+Edge Server Token is Invalid
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If the Edge Server instance token is regenerated, and you do not update the 
+API Key on the instance itself, it can enter a ``Failed`` state.
+
+For more details about how to update the API Key on the Edge Server instance
+after regenerating the Edge Server token, refer to 
+:ref:`edge-server-cycle-api-key`.
