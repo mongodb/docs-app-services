@@ -1,3 +1,21 @@
+# April 26, 2024
+
+## Tutorials
+
+- Change "Get Started" TOC entry to "Tutorials".
+- Flip the TOC construction for tutorial pages from "Device Sync Tutorial - " to " - Device Sync".
+- Individual tutorial pages:
+  - Update page titles to clearly indicate they're tutorials and include product names.
+  - Add meta descriptions and keywords to those that didn't have them.
+
+## Connect to MongoDB Data Sources 
+
+- CRUD & Aggregation APIs: Add `$setisSubset` to list of unsupported pipeline operators.
+
+## Reference
+
+- App Services CLI: Update CLI reference with the `--use-local-app` flag addition to the `functions run` command, the `--limit` flag addition to the `users list` commands, and the new `functions list` command.
+
 # April 19, 2024
 
 ## Develop & Deploy Apps
