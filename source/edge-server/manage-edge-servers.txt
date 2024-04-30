@@ -93,14 +93,24 @@ Services.
    .. tab:: Create an App Service
       :tabid: app-service
 
-      Refer to the documentation to :ref:`create-app`.
+      .. procedure::
 
-      When you choose your App type, select ``Device Sync``. You can add
-      Edge Server to your Device Sync App after you configure Device Sync.
+         .. step:: Create a Device Sync App
 
-      [PLACEHOLDER: Add steps for adding Edge Server to a Device Sync App.
-      It's not 100% clear to me what the flow is from the Figma designs.
-      Populate the rest of this procedure when we are able to test this flow.]
+            Refer to the documentation to :ref:`create-app`.
+
+            When you choose your App type, select ``Device Sync``. You can add
+            Edge Servers to your Device Sync App after you configure 
+            Device Sync.
+
+         .. step:: Add Edge Server Instances to Your Device Sync Service
+
+            While viewing your Device Sync Service, click 
+            :guilabel:`Edge Server` in the left navigation. This opens a
+            list where you can add and view Edge Server instances.
+
+            Click the :guilabel:`Add a server` button, and follow the
+            prompts to name and create your new Edge Server instance.
 
 .. important:: Required Field
 
@@ -182,17 +192,54 @@ registration key.
 
             .. include:: /includes/api-authenticate-instructions.rst
 
-         .. step:: Call the Create Edge Server Endpoint
+         .. step:: Call the Create Edge Server Instance Endpoint
 
-            Call the <CREATE EDGE SERVER> endpoint to add an Edge Server 
-            instance to your service. You must provide the the App's internal 
-            ``appId`` hex string:
+            Call the 
+            :admin-api-endpoint:`Admin API Create an Edge Server instance <operation/adminCreateEdgeServerInstance>` 
+            endpoint to add an Edge Server instance to your service.
+
+            Your request must include:
+
+            - An ``Authorization`` header with your Admin API access
+              token as a :mdn:`Bearer token <Web/HTTP/Authentication>`.
+
+            - A ``name`` for the new Edge Server instance
 
             .. code-block:: shell
 
-               INSERT API DETAILS HERE
+               curl -X POST \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>' \
+                 -d '{
+                   "name": "YOUR-EDGE-SERVER-INSTANCE-NAME"
+                 }'
 
-            This returns <INSERT RETURN DETAILS HERE>.
+            A successful request returns a ``201`` code, as well as a JSON
+            object with information about the newly-created Edge Server 
+            instance:
+
+            .. code-block:: json
+
+               {
+                 "id": "6622b8f5118368b943d228a9",
+                 "user_id": "6622b8f5118368b943d2288a",
+                 "registration_key": "Qi4GgpvVduwwt4k1w77ZzaQ1n4SdTWC8rLBD9vyTib1w9G3CX2ta8WrJvt3giEK7"
+               }
+
+            - ``id``: The unique identifier of the Edge Server instance, of 
+              type ObjectId, as a string. You can use this identifier to delete
+              or update the Edge Server instance.
+
+            - ``user_id``: The Edge Server itself is a user. This is the unique
+              identifier of the Edge Server user, of type ObjectId, as a string.
+              You can use this identifier when configuring permissions.
+
+            - ``registration_key``: Save this information. When you install the
+              Edge Server code on the host, enter this registration token. The
+              Edge Server exchanges this for an API Key that it uses to 
+              authenticate with Atlas. You can only use this registration token
+              once.
 
          .. step:: Install the Edge Server code
 
@@ -226,23 +273,95 @@ or from the Admin API.
 
          .. step:: Get the List of Edge Server Instances
 
-            Call the <LIST EDGE SERVER> endpoint to get a list of all the 
-            Edge Servers instances:
+            Call the 
+            :admin-api-endpoint:`Admin API List Edge Servers <operation/adminGetAllEdgeServerInstances>`
+            endpoint to get a list of all the Edge Servers instances.
+
+            Your request must include an ``Authorization`` header with your 
+            Admin API access token as a 
+            :mdn:`Bearer token <Web/HTTP/Authentication>`.
 
             .. code-block:: shell
 
-               INSERT API DETAILS HERE
+               curl -X GET \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>'
 
-            Find the ID of the instance whose details you want to view.
+            A successful request returns a ``200`` code, and an 
+            ``edge_servers`` key whose values is an array of objects containing
+            summary details for each Edge Server instance associated with the 
+            ``appId``.
+
+            .. code-block:: json
+
+               {
+                 "edge_servers": [
+                   {
+                     "id": "6622b8f5118368b943d228a9",
+                     "created": "2024-04-19T08:51:00Z",
+                     "name": "Edge-Store-42",
+                     "user_id": "6622b8f5118368b943d2288a",
+                     "status": "active",
+                     "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+                     "last_connection": "2024-04-19T09:51:00Z"
+                   }
+                 ]
+               }
+
+            For more detailed information, find the ``id`` of the instance 
+            whose details you want to view.
 
          .. step:: Call the Edge Server Info Endpoint
 
-            Call the <GET EDGE SERVER INFO> endpoint with the ID of the 
-            instance whose details you want to view.
+            Call the 
+            :admin-api-endpoint:`Admin API Get Edge Server information <operation/adminGetEdgeServerInstance>`
+            endpoint to get a list of all the Edge Server instances.
+
+            Your request must include an ``Authorization`` header with your 
+            Admin API access token as a 
+            :mdn:`Bearer token <Web/HTTP/Authentication>`.
 
             .. code-block:: shell
 
-               INSERT API DETAILS HERE
+               curl -X GET \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge/{edgeServerId} \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>'
+
+            A successful request returns a ``200`` code, as well as a JSON
+            object with detailed information about the Edge Server instance:
+
+            .. code-block:: shell
+
+               {
+                 "id": "6622b8f5118368b943d228a9",
+                 "created": "2024-04-19T08:51:00Z",
+                 "name": "Edge-Store-42",
+                 "user_id": "6622b8f5118368b943d2288a",
+                 "status": "active",
+                 "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+                 "last_connection": "2024-04-19T09:51:00Z",
+                 "query": {
+                   "Item": "(store_id == \"641cb3d99e425c794ef69315\")"
+                 },
+                 "package_version": "v0.21.2",
+                 "latest_package_version": "v0.22.2",
+                 "metrics": [
+                   {
+                     "key": "edge_host_memory_percent",
+                     "name": "Memory Usage",
+                     "category": "host",
+                     "detail": "Percentage of memory used by the edge container",
+                     "value": 15,
+                     "unit": "%"
+                   },
+                   ...additional Edge Server metrics...
+                 ]
+               }
+
+               For more information about this response body, refer to the API
+               specification.
 
 .. _edge-server-details:
 
@@ -300,9 +419,9 @@ You can perform the following actions for active or failed instances:
   the instance's query. For more information, refer to 
   :ref:`specify-edge-server-query`.
 - View Metrics about the Edge Server instance. For more information, refer to 
-  [ADD REF LATER].
+  :ref:`edge-server-metrics`.
 - View the instance Logs. For more information, refer to 
-  [ADD REF LATER].
+  :ref:`edge-server-logs`.
 - View version information. This page lists the current version, and the latest
   available version. If the instance falls more than one major version 
   behind the latest available, it enters a :guilabel:`Failed` state and cannot
@@ -356,24 +475,64 @@ You can delete an individual Edge Server instance from Atlas.
 
          .. step:: Get the ID of the Edge Server to Delete
 
-            Call the <LIST EDGE SERVER> endpoint to get a list of all the 
-            Edge Server instances:
+            Call the 
+            :admin-api-endpoint:`Admin API List Edge Servers <operation/adminGetAllEdgeServerInstances>`
+            endpoint to get a list of all the Edge Server instances.
+
+            Your request must include an ``Authorization`` header with your 
+            Admin API access token as a 
+            :mdn:`Bearer token <Web/HTTP/Authentication>`.
 
             .. code-block:: shell
 
-               INSERT API DETAILS HERE
+               curl -X GET \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>'
 
-            Find the ID of the Edge Server instance that you want to delete 
-            in the list.
+            A successful request returns a ``200`` code, and an 
+            ``edge_servers`` key whose values is an array of objects containing
+            summary details for each Edge Server instance associated with the 
+            ``appId``.
+
+            .. code-block:: json
+
+               {
+                 "edge_servers": [
+                   {
+                     "id": "6622b8f5118368b943d228a9",
+                     "created": "2024-04-19T08:51:00Z",
+                     "name": "Edge-Store-42",
+                     "user_id": "6622b8f5118368b943d2288a",
+                     "status": "active",
+                     "hostname": "ec2-13-58-70-88.us-east-2.compute.amazonaws.com",
+                     "last_connection": "2024-04-19T09:51:00Z"
+                   }
+                 ]
+               }
+
+            Find the ``id`` of the Edge Server instance that you want to delete 
+            in the array.
 
          .. step:: Call the Delete Endpoint
 
-            Call the <DELETE EDGE SERVER> endpoint with the ID of the Edge
-            Server instance that you want to delete.
+            Call the 
+            :admin-api-endpoint:`Admin API Delete an Edge Server instance <operation/adminDeleteEdgeServerInstance>`
+            endpoint with the ID of the Edge Server instance that you want to 
+            delete.
+
+            Your request must include an ``Authorization`` header with your 
+            Admin API access token as a 
+            :mdn:`Bearer token <Web/HTTP/Authentication>`.
 
             .. code-block:: shell
 
-               INSERT API DETAILS HERE
+               curl -X DELETE \
+                 https://services.cloud.mongodb.com/api/admin/v3.0/groups/{groupId}/apps/{appId}/edge/{edgeServerId} \
+                 -H 'Content-Type: application/json' \
+                 -H 'Authorization: Bearer <AccessToken>'
+
+            A successful request returns a ``200`` code.
 
 .. _update-edge-server-data-model:
 
@@ -409,6 +568,10 @@ The Edge Server Service automatically infers the other fields from the shape
 of the documents you sync or the documents in the collection.
 
 For information about how to add a schema, refer to :ref:`enforce-a-schema`.
+
+After adding a collection, you must stop and start the Edge Server instance
+to pick up the new collection details. For more information, refer to
+:ref:`start-and-stop-edge-server`.
 
 Change Fields in a Document
 ```````````````````````````
