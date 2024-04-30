@@ -16,7 +16,7 @@ local UI include:
 
    * - Status
      - The current status of the Edge Server instance. Possible values include:
-       ``"ACTIVE"``, ``"FAILED"``. 
+       ``"ACTIVE"``, ``"FAILED"``, and ``"BOOTSTRAPPING""``. 
        
        ``"ACTIVE"`` means that the instance is running, listening for
        connections, and attempting to sync.
@@ -24,6 +24,9 @@ local UI include:
        ``"FAILED"`` means that the instance has encountered an error
        condition that needs intervention. For more information, refer to
        :ref:`troubleshoot-edge-server-instance`.
+
+       ``"BOOTSTRAPPING"``: the instance is performing an initial download of
+       the relevant documents in the data set, and is not yet ready to use.
 
    * - Version
      - The current version of the Edge Server code that the instance is 
