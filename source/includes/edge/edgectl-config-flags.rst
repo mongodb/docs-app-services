@@ -78,7 +78,7 @@
        to update its API key.
 
    * - ``--update-registration-token``
-     - String
+     - Boolean
      - Prompt ``edgectl`` to interactively request a new one-time use 
        registration token. When you supply the new token, the Edge Server
        instance updates its API key.
