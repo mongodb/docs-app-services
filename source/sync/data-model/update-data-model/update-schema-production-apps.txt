@@ -216,9 +216,10 @@ To use schema versioning in App Services, your App Services App must meet the fo
 - Development Mode must be disabled. To learn how, refer to :ref:`Disable
   Development Mode <enable-development-mode>`. 
 
-.. TODO: confirm sdk versions & link out to SDK docs re. setting schema version
+To set schema versioning from the client, your app must also use a minimum
+Device SDK version:
 
-To set schema versioning from the client, your app must also use a minimum Device SDK version:
+.. TODO: confirm sdk versions & link out to SDK docs re. setting schema version
 
 - C++ SDK - unsupported 
 - Flutter SDK v2.1.0
@@ -235,15 +236,7 @@ Make Changes with Schema Versioning
 -----------------------------------
 
 The following describes how to make changes to your server-side schema through
-the App Services UI when schema versioning is enabled.
-
-
-DOCS RECOMMENDATION: Recommend users make another schema change that is the inverse of the one theyre reverting
-
-Are backward- and forward-compatible across multiple, non-sequential versions
-(client on schema v1 is compatible with schema v0 and future schema v10)
-
-For information on the specific changes you can make, refer to 
+the App Services UI when schema versioning is enabled. For information on the specific changes you can make to your schema, refer to 
 :ref:`sync-schema-overview`.
 
 .. procedure::
@@ -333,9 +326,47 @@ For information on the specific changes you can make, refer to
                - If App Services created a new schema, it becomes the new minimum version and is incompatible with any previous schemas.
                - If App Services did not create a new schema, the changes are applied to the current schema version 0.
 
-            4. Because App Services had to terminate and re-enable Device Sync
-               due to breaking changes, your client must perform a manual client
-               reset to ensure that clients can successfully connect to Atlas. For more information, refer to :ref:`client-resets`.
+   .. step:: Handle Client Resets
+            
+            After you deploy your changes, you must do the following to ensure that clients can successfully connect to Atlas and sync data with the new schema:
+
+            .. tabs::
+
+               .. tab:: Schema Versioning
+                  :tabid: supported
+
+                  For schema versioning changes, App Services automatically
+                  handles the client reset and migration for you. 
+
+                  To ensure App Services is able to perform the migration successfully, you must open synced database on the
+                  client *asynchronously*. This blocks the client from writing
+                  to the synced database until after the client reset is
+                  complete.
+                  
+                  For more information, refer to the following SDK
+                  documentation: 
+
+                  .. TODO: add link to SDK docs
+
+                  - C++ SDK
+                  - Flutter SDK
+                  - Java SDK
+                  - Kotlin SDK
+                  - .NET SDK
+                  - Node.js SDK
+                  - React Native SDK
+                  - Swift SDK
+
+               .. tab:: Breaking
+                  :tabid: unsupported
+
+                  For breaking changes, you *must* perform a manual client
+                  reset. This is because breaking changes cause App Services to
+                  terminate and re-enable Device Sync, which always requires a
+                  client reset to ensure that clients can successfully connect
+                  to Atlas.                
+                  
+                  For more information on how to handle manual client resets, refer to :ref:`client-resets`.
 
 View Schemas
 ------------
