@@ -14,4 +14,4 @@
    - :ref:`Client Reset - React Native SDK <react-native-client-resets>`
    - :ref:`Client Reset - Swift SDK <ios-client-resets>`
 
-   For more information, refer to :ref:`client-reset-errors`.
+   For more information, refer to :ref:`client-resets`.
