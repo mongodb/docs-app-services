@@ -23,26 +23,28 @@ Update Your Data Model
    :titlesonly:
    
    Update with Development Mode </sync/data-model/update-data-model/update-schema-development-apps>
-   Update Production Apps </sync/data-model/update-data-model/update-schema-production-apps>
-   Manually Update </sync/data-model/update-data-model/migrate-schema-partner-collection>
+   Update with Schema Versioning </sync/data-model/update-data-model/update-schema-production-apps>
+   Make Breaking Changes </sync/data-model/update-data-model/migrate-schema-partner-collection>
 
 .. TODO: Update [DATE TBD] 
 
 When developing an application using Atlas Device Sync, you may need to make 
-changes to the Device Sync data model that you initially created. For example,
+changes to your Device Sync data model. For example,
 you might need a new object type or decide that an optional property should be 
 required.
 
 In general, we refer to data model updates in the following terms: 
 
 - *What type of change are you making?* 
+
   We broadly categorize changes to a Device Sync data model
   as being either breaking or non-breaking. Breaking changes, such as changing
   the data type of an existing property, are considered destructive and require
-  additional handling to apply. These are discussed further in the
-  :ref:`breaking-and-non-breaking-changes` section on this page. 
+  additional handling to apply. These are discussed in more detail below, or you
+  can check out the :ref:`breaking-change-quick-reference` section on this page. 
 
 - *Where are you making the change?* 
+
   Because the Device Sync data model consists of a client-side SDK object model
   and a server-side App Services schema, we distinguish between making changes
   to the client side (updating the SDK object models defined in your client
@@ -52,129 +54,109 @@ In general, we refer to data model updates in the following terms:
   both sides remain consistent. The implications of where you make your changes are discussed in more detail below.
 
 - *Is Development Mode or schema versioning enabled?* 
-  When possible, we recommend that apps use one of the following Device Sync
-  features, which simplify how you make changes to your data model:  
+
+  When enabled for your app, the following Device Sync features can simplify how you update your data model:  
   
-  - **Automatic Client-Side Updates with Development Mode:** Development Mode is
-    a Device Sync configuration setting that lets you make breaking changes from the client side, and App Services
-    automatically handles updating the server-side schema.
-    Apps must be created after September 13, 2023 and meet a minimum Device SDK
-    version. For more information, refer to :ref:`update-data-model-development-mode-prerequisites`.
-  - **Automatic Server-Side Updates with Schema Versioning:** Schema versioning
-    lets you make changes to your server-side schema while an eligible app* is
-    in production. App Services creates a new schema version with your changes
-    and automatically handles upgrading the client-side model to the new
-    version. Apps must be created after [DATE TBD]. For more information, refer to
-    :ref:`<update-data-model-production-apps-prerequisites>`.
+  - **Development Mode:** Development Mode is a Device Sync configuration setting. When enabled, you can make breaking changes from the client side, and App Services automatically handles updating the server-side schema. Apps must be created after September 13, 2023 and meet a minimum Device SDK version. For more information, refer to :ref:`update-data-model-development-mode`.
+  - **Schema Versioning:** Schema versioning lets you manage incremental changes
+    to your data model. You can make schema versioning changes to your
+    server-side schema, and App Services automatically handles updating the
+    client-side model to the new version. Apps must be created after [DATE TBD]. For more information, refer to :ref:`<update-data-model-production-apps>`.
 
-  When automatic updates aren't possible, you must manually handle
-  changes to your data model. To learn more about manually updating a data model, refer to
-  :ref:`migrate-schema-partner-collection`.
+.. TODO: update
+  
 
-.. _breaking-and-non-breaking-changes:
 
-The following sections provide an overview of breaking and non-breaking changes.
-For a quick reference of these changes, refer to the
-:ref:`breaking-change-quick-reference`.
+.. _non-breaking-changes-overview:
 
 Non-Breaking Changes
 --------------------
 
-**Non-breaking changes** are considered additive changes. They maintain
-compatibility with your existing data model rather than "breaking" it, which
-means that old clients can continue to sync data. No additional handling is
-required to apply these changes.
+**Non-breaking changes** are additive changes that don't require any additional
+handling to apply. Non-breaking changes maintain compatibility with your
+existing data model rather than "breaking" it, which means that old clients can
+continue to sync data. 
 
-You can typically make these changes in your server-side App Services schema
-or in your client-side SDK object model without additional handling:
+You can make these changes in your server-side App Services schema
+or in your client-side SDK object model without additional handling, unless
+otherwise noted
 
-- Adding a new object type or property
-- Adding a default value on an existing property
-- Removing an existing object type or property (non-breaking change *only* when made from
-  the client side)
+.. - Adding a new object type or property
+.. - Adding a default value on an existing property
+.. - Removing an existing object type or property (when made from
+..   the client side)
 
-.. _update-model-schema-versioning-changes:
+.. _schema-versioning-changes-overview:
 
 Schema Versioning Changes
 -------------------------
 
-**Schema versioning changes** are destructive changes that create a
-backward-compatible schema version. When you deploy a schema versioning change, App Services increments the schema version  
-and automatically handles upgrading the client-side model to the new version.
-Refer also to the :ref:`update-model-breaking-changes-schema-versioning` section
-on this page.
+**Schema versioning changes** are destructive changes that create a new
+compatible schema version instead of "breaking" your existing data model. When you deploy a schema versioning change, App Services increments the schema version and automatically handles upgrading the client-side model to the new version.
 
-Schema versioning changes *must* be made from the server side. If you are not using
-schema versioning, these are considered breaking changes. 
+.. TODO: confirm 
 
-- Removing an existing object type or property 
-- Changing whether an existing property is optional or required
+Currently, schema versioning changes *must* be made from the server side. 
+.. If schema versioning is disabled for your app, these are considered breaking changes. 
 
-To learn more about schema versioning, refer to :ref:`update-data-model-production-apps`.
+.. - Removing an existing object type or property 
+.. - Changing whether an existing property is optional or required
 
-.. _update-model-breaking-changes:
+If schema versioning is disabled for your app, schema versioning changes are
+considered breaking changes. To learn more about schema versioning, refer to
+:ref:`update-data-model-production-apps`.
+
+.. _breaking-changes-overview:
 
 Breaking Changes
 ----------------
 
-**Breaking changes** are considered destructive changes. These changes "break"
-your data model and require additional handling to apply to ensure that clients
-can continue to connect and sync data. 
+**Breaking changes** are destructive changes that "break" your data model. These
+changes require additional handling to apply to ensure that clients
+can continue to connect and sync data. To learn more about manually handling breaking changes, refer to
+:ref:`migrate-schema-partner-collection`.
 
-Breaking changes include:
 
-- Removing an existing object type or property (if schema versioning is disabled)
-- Changing whether an existing property is optional or required (if schema versioning is disabled)
-- Renaming an existing object type or property
-- Changing the data type of an existing property
+- If you have schema versioning enabled, breaking changes create a new incompatible schema version (refer to the :ref:`breaking-changes-schema-versioning-overview` section on this page).
 
-.. important:: All Changes are Breaking While Sync is Terminated
+.. Breaking changes include:
 
-   You can :ref:`terminate and re-enable Device Sync <terminating-realm-sync>` in your app. However, if you update your data
-   model while Device Sync is terminated, *all* changes that you make are
-   considered breaking changes - even if they are normally categorized as
-   non-breaking or schema versioning changes. 
+.. - Removing an existing object type or property (if schema versioning is disabled)
+.. - Changing whether an existing property is optional or required (if schema versioning is disabled)
+.. - Renaming an existing object type or property
+.. - Changing the data type of an existing property
 
-.. _update-model-breaking-changes-development-mode:
+.. include:: /includes/note-breaking-changes-sync-terminated.rst
+
+.. _breaking-changes-development-mode-overview:
 
 Breaking Changes with Development Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When Development Mode is enabled in an eligible app*, you can make breaking
+When Development Mode is enabled in your app, you can make breaking
 changes to your client-side object model, and App Services automatically
-applies the changes to your server-side schema. For more information on Development Mode and how to enable it in your app, refer to :ref:`sync-settings`.  
+updates your server-side schema. For more information on Development Mode and how to enable it in your app, refer to :ref:`sync-settings`.  
 
-* *(Your app must be created after September 13, 2023 and meet the minimum Device
-SDK version. See also: :ref:`<update-data-model-development-mode-prerequisites>`.)*
+.. Eligible apps must be created after September 13, 2023 and meet the minimum Device
+.. SDK version, as noted in :ref:`<update-data-model-development-mode-prerequisites>`.
 
 To learn how to make breaking changes with Development Mode, refer to :ref:`update-data-model-development-mode`.
 
 .. include:: /includes/note-dev-mode-production.rst
 
-.. _update-model-breaking-changes-schema-versioning:
+.. _breaking-changes-schema-versioning-overview:
 
 Breaking Changes with Schema Versioning
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When schema versioning is enabled in an eligible app*, you can make breaking
-changes to your server-side schema, and App Services creates a new schema
-version. However, the new schema becomes the new *minimum* version. This means that all previous
-schemas are invalidated, and
+When schema versioning is enabled in your app, breaking changes can create a new
+schema version. This new version is incompatible with any previous schemas, and
 clients *must* upgrade to the new schema version to continue syncing data.
 
-* *(Your app must be created after [DATE TBD]. See also: :ref:`<update-data-model-production-apps-prerequisites>`.)*
+Regardless, breaking changes are still considered breaking when schema
+versioning is enabled and should be avoided if possible.  
 
-To learn how to make breaking changes with schema versioning, refer to
-:ref:`update-data-model-production-apps`.
-
-Manually Handle Breaking Changes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If your app does not support making breaking changes with Development Mode or schema versioning, you must
-manually apply breaking changes to your data model. 
-
-For more information on how to manually apply breaking changes to your data
-model, refer to :ref:`migrate-schema-partner-collection`.
+To learn about schema versioning, refer to :ref:`update-data-model-production-apps`.
 
 .. _breaking-change-quick-reference:
 
@@ -184,7 +166,8 @@ Data Model Changes: Quick Reference
 This table summarizes each type of change, and whether it is considered a
 non-breaking, schema versioning, or 
 breaking change when made to the server-side App Services schema or the client-side
-SDK object model. 
+SDK object model. Schema versioning changes are considered breaking changes when
+schema versioning is disabled.
 
 .. list-table::
    :header-rows: 1
@@ -203,13 +186,13 @@ SDK object model.
      - Non-breaking 
      - Non-breaking
    * - :ref:`Remove an object type <update-model-remove-object-type>`
-     - Schema Versioning*
+     - Schema Versioning
      - Non-breaking
    * - :ref:`Remove a property <update-model-remove-property>`
-     - Schema Versioning*
+     - Schema Versioning
      - Non-breaking
    * - :ref:`Change whether property is optional or required <update-model-change-property-status>`
-     - Schema Versioning*
+     - Schema Versioning
      - Breaking
    * - :ref:`Rename an object type <update-model-change-object-type-name>`
      - Breaking 
@@ -221,25 +204,11 @@ SDK object model.
      - Breaking 
      - Breaking 
 
-* *Schema versioning changes are considered breaking changes when
-schema versioning is disabled.*
-
 .. tip:: Remap a Name Instead of Renaming
 
    Several Device SDKs support remapping a property or class name. Depending on
-   your use case, renaming
-   through the client code
-   can be a convenient
-   alternative to renaming your properties or classes. To learn how, refer to the following SDK documentation:
-
-   - C++ SDK - not currently supported
-   - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
-   - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
-   - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
-   - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
-   - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
-   - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
-   - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
+   your use case, you might choose to remap a name through the client code
+   to avoid having to make a breaking change. For more information, refer to the :ref:`` section 
 
 The following diagram shows the types of changes you can make and the 
 process perform the change:
@@ -253,18 +222,82 @@ process perform the change:
 Data Model Changes
 ------------------ 
 
-The following sections provide more detailed information on how to make specific
-changes to your Device Sync data model:
+The following sections provide information on how to make specific
+changes to your Device Sync data model. 
+
+Examples on this page reference the following App Services schema for an ``Item`` object
+type in a ``todo`` collection:
+
+.. code-block:: json
+   :copyable: false
+
+   {
+    "bsonType": "object",
+    "properties": {
+      "_id": {
+        "bsonType": "objectId"
+      },
+      "isComplete": {
+        "bsonType": "bool"
+      },
+      "owner_id": {
+        "bsonType": "string"
+      },
+      "summary": {
+        "bsonType": "string"
+      }
+    },
+    "required": [
+      "_id",
+      "owner_id",
+      "summary",
+      "isComplete"
+    ],
+    "title": "Item"
+  }
 
 .. _update-model-add-object-type:
 
 Add an Object Type
 ~~~~~~~~~~~~~~~~~~
 
-You can add a new object type to the server-side schema or the client
-object model without any additional handling.
+Adding an object type to your data model is always considered a non-breaking
+change. This means that you can add a new object type to the server-side schema
+or the client object model without any additional handling.
 
-- If Development Mode is enabled, you can add the object type to the SDK object
+We add a new ``Project`` object type to our ``todo`` collection:
+
+.. code-block:: json
+   :copyable: false
+
+   {
+    "bsonType": "object",
+    "properties": {
+      "_id": {
+        "bsonType": "objectId"
+      },
+      "isComplete": {
+        "bsonType": "bool"
+      },
+      "owner_id": {
+        "bsonType": "string"
+      },
+      "summary": {
+        "bsonType": "string"
+      }
+    },
+    "required": [
+      "_id",
+      "owner_id",
+      "summary",
+      "isComplete"
+    ],
+    "title": "Item"
+  }
+
+
+
+- When Development Mode is enabled, you can add the object type to the SDK object
   model, and Sync automatically handles the server-side schema updates.
 - If schema versioning is enabled, you can add the object type to the server-side
   schema, and Sync automatically handles the client-side SDK object model updates.
@@ -282,9 +315,42 @@ object model without any additional handling.
 Add a Default Value on a Property
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can add a default value on an object's required property. When you
+You can add a default value on an object's required property. 
+
+.. code-block:: json
+    :copyable: false
+    :emphasize-lines: 8
+
+  {
+    "bsonType": "object",
+    "properties": {
+      "_id": {
+        "bsonType": "objectId"
+      },
+      "isComplete": {
+        "bsonType": "bool",
+        "default": false
+      },
+      "owner_id": {
+        "bsonType": "string"
+      },
+      "summary": {
+        "bsonType": "string"
+      }
+    },
+    "required": [
+      "_id",
+      "owner_id",
+      "summary",
+      "isComplete"
+    ],
+    "title": "Item"
+  }
+
+
+When you
 insert an Atlas document missing this required property into the
-collection, the Realm clients set the property to the default value. However,
+collection, the SDK clients set the property to the default value. However,
 the same property on the Atlas document remains empty until a client makes
 changes to the property or updates the document directly in Atlas.
 
@@ -498,6 +564,17 @@ application must perform a :ref:`client reset <client-resets>` to restore Sync.
 In the default client reset mode, the client attempts to recover any 
 unsynced changes before resetting.
 
+To learn how, refer to the following SDK documentation:
+
+   - C++ SDK - not currently supported
+   - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
+   - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
+   - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
+   - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
+   - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
+   - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+   - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
+
 .. note::
 
    :ref:`Development Mode <development-mode>` 
@@ -522,6 +599,17 @@ mapping is supported in the following SDKs:
 - :ref:`Node.js: Remap a Property <node-remap-a-property>`
 - :ref:`React Native: Remap a Property <react-native-remap-a-property>`
 - :ref:`Swift: Remap a Property <swift-rename-property>`
+
+To learn how, refer to the following SDK documentation:
+
+   - C++ SDK - not currently supported
+   - :ref:`Flutter SDK - Remap a Property or Class <flutter-map-property>`
+   - :ref:`Java SDK - Rename a Field or Class <java-rename-field>`
+   - :ref:`Kotlin SDK - Remap a Property or Class <kotlin-remap-a-property>`
+   - :ref:`.NET SDK - Rename a Property or Class <dotnet-rename-property>`
+   - :ref:`Node.js SDK - Remap a Property or Class <node-remap-a-property>`
+   - :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
+   - :ref:`Swift SDK - Remap a Property <swift-rename-property>`
 
 .. warning:: Update existing documents
 

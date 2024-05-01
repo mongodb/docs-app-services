@@ -1,9 +1,9 @@
 .. _migrate-schema-partner-collection:
 .. _partner_collections:
 
-============================
-Manually Update a Data Model  
-============================
+========================================
+Make Breaking Changes to Your Data Model  
+========================================
 
 .. meta::
    :description: Manually updating your Device Sync data model with breaking or non-breaking changes may require additional handling.
@@ -18,38 +18,30 @@ Manually Update a Data Model
    :depth: 2
    :class: singlecol
 
-This page describes how to manually update a data model. It applies to App Services Apps
-that do not support automatic updates through Development Mode or with schema versioning. For information on how
-to automatically update a data model, refer to :ref:`synced-schema-overview`.
+This page describes how to make breaking changes to your Device Sync data model. 
 
-.. tip:: Update Data Model Automatically  
+.. tip:: Make Breaking Changes with Development Mode  
    
-   When possible, we recommend that eligible apps update their data model automatically using the following Device Sync features:  
+   When possible, we recommend that apps in development use Development Mode to update their data model. When enabled, you can make breaking changes from yoru client code, and App Services automatically handles the updates to the server-side App Services schema. For more information, refer to :ref:`update-data-model-development-mode`.
 
-   - Automatic Client-Side Updates with Development Mode: Apps with Development
-     Mode enabled can make breaking changes from client code, and Device Sync
-     automatically handles the updates to the server-side App Services schema.
-     Apps must be created after September 13, 2023 and meet a minimum Device SDK
-     version. For more information, refer to :ref:`update-data-model-development-mode`.
+.. - Automatic Server-Side Updates with Schema Versioning: Apps created after
+..    [DATE TBD], 2024 can make breaking changes to the server-side App Services
+..    schema. Device Sync creates a new schema version and automatically handles the
+..    updates to the client object models. For more information, refer to :ref:`update-data-model-production-apps`.
 
-   - Automatic Server-Side Updates with Schema Versioning: Apps created after
-     [DATE TBD], 2024 can make breaking changes to the server-side App Services
-     schema. Device Sync creates a new schema version and automatically handles the
-     updates to the client object models. For more information, refer to :ref:`update-data-model-production-apps`.
-
-   You can contact support to enable either of these features.
+.. You can contact support to enable either of these features.
 
 .. TODO: Update with the correct date once it is available. 
 .. TODO: Update to note support for changes from the client code once SDKs roll out versioning.
 
-.. _manual-breaking-change-quick-reference:
-
-Manual Updates: Quick Reference
--------------------------------
+Breaking Changes: Quick Reference
+---------------------------------
 
 The following diagram shows the types of changes you can make and the 
 process to manually perform the change. Each of these changes is explained 
 in more detail in the table and sections below.
+
+.. TODO: update to be specific to breaking changes only
 
 .. figure:: /images/schema_changes.png
    :alt: Flow chart of schema changes
