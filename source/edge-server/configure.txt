@@ -595,23 +595,23 @@ multiple Edge Server instances on a single host - for example, your local
 machine. You can do this using the ``edgectl`` profile functionality.
 
 When you create an Edge Server instance, ``edgectl`` automatically creates
-a default profile for you.
+a default profile for you. The profile maps your commands to a specific Edge
+Server instance.
+
+When you create a second Edge Server instance on the same machine, ``edgectl``
+sets the new profile as the default profile. When you want to issue a command 
+that uses a profile other than the default, add the ``--profile`` flag with 
+each command.
+
+.. code-block:: console
+
+   edgectl start --profile=instance1 
 
 You can view the profiles, and their associated configuration files, in:
 
 .. code-block:: console
 
    ~/.mongodb-edge/profiles/
-
-When you create a second Edge Server instance on the same machine, you
-must use the ``--profile`` flag with each command you issue to the non-default
-profile. This maps the command to a specific Edge Server instance. If you do 
-not supply a ``--profile`` when issuing commands, ``edgectl`` uses the default
-profile.
-
-.. code-block:: console
-
-   edgectl start --profile=instance1 
 
 .. _name-edgectl-profile:
 
@@ -623,7 +623,7 @@ You can name a profile with the ``--profile`` flag when you issue the
 
 .. code-block:: console
 
-   edgectl init --profile=instance1
+   edgectl init --app-id="YOUR-APP-ID" --platform=compose --profile=instance1
 
 .. _list-edgectl-profiles:
 
@@ -662,7 +662,7 @@ profile:
 Set a Default Profile
 ~~~~~~~~~~~~~~~~~~~~~
 
-When you create your first profile, it becomes the default profile. You can 
+When you create a new profile, it becomes the default profile. You can 
 set a different default profile with the following ``edgectl`` command:
 
 .. code-block:: console
@@ -681,3 +681,6 @@ You can delete a profile with the following ``edgectl`` command:
 .. code-block:: console
 
    edgectl profile delete YOUR-PROFILE-NAME
+
+If you delete the default profile, you must either set a new default profile, 
+or pass the ``--profile`` flag with every command you issue.
