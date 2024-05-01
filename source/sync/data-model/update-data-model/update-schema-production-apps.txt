@@ -43,10 +43,10 @@ and App Services will automatically handle migrating clients to the new schema
 version.
 
 When schema versioning is initially enabled for an app, the schema version
-defaults to ``0``. When you make a schema versioning change (or a breaking
+defaults to 0. When you make a schema versioning change (or a breaking
 change when the version is greater than 0), the schema version increments by 1.  
 
-You can create and set your schema versions from the App Services UI.  
+You can create and set your schema versions from the App Services UI.   
 
 You can also set the schema version from the client code with supported Atlas Device SDKs: 
 
@@ -57,101 +57,6 @@ You can also set the schema version from the client code with supported Atlas De
    While schema versioning can help you manage changes to your data model,
    breaking changes are still considered breaking and should be avoided if
    possible. For more information on breaking changes, their impact, and how to implement them in your app, refer to :ref:`breaking-changes-schema-versioning-overview`. 
-
-Change Types
-~~~~~~~~~~~~
-
-When schema versioning is enabled, changes are categorized as one of three types:
-
-- **Non-Breaking (Additive):** Changes that do *not* create a new schema
-  version, unless they are applied with schema versioning or breaking changes. 
-
-  Instead of creating a new schema, additive changes are automatically applied to the current schema version. This means that only clients with a schema version equal to or greater than that version can reference the added element.
-  
-  Additive changes include:
-
-  - Adding a new object type or property
-  - Adding a default value on a property
-
-- **Schema Versioning (Supported):** Changes that always create a new compatible
-  schema version, unless they are applied at the same time as breaking changes. 
-
-  Schema versioning changes include:
-
-  - Removing an existing object type or property 
-  - Changing whether an existing property is optional or required
-
-- **Breaking (Unsupported):** Changes that create a new incompatible schema
-  version only if the current version is greater than 0, even if they are
-  applied at the same time as non-breaking or schema versioning changes.
-  Otherwise, breaking changes are applied to the current schema version ``0``. 
-
-  Breaking changes include:
-
-  - Renaming an existing object type or property
-  - Changing the data type of an existing property
-
-  Regardless of whether they increment the schema version, breaking changes
-  *always* require terminating and re-enabling Device Sync. 
-
-  .. include:: /includes/warn-terminate-sync-client-reset.rst
-
-.. _schema-versioning-quick-reference:
-
-Change Types: Quick Reference
-`````````````````````````````
-
-.. list-table::
-   :header-rows: 1
-   :stub-columns: 1
-
-   * - Description of Change
-     - Type of Change
-     - Increments Version 
-     - Compatible
-   * - :ref:`Add an object type <update-model-add-object-type>`
-     - Non-breaking (Additive)
-     - No
-     - N/A
-   * - :ref:`Add a property <update-model-add-required-property>`
-     - Non-breaking (Additive)
-     - No
-     - N/A
-   * - :ref:`Add default value on a property <update-model-add-a-default-value>`
-     - Non-breaking (Additive)
-     - No
-     - N/A
-   * - :ref:`Remove an object type <update-model-remove-object-type>`
-     - Schema Versioning (Supported)
-     - Yes
-     - Yes
-   * - :ref:`Remove a property <update-model-remove-property>`
-     - Schema Versioning (Supported)
-     - Yes
-     - Yes
-   * - :ref:`Change whether property is optional or required <update-model-change-property-status>`
-     - Schema Versioning (Supported)
-     - Yes
-     - Yes
-   * - :ref:`Rename an object type <update-model-change-object-type-name>`
-     - Breaking (Unsupported)
-     - Yes
-     - No
-   * - :ref:`Rename a property <update-model-change-property-name>`
-     - Breaking (Unsupported)
-     - Yes
-     - No
-   * - :ref:`Change property type <update-model-change-property-type-but-keep-name>`
-     - Breaking (Unsupported)
-     - Yes
-     - No
-
-.. tip:: Remap a Name Instead of Renaming
-
-   Several Device SDKs support remapping a property or class name. Because
-   renaming is considered a breaking change, we recommend remapping
-   through the client code when possible. To learn how, refer to the following
-   .. TODO: add link
 
 Version Compatibility
 ~~~~~~~~~~~~~~~~~~~~~
@@ -181,7 +86,7 @@ for eligible apps.
 
 If you enable Development Mode in an app with existing schema versions, schema
 versioning is automatically disabled. App Services deletes all existing schema
-versions and resets the current version to ``0``. You cannot create incremented
+versions and resets the current version to 0. You cannot create incremented
 versions again until Development Mode is disabled. 
 
 .. warning:: Enabling Development Mode Can Break Versioned Clients
@@ -202,6 +107,101 @@ increments as expected.
 However, if you update your data model while Device Sync is terminated, any
 changes that you make are considered breaking changes, even if they are
 normally considered non-breaking or schema versioning changes. 
+
+Change Types
+------------
+
+When schema versioning is enabled, changes are categorized as one of three types:
+
+- **Non-Breaking (Additive):** Changes that do *not* create a new schema
+  version, unless they are applied with schema versioning or breaking changes. 
+
+  Instead of creating a new schema, additive changes are automatically applied to the current schema version. This means that only clients with a schema version equal to or greater than that version can reference the added element.
+  
+  Additive changes include:
+
+  - Adding a new object type or property
+  - Adding a default value on a property
+
+- **Schema Versioning (Supported):** Changes that always create a new compatible
+  schema version, unless they are applied at the same time as breaking changes. 
+
+  Schema versioning changes include:
+
+  - Removing an existing object type or property 
+  - Changing whether an existing property is optional or required
+
+- **Breaking (Unsupported):** Changes that create a new incompatible schema
+  version only if the current version is greater than 0, even if they are
+  applied at the same time as non-breaking or schema versioning changes.
+  Otherwise, breaking changes are applied to the current schema version 0. 
+
+  Breaking changes include:
+
+  - Renaming an existing object type or property
+  - Changing the data type of an existing property
+
+  Regardless of whether they increment the schema version, breaking changes
+  *always* require terminating and re-enabling Device Sync. 
+
+  .. include:: /includes/warn-terminate-sync-client-reset.rst
+
+.. _schema-versioning-quick-reference:
+
+Change Types: Quick Reference
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. list-table::
+   :header-rows: 1
+   :stub-columns: 1
+
+   * - Description of Change
+     - Type of Change
+     - Increments Version 
+     - Compatible
+   * - :ref:`Add an object type <schema-update-add-object-type>`
+     - Non-breaking (Additive)
+     - No
+     - N/A
+   * - :ref:`Add a property <schema-update-add-required-property>`
+     - Non-breaking (Additive)
+     - No
+     - N/A
+   * - :ref:`Add default value on a property <schema-update-add-a-default-value>`
+     - Non-breaking (Additive)
+     - No
+     - N/A
+   * - :ref:`Remove an object type <schema-update-remove-object-type>`
+     - Schema Versioning (Supported)
+     - Yes
+     - Yes
+   * - :ref:`Remove a property <schema-update-remove-property>`
+     - Schema Versioning (Supported)
+     - Yes
+     - Yes
+   * - :ref:`Change whether property is optional or required <schema-update-change-property-status>`
+     - Schema Versioning (Supported)
+     - Yes
+     - Yes
+   * - :ref:`Rename an object type <schema-update-change-object-type-name>`
+     - Breaking (Unsupported)
+     - Yes
+     - No
+   * - :ref:`Rename a property <schema-update-change-property-name>`
+     - Breaking (Unsupported)
+     - Yes
+     - No
+   * - :ref:`Change property type <schema-update-change-property-type-but-keep-name>`
+     - Breaking (Unsupported)
+     - Yes
+     - No
+
+.. tip:: Remap a Name Instead of Renaming
+
+   Several Device SDKs support remapping a property or class name. Because
+   renaming is considered a breaking change, we recommend remapping
+   through the client code when possible. To learn how, refer to the following
+   .. TODO: add link
 
 .. _update-data-model-production-apps-prerequisites:
 
@@ -254,106 +254,110 @@ For information on the specific changes you can make, refer to
 
       1. From the :guilabel:`Collections` tab, select the schema that you want to modify.
       
-      .. note:: Define Default values
+      .. note:: Define Default Values When Possible
 
-         If your changes impact the default values of a property
+         If your changes impact the default values of a property (for example,
+         when adding a new required property), we recommend that you define a
+         default value. To learn how, refer to :ref:`schema-update-add-a-default-value`.
 
-         define the default value in the App Services UI. To learn how, refer to
+      2. Do one of the following, depending on whether you are using deployment
+         drafts in your app:
+       
+         - If drafts are disabled, click :guilabel:`Save`. 
+         - If drafts are enabled, click :guilabel:`Save Draft`. From the banner, click :guilabel:`Review Draft & Deploy`. 
+      
+      4. If you *only* made non-breaking changes, your changes are automatically
+         applied to the current schema version without any additional handling.
+         A new schema version is *not* created. 
+      
+         .. note:: Added Elements are Not Available to Previous Versions 
 
-      2. Click :guilabel:`Save`. 
-      3. If you have deployment drafts enabled, click :guilabel:`Save Draft` to save your changes as a draft.
-      4. A confirmation window displays with a summary of your changes. 
+            Because additive changes are applied to the current schema, clients must use a schema version equal to or greater than the
+            current version to reference any elements added as part of
+            your changeset.
+      
+      5. If you made at least one schema versioning or breaking change, a confirmation window displays with a summary of your changes. 
       
    .. step:: Confirm and Deploy Changes
 
-      From the :guilabel:`Are you sure you want to deploy?` window, review your
-      changes. Depending on the type of changes you made, you will see the
-      following:
+      From the confirmation window, review the :guilabel:`Schema Version` and
+      :guilabel:`Change Summary` information: 
+
+      - The current schema version, and the incremented number of the
+        new schema created upon deployment (if applicable).
+      - The type of change, labeled as ADDITIVE, SUPPORTED, or UNSUPPORTED.
+      - A description of the changes to the noted object type or field.
+      - Any notes or suggested actions to take for a given change. For example,
+        if App Services is expecting a default value based on the change you made, the note suggests that you define a default value.
+
+      How you deploy your changes depends on the changes in your changeset:
 
       .. tabs::
-         
-         .. tab:: Non-Breaking 
-            :tabid: additive
-      
-            If your changeset *only* includes non-breaking changes (labeled as
-            "ADDITIVE"), your changes are automatically applied to the current
-            schema version without any additional handling or versioning. 
-            
-            .. TODO: Confirm - do you get a confirmation window for non-breaking changes?
-      
-            1. Review your changes and click :guilabel:`Deploy and re-initialize`.
-            2. Your changes are automatically applied to the current schema
-               version. The schema version is *not* incremented, there is
-               no compatibility impact on previous schemas, and nothing is written to the version history.
 
          .. tab:: Schema Versioning
             :tabid: supported
 
-            If your changeset includes at least one schema versioning change
-            (labeled as "SUPPORTED"), then all changes (including any
-            non-breaking changes) are applied to a new compatible schema version. 
+            If your changeset includes at least one schema versioning change, then all changes (including any non-breaking changes) are applied to a new compatible schema version. 
         
-            1. Review your changes, which may include non-breaking changes. The window displays the current schema version number and the incremented number of the new schema created upon deployment.
+            1. Review your changes, which may include non-breaking changes. We
+               recommend that you resolve any suggested actions noted before you
+               deploy your changes.
+
             2. Click :guilabel:`Deploy`.
+
             3. Your changes are applied to the new schema version. The new
                version is compatible with previous schemas.
 
          .. tab:: Breaking
             :tabid: unsupported
 
-            If your changeset includes at least one breaking change (labeled as
-            "UNSUPPORTED"), then all changes (ncluding any non-breaking and
-            schema versioning changes), are applied together. Upon deployment of
-            breaking changes, App Services terminates and re-initializes Device Sync.
+            If your changeset includes at least one breaking change, then all
+            changes (including any non-breaking and schema versioning changes)
+            are applied in a single changeset. Upon deployment of breaking changes, App Services terminates and re-initializes Device Sync.
             
             1. Review your changes, which may include non-breaking and schema
-               versioning changes. 
+               versioning changes. We recommend that you resolve any suggested actions noted before you deploy your changes.
                
-               - If the current schema version is greater than 0, the window
-                 displays the current schema version number and the incremented
-                 number of the new incompatible schema created upon deployment.
-               - If the current schema version is 0, the window does *not*
-                 display any version increment information.
+               Breaking changes may or may not increment the schema version:
+
+               - If the current schema version is greater than 0, App Services
+                 indicates that the schema will increment upon deployment.
+               - If the current schema version is 0, the window only displays
+                 the current schema version number.
+
             2. Click :guilabel:`Deploy and re-initialize`.
+
             3. After Device Sync terminates and re-initializes, your changes are
-               applied. 
+               applied in one of two ways: 
 
                - If App Services created a new schema, it becomes the new minimum version and is incompatible with any previous schemas.
-               - If App Services did not create a new schema, the changes are applied to the current schema version ``0``.
+               - If App Services did not create a new schema, the changes are applied to the current schema version 0.
 
-   .. step:: Perform a Client Reset (if necessary)
+            4. Because App Services had to terminate and re-enable Device Sync
+               due to breaking changes, your client must perform a manual client
+               reset to ensure that clients can successfully connect to Atlas. For more information, refer to :ref:`client-resets`.
 
-      If App Services had to terminate and re-enable Device Sync due to breaking
-      changes, your client must perform a manual client reset to ensure that clients can
-      successfully connect to Atlas. For more information, refer to
-      :ref:`<client-resets>`.
-
-Set Your Schema Version
------------------------
+View Schemas
+------------
 
 .. TODO: Link out to respective sdk procedures for setting schema version from client?
 
-Once you have multiple schema versions, you can view previous schemas and select
-a version to use as your current schema.
+Once you have multiple schema versions, you can view previous schemas 
 
-.. procedure::
+.. TODO: Q. Can you even set the schema version, or is this only for viewing?
+.. and select a version to use as your current schema. 
 
-   .. step:: Select a Schema Version
+Schemas are listed in version order and grouped by compatibility. Any schemas
+incompatible with the current schema are labeled as incompatible, and a warning displays if you select them.
 
-      In the App Services UI, navigate to the :guilabel:`Schema` page.
+1. In the App Services UI, navigate to the :guilabel:`Schema` page.
 
-      Select the :guilabel:`Sync Models` tab.
+#. Select the :guilabel:`Sync Models` tab. The :guilabel:`Sync schema version`
+   field displays the current schema version by default. 
 
-      displays dropdown and timestamp 
-
-      :guilabel:`Sync schema version` field displays the currently
-      selected schema version, with a dropdown of all available schema versions.
-      
-      if you select a different version, the sync models update to reflect the
-      selected schema.
-
-      Schema versions are listed in descending order, with the most recent
-      version at the top.
+#. When you select a different version, the timestamp updates to indicate when
+   the selected schema was created, and the sync models update to that version.
+   If you select an incompatible schema version, a warning displays. 
 
 Troubleshooting
 ---------------
