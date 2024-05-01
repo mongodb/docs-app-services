@@ -595,8 +595,7 @@ multiple Edge Server instances on a single host - for example, your local
 machine. You can do this using the ``edgectl`` profile functionality.
 
 When you create an Edge Server instance, ``edgectl`` automatically creates
-a default profile for you. You never have to specify the profile while there
-is only one profile.
+a default profile for you.
 
 You can view the profiles, and their associated configuration files, in:
 
@@ -604,18 +603,81 @@ You can view the profiles, and their associated configuration files, in:
 
    ~/.mongodb-edge/profiles/
 
-If you try to create a second Edge Server instance on the same machine, you
-can use the ``--profile`` flag with each command you issue. This maps the 
-command to a specific Edge Server instance. If you do not supply a 
-``--profile`` when issuing commands, ``edgectl`` uses the default profile.
+When you create a second Edge Server instance on the same machine, you
+must use the ``--profile`` flag with each command you issue to the non-default
+profile. This maps the command to a specific Edge Server instance. If you do 
+not supply a ``--profile`` when issuing commands, ``edgectl`` uses the default
+profile.
 
 .. code-block:: console
 
    edgectl start --profile=instance1 
 
-You can name the profile with the ``--profile`` flag when you issue the 
+.. _name-edgectl-profile:
+
+Name a Profile
+~~~~~~~~~~~~~~
+
+You can name a profile with the ``--profile`` flag when you issue the 
 ``edgectl init`` command:
 
 .. code-block:: console
 
    edgectl init --profile=instance1
+
+.. _list-edgectl-profiles:
+
+List Profiles
+~~~~~~~~~~~~~
+
+You can list all profiles with the following ``edgectl`` command:
+
+.. code-block:: console
+
+   edgectl profile list
+
+.. _get-edgectl-profile-details:
+
+Get Profile Details
+~~~~~~~~~~~~~~~~~~~
+
+You can get details about a profile with the following ``edgectl`` command:
+
+.. code-block:: console
+
+   edgectl profile inspect YOUR-PROFILE-NAME
+
+This provides information about the App ID and platform associated with the
+profile:
+
+.. code-block:: json
+
+   {
+     "appId" : "edgeserverpost4-24release-yfziuga",
+     "platform" : "compose"
+   }
+
+.. _set-default-edgectl-profile:
+
+Set a Default Profile
+~~~~~~~~~~~~~~~~~~~~~
+
+When you create your first profile, it becomes the default profile. You can 
+set a different default profile with the following ``edgectl`` command:
+
+.. code-block:: console
+
+   edgectl profile set-default YOUR-PROFILE-NAME
+
+If you list all profiles again, you can see the new default.
+
+.. _delete-edgectl-profile:
+
+Delete a Profile
+~~~~~~~~~~~~~~~~
+
+You can delete a profile with the following ``edgectl`` command:
+
+.. code-block:: console
+
+   edgectl profile delete YOUR-PROFILE-NAME
