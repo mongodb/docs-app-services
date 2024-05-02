@@ -61,9 +61,6 @@
 
       Use ``kubectl`` to apply the configuration to your cluster. The prior
       step provided the configuration path as part of the ``edgectl`` output.
-      It should look similar to:
-
-      ``'/Users/YOUR-USERNAME/.mongodb-edge/profiles/YOUR-PROFILE-NAME/kube-resource.yml'``
 
       .. code-block:: console
 
