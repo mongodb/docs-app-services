@@ -598,14 +598,13 @@ When you create an Edge Server instance, ``edgectl`` automatically creates
 a default profile for you. The profile maps your commands to a specific Edge
 Server instance.
 
-When you create a second Edge Server instance on the same machine, ``edgectl``
-sets the new profile as the default profile. When you want to issue a command 
-that uses a profile other than the default, add the ``--profile`` flag with 
-each command.
+When you create a new Edge Server instance on the same machine, ``edgectl``
+sets the new profile as the default profile. To issue a command that uses a 
+profile other than the default, add the ``--profile`` flag with each command.
 
 .. code-block:: console
 
-   edgectl start --profile=instance1 
+   edgectl start --profile=YOUR-PROFILE-NAME 
 
 You can view the profiles, and their associated configuration files, in:
 
@@ -623,14 +622,15 @@ You can name a profile with the ``--profile`` flag when you issue the
 
 .. code-block:: console
 
-   edgectl init --app-id="YOUR-APP-ID" --platform=compose --profile=instance1
+   edgectl init --app-id="YOUR-APP-ID" --platform=compose --profile=YOUR-PROFILE-NAME
 
 .. _list-edgectl-profiles:
 
 List Profiles
 ~~~~~~~~~~~~~
 
-You can list all profiles with the following ``edgectl`` command:
+You can list all profiles, and see which is currently set as the default, with
+the following ``edgectl`` command:
 
 .. code-block:: console
 
@@ -653,7 +653,7 @@ profile:
 .. code-block:: json
 
    {
-     "appId" : "edgeserverpost4-24release-yfziuga",
+     "appId" : "YOUR-APP-ID",
      "platform" : "compose"
    }
 
