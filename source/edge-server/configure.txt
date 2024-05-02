@@ -173,19 +173,48 @@ host.
 Start and Stop the Edge Server
 ------------------------------
 
-Use ``edgectl`` to start and stop the Edge Server instance.
+.. tabs::
 
-To start all Edge Server instance containers, use the ``start`` command:
+   .. tab:: Docker Compose
+      :tabid: docker
 
-.. code-block:: shell
+      Use ``edgectl`` to start and stop the Edge Server instance.
 
-   edgectl start
+      To start all Edge Server instance containers, use the ``start`` command:
 
-To stop all Edge Server instance containers, use the ``stop`` command:
+      .. code-block:: shell
 
-.. code-block:: shell
+         edgectl start
 
-   edgectl stop
+      To stop all Edge Server instance containers, use the ``stop`` command:
+
+      .. code-block:: shell
+
+         edgectl stop
+
+   .. tab:: Kubernetes
+      :tabid: kubernetes
+
+      Kubernetes deployments do not have a direct analog to ``start`` and
+      ``stop``.
+
+      Instead, you can scale your deployment to effectively stop and start it,
+      or delete the deployment and apply the configuration again later to 
+      recreate it.
+
+      To scale a deployment to effectively stop it:
+
+      .. code-block:: shell
+
+         kubectl scale deployments mongodb-kubernetes-operator --replicas=0
+         kubectl scale deployments mongodb-atlas-edge-operator-controller-manager --replicas=0
+
+      To start the deployment again:
+
+      .. code-block:: shell
+
+         kubectl scale deployments mongodb-kubernetes-operator --replicas=1
+         kubectl scale deployments mongodb-atlas-edge-operator-controller-manager --replicas=1
 
 .. include:: /includes/important-stop-edge-server.rst
 
@@ -194,7 +223,21 @@ To stop all Edge Server instance containers, use the ``stop`` command:
 Check the Edge Server Status
 ----------------------------
 
-.. include:: /includes/edge/edgectl-status.rst
+.. tabs::
+
+   .. tab:: Docker Compose
+      :tabid: docker
+
+      .. include:: /includes/edge/edgectl-status.rst
+
+   .. tab:: Kubernetes
+      :tabid: kubernetes
+
+      Use ``kubectl`` to check the status of running pods:
+
+      .. code-block:: shell
+
+         kubectl get pods
 
 .. _update-edge-server-instance-config:
 
@@ -202,11 +245,16 @@ Update the Edge Server Instance Configuration
 ---------------------------------------------
 
 You can make changes to an existing Edge Server instance using ``edgectl``.
-After you change the configuration, restart the instance to apply the updates.
 
-.. procedure::
+.. tabs::
 
-   .. step:: Update the Edge Server Configuration
+   .. tab:: Docker Compose
+      :tabid: docker
+
+      .. include:: /includes/edge/edge-docker-update-config-procedure.rst
+
+   .. tab:: Kubernetes
+      :tabid: kubernetes
 
       Use the ``edgectl config`` command with the appropriate flags to update
       the instance:
@@ -215,21 +263,10 @@ After you change the configuration, restart the instance to apply the updates.
 
          edgectl config --YOUR-FLAG-HERE
 
+      When you issue the ``config`` command, the Edge Server operator updates
+      the resource.
+
       .. include:: includes/edge/edgectl-config-flags.rst
-
-   .. step:: Restart the Edge Server Instance
-
-      After you update the configuration, stop the instance:
-
-      .. code-block:: console
-
-         edgectl stop
-
-      And start it again to apply the updates:
-
-      .. code-block:: console
-
-         edgectl start
 
 .. _upgrade-edge-server-version:
 
@@ -255,12 +292,12 @@ or it enters a ``FAILED`` state and cannot connect to Atlas.
 
       .. code-block:: shell
 
-         edgectl update
+         edgectl upgrade --YOUR-FLAG-HERE
 
       Depending on your hardware and network connection, the upgrade 
       process may take seconds to minutes.
 
-      You can optionally specify arguments to upgrade to a specific version:
+      You can specify any of these arguments to perform the upgrade:
 
       .. list-table::
          :header-rows: 1
@@ -270,10 +307,11 @@ or it enters a ``FAILED`` state and cannot connect to Atlas.
            - Type
            - Value
 
-         * - ``--config-path``
+         * - ``--edge-root-dir``
            - String
-           - The location on disk to store configuration files. Defaults to
-             ``~/.mongodb-edge/``.
+           - The location on disk where configuration files are stored. 
+             Defaults to ``~/.mongodb-edge/``. If you have not customized the
+             root directory, you can omit this flag.
 
          * - ``--minor``
            - Boolean
@@ -284,9 +322,18 @@ or it enters a ``FAILED`` state and cannot connect to Atlas.
            - Boolean
            - Upgrade to the next major version. Defaults to ``false``.
 
-         * - ``--to``
+         * - ``--latest``
+           - Boolean
+           - Upgrade to the latest version. Defaults to ``false``.
+
+         * - ``--profile``
            - String
-           - Upgrade (or downgrade) to an exact version. Default ``""``.
+           - The name of the profile to use when executing a given ``edgectl``
+             command. If you do not provide a name, the profile name defaults to
+             the ``app-id``, with an incrementing number appended, starting with
+             ``-01``. When you do not provide a profile flag, ``edgectl`` uses the
+             default profile when executing a command. For more information, refer
+             to :ref:`multiple-edge-servers-on-host`.
 
    .. step:: Configure the Edge Server
 

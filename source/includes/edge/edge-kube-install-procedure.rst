@@ -15,13 +15,13 @@
 
          helm upgrade --install community-operator mongodb/community-operator --set mongodb.name=mongodb-enterprise-server --set mongodb.repo=quay.io/mongodb
 
-   .. step:: Fetch the Edge Server Operator resource and `kubectl apply` it
+   .. step:: Fetch the Edge Server Operator resource and ``kubectl apply`` it
 
       .. code-block:: console
 
          curl "https://raw.githubusercontent.com/mongodb/edge-kubernetes-operator/main/release.yaml" | kubectl apply -f -
 
-   .. step:: Install `edgectl`
+   .. step:: Install ``edgectl``
 
       .. include:: /includes/edge/install-edgectl.rst
 
@@ -70,6 +70,7 @@
       deployment resembles:
 
       .. code-block:: console
+         :copyable: false
 
          $ kubectl get pods
          NAME                                                              READY   STATUS    RESTARTS      AGE
