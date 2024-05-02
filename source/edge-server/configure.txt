@@ -585,6 +585,77 @@ Where the JSON file contains:
      "Item": "priority >= 3"
    }
 
+.. _edge-server-simulate-offline-connectivity:
+
+Simulate Offline Connectivity
+-----------------------------
+
+Edge Server provides a demo mode you can use to simulate the instance losing
+connectivity with Atlas. While the Edge Server instance is in offline demo 
+mode, you can continue to perform CRUD operations with the instance using a
+MongoDB Driver or tool, or an Atlas Device SDK application.
+
+You can see the data change locally with clients connected to the Edge Server
+instance, but do not see the changes reflected in Atlas. Similarly, changes
+that you make in Atlas while the Edge Server instance is offline do not sync
+to the Edge Server and reflect on local clients.
+
+When you bring the Edge Server instance out of offline demo mode, it
+automatically resumes syncing with Atlas. You can see the data from the 
+Edge Server instance reflected in Atlas, and data changed in Atlas becomes
+visible to the instance and connected clients.
+
+Set up Offline Demo Mode
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use the following ``edgectl`` flag with either the ``init`` command or the
+``config`` command to set up offline demo functionality:
+
+.. code-block:: console
+
+   edgectl config --insecure-enable-offline-demo
+
+If you issue this flag with the ``edgectl config`` command, you must 
+restart the Edge Server instance for the change to take effect.
+
+Enable Offline Demo Mode
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Before you can simulate offline connectivity, the Edge Server instance must
+successfully connect to Atlas. You cannot use this functionality with an
+Edge Server instance that has never performed an initial sync with Atlas.
+
+After you have set up offline demo mode and successfully connected to Atlas, 
+issue the following ``edgectl`` command to simulate offline connectivity:
+
+.. code-block:: console
+
+   edgectl offline-demo disable-connection
+
+You get a message indicating that the internet connection has been successfully
+disabled. If you check the Edge Server instance status, the ``cloud_connected``
+bool changes from ``true`` to ``false``.
+
+You can now perform CRUD operations with the Edge Server instance locally,
+and should not see the changes reflected in Atlas.
+
+Disable Offline Demo Mode
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To simulate reconnecting to the network, issue the following ``edgectl``
+command:
+
+.. code-block:: console
+
+   edgectl offline-demo enable-connection
+
+You get a message indicating that the internet connection has been successfully
+enabled. If you check the Edge Server instance status, the ``cloud_connected``
+bool changes from ``false`` to ``true``.
+
+After a moment for any changes to sync, you can see local changes reflected
+in Atlas, and Atlas changes reflected on the Edge Server instance. 
+
 .. _multiple-edge-servers-on-host:
 
 Run Multiple Edge Server Instances on a Host
