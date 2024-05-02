@@ -195,26 +195,11 @@ Start and Stop the Edge Server
    .. tab:: Kubernetes
       :tabid: kubernetes
 
-      Kubernetes deployments do not have a direct analog to ``start`` and
-      ``stop``.
+      Kubernetes deployments do not have a direct analog to ``edgectl start``
+      and ``edgectl stop``.
 
-      Instead, you can scale your deployment to effectively stop and start it,
-      or delete the deployment and apply the configuration again later to 
-      recreate it.
-
-      To scale a deployment to effectively stop it:
-
-      .. code-block:: shell
-
-         kubectl scale deployments mongodb-kubernetes-operator --replicas=0
-         kubectl scale deployments mongodb-atlas-edge-operator-controller-manager --replicas=0
-
-      To start the deployment again:
-
-      .. code-block:: shell
-
-         kubectl scale deployments mongodb-kubernetes-operator --replicas=1
-         kubectl scale deployments mongodb-atlas-edge-operator-controller-manager --replicas=1
+      Instead, use your deployment tool to appropriately stop or delete
+      the containers.
 
 .. include:: /includes/important-stop-edge-server.rst
 
