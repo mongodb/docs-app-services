@@ -7,7 +7,7 @@ Update Your Data Model
 ======================
 
 .. meta::
-   :description: Make changes to an existing Device Sync data model.  
+   :description: Make changes to an existing Device Sync data model.
 
 .. facet::
    :name: genre
@@ -21,53 +21,49 @@ Update Your Data Model
 
 .. toctree::
    :titlesonly:
-   
+
    Update with Development Mode </sync/data-model/update-data-model/update-schema-development-apps>
    Update with Schema Versioning </sync/data-model/update-data-model/update-schema-production-apps>
    Make Breaking Changes </sync/data-model/update-data-model/migrate-schema-partner-collection>
 
-.. TODO: After date is confirmed, update [DATE TBD] throughout project
-
-When developing an application using Atlas Device Sync, you may need to make 
+When developing an application using Atlas Device Sync, you may need to make
 changes to your Device Sync data model. For example,
-you might need a new object type or decide that an optional property should be 
+you might need a new object type or decide that an optional property should be
 required.
 
-In general, we refer to data model updates in the following terms: 
+In general, we refer to data model updates in the following terms:
 
-*What type of change are you making?* 
+*What type of change are you making?*
+  We broadly categorize changes to a Device Sync data model
+  as being either breaking or non-breaking. Breaking changes, such as changing
+  the data type of an existing property, are considered destructive and require
+  additional handling to apply. These are discussed in more detail below, or you
+  can check out the :ref:`breaking-change-quick-reference` section on this page.
 
-We broadly categorize changes to a Device Sync data model
-as being either breaking or non-breaking. Breaking changes, such as changing
-the data type of an existing property, are considered destructive and require
-additional handling to apply. These are discussed in more detail below, or you
-can check out the :ref:`breaking-change-quick-reference` section on this page. 
+*Where are you making the change?*
+  Because the Device Sync data model consists of a client-side SDK object model
+  and a server-side App Services schema, we distinguish between making changes
+  to the client side (updating the SDK object models defined in your client
+  code) or the server side (updating the collection schema through the App
+  Services UI or Admin API). Regardless of where you make your changes, though,
+  you must apply those same changes to the other side to ensure both sides
+  remain consistent. The implications of where you make your changes are
+  discussed in more detail below.
 
-*Where are you making the change?* 
+*Is Development Mode or schema versioning enabled?*
+  When enabled for your app, the following Device Sync features can simplify
+  how you update your data model:
 
-Because the Device Sync data model consists of a client-side SDK object model
-and a server-side App Services schema, we distinguish between making changes
-to the client side (updating the SDK object models defined in your client
-code) or the server side (updating the collection schema through the App
-Services UI or Admin API). Regardles of where you make your
-changes, though, you must apply those same changes to the other side to ensure
-both sides remain consistent. The implications of where you make your changes are discussed in more detail below.
+  - **Development Mode:** Development Mode is a Device Sync configuration setting.
+    When enabled, you can make changes from the client side, and App
+    Services automatically handles updating the server-side schema. For
+    more information, refer to :ref:`update-data-model-development-mode`.
 
-*Is Development Mode or schema versioning enabled?* 
-
-When enabled for your app, the following Device Sync features can simplify how you update your data model:  
-
-- **Development Mode:** Development Mode is a Device Sync configuration setting.
-  When enabled, you can make breaking changes from the client side, and App
-  Services automatically handles updating the server-side schema. Apps must be
-  created after September 13, 2023 and meet a minimum Device SDK version. For
-  more information, refer to :ref:`update-data-model-development-mode`.
-
-- **Schema Versioning:** Schema versioning lets you manage incremental changes
-  to your data model. You can make schema versioning changes to your server-side
-  schema, and App Services automatically handles updating the client-side model
-  to the new version. Apps must be created after [DATE TBD]. For more
-  information, refer to :ref:`<update-data-model-production-apps>`.
+  - **Schema Versioning:** Schema versioning lets you manage incremental changes
+    to your data model. You can make schema versioning changes to your
+    server-side schema, and App Services automatically handles updating the
+    client-side model to the new version. For more information, refer to
+    :ref:`<update-data-model-production-apps>`.
 
 .. _non-breaking-changes-overview:
 
@@ -77,19 +73,22 @@ Non-Breaking Changes
 **Non-breaking changes** are additive changes that do not require any additional
 handling to apply. Non-breaking changes maintain compatibility with your
 existing data model rather than breaking it, which means that old clients can
-continue to sync data. 
+continue to sync data.
 
 You can make these changes in your server-side App Services schema
-or in your client-side SDK object model without additional handling, unless
-otherwise noted.
+or in your client-side SDK object model, then update the corresponding side
+without additional handling, unless otherwise noted (see
+:ref:`breaking-change-quick-reference`).
 
 .. note:: Applying Non-Breaking Changes in Client May Require Migration
-  
-  You can make non-breaking changes to your server-side schema, then apply those changes to your client object model. However, if the client device has an existing realm file, you must perform a migration to apply those changes. 
+
+  You can make non-breaking changes to your server-side schema, then apply
+  those changes to your client object model. However, if the client device has
+  an existing realm file, you must perform a migration to apply those changes.
 
   For details, refer to the documentation in your preferred SDK:
 
-  - C++ SDK - migrations are currently unsupported 
+  - C++ SDK - migrations are currently unsupported
   - :ref:`Flutter SDK - Update an Object Schema <flutter-update-realm-object-schema>`
   - :ref:`Java SDK - Modify an Object Schema <java-modify-an-object-schema>`
   - :ref:`Kotlin SDK - Update an Object Model <kotlin-change-object-model>`
@@ -104,14 +103,13 @@ Schema Versioning Changes
 -------------------------
 
 **Schema versioning changes** are destructive changes that create a new
-compatible schema version instead of breaking your existing data model. When you deploy a schema versioning change, App Services increments the schema version and automatically handles upgrading the client-side model to the new version.
+compatible schema version instead of breaking your existing data model. When you
+deploy a schema versioning change, App Services increments the schema version
+and automatically handles upgrading the client-side model to the new version. If
+schema versioning is disabled for your app, schema versioning changes are
+considered breaking changes.
 
-.. TODO: Confirm 
-
-Currently, schema versioning changes *must* be made from the server side. 
-
-If schema versioning is disabled for your app, schema versioning changes are
-considered breaking changes. 
+Currently, schema versioning changes *must* be made from the server side.
 
 To learn more about schema versioning, refer to :ref:`update-data-model-production-apps`.
 
@@ -122,22 +120,22 @@ Breaking Changes
 
 **Breaking changes** are destructive changes that break your data model and
 should be avoided if possible. These changes require additional handling to
-apply to ensure that existing clients can continue to connect and sync data. 
+apply to ensure that existing clients can continue to connect and sync data.
 
 This requires managing the compatibility of your data model for clients trying
-to access data using old data models as well as updated clients that need to
-work with the new model. As a result, older clients may no longer be able to
+to access data using old data models as well as for updated clients using the
+new model. As a result, older clients may be unable to
 connect to App Services and sync data or apps may be prevented from
 automatically recovering from a client reset. Breaking changes can also give the
 appearance of data loss when server-side documents are unable to sync to
-client-side applications. 
+client-side applications.
 
 Because breaking changes require special handling, you cannot make breaking
 changes through the {+cli+} or automated deploy with GitHub. You can make
 breaking changes through the App Services UI.
 
 When you make a breaking change to the server-side App Services schema, you
-must either:  
+must either:
 
 - Terminate, then re-enable Device Sync in App Services. For more information,
   refer to :ref:`Terminate and Re-enable Sync <pause-or-terminate-sync>`. This
@@ -149,7 +147,7 @@ must either:
 
 .. include:: /includes/warn-terminate-sync-client-reset.rst
 
-.. include:: /includes/note-breaking-changes-sync-terminated.rst
+.. include:: /includes/important-breaking-changes-sync-terminated.rst
 
 .. _breaking-changes-development-mode-overview:
 
@@ -158,11 +156,13 @@ Breaking Changes with Development Mode
 
 When Development Mode is enabled in your app, you can make breaking
 changes to your client-side object model, and App Services automatically
-updates your server-side schema. For more information on Development Mode and how to enable it in your app, refer to :ref:`sync-settings`.  
+updates your server-side schema. For more information on Development Mode and
+how to enable it in your app, refer to :ref:`sync-settings`.
 
-To learn how to make breaking changes with Development Mode, refer to :ref:`update-data-model-development-mode`.
+To learn how to make breaking changes with Development Mode, refer to
+:ref:`update-data-model-development-mode`.
 
-.. include:: /includes/note-dev-mode-production.rst
+.. include:: /includes/important-disable-dev-mode-production.rst
 
 .. _breaking-changes-schema-versioning-overview:
 
@@ -174,7 +174,8 @@ schema version. This new version is incompatible with any previous schemas, and
 clients *must* upgrade to the new schema version to continue syncing data.
 
 Regardless, breaking changes are still considered breaking when schema
-versioning is enabled. They require the same manual handling to be implemented and should be avoided if possible.
+versioning is enabled. They require the same manual handling to be implemented
+and should be avoided if possible.
 
 To learn about schema versioning, refer to :ref:`update-data-model-production-apps`.
 
@@ -193,7 +194,7 @@ changes are considered breaking changes when schema versioning is disabled.
    :stub-columns: 1
 
    * - Description of Change
-     - Server-Side Schema 
+     - Server-Side Schema
      - Client-Side Object Model
    * - :ref:`Add an object type <schema-update-add-object-type>`
      - Non-breaking
@@ -202,7 +203,7 @@ changes are considered breaking changes when schema versioning is disabled.
      - Non-breaking
      - Non-breaking
    * - :ref:`Add default value on a property <schema-update-add-a-default-value>`
-     - Non-breaking 
+     - Non-breaking
      - Non-breaking
    * - :ref:`Remove an object type <schema-update-remove-object-type>`
      - Schema Versioning
@@ -214,22 +215,22 @@ changes are considered breaking changes when schema versioning is disabled.
      - Schema Versioning
      - Breaking
    * - :ref:`Rename an object type <schema-update-change-object-type-name>`
-     - Breaking 
-     - Breaking 
+     - Breaking
+     - Breaking
    * - :ref:`Rename a property <schema-update-change-property-name>`
      - Breaking
-     - Breaking 
+     - Breaking
    * - :ref:`Change property type <schema-update-change-property-type-but-keep-name>`
-     - Breaking 
-     - Breaking 
+     - Breaking
+     - Breaking
 
 .. tip:: Remap a Name Instead of Renaming
 
    Several Device SDKs support remapping a property or class name. Depending on
    your use case, you might choose to remap a name through the client code
-   to avoid having to make a breaking change. For more information, refer to the :ref:`` section 
+   to avoid having to make a breaking change. For more information, refer to the :ref:`` section
 
-The following diagram shows the types of changes you can make and the 
+The following diagram shows the types of changes you can make and the
 process perform the change:
 
 .. TODO: UPDATE WITH NEW DIAGRAM
@@ -239,30 +240,32 @@ process perform the change:
 ..    :lightbox:
 
 Data Model Changes
------------------- 
+------------------
 
 The following sections provide more detailed information on how to make
 specific changes to your Device Sync data model.
+
+.. TODO: DOCSP-38472 - update these descriptions to reflect new features and include examples. see comments in PR-746
 
 .. _schema-update-add-object-type:
 
 Add an Object Type
 ~~~~~~~~~~~~~~~~~~
 
-You can add an object type to either the server-side schema or the client 
-object model without any additional handling. 
+You can add an object type to either the server-side schema or the client
+object model without any additional handling.
 
-If you want to add an object type to both the server-side schema and the 
-client object model, you can add the object type to the object model, and 
-use :ref:`Development Mode <development-mode>` to let App Services handle the 
-server-side schema updates. Or you can manually add the object type to both 
+If you want to add an object type to both the server-side schema and the
+client object model, you can add the object type to the object model, and
+use :ref:`Development Mode <development-mode>` to let App Services handle the
+server-side schema updates. Or you can manually add the object type to both
 the model and the schema.
 
 .. note:: These changes may trigger a resync
 
-   When you add a new object type, we retrieve the documents for the 
+   When you add a new object type, we retrieve the documents for the
    collection and re-insert them into App Services to get the new values. This
-   is expected behavior, but it does cause a temporary halt to propagating 
+   is expected behavior, but it does cause a temporary halt to propagating
    changes while this process is underway.
 
 .. _schema-update-add-a-default-value:
@@ -270,81 +273,83 @@ the model and the schema.
 Add a Default Value on a Property
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can add a default value on an object's required property. When you 
-insert an Atlas document missing this required property into the 
-collection, the Device SDK clients set the property to the default value. However, 
-the same property on the Atlas document remains empty until a client makes 
+You can add a default value on an object's required property. When you
+insert an Atlas document missing this required property into the
+collection, the Device SDK clients set the property to the default value. However,
+the same property on the Atlas document remains empty until a client makes
 changes to the property or updates the document directly in Atlas.
 
-For more information on how default values are helpful when modifying 
+For more information on how default values are helpful when modifying
 existing Atlas documents, see :ref:`<schema-update-add-required-property>`.
 
 .. warning:: Ensure the default value type and property's type are the same
 
    The default field does not have type validation. If the default field's type
    and the property's type are not the same, the error will indicate that
-   the document is missing a required field. 
+   the document is missing a required field.
 
 .. _schema-update-add-required-property:
 
 Add a Required Property
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-You can add a required property to the client's object model, and 
-use :ref:`Development Mode <development-mode>` to let App Services infer the 
-server-side schema updates. Or you can manually add the 
-required property to both the client model and the Atlas schema. 
-However, you should consider making the property optional to avoid the need to 
-modify existing Atlas documents. 
+You can add a required property to the client's object model, and
+use :ref:`Development Mode <development-mode>` to let App Services infer the
+server-side schema updates. Or you can manually add the
+required property to both the client model and the Atlas schema.
+However, you should consider making the property optional to avoid the need to
+modify existing Atlas documents.
 
 .. note:: Required Properties Missing in a Schema Subset Will Default to Zero
 
-   Clients can open the Realm with a schema subset that doesn't 
-   include a required property. The server populates the 
+   Clients can open the Realm with a schema subset that doesn't
+   include a required property. The server populates the
    missing required value field with a zero or blank value
    (like 0, "", or 0.0 depending on the property type) when the document syncs.
+
+.. _schema-update-modify-existing-documents:
 
 Modify Existing Atlas Documents
 ```````````````````````````````
 
-When you add a new required property, you must update existing documents with 
-the new property or they do not sync to the client. This may give client 
+When you add a new required property, you must update existing documents with
+the new property or they do not sync to the client. This may give client
 users the impression that the data has been lost. Resolve this issue by
-adding the new property to each impacted document and populating it with a 
-value. After you update the documents to match the client schema, they 
+adding the new property to each impacted document and populating it with a
+value. After you update the documents to match the client schema, they
 sync to the client application.
 
-When you add a new required property, App Services retrieves the documents for 
-the collection that have new values per the updated schema. App Services iterates 
+When you add a new required property, App Services retrieves the documents for
+the collection that have new values per the updated schema. App Services iterates
 through those documents and re-inserts them to get the new values. This is
-expected behavior, but it does cause a temporary halt to propagating changes 
+expected behavior, but it does cause a temporary halt to propagating changes
 while this process is underway.
 
 .. important::
 
-   App Services uses a ``__realm_sync.unsynced_documents`` collection to track 
-   unsynced documents. When you add a required property, the re-sync process can 
-   push this collection over the limit of 100,000 documents. In this case, you must 
-   :ref:`terminate and re-enable sync <terminating-realm-sync>`, even though the 
-   change you're making is a non-breaking change. 
+   App Services uses a ``__realm_sync.unsynced_documents`` collection to track
+   unsynced documents. When you add a required property, the re-sync process can
+   push this collection over the limit of 100,000 documents. In this case, you must
+   :ref:`terminate and re-enable sync <terminating-realm-sync>`, even though the
+   change you're making is a non-breaking change.
 
 .. _schema-update-add-optional-property:
 
 Add an Optional Property
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want to add an optional property to both the server-side schema and 
-the client object model, you can add the optional property to the object 
-model, and use :ref:`Development Mode <development-mode>` to let 
-App Services infer the server-side schema updates. Or you can manually add the 
+If you want to add an optional property to both the server-side schema and
+the client object model, you can add the optional property to the object
+model, and use :ref:`Development Mode <development-mode>` to let
+App Services infer the server-side schema updates. Or you can manually add the
 optional property to both the model and the schema.
 
 .. note:: These changes may trigger a resync
 
-   When you add a new optional property, we retrieve the documents for the 
-   collection that have new values per the updated schema. We iterate 
-   through those documents and re-insert them into App Services to get 
-   the new values. This is expected behavior, but it does cause a temporary 
+   When you add a new optional property, we retrieve the documents for the
+   collection that have new values per the updated schema. We iterate
+   through those documents and re-insert them into App Services to get
+   the new values. This is expected behavior, but it does cause a temporary
    halt to propagating changes while this process is underway.
 
 .. _schema-update-remove-object-type:
@@ -352,40 +357,40 @@ optional property to both the model and the schema.
 Remove an Object Type
 ~~~~~~~~~~~~~~~~~~~~~
 
-You can remove an object from the client's object model as a non-breaking change. 
+You can remove an object from the client's object model as a non-breaking change.
 If you remove the object from the server-side schema, it is a breaking change.
-For this reason, we recommend you remove the object type from the client-side 
-object model only and leave it in place on the server-side schema. 
+For this reason, we recommend you remove the object type from the client-side
+object model only and leave it in place on the server-side schema.
 
 .. _schema-update-remove-property:
 
 Remove a Property
 ~~~~~~~~~~~~~~~~~
 
-You can remove an optional or required property from the client-side object model and 
-leave it in place on the server-side schema. This is a 
+You can remove an optional or required property from the client-side object model and
+leave it in place on the server-side schema. This is a
 non-breaking change to the object model.
 
-If you remove a property from the server-side schema, it is a breaking change. 
-For this reason, we recommend that you remove the property from the client-side 
-object model only and leave it in place on the server-side schema. 
+If you remove a property from the server-side schema, it is a breaking change.
+For this reason, we recommend that you remove the property from the client-side
+object model only and leave it in place on the server-side schema.
 
-To maintain backward compatibility, removing a property from a client-side 
-object model does not delete the property from the database. Instead, 
-new objects retain the removed property, and App Services sets the value to an 
-appropriate empty value, such as ``null`` for nullable properties, a 0 for 
-integer values, or an empty string for string values. 
+To maintain backward compatibility, removing a property from a client-side
+object model does not delete the property from the database. Instead,
+new objects retain the removed property, and App Services sets the value to an
+appropriate empty value, such as ``null`` for nullable properties, a 0 for
+integer values, or an empty string for string values.
 
 .. _schema-update-change-object-type-name:
 
 Rename an Object Type
 ~~~~~~~~~~~~~~~~~~~~~
 
-Changing an object's name on both the server-side schema and the client-side 
-object model is a breaking change. However, some SDKs offer an API to 
-map a new object name to an existing name in the schema. This allows you to 
-rename an object on the client but not change the object name on the server. 
-In this way, you avoid triggering a migration. Object name 
+Changing an object's name on both the server-side schema and the client-side
+object model is a breaking change. However, some SDKs offer an API to
+map a new object name to an existing name in the schema. This allows you to
+rename an object on the client but not change the object name on the server.
+In this way, you avoid triggering a migration. Object name
 mapping is supported in the following SDKs:
 
 - :ref:`Flutter SDK - Remap a Class <flutter-map-property>`
@@ -394,36 +399,36 @@ mapping is supported in the following SDKs:
 - :ref:`.NET SDK - Rename a Class <dotnet-rename-property>`
 - :ref:`Node.js SDK - Remap a PClass <node-remap-a-property>`
 
-.. TODO: Add RN once docs are updated in DOCSP-32466 
+.. TODO: Add RN once docs are updated in DOCSP-32466
 .. :ref:`React Native SDK - Remap a Property <react-native-remap-a-property>`
 
-If name mapping is not an option, consider implementing a  
-:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
-you keep the existing collection and schema, and create a new collection 
-with the new schema. 
+If name mapping is not an option, consider implementing a
+:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which
+you keep the existing collection and schema, and create a new collection
+with the new schema.
 
-If you choose to change the object's name instead of using the partner collection 
-strategy, you must terminate sync, manually update the schema, 
-and re-enable sync. In addition, your client 
+If you choose to change the object's name instead of using the partner collection
+strategy, you must terminate sync, manually update the schema,
+and re-enable sync. In addition, your client
 application must perform a :ref:`client reset <client-resets>` to restore Sync.
-In the default client reset mode, the client attempts to recover any 
+In the default client reset mode, the client attempts to recover any
 unsynced changes before resetting.
 
 .. note::
 
-   :ref:`Development Mode <development-mode>` 
-   does not automatically update your schema for these changes. 
+   :ref:`Development Mode <development-mode>`
+   does not automatically update your schema for these changes.
 
 .. _schema-update-change-property-name:
 
 Rename a Property
 ~~~~~~~~~~~~~~~~~
 
-Changing a property's name on both the server-side schema and the client-side 
-object model is a breaking change. However, some SDKs offer an API to 
-map a new property name to an existing name in the schema. This allows you to 
-rename a property on the client but not change the property name on the server. 
-In this way, you avoid triggering a migration. Property name 
+Changing a property's name on both the server-side schema and the client-side
+object model is a breaking change. However, some SDKs offer an API to
+map a new property name to an existing name in the schema. This allows you to
+rename a property on the client but not change the property name on the server.
+In this way, you avoid triggering a migration. Property name
 mapping is supported in the following SDKs:
 
 - :ref:`Flutter SDK - Remap a Property <flutter-map-property>`
@@ -436,33 +441,33 @@ mapping is supported in the following SDKs:
 
 .. warning:: Update existing documents
 
-   If you rename a property in the server-side schema, you must 
-   update existing documents with that new property name or they do not sync 
-   to the client. This may give client users the impression that the data 
+   If you rename a property in the server-side schema, you must
+   update existing documents with that new property name or they do not sync
+   to the client. This may give client users the impression that the data
    has been lost.
 
-If name mapping is not an option, consider implementing a  
-partner collection strategy, in which 
-you keep the existing collection and schema, and create a new collection 
+If name mapping is not an option, consider implementing a
+partner collection strategy, in which
+you keep the existing collection and schema, and create a new collection
 with the new schema. This strategy is described in the :ref:`schema-partner_collection-strategy` section on this page.
 
-If you choose to change the property's name, you must terminate sync, manually update the schema, 
-and re-enable sync. In addition, your client 
+If you choose to change the property's name, you must terminate sync, manually update the schema,
+and re-enable sync. In addition, your client
 application must perform a :ref:`client reset <client-resets>` to restore Sync.
-In the default client reset mode, the client attempts to recover any 
+In the default client reset mode, the client attempts to recover any
 unsynced changes before resetting.
 
-When you terminate and re-enable sync, you must also update existing Atlas 
-documents to enable them to Sync with your client applications. 
-Without this additional handling, those documents do not Sync and it may 
-appear in the client that the data has been lost. You could resolve this issue 
+When you terminate and re-enable sync, you must also update existing Atlas
+documents to enable them to Sync with your client applications.
+Without this additional handling, those documents do not Sync and it may
+appear in the client that the data has been lost. You could resolve this issue
 in two ways:
 
 - Change the old field name on each document to match the new schema
-- Add a new field to each document with a name that matches the new schema, 
+- Add a new field to each document with a name that matches the new schema,
   and copy the value from the old field into it
 
-After you've made these changes, the appropriate documents sync to the client 
+After you've made these changes, the appropriate documents sync to the client
 application.
 
 .. _schema-update-change-property-type-but-keep-name:
@@ -470,44 +475,44 @@ application.
 Change a Property Type but Keep the Name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Changing a property's type is a breaking change to both the server-side 
+Changing a property's type is a breaking change to both the server-side
 schema and the client-side object model.
 
 .. warning:: Update existing documents
 
-   If you change a property's type in the server-side schema, you must 
-   update existing documents with that new property type or they do not sync 
-   to the client. This may give client users the impression that the data 
+   If you change a property's type in the server-side schema, you must
+   update existing documents with that new property type or they do not sync
+   to the client. This may give client users the impression that the data
    has been lost.
 
-Instead of changing a property's type, consider implementing the 
-partner collection strategy, in which 
-you keep the existing collection and schema, and create a new collection 
+Instead of changing a property's type, consider implementing the
+partner collection strategy, in which
+you keep the existing collection and schema, and create a new collection
 with the new schema. This strategy is described in the :ref:`schema-partner_collection-strategy` section on this page.
 
-If you choose to change the property's type instead of using the partner collection 
-strategy, you must terminate sync, manually update the schema, 
-and re-enable sync. In addition, your client 
+If you choose to change the property's type instead of using the partner collection
+strategy, you must terminate sync, manually update the schema,
+and re-enable sync. In addition, your client
 application must perform a :ref:`client reset <client-resets>` to restore Sync.
-In the default client reset mode, the client attempts to recover any 
+In the default client reset mode, the client attempts to recover any
 unsynced changes before resetting.
 
 .. note::
 
-   :ref:`Development Mode <development-mode>` 
-   does not automatically update your schema for these changes. 
+   :ref:`Development Mode <development-mode>`
+   does not automatically update your schema for these changes.
 
-When you terminate and re-enable sync, you must also update existing Atlas 
-documents to enable them to Sync with your client applications. 
-Without this additional handling, those documents do not Sync and it may 
-appear in the client that the data has been lost. You could resolve this issue 
+When you terminate and re-enable sync, you must also update existing Atlas
+documents to enable them to Sync with your client applications.
+Without this additional handling, those documents do not Sync and it may
+appear in the client that the data has been lost. You could resolve this issue
 in two ways:
 
 - Change the old field type on each document to match the new schema
-- Add a new field to each document with the type that matches the new schema, 
+- Add a new field to each document with the type that matches the new schema,
   and copy the value from the old field into it, transforming its type
 
-After you've made these changes, the appropriate documents should once again 
+After you've made these changes, the appropriate documents should once again
 sync to the client application.
 
 .. _schema-update-change-property-status:
@@ -515,24 +520,24 @@ sync to the client application.
 Change a Property's Status Between Optional and Required
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Changing a property's status between optional and required 
+Changing a property's status between optional and required
 is a breaking change to both the server-side schema and the client-side object model.
 
 .. warning:: Update existing documents
 
-   If you change a property's status in the server-side schema, you must 
-   update existing documents with that new property type or they do not sync 
-   to the client. This may give client users the impression that the data 
+   If you change a property's status in the server-side schema, you must
+   update existing documents with that new property type or they do not sync
+   to the client. This may give client users the impression that the data
    has been lost.
 
-Instead of changing a property's status, consider implementing the 
-:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which 
-you keep the existing collection and schema, and create a new collection 
-with the new schema. 
+Instead of changing a property's status, consider implementing the
+:ref:`partner collection strategy <schema-partner_collection-strategy>`, in which
+you keep the existing collection and schema, and create a new collection
+with the new schema.
 
-If you choose to change the property's status instead of using the partner collection 
-strategy, you must terminate sync, manually update the schema, 
-and re-enable sync. In addition, your client 
+If you choose to change the property's status instead of using the partner collection
+strategy, you must terminate sync, manually update the schema,
+and re-enable sync. In addition, your client
 application must perform a :ref:`client reset <client-resets>` to restore Sync.
-In the default client reset mode, the client attempts to recover any 
+In the default client reset mode, the client attempts to recover any
 unsynced changes before resetting.

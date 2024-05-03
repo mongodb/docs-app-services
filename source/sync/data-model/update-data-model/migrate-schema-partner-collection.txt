@@ -2,7 +2,7 @@
 .. _partner_collections:
 
 ========================================
-Make Breaking Changes to Your Data Model  
+Make Breaking Changes to Your Data Model
 ========================================
 
 .. meta::
@@ -18,17 +18,17 @@ Make Breaking Changes to Your Data Model
    :depth: 2
    :class: singlecol
 
-This page describes how to make breaking changes to your Device Sync data model. 
+This page describes how to make breaking changes to your Device Sync data model.
 
-.. tip:: Make Breaking Changes with Development Mode  
-   
-   When possible, we recommend that apps in development use Development Mode to update their data model. When enabled, you can make breaking changes from yoru client code, and App Services automatically handles the updates to the server-side App Services schema. For more information, refer to :ref:`update-data-model-development-mode`.
+.. tip:: Make Breaking Changes with Development Mode
+
+   When possible, we recommend that apps in development use Development Mode to update their data model. When enabled, you can make breaking changes from your client code, and App Services automatically handles the updates to the server-side App Services schema. For more information, refer to :ref:`update-data-model-development-mode`.
 
 Breaking Changes: Quick Reference
 ---------------------------------
 
-The following diagram shows the types of changes you can make and the 
-process to manually perform the change. Each of these changes is explained 
+The following diagram shows the types of changes you can make and the
+process to manually perform the change. Each of these changes is explained
 in more detail in the table and sections below.
 
 .. TODO: update to be specific to breaking changes only
@@ -37,9 +37,9 @@ in more detail in the table and sections below.
    :alt: Flow chart of schema changes
    :lightbox:
 
-This table summarizes each type of change, and whether it is considered a breaking or 
+This table summarizes each type of change, and whether it is considered a breaking or
 non-breaking change when made to the server-side App Services schema or the client-side
-SDK object model. 
+SDK object model.
 
 .. list-table::
    :header-rows: 1
@@ -92,14 +92,14 @@ collection strategy to ensure that data flows in both directions.
 A **partner collection** is a collection that contains the same data as
 the original collection, but has the new schema definition in place. Partner
 collections use database triggers to ensure that data flows in both directions,
-meaning that when one collection is written to, the other is also written to 
+meaning that when one collection is written to, the other is also written to
 (with the data modifications required for the new schema).
 
 Example
 ~~~~~~~
 
 The following demonstrates how to implement a breaking schema change using the
-partner collection strategy for an updated ``Task`` collection schema. 
+partner collection strategy for an updated ``Task`` collection schema.
 
 The JSON schema below is the initial collection. Note the ``_id`` field of type ``objectId``:
 
@@ -130,7 +130,7 @@ The JSON schema below is the initial collection. Note the ``_id`` field of type 
 The *new* schema is the same, except we want the ``_id`` field to be a string:
 
 .. code-block:: json
-    :caption: New Task Schema 
+    :caption: New Task Schema
     :emphasize-lines: 9-10
 
     {
@@ -167,7 +167,7 @@ The *new* schema is the same, except we want the ``_id`` field to be a string:
       the new partner collection is to use the :manual:`Aggregation Framework
       </aggregation/>`.
 
-      You can create and run an aggregation pipeline from the 
+      You can create and run an aggregation pipeline from the
       `mongo shell <https://www.mongodb.com/docs/mongodb-shell/>`__,
       by using the :compass:`</aggregation-pipeline-builder/>`, or with the
       :atlas:`</data-explorer/cloud-agg-pipeline/>`.
@@ -231,7 +231,7 @@ The *new* schema is the same, except we want the ``_id`` field to be a string:
       documentation to create a trigger that copies data from the ``Task`` collection to
       the ``TaskV2`` collection for all operation types. Repeat these steps to create
       a second trigger that copies data from the ``TaskV2`` collection to the
-      ``Task`` collection. 
+      ``Task`` collection.
 
    .. step:: Add Trigger Functions
 
