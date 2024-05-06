@@ -1,3 +1,35 @@
+# May 6, 2024
+
+## Edge Server
+
+- Landing Page
+  - Update details for Public Preview. Add info about using MongoDB Drivers and tools. Remove verbiage or clarify behavior that is Atlas Device SDK-specific.
+  - Landing Page: Add marketing CTA and link to Public Preview announcement blog entry.
+- Manage Edge Servers: New page describing how to manage Edge Servers in Atlas.
+- Configure Edge Server
+  - Update the page for the Public Preview. Add `edgectl` commands and build out new sections with additional details.
+  - Add information about managing `edgectl` profiles with the various `profile` commands.
+  - New "Simulate Offline Connectivity" section describing how to use offline demo mode.
+- Connect to an Edge Server: Update the page for the Public Preview. Add details about Roaming with Atlas Device SDK, Connecting via the wireprotocol with authentication, and Connecting via Compass.
+- Edge Server MongoDB API Support: Add `findAndModify` command to update options.
+- Edge Server Permissions Guide: New page providing a high-level overview of Edge Server permissions, and how they relate to client permissions.
+- Monitor Edge Server: New page with information about Edge Server logs, metrics, and status.
+
+## Reference
+
+- Admin API: New Edge Server endpoints:
+  - List Edge Server instances
+  - Get information about an Edge Server instance
+  - Create an Edge Server instance
+  - Delete an Edge Server instance
+  - Regenerate an Edge Server registration key
+  - Rename an Edge Server instance
+- Billing: New "Atlas Edge Server" section with a high-level blurb about billing.
+
+## Release Notes
+
+- Update external changelog with release notes for App Services CLI updates.
+
 # April 26, 2024
 
 ## Tutorials
