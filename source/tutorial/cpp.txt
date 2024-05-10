@@ -23,7 +23,9 @@ Tutorial: Atlas Device Sync for C++ with FTXUI
 Atlas Device SDK for C++ enables you to store and sync data across phones,
 tablets, wearables or IoT devices. This tutorial is based on the C++ Template
 App, named ``cpp.todo.flex``, which illustrates the creation of a to-do list
-terminal GUI application. This application enables users to: 
+terminal GUI application built with 
+`FTXUI <https://github.com/ArthurSonzogni/FTXUI>`__. This application enables
+users to: 
 
 - Register their email as a new user account.
 - Sign in to their account with their email and password (and sign out later).
@@ -75,8 +77,8 @@ Prerequisites
 Start with the Template
 -----------------------
 
-This tutorial is based on the SwiftUI Flexible Sync Template App named 
-``swiftui.todo.flex``. We start with the default app and build new features 
+This tutorial is based on the C++ Sync Template App named 
+``cpp.todo.flex``. We start with the default app and build new features 
 on it. 
 
 .. include:: /includes/tutorial-learn-more-template-app.rst
@@ -145,11 +147,10 @@ Explore the Template App
 
       Open the frontend client code in your preferred IDE. 
       
-      If you downloaded the client as a ``.zip`` file or cloned the client 
-      GitHub repository, you must manually insert the App Services App ID 
-      in the appropriate place in your client. Follow the 
-      :guilabel:`Configuration` instructions in the client :file:`README.md` 
-      to learn where to insert your App ID.
+      If you cloned the client from a GitHub repository, you must manually
+      insert the App Services App ID in the appropriate place in your client.
+      Follow the :guilabel:`Configuration` instructions in the client 
+      :file:`README.md` to learn where to insert your App ID.
 
    .. step:: Build the App
 
@@ -178,9 +179,10 @@ Explore the Template App
    .. step:: Explore the App Structure
 
       Take a few minutes to explore how the project is organized while 
-      CMake builds the executable. You won't work directly with these files
-      during this tutorial, but they contain code that demonstrates using
-      the C++ SDK:
+      CMake builds the executable.
+      
+      You won't work directly with these files during this tutorial, but they
+      contain code that demonstrates using the C++ SDK:
 
       .. cssclass:: config-table
       .. list-table::
@@ -194,8 +196,9 @@ Explore the Template App
            - This file uses the ``nlohmann::json`` library to read values from
              ``atlasConfig.json``. It uses these values to initialize
              the ``realm::App``, and save it in the app's state. The ``App``
-             is how your app communicates with the App Services backend. This
-             provides access to login and authentication.
+             is how your application communicates with the App Services 
+             backend. This provides access to authentication, and to the
+             ``realm::user`` object of the logged-in user.
 
              To learn more about how you can customize your app configuration,
              see: :ref:`Connect to an Atlas App Services Backend <ios-init-appclient>`.
@@ -562,12 +565,15 @@ Change the Subscription
       For this tutorial, we want to maintain that, but *only* sync Items that
       are marked as High or Severe priority. 
 
-      This is why we set the ``property`` as an ``int64_t``, where the highest 
-      priority (severe) has a value of 0, and the lowest priority (low) has 
-      a value of 3. We can make direct comparisons between a number and the 
-      priority property. To do so, update the query statement to include documents 
-      where the priority is equal to or *less* than "High" (or 1). This should
-      only include items of "Severe" or "High" priority.
+      This is why we used an ``int64_t`` for the ``priority`` property, and
+      labeled the priority levels in the UI from most to least important. The
+      highest priority (severe) has a value of 0, and the lowest priority 
+      (low) has a value of 3. We can make direct comparisons between a number
+      and the priority property.
+      
+      To do so, update the query statement to include documents where the
+      priority is equal to or *less* than "High" (or 1). This should only
+      include items of "Severe" or "High" priority.
 
       .. code-block:: cpp
          :emphasize-lines: 5
@@ -595,6 +601,8 @@ Change the Subscription
       because it does not have a ``priority`` field. If you want this Item to
       sync to the device, you can edit the document in the Atlas UI and add a
       value for the ``priority`` field.
+
+      .. include:: /includes/tip-queryable-fields-dev-mode.rst
       
       If you want to further test the functionality, you can create Items of various 
       priorities. You will see that a new Item with a lower priority briefly
@@ -610,6 +618,15 @@ Change the Subscription
       In this scenario, the SDK creates the Item locally, syncs it with the 
       backend, and then reverts the write because it doesn't meet the 
       subscription rules.
+
+      .. note:: Known UI Issue
+
+         If the error modal displays, and you move your mouse over the item
+         list in the terminal prior to dismissing the error modal, the UI
+         rendering breaks. This is related to limitations with the FTXUI
+         library. If this occurs, quit the app using ``ctrl + c``, and re-run
+         it. You can avoid this issue by using the enter key to press the
+         ``Dismiss`` button in the error modal before moving the mouse.
 
 Conclusion
 ----------
