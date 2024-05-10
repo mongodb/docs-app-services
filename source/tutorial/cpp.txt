@@ -178,8 +178,9 @@ Explore the Template App
    .. step:: Explore the App Structure
 
       Take a few minutes to explore how the project is organized while 
-      CMake builds the executable. Within the client directory, these files
-      contain code that uses the C++ SDK:
+      CMake builds the executable. You won't work directly with these files
+      during this tutorial, but they contain code that demonstrates using
+      the C++ SDK:
 
       .. cssclass:: config-table
       .. list-table::
@@ -204,7 +205,12 @@ Explore the Template App
              ``LoginController`` or the ``HomeController`` depending on 
              whether there is a logged-in user.
 
-      In this tutorial, you'll be working in the following files:
+         * - ``managers/auth_manager.cpp``
+           - This file implements the logic to register an email/password
+             user, log them in or out, and display an error message when
+             authentication errors occur.
+
+      In this tutorial, you'll work in the following files:
 
       .. cssclass:: config-table
       .. list-table::
@@ -215,27 +221,32 @@ Explore the Template App
            - Purpose
 
          * - ``state/item.hpp``
-           - This file defines the ``Item`` object we store in the database.
+           - This file, located in the ``state`` directory, defines the
+             ``Item`` object we store in the database.
 
          * - ``state/home_controller_state.hpp``
-           - This file, located in the ``Views`` directory, provides the 
-             functionality to add a new item to the list.
-
-         * - ``managers/database_manager.hpp``
-           - This file, located in the ``Views`` directory, defines the 
-             Flexible Sync subscription.
-
-         * - ``managers/database_manager.cpp``
-           - This file, located in the ``Views`` directory, defines the 
-             Flexible Sync subscription.
+           - This file, located in the ``state`` directory, manages the app 
+             state for the Home view.
 
          * - ``controllers/home_controller.hpp``
-           - This file, located in the ``Views`` directory, defines the 
-             Flexible Sync subscription.
+           - This file, located in the ``controllers`` directory, is the
+             header file that contains important definitions for the Home
+             view controller.
 
-         * - ``managers/home_controller.cpp``
-           - This file, located in the ``Views`` directory, defines the 
-             Flexible Sync subscription.
+         * - ``controllers/home_controller.cpp``
+           - This file, located in the ``controllers`` directory, implements
+             the Home view. This is the view where a logged-in user can work
+             with the app.
+
+         * - ``managers/database_manager.hpp``
+           - This file, located in the ``managers`` directory, is the header
+             file that contains important definitions for Device Sync and
+             database operations.
+
+         * - ``managers/database_manager.cpp``
+           - This file, located in the ``managers`` directory, implements some
+             Device Sync and database operations, such as creating items,
+             changing Device Sync query subscriptions, and handling Sync errors.
 
    .. step:: Run the App
 
