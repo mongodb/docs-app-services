@@ -21,7 +21,7 @@ Tutorial: Atlas Device Sync for C++ with FTXUI
 *Estimated time to complete: 30 minutes, depending on your experience with C++*
 
 Atlas Device SDK for C++ enables you to store and sync data across phones,
-tablets, wearables or IoT devices. This tutorial is based on the C++ Template
+tablets, wearables, or IoT devices. This tutorial is based on the C++ Template
 App, named ``cpp.todo.flex``, which illustrates the creation of a to-do list
 terminal GUI application built with 
 `FTXUI <https://github.com/ArthurSonzogni/FTXUI>`__. This application enables
@@ -107,7 +107,7 @@ on it.
       :tabid: cli
 
       The :ref:`{+cli-bin+} apps create <appservices-apps-create>`
-      command sets up the backend and creates a SwiftUI template app for
+      command sets up the backend and creates a C++ template app for
       you to use as a base for this tutorial.
 
       Run the following command in a terminal window to create an app
@@ -156,7 +156,8 @@ Explore the Template App
 
       1. Make a directory in which to build the app. For convenience, the 
          ``.gitignore`` packaged with the template app ignores a ``build``
-         directory whin the client directory. CD into the directory you make.
+         directory within the client directory. Navigate into the build
+         directory.
 
          .. code-block:: console
 
@@ -193,8 +194,8 @@ Explore the Template App
            - Purpose
 
          * - ``controllers/app_controller.cpp``
-           - This file uses the ``nlohmann::json`` library to read values from
-             ``atlasConfig.json``. It uses these values to initialize
+           - Use the ``nlohmann::json`` library to read values from
+             ``atlasConfig.json``. Then, use these values to initialize
              the ``realm::App``, and save it in the app's state. The ``App``
              is how your application communicates with the App Services 
              backend. This provides access to authentication, and to the
@@ -203,15 +204,14 @@ Explore the Template App
              To learn more about how you can customize your app configuration,
              see: :ref:`Connect to an Atlas App Services Backend <ios-init-appclient>`.
              
-             This file also sets up the ``AuthManager`` and the ``ErrorManager``.
+             This code also sets up the ``AuthManager`` and the ``ErrorManager``.
              It contains the navigation flow to send users to the 
              ``LoginController`` or the ``HomeController`` depending on 
              whether there is a logged-in user.
 
          * - ``managers/auth_manager.cpp``
-           - This file implements the logic to register an email/password
-             user, log them in or out, and display an error message when
-             authentication errors occur.
+           - Logic to register an email/password user, log them in or out, and
+             display an error message when authentication errors occur.
 
       In this tutorial, you'll work in the following files:
 
@@ -224,32 +224,26 @@ Explore the Template App
            - Purpose
 
          * - ``state/item.hpp``
-           - This file, located in the ``state`` directory, defines the
-             ``Item`` object we store in the database.
+           - Define the ``Item`` object we store in the database.
 
          * - ``state/home_controller_state.hpp``
-           - This file, located in the ``state`` directory, manages the app 
-             state for the Home view.
+           - Manage the app state for the Home view.
 
          * - ``controllers/home_controller.hpp``
-           - This file, located in the ``controllers`` directory, is the
-             header file that contains important definitions for the Home
-             view controller.
+           - Contains important definitions for the Home view controller.
 
          * - ``controllers/home_controller.cpp``
-           - This file, located in the ``controllers`` directory, implements
-             the Home view. This is the view where a logged-in user can work
-             with the app.
+           - Implements the Home view. This is the view where a logged-in user
+             can work with the app.
 
          * - ``managers/database_manager.hpp``
-           - This file, located in the ``managers`` directory, is the header
-             file that contains important definitions for Device Sync and
-             database operations.
+           - Contains important definitions for Device Sync and database
+             operations.
 
          * - ``managers/database_manager.cpp``
-           - This file, located in the ``managers`` directory, implements some
-             Device Sync and database operations, such as creating items,
-             changing Device Sync query subscriptions, and handling Sync errors.
+           - Implements some Device Sync and database operations, such as
+             creating items, changing Device Sync query subscriptions, and
+             handling Sync errors.
 
    .. step:: Run the App
 
@@ -267,10 +261,9 @@ Explore the Template App
       .. tip:: Expand the terminal window, if needed.
 
          The top of the home screen contains a row of buttons and a toggle to
-         hide completed tasks. If the terminal window is small, the buttons
-         display as rectangles too small to display the text labels. If you
-         don't see the text labels, make the terminal window bigger. FTXUI
-         re-renders the content to fit the larger window.
+         hide completed tasks. If your terminal window is too small, the button
+         text labels don't display. To see the labels, make the terminal window
+         bigger, and FTXUI re-renders the content to fit the larger window.
 
    .. step:: Check the Backend
 
@@ -302,7 +295,7 @@ Add a New Property
 
       A. Open the client code in your preferred IDE. 
 
-      #. Open the ``item.hpp`` file in the ``state/`` directory.
+      #. In the ``state/`` directory, ppen the ``item.hpp`` file.
 
       #. Add the following property to the ``Item`` struct:
 
@@ -310,7 +303,7 @@ Add a New Property
 
             int64_t priority;
 
-      #. Add the new property to the ``REALM_SCHEMA()``:
+      #. Add the new ``priority`` property to the ``REALM_SCHEMA()``:
 
          .. code-block:: cpp
 
@@ -338,10 +331,10 @@ Add a New Property
 
       A. In the ``state`` directory, go to ``home_controller_state.hpp``. 
          Add a new ``int`` property under the existing ``newTaskIsComplete``
-         property.
+         property. Then, add a ``static const int`` to store the default int
+         value for this property. 
          
-         Optionally, add a ``static const int`` to store the default int value
-         for this property. The ``HomeControllerState`` struct may now resemble:
+         The ``HomeControllerState`` struct may now resemble:
 
          .. code-block:: cpp
             :emphasize-lines: 2, 7
@@ -358,8 +351,9 @@ Add a New Property
             };
 
       #. In the ``controllers`` directory, go to ``home_controller.hpp``. This
-         controller renders the main view of the app. Import the string and
-         vector libraries:
+         controller renders the main view of the app.
+         
+         Import the string and vector libraries:
 
          .. code-block:: cpp
 
@@ -507,10 +501,23 @@ Add a New Property
 
    .. step:: Run and Test
     
-      At this point, you can run the application again. Log in using the account 
-      you created earlier in this tutorial. You will see the one Item you 
-      previously created. Add a new Item, and you will see that you can now 
-      set the priority. Choose ``High`` for the priority and save the Item. 
+      At this point, build and run the application again. In your build
+      directory, rebuild the executable with the changes you made:
+
+      .. code-block:: console
+
+         cmake --build .
+      
+      And run the app:
+
+      .. code-block:: console
+         
+         ./sync_todo /path-to-file/atlasConfig.json
+
+      Log in using the account you created earlier in this tutorial. You will
+      see the one Item you previously created. Add a new Item, and you will see
+      that you can now set the priority. Choose ``High`` for the priority and
+      save the Item. 
 
       Now switch back to the Atlas data page in your browser, and refresh the 
       ``Item`` collection. You should now see the new Item with the ``priority`` 
@@ -533,47 +540,49 @@ Add a New Property
 Change the Subscription
 ~~~~~~~~~~~~~~~~~~~~~~~
 
+In the ``database_manager.cpp`` file in the ``managers`` directory, we
+create the Flexible Sync subscription that defines which documents we
+sync with the user's device and account. By default, we subscribe to all
+items. You can see items that other people create, but server-side rules
+prevent you from writing to them. You can see this logic in the block
+where we create the initial subscription. If there are no subscriptions
+when the app opens, we add a subscription for all ``Item`` objects:
+
+.. code-block:: cpp
+   :copyable: false
+
+   _database->subscriptions().update([this](realm::mutable_sync_subscription_set& subs) {
+     // By default, we show all items.
+     if (!subs.find(_allItemSubscriptionName)) {
+       subs.add<realm::Item>(_allItemSubscriptionName);
+     }
+   }).get();
+      
+In the ``toggleSubscriptions()`` function, we switch the subscription,
+depending on the current subscription state. In the UI, the user can
+toggle between showing all items, or showing only their own items.
+Within this function, find the the ``_myItemSubscriptionName`` logic. 
+If there isn't already a subscription for this subscription name, the app
+adds a subscription to all documents where the ``owner_id`` property
+matches the authenticated user's id. 
+
+For this tutorial, we want to maintain that, but *only* sync Items that
+are marked as "High" or "Severe" priority. 
+
+This is why we used an ``int64_t`` for the ``priority`` property, and
+labeled the priority levels in the UI from most to least important. The
+highest priority (severe) has a value of 0, and the lowest priority 
+(low) has a value of 3. We can make direct comparisons between a number
+and the priority property.
+
 .. procedure::
 
    .. step:: Update the subscription
-
-      In the ``database_manager.cpp`` file in the ``managers`` directory, we
-      create the Flexible Sync subscription that defines which documents we
-      sync with the user's device & account. By default, we subscribe to all
-      items. You can see items that other people create, but server-side rules
-      prevent you from writing to them. You can see this logic in the block
-      where we create the initial subscription. If there are no subscriptions
-      when the app opens, we add a subscription for all ``Item`` objects:
-
-      .. code-block:: cpp
-
-         _database->subscriptions().update([this](realm::mutable_sync_subscription_set& subs) {
-           // By default, we show all items.
-           if (!subs.find(_allItemSubscriptionName)) {
-             subs.add<realm::Item>(_allItemSubscriptionName);
-           }
-         }).get();
       
-      In the ``toggleSubscriptions()`` function, we switch the subscription,
-      depending on the current subscription state. In the UI, the user can
-      toggle between showing all items, or showing only their own items.
-      Within this function, find the the ``_myItemSubscriptionName`` logic. 
-      If there isn't already a subscription for this subscription name, the app
-      adds a subscription to all documents where the ``owner_id`` property
-      matches the authenticated user's id. 
-      
-      For this tutorial, we want to maintain that, but *only* sync Items that
-      are marked as High or Severe priority. 
-
-      This is why we used an ``int64_t`` for the ``priority`` property, and
-      labeled the priority levels in the UI from most to least important. The
-      highest priority (severe) has a value of 0, and the lowest priority 
-      (low) has a value of 3. We can make direct comparisons between a number
-      and the priority property.
-      
-      To do so, update the query statement to include documents where the
-      priority is equal to or *less* than "High" (or 1). This should only
-      include items of "Severe" or "High" priority.
+      To change the subscription, go to the ``managers`` directory and open the
+      ``database_manager.cpp`` file. Update the query statement to include
+      documents where the priority is equal to or *less* than 1. This should
+      only include items of "Severe" (0) or "High" (1) priority.
 
       .. code-block:: cpp
          :emphasize-lines: 5
