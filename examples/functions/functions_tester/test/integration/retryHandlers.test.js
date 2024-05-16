@@ -13,7 +13,7 @@ afterAll(async () => {
 describe("Recursive retry integration tests", () => {
   test("should not fail", async () => {
     let passVal = 0;
-    const res = await app.currentUser.callFunction("mightFail", [passVal]);
+    const res = await app.currentUser.callFunction("mightFail", passVal);
     expect(res).toBe(true);
   });
 });
