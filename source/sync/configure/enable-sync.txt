@@ -200,6 +200,17 @@ Procedure
 
             For details, refer to the :ref:`sync-configuration-reference`.
 
+            You may want to enable :ref:`Development Mode <development-mode>` before deploying your changes. 
+            You can use the following command to enable Development Mode:
+            
+            .. code-block:: shell
+
+               curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/sync/config \
+               -X PUT \
+               -h 'Authorization: Bearer <Valid Access Token>'
+               -h "Content-Type: application/json"
+               -d '{"development_mode_enabled": true}'
+              
          .. step:: Deploy the Sync Configuration
 
             To deploy your changes and start syncing data, send an
