@@ -179,28 +179,11 @@ Procedure
                  -X GET \
                  -h 'Authorization: Bearer <Valid Access Token>'
 
-            Once you have the configuration, add the ``flexible_sync`` object with the
-            following template configuration:
+         .. step:: Enable Development Mode (optional)
 
-            .. code-block:: json
-
-               {
-                 ...
-                 "flexible_sync": {
-                   "state": "enabled",
-                   "database_name": "<Name of Database>",
-                   "client_max_offline_days": <Number>,
-                   "is_recovery_mode_disabled": <Boolean>,
-                   "indexed_queryable_fields_names": <Array of String Field Names>,
-                   "queryable_fields_names": <Array of String Field Names>,
-                   "collection_queryable_fields_names": <Map[String][]String>
-                 }
-                 ...
-               }
-
-            You may want to enable :ref:`Development Mode <development-mode>` before deploying your changes. 
+            You may need to enable :ref:`Development Mode <development-mode>` before deploying your changes. 
             You can use the following command to enable Development Mode:
-            
+
             .. code-block:: shell
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/sync/config \
@@ -209,14 +192,12 @@ Procedure
                  -h "Content-Type: application/json"
                  -d '{"development_mode_enabled": true}'
 
-            For details, refer to the :ref:`sync-configuration-reference`.
-              
-         .. step:: Deploy the Sync Configuration
+         .. step:: Update and Deploy the Sync Configuration
 
             To deploy your changes and start syncing data, send an
             :admin-api-endpoint:`Admin API request
-            <operation/adminGetServiceConfig>` that updates the cluster
-            configuration with your sync configuration:
+            <operation/adminUpdateServiceConfig>` that updates the cluster
+            configuration with the following template sync configuration:
 
             .. note:: Authenticating Your Request with an Access Token
 
@@ -230,5 +211,21 @@ Procedure
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X PATCH \
                  -h 'Authorization: Bearer <Valid Access Token>' \
-                 -h "Content-Type: application/json"
-                 -d @/sync/config.json
+                 -h "Content-Type: application/json" \
+                 -d '<Flexible Sync Configuration>'
+
+            .. code-block:: json
+
+               {
+                 "flexible_sync": {
+                   "state": "enabled",
+                   "database_name": "<Name of Database>",
+                   "client_max_offline_days": <Number>,
+                   "is_recovery_mode_disabled": <Boolean>,
+                   "indexed_queryable_fields_names": <Array of String Field Names>,
+                   "queryable_fields_names": <Array of String Field Names>,
+                   "collection_queryable_fields_names": <Map[String][]String>
+                 }
+               }
+
+            For details on the sync configuration, refer to the :ref:`sync-configuration-reference`.
