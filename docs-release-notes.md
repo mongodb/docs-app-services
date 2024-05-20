@@ -1,3 +1,9 @@
+# May 10, 2024
+
+## Edge Server
+
+- Configure Edge Server: New "Simulate Offline Connectivity" section describing how to use offline demo mode.
+
 # May 3, 2024
 
 ## Edge Server

@@ -4,16 +4,19 @@
 Template Apps
 =============
 
-.. default-domain:: mongodb
+.. meta::
+   :description: Quick start your Atlas App Services exploration with a ready-to-use template application.
+   :keywords: code example
+
+.. facet::
+  :name: genre
+  :values: reference
 
 .. contents:: On this page
    :class: singlecol
    :backlinks: none
    :depth: 2
    :local:
-
-Overview
---------
 
 You can get up and running with an Atlas App Services App using one of our premade template apps.
 Template apps bring together many of the building blocks available in Atlas App Services
@@ -28,7 +31,7 @@ Create a Template App
 ---------------------
 
 You can create a template app using the UI on the Atlas App Services
-site, the Realm CLI, or the Admin API. Choose the tab for whichever
+site, the {+cli+}, or the Admin API. Choose the tab for whichever
 option is most convenient for you.
 
 .. tabs-realm-admin-interfaces::
@@ -44,14 +47,9 @@ option is most convenient for you.
       .. _explore-template-app:
 
       After you create a template app, the UI includes a
-      :guilabel:`Welcome to Your Application` section that offers
-      several resources for getting started:
-
-      - Information about what your chosen template app includes.
-
-      - On-screen guides to customize your app.
-
-      - Template app client code that you can download as a ``.zip`` file.
+      :guilabel:`Get the Front-End Code for your Template` section that 
+      offers client code that you can download as a ``.zip`` file, view on
+      GitHub, or get through the {+cli+}.
 
    .. tab::
       :tabid: cli
@@ -123,14 +121,15 @@ the Atlas App Services UI, Realm CLI, or GitHub.
       **Download the client when you create the template app**
 
       When you create a template app using the App Services UI, the UI 
-      prompts you with two options to get the client code immediately 
+      provides you with three options to get the client code immediately 
       after creating the template:
 
       - Download your preferred client as a ``.zip`` file.
       - Use the {+cli+} to pull your preferred client to a local directory.
+      - View and clone the client code from GitHub.
 
-      After selecting the ``.zip`` or {+cli+} method, follow the on-screen
-      instructions to get the client code.
+      After selecting your preferred method, follow the on-screen
+      instructions or clone the repository to get the client code.
       
       **Download the client at some point after creating the template app**
 
@@ -139,8 +138,13 @@ the Atlas App Services UI, Realm CLI, or GitHub.
       displays a "Welcome to Your Application" pane on the main dashboard. 
       This pane contains a button labeled :guilabel:`</> Pull front-end code`. 
       When you click this button, you see the same dialogue as when you 
-      first create an app, which gives you the option to download the client 
-      as a ``.zip`` or pull it with the {+cli+}.
+      first create an app, which gives you the options to get the client.
+
+      .. tip::
+
+         The C++ Template App is not yet available to download in the App
+         Services UI. Use the CLI or clone the repository from GitHub to get
+         the client code.
 
    .. tab:: {+cli+}
       :tabid: cli
@@ -185,6 +189,7 @@ the Atlas App Services UI, Realm CLI, or GitHub.
       want just the client code without the backend code, explore the 
       relevant GitHub repository for your preferred framework or language:
 
+      - :github:`C++ Device Sync Client <mongodb/template-app-cpp-todo>`
       - :github:`Flutter Device Sync Client <mongodb/template-app-dart-flutter-todo>`
       - :github:`Kotlin Device Sync Client <mongodb/template-app-kotlin-todo>`
       - :github:`MAUI Device Sync Client <mongodb/template-app-maui-todo>`
@@ -204,7 +209,7 @@ the Atlas App Services UI, Realm CLI, or GitHub.
 Template Apps Available
 -----------------------
 
-The following templates are available. The Realm CLI accepts the following IDs
+The following templates are available. The {+cli+} accepts the following IDs
 to the ``--template`` flag of the :ref:`appservices-apps-create` and
 :ref:`appservices-pull` commands.
 
@@ -238,29 +243,49 @@ to the ``--template`` flag of the :ref:`appservices-apps-create` and
        for Device Sync using Flexible Sync.
      - None
 
+   * - ``cpp.todo.flex``
+     - C++ SDK + Atlas Device Sync Starter
+     - Terminal GUI to-do list app written in C++ using the :ref:`C++ SDK <cpp-intro>`
+       and `FTXUI <https://github.com/ArthurSonzogni/FTXUI>`__. Syncs local
+       data to MongoDB Atlas using Device Sync with 
+       :ref:`Flexible Sync <flexible-sync>`. 
+     - C++
+
    * - ``flutter.todo.flex``
-     - Realm Flutter SDK + Atlas Device Sync Starter
-     - Cross-platform to-do list app for Android, iOS, Windows, MacOS, and Linux written in Dart using the :ref:`Realm Flutter SDK <flutter-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`. 
+     - Flutter SDK + Atlas Device Sync Starter
+     - Cross-platform to-do list app for Android, iOS, Windows, MacOS, and
+       Linux written in Dart using the :ref:`Flutter SDK <flutter-intro>`.
+       Syncs local data to MongoDB Atlas using Device Sync with 
+       :ref:`Flexible Sync <flexible-sync>`. 
      - Flutter
 
    * - ``kotlin.todo.flex``
      - Kotlin SDK + Atlas Device Sync Starter
-     - Android to-do list app written in Kotlin using the :ref:`Realm Kotlin SDK <kotlin-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
+     - Android to-do list app written in Kotlin using the 
+       :ref:`Kotlin SDK <kotlin-intro>`. Syncs local data to MongoDB Atlas
+       using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
      - Kotlin
 
    * - ``maui.todo.flex``
      - MAUI + Atlas Device Sync Starter
-     - Cross-platform to-do list mobile app using the :ref:`Realm C# SDK <dotnet-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
+     - Cross-platform to-do list mobile app using the 
+       :ref:`C# SDK <dotnet-intro>`. Syncs local data to MongoDB Atlas using
+       Device Sync with :ref:`Flexible Sync <flexible-sync>`.
      - MAUI
 
    * - ``react-native.todo.flex``
      - React Native + Atlas Device Sync Starter
-     - Cross-platform to-do list mobile app using the :ref:`Realm JS SDK <react-native-intro>` and the :npm:`@realm/react <package/@realm/react>` library. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
+     - Cross-platform to-do list mobile app using the 
+       :ref:`JS SDK <react-native-intro>` and the 
+       :npm:`@realm/react <package/@realm/react>` library. Syncs local data to
+       MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
      - Realm React
 
    * - ``swiftui.todo.flex``
      - SwiftUI + Atlas Device Sync Starter
-     - iOS to-do list app using SwiftUI and the :ref:`Realm Swift SDK <ios-intro>`. Syncs local data to MongoDB Atlas using Device Sync with :ref:`Flexible Sync <flexible-sync>`.
+     - iOS to-do list app using SwiftUI and the :ref:`Swift SDK <ios-intro>`.
+       Syncs local data to MongoDB Atlas using Device Sync with 
+       :ref:`Flexible Sync <flexible-sync>`.
      - SwiftUI
 
    * - ``sync.todo``
@@ -274,8 +299,8 @@ to the ``--template`` flag of the :ref:`appservices-apps-create` and
      - None
 
    * - ``web.mql.todo``
-     - Realm Web SDK + React Starter
-     - Hosted to-do list web app using the :ref:`Realm Web SDK <web-intro>`.
+     - Web SDK + React Starter
+     - Hosted to-do list web app using the :ref:`Web SDK <web-intro>`.
      - React/ MQL
 
    * - ``web.data-api.todo``
