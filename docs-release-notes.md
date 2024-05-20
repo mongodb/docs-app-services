@@ -1,3 +1,19 @@
+# May 17, 2024
+
+## Get Started
+
+- Landing Page: Add a card for the C++ tutorial.
+- C++ - Device Sync: New C++ tutorial based on the template app.
+
+## Reference
+
+- Release Notes: Update external changelog with release notes for new App Services CLI platform support for Linux Arm64 machines.
+- Template Apps: Add the C++ template app ID and link to the GitHub repository. Minor procedure updates for UI changes, and minor naming tweaks.
+
+## Other
+
+- Internal: Update test suite dependencies to resolve security vulnerability alerts.
+
 # May 10, 2024
 
 ## Edge Server
