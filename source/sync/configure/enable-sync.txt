@@ -160,6 +160,7 @@ Procedure
             through the Admin API <operation/adminListServices>`:
 
             .. code-block:: shell
+               :caption: Find Your Service's Id
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services \
                  -X GET \
@@ -174,6 +175,7 @@ Procedure
             this service <operation/adminGetServiceConfig>`:
 
             .. code-block:: shell
+               :caption: Get the Service Configuration File
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X GET \
@@ -183,32 +185,26 @@ Procedure
 
          .. step:: Enable Development Mode (optional)
 
-            You may need to enable :ref:`Development Mode <development-mode>` before deploying your changes. 
-            You can use the following command to enable Development Mode:
+            If you would like to enable :ref:`Development Mode <development-mode>` to streamline production, 
+            use the following command:
 
             .. code-block:: shell
+               :caption: Enable Development Mode
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/sync/config \
                  -X PUT \
-                 -h 'Authorization: Bearer <Valid Access Token>'
-                 -h "Content-Type: application/json"
+                 -h 'Authorization: Bearer <Valid Access Token>' \
+                 -h "Content-Type: application/json" \
                  -d '{"development_mode_enabled": true}'
 
-         .. step:: Update and Deploy the Sync Configuration
+         .. step:: Add and Deploy the Sync Configuration
 
             To deploy your changes and start syncing data, send an
-            :admin-api-endpoint:`Admin API request
-            <operation/adminUpdateServiceConfig>` that updates the cluster
-            configuration with the following template sync configuration:
-
-            .. note:: Authenticating Your Request with an Access Token
-
-              To authenticate your request to the App Services Admin API, you need a valid and
-              current authorization token from the MongoDB Cloud API. Read the
-              :admin-api-endpoint:`API Authentication <section/Get-Authentication-Tokens>`
-              documentation to learn how to acquire a valid access token.
+            Admin API request that :admin-api-endpoint:`updates the cluster
+            configuration <operation/adminUpdateServiceConfig>` with the following template sync configuration:
 
             .. code-block:: shell
+               :caption: Update Sync Configuration
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X PATCH \
@@ -217,6 +213,7 @@ Procedure
                  -d '<Flexible Sync Configuration>'
 
             .. code-block:: json
+               :caption: Flexible Sync Configuration
 
                {
                  "flexible_sync": {
@@ -230,4 +227,8 @@ Procedure
                  }
                }
 
+            
             For details on the sync configuration, refer to the :ref:`sync-configuration-reference`.
+
+            You can confirm the configuration is updated by getting the service
+            configuration, as in Step 1. 
