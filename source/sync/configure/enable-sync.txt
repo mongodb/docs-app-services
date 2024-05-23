@@ -155,27 +155,27 @@ Procedure
               :admin-api-endpoint:`API Authentication <section/Get-Authentication-Tokens>`
               documentation to learn how to acquire a valid access token.
 
-            You'll need the cluster's service configuration file to configure sync. You
+            You'll need the cluster's data source configuration file to configure sync. You
             can find the configuration file by :admin-api-endpoint:`listing all services 
             through the Admin API <operation/adminListServices>`:
 
             .. code-block:: shell
-               :caption: Find Your Service's Id
+               :caption: Find Your Cluster's Id
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services \
                  -X GET \
                  -h 'Authorization: Bearer <Valid Access Token>'
 
-            Identify the service whose configuration you need to update to enable
+            Identify the cluster whose configuration you need to update to enable
             Sync. If you have accepted the default names when configuring 
-            your App, this should be a service whose ``name`` is ``mongodb-atlas``
-            and ``type`` is ``mongodb-atlas``. You need this service's ``_id``.
+            your App, this should be a cluster whose ``name`` is ``mongodb-atlas``
+            and ``type`` is ``mongodb-atlas``. You need this cluster's ``_id``.
 
-            Now you can :admin-api-endpoint:`get the configuration file for 
-            this service <operation/adminGetServiceConfig>`:
+            Now you can :admin-api-endpoint:`get the sync configuration file for 
+            this cluster <operation/adminGetServiceConfig>`:
 
             .. code-block:: shell
-               :caption: Get the Service Configuration File
+               :caption: Get the Sync Configuration File for the Cluster
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X GET \
