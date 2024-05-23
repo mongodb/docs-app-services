@@ -171,17 +171,17 @@ Procedure
             your App, this should be a cluster whose ``name`` is ``mongodb-atlas``
             and ``type`` is ``mongodb-atlas``. You need this cluster's ``_id``.
 
-            Now you can :admin-api-endpoint:`get the sync configuration file for 
+            Now you can :admin-api-endpoint:`get the service configuration file for 
             this cluster <operation/adminGetServiceConfig>`:
 
             .. code-block:: shell
-               :caption: Get the Sync Configuration File for the Cluster
+               :caption: Get the Service Configuration File for the Cluster
 
                curl https://services.cloud.mongodb.com/api/admin/v3.0/groups/{GROUP_ID}/apps/{APP_ID}/services/{MongoDB_Service_ID}/config \
                  -X GET \
                  -h 'Authorization: Bearer <Valid Access Token>'
 
-            For details on the sync configuration, refer to the :ref:`sync-configuration-reference`.
+            To configure sync, we will add a ``flexible_sync`` object to this configuration in a following step.
 
          .. step:: Enable Development Mode (optional)
 
@@ -201,7 +201,8 @@ Procedure
 
             To deploy your changes and start syncing data, send an
             Admin API request that :admin-api-endpoint:`updates the cluster
-            configuration <operation/adminUpdateServiceConfig>` with the following template sync configuration:
+            configuration <operation/adminUpdateServiceConfig>` with a 
+            ``flexible_sync`` object with the following template configuration:
 
             .. code-block:: shell
                :caption: Update Sync Configuration
