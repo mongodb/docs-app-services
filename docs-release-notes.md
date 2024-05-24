@@ -1,3 +1,17 @@
+# May 24, 2024
+
+## Device Sync
+
+- Configure Sync/Enable Atlas Device Sync: For the Admin API procedure, add a step for enabling Development Mode and clarify procedure steps for enabling sync.
+
+## Edge Server
+
+- Manage Edge Servers: Add a new "Edge Server Limitations" section with details about Edge Server not supporting time series collections, the full range of MongoDB Aggregation and CRUD APIs, or Data Ingest.
+
+## Secure Your App
+
+- Use a VPC Private Endpoint: Add VPC Private Endpoint note about using IP Access Lists.
+
 # May 17, 2024
 
 ## Get Started
