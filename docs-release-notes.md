@@ -10,7 +10,7 @@
 
 ## Secure Your App
 
-- Use a VPC Private Endpoint: Add VPC Private Endpoint note about using IP Access Lists.
+- Use a VPC Private Endpoint: Add a note about using VPC Private Endpoint with IP Access Lists.
 
 # May 17, 2024
 
