@@ -2,7 +2,7 @@
 
 ## Device Sync
 
-- Configure Sync/Enable Atlas Device Sync: For the Admin API procedure, add a step for enabling Development Mode and clarify procedure steps for enabling sync.
+- Configure Sync/Enable Atlas Device Sync: For the Admin API procedure, add a step for enabling Development Mode and clarify procedure steps for enabling Sync.
 
 ## Edge Server
 
