@@ -4,7 +4,7 @@
 Data Model Mapping
 ==================
 
-.. meta:: 
+.. meta::
    :keywords: code example
    :description: Learn about how data types in the Atlas App Services Schema map to objects used by Atlas Device SDK.
 
@@ -39,34 +39,34 @@ refer to the :ref:`Sync Data Model Overview <sync-schema-overview>`.
 Databases, Collections, and Objects
 -----------------------------------
 
-When you configure Device Sync, you :ref:`specify the data source 
-<sync-config-data-source>` where you want to store data. This data source 
-may contain multiple databases, and each database may contain multiple 
+When you configure Device Sync, you :ref:`specify the data source
+<sync-config-data-source>` where you want to store data. This data source
+may contain multiple databases, and each database may contain multiple
 collections.
 
-The :ref:`App Services schema <schemas>` maps your Realm Database object 
-names to collections in databases in your Device Sync data source. The 
-``title`` field in an App Services schema maps to the object type name in 
-Realm Database. Because the ``title`` name determines the mapping between 
+The :ref:`App Services schema <schemas>` maps your Realm Database object
+names to collections in databases in your Device Sync data source. The
+``title`` field in an App Services schema maps to the object type name in
+Realm Database. Because the ``title`` name determines the mapping between
 client objects and the appropriate Atlas collection, this name must be
 unique among all schemas in your synced data source.
 
-The ``title`` does not need to match the collection name. 
+The ``title`` does not need to match the collection name.
 
 .. example::
 
-   Consider an app with a database named ``Pets``. It may contain multiple 
+   Consider an app with a database named ``Pets``. It may contain multiple
    collections, such as ``Canine`` and ``Feline``. The App Services schema
-   for the ``Canine`` collection might resemble :ref:`the example below 
-   <sync-app-services-schema-dog-example>`, where the ``title`` field of 
-   the schema is ``Dog``. That would map a Realm Database object called 
+   for the ``Canine`` collection might resemble :ref:`the example below
+   <sync-app-services-schema-dog-example>`, where the ``title`` field of
+   the schema is ``Dog``. That would map a Realm Database object called
    ``Dog`` to the ``Canine`` collection in the ``Pets`` database.
 
-   You could not have another schema whose ``title`` was ``Dog`` in the 
-   same cluster. For example, you could not sync an object with a ``title`` 
-   of ``Dog`` to both a ``Debug`` and a ``Test`` database in the 
-   same cluster. If you want to sync the same object to different 
-   collections for app development purposes, you must use different 
+   You could not have another schema whose ``title`` was ``Dog`` in the
+   same cluster. For example, you could not sync an object with a ``title``
+   of ``Dog`` to both a ``Debug`` and a ``Test`` database in the
+   same cluster. If you want to sync the same object to different
+   collections for app development purposes, you must use different
    data sources - one cluster for development and a different cluster
    for production.
 
@@ -75,44 +75,44 @@ The ``title`` does not need to match the collection name.
 Mapping with Development Mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When you :ref:`enable Development Mode <enable-development-mode>` in your 
-Device Sync configuration, App Services can automatically create collections 
-and schemas for Realm Database objects that you sync. It creates those 
-collections in the :ref:`database you specify 
+When you :ref:`enable Development Mode <enable-development-mode>` in your
+Device Sync configuration, App Services can automatically create collections
+and schemas for Realm Database objects that you sync. It creates those
+collections in the :ref:`database you specify
 <sync-config-database-name>` when you enable Development Mode.
 
-With Development Mode enabled, Sync looks for a collection whose App Services 
-schema has a ``title`` that matches the name of your Realm Database object 
-type. This collection could be in any database in your linked data source. 
-It doesn't have to be in the database you add when you configure 
+With Development Mode enabled, Sync looks for a collection whose App Services
+schema has a ``title`` that matches the name of your Realm Database object
+type. This collection could be in any database in your linked data source.
+It doesn't have to be in the database you add when you configure
 Development Mode.
 
-If there is no corresponding ``title`` in any App Services schema in your 
-linked data source, App Services creates a new collection for this object 
-type. This collection is created in the database you specify when you enable 
-Development Mode. The collection name matches the object's type, and the 
-corresponding App Services schema has a ``title`` field whose value is the 
-name of the object type. This creates the mapping between your Realm 
+If there is no corresponding ``title`` in any App Services schema in your
+linked data source, App Services creates a new collection for this object
+type. This collection is created in the database you specify when you enable
+Development Mode. The collection name matches the object's type, and the
+corresponding App Services schema has a ``title`` field whose value is the
+name of the object type. This creates the mapping between your Realm
 Database object and the new collection.
 
 .. example::
 
-   Consider an Atlas cluster with a database named ``Pets``. It contains a 
-   ``Feline`` collection with existing data. 
-   
+   Consider an Atlas cluster with a database named ``Pets``. It contains a
+   ``Feline`` collection with existing data.
+
    In your application code, you define a new ``Dog`` object. You enable
-   Development Mode, and specify the ``Pets`` database as the database 
+   Development Mode, and specify the ``Pets`` database as the database
    in which to create collections for new object types. When you sync your
-   new ``Dog`` object, App Services creates a ``Dog`` collection in the 
-   ``Pets`` database and creates a schema for it. The ``title`` of the 
+   new ``Dog`` object, App Services creates a ``Dog`` collection in the
+   ``Pets`` database and creates a schema for it. The ``title`` of the
    object in the schema is ``Dog``.
 
-   If you later add a new ``Person`` object to your application code and 
-   then sync it, App Services creates a new collection for this 
-   ``Person`` object in the ``Pets`` database. If you wanted to create a 
-   collection for the ``Person`` object in a different database, you 
+   If you later add a new ``Person`` object to your application code and
+   then sync it, App Services creates a new collection for this
+   ``Person`` object in the ``Pets`` database. If you wanted to create a
+   collection for the ``Person`` object in a different database, you
    could :ref:`enforce-a-schema` for the ``Person`` object
-   in a different database. Or you could disable and re-enable Development 
+   in a different database. Or you could disable and re-enable Development
    Mode, and select a different database in which to create new collections.
 
 .. _object-schema:
@@ -136,7 +136,7 @@ A conventional approach is to name each object type with a singular
 noun, like "Dog" or "Person". Schemas generated in development mode or
 by sampling existing documents use this convention.
 
-.. note:: 
+.. note::
 
    To work with Atlas Device Sync, type names cannot exceed {+name-char-limit+} UTF-8 characters.
 
@@ -188,7 +188,7 @@ You can configure the following constraints for a given property:
        value for a defined property, the object uses the default value
        instead.
 
-       If you open a Realm in the client with a schema subset that doesn't 
+       If you open a Realm in the client with a schema subset that doesn't
        include a required property, the server will automatically
        populate the value of the required property with a zero or blank
        default value.
@@ -221,7 +221,7 @@ Array Properties
 
 Both Realm Object Schemas and App Services Schemas support array properties.
 
-You can find information on using array data types in the following Atlas 
+You can find information on using array data types in the following Atlas
 Device SDK documentation:
 
 - :ref:`cpp-supported-property-types`
@@ -246,11 +246,11 @@ Mixed Properties
 Both Realm Object Schemas and App Services Schemas support mixed
 type properties.
 
-A mixed field can contain any supported data type and 
+A mixed field can contain any supported data type and
 functionally acts as an object or document without a pre-defined
-structure. 
+structure.
 
-For more information on modeling mixed properties in 
+For more information on modeling mixed properties in
 an App Services Schema, refer to :ref:`Mixed - Schema Types <schema-type-mixed>`.
 
 Collections in Mixed Properties
@@ -258,19 +258,51 @@ Collections in Mixed Properties
 
 .. include:: /includes/note-collections-in-mixed-sync.rst
 
-You can leverage collections (arrays or dictionaries) in mixed properties to store data that does not fit into a
-pre-defined schema, such as variable JSON data or complex MongoDB documents. Because collections of mixed data can contain other collections of
-mixed data, you can nest data into complex structures. 
-For an example, refer to the :ref:`nested-collections-data-model-example` on this page.
+You can leverage collections (arrays or dictionaries) in mixed properties to
+store data that does not fit into a pre-defined schema, such as variable JSON
+data or complex MongoDB documents. Because collections of mixed data can contain
+other collections of mixed data, you can nest data into complex structures. For
+an example, refer to the :ref:`nested-collections-data-model-example` on this page.
 
-You can store collections in mixed data types in an App Services schema or in an object models for the following Device SDKs:
+You can store collections in mixed data types in an App Services schema or in an
+SDK object model schema. Collections in mixed data requires the following minimum SDK versions:
 
-- :ref:`Flutter SDK - RealmValue <flutter-realm-value>` (v2.0.0 or later)
-- :ref:`.NET SDK - RealmValue <dotnet-realm-value>` (v12.0.0 or later)
-   
-Support for other SDKs will be added in future releases.
+.. list-table::
+   :widths: 70 30
 
-.. TODO: Add links to other SDKs when available.
+   * - C++ SDK
+     - Not currently supported.
+   * - Flutter SDK
+     - v2.0.0 or later
+   * - Java SDK
+     - Unsupported.
+   * - Kotlin SDK
+     - v2.0.0 or later
+   * - .NET SDK
+     - v12.2.0 or later
+   * - Node.js SDK
+     - v12.9.0 or later
+   * - React Native SDK
+     - v12.9.0 or later
+   * - Swift SDK
+     - Not currently supported.
+
+Atlas Device SDK mixed data type documentation:
+
+- :ref:`Mixed - C++ SDK <cpp-supported-property-types>`
+- :ref:`RealmValue - Flutter SDK <flutter-realm-value>`
+- :ref:`RealmAny <java-realmany>`
+- :ref:`RealmAny - Kotlin SDK <kotlin-realmany>`
+- :ref:`RealmValue - .NET SDK <realmvalue>`
+- :ref:`Mixed - Node.js SDK <node-data-types-mixed>`
+- :ref:`Mixed - React Native <react-nativedata-types-mixed>`
+- :ref:`AnyRealmValue - Swift SDK <ios-mixed-data-type>`
+
+.. note:: New Java SDK apps cannot use ``RealmAny``
+
+    New :ref:`App Services Apps </app-services/apps/>` using Java SDK
+    will not be able to synchronize data models with properties of type
+   ``RealmAny``.
 
 Embedded Objects
 ~~~~~~~~~~~~~~~~
@@ -369,25 +401,25 @@ refer to :ref:`Relationships <relationships>`.
 Geospatial Data
 ---------------
 
-Geospatial data describes points and other data on the earth's surface. App 
+Geospatial data describes points and other data on the earth's surface. App
 Services does not have built-in geospatial types. Instead, you model geographic
 data using standard GeoJSON objects. For more information on geospatial data, refer to :ref:`Schema Types <schema-types>`.
 
 GeoJSON Points and Device Sync Queries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GeoPoints are the only form of geospatial data that Device Sync can 
-query. The Device Sync server validates every embedded GeoPoint property with 
+GeoPoints are the only form of geospatial data that Device Sync can
+query. The Device Sync server validates every embedded GeoPoint property with
 the rules outlined above.
 
-If a device writes an object that fails validation, it will be reverted with a 
-:ref:`compensating write error <flexible-sync-errors>`. If a document that doesn't 
-meet these requirements is written directly to the MongoDB collection, the server 
+If a device writes an object that fails validation, it will be reverted with a
+:ref:`compensating write error <flexible-sync-errors>`. If a document that doesn't
+meet these requirements is written directly to the MongoDB collection, the server
 marks that document as :ref:`unsyncable <unsynced-documents>`.
 
-You can query a GeoPoint using :ref:`Realm Query Language (RQL) <rql>`, 
-using ``geoWithin`` to do so. Although GeoPoints are the only stored type you 
-can query, your query may contain other geospatial types. For example, 
+You can query a GeoPoint using :ref:`Realm Query Language (RQL) <rql>`,
+using ``geoWithin`` to do so. Although GeoPoints are the only stored type you
+can query, your query may contain other geospatial types. For example,
 this partial query looks for all points within the specified GeoCircle:
 
 .. code-block:: json
@@ -628,7 +660,7 @@ Data in Atlas
 ~~~~~~~~~~~~~
 
 An application using Device Sync for the ``Dog`` data model creates MongoDB documents
-in Atlas based on the previous schemas. 
+in Atlas based on the previous schemas.
 
 Example Document
 ````````````````
@@ -640,7 +672,7 @@ Example Document
      "_id": ObjectId('616f44305a205add93ff1081'),
      "age": 8,
      "breed": "Golden Retriever",
-     "name": "Jasper", 
+     "name": "Jasper",
      "details": null
    }
 
@@ -660,7 +692,7 @@ data type. This can resemble the following example:
      "_id": ObjectId('616f44305a205add93ff1081'),
      "age": 8,
      "breed": "Golden Retriever",
-     "name": "Jasper", 
+     "name": "Jasper",
      "details": {
        "vaccinations": ["rabies", "distemper"],
        "weight": 65.5,
