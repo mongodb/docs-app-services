@@ -4,8 +4,6 @@
 appservices users list
 ======================
 
-.. default-domain:: mongodb
-
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -41,7 +39,7 @@ Options
    * - -a, --app
      - string
      - false
-     - Specify the name or ID of an App Service to list its users’
+     - Specify the name or ID of an App Service to list its users
    * - --project
      - string
      - false
@@ -62,6 +60,10 @@ Options
      - Set
      - false
      - Filter the Realm app's users by provider type (Default value: <none>; Allowed values: <none>, "local-userpass", "api-key", "oauth2-facebook", "oauth2-google", "anon-user", "custom-token", "oauth2-apple", "custom-function") This value defaults to [].
+   * - -l, --limit
+     - string
+     - false
+     - Specify the number of users to list. A max of 50 users can be retured in one call. 
    * - -h, --help
      - 
      - false
@@ -81,7 +83,7 @@ Inherited Options
    * - --profile
      - string
      - false
-     - Specify your profile (Default value: "default")
+     - Specify your profile (Default value: "default") [`Learn more <https://www.mongodb.com/docs/atlas/app-services/cli/#cli-profiles>`__]
    * - --telemetry
      - string
      - false

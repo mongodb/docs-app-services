@@ -1,0 +1,299 @@
+.. _edge-server-permissions-guide:
+
+=============================
+Edge Server Permissions Guide
+=============================
+
+.. meta::
+  :keywords: code example
+   :description: Learn how to configure permissions for Edge Servers and client connections.
+
+.. facet::
+   :name: programming_language
+   :values: json
+
+.. facet::
+   :name: genre 
+   :values: reference
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+Edge Server data access is governed by the intersection of:
+
+- Role-based permissions
+- User authentication
+- The query used to sync data to the Edge Server instance
+- If using Atlas Device SDK, the query used to sync data with the client
+
+Edge Server supports role-based permissions at the document and field level. 
+This page explores high-level Edge Server and client permissions configuration,
+and provides examples to illustrate basic permissions principles.
+
+Related documentation:
+
+- If you are new to role-based permissions in Atlas, get an overview of 
+  the permissions engine at :ref:`permissions`.
+- For information about how to define roles and permissions, refer to 
+  :ref:`define-roles-and-permissions`.
+- Edge Server uses Device Sync to sync data between the Edge Server instances
+  and Atlas. Edge Server and client roles must use 
+  :ref:`Device Sync-compatible permissions <device-sync-compatibility>`.
+
+.. _edge-server-permissions:
+
+Edge Server Permissions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+An Edge Server instance is a user, similar to other incoming client 
+connections. The Edge Server must authenticate with Atlas, and it has its 
+own permissions to determine what data the instance can read and write.
+
+You can configure rules to generally apply to all Edge Servers in your service.
+Or you can get more granular with rules to specify a subset of data that
+the Edge Server instance can read and write.
+
+All Edge Servers
+````````````````
+
+You can create a role that applies to all Edge Server instances by specifying
+an ``applyWhen`` :ref:`rule expression <expressions>` where the 
+:ref:`%%user_type <rule-expression-user-expansion>` is ``edge``:
+
+.. code-block:: json
+
+   {
+     "name": "edgeServerRole",
+     "apply_when": {
+       "%%user.type": "edge"
+     },
+     ...customize the permissions for all Edge Server instances...
+   }
+
+For example, if your data set does not contain sensitive data, such as a 
+weather service, you might add a role stating that Edge Servers can read and 
+write all data:
+
+.. code-block:: json
+
+   {
+     "name": "readAndWriteAll",
+     "apply_when": {
+       "%%user.type": "edge"
+     },
+     "document_filters": {
+       "read": true,
+       "write": true
+     },
+     "insert": true,
+     "delete": true,
+     "search": true,
+     "read": true,
+     "write": true
+   }
+
+A Specific Edge Server
+``````````````````````
+
+In some cases, your business logic means you only want to sync a subset of the
+data to a given Edge Server instance. For example, you might want to restrict
+an Edge Server to a subset of the data when:
+
+- The data set contains PII or other sensitive data that should not sync to 
+  every Edge Server instance
+- It's a large data set that you don't want to sync to resource-constrained 
+  devices
+- The Edge Server host is untrusted hardware that should have the minimum data
+  required to complete a task
+- Data is region-constrained for legal or regulatory purposes, and you only 
+  want to sync the data relevant to the Edge Server's region
+
+You can use permissions to filter a specific instance's access to a subset of 
+the data. Or you can use permissions to configure an Edge Server instance to 
+read data, but not write it.
+
+Because every Edge Server instance is a user, you can use the Edge Server's
+``user_id`` to configure permissions for a given instance. You can create a 
+role that restricts the data that syncs with a specific Edge Server instance
+using a :ref:`rule expression <expressions>` where the 
+:ref:`%%user_id <rule-expression-user-expansion>` is the Edge Server's 
+``user_id``. You can get the Edge Server instance ``user_id`` from the
+:ref:`edge-server-details`, or from the 
+:admin-api-endpoint:`Admin API List Edge Servers <operation/adminGetAllEdgeServerInstances>`
+endpoint.
+
+Read/Write Own Documents
+++++++++++++++++++++++++
+
+You can restrict an Edge Server instance to read and write only its own 
+documents using the ``user_id``. 
+
+For example, if an Edge Server instance represents a healthcare clinic, you 
+might only want to sync data relevant to that clinic's patients.
+
+In this example, every document has a ``facility_id`` property whose value is
+the Edge Server's ``user_id``. This role means that the Edge Server can only
+read and write documents with a ``facility_id`` matching its own ``user_id``.
+
+.. code-block:: json
+
+   {
+     "name": "facilityItemsOnly",
+     "apply_when": {
+       "%%user.type": "edge"
+     },
+     "document_filters": {
+       "write": {
+         "facility_id": "%%user.id"
+       },
+       "read": {
+         "facility_id": "%%user.id"
+       },
+     },
+     "read": true,
+     "write": true,
+     "insert": true,
+     "delete": true,
+     "search": true
+   }
+
+Read All, Write Own Documents
++++++++++++++++++++++++++++++
+
+You can configure an Edge Server instance to be able to read all data, but
+write only its own data. For example, in a retail setting, an Edge Server 
+instance might represent a store inventory system. You might want the store to
+have the ability to search across all inventory for an item, but only sell 
+items in its own inventory.
+
+.. code-block:: json
+   :emphasize-lines: 7-10
+
+   {
+     "name": "readAllWriteOnlyStoreItems",
+     "apply_when": {
+       "%%user.type": "edge"
+     },
+     "document_filters": {
+       "write": {
+         "store_id": "%%user.id"
+       },
+       "read": true
+     },
+     "read": true,
+     "write": true,
+     "insert": true,
+     "delete": true,
+     "search": true
+   }
+
+Client Permissions
+~~~~~~~~~~~~~~~~~~
+
+Clients that connect to an Edge Server instance have their own permissions. 
+You can think of an Edge Server instance's permissions as a filter between the
+data in Atlas and the data that a client can read and write.
+
+In a healthcare setting similar to the Edge server instance example above, the
+Edge Server instance may only read and write data that is relevant to its own 
+facility. A second role may then further restrict the permissions for connected
+clients. For example, a patient in the facility may only view their own data.
+
+You represent these as independent roles within the ``roles`` array.
+
+The rules engine evaluates each role's ``apply_when`` expression in the order
+that you specify them. The first role whose ``apply_when`` expression evaluates
+to ``true`` becomes the assigned role. When no role matches, access is denied.
+
+In this example, a ``PatientRecords`` database has a ``Visits`` collection.
+The two roles determine which documents the Edge Server instance can sync,
+and which documents an individual client connected to the instance can sync:
+
+- The ``facilityItemsOnly`` role filters items that sync to the Edge Server
+  instance. The only items that sync to the facility are records where the
+  ``facility_id`` matches the Edge Server instance ``user_id``.
+- The ``patientOwnRecordsOnly`` role filters items that can sync to a connected
+  client device. The only items that sync to a connected client are visits 
+  where the ``patient_id`` is the client's ``user_id``.
+
+.. code-block:: json
+
+   {
+     "collection": "Visits",
+     "database": "PatientRecords",
+     "roles": [
+       {
+         "name": "facilityItemsOnly",
+         "apply_when": { 
+           "%%user.type": "edge"
+         },
+         "document_filters": {
+           "write": {
+             "facility_id": "%%user.id"
+           },
+           "read": {
+             "facility_id": "%%user.id"
+           },
+         },
+         "insert": true,
+         "delete": true,
+         "search": true,
+         "read": true,
+         "write": true
+       },
+       {
+         "name": "patientOwnRecordsOnly",
+         "apply_when": {},
+         "document_filters": {
+           "write": {
+             "patient_id": "%%user.id"
+           },
+           "read": {
+             "patient_id": "%%user.id"
+           }
+         },
+         "read": true,
+         "write": true,
+         "insert": true,
+         "delete": true,
+         "search": true
+       }
+     ]
+   }
+
+.. important:: Role order matters
+
+   In this example, the first entry in the ``roles`` array is the
+   Edge Server role, whose ``apply_when`` expression only applies to the Edge 
+   Server. When the client is evaluating roles, the first role evaluates to 
+   ``false`` for the client, so it proceeds to the next role. If the first 
+   entry was the client role, with an empty ``apply_when`` expression, that 
+   role would evaluate to ``true`` for the Edge Server. Since the Edge 
+   Server's ``user_id`` would never match a ``patient_id``, no documents would
+   sync to the Edge Server.
+
+In a setting where you have many different types of clients that should each
+have access to a subset of the data, you may define many different client 
+roles. For example, in a healthcare setting, you may use different roles for:
+
+- Patients: provide access to only their own medical records and address billing 
+  information.
+- Billing specialists: provide access to all patient address and billing 
+  information, but not medical records.
+- Doctors: provide access to all patient medical records, but not address and
+  billing information.
+
+.. figure:: /images/field-level-permissions.png
+   :alt: Documents showing different data available to three different roles - a patient, a billing specialist, and a doctor.
+   :lightbox:
+
+Field-Level Permissions
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Edge Server also supports :ref:`field-level-permissions`, which determine read 
+or write access to specific fields in a document. You can define 
+field-level permissions for the Edge Server instance, for the clients that
+connect to the Edge Server instance, or both.

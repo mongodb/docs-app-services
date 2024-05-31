@@ -1,10 +1,8 @@
-.. _appservices-users-count:
+.. _appservices-function-list:
 
-=======================
-appservices users count
-=======================
-
-.. default-domain:: mongodb
+=========================
+appservices function list
+=========================
 
 .. contents:: On this page
    :local:
@@ -12,7 +10,9 @@ appservices users count
    :depth: 1
    :class: singlecol
 
-Displays the number of total application users of your app, across all Auth Provider types.
+List the functions of your app
+
+Displays a list of your app's functions and their directories. Test files will not be taken into account. Navigate to a function's directory to access its source and view its arguments.
 
 Syntax
 ------
@@ -20,7 +20,7 @@ Syntax
 .. code-block::
    :caption: Command Syntax
 
-   appservices users count [options]
+   appservices function list [options]
 
 .. Code end marker, please don't delete this comment
 
@@ -35,18 +35,14 @@ Options
      - Type
      - Required
      - Description
-   * - -a, --app
+   * - --local
      - string
      - false
-     - Specify the name or ID of an App Service to display number of users’
-   * - --project
-     - string
-     - false
-     - Specify the ID of a MongoDB Atlas project
+     - Specify the local filepath of an app to list functions from
    * - -h, --help
      - 
      - false
-     - help for count
+     - help for list
 
 Inherited Options
 -----------------
@@ -62,7 +58,7 @@ Inherited Options
    * - --profile
      - string
      - false
-     - Specify your profile (Default value: "default") [`Learn more <https://www.mongodb.com/docs/atlas/app-services/functions/#call-from-app-services-cli>`__]
+     - Specify your profile (Default value: "default") [`Learn more <https://www.mongodb.com/docs/atlas/app-services/cli/#cli-profiles>`__]
    * - --telemetry
      - string
      - false

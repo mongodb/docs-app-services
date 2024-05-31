@@ -4,6 +4,9 @@
 Edge Server MongoDB API Support
 ===============================
 
+.. meta:: 
+   :description: Edge Server natively supports a subset of MongoDB CRUD APIs.
+
 .. facet::
    :name: genre 
    :values: reference
@@ -14,7 +17,7 @@ Edge Server MongoDB API Support
    :depth: 2
    :class: singlecol
 
-Atlas Edge Server natively implements a subset of the MongoDB wire protocol,
+Atlas Edge Server natively implements a subset of the MongoDB Wire Protocol,
 which allows you to access your Atlas data on the Edge using standard
 MongoDB drivers and tools. 
 
@@ -23,13 +26,13 @@ send requests. For more information about how to connect to the Edge Server
 using a MongoDB connection string, refer to :ref:`edge-server-wireprotocol-connect`.
 
 Edge Server currently supports a subset of the MongoDB APIs over the 
-wire protocol.
+Wire Protocol.
 
 CRUD APIs
 ---------
 
 Edge Server currently supports using these MongoDB CRUD APIs over the 
-wire protocol.
+Wire Protocol.
 
 For examples of using these commands, refer to the documentation for the
 Driver or tool you're using to execute these commands.
@@ -71,6 +74,11 @@ matching documents.
   ``collection.updateOne()`` method.
 - You can update multiple documents in a collection using the
   ``collection.updateMany()`` method.
+- You can find and update one or more documents in a collection using the
+  ``collection.findAndModify()`` method. This action allows you to atomically 
+  find, modify, and return one or more documents with the same command. This 
+  avoids the risk of other update operations changing the documents between 
+  separate find and update operations.
 
 .. note:: 
 

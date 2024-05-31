@@ -4,8 +4,6 @@
 appservices function run
 ========================
 
-.. default-domain:: mongodb
-
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -14,7 +12,7 @@ appservices function run
 
 Run a Function from your app
 
-Functions allow you to define and execute server-side logic for your app. Once
+Functions allow you to define and execute server-side logic for your app. Once 
 you select and run a Function for your app, the following will be displayed:
 
 - A list of logs, if present
@@ -57,11 +55,27 @@ Options
    * - --args
      - stringArray
      - false
-     - Specify the args to pass to your function [Learn more: https://www.mongodb.com/docs/atlas/app-services/functions/#call-from-app-services-cli]
+     - Specify the args to pass to your function [`Learn more <https://www.mongodb.com/docs/atlas/app-services/functions/#call-from-app-services-cli>`__]
    * - --user
      - string
      - false
      - Specify which user to run the function as (Note: Using <none> will run as the System user) (Default value: <none>; Allowed values: <none>, <userID>)
+   * - --local
+     - string
+     - false
+     - Specify the local filepath of an app to run functions from
+   * - --use-local-app
+     - 
+     - false
+     - Run function from local app
+   * - --include-node-modules
+     - 
+     - false
+     - Include node_modules as a dependency
+   * - --include-package-json
+     - 
+     - false
+     - Include package.json as a dependency
    * - -h, --help
      - 
      - false
@@ -81,7 +95,7 @@ Inherited Options
    * - --profile
      - string
      - false
-     - Specify your profile (Default value: "default")
+     - Specify your profile (Default value: "default") [`Learn more <https://www.mongodb.com/docs/atlas/app-services/cli/#cli-profiles>`__]
    * - --telemetry
      - string
      - false

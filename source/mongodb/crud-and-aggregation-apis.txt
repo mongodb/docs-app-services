@@ -4,7 +4,13 @@
 CRUD & Aggregation APIs
 =======================
 
-.. default-domain:: mongodb
+.. facet::
+   :name: genre 
+   :values: reference
+
+.. meta:: 
+   :description: Use supported MongoDB CRUD operations, aggregation methods, and limited database commands with your Atlas data source.
+
 
 .. contents:: On this page
    :local:
@@ -598,21 +604,14 @@ Aggregation Pipeline Operator Availability
 App Services supports all :manual:`aggregation pipeline operators
 </reference/operator/aggregation/>` when you :ref:`run an aggregation pipeline
 <mongodb-aggregate>` in the :ref:`system user
-<system-functions>` context. App Services supports all pipeline operators
-in an :ref:`application user <user-accounts>` context with the following
-exceptions:
+<system-functions>` context. 
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 10 10
+App Services supports all pipeline operators
+in an :ref:`application user <user-accounts>` context except for the following
+operators:
 
-   * - Operator
-     - User Context
-     - System Context
-
-   * - :manual:`$function </reference/operator/aggregation/function/>`
-     - No
-     - Yes
+- :manual:`$function </reference/operator/aggregation/function/>`
+- :manual:`$setIsSubset </reference/operator/aggregation/setIsSubset/>`
 
 .. _mongodb-crud-and-aggregation-apis-database-commands:
 

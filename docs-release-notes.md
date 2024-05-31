@@ -1,3 +1,92 @@
+# May 24, 2024
+
+## Device Sync
+
+- Configure Sync/Enable Atlas Device Sync: For the Admin API procedure, add a step for enabling Development Mode and clarify procedure steps for enabling Sync.
+
+## Edge Server
+
+- Manage Edge Servers: Add a new "Edge Server Limitations" section with details about Edge Server not supporting time series collections, the full range of MongoDB Aggregation and CRUD APIs, or Data Ingest.
+
+## Secure Your App
+
+- Use a VPC Private Endpoint: Add a note about using VPC Private Endpoints with IP Access Lists.
+
+# May 17, 2024
+
+## Get Started
+
+- Landing Page: Add a card for the C++ tutorial.
+- C++ - Device Sync: New C++ tutorial based on the template app.
+
+## Reference
+
+- Release Notes: Update external changelog with release notes for new App Services CLI platform support for Linux Arm64 machines.
+- Template Apps: Add the C++ template app ID and link to the GitHub repository. Minor procedure updates for UI changes, and minor naming tweaks.
+
+## Other
+
+- Internal: Update test suite dependencies to resolve security vulnerability alerts.
+
+# May 10, 2024
+
+## Edge Server
+
+- Configure Edge Server: New "Simulate Offline Connectivity" section describing how to use offline demo mode.
+
+# May 3, 2024
+
+## Edge Server
+
+- Landing Page:
+  - Update details for Public Preview. Add information about using MongoDB Drivers and tools. Update existing information about Atlas Device SDK-specific behavior.
+  - Landing Page: Add marketing CTA and link to Public Preview announcement blog entry.
+- Manage Edge Servers: New page describing how to manage Edge Servers in Atlas.
+- Configure Edge Server:
+  - Update the page for the Public Preview. Add `edgectl` commands and build out new sections with additional details.
+  - Add information about managing `edgectl` profiles with the various `profile` commands.
+  - New "Simulate Offline Connectivity" section describing how to use offline demo mode.
+- Connect to an Edge Server: Update the page for the Public Preview. Add details about roaming with Atlas Device SDK, connecting with the Wire Protocol with authentication, and connecting with Compass.
+- Edge Server MongoDB API Support: Add `findAndModify` command to update options.
+- Edge Server Permissions Guide: New page providing a high-level overview of Edge Server permissions and how they relate to client permissions.
+- Monitor Edge Server: New page with information about Edge Server logs, metrics, and status.
+
+## Reference
+
+- Admin API: New Edge Server endpoints:
+  - List Edge Server instances
+  - Get information about an Edge Server instance
+  - Create an Edge Server instance
+  - Delete an Edge Server instance
+  - Regenerate an Edge Server registration key
+  - Rename an Edge Server instance
+- Billing: New "Atlas Edge Server" section with high-level information about billing while in Public Preview.
+
+## Release Notes
+
+- Update external changelog with release notes for App Services CLI updates.
+
+# April 26, 2024
+
+## Tutorials
+
+- Change "Get Started" TOC entry to "Tutorials".
+- Flip the TOC construction for tutorial pages from "Device Sync Tutorial - " to " - Device Sync".
+- Individual tutorial pages:
+  - Update page titles to clearly indicate they're tutorials and include product names.
+  - Add meta descriptions and keywords to those that didn't have them.
+
+## Connect to MongoDB Data Sources 
+
+- CRUD & Aggregation APIs: Add `$setisSubset` to list of unsupported pipeline operators.
+
+## Reference
+
+- App Services CLI
+  - `functions run`: Add `--use-local-app` flag.
+  - `users list`: Add `--limit` flag.
+  - `functions list`: New command to list all Functions in an app.
+
 # April 19, 2024
 
 ## Develop & Deploy Apps

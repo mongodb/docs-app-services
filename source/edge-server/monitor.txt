@@ -1,0 +1,232 @@
+.. _edge-server-monitor:
+
+===================
+Monitor Edge Server
+===================
+
+.. meta::
+   :description: Learn how to monitor Edge Server instances.
+
+.. facet::
+   :name: genre 
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 1
+   :class: singlecol
+
+You can view metrics and logs for your Edge Server instances to get a general 
+health status, or information about usage, performance, and errors.
+
+You can monitor an instance:
+
+- In the Atlas UI
+- In a UI on the local hardware
+- Through Admin API calls
+
+You can also forward logs to a MongoDB collection or an external service.
+
+This page contains details about how to view metrics and logs for your 
+Edge Server instances, and what information is available.
+
+Before You Begin
+----------------
+
+.. tabs::
+
+   .. tab:: Atlas UI
+      :tabid: atlas-ui
+
+      You need the following to manage Edge Servers in the Atlas UI:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+   
+   .. tab:: Local UI
+      :tabid: local-ui
+
+      The local UI is enabled by default, and only requires a running
+      Edge Server instance.
+
+      On an untrusted host, you can disable the local UI by running the
+      following ``edgectl`` command:
+
+      .. code-block:: console
+
+         edgectl config --disable-local-ui=true
+
+   .. tab:: Admin API
+      :tabid: api
+
+      You need the following to manage Edge Servers with the Admin API:
+
+      - .. include:: /includes/prereqs/atlas-account.rst
+
+      - .. include:: /includes/prereqs/atlas-admin-api-key.rst
+
+      - .. include:: /includes/prereqs/api-project-app-id.rst
+
+.. _edge-server-status:
+
+Get Edge Server Instance Status
+-------------------------------
+
+You can get details about the status of Edge Server instance in a few ways:
+
+- View the Edge Server instance details in the Atlas UI
+- View the status details in the local UI
+- Use ``edgectl`` to check the status
+- Make a request to the relevant Admin API endpoint
+
+The available details vary depending on how you access them.
+
+.. tabs::
+
+   .. tab:: Atlas UI
+      :tabid: atlas-ui
+
+      .. include:: /includes/edge/atlas-ui-get-edge-server-list-details.rst
+
+      The information available when viewing an Edge Server instance varies
+      depending on the instance state. For details, refer to 
+      :ref:`edge-server-details`.
+   
+   .. tab:: Local UI
+      :tabid: local-ui
+
+      To access the local UI, open a web browser and go to ``localhost``
+      on the ``http-port``. You can access the local UI on the default port 
+      at: ``http://localhost:80``
+
+      You can change the port by providing an alternative port as an ``Int`` 
+      with the following ``edgectl`` flag:
+
+      .. code-block:: console
+
+         edgectl config --http-port=<YOUR-PORT-INT>
+
+   .. tab:: edgectl
+      :tabid: edgectl
+
+      .. include:: /includes/edge/edgectl-status.rst
+
+   .. tab:: Admin API
+      :tabid: api
+
+      .. include:: /includes/edge/admin-api-get-edge-server-status.rst
+
+.. _edge-server-logs:
+
+Edge Server Logs
+----------------
+
+Edge Server uses the following log types:
+
+- :ref:`authentication-logs`: When an Edge Server instance attempts to 
+  authenticate with Atlas, or clients attempt to authenticate with an Edge
+  Server instance, this generates an authentication log.
+- :ref:`logs-sync`: When an Edge Server instance syncs with Atlas, or an 
+  Atlas Device SDK client syncs with Edge Server, this generates a Device Sync
+  log.
+
+Access Edge Server Logs
+~~~~~~~~~~~~~~~~~~~~~~~
+
+You can access your logs with the Admin API's
+:admin-api-endpoint:`Admin API Retrieve App Services logs <operation/adminGetLogs>`
+endpoint. Filter for the ``user_id`` matching the Edge Server instance 
+``user_id``. Or you can view logs when viewing :ref:`edge-server-details` in 
+the Atlas UI.
+
+Forward Edge Server Logs
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can configure log forwarders to store logs in a MongoDB collection or
+send them to an external service. For more information, refer to 
+:ref:`forward-logs`.
+
+.. _edge-server-metrics:
+
+Edge Server Metrics
+-------------------
+
+An Edge Server instance tracks a variety of metrics about:
+
+- The host hardware
+- Requests
+- Wire Protocol connections, and their activity
+- Sync
+
+You can access your metrics data with the Admin API's
+:admin-api-endpoint:`Admin API Get Edge Server information <operation/adminGetEdgeServerInstance>`
+endpoint. Or you can view a subset of these metrics when viewing 
+:ref:`edge-server-details` in the Atlas UI.
+
+The exact metrics returned may be subject to change.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 16 12 10 12 50
+
+   * - Metric key
+     - Name
+     - Category
+     - Unit
+     - Description
+
+   * - edge_host_memory_percent
+     - Memory Usage
+     - Host
+     - Percent (%)
+     - Percentage of memory used by the Edge Server containers.
+
+   * - edge_host_cpu_percent
+     - CPU Usage
+     - Host
+     - Percent (%)
+     - Percentage of CPU used by the Edge Server containers.
+
+   * - overall_request_success
+     - Successful Requests
+     - Overall
+     - Int
+     - The total number of successful requests.
+
+   * - overall_request_fail
+     - Failed Requests
+     - Overall
+     - Int
+     - The total number of failed requests.
+
+   * - wire_protocol_request_success
+     - Successful Wire Protocol Requests
+     - Wire Protocol
+     - Int
+     - The total number of successful Wire Protocol requests.
+
+   * - wire_protocol_request_fail
+     - Failed Wire Protocol Requests
+     - Wire Protocol
+     - Int
+     - The total number of failed Wire Protocol requests.
+
+   * - wire_protocol_egress_bytes
+     - Wire Protocol Data Transfer
+     - Wire Protocol
+     - Bytes
+     - The total number of bytes returned by Wire Protocol.
+
+   * - edge_wire_protocol_connection_count
+     - Wire Protocol Connection Count
+     - Wire Protocol
+     - Int
+     - The total number of clients currently connected using the Wire Protocol.
+       These connections include MongoDB Drivers, MongoDB Shell, MongoDB Compass,
+       and other tools that use the Wire Protocol connection.
+
+   * - sync_requests_success
+     - Successful Sync Requests
+     - Sync
+     - Int
+     - The total number of successful sync requests.
