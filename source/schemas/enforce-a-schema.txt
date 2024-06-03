@@ -1,10 +1,21 @@
 .. _enforce-a-schema:
+.. _define-a-schema:
 
-================
-Enforce a Schema
-================
+=========================
+Define & Enforce a Schema
+=========================
 
-.. default-domain:: mongodb
+.. meta:: 
+   :keywords: code example
+   :description: Learn how to create and deploy an Atlas App Services Schema and define validation rules to enforce it.
+
+.. facet::
+  :name: genre
+  :values: reference
+
+.. facet::
+   :name: programming_language
+   :values: json
 
 .. contents:: On this page
    :local:
@@ -25,8 +36,16 @@ MongoDB Atlas collection.
 
 .. include:: /includes/adf-rules-note.rst
 
-Procedure
----------
+Define a Schema
+---------------
+
+You can define a schema for a collection in the App Services UI or with the
+App Services CLI. 
+
+When using the App Services UI, you can choose to: 
+
+- Generate a schema from existing data in the collection, and modify as needed.
+- Define a schema manually by adding field-level schema definitions.
 
 .. tabs-realm-admin-interfaces::
    
@@ -46,11 +65,11 @@ Procedure
             configuration screen.
 
 
-         .. step:: Generate a Schema
+         .. step:: Generate a Schema from Existing Data (Optional)
 
             If you already have data in your collection, App Services can
             sample a subset of the documents in the collection and generate a
-            schema for you based on the sample. This step is optional, so if you
+            schema for you based on the sample. If you
             already have a schema or prefer to define one manually, skip this
             step.
 
@@ -80,7 +99,9 @@ Procedure
                :alt: The Generate Schema sample size input in the App Services UI
 
 
-         .. step:: Add Field-Level Schema Definitions
+         .. step:: Define or Modify the Schema 
+            
+            You can define a schema manually or modify an existing schema by adding field-level schema definitions. 
 
             You may define a single BSON schema for each collection. The root-level type
             of each collection schema is an ``object`` schema that represents a document
@@ -149,8 +170,7 @@ Procedure
                     }
                   }
 
-
-         .. step:: Add Change Validation Expressions
+         .. step:: Add Change Validation Expressions (Optional)
 
             In addition to configuring the content of each field, you can validate changes
             to documents by defining a validation :ref:`expression <expressions>` in the
@@ -308,7 +328,7 @@ Procedure
                }
 
 
-         .. step:: Define Change Validation
+         .. step:: Define Change Validation (Optional)
 
             You can validate changes to documents by defining a validation
             :ref:`expression <expressions>` in the ``validate`` field of a schema.

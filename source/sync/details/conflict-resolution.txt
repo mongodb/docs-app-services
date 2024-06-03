@@ -4,7 +4,12 @@
 Conflict Resolution
 ===================
 
-.. default-domain:: mongodb
+.. meta:: 
+   :description: A high-level overview of how Atlas Device Sync resolves synced data conflicts.
+
+.. facet::
+  :name: genre
+  :values: reference
 
 .. contents:: On this page
    :local:
@@ -91,6 +96,34 @@ the merge can reach the correct result. You have the choice to
 update the entire value or edit it in a way that conveys more meaning,
 allowing you to get more precise control of the conflict resolution.
 
+Nested Collections
+~~~~~~~~~~~~~~~~~~
+
+Nested collections are treated similarly to embedded objects. That is, 
+they are considered child objects with a specific parent object. Any updates to 
+the parent object will always win in a conflict resolution, even if it 
+overwrites the child object.
+
+Updates to a nested collection are resolved as follows: 
+
+- If multiple devices *update* the same existing nested collection, Device Sync uses
+  normal conflict resolution rules to incorporate both changes.
+
+- If multiple devices *create* new unique collections nested in the same 
+  parent object, the "last update wins" rule applies, and Device Sync overwrites
+  all other updates with the last update made. 
+  
+For example, client details in Sarah and Matt's dog walking app are modeled as
+arrays nested in the parent ``client`` property. Sarah - and then later, Matt -
+each create a new details collection for the same client on their
+devices while offline. When the devices sync, Device Sync keeps the entry created
+by Matt because his update (creating a new nested details collection) was the last
+one made.
+
+Later, Sarah and Matt each make unique updates to the newly created details entry. Device Sync will merge these updates according to
+normal conflict resolution rules, inserting the new or modified items to the
+list in chronological order. 
+
 Strings
 ~~~~~~~
 
@@ -117,5 +150,9 @@ Summary
 -------
 
 - Device Sync implements a conflict resolution system to allow multiple offline writers to write simultaneously and still eventually converge on the same result.
-- The conflict resolution system follows four rules: deletes always win, the last update wins, inserts in lists are ordered by time, and primary keys designate object identity.
-- Counters and strings are special cases to be aware of in your client code.
+- The conflict resolution system follows four rules: 
+    - Deletes always win.
+    - The last update wins. 
+    - Inserts in lists are ordered by time.
+    - Primary keys designate object identity.
+- Counters, nested collections, and strings are special cases to be aware of in your client code.

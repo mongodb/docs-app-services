@@ -4,11 +4,17 @@
 Schema Types
 ============
 
+.. meta::
+  :keywords: code example
+  :description: Learn about the data types supported by Atlas Device Sync to define data in an App Services Schema.
+
 .. facet::
   :name: genre
   :values: reference
 
-.. default-domain:: mongodb
+.. facet::
+   :name: programming_language
+   :values: json
 
 .. contents:: On this page
    :local:
@@ -69,9 +75,9 @@ The following fields are available for all BSON schemas regardless of type:
      - The JSON type of the property the schema describes. If the
        property's value can be of multiple types, specify an array of
        JSON types. Cannot be used with ``bsonType``.
-       
+
        .. important::
-          
+
           Atlas App Services supports the ``type`` field to maintain compatibility with the JSON
           schema standard. However, we recommend that you use the ``bsonType``
           field instead. BSON types include all JSON schema types and support even
@@ -170,9 +176,9 @@ format.
 
        If ``true``, each item in the array must be unique.
        If ``false``, multiple array items may be identical.
-       
+
        .. tip:: Unique Arrays are Sets
-       
+
           To model a :ref:`Set <schema-type-set>`, use the ``array`` schema type
           with ``uniqueItems`` set to ``true``.
 
@@ -192,14 +198,24 @@ A ``bool`` is either ``true`` or ``false``.
 Mixed
 ~~~~~
 
-A ``mixed`` field may contain any schema type except for :ref:`arrays
-<schema-type-array>`, :ref:`embedded objects <schema-type-object>`,
-:ref:`sets <schema-type-set>`, and :ref:`dictionaries
-<schema-type-dictionary>`. App Services does not enforce a consistent type across
+.. include:: /includes/note-collections-in-mixed-sync.rst
+
+A ``mixed`` field may contain any schema type except for :ref:`embedded objects
+<schema-type-object>`, :ref:`sets <schema-type-set>`, or any SDK-supported :ref:`counters
+<schema-type-counter>`. App Services does not enforce a consistent type across
 documents, so two different documents may have values of different types.
 
-Mixed fields can represent relationships. Sync translates these relationships
-to MongoDB as a :manual:`DBRef </reference/database-references/>` to preserve
+Mixed fields can store :ref:`arrays <schema-type-array>` and
+:ref:`dictionaries <schema-type-dictionary>` of mixed data. Sync translates
+these to MongoDB as arrays and objects, respectively. These collections of mixed
+data can also contain other
+collections of mixed data, with a :manual:`maximum depth of 100 levels
+<reference/limits>`. You can leverage this flexibility to store complex data
+structures that wouldn't otherwise fit into a pre-defined schema, such as
+variable JSON data or complex MongoDB documents.
+
+Mixed fields can also represent relationships. Sync translates these relationships
+to MongoDB as a :manual:`DBRef <reference/database-references/>` to preserve
 the database name, collection name, and primary key of the link.
 
 .. code-block:: json
@@ -415,6 +431,39 @@ BSON type <https://bsonspec.org/spec.html>`__. Always uses subtype 0.
 Realm Database Types
 --------------------
 
+Realm Database types are specific to Atlas Device SDK.
+
+For more information on SDK-specific types and how to define them,
+refer to the SDK documentation:
+
+- :ref:`cpp-supported-property-types`
+- :ref:`flutter-data-types`
+- :ref:`java-data-types`
+- :ref:`kotlin-supported-types`
+- :ref:`dotnet-field-types`
+- :ref:`node-data-types`
+- :ref:`react-nativedata-types-field-types`
+- :ref:`swift-supported-types`
+
+.. _schema-type-counter:
+
+Counter
+~~~~~~~
+
+A counter is a special numerical type whose value can be incremented or
+decremented. It maps to the ``long`` :ref:`number type <schema-type-number>` in
+App Services.
+
+.. code-block:: json
+
+   { "bsonType": "long" }
+
+Counter data types are only supported in the following SDKs:
+
+- :ref:`java-counters`
+- :ref:`MutableRealmInt (Counter) - Kotlin SDK <kotlin-mutablerealmint>`
+- :ref:`realminteger`
+
 .. _schema-type-set:
 
 Set
@@ -426,7 +475,7 @@ A set schema is an ``array`` schema where ``uniqueItems`` is set to ``true``.
 
 .. code-block:: json
    :emphasize-lines: 3
-   
+
    {
       "bsonType": "array",
       "uniqueItems": true,
@@ -455,7 +504,7 @@ To store a dictionary with values of a BSON type, set ``additionalProperties``
 to the type's schema.
 
 .. code-block:: json
-   
+
    {
       "bsonType": "object",
          "additionalProperties": {
@@ -471,7 +520,7 @@ To store a dictionary with :ref:`mixed <schema-type-mixed>` values, set
 ``additionalProperties`` to ``true``:
 
 .. code-block:: json
-   
+
    {
       "bsonType": "object",
          "additionalProperties": true
@@ -481,7 +530,7 @@ To store a dictionary with :ref:`mixed <schema-type-mixed>` values, set
 Alternatively, you can define a full ``mixed`` schema:
 
 .. code-block:: json
-   
+
    {
       "bsonType": "object",
          "additionalProperties": {
@@ -498,7 +547,7 @@ with the ``title`` field set to the embedded object's type name:
 
 .. code-block:: json
    :emphasize-lines: 5
-   
+
    {
       "bsonType": "object",
          "additionalProperties": {
@@ -520,47 +569,44 @@ with the ``title`` field set to the embedded object's type name:
 Geospatial Data
 ---------------
 
-Geospatial data describes points and other data on the earth's surface. App 
+Geospatial data describes points and other data on the earth's surface. App
 Services does not have built-in geospatial types. Instead, you model geographic
 data using standard GeoJSON objects.
-
-If you are not using Device Sync, you can query your geospatial data with regular 
-:manual:`geospatial operators </geospatial-queries>`. However, if you are 
-using Device Sync, there are additional requirements in how you store and 
-query the data.
 
 GeoJSON Point
 ~~~~~~~~~~~~~
 
-A GeoJSON Point (GeoPoint) is a single location on the Earth's surface. The GeoPoint 
-schema must a **required** ``type`` field, of type string, which is always set 
+A GeoJSON Point (GeoPoint) is a single location on the Earth's surface. The GeoPoint
+schema must be a **required** ``type`` field, of type ``string``, which is always set
 to "Point".
 
-You must also provide a ``coordinates`` field, which is an array of doubles. 
-The ``coordinates`` array must contain  at least 2 double values, and may 
+You must also provide a ``coordinates`` field, which is an array of doubles.
+The ``coordinates`` array must contain  at least 2 double values, and may
 contain a third:
-    
+
 - The first double is the longitude of the point, between -180 and 180.
 - The second is the latitude, between -90 and 90.
-- The optional third value represents the elevation/altitude of the point, 
-  in meters. Atlas ignores this value when performing queries. 
+- The optional third value represents the elevation/altitude of the point,
+  in meters. Atlas ignores this value when performing queries.
 
 .. note::
 
-   You cannot set an array as required in a Device Sync schema, so the Sync 
-   server checks that the coordinates field is present and meets the 
+   You cannot set an array as required in a Device Sync schema, so the Sync
+   server checks that the coordinates field is present and meets the
    requirements.
 
-To store a GeoPoint in Atlas for later querying with :ref:`Atlas Device Sync <sync>`, 
+If you are not using Device Sync, you can query your geospatial data with regular
+:manual:`geospatial operators </geospatial-queries>`. However, if you are
+using :ref:`Atlas Device Sync <sync>`,
 the following rules also apply to the GeoPoint object:
 
 - It must be of type ``object``.
 - It must be embedded within another type.
-- Additional values are allowed within the ``coordinates`` array, as long as 
+- Additional values are allowed within the ``coordinates`` array, as long as
   they are doubles.
 - Additional properties in the GeoPoint object are also allowed.
- 
-The following is the Device Sync schema of an object with an embedded GeoPoint 
+
+The following is the Device Sync schema of an object with an embedded GeoPoint
 property named "location":
 
 .. code-block:: json
@@ -590,7 +636,7 @@ property named "location":
       }
    }
 
-The following code block shows a document that follows the schema. It has a 
+The following code block shows a document that follows the schema. It has a
 single embedded GeoPoint object named "location".
 
 .. code-block:: json
@@ -604,35 +650,3 @@ single embedded GeoPoint object named "location".
        "coordinates": [-122.4, 48.12, 23.0]
       }
    }
-
-GeoJSON Points and Device Sync Queries
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-GeoPoints are the only form of geospatial data that Device Sync can 
-query. The Device Sync server validates every embedded GeoPoint property with 
-the rules outlined above.
-
-If a device writes an object that fails validation, it will be reverted with a 
-:ref:`compensating write error <flexible-sync-errors>`. If a document that doesn't 
-meet these requirements is written directly to the MongoDB collection, the server 
-marks that document as :ref:`unsyncable <unsynced-documents>`.
-
-Querying
-````````
-You can query a GeoPoint using :ref:`Realm Query Language (RQL) <rql>`, 
-using ``geoWithin`` to do so. Although GeoPoints are the only stored type you 
-can query, your query may contain other geospatial types. For example, 
-this partial query looks for all points within the specified GeoCircle:
-
-.. code-block:: json
-   :copyable: false
-
-   location geoWithin GeoCircle([-73.981209, 40.725055], 0.00050464271)
-
-For SDK-specific details about querying against geospatial data, see:
-
-- :ref:`Geospatial - Flutter SDK <flutter-data-types-geospatial>`
-- :ref:`Geospatial - Kotlin SDK <kotlin-geospatial>`
-- :ref:`Geospatial - .NET SDK <dotnet-geospatial>`
-- :ref:`Geospatial - Node.js SDK <node-data-types-geospatial>`
-- :ref:`Geospatial - React Native SDK <react-native-data-types-geospatial>`
