@@ -5,7 +5,7 @@ Conflict Resolution
 ===================
 
 .. meta::
-   :description: A high-level overview of how Atlas Device Sync resolves synced data conflicts.
+   :description: Learn about how Atlas Device Sync automatically resolves synced data conflicts, or how to build custom conflict resolution rules.
 
 .. facet::
   :name: genre
@@ -135,10 +135,9 @@ this as a replacement of the entire value of the string.
 Dictionaries
 ~~~~~~~~~~~~
 
-Generally, dictionary conflicts are handled similarly to lists. However, there
-is one difference to be aware of: Device Sync considers the removal of a
-dictionary key to be an update, rather than a deletion. As a result, the "Last
-update wins" rule is applied instead of the "Deletes always win" rule.
+Device Sync considers the removal of a dictionary key to be an update, rather
+than a deletion. As a result, the "Last update wins" rule is applied instead of
+the "Deletes always win" rule.
 
 For example, the dog walking app contains an optional collection of details for
 each dog, which are entered as key-values. While both users are offline, Sarah
@@ -166,8 +165,8 @@ Summary
 
 - Device Sync implements a conflict resolution system to allow multiple offline writers to write simultaneously and still eventually converge on the same result.
 - The conflict resolution system follows four rules:
-    - Deletes always win.
-    - The last update wins.
-    - Inserts in lists are ordered by time.
-    - Primary keys designate object identity.
+   - Deletes always win.
+   - The last update wins.
+   - Inserts in lists are ordered by time.
+   - Primary keys designate object identity.
 - Counters, nested collections, and strings are special cases to be aware of in your client code.
