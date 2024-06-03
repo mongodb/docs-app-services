@@ -1,3 +1,9 @@
+# May 31, 2024
+
+## Release Notes
+
+- Update external changelog with release notes for Device Sync and Edge Server dashboard updates and a change for requests authenticated through Private Link.
+
 # May 24, 2024
 
 ## Device Sync
@@ -76,7 +82,7 @@
   - Update page titles to clearly indicate they're tutorials and include product names.
   - Add meta descriptions and keywords to those that didn't have them.
 
-## Connect to MongoDB Data Sources 
+## Connect to MongoDB Data Sources
 
 - CRUD & Aggregation APIs: Add `$setisSubset` to list of unsupported pipeline operators.
 
@@ -103,7 +109,7 @@
 
 ## Reference
 
-- Admin API: 
+- Admin API:
   - Update references for VPC private endpoints due to domain migration to `services.cloud.mongodb.com`.
   - Fix errors in the Admin API spec caught by the openapi linter.
 - Release Notes: Update external changelog with release notes for new schema version selector, the service.cloud.mongodb.com domain change, and more.
@@ -279,15 +285,15 @@ Throughout the App Services docs:
 - App Services Admin API
   - Update `/adminGetLogs` endpoint with new `TRIGGER_ERROR_HANDLER` log type schema in support of AWS EventBridge custom error handling.
   - Add the new `error_handler` object property to Database type Trigger payloads in all relevant Trigger endpoints.
-  - Update "Authenticate as an App Services adminstrator" endpoint with `mongodb-cloud` as the `ProviderType`, as `mongodb-cloud` is the only supported provider for this endpoint. 
+  - Update "Authenticate as an App Services adminstrator" endpoint with `mongodb-cloud` as the `ProviderType`, as `mongodb-cloud` is the only supported provider for this endpoint.
   - Fix syntax of schema for `ServiceResponse` and refine endpoint descriptions.
-  -  Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema definitions. 
+  -  Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema definitions.
 - App Services CLI/logs/list: Add `trigger_error_handler` as value for the `--type` flag in the Options table.
 - Billing: Update App Services Requests section to include the new custom error function as an example of a Function Execution billing.
 
 ## Release Notes
 
-- Update external change log with release notes for custom user data parsing and AWS EventBridge error handling. 
+- Update external change log with release notes for custom user data parsing and AWS EventBridge error handling.
 
 # February 9, 2024
 
@@ -308,7 +314,7 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 ## Release Notes
 
-- Update external change log with release notes for the Data Services logs UI, object model generation for dictionaries, and more. 
+- Update external change log with release notes for the Data Services logs UI, object model generation for dictionaries, and more.
 
 # February 2, 2024
 
@@ -364,7 +370,7 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 - Authentication Providers/Custom JWT: Note that App Services specifies a 30 minute expiry for the access token even if expiry is defined by the Custom JWT's ``exp`` key.
 
-## Reference 
+## Reference
 
 - App Services Admin API: Fix broken links in Endpoints/Create, Endpoints/Modify, Data API/Enable, Data API/Modify.
 
