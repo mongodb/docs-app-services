@@ -328,8 +328,14 @@ There are three values that you need to specify for each metadata field:
        | *name*
 
      - The name or path to a field in the JWT that
-       contains the value for the metadata field. To specify the path to a field in
-       an embedded object, use :manual:`dot notation </core/document/#dot-notation>`.
+       contains the value for the metadata field. 
+       
+       If the field *name* contains 
+       a period (``.``) character, use a backslash (``\``) to escape the period. 
+       For example if the field name is ``http://example.com/id/emailaddress``, 
+       use ``http://example\.com/id/emailaddress``.
+
+       If the field *value* is an embedded field, use :ref:`dot notation <document-dot-notation>`.
 
    * - | :guilabel:`Field Name`
        | *field_name*
