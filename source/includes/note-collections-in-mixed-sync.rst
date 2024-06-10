@@ -1,13 +1,13 @@
-.. note:: Collections in Mixed fields supported in Apps created after May 22, 2024
+.. note:: Apps created after May 28, 2024
 
-    App Services Apps created *after* May 22, 2024 can store collections
+    App Services Apps created *after* May 28, 2024 can store collections
     (arrays and dictionaries) of mixed data within a mixed data property.
     You can nest collections within other collections, which lets you store
     complex data structures such as JSON or MongoDB documents without having to
     define a strict data model.
 
-    To use this feature with Atlas Device SDK, you must use the following
-    minimum SDK versions:
+    To use this feature with Atlas Device SDK, you must use one of the
+    following minimum SDK versions:
 
     - C++ SDK: version TBD
     - Flutter SDK: v2.0.0 or later
