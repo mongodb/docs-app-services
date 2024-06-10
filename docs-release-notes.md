@@ -1,3 +1,26 @@
+# June 7, 2024
+
+## Device Sync
+
+- Configure and Update Your Data Model
+  - Create a Data Model: Updates for readability and clarity.
+  - Data Model Mapping:
+    - Add new "Mixed Properties" section.
+    - Update "Example" section to demonstrate nested collections of mixed data.
+    - Update "Geospatial" section with content moved from Schema Types page.
+- Technical Details
+  - Conflict Resolution: 
+    - Add new "Dictionaries" section to clarify how Device Sync handles conflicts with dictionary keys.
+    - Add new "Nested Collections" section.
+
+## Define a Data Model
+
+- Schemas/Enforce a Schema: Update page title to "Define & Enforce a Schema".
+- Schemas/Schema Types:
+  - Update "Mixed" data type section to reflect new support for arrays and dictionaries in Apps created after May 22, 2024.
+  - Add new "Counter" section to "Realm Database Types" to document counter data types and specify which SDKs support them.
+  - Move Device Sync-specific geospatial query content to Data Model Mapping page.
+
 # May 31, 2024
 
 ## Release Notes
