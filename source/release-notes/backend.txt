@@ -13,6 +13,39 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_20240605:
+
+5 June 2024 Release
+~~~~~~~~~~~~~~~~~~~
+
+- Atlas Events
+
+  - Apps with the Atlas Events feature flag will start to react to changes made in their linked Atlas clusters.
+
+  - On cluster deletion, Apps will delete datasources and all resources linked to that datasource for datasources connected to the deleted cluster.
+
+  - When the cluster is updated (instance size change), the next subsequent usage of a Mongo Client will have small 
+    cold start time caused by refreshing client connection details.
+
+- Improvements to Function Editing Experience: All Apps will now be able to use a new function editor with autocomplete for common functionalities and App Services context. This includes:
+
+  - A new button to allow formatting your functions' code
+
+  - A new clear and run button to replace the Clear result one
+  
+  - Context autocomplete
+
+- Collections in mixed data properties is now availbale. See :ref:`<collections-in-mixed>` for more information. 
+
+- Error logs for GraphQL failures now appear in an app's Logs page.
+
+- Users can no longer disable client max offline time. Users can continue to increase or decrease
+  the number of days for client max offline time where neccessary.
+
+- Querying is now supported for tables that don't contain the Indexed Queryable Field (IQF).
+
+- Fixed Edge Server authentication for Email/Password authentication with the C++ driver.
+
 .. _backend_20240522:
 
 22 May 2024 Release
