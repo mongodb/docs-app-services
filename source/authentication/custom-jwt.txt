@@ -327,9 +327,12 @@ There are three values that you need to specify for each metadata field:
    * - | :guilabel:`Path`
        | *name*
 
-     - The name or path to a field in the JWT that
-       contains the value for the metadata field. To specify the path to a field in
+     - The name of, or the path to, a field in the JWT that contains the value 
+       for the metadata field. To specify the path to a field in
        an embedded object, use :manual:`dot notation </core/document/#dot-notation>`.
+       If the name of the field itself in the JWT contains a period (``.``) 
+       character, use a backslash (``\``) to escape the period. For example, if 
+       the name is ``http://example.com/id``, use ``http://example\.com/id``.
 
    * - | :guilabel:`Field Name`
        | *field_name*
@@ -347,6 +350,7 @@ There are three values that you need to specify for each metadata field:
          the default name will be the last part of the notation. For example, if 
          you specify a path of ``location.primary.city``, the default value for 
          the name is ``city``.
+
        
 .. tabs-realm-admin-interfaces::
 
