@@ -18,31 +18,22 @@ Atlas App Services Changelog
 5 June 2024 Release
 ~~~~~~~~~~~~~~~~~~~
 
-- Atlas Events
+- Support for nested collections in ``Mixed`` properties is now available. To learn more, refer to :ref:`<collections-in-mixed>`. 
 
-  - Apps with the Atlas Events feature flag will start to react to changes made in their linked Atlas clusters.
+- Improvements to the Function Editor for all Apps, inclusing the following changes:
 
-  - On cluster deletion, Apps will delete datasources and all resources linked to that datasource for datasources connected to the deleted cluster.
+  - A new :guilabel:`Format Code` button to format function code.
 
-  - When the cluster is updated (instance size change), the next subsequent usage of a Mongo Client will have small 
-    cold start time caused by refreshing client connection details.
-
-- Improvements to Function Editing Experience: All Apps will now be able to use a new function editor with autocomplete for common functionalities and App Services context. This includes:
-
-  - A new button to allow formatting your functions' code
-
-  - A new clear and run button to replace the Clear result one
+  - A new :guilabel:`Clear & Run` button that replace the :guilabel:`Clear Result` button.
   
-  - Context autocomplete
+  - Autocomplete for common functionalities and App Services context.
 
-- Collections in mixed data properties is now availbale. See :ref:`<collections-in-mixed>` for more information. 
-
-- Error logs for GraphQL failures now appear in an app's Logs page.
+- App error logs now include GraphQL failures.
 
 - Users can no longer disable client max offline time. Users can continue to increase or decrease
   the number of days for client max offline time where neccessary.
 
-- Querying is now supported for tables that don't contain the Indexed Queryable Field (IQF).
+- Device Sync apps with an indexed queryable field now support schemas that do not contain the indexed queryable field. 
 
 - Fixed Edge Server authentication for Email/Password authentication with the C++ driver.
 
