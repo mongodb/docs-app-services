@@ -1,3 +1,14 @@
+# June 14, 2024
+
+## Device Sync
+
+- Configure and Update Your Data Model/Data Model Mapping: Update note for `Mixed Properties` to specify Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
+- Define a Data Model/Schemas/Schema Data Types: Update note for `Mixed` data type to specify Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
+
+# Triggers
+
+- Database Triggers: Fix typos ("the the") and correct a formatting issue.
+
 # June 7, 2024
 
 ## Device Sync
