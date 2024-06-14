@@ -2,8 +2,8 @@
 
 ## Device Sync
 
-- Configure and Update Your Data Model/Data Model Mapping: Update note for `Mixed Properties` to specify Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
-- Define a Data Model/Schemas/Schema Data Types: Update note for `Mixed` data type to specify Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
+- Configure and Update Your Data Model/Data Model Mapping: Update note for `Mixed Properties` to specify the Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
+- Define a Data Model/Schemas/Schema Data Types: Update note for `Mixed` data type to specify the Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
 
 # Triggers
 
@@ -15,7 +15,7 @@
 
 # Release Notes
 
-- Update external changelog with release notes for Atlas Events, updated Function Editor, Collections in Mixed, and more.
+- Update external changelog with release notes for the updated Function Editor, Collections in Mixed, and more.
 
 # June 7, 2024
 
