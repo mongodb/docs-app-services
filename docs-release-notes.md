@@ -9,6 +9,14 @@
 
 - Database Triggers: Fix typos ("the the") and correct a formatting issue.
 
+# Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Add note about escaping a period for the `path` metadata field and update link to Server documentation on dot notation.
+
+# Release Notes
+
+- Update external changelog with release notes for Atlas Events, updated Function Editor, Collections in Mixed, and more.
+
 # June 7, 2024
 
 ## Device Sync
