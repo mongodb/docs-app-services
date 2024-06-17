@@ -7,7 +7,7 @@
 
 # Triggers
 
-- Database Triggers: Fix typos ("the the") and correct a formatting issue.
+- Database Triggers: Fix typos and a formatting issue.
 
 # Authenticate & Manage Users
 
