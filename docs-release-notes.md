@@ -1,3 +1,22 @@
+# June 14, 2024
+
+## Device Sync
+
+- Configure and Update Your Data Model/Data Model Mapping: Update note for `Mixed Properties` to specify the Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
+- Define a Data Model/Schemas/Schema Data Types: Update note for `Mixed` data type to specify the Collections in Mixed feature is only valid for App Services Apps created after `May 28, 2024`.
+
+## Triggers
+
+- Database Triggers: Fix typos and a formatting issue.
+
+## Authenticate & Manage Users
+
+- Authentication Providers/Custom JWT: Add note about escaping a period for the `path` metadata field and update link to Server documentation on dot notation.
+
+## Release Notes
+
+- Update external changelog with release notes for the updated Function Editor, Collections in Mixed, and more.
+
 # June 7, 2024
 
 ## Device Sync
