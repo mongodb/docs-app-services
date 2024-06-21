@@ -1,3 +1,11 @@
+# June 21, 2024
+
+## Other
+
+- Throughout docs
+  - Typo fixes: change "the the" to "the" on several pages.
+  - Add meta information for internal search improvements to pages with the typo fixes.
+
 # June 14, 2024
 
 ## Device Sync
