@@ -3,8 +3,9 @@
 ## Other
 
 - Throughout docs
-  - Typo fixes: change "the the" to "the" on several pages.
+  - Typo fixes: Change "the the" to "the" on several pages.
   - Add meta information for internal search improvements to pages with the typo fixes.
+  - Replace images on the App Services, Device Sync, and Edge Server landing pages with images that are more compatible with upcoming dark mode support.
 
 # June 14, 2024
 
