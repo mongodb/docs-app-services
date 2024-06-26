@@ -533,40 +533,58 @@ All :manual:`aggregation pipeline stages </reference/operator/aggregation-pipeli
 stages are available to the *system user* except for ``$indexStats``. However, 
 App Services does not support the following aggregation pipeline stages
 when you :ref:`run an aggregation pipeline <mongodb-aggregate>` in the context 
-of an *:ref:`application user <user-accounts>`*. 
+of an :ref:`*application user* <user-accounts>`. 
 
-- :manual:`$collStats </reference/operator/aggregation/collStats/>` 
+.. list-table::
+   :header-rows: 1
+   :widths: 25 10 10
 
-- :manual:`$currentOp </reference/operator/aggregation/currentOp/>`
+   * - Operation
+     - Notes
+     
+     - :manual:`$collStats </reference/operator/aggregation/collStats/>` 
+     - 
 
-- :manual:`$facet </reference/operator/aggregation/facet/>`
-
-- :manual:`$geoNear </reference/operator/aggregation/geoNear/>`
-
-- :manual:`$graphLookup </reference/operator/aggregation/graphLookup/>`
-
-- :manual:`$indexStats </reference/operator/aggregation/indexStats/>`
-
-- :manual:`$lookup </reference/operator/aggregation/lookup/>`
-
-- :manual:`$merge </reference/operator/aggregation/merge/>`
-
-- :manual:`$out </reference/operator/aggregation/out/>`
-
-- :atlas:`$search </reference/atlas-search/query-syntax/>`
-
-  .. include:: /includes/note-atlas-search-rules.rst  
-
-  .. include:: /includes/note-atlas-search-search_meta.rst
-
-- :manual:`$unionWith </reference/operator/aggregation/unionWith/>`
-
-.. note::
-   
-   By default, ``$merge`` and ``$out`` route the entire aggregation operation to
-   the cluster's primary node. If you want to force these stages to respect your
-   configured cluster read preference, set the ``enforceReadPref`` option to
-   ``true``.
+     - :manual:`$currentOp </reference/operator/aggregation/currentOp/>`
+     - 
+          
+     - :manual:`$facet </reference/operator/aggregation/facet/>`
+     - 
+          
+     - :manual:`$geoNear </reference/operator/aggregation/geoNear/>`
+     - 
+          
+     - :manual:`$graphLookup </reference/operator/aggregation/graphLookup/>`
+     - 
+          
+     - :manual:`$indexStats </reference/operator/aggregation/indexStats/>`
+     - 
+          
+     - :manual:`$lookup </reference/operator/aggregation/lookup/>`
+     - 
+          
+     - :manual:`$merge </reference/operator/aggregation/merge/>`
+     - 
+          
+     - :manual:`$out </reference/operator/aggregation/out/>`
+     - |
+          
+        .. note::
+          
+          By default, ``$merge`` and ``$out`` route the entire aggregation operation to
+          the cluster's primary node. If you want to force these stages to respect your
+          configured cluster read preference, set the ``enforceReadPref`` option to
+          ``true``.
+     
+     - :atlas:`$search </reference/atlas-search/query-syntax/>`
+     - |
+     
+        .. include:: /includes/note-atlas-search-rules.rst  
+     
+        .. include:: /includes/note-atlas-search-search_meta.rst
+    
+     - :manual:`$unionWith </reference/operator/aggregation/unionWith/>`
+     - 
 
 Aggregation Pipeline Operator Availability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
