@@ -368,7 +368,8 @@ one day:
    each day.
    
    The app would hit the requests, sync, and data transfer free tier thresholds. 
-   As requests are less than 25 million, requests are billed at :ref:`Tier 1 pricing <request-tier-pricing>`. 
+   As requests are less than 25 million, requests are billed at :ref:`Tier 1 pricing <request-tier-pricing>`
+   of $2.00 USD per Million. 
    
    The free tier would cover the following usage in each area:
    
@@ -447,12 +448,12 @@ one day:
 Backend Application
 ~~~~~~~~~~~~~~~~~~~
 
-A regional pizza chain uses App Services to handle orders for all of its
+An international pizza chain uses App Services to handle orders for all of its
 restaurants. The app has the following usage:
 
-- The chain has 25 stores and each store gets about 400 orders each day.
+- The chain has 18,000 stores, and each store gets about 400 orders each day.
 
-- The stores are open 24 hourse, 7 days a week.
+- The stores are in operation for 16 hours each day.
 
 - For each order, a database trigger sends the customer an email receipt.
   Another trigger sends text message updates to the customer when their order is
@@ -463,7 +464,7 @@ restaurants. The app has the following usage:
   delivery is taking too long, it sends a text message update to the user. About
   10% of all deliveries take too long.
 
-- Orders vary in size but are no larger than 4KB
+- Orders vary in size but are no larger than 4KB.
 
 .. list-table::
    :header-rows: 1
@@ -473,46 +474,47 @@ restaurants. The app has the following usage:
      - Calculation
 
    * - :ref:`App Services Requests <billing-requests>`
-     - - (25 stores) * (400 orders / store) = 10,000 orders
+     - - (18,000 stores) * (400 orders / store) = 7,200,000 orders
        
-       - (10,000 orders) * ((1 email + 3.10 texts) / order) = 41,000 requests
-
-       - (12 triggers / hr) * (24 hrs / day) = 288 requests
+       - (7,200,000 orders) * ((1 email + 3.10 texts + 3 scheduled triggers) / order) = 51,120,000 requests
        
-       - (41,000 + 288 requests) - (50,000 free tier requests) = 0 requests
+       - (51,120,000 requests) - (50,000 free tier requests) = 51,070,000 requests
 
-       - (0 requests) * ($0.000002 / request) = **FREE**
+       - (51,070,000 requests) * ($0.000001 / request) = **$51.07**
 
    * - :ref:`App Services Compute <billing-compute>`
-     - - (41,000 requests) * (300 ms / request) * 1 = 12,300,000 ms
+     - - (51,120,000 requests) * (300 ms / request) * 1 =  15,336,000,000 ms
          
          - *300 ms is a runtime estimate for the trigger function. To get a
            better estimate, create a POC function and test how long it takes to
            connect to external services, etc.*
          - *4KB is well under 32MB, so the memory multiplier is 1*
        
-       - (12,300,000 ms) - (90,000,000 free tier ms) = 0 ms
+       - (15,336,000,000 ms) - (90,000,000 free tier ms) = 15,246,000,000 ms
 
-       - (0 ms) * ($0.000000005 / ms) = **FREE**
+       - (15,246,000,000 ms) * ($0.000000005 / ms) = **$76.23**
 
    * - :ref:`Data Transfer <billing-data-transfer>`
-     - - (41,000 requests) * (0.000004 GB / request) = 0.16 GB
+     - - (51,120,000 requests) * (0.000004 GB / request) = 204.48 GB
        
-       - (0.16 GB) - (0.50 free tier GB) = 0 GB
+       - (204.48 GB) - (0.50 free tier GB) = 203.98 GB
        
-       - (0 GB) * ($0.12 / GB) = **FREE**
+       - (203.98 GB) * ($0.12 / GB) = **$24.48**
 
    * - **TOTAL**
-     - $0 (requests) + $0 (compute) + $0 (data transfer) = **$0 / day**
+     - $51.07 (requests) + $76.23 (compute) + $24.48 (data transfer) = **$151.78 / day**
 
 .. note:: Free Tier Usage
 
    The way that free tier usage affects your bill depends on your consumption
    each day.
    
-   In this situation, the free tier covers all App Services expenses for the App.
+   The app would hit the requests, compute, and data transfer free tier thresholds.
+   As requests are more than 25 million, requests would be billed at 
+   :ref:`Tier 2 pricing <request-tier-pricing>` of $1.00 USD per million requests.
+
    The free tier would cover the following usage in each area:
    
-   - **App Services Requests:** 41,288 requests
-   - **App Services Compute:** 3.42 hours
-   - **Data Transfer:** 0.16 GB
+   - **App Services Requests:** 50,000 requests
+   - **App Services Compute:** 25 hours
+   - **Data Transfer:** 0.5 GB
