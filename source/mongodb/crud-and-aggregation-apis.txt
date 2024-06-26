@@ -529,74 +529,67 @@ using the following commands:
 Aggregation Pipeline Stage Availability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-App Services does not support the following :manual:`aggregation pipeline stages
-</reference/operator/aggregation-pipeline/>` when you :ref:`run an aggregation
-pipeline <mongodb-aggregate>` in the context of an
-:ref:`application user <user-accounts>`. All aggregation pipeline stages are
-available to the system user except for ``$indexStats``.
+All :manual:`aggregation pipeline stages </reference/operator/aggregation-pipeline/>` 
+stages are available to the *system user* except for ``$indexStats``. However, 
+App Services does not support the following aggregation pipeline stages
+when you :ref:`run an aggregation pipeline <mongodb-aggregate>` in the context 
+of an :ref:`application user <user-accounts>`. 
 
 .. list-table::
    :header-rows: 1
-   :widths: 25 10 10
 
-   * - Stage
-     - User Context
-     - System Context
-
-   * - :manual:`$collStats </reference/operator/aggregation/collStats/>`
-     - No
-     - Yes
+   * - Operation
+     - Notes
+     
+   * - :manual:`$collStats </reference/operator/aggregation/collStats/>` 
+     - 
 
    * - :manual:`$currentOp </reference/operator/aggregation/currentOp/>`
-     - No
-     - Yes
-
+     - 
+          
    * - :manual:`$facet </reference/operator/aggregation/facet/>`
-     - No
-     - Yes
-
+     - 
+          
    * - :manual:`$geoNear </reference/operator/aggregation/geoNear/>`
-     - No
-     - Yes
-
+     - 
+          
    * - :manual:`$graphLookup </reference/operator/aggregation/graphLookup/>`
-     - No
-     - Yes
-
+     - 
+          
    * - :manual:`$indexStats </reference/operator/aggregation/indexStats/>`
-     - No
-     - No
-
+     - 
+          
    * - :manual:`$lookup </reference/operator/aggregation/lookup/>`
-     - Yes
-     - Yes
-
+     - 
+          
    * - :manual:`$merge </reference/operator/aggregation/merge/>`
-     - No
-     - Yes
-
+     - 
+          
    * - :manual:`$out </reference/operator/aggregation/out/>`
-     - No
-     - Yes
-
+     - |
+       | By default, ``$merge`` and ``$out`` route the entire aggregation operation to
+       | the cluster's primary node. If you want to force these stages to respect your
+       | configured cluster read preference, set the ``enforceReadPref`` option to
+       | ``true``.
+     
    * - :atlas:`$search </reference/atlas-search/query-syntax/>`
-       
-       .. include:: /includes/note-atlas-search-rules.rst
-
-       .. include:: /includes/note-atlas-search-search_meta.rst
-     - Yes
-     - Yes
-
+     - |
+       | App Services performs ``$search`` operations as a system user and
+       | enforces field-level rules on the returned search results. This means 
+       | that a user may search on a field for which they do not have read access. 
+       | In this case, the search is based on the specified field but no returned 
+       | documents include the field. 
+       | 
+       | The :atlas:`$$SEARCH_META </atlas-search/query-syntax/#aggregation-variable>`
+       | aggregation variable is only available for functions that 
+       | :ref:`run as system <system-functions>` or if the first role on the 
+       | searched collection 
+       | has its ``apply_when`` and ``read`` expressions set to ``true``.
+       | If neither of these two scenarios apply, ``$$SEARCH_META`` is undefined 
+       | and the aggregation will fail.
+    
    * - :manual:`$unionWith </reference/operator/aggregation/unionWith/>`
-     - Yes
-     - Yes
-
-.. note::
-   
-   By default, ``$merge`` and ``$out`` route the entire aggregation operation to
-   the cluster's primary node. If you want to force these stages to respect your
-   configured cluster read preference, set the ``enforceReadPref`` option to
-   ``true``.
+     - 
 
 Aggregation Pipeline Operator Availability
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -664,7 +657,8 @@ Database Command Availability
      - 
 
    * - :manual:`aggregate </reference/command/aggregate>`
-     - - ``explain``
+     - - ``distinct``
+       - ``explain``
        - ``allowDiskUse`` [#f1]_
        - ``readConcern``
        - ``collation``
