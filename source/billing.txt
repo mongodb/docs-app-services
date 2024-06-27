@@ -51,7 +51,7 @@ how much you pay each day:
    application dashboard in the App Services UI.
 
 Daily Free Tier
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
 All App Services Apps in a MongoDB Atlas project share a single daily free
 tier. All usage below the free tier thresholds in a given day is not billed.
@@ -63,18 +63,20 @@ Free tier thresholds
 
 App Services is free to use below the following daily free tier thresholds:
 
-- 50,000 :ref:`requests <billing-requests>` or 25 hours of
-  :ref:`compute <billing-compute>` or 30,000 minutes of :ref:`sync
-  <billing-sync>` runtime (whichever occurs first)
+- 50,000 :ref:`requests <billing-requests>`, 25 hours of
+  :ref:`compute <billing-compute>`, and 30,000 minutes of :ref:`sync
+  <billing-sync>` runtime
 
 - 0.5 GB of :ref:`data transfer <billing-data-transfer>`
 
 Invoicing and Payment
 ~~~~~~~~~~~~~~~~~~~~~
 
-App Services is billed as part of MongoDB Atlas. All payment methods 
-that work with Atlas can be used to pay for App Services, including
-prepaid Atlas Credits. Any costs associated with a linked Atlas data
+App Services is billed as part of MongoDB Atlas. Invoices are sent monthly and
+include all costs incurred from going over the daily free tier limits. 
+
+All payment methods that work with Atlas can be used to pay for App Services, 
+including prepaid Atlas Credits. Any costs associated with a linked Atlas data
 source, such as database operations and backup, are billed separately
 from App Services.
 
@@ -130,37 +132,13 @@ following:
 
 .. _request-tier-pricing:
 
-**Price:** 
+**Price:** $2.00 / 1,000,000 requests ($0.000002 / request)
 
-.. list-table::
-   :header-rows: 1
-   :widths: 25 25 25 25
+**Formula:** (Function Executions + Trigger Executions + GraphQL/Webhook/HTTPS Endpoint Requests + Sync Updates) * $0.000002
 
-   * - Billing Tier
-     - Request Volume (Requests/Day)
-     - Price (per Million Requests)
-     - Price (per Request)
-
-   * - Tier 1
-     - Less than 25 Million
-     - $2.00 USD
-     - $0.000002 USD
-
-   * - Tier 2
-     - 25 Million - 250 Million
-     - $1.00 USD
-     - $0.000001 USD
-
-   * - Tier 3
-     - Greater than 250 Million
-     - $0.75 USD
-     - $0.00000075 USD  
-
-**Formula:** (Function Executions + Trigger Executions + GraphQL/Webhook/HTTPS Endpoint Requests + Sync Updates) * (Price per Request Depending on Tier)
-
-**Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>` or 25 hours of
-:ref:`compute <billing-compute>` or 30,000 minutes of :ref:`sync
-<billing-sync>` runtime (whichever occurs first)
+**Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>`, 25 hours of
+:ref:`compute <billing-compute>`, and 30,000 minutes of :ref:`sync
+<billing-sync>` runtime 
 
 .. example:: Estimate Your Usage
    
@@ -200,9 +178,9 @@ and increases by 1 for every 32MB of memory that a given request uses.
 
 **Formula:** (# Requests) * (Runtime (ms)) * (Memory (MB) / 32MB) * $0.000000005 / ms
 
-**Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>` or 25 hours of
-:ref:`compute <billing-compute>` or 30,000 minutes of :ref:`sync
-<billing-sync>` runtime (whichever occurs first)
+**Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>`, 25 hours of
+:ref:`compute <billing-compute>`, and 30,000 minutes of :ref:`sync
+<billing-sync>` runtime
 
 .. example:: Estimate Your Usage
    
@@ -237,9 +215,9 @@ millisecond of sync runtime per user.
 
 **Formula:** (# Active Users) * (Sync time (min / user)) * ($0.00000008 / min)
 
-**Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>` or 25 hours of
-:ref:`compute <billing-compute>` or 30,000 minutes of :ref:`sync
-<billing-sync>` runtime (whichever occurs first)
+**Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>`, 25 hours of
+:ref:`compute <billing-compute>`, and 30,000 minutes of :ref:`sync
+<billing-sync>` runtime 
 
 Device Sync pauses automatically after {+sync-inactive-app-pause-time+} 
 of inactivity.
@@ -367,9 +345,7 @@ one day:
    The way that free tier usage affects your bill depends on your consumption
    each day. Consumption can look different on any individual day.
    
-   The app would hit the requests, sync, and data transfer free tier thresholds. 
-   As requests are less than 25 million, requests are billed at :ref:`Tier 1 pricing <request-tier-pricing>`
-   of $2.00 USD per Million. 
+   The app would hit the requests, sync, and data transfer free tier thresholds.  
    
    The free tier would cover the following usage in each area:
    
@@ -431,7 +407,7 @@ one day:
        - (0 GB) * ($0.12 / GB) = **FREE**
 
    * - **TOTAL**
-     - $0 (requests) + $0 (compute) + $0 (data transfer) = **$0 / day**
+     - $0 (requests) + $0 (compute) + $0 (data transfer) = **$0 for the day**
 
 .. note:: Free Tier Usage
 
@@ -480,7 +456,7 @@ restaurants. The app has the following usage:
        
        - (51,120,000 requests) - (50,000 free tier requests) = 51,070,000 requests
 
-       - (51,070,000 requests) * ($0.000001 / request) = **$51.07**
+       - (51,070,000 requests) * ($0.000002 / request) = **$102.14**
 
    * - :ref:`App Services Compute <billing-compute>`
      - - (51,120,000 requests) * (300 ms / request) * 1 =  15,336,000,000 ms
@@ -502,7 +478,7 @@ restaurants. The app has the following usage:
        - (203.98 GB) * ($0.12 / GB) = **$24.48**
 
    * - **TOTAL**
-     - $51.07 (requests) + $76.23 (compute) + $24.48 (data transfer) = **$151.78 / day**
+     - $102.14 (requests) + $76.23 (compute) + $24.48 (data transfer) = **$202.85 for the day**
 
 .. note:: Free Tier Usage
 
@@ -511,8 +487,6 @@ restaurants. The app has the following usage:
    
    This is an example of a larger app with many users and a larger workload. 
    The app would hit the requests, compute, and data transfer free tier thresholds.
-   As requests are more than 25 million, requests would be billed at
-   :ref:`Tier 2 pricing <request-tier-pricing>` of $1.00 USD per million requests.
 
    The free tier would cover the following usage in each area:
    
