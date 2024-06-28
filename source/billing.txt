@@ -22,9 +22,6 @@ Billing
 
    GraphQL is deprecated. :ref:`Learn More <migrate-hosting-graphql>`.
 
-Overview
---------
-
 Atlas App Services Apps are billed according to how much they're used on a
 daily basis. There are four independently-measured usage types that determine
 how much you pay each day:
@@ -33,8 +30,7 @@ how much you pay each day:
   requests that App Services sends and receives from client
   applications and external services. Requests include function calls,
   trigger executions, and sync updates, but exclude user authentication
-  and blocked or invalid requests. Pricing for requests is tiered based on
-  how many requests are sent. 
+  and blocked or invalid requests.
 
 - :ref:`App Services Compute <billing-compute>`, which measures the runtime and memory
   usage of all requests excluding sync and authentication.
@@ -51,15 +47,13 @@ how much you pay each day:
    application dashboard in the App Services UI.
 
 Daily Free Tier
-~~~~~~~~~~~~~~~
+---------------
 
 All App Services Apps in a MongoDB Atlas project share a single daily free
 tier. All usage below the free tier thresholds in a given day is not billed.
-As soon as a project exceeds any daily free tier threshold, App Services starts 
-billing for additional usage of any kind for that project.
 
-Free tier thresholds
-````````````````````
+Free Tier Thresholds
+~~~~~~~~~~~~~~~~~~~~
 
 App Services is free to use below the following daily free tier thresholds:
 
@@ -70,7 +64,7 @@ App Services is free to use below the following daily free tier thresholds:
 - 0.5 GB of :ref:`data transfer <billing-data-transfer>`
 
 Invoicing and Payment
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 App Services is billed as part of MongoDB Atlas. Invoices are sent monthly and
 include all costs incurred from going over the daily free tier limits. 
@@ -176,7 +170,7 @@ and increases by 1 for every 32MB of memory that a given request uses.
 
 **Price:** $10.00 / 500 runtime hours (~$0.000000005 / ms)
 
-**Formula:** (# Requests) * (Runtime (ms)) * (Memory (MB) / 32MB) * $0.000000005 / ms
+**Formula:** (Number of Requests) * (Runtime (ms)) * (Memory (MB) / 32MB) * $0.000000005 / ms
 
 **Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>`, 25 hours of
 :ref:`compute <billing-compute>`, and 30,000 minutes of :ref:`sync
@@ -213,7 +207,7 @@ millisecond of sync runtime per user.
 
 **Price:** $0.08 / 1,000,000 runtime minutes ($0.00000008 / min)
 
-**Formula:** (# Active Users) * (Sync time (min / user)) * ($0.00000008 / min)
+**Formula:** (Number of Active Users) * (Sync Time (min / user)) * ($0.00000008 / min)
 
 **Free Tier Threshold:** 50,000 :ref:`requests <billing-requests>`, 25 hours of
 :ref:`compute <billing-compute>`, and 30,000 minutes of :ref:`sync
@@ -261,7 +255,7 @@ set rate for each gigabyte of data egress.
 
 **Price:** $0.12 per GB
 
-**Formula:** (Data sent to clients/services (GB)) * ($0.12 / GB)
+**Formula:** (Data Sent to Clients/Services (GB)) * ($0.12 / GB)
 
 **Free Tier Threshold:** 10GB
 
