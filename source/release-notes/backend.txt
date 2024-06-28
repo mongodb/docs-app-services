@@ -25,7 +25,14 @@ Atlas App Services Changelog
   - When a user updates a cluster (for example, an instance size change), the next usage of a mongo client with
     the cluster will have a start time of 5 seconds or longer, due to refreshing client connection details. 
 
+- The CLI command, ``appservices app diff``, now returns the app diff even when there is an error, such as a breaking change.
 
+- To make billing more intuitive, customers are now charged for their App Services usage at a daily instead of monthly rate. 
+  Free tier app limits have been updated to reflect the new daily model. For more information, see the :ref:`Billing <billing>` page. 
+
+- :ref:`Datasource client configuration documents <appconfig-data_sources>` missing the ``cluster_size`` field will be updated to include the field.
+
+- The function name now appears in the validation error message if the function name contains incorrect formatting.
 
 .. _backend_20240605:
 
