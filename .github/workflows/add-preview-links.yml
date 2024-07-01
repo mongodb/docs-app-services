@@ -1,0 +1,18 @@
+on:
+    workflow_call:
+    pull_request:
+
+jobs:
+    get_changed_files:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+        - run: |
+            git fetch origin ${{ github.ref }}
+            raw_files = git diff --name-only
+            # files = rawFiles.split('\n')
+            # console.log(files)
+
+            # Q: how do we get the preview link? Can we?
+            # If so, this has to be run after check autobuilder.
+            
