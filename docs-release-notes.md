@@ -2,11 +2,11 @@
 
 ## Device Sync
 
-- Configure and Update Your Data Model Data Model Mapping: Correct the minimum Swift SDK version number listed in the Collections in Mixed note.
+- Configure and Update Your Data Model/ Data Model Mapping: Correct the minimum Swift SDK version number listed in the Collections in Mixed note.
 
 ## Connect to MongoDB Data Sources
 
-- CRUD & Aggregation APIs: Add `distinct` and `explain` to the list of unsupported database command. Update descriptions for the `$search` and `$out` aggregation pipeline stages. 
+- CRUD & Aggregation APIs: Add `distinct` and `explain` to the list of unsupported database commands. Update descriptions for the `$search` and `$out` aggregation pipeline stages. 
 
 # June 21, 2024
 
