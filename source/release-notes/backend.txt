@@ -18,7 +18,7 @@ Atlas App Services Changelog
 26 June 2024 Release
 ~~~~~~~~~~~~~~~~~~~~
 
-- Enable Atlas Events: Apps react to changes made in their linked clusters.
+- Enable Atlas Events: App Services Apps react to changes made in their linked clusters.
 
   - On cluster deletion, Apps delete datasources and all resources linked to the datasources if they are connected to the deleted cluster.
 
@@ -40,12 +40,12 @@ Atlas App Services Changelog
 
   - MongDB Compass now correctly shows the count of documents when connecting to an Edge Wire Protocol Server.
 
-- To make billing more intuitive, customers are now charged for their App Services usage at a daily instead of monthly rate. 
+- To make billing more intuitive, App Services usage is charged at a daily instead of monthly rate. 
   Free tier App limits are updated to reflect the new daily model. For more information, see the :ref:`Billing <billing>` page. 
 
 - :ref:`Datasource client configuration documents <appconfig-data_sources>` missing the ``cluster_size`` field are updated to include the field.
 
-- The function name now appears in the validation error message when valdidating the function name for incorrect formatting.
+- If a Function name contains incorrect formatting upon creation of the Function, the Function name now appears in the validation error message for easy identification.
  
 - :ref:`Timeseries collections <time-series-limitation>` not using data ingest are sync incompatible. Fixed error where Edge Server or Sync 
   instances would attempt to generate schemas for sync-incompatible time series collections.
