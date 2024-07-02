@@ -32,8 +32,12 @@ There are two kinds of App Services Private Endpoints:
 - Sync: Endpoints that use ``services.cloud.mongodb.com`` for Sync WebSocket
   connections.
 
-Endpoints that use the ``realm.mongodb.com`` domain must migrate to use the new
-``services.cloud.mongodb.com`` domain.
+.. important:: 
+
+   :ref:`Custom HTTPS Endpoints <custom-endpoints>` and 
+   :ref:`Data API endpoints <data-api-endpoints>` are not supported 
+   in private endpoints.
+
 
 Before You Begin
 ----------------
@@ -62,10 +66,8 @@ You must also install and authenticate the AWS CLI.
 Add a Private Endpoint
 ----------------------
 
-You can add a new Private Endpoint with the App Services UI or the Admin API.
-
-You can add a new General Endpoint or a new Sync Endpoint. You can also
-migrate a Legacy Endpoint to either a new General or Sync Endpoint.
+You can add a new General Endpoint or Sync Endpoint with the App Services UI or
+the Admin API.
 
 Add a General Endpoint
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -333,21 +335,6 @@ Every Sync Endpoint must be paired with a General Endpoint.
                   }'
             #. You must also create a General Private Endpoint by following the
                steps for creating a General Private Endpoint on this page.
-
-Migrate a Legacy Endpoint
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you have an endpoint that uses the legacy ``realm.mongodb.com`` domain, you
-must migrate it to use the ``services.cloud.mongodb.com`` domain. You can't
-create new legacy endpoints.
-
-**To migrate a Legacy Endpoint:** 
-
-#. Following the procedures on this page, create new VPC endpoints to replace
-   existing VPC endpoints
-#. Update Atlas Device SDK to a :ref:`version that supports the new domain 
-   <domain-migration-sdk-versions>`
-#. Update client API calls to use new services domain
 
 .. _change_access_restrictions:
 
