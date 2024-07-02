@@ -13,6 +13,43 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_20240626:
+
+26 June 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Enable Atlas Events: App Services Apps react to changes made in their linked clusters.
+
+  - On cluster deletion, Apps delete datasources and all resources linked to the datasources if they are connected to the deleted cluster.
+
+  - When a user updates a cluster (for example, an instance size change), the next usage of a MongoDB client with
+    the cluster will have a start time of 5 seconds or longer, due to refreshing client connection details. 
+
+- CLI Improvements
+
+  - The CLI defaults to a local deployment model on App creation.
+
+  - The ``push`` command with a ``--dry-run`` flag now prints out the App diff.
+
+  - The CLI command, ``appservices app diff``, now returns the App diff even when there is an error, such as a breaking change.
+
+- Edge Server
+
+  - Fix incorrect prompt for connection strings that included a trailing slash. Atlas Device SDK clients expect no 
+    trailing slash in the connection string.
+
+  - MongDB Compass now correctly shows the count of documents when connecting to an Edge Wire Protocol Server.
+
+- To make billing more intuitive, App Services usage is charged at a daily instead of monthly rate. 
+  Free tier App limits are updated to reflect the new daily model. For more information, see the :ref:`Billing <billing>` page. 
+
+- :ref:`Datasource client configuration documents <appconfig-data_sources>` missing the ``cluster_size`` field are updated to include the field.
+
+- If a Function name contains incorrect formatting upon creation of the Function, the Function name now appears in the validation error message for easy identification.
+ 
+- :ref:`Timeseries collections <time-series-limitation>` not using data ingest are sync incompatible. Fixed error where Edge Server or Sync 
+  instances would attempt to generate schemas for sync-incompatible time series collections.
+
 .. _backend_20240605:
 
 5 June 2024 Release
