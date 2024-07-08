@@ -12,7 +12,7 @@ jobs:
         steps:
         - uses: actions/checkout@v3
         - run: |
-            git fetch origin ${{ github.ref }}
+            git pull origin ${{ github.ref }} --rebase
             ls -l
             gh pr view
           env:
