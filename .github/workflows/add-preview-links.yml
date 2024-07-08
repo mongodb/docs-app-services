@@ -11,6 +11,8 @@ jobs:
             git fetch origin ${{ github.ref }}
             raw_files="$(git diff --name-only)"
             echo $raw_files
+            echo "PR"
+            echo ${{ github.event.number }} 
             if [ raw_files ]; then
                 base_url="https://deploy-preview-"
                 base_url+=${{ github.event.number }} 
