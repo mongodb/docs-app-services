@@ -10,9 +10,15 @@ jobs:
         - run: |
             git fetch origin ${{ github.ref }}
             raw_files = git diff --name-only
-            # files = rawFiles.split('\n')
-            # console.log(files)
-
-            # Q: how do we get the preview link? Can we?
-            # If so, this has to be run after check autobuilder.
-            
+            if [ raw_files ]; then
+                url_prefix = "https://deploy-preview-"
+                url_postscript = "--app-services.netlify.app/"
+                base_url = url_prefix + ${{ github.event.number }} + url_postscript
+                console.log(base_url)
+                files = rawFiles.split('\n')
+                for file in files; do
+                    link = base_url + file
+                    console.log(link)
+            fi
+                # now write the paths to the PR template.
+            done
