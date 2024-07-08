@@ -13,8 +13,8 @@ jobs:
             if [ raw_files ]; then
                 url_prefix="https://deploy-preview-"
                 url_postscript="--app-services.netlify.app/"
-                pr_number=${{ github.event.number }} 
-                base_url="${url_prefix}${pr_number}${url_postscript}"
+                pr_number="foo"
+                base_url="$url_prefix$pr_number$url_postscript"
                 console.log(base_url)
                 files = rawFiles.split('\n')
                 for file in files; do
