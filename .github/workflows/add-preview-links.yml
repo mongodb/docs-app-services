@@ -6,7 +6,9 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - run: gh pr view $PR
+      - name: foo
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR: ${{ github.event.number }}
+        run: gh pr view $PR
