@@ -7,6 +7,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v3
+          env:
+            GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
         - run: |
             git fetch origin ${{ github.ref }}
             raw_files="$(gh pr view ${{ github.event.number }})"
