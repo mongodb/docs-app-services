@@ -15,6 +15,7 @@ jobs:
             echo ${{ github.head_ref }}
             echo ${{ github.base_ref }}
             echo ${{github.ref}}
+            gh repo set-default --view
             gh pr diff ${{github.ref}} --name-only
 #links_action
 #master
