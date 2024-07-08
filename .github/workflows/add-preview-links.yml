@@ -8,8 +8,8 @@ jobs:
         steps:
         - uses: actions/checkout@v3
         - run: |
-            git fetch origin ${{ github.ref }}
-            raw_files="$(git diff --name-only -r HEAD^1 HEAD | xargs)"
+            git pull origin ${{ github.ref }}
+            raw_files="$(git diff --name-only ${{ github.ref }})"
             echo "$raw_files"
             if [ $raw_files ]; then
                 base_url="https://deploy-preview-"
