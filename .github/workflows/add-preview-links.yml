@@ -15,11 +15,11 @@ jobs:
                 base_url="https://deploy-preview-"
                 base_url+=${{ github.event.number }} 
                 base_url+="--app-services.netlify.app/"
-                console.log($base_url)
+                console.log("$base_url")
                 files = rawFiles.split('\n')
                 for file in files; do
                     link = base_url + file
-                    console.log(link)
+                    console.log("$link")
                 done
             # fi
                 # now write the paths to the PR template.
