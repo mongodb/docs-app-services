@@ -10,14 +10,13 @@ jobs:
         - run: |
             git fetch origin ${{ github.ref }}
             raw_files="$(git diff --name-only)"
-            echo $raw_files
-            echo "PR"
-            echo ${{ github.event.number }} 
-            if [ raw_files ]; then
+            if [ $raw_files ]; then
                 base_url="https://deploy-preview-"
                 base_url+=${{ github.event.number }} 
                 base_url+="--app-services.netlify.app/"
                 echo $base_url
+            else
+                echo "no changes"
             fi
                 # now write the paths to the PR template.
         
