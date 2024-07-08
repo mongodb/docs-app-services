@@ -3,13 +3,15 @@ on:
     pull_request:
 
 jobs:
-    build_links:
+    get_changed_files:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v3
+          env:
+            GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
         - run: |
             git fetch origin ${{ github.ref }}
-            raw_files="$(git diff --name-only ${{ github.event.after }} ${{ github.event.before }})"
+            raw_files="$(gh pr view ${{ github.event.number }})"
             echo "$raw_files"
             if [ $raw_files ]; then
                 base_url="https://deploy-preview-"
@@ -21,3 +23,4 @@ jobs:
             fi
                 # now write the paths to the PR template.
         
+
