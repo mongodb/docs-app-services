@@ -16,7 +16,8 @@ jobs:
             echo ${{ github.head_ref }}
             echo ${{ github.base_ref }}
             echo ${{github.ref}}
-            # gh repo set-default mongodb/docs-app-services
+            git fetch origin
+            git checkout ${{ github.base_ref }}
             gh pr view
 #links_action
 #master
