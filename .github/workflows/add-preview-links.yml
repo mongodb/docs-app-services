@@ -14,7 +14,9 @@ jobs:
                 url_prefix="https://deploy-preview-"
                 url_postscript="--app-services.netlify.app/"
                 pr_number="foo"
-                base_url="$url_prefix$pr_number$url_postscript"
+                base_url=$url_prefix
+                base_url+=$pr_number
+                base_url+=$url_postscript
                 console.log(base_url)
                 files = rawFiles.split('\n')
                 for file in files; do
