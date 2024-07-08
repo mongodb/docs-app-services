@@ -8,8 +8,11 @@ on:
 jobs:
     foo:
         runs-on: ubuntu-latest
+        permissions: write-all
         steps:
+        - uses: actions/checkout@v3
         - run: |
+            git pull origin ${{ github.ref }}
             ls -l
 
           env:
