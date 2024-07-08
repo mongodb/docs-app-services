@@ -9,7 +9,8 @@ jobs:
         - uses: actions/checkout@v3
         - run: |
             git pull origin ${{ github.ref }}
-            raw_files="$(git diff --name-only ${{ github.ref }})"
+            version=$(git log -1 --format='%H')
+            raw_files="$(git diff --name-only $version)"
             echo "$raw_files"
             if [ $raw_files ]; then
                 base_url="https://deploy-preview-"
