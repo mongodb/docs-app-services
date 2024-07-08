@@ -8,7 +8,7 @@ jobs:
         steps:
         - uses: actions/checkout@v3
         - run: |
-            git pull origin ${{ github.ref }}
+            git fetch origin ${{ github.ref }}
             raw_files="$(git diff --name-only ${{ github.event.after }} ${{ github.event.before }})"
             echo "$raw_files"
             if [ $raw_files ]; then
