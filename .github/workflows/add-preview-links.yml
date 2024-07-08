@@ -3,12 +3,21 @@ on:
     pull_request:
 
 jobs:
-  comment:
-    runs-on: ubuntu-latest
-    steps:
-      - name: foo
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR: ${{ github.event.number }}
-        run: gh pr view $PR
+    build_links:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+        - run: |
+            git fetch origin ${{ github.ref }}
+            raw_files="$(git diff --name-only -r HEAD^1 HEAD | xargs)"
+            echo "$raw_files"
+            if [ $raw_files ]; then
+                base_url="https://deploy-preview-"
+                base_url+=${{ github.event.number }} 
+                base_url+="--app-services.netlify.app/"
+                echo $base_url
+            else
+                echo "no changes"
+            fi
+                # now write the paths to the PR template.
+        
