@@ -9,7 +9,7 @@ jobs:
         - uses: actions/checkout@v3
         - run: |
             git fetch origin ${{ github.ref }}
-            raw_files=gh pr view ${{ github.event.number }}
+            raw_files="$(gh pr view ${{ github.event.number }})"
             if [ $raw_files ]; then
                 base_url="https://deploy-preview-"
                 base_url+=${{ github.event.number }} 
