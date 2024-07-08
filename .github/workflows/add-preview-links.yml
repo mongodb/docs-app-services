@@ -12,12 +12,12 @@ jobs:
         steps:
         - uses: actions/checkout@v3
         - run: |
-            # git fetch 
+            git remote -v 
             echo ${{ github.head_ref }}
             echo ${{ github.base_ref }}
             echo ${{github.ref}}
-            gh repo set-default mongodb/docs-app-services
-            gh pr diff ${{ github.head_ref }} --name-only
+            # gh repo set-default mongodb/docs-app-services
+            gh pr view
 #links_action
 #master
 #refs/pull/789/merge
