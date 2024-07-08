@@ -2,6 +2,9 @@ on:
     workflow_call:
     pull_request:
 
+env:
+    GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }} # setting GH_TOKEN for the entire workflow
+
 jobs:
     get_changed_files:
         runs-on: ubuntu-latest
@@ -10,6 +13,7 @@ jobs:
           env:
             GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
         - run: |
+            echo ${{ secrets.API_TOKEN_GITHUB }} | gh auth login --with-token
             git fetch origin ${{ github.ref }}
             raw_files="$(gh pr view ${{ github.event.number }})"
             echo "$raw_files"
