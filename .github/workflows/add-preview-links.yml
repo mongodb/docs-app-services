@@ -14,7 +14,7 @@ jobs:
         - run: |
             git pull origin ${{ github.ref }} --rebase
             ls -l
-            gh pr diff master --name-only
+            gh pr diff --repo 'mongodb/docs-app-services' master --name-only
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             BRANCH: ${{ github.head_ref }}
