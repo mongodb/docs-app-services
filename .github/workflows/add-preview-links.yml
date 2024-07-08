@@ -11,12 +11,9 @@ jobs:
             git fetch origin ${{ github.ref }}
             raw_files="$(git diff --name-only)"
             if [ raw_files ]; then
-                url_prefix="https://deploy-preview-"
-                url_postscript="--app-services.netlify.app/"
-                pr_number="foo"
-                base_url=$url_prefix
-                base_url+=$pr_number
-                base_url+=$url_postscript
+                base_url="https://deploy-preview-"
+                base_url+=${{ github.event.number }} 
+                base_url+="--app-services.netlify.app/"
                 console.log(base_url)
                 files = rawFiles.split('\n')
                 for file in files; do
@@ -25,3 +22,4 @@ jobs:
             fi
                 # now write the paths to the PR template.
             done
+
