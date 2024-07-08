@@ -15,8 +15,12 @@ jobs:
             echo ${{ github.head_ref }}
             echo ${{ github.base_ref }}
             echo ${{github.ref}}
-            # gh pr checkout $BRANCH
-            # gh pr diff master --name-only
+            gh pr diff ${{github.ref}} --name-only
+#links_action
+#master
+#refs/pull/789/merge
+            #gh pr checkout $BRANCH
+
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             BRANCH: ${{ github.head_ref }}
