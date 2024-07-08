@@ -2,29 +2,13 @@ on:
     workflow_call:
     pull_request:
 
-env:
-    GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }} # setting GH_TOKEN for the entire workflow
+# env:
+#   GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }} # setting GH_TOKEN for the entire workflow
 
 jobs:
-    get_changed_files:
+    foo:
         runs-on: ubuntu-latest
         steps:
-        - uses: actions/checkout@v3
+        - run: gh pr view
           env:
-            GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
-        - run: |
-            
-            git fetch origin ${{ github.ref }}
-            raw_files="$(gh pr view ${{ github.event.number }})"
-            echo "$raw_files"
-            if [ $raw_files ]; then
-                base_url="https://deploy-preview-"
-                base_url+=${{ github.event.number }} 
-                base_url+="--app-services.netlify.app/"
-                echo $base_url
-            else
-                echo "no changes"
-            fi
-                # now write the paths to the PR template.
-        
-
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
