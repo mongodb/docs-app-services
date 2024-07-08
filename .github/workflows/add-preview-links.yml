@@ -9,7 +9,7 @@ jobs:
         - uses: actions/checkout@v3
         - run: |
             git fetch origin ${{ github.ref }}
-            raw_files=git diff --name-only
+            raw_files="$(git diff --name-only)"
             if [ raw_files ]; then
                 url_prefix="https://deploy-preview-"
                 url_postscript="--app-services.netlify.app/"
