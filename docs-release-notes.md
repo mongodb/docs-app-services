@@ -7,7 +7,7 @@
 
 ## Authenticate & Manage Users
 
-- Define User Metadata: Fix typo and update references to "Realm" to "Atlas Device SDK."
+- Define User Metadata: Fix typo and update references using "Realm" to "Atlas Device SDK."
 
 ## Secure Your App
 
