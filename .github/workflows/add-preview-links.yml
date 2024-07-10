@@ -16,9 +16,9 @@ jobs:
             echo ${{ github.head_ref }}
             echo ${{ github.base_ref }}
             echo ${{github.ref}}
-            git checkout ${{ github.base_ref }}
+            git checkout ${{ github.head_ref }}
             git status
-            gh pr view 
+            gh pr diff 
 #links_action
 #master
 #refs/pull/789/merge
