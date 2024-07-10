@@ -107,6 +107,39 @@ collection. Depending on your use case, you may:
   standard CRUD operations from a Function, an Atlas Device SDK, a MongoDB
   driver, or MongoDB Compass.
 
+Modify User Permissions in Custom User Data Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Permissions will automaticlly refresh for a user when you change their custom 
+user data document. Their :ref:`user session <user-sessions>` 
+will terminate and then reconnect automatically. For user permissions to refresh
+automatically, the custom user data documents should be stored in a normal collection (ref),
+not a view (ref) or timeseries collection (ref). 
+
+For permissions to refresh automatically, keep in mind the following when 
+removing permsisions from a user:
+ 
+1. Don't delete a custom user data document. Rather, unset the fields in the document. 
+
+   .. example::
+
+     Say you have the following custom user data document:
+
+     .. code-block:: json
+        :caption: Need a custom user data document example.???????
+
+        {
+          "_id": "63ed2e4fb7f367c92578e526",
+          "user_id": "63ed2dbe5960df2af7fd216e",
+          "preferences": {
+            "preferDarkMode": true
+          },
+          "dateOfBirth": "1989-03-11T00:00:00.000Z"
+        }
+        
+
+2. Don't unset the user ID field. Rather, unset all the non-ID fields.
+
 Secure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~
 
