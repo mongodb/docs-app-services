@@ -6,9 +6,12 @@ on:
 #   GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }} # setting GH_TOKEN for the entire workflow
 
 jobs:
-    foo:
+    get-pr-changes:
         runs-on: ubuntu-latest
-        permissions: write-all
+        permissions:
+            contents: write
+            pull-requests: write
+            repository-projects: write
         steps:
         - uses: actions/checkout@v3
         - run: |
