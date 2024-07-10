@@ -5,13 +5,13 @@
 Define & Enforce a Schema
 =========================
 
-.. meta:: 
+.. meta::
    :keywords: code example
    :description: Learn how to create and deploy an Atlas App Services Schema and define validation rules to enforce it.
 
 .. facet::
   :name: genre
-  :values: reference
+  :values: tutorial
 
 .. facet::
    :name: programming_language
@@ -22,9 +22,6 @@ Define & Enforce a Schema
    :backlinks: none
    :depth: 1
    :class: singlecol
-
-Overview
---------
 
 You can control the shape and contents of documents in a collection by defining
 a :ref:`schema <schemas>`. Schemas let you require specific fields, control the
@@ -40,38 +37,41 @@ Define a Schema
 ---------------
 
 You can define a schema for a collection in the App Services UI or with the
-App Services CLI. 
+App Services CLI.
 
-When using the App Services UI, you can choose to: 
+When using the App Services UI, you can choose to:
 
 - Generate a schema from existing data in the collection, and modify as needed.
 - Define a schema manually by adding field-level schema definitions.
 
 .. tabs-realm-admin-interfaces::
-   
+
    .. tab::
       :tabid: ui
-      
+
       .. procedure::
 
-         .. step:: Navigate to the Collection Schema Screen
+         .. step:: Navigate to the Schema Screen
 
-            In the left navigation menu, click :guilabel:`Schema` beneath :guilabel:`Data
-            Access` to open the schema editor. Atlas App Services scans your linked cluster for
-            existing collections and lists them on the left side of the schema
-            editor.
+            In the left navigation menu, click :guilabel:`Schema` beneath
+            :guilabel:`Data Access` to open the schema editor. The Collections
+            configuration screen displays in the :guilabel:`Collections` tab.
+            Atlas App Services scans your linked cluster for existing
+            collections and lists them on the left side of the schema editor.
 
-            Find and select your collection from the menu to open the collection
-            configuration screen.
+            Find and select your collection from the menu to display the
+            collection configuration on the right side of the schema editor.
 
+            .. figure:: /images/schema-screen.png
+               :lightbox:
+               :alt: The Schema screen in the App Services UI
 
          .. step:: Generate a Schema from Existing Data (Optional)
 
             If you already have data in your collection, App Services can
             sample a subset of the documents in the collection and generate a
-            schema for you based on the sample. If you
-            already have a schema or prefer to define one manually, skip this
-            step.
+            schema for you based on the sample. If you already have a schema or
+            prefer to define one manually, skip to the next step.
 
             You can configure the number of documents to sample and use the
             MongoDB query language to limit the sample to specific documents. By
@@ -80,7 +80,9 @@ When using the App Services UI, you can choose to:
 
             To generate a schema from existing data:
 
-            1. Click the :guilabel:`Generate Schema` button to open the sample configuration screen.
+            1. From the collection configuration on the right side of the schema
+               editor, click :guilabel:`Generate Schema` to open the sample configuration
+               screen.
 
             2. Specify the sample size, up to a maximum of 50,000 documents.
 
@@ -99,9 +101,9 @@ When using the App Services UI, you can choose to:
                :alt: The Generate Schema sample size input in the App Services UI
 
 
-         .. step:: Define or Modify the Schema 
-            
-            You can define a schema manually or modify an existing schema by adding field-level schema definitions. 
+         .. step:: Define or Modify the Schema
+
+            You can define a schema manually or modify an existing schema by adding field-level schema definitions.
 
             You may define a single BSON schema for each collection. The root-level type
             of each collection schema is an ``object`` schema that represents a document
@@ -261,10 +263,10 @@ When using the App Services UI, you can choose to:
                :alt: The table that displays schema validation errors in the App Services UI
                :lightbox:
 
-   
+
    .. tab::
       :tabid: cli
-      
+
       .. procedure::
 
          .. step:: Log In to MongoDB Cloud
@@ -387,8 +389,8 @@ When using the App Services UI, you can choose to:
 Validate Null Types
 -------------------
 
-App Services's default behavior is to only accept a single type for each field. 
-Schema fields are not nullable by default because ``null`` is a unique 
+App Services's default behavior is to only accept a single type for each field.
+Schema fields are not nullable by default because ``null`` is a unique
 :manual:`BSON type </reference/bson-types/>`.
 
 You can configure App Services to pass schema validation when you use ``null``
@@ -399,9 +401,9 @@ If you do not enable null type schema validation, App Services rejects ``null``
 values passed to optional fields. Even if you enable null type validation,
 required fields are never nullable.
 
-To enable null type schema validation in the App Services UI: 
+To enable null type schema validation in the App Services UI:
 
 #. In the left navigation menu below the :guilabel:`Manage` header, select :guilabel:`App Settings`.
 #. On the :guilabel:`General` tab, navigate to the :guilabel:`Null Type Schema Validation`
    section. Toggle the switch to :guilabel:`ON`.
-#. Click the :guilabel:`Save` button. 
+#. Click the :guilabel:`Save` button.
