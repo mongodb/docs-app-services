@@ -1,3 +1,53 @@
+# July 5, 2024
+
+## Data API
+
+- Data API Endpoints: Add note indicating that private endpoints do not support Data API Endpoints.
+- Custom HTTPS Endpoints: Add note indicating that private endpoints do not support HTTPS Endpoints.
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Fix typo and update references using "Realm" to "Atlas Device SDK."
+
+## Secure Your App
+
+- Use a VPC Private Endpoint (Preview): Remove guidance on migrating to HTTPS endpoints and Data API.
+
+## Reference
+
+- Billing:
+
+  - Update formatting of free tier thresholds to represent independent threshold
+    model.
+  - Update page with new billing practice, including new daily free tier limits.
+
+## Release Notes
+
+- Update external changelog with release notes for the CLI, Edge Server, Atlas Events, and more.
+
+## Internal
+
+- Add files for Netlify workflow.
+
+# June 28, 2024
+
+## Device Sync
+
+- Configure and Update Your Data Model/ Data Model Mapping: Correct the minimum Swift SDK version number listed in the Collections in Mixed note.
+
+## Connect to MongoDB Data Sources
+
+- CRUD & Aggregation APIs: Add `distinct` and `explain` to the list of unsupported database commands. Update descriptions for the `$search` and `$out` aggregation pipeline stages.
+
+# June 21, 2024
+
+## Other
+
+- Throughout docs
+  - Typo fixes: Change "the the" to "the" on several pages.
+  - Add meta information for internal search improvements to pages with the typo fixes.
+  - Replace images on the App Services, Device Sync, and Edge Server landing pages with images that are more compatible with upcoming dark mode support.
+
 # June 14, 2024
 
 ## Device Sync
@@ -28,7 +78,7 @@
     - Update "Example" section to demonstrate nested collections of mixed data.
     - Update "Geospatial" section with content moved from Schema Types page.
 - Technical Details
-  - Conflict Resolution: 
+  - Conflict Resolution:
     - Add new "Dictionaries" section to clarify how Device Sync handles conflicts with dictionary keys.
     - Add new "Nested Collections" section.
 

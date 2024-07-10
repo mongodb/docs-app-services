@@ -4,21 +4,23 @@
 Define Custom User Metadata
 ===========================
 
+.. meta::
+   :description: Learn how to define custom user metadata and read user metadata from authentication providers.
+   :keywords: code example
+
 .. facet::
-   :name: genre 
+   :name: genre
    :values: tutorial
 
-.. meta:: 
-   :description: Learn how to define custom user metadata and read user metadata from authentication providers. 
+.. facet::
+   :name: programming_language
+   :values: json, javascript/typescript
 
 .. contents:: On this page
    :local:
    :backlinks: none
    :depth: 2
    :class: singlecol
-
-Overview
---------
 
 You can associate custom metadata with each user of your App. For
 example, you might store a user's preferred language, date of birth, or
@@ -102,8 +104,8 @@ collection. Depending on your use case, you may:
   update or delete custom user data.
 
 - Manually create, update, and delete documents in the collection using
-  standard CRUD operations from a Function, a Realm SDK, a MongoDB
-  driver or MongoDB Compass.
+  standard CRUD operations from a Function, an Atlas Device SDK, a MongoDB
+  driver, or MongoDB Compass.
 
 Secure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -243,8 +245,8 @@ Enable Custom User Data
          .. step:: Specify the User ID Field
 
             Every document in the custom user data collection has a field that
-            maps it to a specific application user. The field must be of type 
-            ``ObjectID`` or a ``string`` type that represents that ObjectID. 
+            maps it to a specific application user. The field must be of type
+            ``ObjectID`` or a ``string`` type that represents that ObjectID.
             This field must be present in every document that maps to a user.
 
             Specify the name of the field that contains each user's ID in the
@@ -252,15 +254,15 @@ Enable Custom User Data
 
             .. note::
 
-               If two documents contain the same user ID, one stored as a string 
-               and the other as an ObjectID, App Services 
+               If two documents contain the same user ID, one stored as a string
+               and the other as an ObjectID, App Services
                maps the document with the string type to the user.
 
          .. step:: Define a User Creation Function (Optional)
 
             If you want to use a :ref:`user creation Function
             <user-creation-function>`, define it in the inline editor or
-            reference and existing function by name.
+            reference an existing function by name.
 
          .. step:: Deploy the Updated Application
 
@@ -282,10 +284,10 @@ Enable Custom User Data
             document matches, App Services exposes the data in the document in the
             ``custom_data`` field of that user's :ref:`user object
             <user-objects>`.
-   
+
    .. tab::
       :tabid: cli
-      
+
       .. procedure::
 
          .. step:: Pull the Latest Version of Your App
@@ -375,8 +377,8 @@ Access Custom User Data from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For code examples that demonstrate how to access and update custom user
-data from the client application, see the documentation for the Realm
-SDKs:
+data from the client application, see the documentation for the
+Atlas Device SDKs:
 
 - :ref:`C++ SDK <cpp-custom-user-data>`
 - :ref:`Flutter SDK <flutter-custom-user-data>`
@@ -393,17 +395,17 @@ SDKs:
 Authentication Provider Metadata
 --------------------------------
 
-Atlas App Services can read user metadata from authentication providers. Then, 
-App Services exposes each user's data in a field of their :ref:`user 
-object <user-objects>`. For example, you might want to access a user's name, 
+Atlas App Services can read user metadata from authentication providers. Then,
+App Services exposes each user's data in a field of their :ref:`user
+object <user-objects>`. For example, you might want to access a user's name,
 email, birthday, or gender.
 
-You can configure App Services to request metadata with the access token 
-when users log in. You can access that data from the logged-in user's 
+You can configure App Services to request metadata with the access token
+when users log in. You can access that data from the logged-in user's
 object with a client SDK.
 
-You can define the metadata to request when you configure authentication 
-providers. Specify optional metadata fields that you want to access through 
+You can define the metadata to request when you configure authentication
+providers. Specify optional metadata fields that you want to access through
 the user's account. These metadata fields vary depending on provider.
 
 .. list-table::
@@ -423,7 +425,7 @@ the user's account. These metadata fields vary depending on provider.
        - ``min_age``
        - ``max_age``
        - ``email``
-   
+
    * - Google
      - - ``name``
        - ``first_name``
@@ -439,17 +441,17 @@ the user's account. These metadata fields vary depending on provider.
 
 .. important:: Avoid Stale Authentication Provider Metadata
 
-  If a user's metadata is updated after the access token is issued, requests 
-  using the previously created access token will not have the newly 
-  updated metadata. Their user metadata will update when they refresh 
+  If a user's metadata is updated after the access token is issued, requests
+  using the previously created access token will not have the newly
+  updated metadata. Their user metadata will update when they refresh
   their access token or re-authenticate.
 
-.. note:: Security and Authentication Provider Metadata 
+.. note:: Security and Authentication Provider Metadata
 
   Authentication provider metadata can be externally-defined by clients and
-  external authentication providers and should be regarded with caution. You should 
-  not rely solely on authentication provider metadata for security-related 
-  decisions, such as using this metadata in rule expressions for data access 
+  external authentication providers and should be regarded with caution. You should
+  not rely solely on authentication provider metadata for security-related
+  decisions, such as using this metadata in rule expressions for data access
   permissions.
 
 .. _enable-user-metadata-procedure:
@@ -462,7 +464,7 @@ Configure Authentication Provider Metadata
 
    .. tab::
       :tabid: ui
-      
+
       .. procedure::
 
          .. step:: Navigate to the Authentication Provider Configuration Screen
@@ -523,10 +525,10 @@ Configure Authentication Provider Metadata
             permission to access the requested metadata. If the user approves,
             App Services exposes the data in that user's :ref:`user object
             <user-objects>`.
-   
+
    .. tab::
       :tabid: cli
-      
+
       .. procedure::
 
          .. step:: Pull the Latest Version of Your App
@@ -736,22 +738,21 @@ Configure Authentication Provider Metadata
 
 
 
-.. note:: Tips for Users with Multiple Linked Authentication Providers  
+.. note:: Tips for Users with Multiple Linked Authentication Providers
 
-  - To ensure the most up-to-date metadata, users should re-authenticate after 
-    switching to a different authentication provider. Failure to do so may result 
-    in outdated metadata reflected in the :guilabel:`Users` table in 
+  - To ensure the most up-to-date metadata, users should re-authenticate after
+    switching to a different authentication provider. Failure to do so may result
+    in outdated metadata reflected in the :guilabel:`Users` table in
     the UI's :guilabel:`App Users` page and for requests using authentication providers.
-  - If a user switches between authentication providers, it may take up to 30 minutes 
-    for metadata to propagate. The request is always guaranteed to have the 
+  - If a user switches between authentication providers, it may take up to 30 minutes
+    for metadata to propagate. The request is always guaranteed to have the
     most up-to-date metadata associated with the authentication provider used.
 
 Access User Metadata from a Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 For code examples that demonstrate how to access user metadata
-data from the client application, see the documentation for the Realm
-SDKs:
+data from the client application, see the documentation for the Atlas Device SDKs:
 
 - :ref:`Flutter SDK <flutter-user-metadata>`
 - :ref:`.NET SDK <dotnet-user-metadata>`

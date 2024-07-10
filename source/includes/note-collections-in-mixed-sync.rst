@@ -15,7 +15,7 @@
     - .NET SDK: v12.2.0 or later
     - Node.js SDK: v12.9.0 or later
     - React Native SDK: v12.9.0 or later
-    - Swift SDK: version v10.15.0 or later
+    - Swift SDK: v10.51.0 or later
 
     This feature is *not* supported in the Java SDK.
 
