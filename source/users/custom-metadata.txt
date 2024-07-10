@@ -112,33 +112,41 @@ Modify User Permissions in Custom User Data Documents
 
 Permissions will automaticlly refresh for a user when you change their custom 
 user data document. Their :ref:`user session <user-sessions>` 
-will terminate and then reconnect automatically. For user permissions to refresh
-automatically, the custom user data documents should be stored in a normal collection (ref),
-not a view (ref) or timeseries collection (ref). 
+will terminate and then reconnect automatically. 
 
-For permissions to refresh automatically, keep in mind the following when 
-removing permsisions from a user:
- 
-1. Don't delete a custom user data document. Rather, unset the fields in the document. 
+For user permissions to refresh automatically, the custom user data 
+documents should be stored in a normal collection,
+not in a :manual:`view </core/views/>` or :manual:`time series </core/timeseries-collections/>` collection. 
 
-   .. example::
+For permissions to refresh automatically, don't delete a custom user data document. 
+Rather, unset all the non-ID fields in the document. 
 
-     Say you have the following custom user data document:
+.. example::
 
-     .. code-block:: json
-        :caption: Need a custom user data document example.???????
+  Say you have the following custom user data document:
 
-        {
-          "_id": "63ed2e4fb7f367c92578e526",
-          "user_id": "63ed2dbe5960df2af7fd216e",
-          "preferences": {
-            "preferDarkMode": true
-          },
-          "dateOfBirth": "1989-03-11T00:00:00.000Z"
-        }
-        
+  .. code-block:: json
+    :caption: Need a custom user data document example??
 
-2. Don't unset the user ID field. Rather, unset all the non-ID fields.
+    {
+      "_id": "63ed2e4fb7f367c92578e526",
+      "user_id": "63ed2dbe5960df2af7fd216e",
+      "preferences": {
+        "preferDarkMode": true
+      },
+      "dateOfBirth": "1989-03-11T00:00:00.000Z"
+    }   
+  
+  Instead of deleting the document, unset the non-ID fields. The document would
+  then look like:
+
+  .. code-block:: json
+    :caption: Need a custom user data document example.???????
+
+    {
+      "_id": "63ed2e4fb7f367c92578e526",
+      "user_id": "63ed2dbe5960df2af7fd216e"
+    } 
 
 Secure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~
