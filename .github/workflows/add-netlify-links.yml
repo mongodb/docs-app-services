@@ -27,14 +27,13 @@ jobs:
               declare -a new_links=()
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
-              echo $changed_files
-              echo $changed_files | tr "," "\n"
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
+                echo "processing ${file}"
                 if [[ ($file != *"includes/"*) ]]; then
                   file="${file#source}"
                   file="${file%.txt}"
-                  # echo "${base_link}${file}"
+                  echo "${base_link}${file}"
                   new_links+=("${base_link}${file}")
                   echo "new_links array: "
                   echo $new_links
