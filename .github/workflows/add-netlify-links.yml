@@ -34,7 +34,7 @@ jobs:
               echo $changed_files
               echo $changed_files | tr "," "\n"
               files=$(echo $changed_files | tr "," "\n")
-              for file in files; do
+              for file in $files; do
                 if [[ ($file == *"source/"*) && ($file == *"includes/"*) ]]; then
                   echo "${base_link}${file}"
                 else
