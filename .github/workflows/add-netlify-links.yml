@@ -51,7 +51,7 @@ jobs:
               uses: actions/checkout@v4
             - name: Debug
               id: parser
-              run: echo "parsed_links="echo ${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n'" >> "$GITHUB_OUTPUT"
+              run: echo "parsed_links=${echo ${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n'}" >> "$GITHUB_OUTPUT"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
