@@ -21,7 +21,7 @@ jobs:
             git fetch origin
             git branch -a
             git checkout ${{ github.head_ref }}
-            git diff ${{ github.head_ref }}..${{ github.base_ref }} --name-only
+            git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD
 #links_action
 #master
 #refs/pull/789/merge
