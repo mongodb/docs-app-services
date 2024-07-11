@@ -18,6 +18,9 @@ jobs:
             uses: tj-actions/changed-files@v44
             with:
               files: source/**
+          - name: List changed files (debugging log statement).
+            run: |
+              echo ${{ steps.changed-files.outputs.all_changed_files }}
           - name: Build Netlify Links for Changed Pages
             run: |
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
@@ -26,9 +29,9 @@ jobs:
               echo $changed_files | tr "," "\n"
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
-                if [[ ($file == *"source/"*) && ($file != *"includes/"*) ]]; then
-                  $file=`echo "${file#source}"`
-                  $file=`echo "${file%.txt}"`
+                if [[ ($file != *"includes/"*) ]]; then
+                 # $file=`echo "${file#source}"`
+                 # $file=`echo "${file%.txt}"`
                   echo "${base_link}${file}"
                 else
                   echo not: "${file}"
