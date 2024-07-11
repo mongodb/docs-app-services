@@ -52,7 +52,7 @@ jobs:
             - name: Debug
               id: parser
               run: |
-                pl=echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n'
+                pl=$(echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n')
                 echo "${pl}"
                 echo "parsed_links=${pl}" >> "$GITHUB_OUTPUT"
             - name: Update PR Description
