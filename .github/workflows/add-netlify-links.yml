@@ -43,8 +43,6 @@ jobs:
               echo "Final new_links string: "
               echo "${new_links}"
               echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
-          - name: Test within same job
-            run: echo -n "${{ steps.build_page_links.outputs.staging_links}}"
     update-pr-description:
         needs: get-pr-changes
         runs-on: ubuntu-latest
@@ -56,5 +54,5 @@ jobs:
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "\n\n### Staging links:\n\n${{ needs.get-pr-changes.outputs.staging_links }}"
+                  content: "\n\n### Staging links:\n\n `echo ${{ needs.get-pr-changes.outputs.staging_links }} | tr ',' '\n'`"
                   token: ${{ secrets.GITHUB_TOKEN }}
