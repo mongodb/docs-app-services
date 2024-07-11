@@ -53,5 +53,5 @@ jobs:
             - name: Update Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: $(echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n')
+                  content: "${echo ${{ needs.get-pr-changes.outputs.staging_links }} | tr ',' '\n'}"
                   token: ${{ secrets.GITHUB_TOKEN }}
