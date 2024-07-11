@@ -1,0 +1,32 @@
+name: Add Netlify Links To Changed Pages
+
+on:
+    workflow_call:
+    pull_request:
+jobs:
+    get-pr-changes:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+            contents: write
+            pull-requests: write
+            repository-projects: write
+        steps:
+        - uses: actions/checkout@v3
+        - run: |
+            git remote -v 
+            echo ${{ github.head_ref }}
+            echo ${{ github.base_ref }}
+            echo ${{github.ref}}
+            git fetch origin
+            git checkout master
+            git status
+            gh pr status
+            gh pr list 
+#links_action
+#master
+#refs/pull/789/merge
+            #gh pr checkout $BRANCH
+
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
