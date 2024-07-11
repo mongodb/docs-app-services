@@ -31,20 +31,12 @@ jobs:
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
                 if [[ ($file != *"includes/"*) ]]; then
-                  echo "${file#source}"
-                  echo "${file%.txt}"
+                  file="${file#source}"
+                  file="${file%.txt}"
                   echo "${base_link}${file}"
                 else
                   echo not: "${file}"
                 fi
               done
-  #should be https://deploy-preview-800--app-services.netlify.app/tutorial/dotnet/
-  # was      https://deploy-preview-800--app-services.netlify.appsource/tutorial/dotnet.txt
-  # TODO: remove source and .txt
-#get PR number
-#netlify url
-        #foreach
-#if changed file is in /source and ends in .txt and not in /source/includes
-# append 
 
         
