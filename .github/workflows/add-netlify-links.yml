@@ -35,7 +35,11 @@ jobs:
               echo $changed_files | tr "," "\n"
               files=$(echo $changed_files | tr "," "\n")
               for file in files; do
-                echo $file
+                if [[ ($file == *"source/"*) && ($file == *"includes/"*) ]]; then
+                  echo "${base_link}${file}"
+                else
+                  echo "${file}"
+                fi
               done
   
 #get PR number
