@@ -127,7 +127,7 @@ create_data_api_app () {
   ## Copy the template App config files that we use for this test.
   cp -r ./backend "$app_name"
   ## Replace the App & Cluster configs with the values from the new App.
-  mv "$app_name-tmp/realm_config.json" "$app_name/realm_config.json"
+  mv "$app_name-tmp/root_config.json" "$app_name/root_config.json"
   mv "$app_name-tmp/data_sources/mongodb-atlas/config.json" "$app_name/data_sources/mongodb-atlas/config.json"
   ## Throw away the rest of the base App config files.
   rm -rf "$app_name-tmp"

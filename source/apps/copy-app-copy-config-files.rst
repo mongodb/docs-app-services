@@ -7,8 +7,8 @@ configuration files.
 
    .. code-block:: bash
 
-      # Copy all configuration files except for realm_config.json
+      # Copy all configuration files except for root_config.json
       cp -r myapp myapp-temp
-      rm myapp-temp/realm_config.json
+      rm myapp-temp/root_config.json
       cp -r myapp-temp/* myapp-copy
       rm -rf myapp-temp

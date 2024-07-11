@@ -1,7 +1,7 @@
 .. code-block:: none
 
    app/
-   ├── realm_config.json
+   ├── root_config.json
    ├── auth/
    │   ├── providers.json
    │   └── custom_user_data.json
