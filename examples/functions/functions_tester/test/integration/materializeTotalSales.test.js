@@ -1,5 +1,5 @@
 // :snippet-start: materialize-total-sales-test
-const { app_id } = require("../../realm_config.json");
+const { app_id } = require("../../root_config.json");
 const Realm = require("realm");
 const { BSON } = require("realm");
 

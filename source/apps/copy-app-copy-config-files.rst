@@ -1,6 +1,6 @@
 Copy all configuration files from your original App, except for
-``realm_config.json``, to the new App's configuration directory. You
-should use the new App's ``realm_config.json`` and overwrite any other
+``root_config.json``, to the new App's configuration directory. You
+should use the new App's ``root_config.json`` and overwrite any other
 configuration files.
 
 .. example::
