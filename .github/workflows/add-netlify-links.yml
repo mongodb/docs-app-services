@@ -26,7 +26,7 @@ jobs:
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               echo $changed_files
-              echo $changed_files | tr "," "\n"
+              echo $changed_files | tr " " "\n"
               files=$(echo $changed_files | tr " " "\n")
               for file in $files; do
                 if [[ ($file != *"includes/"*) ]]; then
