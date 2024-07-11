@@ -44,12 +44,15 @@ jobs:
         needs: get-pr-changes
         runs-on: ubuntu-latest
         steps:
+            - name: test
+              run: |
+                echo ${{ needs.get-pr-changes.outputs.staging-links }}
             - name: Checkout
               uses: actions/checkout@v4
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "Staging links:\n${{ steps.page-links.outputs.staging-links }}"
+                  content: "Staging links:\n${{ needs.get-pr-changes.outputs.staging-links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
         
         
