@@ -22,7 +22,7 @@ jobs:
           - name: Build Netlify Links for Changed Pages
             id: page-links
             run: |
-              new-links=()
+              declare -a new-links=()
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               echo $changed_files
