@@ -12,20 +12,33 @@ jobs:
             pull-requests: write
             repository-projects: write
         steps:
-        - uses: actions/checkout@v3
-        - run: |
-            git remote -v 
-            echo ${{ github.head_ref }}
-            echo ${{ github.base_ref }}
-            echo ${{github.ref}}
-            git fetch origin
-            git branch -a
-            git checkout ${{ github.head_ref }}
-            git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD
-#links_action
-#master
-#refs/pull/789/merge
-            #gh pr checkout $BRANCH
+          - uses: actions/checkout@v4
+          - id: get-diffs
+            name: Get Changed Files in PR
+            run: |
+              git remote -v 
+              echo ${{ github.head_ref }}
+              echo ${{ github.base_ref }}
+              echo ${{github.ref}}
+              git fetch origin
+              git branch -a
+              git checkout ${{ github.head_ref }}
+              CHANGED_FILES=$(git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD)
+              echo "changedFiles=$CHANGED_FILES" >> "$GITHUB_OUTPUT"
+            
+          - name: Build Netlify Links for Changed Pages
+            run: |
+              base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
+              changed_files="${{ needs.get-diffs.outputs.changedFiles }}"
+              echo $changed_files
+              for file in changed_files; do
+                echo file
+              done
 
-          env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#get PR number
+#netlify url
+        #foreach
+#if changed file is in /source and ends in .txt and not in /source/includes
+# append 
+
+        
