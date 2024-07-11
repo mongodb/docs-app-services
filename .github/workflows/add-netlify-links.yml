@@ -24,26 +24,25 @@ jobs:
           - name: Build Netlify Links for Changed Pages
             id: build_page_links
             run: |
-              declare -a new_links=()
+              new_links=""
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
                 echo "processing ${file}"
-                if [[ ($file != *"includes/"*) || ($file != *"images/"*) || ($file != *"examples/"*) ]]; then
+                if [[ ($file != *"includes/"*) ]]; then 
+                  #todo: exclude images and examples
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new_links+=("${base_link}${file}")
-                  echo "new_links array: "
-                  echo ${new_links[@]}
+                  new_links+="- ${base_link}${file}\n"
                 else
                   echo not: "${file}"
                 fi
               done
-              echo "Final new_links array: "
-              echo ${new_links[@]}
-              echo "staging_links=${new_links[@]}" >> "$GITHUB_OUTPUT"
+              echo "Final new_links string: "
+              echo ${new_links}
+              echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
           - name: Test within Same Job
             run: echo ${{ steps.build_page_links.outputs.staging_links}}
     update-pr-description:
@@ -52,22 +51,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Pull Individual Links
-              id: pull-links
-              run: |
-                links_array="${{ needs.get-pr-changes.outputs.staging_links }}"
-                links_string=""
-                for i in "${links_array[@]}"
-                do
-                  echo "${i}"
-                  links_string+="- ${i}\n"
-                done
-                echo "${links_string}"
-                echo "links=${links_string}" >> "$GITHUB_OUTPUT"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "\n\n### Staging links:\n\n${{ steps.pull-links.outputs.links }}"
+                  content: "\n\n### Staging links:\n\n${{ needs.get-pr-changes.outputs.staging_links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
-        
-        
