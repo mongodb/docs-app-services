@@ -43,7 +43,8 @@ jobs:
               done
               echo "Final new_links string: "
               echo "${new_links}"
-              echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
+              links_encoded=$(echo -n "${new_links}" | base64)
+              echo "staging_links=${links_encoded}" >> "$GITHUB_OUTPUT"
           - name: Test within Same Job
             run: echo ${{ steps.build_page_links.outputs.staging_links}}
     update-pr-description:
@@ -52,8 +53,15 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: decode
+              id: decode
+              run: |
+                links=${{ needs.get-pr-changes.outputs.staging_links }}
+                decoded_links=$(echo "$links" | base64 --decode)
+                echo "${decoded_links}"
+                echo "decoded_links=${decoded_links}" >> "$GITHUB_OUTPUT"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "\n\n### Staging links:\n\n${{ needs.get-pr-changes.outputs.staging_links }}"
+                  content: "\n\n### Staging links:\n\n${{ steps.decode.outputs.decoded_links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
