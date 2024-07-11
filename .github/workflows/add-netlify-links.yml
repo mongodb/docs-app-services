@@ -13,12 +13,13 @@ jobs:
             repository-projects: write
         steps:
           - uses: actions/checkout@v4
-          - name: Get changed files.
+          - name: Get changed files
             id: changed-files
             uses: tj-actions/changed-files@v44
             with:
+              separator: ","
               files: source/**
-          - name: List changed files (debugging log statement).
+          - name: List changed files (debugging log statement)
             run: |
               echo ${{ steps.changed-files.outputs.all_changed_files }}
           - name: Build Netlify Links for Changed Pages
@@ -26,12 +27,12 @@ jobs:
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               echo $changed_files
-              echo $changed_files | tr " " "\n"
-              files=$(echo $changed_files | tr " " "\n")
+              echo $changed_files | tr "," "\n"
+              files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
                 if [[ ($file != *"includes/"*) ]]; then
-                 # $file=`echo "${file#source}"`
-                 # $file=`echo "${file%.txt}"`
+                  $file=`echo "${file#source}"`
+                  $file=`echo "${file%.txt}"`
                   echo "${base_link}${file}"
                 else
                   echo not: "${file}"
