@@ -41,6 +41,7 @@ jobs:
               echo $new_links
               echo "staging-links=$all-links" >> "$GITHUB_OUTPUT"
     update-pr-description:
+        needs: get-pr-changes
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -48,7 +49,7 @@ jobs:
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "Staging:\n"
+                  content: "Staging links:\n${{ steps.page-links.outputs.staging-links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
-            - run: echo ${{ steps.page-links.outputs.staging-links }}
+        
         
