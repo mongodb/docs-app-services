@@ -19,11 +19,10 @@ jobs:
             with:
               separator: ","
               files: source/**
-          - name: List changed files (debugging log statement)
-            run: |
-              echo ${{ steps.changed-files.outputs.all_changed_files }}
           - name: Build Netlify Links for Changed Pages
+            id: page-links
             run: |
+              new-links=()
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               echo $changed_files
@@ -34,9 +33,22 @@ jobs:
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
+                  new-links+=("${base_link}${file}")
                 else
                   echo not: "${file}"
                 fi
               done
-
+              echo $new-links
+              echo "staging-links=$all-links" >> "$GITHUB_OUTPUT"
+    update-pr-description:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Update PR Description
+              uses: nefrob/pr-description@v1.1.2
+              with:
+                  content: "Staging:\n"
+                  token: ${{ secrets.GITHUB_TOKEN }}
+            - run: echo ${{ steps.page-links.outputs.staging-links }}
         
