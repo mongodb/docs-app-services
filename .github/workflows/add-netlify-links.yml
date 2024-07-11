@@ -35,29 +35,24 @@ jobs:
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new_links+="- ${base_link}${file} \n"
+                  new_links+="- ${base_link}${file},"
                 else
                   echo not including "${file}"
                 fi
               done
               echo "Final new_links string: "
               echo "${new_links}"
-              echo "staging_links<<EOF" >> $GITHUB_ENV
-              echo $new_links >> $GITHUB_ENV
-              echo "EOF" >> $GITHUB_ENV
-              echo "staging_links<<EOF" >> $GITHUB_OUTPUT
-              echo $new_links >> $GITHUB_OUTPUT
-              echo "EOF" >> $GITHUB_OUTPUT
+              echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
           - name: Test within same job
-            run: |
-              echo -n "${{ steps.build_page_links.outputs.staging_links}}"
-              echo -n "${{ env.staging_links}}"
+            run: echo -n "${{ steps.build_page_links.outputs.staging_links}}"
     update-pr-description:
         needs: get-pr-changes
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Debug
+              run: echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n'
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
