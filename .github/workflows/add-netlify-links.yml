@@ -42,7 +42,7 @@ jobs:
               done
               echo "new_links array: "
               echo $new_links
-              echo "staging_links=$all_links" >> "$GITHUB_OUTPUT"
+              echo "staging_links=$new_links" >> "$GITHUB_OUTPUT"
           - name: Test within Same Job
             run: echo ${{ steps.build_page_links.outputs.staging_links}}
     update-pr-description:
