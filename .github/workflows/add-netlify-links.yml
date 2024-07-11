@@ -22,7 +22,7 @@ jobs:
           - name: Build Netlify Links for Changed Pages
             id: page-links
             run: |
-              declare -a new-links=()
+              declare -a new_links=()
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               echo $changed_files
@@ -33,12 +33,12 @@ jobs:
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new-links+=("${base_link}${file}")
+                  new_links+=("${base_link}${file}")
                 else
                   echo not: "${file}"
                 fi
               done
-              echo $new-links
+              echo $new_links
               echo "staging-links=$all-links" >> "$GITHUB_OUTPUT"
     update-pr-description:
         runs-on: ubuntu-latest
