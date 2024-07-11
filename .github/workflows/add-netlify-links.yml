@@ -12,7 +12,7 @@ jobs:
             pull-requests: write
             repository-projects: write
         outputs:
-            new-key: ${{ steps.page-links.outputs.all-links }}
+            new-key: ${{ steps.build_page_links.outputs.staging_links }}
         steps:
           - uses: actions/checkout@v4
           - name: Get changed files
@@ -22,7 +22,7 @@ jobs:
               separator: ","
               files: source/**
           - name: Build Netlify Links for Changed Pages
-            id: page-links
+            id: build_page_links
             run: |
               declare -a new_links=()
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
@@ -41,20 +41,22 @@ jobs:
                 fi
               done
               echo $new_links
-              echo "staging-links=$all-links" >> "$GITHUB_OUTPUT"
+              echo "staging_links=$all_links" >> "$GITHUB_OUTPUT"
+          - name: Test within Same Job
+            run: echo ${{ steps.build_page_links.outputs.staging_links}}
     update-pr-description:
         needs: get-pr-changes
         runs-on: ubuntu-latest
         steps:
             - name: test
               run: |
-                echo ${{ needs.get-pr-changes.outputs.staging-links }}
+                echo ${{ needs.get-pr-changes.outputs.staging_links }}
             - name: Checkout
               uses: actions/checkout@v4
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "Staging links:\n${{ needs.get-pr-changes.outputs.staging-links }}"
+                  content: "Staging links:\n${{ needs.get-pr-changes.outputs.staging_links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
         
         
