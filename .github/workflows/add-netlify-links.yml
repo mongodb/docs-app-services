@@ -35,7 +35,8 @@ jobs:
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new_links+="- ${base_link}${file}"$"\n"
+                  new_links+="- ${base_link}${file}" 
+                  new_links+=$'\n'
                 else
                   echo not: "${file}"
                 fi
@@ -44,7 +45,7 @@ jobs:
               echo "${new_links}"
               echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
           - name: Test within Same Job
-            run: echo ${{ steps.build_page_links.outputs.staging_links}}
+            run: echo -e ${{ steps.build_page_links.outputs.staging_links}}
     update-pr-description:
         needs: get-pr-changes
         runs-on: ubuntu-latest
