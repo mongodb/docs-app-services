@@ -36,14 +36,14 @@ jobs:
                   echo "${base_link}${file}"
                   new_links+=("${base_link}${file}")
                   echo "new_links array: "
-                  echo ${new_links$[@]}
+                  echo ${new_links[@]}
                 else
                   echo not: "${file}"
                 fi
               done
               echo "Final new_links array: "
-              echo ${new_links$[@]}
-              echo "staging_links=${new_links$[@]}" >> "$GITHUB_OUTPUT"
+              echo ${new_links[@]}
+              echo "staging_links=${new_links[@]}" >> "$GITHUB_OUTPUT"
           - name: Test within Same Job
             run: echo ${{ steps.build_page_links.outputs.staging_links}}
     update-pr-description:
