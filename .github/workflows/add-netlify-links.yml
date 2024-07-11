@@ -11,6 +11,8 @@ jobs:
             contents: write
             pull-requests: write
             repository-projects: write
+        outputs:
+            new-key: ${{ steps.page-links.outputs.all-links }}
         steps:
           - uses: actions/checkout@v4
           - name: Get changed files
