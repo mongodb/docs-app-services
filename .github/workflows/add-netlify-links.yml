@@ -20,7 +20,7 @@ jobs:
             echo ${{github.ref}}
             git fetch origin
             git checkout master
-            git diff --name-only
+            git diff ${{ github.head_ref }}..${{ github.base_ref }} --name-only
 #links_action
 #master
 #refs/pull/789/merge
