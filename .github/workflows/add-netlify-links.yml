@@ -13,6 +13,14 @@ jobs:
             repository-projects: write
         steps:
           - uses: actions/checkout@v4
+          - name: Get changed files.
+            id: changed-files
+            uses: tj-actions/changed-files@v44
+            with:
+              files: source/**
+          - name: List changed files (debugging log statement).
+            run: |
+              echo ${{ steps.changed-files.outputs.all_changed_files }}
           - id: get-diffs
             name: Get Changed Files in PR
             run: |
@@ -41,7 +49,9 @@ jobs:
                   echo not: "${file}"
                 fi
               done
-  
+  #should be https://deploy-preview-800--app-services.netlify.app/tutorial/dotnet/
+  # was      https://deploy-preview-800--app-services.netlify.appsource/tutorial/dotnet.txt
+  # TODO: remove source and .txt
 #get PR number
 #netlify url
         #foreach
