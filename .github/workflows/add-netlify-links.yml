@@ -46,7 +46,10 @@ jobs:
               links_encoded=$(echo -n "${new_links}" | base64)
               echo "staging_links=${links_encoded}" >> "$GITHUB_OUTPUT"
           - name: Test within Same Job
-            run: echo ${{ steps.build_page_links.outputs.staging_links}}
+            run: |
+              links=${{ steps.build_page_links.outputs.staging_links}}
+              decoded_links=$(echo "$links" | base64 --decode)
+              echo "${decoded_links}"
     update-pr-description:
         needs: get-pr-changes
         runs-on: ubuntu-latest
