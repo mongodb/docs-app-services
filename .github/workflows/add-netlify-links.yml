@@ -50,9 +50,10 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
             - name: Debug
-              run: echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n'
+              id: parser
+              run: echo "parsed_links="${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n'" >> "$GITHUB_OUTPUT"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "\n\n### Staging links:\n\n `echo ${{ needs.get-pr-changes.outputs.staging_links }} | tr ',' '\n'`"
+                  content: "\n\n### Staging links:\n\n ${{ steps.parser.outputs.parsed_links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
