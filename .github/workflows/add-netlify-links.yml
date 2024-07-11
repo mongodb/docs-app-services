@@ -18,27 +18,10 @@ jobs:
             uses: tj-actions/changed-files@v44
             with:
               files: source/**
-          - name: List changed files (debugging log statement).
-            run: |
-              echo ${{ steps.changed-files.outputs.all_changed_files }}
-          - id: get-diffs
-            name: Get Changed Files in PR
-            run: |
-              git remote -v 
-              echo ${{ github.head_ref }}
-              echo ${{ github.base_ref }}
-              echo ${{github.ref}}
-              git fetch origin
-              git branch -a
-              git checkout ${{ github.head_ref }}
-              git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD
-              CHANGED_FILES=$(git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD  | tr '\n' ',' | sed 's/\(.*\),/\1 /')
-              echo "changed_files=$CHANGED_FILES" >> "$GITHUB_OUTPUT"
-              echo $changed_files
           - name: Build Netlify Links for Changed Pages
             run: |
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
-              changed_files=${{ steps.get-diffs.outputs.changed_files }}
+              changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               echo $changed_files
               echo $changed_files | tr "," "\n"
               files=$(echo $changed_files | tr "," "\n")
