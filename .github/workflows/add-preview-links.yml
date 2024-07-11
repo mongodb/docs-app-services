@@ -9,6 +9,7 @@ jobs:
     get-pr-changes:
         runs-on: ubuntu-latest
         permissions:
+            issues: write
             contents: write
             pull-requests: write
             repository-projects: write
@@ -30,5 +31,4 @@ jobs:
             #gh pr checkout $BRANCH
 
           env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            BRANCH: ${{ github.head_ref }}
+            GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
