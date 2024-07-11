@@ -50,15 +50,24 @@ jobs:
         needs: get-pr-changes
         runs-on: ubuntu-latest
         steps:
-            - name: test
-              run: |
-                echo ${{ needs.get-pr-changes.outputs.staging_links }}
             - name: Checkout
               uses: actions/checkout@v4
+            - name: Pull Individual Links
+              id: pull-links
+              run: |
+                links_array=${{ needs.get-pr-changes.outputs.staging_links }}
+                links_string=""
+                for i in "${links_array[@]}"
+                do
+                  echo "$i"
+                  links_string+="- $i\n"
+                done
+                echo links_string
+                echo "links=${links_string}" >> "$GITHUB_OUTPUT"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  content: "\n\n## Staging links:\n${{ needs.get-pr-changes.outputs.staging_links }}"
+                  content: "\n\n### Staging links:\n\n${{ steps.pull-links.outputs.links }}"
                   token: ${{ secrets.GITHUB_TOKEN }}
         
         
