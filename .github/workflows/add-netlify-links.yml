@@ -24,9 +24,9 @@ jobs:
               git branch -a
               git checkout ${{ github.head_ref }}
               git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD
-              CHANGED_FILES=$(git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD)
+              CHANGED_FILES=$(git diff-tree --no-commit-id --name-only --diff-filter 'AM' -r HEAD^1 HEAD  | xargs)
               echo "changed-files=$CHANGED_FILES" >> "$GITHUB_OUTPUT"
-            
+              echo $changed-files
           - name: Build Netlify Links for Changed Pages
             run: |
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
