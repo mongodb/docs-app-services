@@ -31,8 +31,8 @@ jobs:
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
                 if [[ ($file != *"includes/"*) ]]; then
-                  $file=`echo "${file#source}"`
-                  $file=`echo "${file%.txt}"`
+                  echo "${file#source}"
+                  echo "${file%.txt}"
                   echo "${base_link}${file}"
                 else
                   echo not: "${file}"
