@@ -52,13 +52,14 @@ jobs:
               uses: actions/checkout@v4
             - name: Set environment variable
               run: |
-                echo "MY_ENV_VAR=myValue" >> $GITHUB_ENV
-                echo "LINKS_ENV=${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n') >> $GITHUB_ENV
+                #echo "MY_ENV_VAR=myValue" >> $GITHUB_ENV
+                pl=$(echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n')
+                echo "LINKS_ENV=${pl}" >> $GITHUB_ENV
             - name: Debug
               id: parser
               run: |
-                #pl=$(echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n')
-                #echo "${pl}"
+                pl=$(echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n')
+                echo "${pl}"
                 echo $LINKS_ENV
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
