@@ -24,7 +24,7 @@ jobs:
           - name: Build Netlify Links for Changed Pages
             id: build_page_links
             run: |
-              new_links="### Staging Links: \n\n"
+              new_links="### Staging Links: \n\n <br/>"
               base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
               changed_files=${{ steps.changed-files.outputs.all_changed_files }}
               files=$(echo $changed_files | tr "," "\n")
@@ -32,11 +32,10 @@ jobs:
                 echo "processing ${file}"
                 if [[ ($file != *"includes/"*) ]]; then 
                   #todo: exclude images and examples
-                  new_links+="- "
+                  new_links+="<br/> - "
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new_links+=" \n\n"
                 else
                   echo not including "${file}"
                 fi
