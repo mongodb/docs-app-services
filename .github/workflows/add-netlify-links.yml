@@ -57,6 +57,6 @@ jobs:
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  regex: "### Staging Links:\n\n-"
+                  regex: "### Staging Links:(\n*)-"
                   content: ${{ needs.get-pr-changes.outputs.staging_links }}
                   token: ${{ secrets.GITHUB_TOKEN }}
