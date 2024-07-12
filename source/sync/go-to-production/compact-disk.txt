@@ -17,64 +17,34 @@ Compact an Atlas Volume
    :depth: 1
    :class: singlecol
 
-Atlas Device SDK's :ref:`data compaction <backend-compaction>` defragments the storage
-space the local database file uses on a client and reduces the size of the
-``__realm_sync`` database on Atlas clusters. However, it does *not* reduce the
-overall size of the Atlas cluster. Compacting the data on an Atlas volume
-involves additional steps.
+Atlas Device Sync :ref:`optimizes sync storage <optimize-sync-atlas-usage>` by
+minimizing the amount of Device Sync metadata stored in your Atlas clusters.
+However, these strategies do *not* reduce the overall size of the Atlas cluster.
 
-Enable Compaction to Reclaim Disk Space
----------------------------------------
+To reclaim disk space in your cluster, you must compact the data on an Atlas
+volume. For more information on reducing the size of your Atlas cluster, contact :atlas:`Support </support>`.
 
-Perform the following to reduce Atlas disk space usage:
+You can compact your Atlas volume in two ways:
 
-1. Enable Compaction in App Services
+- (Recommended) File a Support ticket to request a rolling resync be performed
+  on your Atlas cluster. This process is similar to the procedure outlined in
+  :manual:`Resync a Member of a Replica Set <tutorial/>`, but re-syncing an
+  Atlas cluster must be completed by a Support representative.
 
-   Before reclaiming volume space, be sure that you have enabled Compaction
-   on your Atlas App Services app. To do so, set the :guilabel:`Client Max Offline Time`
-   in the Sync Settings through the App Services UI. For more information, refer to
-   :ref:`set-the-client-maximum-offline-time`.
+- Alternatively, you can compact the indexes on your Atlas cluster using the
+  :manual:`compact() </reference/command/compact/>` command. This may not
+  reduce the volume size as effectively as performing a rolling resync.
 
-   .. note:: Wait for Compaction
+  This method involves performing a failover on the cluster's primary node. To
+  fully understand this process and to ensure that your cluster meets the
+  minimum requirements to successfully handle a primary failover, we highly
+  recommend that you first perform a
+  :atlas:`primary failover test </tutorial/test-resilience/test-primary-failover/>`.
 
-      If you are enabling compaction for the first time, you will need to wait for
-      the compaction to happen before continuing. You can file a ticket with
-      support if you want to ensure compaction has completed.
+  After successfully testing failover of your primary node, follow these steps:
 
-#. Perform a Rolling Resync
+  1. Run the :manual:`compact() </reference/command/compact/>` command on
+     each of the cluster's secondary nodes, one at a time.
 
-   Perform a rolling resync of your Atlas cluster, as described in
-   :manual:`Resync a Member of a Replica Set <tutorial/resync-replica-set-member/>`.
-
-   The commands to do this are not available through Atlas. Instead, you can
-   file a ticket with support to have this process done for you.
-
-Use ``Compact()``
------------------
-
-Another step that you can take to reclaim Atlas volume space is to compact the
-indexes on the Atlas cluster.
-
-1. Test the primary failover process (recommended). Because this procedure
-   involves performing a failover on the primary node, we highly recommend that
-   you test whether your cluster can handle a primary failover before
-   proceeding.
-
-   For more information on performing this test and its prerequisites, refer to
-   :atlas:`Test Primary Failover </tutorial/test-resilience/test-primary-failover/>`.
-
-#. Run the :manual:`compact() </reference/command/compact/>` command on one of the
-   secondary nodes, and then on the other secondary nodes.
-
-#. Perform a failover on the primary mode, then run ``compact()`` on the primary
-   node.
-
-For more information on this approach, support-enabled customers can refer to
-`How to use the compact() command in Atlas
-<https://support.mongodb.com/article/000019602>`__.
-Contact :atlas:`Support </support>` for access.
-
-.. note::
-
-   The ``compact()`` command may not reduce the volume size as much as
-   performing a rolling resync.
+  #. Perform a failover on the primary mode, then run ``compact()`` on the
+     primary node.

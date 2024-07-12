@@ -4,7 +4,12 @@
 Optimize Sync Storage in Atlas
 ==============================
 
-.. default-domain:: mongodb
+.. meta::
+  :description: Atlas Device Sync uses several strategies to optimize storage space for sync data stored in an Atlas cluster.
+
+.. facet::
+  :name: genre
+  :values: reference
 
 .. contents:: On this page
    :local:
@@ -15,11 +20,8 @@ Optimize Sync Storage in Atlas
 .. meta::
    :keywords: maxOfflineTime, client, maximum, offline, time, client maximum offline time, maximum offline time, max, max offline time, client max offline time
 
-Overview
---------
-
 Atlas Device Sync uses space in your app's synced Atlas cluster to store
-metadata for sync. This includes a history of changes to each realm.
+metadata for sync. This includes a history of changes to each synced database.
 Atlas App Services minimizes this space usage in your Atlas cluster.
 Minimizing metadata is necessary to reduce the time and data needed for sync.
 
@@ -39,9 +41,8 @@ App Services stores history in your synced Atlas cluster.
 Trimming
 --------
 
-When you set a client maximum offline time in an App that uses :ref:`Flexible
-Sync <flexible-sync>`, **trimming** deletes changes older than the client
-maximum offline time.
+When you set a client maximum offline time in an App, **trimming** deletes
+changes older than the client maximum offline time.
 
 .. _client-maximum-offline-time:
 
