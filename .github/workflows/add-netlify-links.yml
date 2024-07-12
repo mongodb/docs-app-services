@@ -24,16 +24,26 @@ jobs:
           - name: Build Netlify Links for Changed Pages
             id: build_page_links
             run: |
-                MY_STRING=$(cat << EOF
-                first line
-                second line
-                third line
-                EOF
-                )
-                MY_STRING="${MY_STRING//'%'/'%25'}"
-                MY_STRING="${MY_STRING//$'\n'/'%0A'}"
-                MY_STRING="${MY_STRING//$'\r'/'%0D'}"
-                echo "staging_links=${MY_STRING}" >> "$GITHUB_OUTPUT"
+              new_links="<ul>"
+              base_link='https://deploy-preview-${{ github.event.number }}--app-services.netlify.app'
+              changed_files=${{ steps.changed-files.outputs.all_changed_files }}
+              files=$(echo $changed_files | tr "," "\n")
+              for file in $files; do
+                echo "processing ${file}"
+                if [[ ($file != *"includes/"*) ]]; then 
+                  #todo: exclude images and examples
+                  file="${file#source}"
+                  file="${file%.txt}"
+                  echo "${base_link}${file}"
+                  new_links+="<li>${base_link}${file}</li>"
+                else
+                  echo not including "${file}"
+                fi
+              done
+              new_links+="</ul>
+              echo "Final new_links string: "
+              echo "${new_links}"
+              echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
     update-pr-description:
         name: Update the PR Description
         needs: get-pr-changes
@@ -41,16 +51,10 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-            - name: Set environment variable
-              run: |
-                pl=$(echo "${{ needs.get-pr-changes.outputs.staging_links }}")
-                echo "${pl}"
             - name: Debug
               id: parser
               run: |
-               # pl=$(echo "${{ needs.get-pr-changes.outputs.staging_links }}" | tr ',' '\n')
-                #echo "${pl}"
-               # echo $LINKS_ENV
+                echo "${{ needs.get-pr-changes.outputs.staging_links }}"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
