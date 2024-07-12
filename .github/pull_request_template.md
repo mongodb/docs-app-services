@@ -2,7 +2,8 @@
 
 Jira ticket: https://jira.mongodb.org/browse/DOCSP-NNNNN
 
-- [PAGE_NAME](https://docs-atlas-staging.mongodb.com/atlas-app-services/docsworker-xlarge/BRANCH_NAME/): description of changes
+### Staging Links
+<!-- start insert-links --><!-- end insert-links -->
 
 ### Reminder Checklist
 
