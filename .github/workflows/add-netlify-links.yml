@@ -30,7 +30,7 @@ jobs:
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
                 echo "processing ${file}"
-                if (grep -s "includes/"  <<< $file) || (grep -s "images/"  <<< $file) || (grep -s "examples/"  <<< $file); then
+                if (! grep -s "includes/"  <<< $file) || (! grep -s "images/"  <<< $file) || (! grep -s "examples/"  <<< $file); then
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
