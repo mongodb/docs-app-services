@@ -30,13 +30,15 @@ jobs:
               files=$(echo $changed_files | tr "," "\n")
               for file in $files; do
                 echo "processing ${file}"
-                if (! grep -s "includes/"  <<< $file) && (! grep -s "images/"  <<< $file) && (! grep -s "examples/"  <<< $file); then
+                if (! grep -s "includes/"  <<< $file) && 
+                    (! grep -s "images/"  <<< $file) && 
+                    (! grep -s "examples/"  <<< $file); then
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
                   new_links+="<br/> - ${base_link}${file}"
                 else
-                  echo not including "${file}"
+                  echo (skipped)
                 fi
               done
               echo "Final new_links string: "
@@ -47,8 +49,7 @@ jobs:
         needs: get-pr-changes
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
             - name: Debug
               id: parser
               run: |
