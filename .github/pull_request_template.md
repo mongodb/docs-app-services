@@ -2,9 +2,7 @@
 
 Jira ticket: https://jira.mongodb.org/browse/DOCSP-NNNNN
 
-<!-- start insert links -->
-
-<!-- end insert links -->
+<!-- start insert links --><!-- end insert links -->
 
 ### Reminder Checklist
 
