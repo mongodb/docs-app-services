@@ -13,6 +13,35 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_20240710:
+
+10 July 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Updated description under :guilabel:`Enable Automatic Deployment` in UI to 
+  include that enabling automatic deployment will allow App Services to automatically push a copy of your App to your designated repository. 
+
+- Deployment logs now record the ``user_id`` for Admin API and CLI requests.
+
+- Fixed bug where triggers match expressions were converted to incorrect formats if they contained a regular expression (``$regex``).
+
+- App Services Function names can now include hyphens (-).
+
+- Throw an error if max number of collections is exceeded. need to look at tyler's msg
+
+- The deleted version store for Partion Based Sync Apps will now be pruned of version that are ___ days old
+
+- Removed option to switch between :guilabel:`Sync Types` in the UI of the cluster configuration page, unless the cluster is associated with a PBS app. Then, the option to switch between sync modes will be available.
+
+- Destrcutive changes require restartinng Sync. When making a destrcutive change (add ref) in the Devic Sync configuration UI, a modal now pops up to allow you to terminate and restart Sync when confirming the change.
+
+- Fixed bug where :ref:`revoking all user's sessions <revoke-user-sessions>`, did not immediately disconnect users.
+  Now, users cannot stay connected or sync after all sessions are revoked.
+
+Edge Server
+
+- The bootstrap progress percentage is now shown in the Edge Server status UI.
+
 .. _backend_20240626:
 
 26 June 2024 Release
