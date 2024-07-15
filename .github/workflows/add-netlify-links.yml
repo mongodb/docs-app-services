@@ -41,6 +41,9 @@ jobs:
                   echo "(file skipped)"
                 fi
               done
+              if (${new_links} == ""); then
+                new_links = " - "
+              fi
               echo "Final new_links string: "
               echo "${new_links}"
               echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
