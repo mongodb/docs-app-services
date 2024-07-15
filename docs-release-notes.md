@@ -1,3 +1,41 @@
+# July 12, 2024
+
+## Tutorials
+
+- All Device Sync Tutorials: Note that the downloaded .zip file may appear empty for Windows users, and recommend using a third-party zip utility as a workaround.
+
+## Device Sync
+
+- App Builder's Resources/Device Sync Permissions Guide: Fix a typo in "Create subscribeToUser Function" section and add metadata to the page.
+- Go to Production with Sync/Compact an Atlas Volume: Remove outdated information and update procedure with link to the Test Primary Failover page in the Atlas documentation.
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Fix a typo in "User Creation Function" section.
+
+## Connect to MongoDB Data Sources
+
+- CRUD & Aggregation APIs: Remove `$currentOp` from the list of aggregation pipelines stages.
+- Internal Database Usage: Update "Unsynced Documents" section to note that with more than 100,000 unsyncable documents, users must manually terminate Sync, fix the documents, and re-enable Sync.
+
+## Define a Data Model
+
+- Schemas/Define & Enforce a Schema: Add screenshot of the "Schemas" UI to the "Define a Schema" procedure for the App Services UI.
+
+## Monitor App Activity
+
+- Activity Feed & Alerts: Add a link from the "Custom App Services Alerts" section to the App Services Metrics Reference.
+
+## Reference
+
+- App Services CLI: Regenerate and add updated documentation pages for App Services CLI and all children pages.
+- Partition-Based Sync Mode: Added a link to the migration guide from PBS to Flexible Sync.
+
+## Other
+
+- Throughout the docs: Remove old mentions of `realm_config.json` and replace with current name, `root_config.json`.
+- Internal: Update redirects for deprecated `realm-cli` pages to include the missing path directory.
+
 # July 5, 2024
 
 ## Data API
