@@ -123,30 +123,51 @@ Rather, unset all the non-ID fields in the document.
 
 .. example::
 
-  Say you have the following custom user data document:
-
-  .. code-block:: json
-    :caption: Need a custom user data document example??
-
-    {
-      "_id": "63ed2e4fb7f367c92578e526",
-      "user_id": "63ed2dbe5960df2af7fd216e",
-      "preferences": {
-        "preferDarkMode": true
-      },
-      "dateOfBirth": "1989-03-11T00:00:00.000Z"
-    }   
+  Consider a collection named ``employees`` where each employee has their own 
+  document stating their level at the company. This collection might have 
+  three roles: Junior, Senior, or Manager. 
   
-  Instead of deleting the document, unset the non-ID fields. The document would
-  then look like:
+  Using the ````apply_when`` expression, the role for the employee is based on 
+  the value of the ``level`` field in the employee's custom user data document. 
+  The ``level`` field also has Junior, Senior, or Manager values. For example, 
+  the ``apply_when`` expression for the role of Senior would look like:
 
   .. code-block:: json
-    :caption: Need a custom user data document example.???????
+    :caption: Junior role with apply_when expression
 
     {
-      "_id": "63ed2e4fb7f367c92578e526",
-      "user_id": "63ed2dbe5960df2af7fd216e"
-    } 
+      "name": "Junior"
+      "apply_when": {"%%user.custom_data.level": "sneior"},
+      ...
+
+    }
+
+    Say you you would like to remove the following employee's document
+    because they no longer work at the company:
+
+  .. code-block:: json
+    :caption: Custom user data document
+
+    {
+      "_id": "63ed2erealobjectid78e526",
+      "user_id": "63ed2dbe5960df2af7fd216e",
+      "level": "senior"
+    }
+  
+    First, you need to correctly remove the employee's permissions, by unsetting
+    the non-ID fields. The document would then look like:
+
+    .. code-block:: json
+      :caption: Correctly updated custom user data document
+
+      {
+        "_id": "63ed2erealobjectid78e526",
+        "user_id": "63ed2dbe5960df2af7fd216e"
+      } 
+
+    Unsetting the non-ID field allows App Services to remove the employee's 
+    permissions, so the employee no longer has access. 
+    You can now safely delete the document if necessary.
 
 Secure Custom User Data
 ~~~~~~~~~~~~~~~~~~~~~~~
