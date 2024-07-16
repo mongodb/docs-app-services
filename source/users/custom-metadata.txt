@@ -127,9 +127,9 @@ Rather, unset all the non-ID fields in the document.
   document stating their level at the company. This collection might have 
   three roles: Junior, Senior, or Manager. 
   
-  Using the ````apply_when`` expression, the role for the employee is based on 
-  the value of the ``level`` field in the employee's custom user data document. 
-  The ``level`` field also has Junior, Senior, or Manager values. For example, 
+  The ``level`` field in the employee's custom user data document also has 
+  Junior, Senior, or Manager values. Using the ``apply_when`` expression, the 
+  role for the employee is based on the value of the ``level`` field. For example, 
   the ``apply_when`` expression for the role of Senior would look like:
 
   .. code-block:: json
@@ -137,9 +137,8 @@ Rather, unset all the non-ID fields in the document.
 
     {
       "name": "Junior"
-      "apply_when": {"%%user.custom_data.level": "sneior"},
+      "apply_when": {"%%user.custom_data.level": "senior"},
       ...
-
     }
 
   Say you you would like to remove the following employee's document
