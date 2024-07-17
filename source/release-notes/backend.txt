@@ -20,11 +20,12 @@ Atlas App Services Changelog
 
 - Edge Server
 
-  - The bootstrap progress percentage is now shown in the Edge Server status UI.
+  - You can now track the bootstrap progress percentage in the status section of the Edge Server Local UI. 
+    For more information on tracking the status of you Edge Server instance, see :ref:`<edge-server-status>`. 
 
 - :ref:`Enabling automatic deployment <deploy-github>` allows App Services to automatically push a copy of your App to your designated repository, 
-  making the current :guilabel:`Export your application and upload to GitHub` section in the Deployment UI unnecessary. Updated the description 
-  under the :guilabel:`Enable Automatic Deployment` section to make this behavior clear. 
+  making the :guilabel:`Export your application and upload to GitHub` section in the :guilabel:`Deployment` screen unnecessary. Removed the section and 
+  updated the description under the :guilabel:`Enable Automatic Deployment` section to make this behavior clear. 
 
 - Deployment logs for your application now record the ``user_id`` for Admin API and CLI requests.
 
@@ -33,19 +34,20 @@ Atlas App Services Changelog
 - App Services Function names can now include hyphens (-).
 
 - When a free or shared Atlas cluster exceeds 500 collections, the max number of collections for these tiers, you will get an error message.
-  For more information on the operational limits of free or shared clusters, see the :atlas:`Free and Shared Cluster Operational Limits <reference/free-shared-limitations/#operational-limits>`.
+  For more information on the operational limits of free or shared clusters, see the :atlas:`Free and Shared Cluster Operational Limits </reference/free-shared-limitations/#operational-limits>`.
 
-- :ref:`Version metadata <deployment-history>` for :ref:`Partion Based Sync Apps <partition-based-sync>` will now be pruned for versions older than 60 days.
+- Version metadata for :ref:`Partition-Based Sync Apps <partition-based-sync>` will now be pruned if the deployment version is older than 60 days.
+  For more information on viewing previous App deployments, see :ref:`Deployment History <deployment-history>`. 
 
-- Removed option to switch between :guilabel:`Sync Types` in the UI of the cluster configuration page, unless the cluster is associated with a Partion Based Sync app. 
-  Then, the option to switch between sync modes will be available, as we recommend switching to Flexible Sync. For more information on migrating to Flexible Sync,
-  see :ref:`<realm-sync-migrate-modes>`.
+- Removed the option to change from Flexible Sync to Partition-Based Sync mode. The :guilabel:`Sync Types` field in the 
+  :guilabel:`Device Sync` configuration screen now only displays if the cluster is associated with a Partition-Based Sync App. 
+  Then, the option to switch sync modes will be left available, as we recommend :ref:`migrating to Flexible Sync <realm-sync-migrate-modes>`.
 
-- :ref:`Destructive or breaking changes <breaking_changes>` require restarting Sync. When making a destructive change 
-  in the Device Sync configuration UI, a modal now pops up to allow you to terminate and restart Sync when confirming the change.
+- Adding or removing a collections for :ref:`Data Ingest <asymmetric-sync>` is a destructive change that requires restarting Sync. 
+  In the :guilabel:`Device Sync` configuration screen, a modal now appears to allow you to terminate and restart Sync when confirming additions or removals for Data Ingest collections.
 
-- Fixed bug where :ref:`revoking all user's sessions <revoke-user-sessions>` did not immediately disconnect users.
-  Now, users cannot stay connected or sync after all sessions are revoked.
+- Fixed bug where :ref:`revoking all of a user's current sessions <revoke-user-sessions>` did not immediately disconnect the user.
+  Now, a user cannot stay connected or sync after all sessions are revoked.
 
 .. _backend_20240626:
 
