@@ -107,8 +107,8 @@ collection. Depending on your use case, you may:
   standard CRUD operations from a Function, an Atlas Device SDK, a MongoDB
   driver, or MongoDB Compass.
 
-Modify User Permissions in Custom User Data Documents
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Best Custom User Data Practices for Automatically Refreshing Permissions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 :ref:`Permissions <permissions>` will automatically refresh for a user when you 
 change their custom user data document. Their :ref:`user session <user-sessions>` 
@@ -137,8 +137,8 @@ Rather, unset all the non-ID fields in the document.
       "canWrite": true,
     }
 
-  The ``canRead`` and ``canWrite`` fields help determine the roles for the collection
-  this document is in. For example, the ``canRead`` field is used to determine eligibility 
+  The ``canRead`` and ``canWrite`` fields help determine the roles for this document's
+  collection. For example, the ``canRead`` field is used to determine eligibility 
   for the following ``readAllRole`` in the ``apply_when`` expression: 
 
   .. code-block:: json
