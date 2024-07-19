@@ -112,7 +112,7 @@ Permissions and Custom User Data
 
 :ref:`Permissions <permissions>` will automatically refresh for a user when you 
 change their custom user data document. Their :ref:`user session <user-sessions>` 
-will terminate and then reconnect automatically. 
+will terminate and then refresh automatically. 
 
 For user permissions to refresh automatically, the custom user data 
 documents should be stored in a normal collection and
@@ -130,14 +130,13 @@ Rather, unset all the non-ID fields in the document.
     :caption: Custom user data document
 
     {
-
       "_id": "63ed2erealobjectid78e526",
       "user_id": "63ed2dbe5960df2af7fd216e",
       "canRead": true,
       "canWrite": true,
     }
 
-  The ``canRead`` and ``canWrite`` fields help determine the roles for this document's
+  The ``canRead`` and ``canWrite`` fields can help determine the roles for this document's
   collection. For example, the ``canRead`` field is used to determine eligibility 
   for the following ``readAllRole`` in the ``apply_when`` expression: 
 
