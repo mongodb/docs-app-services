@@ -390,6 +390,65 @@ Atlas Device SDKs:
 - :ref:`Swift SDK <ios-custom-user-data>`
 - :ref:`Web SDK <web-access-custom-user-data>`
 
+Best Practices for Modifying Permissions in Custom User Data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:ref:`Permissions <permissions>` will automatically refresh for a user when you 
+change their custom user data document. Their :ref:`user session <user-sessions>` 
+will terminate and then refresh automatically. 
+
+For user permissions to refresh automatically, the custom user data 
+documents should be stored in a normal collection and
+not in a :manual:`view </core/views/>` or :manual:`time series </core/timeseries-collections/>` collection. 
+
+For permissions to refresh automatically, don't delete a custom user data document. 
+Rather, unset all the non-ID fields in the document. 
+
+.. example::
+
+  Consider the following document where the user is assigned read and write
+  permissions: 
+
+  .. code-block:: json
+    :caption: Custom user data document
+
+    {
+      "_id": "63ed2erealobjectid78e526",
+      "user_id": "63ed2dbe5960df2af7fd216e",
+      "canRead": true,
+      "canWrite": true,
+    }
+
+  The ``canRead`` and ``canWrite`` fields can help determine the roles for this document's
+  collection. For example, the ``canRead`` field is used to determine eligibility 
+  for the following ``readAllRole`` in the ``apply_when`` expression: 
+
+  .. code-block:: json
+    :caption: Custom user data document
+
+    {
+      "name": "readAllRole"
+      "apply_when": {"%%user.custom_data.canRead": true},
+      ...
+    }
+
+  Say you would like to remove the user's document
+  because they haven't been active for an extended period of time.
+  First, you need to correctly remove the employee's permissions, by unsetting
+  the non-ID fields. The document would then look like:
+
+  .. code-block:: json
+    :caption: Correctly updated custom user data document
+
+    {
+      "_id": "63ed2erealobjectid78e526",
+      "user_id": "63ed2dbe5960df2af7fd216e"
+    } 
+
+  Unsetting the non-ID field allows App Services to automatically
+  refresh the user's permissions according to the roles. 
+  You can now safely delete the document if necessary.
+
 .. _auth-provider-metadata:
 
 Authentication Provider Metadata
