@@ -11,8 +11,6 @@ Sync Settings
 .. meta::
   :description: Learn about Atlas Device Sync settings and how to use them.
 
-.. default-domain:: mongodb
-
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -35,37 +33,43 @@ you want to store your synced data.
 
 .. include:: /includes/note-flexible-sync-prerequisite.rst
 
-After you enable Device Sync, you cannot modify this field. You must :ref:`pause
-or terminate Sync <pause-or-terminate-sync>` before you can select a different
-synced cluster.
+.. include:: /includes/sync-settings-field-disabled.rst
 
 .. _flexible-sync:
 
 Sync Type
 ~~~~~~~~~
 
-If your app uses the older Partition-Based Sync mode, use this field to change
-to Flexible Sync mode.
+.. important:: Sync Type Displays Only for Partition-Based Sync Apps
 
-.. important:: Sync Type Displays Only for Existing Partition-Based Sync Apps
+   The ability to select your app's Sync Type is only available for
+   organizations with at least one existing :ref:`Partition-Based Sync
+   <partition-based-sync>` app in their project.
 
-   The ability to change your app's Sync Type is only available for existing
-   apps that still use the older :ref:`Partition-Based Sync mode
-   <partition-based-sync>`, and you can only change from Partition-Based to
-   Flexible Sync mode. Partition-Based Sync has been deprecated and is disallowed for new Sync configurations.
+   Partition-Based Sync has been deprecated and is disallowed for new Sync
+   configurations. Instead, all new Sync configurations automatically default to the recommended Flexible Sync mode.
 
-Atlas Device Sync has two sync modes: Flexible Sync and the older
-Partition-Based Sync. Partition-Based Sync has
-been deprecated and is disallowed for new Sync configurations. If you have
-an existing app that uses Partition-Based Sync, use this field to migrate
-to Flexible Sync. For more information, refer to :ref:`realm-sync-migrate-modes`.
+When you enable Device Sync, you can select one of the following Sync modes:
 
-Flexible Sync lets you define a query in the client and sync only the objects
-that match the query. With client-side subscriptions, client applications can:
+- **Flexible Sync** lets you define a query in the client and sync only the
+  objects that match the query. With client-side subscriptions, client
+  applications can:
 
-- Maintain queries
-- React to changes
-- Add, change, or delete queries
+  - Maintain queries
+  - React to changes
+  - Add, change, or delete queries
+
+  Flexible Sync is the only mode available for new Sync configurations.
+
+- **Partition-Based Sync** is an older Sync mode that has been deprecated and is
+  disallowed for new Sync configurations.
+
+  If you have an existing app that already uses the older Partition-Based Sync,
+  we highly recommend that you migrate to Flexible Sync. Migration is an
+  automatic process that doesn't require any changes to your client app code
+  except upgrading SDK versions. For more information, refer to :ref:`realm-sync-migrate-modes`.
+
+.. include:: /includes/sync-settings-field-disabled.rst
 
 .. _development-mode:
 .. _enable-development-mode:
