@@ -2,8 +2,8 @@ on:
     workflow_call:
     pull_request:
 
-# env:
-#   GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }} # setting GH_TOKEN for the entire workflow
+env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # setting GH_TOKEN for the entire workflow
 
 jobs:
     get-pr-changes:
@@ -25,10 +25,5 @@ jobs:
             git status
             gh pr status
             gh pr list 
-#links_action
-#master
-#refs/pull/789/merge
-            #gh pr checkout $BRANCH
-
-          env:
-            GH_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
