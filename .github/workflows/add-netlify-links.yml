@@ -51,12 +51,12 @@ jobs:
         name: Update the PR Description
         needs: get-pr-changes
         runs-on: ubuntu-latest
-        permissions:
-            issues: write
-            contents: write
-            pull-requests: write
         steps:
             - uses: actions/checkout@v4
+            - name: Debug
+              id: parser
+              run: |
+                echo "${{ needs.get-pr-changes.outputs.staging_links }}"
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
