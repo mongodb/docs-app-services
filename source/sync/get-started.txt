@@ -5,7 +5,7 @@ Get Started with Atlas Device Sync
 ==================================
 
 .. meta::
-   :description: Get started using Atlas Device Sync in this high-level overview.
+   :description: Get started using Atlas Device Sync with this high-level overview.
    :keywords: Realm, C++ SDK, Flutter SDK, Java SDK, Kotlin SDK, .NET SDK, Node.js SDK, React Native SDK, Swift SDK, mobile app development, MongoDB mobile
 
 .. facet::
@@ -18,8 +18,7 @@ Get Started with Atlas Device Sync
    :depth: 2
    :class: singlecol
 
-To sync data across devices, :ref:`enable Device Sync <enable-sync>` for your
-App Services App, then use the sync-related methods and properties in the
+To sync data across devices, :ref:`enable Device Sync <enable-sync>`, then use the sync-related methods and properties in the
 :ref:`Atlas Device SDK <realm-sdks>`.
 
 .. tip:: Check out the tutorial
@@ -51,7 +50,7 @@ Choose an SDK
 ~~~~~~~~~~~~~
 
 :ref:`Atlas Device SDK <realm-sdks>` wraps Realm Core Database, an object
-database optimized for mobile use cases. The SDK, available for multiple languages
+database optimized for mobile and edge use cases. The SDK, available for multiple languages
 and
 platforms, includes everything you need to work with synced databases in your
 client code. You can use multiple SDK languages to work with the same set of synced data
@@ -71,10 +70,11 @@ check out the SDK docs:
 - :ref:`React Native SDK <react-native-intro>`
 - :ref:`Swift SDK <ios-intro>`
 
-.. note::
+.. note:: Using Device Sync with the Realm JS WebAssembly SDK
 
-   The Web SDK does not currently support Realm Database or Atlas Device Sync.
-   However, you can query the same data in an Atlas cluster using
+   For more information on building realtime web apps for the browser with the
+   Realm Database API and Atlas Device Sync, check out :ref:`<web-sync>`.
+   Or you can query the same data in an Atlas cluster using
    :ref:`MongoDB Data Access <web-mongodb-data-access>`.
 
 Define Data Model
@@ -82,14 +82,14 @@ Define Data Model
 
 A synced database uses object models that you define to determine the type of
 objects in the database. Additionally, Sync requires a server-side document schema
-for each synced object type so that App Services can translate and apply changes
+for each synced object type so the server can translate and apply changes
 between synced databases and MongoDB Atlas.
 
 To define your synced object models, do one of the following for each object
 type:
 
 - **Sync object models from an SDK:** In :ref:`Development Mode
-  <development-mode>`, App Services automatically generates a document schema
+  <development-mode>`, you can automatically generate a document schema
   for each synced object type and assigns that schema to a collection in the
   linked cluster with the same name as the object type. Development mode lets
   you configure your synced data model from a client application using the same
@@ -99,17 +99,16 @@ type:
 
   To get started, check out :ref:`create-sync-schema`.
 
-- **Generate object models from a document schema:** App Services can automatically
-  generate language-specific object models that you can use in your client
-  applications. The generated models match the document schemas defined for your
-  app's synced cluster. You can define these schemas manually or App Services can
-  sample existing data in the cluster to create them automatically. This is
-  useful if you prefer a server-first approach or plan to build apps with
-  multiple SDKs.
+- **Generate object models from a document schema:** If you already have data in
+  Atlas, you can automatically generate language-specific object models that
+  match the document schemas defined for your app's synced cluster. You can
+  define these schemas manually or App Services can sample existing data in the
+  cluster to create them automatically. This is useful if you prefer a
+  server-first approach or plan to build apps with multiple SDKs.
 
-  For a walkthrough of how to generate your object models based on server-side
-  document schemas, see :ref:`Generate SDK Object Models
-  <generate-sdk-object-models>`.
+  For a walkthrough of how to generate object models that you can use in your
+  client applications, see
+  :ref:`Generate SDK Object Models<generate-sdk-object-models>`.
 
   Once you have the generated object models, you can copy them directly into
   your client application and use them the same way you would any regular object
@@ -132,7 +131,7 @@ Data access rules determine which data to sync, as well as each user's
 ability to read and write data. Rules are closely linked to your app's data
 model.
 
-With Flexible Sync, you specify which data to sync through queries for matching
+With Device Sync, you specify which data to sync through queries for matching
 objects in a client application. App Services then evaluates :ref:`roles and
 rules <flexible-sync-roles>` to determine which of those matching objects a user
 can read and write.
@@ -168,7 +167,7 @@ our guide to :ref:`Optimize Device Sync Atlas Usage
 Create Queries in Your Client Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With Flexible Sync enabled, you can start creating queries from your client
+With Device Sync enabled, you can start creating queries from your client
 application.
 
 The Atlas Device SDK provide methods to create, update, and remove queries from the
