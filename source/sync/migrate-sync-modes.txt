@@ -4,11 +4,11 @@
 Migrate Device Sync Modes
 =========================
 
-.. meta:: 
-   :description: Learn how to migrate from Partition-Based Sync to Flexible Sync.
+.. meta::
+   :description: Learn how to migrate your existing App Services App from the now-deprecated Partition-Based Sync mode to the recommended Flexible Sync.
 
 .. facet::
-   :name: genre 
+   :name: genre
    :values: tutorial
 
 .. contents:: On this page
@@ -17,7 +17,7 @@ Migrate Device Sync Modes
    :depth: 3
    :class: singlecol
 
-Atlas App Services Apps can have one of two Device Sync modes: 
+Atlas App Services Apps can have one of two Device Sync modes:
 :ref:`Partition-Based Sync <partition-based-sync>` and :ref:`Flexible Sync <sync>`.
 Partition-Based Sync is an older mode and you should consider migrating to
 Flexible Sync.
@@ -40,21 +40,21 @@ App Services App:
 
 Linked Atlas Cluster:
 
-- Use MongoDB 5.0 or later for Flexible Sync compatibility
+- Use MongoDB {+sync-min-mongo-version-required+} or later for Flexible Sync compatibility
 - Enable :atlas:`storage auto-scaling </cluster-autoscaling/#configure-auto-scaling-options>`
 - Be an M10+ Cluster Tier
 - Have time-based :manual:`oplog </core/replica-set-oplog/>` setting enabled
 
 Client apps:
 
-- Minimum SDK version:
+- Minimum Atlas Device SDK version:
 
-  - Realm Swift SDK v10.40.0
-  - Realm Kotlin SDK v1.9.0
-  - Realm Node.js SDK v11.10.0
-  - Realm React Native SDK v11.10.0
-  - Realm .NET SDK v11.1.0
-  - Realm Java SDK v10.16.0
+  - Swift SDK v10.40.0 or later
+  - Kotlin SDK v1.9.0 or later
+  - Node.js SDK v11.10.0 or later
+  - React Native SDK v11.10.0 or later
+  - .NET SDK v11.1.0 or later
+  - Java SDK v10.16.0 or later
 
 - Have a :ref:`Client Reset Handler <client-resets>` configured.
 
@@ -70,16 +70,16 @@ your App's backend. You should be aware of the effects and plan ahead.
   able to sync after migration.
 - How long a migration takes is directly proportional to the amount of data that
   needs to be migrated. The more data, the longer it will take to migrate.
-- Migrations can be :ref:`canceled <realm-sync-migrate-cancel>` during the 
-  migration or :ref:`reverted <realm-sync-migrate-revert>` within a certain 
+- Migrations can be :ref:`canceled <realm-sync-migrate-cancel>` during the
+  migration or :ref:`reverted <realm-sync-migrate-revert>` within a certain
   timeframe after the migration is finished.
 - Progress notifications will not work after migration because Flexible Sync does
   not support them.
-- Client apps that were connected to the Partition-Based Sync backend will 
-  experience a client reset after the backend is migrated to Flexible Sync. You 
+- Client apps that were connected to the Partition-Based Sync backend will
+  experience a client reset after the backend is migrated to Flexible Sync. You
   should use a :ref:`client reset <handle-a-client-reset>` handler with recovery
   enabled so you don't lose any pending changes from before the client reset.
-- Creating new tables in a migrated Flexible Sync backend using 
+- Creating new tables in a migrated Flexible Sync backend using
   :ref:`Development Mode <development-mode>` from a Partition-Based Sync client
   may lead to unexpected behavior.
 
@@ -91,23 +91,23 @@ Migration Stages
 You can see your migration's stage in the App Services UI. There are three stages
 to a Sync mode migration:
 
-#. **Syncing Partition-Based Sync metadata** 
-   
-   At this stage, client apps can connect to your App's backend, but local writes 
-   will not sync. These writes will be lost if you don't have a 
+#. **Syncing Partition-Based Sync metadata**
+
+   At this stage, client apps can connect to your App's backend, but local writes
+   will not sync. These writes will be lost if you don't have a
    :ref:`client reset handler <handle-a-client-reset>` to recover unsynced changes.
-	 
+
    Clients will receive updates to synced collections, but won't be able to send
    uploads or receive upload acknowledgements.
 
-#. **Building Flexible Sync metadata** 
-   
+#. **Building Flexible Sync metadata**
+
    Clients cannot connect at this stage. The duration of this stage is directly
    proportional to the amount of data in synced collections.
 
-#. **Completed migration** 
+#. **Completed migration**
 
-   :guilabel:`Manage Sync Migration` appears on the Device Sync page if the 
+   :guilabel:`Manage Sync Migration` appears on the Device Sync page if the
    migration hasn't been committed or reverted.
 
 After the migration has finished, check out the :ref:`After Migration
@@ -120,7 +120,7 @@ Migrate Partition-Based Sync to Flexible Sync
 After beginning migration from Partition-Based Sync to Flexible Sync, the process
 is mostly automatic. However, you can control important parts of the migration.
 
-During a migration, you can cancel it. After a migration, you can revert it 
+During a migration, you can cancel it. After a migration, you can revert it
 or manually commit the migration.
 
 Begin Migration
@@ -130,32 +130,38 @@ Before you begin a migration, make sure you're aware of the
 :ref:`migration stages <realm-sync-migrate-stages>` and
 :ref:`effects <realm-sync-migrate-what-to-know>`.
 
-Migration generally has similar effects as :ref:`terminating <terminating-realm-sync>` 
+Migration generally has similar effects as :ref:`terminating <terminating-realm-sync>`
 and re-enabling Device Sync. There are some additional effects of migration:
 
 - In the App Services UI, all configuration pages will be read-only. For
-  example: the Rules, Schemas, Functions, Triggers, and more pages.
-- Your App will experience a period of read-only Sync and then a 
+  example, Rules, Schemas, Functions, and Triggers screens.
+- Your App will experience a period of read-only Sync and then a
   period of downtime.
-- The new Flexible Sync configuration will set 
+- The new Flexible Sync configuration will set
   :ref:`client max offline time <client-maximum-offline-time>` to 30 days.
 - Storage in your Atlas cluster used by Device Sync metadata is temporarily doubled.
-  Partition-Based Sync metadata and Flexible Sync metadata must temporarily co-exist. 
+  Partition-Based Sync metadata and Flexible Sync metadata must temporarily co-exist.
   Depending on the size of your synced data, this could affect billing every time you
   migrate. The duplicated metadata is removed after the migration is rolled back
   or committed.
 
-**To migrate from Partition-Based Sync to Flexible Sync:** 
+**To migrate from Partition-Based Sync to Flexible Sync:**
 
-#. In the App Services UI, go to your App and select the Device Sync page.
-#. At the top of the page, select :guilabel:`[Migrate to Flexible Sync]`.
-   
-   .. image:: /images/begin-migration.png
+#. Navigate to the :guilabel:`Device Sync` screen:
+
+   .. include:: /includes/navigation/nav-to-device-sync-page.rst
+
+#. Select the :guilabel:`Configuration` tab.
+
+#. Click :guilabel:`Start migration`.
+
+   .. figure:: /images/begin-migration.png
       :alt: Begin a migration
-   
-#. Read the information about migrating, then select 
+      :lightbox:
+
+#. Review the information for the migration process, then click
    :guilabel:`Next: Migration Requirements`.
-#. Ensure you meet the migration requirements, then select 
+#. Ensure you meet the migration requirements, then click
    :guilabel:`Start Migration`.
 
 .. note:: Temporary Sync Disruption
@@ -168,7 +174,7 @@ a client reset. Then, they can communicate with your App's Flexible Sync backend
 You can disable and re-enable Flexible Sync and client apps will still
 communicate with your backend.
 
-If you re-enable Partitition-Based Sync you will lose the "migrated" status.
+If you re-enable Partition-Based Sync you will lose the "migrated" status.
 This means you'll need to do another migration if you want to use Flexible Sync
 on the backend with Partition-Based Sync client apps.
 
@@ -181,14 +187,14 @@ previously-defined App Services Rules.
 
 In step 4 above, you will see if your permissions and rules can be automatically
 migrated. On the :guilabel:`Review Migration Process` step in the App Services UI,
-look for :guilabel:`Rules & Permisssions`.
+look for :guilabel:`Rules & Permissions`.
 
 Some Partition-Based Sync rule strategies can't translate directly to App Services
 Rules. You may need to manually migrate permissions that include:
 
 - :json-operator:`%function` operator.
 
-  :ref:`Function rules <pbs-function-rules>` are not compatible with Flexible Sync 
+  :ref:`Function rules <pbs-function-rules>` are not compatible with Flexible Sync
   and cannot be migrated.
 
 - ``%or``, ``%not``, ``%nor``, ``%and`` expansions.
@@ -202,7 +208,7 @@ Rules. You may need to manually migrate permissions that include:
 See the list of :ref:`Flexible Sync-compatible expansions <sync-compatible-expansions>`
 for all supported expansions.
 
-You should also check out the 
+You should also check out the
 :ref:`Device Sync Permissions Guide <flexible-sync-permissions-guide>` for more
 information about how to work with permissions.
 
@@ -218,15 +224,20 @@ migration started.
 If you cancel a migration, you need to start over from the beginning with future
 migration attempts.
 
-**To cancel a migration:** 
+**To cancel a migration:**
 
-#. In the App Services UI, go to your App and select the Device Sync page.
-#. At the top of the page, in the notification banner, select
-   :guilabel:`Stop Migration`.
-   
-   .. image:: /images/cancel-migration.png
+#. Navigate to :guilabel:`Device Sync` screen:
+
+   .. include:: /includes/navigation/nav-to-device-sync-page.rst
+
+#. Select the :guilabel:`Configuration` tab.
+
+#. In the notification banner, click :guilabel:`Cancel Migration`.
+
+   .. figure:: /images/cancel-migration.png
       :alt: Cancel a migration
-   
+      :lightbox:
+
    This will cancel your migration. You will need to migrate again if you want to
    enable Flexible Sync in the future.
 
@@ -240,30 +251,35 @@ commit the migration to make it permanent or revert the migration to return your
 App to Partition-Based Sync.
 
 If you don't commit or revert the migration, it will automatically commit
-according to your 
-:atlas:`minimum oplog window </cluster-additional-settings/#set-minimum-oplog-window>`. 
+according to your
+:atlas:`minimum oplog window </cluster-additional-settings/#set-minimum-oplog-window>`.
 For example, if your minimum oplog window is 48 hours, you will have 48 hours to
 revert your migration.
 
 After a migration is committed, the old Partition-Based Sync metadata is deleted
 and you cannot revert the migration.
 
-**To manually commit a migration:** 
+**To manually commit a migration:**
 
-#. In the App Services UI, go to your App and select the Device Sync page.
-#. At the top of the page, select the three dots next to 
-   :guilabel:`Manage Sync Migration`.
-#. From the list of options, select :guilabel:`Commit migration to Flexible Sync`.
-   
-   .. image:: /images/commit-migration.png
+#. Navigate to :guilabel:`Device Sync` screen:
+
+   .. include:: /includes/navigation/nav-to-device-sync-page.rst
+
+#. Select the :guilabel:`Configuration` tab.
+
+#. At the top of the page, click the
+   :guilabel:`Manage migration` dropdown, then select :guilabel:`Delete Partition-Based Sync metadata`.
+
+   .. figure:: /images/commit-migration.png
       :alt: Commit a migration
-#. Confirm migration commit by typing "Commit", then select :guilabel:`Commit`.
-   
-   .. image:: /images/confirm-migration-commit.png
-      :alt: Confirm migration commit
-   
-   This will commit your migration and you will not be able to recover your
-   Partition-Based Sync Metadata.
+      :scale: 75
+
+#. Confirm that you want to delete your metadata and
+   commit to the migration to Flexible Sync.
+
+   .. important::
+
+      Once deleted, you cannot recover your Partition-Based Sync metadata.
 
 .. _realm-sync-migrate-revert:
 
@@ -272,36 +288,39 @@ Revert Migration
 
 You can revert a migration after it has completed and before it has been committed.
 
-Completed migrations are automatically committed in accordance with your 
+Completed migrations are automatically committed in accordance with your
 :atlas:`minimum oplog window </cluster-additional-settings/#set-minimum-oplog-window>`.
-You can increase or decrease the amount of time you have to 
+You can increase or decrease the amount of time you have to
 revert a migration by adjusting the minimum oplog window.
 
 You cannot revert a migration that has been committed.
 
-Similar to canceling a migration, if you revert a migration, you need to 
+Similar to canceling a migration, if you revert a migration, you need to
 start over from the beginning with future migration attempts.
 
-**To revert a migration:** 
+**To revert a migration:**
 
-#. In the App Services UI, go to your App and select the Device Sync page.
-#. At the top of the page, select the three dots next to 
-   :guilabel:`Manage Sync Migration`.
-#. From the list of options, select 
-   :guilabel:`Revert back to Partition-Based Sync`.
-   
-   .. image:: /images/revert-migration.png
+#. Navigate to :guilabel:`Device Sync` screen:
+
+   .. include:: /includes/navigation/nav-to-device-sync-page.rst
+
+#. Select the :guilabel:`Configuration` tab.
+
+#. From the :guilabel:`Manage Sync` section, click the
+   :guilabel:`Manage migration` dropdown, then select :guilabel:`Revert back to Partition-Based Sync`.
+
+   .. figure:: /images/revert-migration.png
       :alt: Revert a migration
-   
-   This will revert your migration. You will need to migrate again if you 
-   want to enable Flexible Sync in the future.
+      :scale: 75
+
+   This will revert your migration. You must migrate again if you want to enable Flexible Sync in the future.
 
 .. _realm-sync-migrate-after:
 
 After Backend Migration
 -----------------------
 
-Your migrated backend uses a partition key field in your Realm object models
+Your migrated backend uses a partition key field in your object models
 to map the Partition-Based Sync client objects to Flexible Sync equivalents on
 the backend. If your object models don't have a partition key field, the
 backend automatically injects one into every object the Partition-Based Sync
@@ -310,7 +329,7 @@ client creates.
 These are some other characteristics of the injected field you should be aware
 of:
 
-- The injected field follows this structure: ``<yourPartitionKey> == 
+- The injected field follows this structure: ``<yourPartitionKey> ==
   <yourPartitionValue>``. The field key is derived from your old
   Partition-Based Sync  **backend**  configuration. The value is derived from
   your current Partition-Based Sync  **client**  configuration.
@@ -318,14 +337,14 @@ of:
   This means the originating client won't be able to read the injected
   ``partitionKey`` field.
 
-The Partition-Based Sync client automatically creates sync subscriptions for 
+The Partition-Based Sync client automatically creates sync subscriptions for
 each table where ``partitionKey == partitionValue``. This will continue
 until you :ref:`migrate your client app <realm-sync-migrate-client>` to
 Flexible Sync.
 
 After migrating your client app to Flexible Sync, the backend will stop injecting
 the partition key field. If your client app relies on the partition key field for
-managing sync subscriptions, you should add the parition key field to your
+managing sync subscriptions, you should add the partition key field to your
 object models.
 
 If you don't, objects created in new versions of your app will not be synced
@@ -339,23 +358,23 @@ Migrate Client App to Flexible Sync
 After your App's backend has been migrated to Flexible Sync, we recommend
 that you migrate your client app to Flexible Sync. When you migrate your
 client app to Flexible Sync, the client will stop automatically creating
-sync subscriptions for each Realm object model in your app's data model.
+sync subscriptions for each object model in your app's data model.
 
 We also recommend removing all sync subscriptions and then creating new subscriptions
 for your data. This is the clearest way to control what data is synced after a
-migration. 
+migration.
 
 If you want to remove individual subscriptions, the automatically
-generated subscriptions use a specific naming format: ``flx_migrated_`` + your 
+generated subscriptions use a specific naming format: ``flx_migrated_`` + your
 object model's name. For example, a ``Person`` object model's subscription
 name would be ``flx_migrated_Person``.
 
 You can keep the automatically-generated subscriptions if you don't want to
-remove and recreate them. But because these subscriptions aren't created in 
-your client code, they may make it harder for you to maintain and extend 
+remove and recreate them. But because these subscriptions aren't created in
+your client code, they may make it harder for you to maintain and extend
 client code.
 
-For more information about updating client code after migrating from 
+For more information about updating client code after migrating from
 Partition-Based Sync to Flexible Sync, refer to:
 
 - Java SDK
