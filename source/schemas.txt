@@ -4,7 +4,7 @@
 Schemas
 =======
 
-.. meta:: 
+.. meta::
    :description: Learn about Atlas App Services Schemas.
 
 .. facet::
@@ -19,7 +19,7 @@ Schemas
 
 .. toctree::
    :titlesonly:
-   
+
    Define & Enforce a Schema </schemas/enforce-a-schema>
    Remove a Schema </schemas/remove-a-schema>
    Schema Data Types </schemas/types>
@@ -44,12 +44,12 @@ For example, this is a basic schema for data about cars and some car objects
 that conform to the schema:
 
 .. tabs::
-   
+
    .. tab:: Schema
       :tabid: schema
-      
+
       .. code-block:: json
-         
+
          {
            "title": "car",
            "required": [
@@ -67,12 +67,12 @@ that conform to the schema:
              "miles": { "bsonType": "number" }
            }
          }
-   
+
    .. tab:: Objects
       :tabid: objects
-      
+
       .. code-block:: json
-         
+
          {
            "_id": ObjectId("5af712eff26b29dc5c51c60f"),
            "year": "2017",
@@ -115,7 +115,7 @@ type's properties. Each root-level schema is an ``object`` schema that has the
 following form:
 
 .. code-block:: json
-   
+
    {
      "bsonType": "object",
      "title": "<Type Name>",
@@ -153,7 +153,7 @@ How App Services Enforces Schemas
 App Services validates all write operations (inserts, updates, and deletes) on a
 MongoDB collection against its collection schema. It checks every document
 before and after every request to ensure that all properties conform to the
-schema and that no invalid changes occured.
+schema and that no invalid changes occurred.
 
 App Services evaluates the result of all document writes and compares them against the
 schema before committing the writes to your cluster. If the result of any write

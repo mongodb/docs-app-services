@@ -1,0 +1,155 @@
+.. _generate-sdk-object-models:
+
+===============================================
+Generate SDK Models from an App Services Schema
+===============================================
+
+.. meta::
+   :description: Generate client-side objects in your preferred SDK language from an existing App Services JSON schema.
+   :keywords: Realm, object model, C++ SDK, Flutter SDK, Java SDK, Kotlin SDK, .NET SDK, Node.js SDK, React Native SDK, Swift SDK
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+When defining a :ref:`data model <device-sync-data-model>` to use with Device
+Sync, you can choose to define your App Services schema first, then have App
+Services automatically generate the corresponding language-specific object
+models. You can then copy the generated models directly in your client app.
+
+This approach is useful when:
+
+- You already have a lot of data in Atlas. Instead of manually defining
+  your objects, you can generate a JSON schema from your sampled Atlas data,
+  then generate the corresponding SDK models in the language of your choice.
+
+- You are building apps using multiple Atlas Device SDK languages. For example,
+  you have an iOS app using the Swift SDK and an Android app using the Kotlin
+  SDK. Instead of defining your objects multiple times, you can automatically
+  generate the data models in each of your desired SDK languages.
+
+If you prefer to define your data model from your client application first, refer to :ref:`create-schema-for-backend-realm-app`.
+
+.. _create-rom-from-schema:
+
+Generate SDK Models from a Schema
+---------------------------------
+
+You can generate data models from an App Services schema using the App Services
+UI or using the {+cli+}.
+
+.. procedure::
+
+   .. step:: Generate Your App Services Schema
+
+      If you don't already have an App Services schema defined for each
+      object type that you plan to sync, you can generate one from existing data in the collection, then modify as needed.
+
+      For instructions, continue to to :ref:`define-a-schema`.
+
+      To work with Device Sync, your App Services schema must meet the following
+      requirements:
+
+      - All objects *must* have a primary key field called``_id``. The ``_id``
+        can be of type ``string``, ``int``, or ``objectId``.
+      - Your schema object :ref:`type names <sync-type-name>` cannot exceed
+        {+name-char-limit+} UTF-8 characters.
+
+      .. note:: Limitation of Generated App Services Schemas
+
+         If you choose to automatically generate your App Services schema, note
+         that App Services *cannot* generate required properties or mixed data
+         type properties. To include a required or mixed data type property in
+         your data model, you must manually edit your schema as needed.
+
+   .. step:: Generate Data Models Based On Your Schema
+
+   .. tabs-realm-admin-interfaces::
+
+      .. tab::
+         :tabid: ui
+
+         .. include:: /includes/navigation/nav-to-device-sync-page.rst
+
+         Select the :guilabel:`Sync Models` tab to view the
+         data models generated for each Atlas Device SDK language.
+
+         Use the :guilabel:`Platform` and :guilabel:`Language` dropdowns
+         to select your preferred SDK. The page updates with a generated
+         models translated to the selected language.
+
+         .. image:: /images/translate-jsonschema-into-realm-data-model.png
+            :alt: Generated SDK data models in App Services UI
+
+      .. tab::
+         :tabid: cli
+
+         Use the :ref:`{+cli-bin+} schema <appservices-schema>` CLI commands to
+         generate your data models.
+
+         First, run the following:
+
+         .. code-block:: shell
+
+            {+cli-bin+} schema datamodels -a "<Your App ID>"
+
+         Next, confirm the following options when prompted:
+
+         1. Select the language you want the SDK data models generated in.
+         #. Choose whether to omit the import statements from the generated
+            code.
+         #. Choose whether to group all generated data models together in a
+            single output.
+
+         .. code-block:: shell
+
+            ? Select the language you would like to generate data models in
+            ? Would you like to omit imports?
+            ? Would you like to group all generated data models together?
+
+   .. step:: Add the Generated Models to Your Client Code
+
+   .. tabs-realm-admin-interfaces::
+
+      .. tab::
+         :tabid: ui
+
+         Copy the generated models to your clipboard, then paste them directly
+         into your client code.
+
+         You can copy individual models or all models:
+
+         - To copy all models for the selected language, click
+            :guilabel:`Copy All Data Models`.
+
+            When prompted, choose whether you want to include import
+            statements (default) or exclude them from the copied data, then
+            click :guilabel:`Copy`.
+         - To copy a single model, click the :guilabel:`Copy` icon for the
+            data model code block.
+
+      .. tab::
+         :tabid: cli
+
+         Copy the generated models from your terminal, then paste them into
+         your client code.
+
+   .. step:: Open a Synced Database with the SDK Data Model
+
+      You can use the data model in your client application immediately.
+      Refer to the Atlas Device SDK documentation to open a
+      synced database with the generated model:
+
+      - :ref:`Flutter SDK <flutter-sync>`
+      - :ref:`Java SDK <java-sync-data>`
+      - :ref:`Kotlin SDK <kotlin-sync-overview>`
+      - :ref:`.NET SDK <dotnet-sync-changes-between-devices>`
+      - :ref:`Node.js SDK <node-sync-changes-between-devices>`
+      - :ref:`React Native SDK <react-native-realm-sync>`
+      - :ref:`Swift SDK <ios-sync-changes-between-devices>`

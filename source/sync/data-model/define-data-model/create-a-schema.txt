@@ -1,0 +1,130 @@
+.. _create-schema-for-backend-realm-app:
+
+=======================================
+Define Object Models in Your Client App
+=======================================
+
+.. meta::
+   :description: Define your app's data model with Development Mode by generating App Services schemas from client object models.
+   :keywords: Realm, object model, sync schema, C++ SDK, Flutter SDK, Java SDK, Kotlin SDK, .NET SDK, Node.js SDK, React Native SDK, Swift SDK
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+When defining a :ref:`data model <device-sync-data-model>` to use with Device
+Sync, you can choose to configure your object models from a client app, then
+use :ref:`Development Mode <development-mode>` to automatically generate a
+schema for each synced object type.
+
+If you prefer to start from an App Services schema first, then use it to
+generate your SDK data model, refer to :ref:`generate-sdk-object-models`.
+
+Development Mode
+----------------
+
+**Development Mode** is a Device Sync configuration setting that lets you
+define and modify your SDK data model directly in your client code, and App
+Services automatically handles the server-side updates.
+
+The first time a client connects and syncs data while Development Mode is
+enabled, App Services :ref:`maps your idiomatic client model
+<map-realm-to-atlas-with-development-mode>`
+to an automatically generated App Services JSON schema. App Services assigns each
+schema to a collection in the linked Atlas cluster with the same name as the
+object type.
+
+For example, we're developing a todo mobile app using the Atlas Device SDK for
+Kotlin. After defining our Kotlin object types in the client application, we
+enable Development Mode, and choose to link to our ``todo`` Atlas database.
+We then connect a client to App Services and sync several ``todo`` and ``list``
+objects. Based on the uploaded object models, App Services automatically
+creates new ``Todo`` and ``List`` collections in our linked database,
+and generates the corresponding JSON schemas.
+
+.. _create-schema-from-rom:
+
+Generate a Schema from Synced SDK Objects
+-----------------------------------------
+
+Do the following to define a data model from your client app using Atlas Device
+SDK, then use Development Mode to generate the matching App Services schema.
+
+.. include:: /includes/note-flexible-sync-prerequisite.rst
+
+.. procedure::
+
+   .. step:: Define Your Client-Side SDK Data Model
+
+      Create your object types in your client code. Objects that you intend to
+      sync to Atlas must meet the following requirements:
+
+      - All synced objects *must* have a primary key field called
+        ``_id``. The ``_id`` can be of type ``string``, ``int``, or
+        ``objectId``.
+      - Your object or class names *cannot* exceed {+name-char-limit+} UTF-8
+        characters.
+
+      Refer to the Atlas Device SDK documentation for defining a data
+      model in your preferred language:
+
+      - :ref:`C++ SDK <cpp-object-models>`
+      - :ref:`Flutter SDK <flutter-define-realm-object-schema>`
+      - :ref:`Java SDK <java-define-a-realm-object-schema>`
+      - :ref:`Kotlin SDK <kotlin-supported-types>`
+      - :ref:`.NET SDK <dotnet-sync-changes-between-devices>`
+      - :ref:`Node.js SDK <node-define-a-realm-object-schema>`
+      - :ref:`React Native SDK <react-native-define-a-realm-object-schema>`
+      - :ref:`Swift SDK <swift-object-models>`
+
+   .. step:: Enable Device Sync with Development Mode
+
+      Development Mode requires Device Sync to be enabled in your App Services
+      App :ref:`Sync settings <sync-settings>`.
+
+      To enable Device Sync through the App Services UI, do the following. For instructions using the {+cli+} or Admin API, refer to :ref:`enable-sync`.
+
+      .. include:: /includes/navigation/nav-to-device-sync-page.rst
+
+      Select the :guilabel:`Configuration` tab, then toggle
+      :guilabel:`Development Mode` on.
+
+      .. figure:: /images/turn-on-dev-mode.png
+         :alt: The UI to enable Development Mode
+         :lightbox:
+
+      A modal appears for you to select the database where you want App Services
+      to automatically create new collections for synced data. Click
+      :guilabel:`OK`.
+
+      Click :guilabel:`Save Changes`, take note of any recommendations that
+      appear, then confirm.
+
+   .. step:: Generate Your App Services Schema
+
+      While Development Mode is enabled, connect a client to
+      App Services. After syncing your data, App Services automatically
+      generates a matching schema that maps to each uploaded object type that
+      you defined in your SDK data model.
+
+      For more information on how App Services maps between the client and
+      server-side models, refer to :ref:`sync-data-model-mapping`.
+
+   .. step:: Develop Your App
+
+      After your data model is defined, you can continue to use Development Mode
+      while your app is in development. As you make changes to your client-side
+      model, App Services ensures that your schema reflects those updates. For
+      more information, refer to :ref:`update-data-model-development-mode`.
+
+      When you disable Development Mode, App Services automatically updates your
+      App Services schema and uses it to enforce data validation for your Atlas
+      cluster.
+
+      .. include:: /includes/device-sync/important-disable-dev-mode-production.rst
