@@ -3,7 +3,7 @@
 ## Device Sync
 
 - Get Started: Rename references to "Realm" and adjust phrasing for clarity.
-- Configure Sync/Sync Settings: Update page to indicate that the ``Sync Type`` field only displays for Partition-Based Sync apps and move ``Select Your Cluster`` field to the top of the page.
+- Configure Sync/Sync Settings: Update page to indicate that the Sync Type field only displays for Partition-Based Sync apps and move the "Cluster to Sync" section to the top of the page.
 - Go to Production with Sync/Optimize Sync Storage in Atlas: Remove references to disabling client maximum offline time and update Device Sync settings screenshot to remove Enable Max Offline Time field.
 - Migrate Sync Modes: Update migration instructions and corresponding screenshots to reflect recent Device Sync UI changes.
 
