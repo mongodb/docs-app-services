@@ -1,3 +1,20 @@
+# July 26, 2024
+
+## Device Sync
+
+- Get Started: Rename references to "Realm" and adjust phrasing for clarity.
+- Configure Sync/Sync Settings: Update page to indicate that the ``Sync Type`` field only displays for Partition-Based Sync apps and move ``Select Your Cluster`` field to the top of the page.
+- Go to Production with Sync/Optimize Sync Storage in Atlas: Remove references to disabling client maximum offline time and update Device Sync settings screenshot to remove Enable Max Offline Time field.
+- Migrate Sync Modes: Update migration instructions and corresponding screenshots to reflect recent Device Sync UI changes.
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Create a new section on updating permissions using custom user data.
+
+## Define a Data Model
+
+- Schemas/Schema Data Types: Add link to Node.js Counters page under the list of SDKs that support counters.
+
 # July 12, 2024
 
 ## Tutorials
