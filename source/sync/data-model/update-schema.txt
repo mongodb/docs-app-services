@@ -100,11 +100,9 @@ devices can continue to sync data without interruption.
   applies those changes to your server-side schema. To learn more, refer to
   :ref:`update-data-model-development-mode`.
 - **Non-Breaking Changes in Production:** Once your app is in production, you
-  can make non-breaking changes to your server-side schema or to your
-  client-side data model, then manually update the corresponding side without
-  breaking compatibility for existing clients. Note that some changes are only
-  considered non-breaking when made to the client side model. To learn more,
-  refer to :ref:`update-data-model-production`.
+  can make non-breaking changes to your server-side schema, then manually update
+  the corresponding client-side models without breaking compatibility for
+  existing clients. To learn more, refer to :ref:`update-data-model-production`.
 
 .. _breaking-changes-overview:
 
@@ -112,15 +110,16 @@ Breaking Changes
 ~~~~~~~~~~~~~~~~
 
 Breaking changes break compatibility with your existing data model and require
-that you :ref:`terminate and re-enable Device Sync <pause-or-terminate-sync>`.
-This results in existing clients being unable to connect and sync data until
-they upgrade to the new data model through a :ref:`client reset
+you to :ref:`terminate and re-enable Device Sync <pause-or-terminate-sync>`.
+This results in existing clients being unable to sync data until
+they upgrade to the new data model and reconnect through a :ref:`client reset
 <client-resets>`.
 
-Development Mode streamlines this process by letting you make breaking
-changes without requiring you to terminate Sync, but it is not intended for
-production use and should not be enabled in a production-level app. As a result, we recommend that you only make breaking changes in
-a production app when necessary.
+Development Mode streamlines this process for apps in development by letting you
+make breaking changes without requiring you to terminate Sync. However,
+Development Mode is not intended for production use and should not be enabled in
+a production-level app. As a result, we recommend that you only make breaking
+changes in a production app when necessary.
 
 You can make breaking changes to your server-side schema or to your
 client-side data model, but there are implications depending on the state of
@@ -129,7 +128,10 @@ Services schema with breaking changes using the {+cli+} or automated deploy with
 GitHub. You must use the App Services UI.
 
 - **Breaking Changes in Development:** While you develop your app,
-  :ref:`Development Mode <development-mode>` lets you make breaking changes to your client code, and App Services automatically handles applying those changes to your server-side schema. To learn more, refer to :ref:`update-data-model-development-mode`.
+  :ref:`Development Mode <development-mode>` lets you make breaking changes to
+  your client code, and App Services automatically handles overwriting
+  your server-side schema without requiring you to terminate Sync. To learn
+  more, refer to :ref:`update-data-model-development-mode`.
 - **Breaking Changes in Production:** Once your app is in production, and you
   determine you need to make a breaking change, you can choose to either update
   your current data model directly or create a new data model with the changes:
@@ -153,11 +155,11 @@ Schema versioning changes are a special subset of breaking change for production
 apps. These changes do not require you to terminate Device Sync or
 manually perform a client reset.
 
-Instead, Device Sync creates a new backward-compatible version of your existing
-server-side schema, then automatically handles existing clients on older schemas
+Instead, the server creates a new backward-compatible version of your existing
+schema, then automatically handles existing clients on older schemas
 in a backward-compatible way. This ensures data consistency across schema
-versions, as devices on older schema versions can still sync with the Device
-Sync server and other SDK devices.
+versions, as devices on older schema versions can still sync with the server and
+other SDK devices.
 
 To learn more, refer to :ref:`update-data-model-production`.
 
@@ -171,8 +173,6 @@ To learn more, refer to :ref:`update-data-model-production`.
    schemas, App Services deletes all existing versions regardless of
    whether they are currently in use by an existing client. This will disrupt
    Sync for any client using a deleted version.
-
-.. TODO from Ben: The main distinction is that the developer must manually upgrade the client to the new schema version (by making the changes in the SDK)
 
 .. _breaking-change-quick-reference:
 
@@ -227,7 +227,6 @@ App Services schema or to the client-side SDK data model.
 
 The following diagram shows the types of changes you can make and the
 process perform the change:
-
 
 Add an Object Type
 ~~~~~~~~~~~~~~~~~~
