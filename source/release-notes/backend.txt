@@ -13,6 +13,38 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_20240724:
+
+24 July 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- GraphQL and Static Hosting Deprecation 
+
+  - Existing apps that have either ``GRAPHQL_ALLOWED`` or ``HOSTING_ALLOWED`` enabled will now
+    display banners in the App Services UI alerting customers of both GraphQL and Static
+    Hosting deprecation.
+
+  - "GraphQL" will no longer be shown in the App Services side navigation, and the
+    "GraphQL Models" tab and "GraphQL Model Errors" section will no longer be on the Schema
+    page by default. These will only be visible for apps with the ``GRAPHQL_ALLOWED`` flag enabled.
+
+  - "Hosting" will no longer be shown in the App Services side navigation by default. This page will only
+    be visible for apps with the ``HOSTING_ALLOWED`` flag enabled.
+
+  - Attempting to reach the GraphQL Explore page by URL from an app without the
+  ``GRAPHQL_ALLOWED`` flag enabled will now display "404 Document Not Found" instead of the GraphQL Explore page.
+
+  - Attempting to reach the Static Hosting page by URL from an app without the
+  ``HOSTING_ALLOWED`` flag enabled will now display "404 Document Not Found" instead of the Static Hosting page.
+
+  - App Services CLI will now show '[DEPRECATED]' before the impacted results on ``logs list
+    --help``, ``push --help``, and ``pull --help``.
+
+  - App Services CLI will now make daily announcements for the deprecation of GraphQL and
+    Static Hosting.
+
+  - The GraphQL template app (web.graphql.todo) is no longer be available.
+
 .. _backend_20240710:
 
 10 July 2024 Release
