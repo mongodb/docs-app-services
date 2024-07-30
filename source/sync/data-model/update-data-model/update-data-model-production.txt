@@ -149,9 +149,11 @@ must use the App Services UI.
 The following are considered breaking changes when made to your server-side
 schema:
 
-- Renaming an existing object type
+- Renaming an existing object type *
 - Renaming an existing property *
 - Changing the data type of an existing property
+
+  *Note: To avoid breaking your data model, consider :ref:`remapping the name <schema-update-change-property-name>` in your client instead.*
 
 When deployed, a breaking change sets a new minimum schema version and breaks
 compatibility with all existing versions. This requires you to terminate and
@@ -383,6 +385,9 @@ To get started, navigate to the :guilabel:`Device Sync` screen:
      click :guilabel:`Copy`.
    - To copy a single model, click the :guilabel:`Copy` icon for the
      data model code block.
+
+   .. image:: /images/translate-jsonschema-into-realm-data-model.png
+      :alt: Generated SDK data models in App Services UI
 
    The models copy to your clipboard. You can add them directly to your client
    code.

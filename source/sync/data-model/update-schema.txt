@@ -30,7 +30,7 @@ Update Your Data Model
 
    Update Data Model in Development </sync/data-model/update-data-model/update-data-model-development>
    Update Data Model in Production </sync/data-model/update-data-model/update-data-model-production>
-   Migrate to Partner Collection Data Model </sync/data-model/update-data-model/migrate-schema-partner-collection>
+   Migrate Data Model to Partner Collection </sync/data-model/update-data-model/migrate-schema-partner-collection>
 
 You will most likely need to make changes to your app's
 :ref:`data model <device-sync-data-model>` after you have defined it. For
@@ -175,12 +175,22 @@ To learn more, refer to :ref:`update-data-model-production`.
 
 .. _breaking-change-quick-reference:
 
-Update a Data Model: Quick Reference
-------------------------------------
+Data Model Changes
+------------------
 
-This section summarizes whether a data model change is considered a
-non-breaking, schema versioning, or breaking change when made to the server-side
-App Services schema or to the client-side SDK data model.
+This section outlines the types of changes you can make to your data model,
+including any implications for how to implement them.
+
+Quick Reference
+~~~~~~~~~~~~~~~
+
+The following table summarizes whether a change is considered a non-breaking,
+schema versioning, or breaking change when made to the server-side schema or to
+the client-side model.
+
+*Note: If Development Mode is enabled in your app, schema versioning is
+disabled, and the server processes schema versioning changes as breaking
+changes.*
 
 .. list-table::
    :header-rows: 1
@@ -217,17 +227,14 @@ App Services schema or to the client-side SDK data model.
      - Breaking
      - Breaking
 
-*If Development Mode is enabled in your app, schema versioning is disabled, and
-App Services processes schema versioning changes as breaking changes.*
-
 .. figure:: /images/data-model-changes-from-client-or-server.png
    :alt: Summary of data model changes when made from client or server side
    :lightbox:
 
 .. _schema-update-add-object-type:
 
-Add an Object Type
-------------------
+Add an Object
+~~~~~~~~~~~~~
 
 Adding an object type is a non-breaking change when made to the server-side
 schema or the client-side SDK data model.
@@ -249,7 +256,7 @@ You can make your changes from the client or server side:
 .. _schema-update-add-a-default-value:
 
 Set a Default Value on a Property
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Setting a default value on an existing object property is a non-breaking change
 when made to the server-side schema or the client-side SDK data model.
@@ -269,7 +276,7 @@ You can make your changes from the client or server side:
   directly in Atlas.
 
 Set Default Value in App Services UI
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+````````````````````````````````````
 
 To set a default value through the App Services UI:
 
@@ -280,8 +287,30 @@ To set a default value through the App Services UI:
 #. Find and select the collection you want to edit the schema for, then toggle
    the editor view to ``JSON View``.
 
-#. Update the JSON schema to set a default value for a given property, similar
-   to ``"default": <value> ``.
+#. Update the JSON schema to set a default value for a given property by adding
+   a default value to the property and updating the required array.
+
+   For example:
+
+    .. code-block:: json
+      :emphasize-lines: 9, 14
+
+        {
+          "properties": {
+            "name": {
+              "type": "string",
+              "default": "My Name"
+            },
+            "age": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          "required": [
+            "name",
+            "age"
+            ]
+        }
 
    .. figure:: /images/set-default-value.png
       :alt: Setting default value using the Schema screen editor
@@ -296,13 +325,15 @@ To set a default value through the App Services UI:
 .. _schema-update-add-required-property:
 .. _schema-update-add-optional-property:
 
-Add a Required or Optional Property
------------------------------------
+Add a Property
+~~~~~~~~~~~~~~
 
-Adding a new property is a non-breaking change when made to the server-side
-schema or the client-side SDK data model. However, if you have existing Atlas
-documents that may be impacted by this change, you should consider making the
-property optional to avoid having to update them.
+Adding a new required or optional property is a non-breaking change when made to
+the server-side schema or the client-side SDK data model. However, note that if
+you are adding a required property and you have existing Atlas documents that
+may be impacted by this change, you must update them to continue syncing with
+clients if you're adding a required property. To avoid this, consider making the
+property optional.
 
 .. tip:: Always Set Default Values for Required Properties
 
@@ -338,16 +369,14 @@ You can make your changes from the client or server side:
 
 .. _schema-update-remove-object-type:
 
-Remove an Object Type
----------------------
+Remove an Object
+~~~~~~~~~~~~~~~~
 
 Removing an existing object type is handled differently depending on where you
 make the change:
 
 - **Client Side:** Removing an object type from the client-side model is
-  considered a *non-breaking change*.
-
-  You can either:
+  considered a *non-breaking change*. You can either:
 
   - Use :ref:`Development Mode <development-mode>` to let App Services handle
     the server-side schema updates.
@@ -360,32 +389,31 @@ make the change:
 .. _schema-update-remove-property:
 
 Remove a Property
------------------
+~~~~~~~~~~~~~~~~~
 
 Removing an existing optional or required property is handled differently
 depending on where you make the change:
 
 - **Client Side:** Removing a property from the client-side SDK model is a
-  *non-breaking change*.
-
-  You can either:
+  *non-breaking change*. You can either:
 
   - Use :ref:`Development Mode <development-mode>` to let App Services handle
     the server-side schema updates.
 
   - Manually remove the property from the client model and leave it in place
-    on the server-side schema. This does not delete the property from the
-    database. Instead, new objects retain the removed property populated with a
-    zero or blank value (for example, 0, "", ``null`` depending on the property
-    type).
+    on the server-side schema.
+
+    Note that this does not delete the property from the database. Instead, new
+    objects retain the removed property populated with a zero or blank value
+    (for example, 0, "", or null depending on the property type).
 - **Server Side:** Removing a property from the server-side schema is a
   *schema versioning change*. You must manually add the property to the schema,
   and App Services creates a backward-compatible schema version.
 
 .. _schema-update-change-property-status:
 
-Change a Property's Status Between Optional and Required
---------------------------------------------------------
+Change if Property is Optional or Required
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Changing the optionality of an existing property is handled differently
 depending on where you make the change:
@@ -422,8 +450,8 @@ depending on where you make the change:
 
 .. _schema-update-change-object-type-name:
 
-Change an Object's Name
------------------------
+Rename an Object Type
+~~~~~~~~~~~~~~~~~~~~~
 
 Renaming an object type is a breaking change to both the server-side schema and
 the client-side object model. Unless you have Development Mode enabled, this
@@ -436,9 +464,8 @@ renaming an object type:
   Device SDK languages, you can avoid breaking your data model by remapping a
   new object or class name to your existing name. This effectively renames your
   client-side object while keeping the original name on the server, and avoids
-  having to perform a client reset.
-
-  Remapping an object or class name is supported in the following SDKs:
+  having to perform a client reset. Remapping an object or class name is
+  supported in the following SDKs:
 
   - :ref:`Flutter SDK <flutter-map-property>`
   - :ref:`Java SDK <java-rename-object>`
@@ -468,8 +495,8 @@ client or server side:
 
 .. _schema-update-change-property-name:
 
-Change a Property Name
-----------------------
+Rename a Property
+~~~~~~~~~~~~~~~~~
 
 Renaming a property is a breaking change to both the server-side schema and
 the client-side object model. Unless you have Development Mode enabled, this
@@ -482,17 +509,16 @@ renaming an existing property:
   Device SDK languages, you can avoid breaking your data model by remapping a
   new property name to your existing name. This effectively renames your
   client-side property while keeping the original name on the server, and avoids
-  having to perform a client reset.
+  having to perform a client reset. Remapping property name is supported in the
+  following SDKs:
 
-  Remapping property name is supported in the following SDKs:
-
-- :ref:`Flutter SDK <flutter-map-property>`
-- :ref:`Java SDK <java-rename-field>`
-- :ref:`Kotlin SDK <kotlin-remap-a-property>`
-- :ref:`.NET SDK <dotnet-rename-property>`
-- :ref:`Node.js SDK <node-remap-a-property>`
-- :ref:`React Native SDK <react-native-remap-a-property>`
-- :ref:`Swift SDK <swift-rename-property>`
+  - :ref:`Flutter SDK <flutter-map-property>`
+  - :ref:`Java SDK <java-rename-field>`
+  - :ref:`Kotlin SDK <kotlin-remap-a-property>`
+  - :ref:`.NET SDK <dotnet-rename-property>`
+  - :ref:`Node.js SDK <node-remap-a-property>`
+  - :ref:`React Native SDK <react-native-remap-a-property>`
+  - :ref:`Swift SDK <swift-rename-property>`
 
 - **Create a partner collection.** Implementing a :ref:`partner collection
   strategy <schema-partner_collection-strategy>` lets you keep your existing
@@ -526,7 +552,7 @@ If you choose to change the property's name, you can make your changes from the 
 .. _schema-update-change-property-type-but-keep-name:
 
 Change a Property Data Type
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Changing the data type of an existing property is a breaking change to both the
 server-side schema and the client-side object model. Unless you have Development
