@@ -20,33 +20,8 @@ Atlas App Services Changelog
 
 - GraphQL and Static Hosting Deprecation 
 
-  - Existing apps that have either the ``GRAPHQL_ALLOWED`` or ``HOSTING_ALLOWED`` flags enabled will now
-    display banners in their App Services UI alerting customers of both the GraphQL and Static
-    Hosting deprecations.
-
-  - "GraphQL" is no longer shown in the App Services UI side navigation, and the
-    "GraphQL Models" tab and "GraphQL Model Errors" section are no longer on the "Schema"
-    page by default. These will only be visible for apps with the ``GRAPHQL_ALLOWED`` flag enabled.
-
-  - "Hosting" is no longer shown in the App Services UI side navigation by default. This page will only
-    be visible for apps with the ``HOSTING_ALLOWED`` flag enabled.
-
-  - Attempting to reach the GraphQL Explore page by URL from an app without the
-    ``GRAPHQL_ALLOWED`` flag enabled will now display "404 Document Not Found" instead of the GraphQL Explore page.
-
-  - Attempting to reach the Static Hosting page by URL from an app without the
-    ``HOSTING_ALLOWED`` flag enabled will now display "404 Document Not Found" instead of the Static Hosting page.
-
-  - App Services CLI will now show ``[DEPRECATED]`` before results impacted by the deprecation on:
-
-    - ``logs list --help``
-
-    - ``push --help``
-
-    - ``pull --help``
-
-  - App Services CLI will now make daily announcements for the deprecation of GraphQL and
-    Static Hosting.
+  - Apps that use GraphQL or Static Hosting will now display banners in their App Services 
+    UI alerting customers of both the GraphQL and Static Hosting deprecations.
 
   - The GraphQL template app (web.graphql.todo) is no longer available.
 
