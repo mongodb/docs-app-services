@@ -70,55 +70,55 @@ UI or using the {+cli+}.
 
    .. step:: Generate Data Models Based On Your Schema
 
-   .. tabs-realm-admin-interfaces::
+      .. tabs-realm-admin-interfaces::
 
-      .. tab::
-         :tabid: ui
+         .. tab::
+            :tabid: ui
 
-         .. include:: /includes/navigation/nav-to-device-sync-page.rst
+            .. include:: /includes/navigation/nav-to-device-sync-page.rst
 
-         Select the :guilabel:`Sync Models` tab to view the
-         data models generated for each Atlas Device SDK language.
+            Select the :guilabel:`Sync Models` tab to view the
+            data models generated for each Atlas Device SDK language.
 
-         Use the :guilabel:`Platform` and :guilabel:`Language` dropdowns
-         to select your preferred SDK. The page updates with a generated
-         models translated to the selected language.
+            Use the :guilabel:`Platform` and :guilabel:`Language` dropdowns
+            to select your preferred SDK. The page updates with a generated
+            models translated to the selected language.
 
-         .. note:: Generate Previous Schema Versions
+            .. note:: Generate Previous Schema Versions
 
-            If you have multiple schema versions available, the current schema
-            version displays by default. Use the :guilabel:`Sync schema version`
-            dropdown field to select previous versions. The generated SDK data
-            models update to reflect the selected schema version.
+               If you have multiple schema versions available, the current schema
+               version displays by default. Use the :guilabel:`Sync schema version`
+               dropdown field to select previous versions. The generated SDK data
+               models update to reflect the selected schema version.
 
-         .. image:: /images/translate-jsonschema-into-realm-data-model.png
-            :alt: Generated SDK data models in App Services UI
+            .. image:: /images/translate-jsonschema-into-realm-data-model.png
+               :alt: Generated SDK data models in App Services UI
 
-      .. tab::
-         :tabid: cli
+         .. tab::
+            :tabid: cli
 
-         Use the :ref:`{+cli-bin+} schema <appservices-schema>` CLI commands to
-         generate your data models.
+            Use the :ref:`{+cli-bin+} schema <appservices-schema>` CLI commands to
+            generate your data models.
 
-         First, run the following:
+            First, run the following:
 
-         .. code-block:: shell
+            .. code-block:: shell
 
-            {+cli-bin+} schema datamodels -a "<Your App ID>"
+               {+cli-bin+} schema datamodels -a "<Your App ID>"
 
-         Next, confirm the following options when prompted:
+            Next, confirm the following options when prompted:
 
-         1. Select the language you want the SDK data models generated in.
-         #. Choose whether to omit the import statements from the generated
-            code.
-         #. Choose whether to group all generated data models together in a
-            single output.
+            1. Select the language you want the SDK data models generated in.
+            #. Choose whether to omit the import statements from the generated
+               code.
+            #. Choose whether to group all generated data models together in a
+               single output.
 
-         .. code-block:: shell
+            .. code-block:: shell
 
-            ? Select the language you would like to generate data models in
-            ? Would you like to omit imports?
-            ? Would you like to group all generated data models together?
+               ? Select the language you would like to generate data models in
+               ? Would you like to omit imports?
+               ? Would you like to group all generated data models together?
 
    .. step:: Add the Generated Models to Your Client Code
 
