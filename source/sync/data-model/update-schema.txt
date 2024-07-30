@@ -67,8 +67,6 @@ Is your app in development or production?
     additional planning to reduce the impact to existing clients. To learn more,
     refer to :ref:`update-data-model-production`.
 
-    .. include:: /includes/device-sync/important-disable-dev-mode-production.rst
-
 Change Types
 ------------
 
@@ -184,10 +182,6 @@ This section summarizes whether a data model change is considered a
 non-breaking, schema versioning, or breaking change when made to the server-side
 App Services schema or to the client-side SDK data model.
 
-.. figure:: /images/data-model-changes-from-client-or-server.png
-   :alt: Summary of data model changes when made from client or server side
-   :lightbox:
-
 .. list-table::
    :header-rows: 1
    :stub-columns: 1
@@ -201,7 +195,7 @@ App Services schema or to the client-side SDK data model.
    * - :ref:`Add a property <schema-update-add-required-property>`
      - Non-breaking
      - Non-breaking
-   * - :ref:`Add default value on a property <schema-update-add-a-default-value>`
+   * - :ref:`Set a default value on a property <schema-update-add-a-default-value>`
      - Non-breaking
      - Non-breaking
    * - :ref:`Remove an object type <schema-update-remove-object-type>`
@@ -223,61 +217,61 @@ App Services schema or to the client-side SDK data model.
      - Breaking
      - Breaking
 
-* If Development Mode is enabled in your app, schema versioning is disabled, and
-  App Services processes schema versioning changes as breaking changes.
+*If Development Mode is enabled in your app, schema versioning is disabled, and
+App Services processes schema versioning changes as breaking changes.*
 
-The following diagram shows the types of changes you can make and the
-process perform the change:
+.. figure:: /images/data-model-changes-from-client-or-server.png
+   :alt: Summary of data model changes when made from client or server side
+   :lightbox:
+
+.. _schema-update-add-object-type:
 
 Add an Object Type
-~~~~~~~~~~~~~~~~~~
+------------------
 
-You can add an object type to either the server-side schema or the client
-object model without any additional handling.
+Adding an object type is a non-breaking change when made to the server-side
+schema or the client-side SDK data model.
 
-If you want to add an object type to both the server-side schema and the
-client object model, you can add the object type to the object model, and
-use :ref:`Development Mode <development-mode>` to let App Services handle the
-server-side schema updates. Or you can manually add the object type to both
-the model and the schema.
+You can make your changes from the client or server side:
 
-.. note:: These changes may trigger a resync
+- **Client Side:** Use :ref:`Development Mode <development-mode>` to let App
+  Services handle the server-side schema updates.
+- **Server Side:** Manually add the object type to both the client model and the
+  schema.
 
-   When you add a new object type, we retrieve the documents for the
-   collection and re-insert them into App Services to get the new values. This
-   is expected behavior, but it does cause a temporary halt to propagating
-   changes while this process is underway.
+.. note:: May Cause Documents to Resync
 
-Add a Default Value on a Property
+  If you have existing documents in Atlas and you add a new object type, the
+  server retrieves the documents in Atlas for the collection and re-inserts them
+  to get the new values. This is expected behavior, but it does temporarily halt
+  syncing changes until the process completes.
+
+.. _schema-update-add-a-default-value:
+
+Set a Default Value on a Property
 ---------------------------------
 
-You can add a default value on an object's required property. When you
-insert an Atlas document missing this required property into the
-collection, the Realm clients set the property to the default value. However,
-the same property on the Atlas document remains empty until a client makes
-changes to the property or updates the document directly in Atlas.
+Setting a default value on an existing object property is a non-breaking change
+when made to the server-side schema or the client-side SDK data model.
 
-We recommend that you add a default value to a property in the following
-scenarios:
+We recommend that you always set a default value to a property whenever you add
+a new required property, either on its own or as a property for a new object
+type.
 
-- You are adding a new required property (either on its own or as part of a new
-  object type)
-- You are removing a property that does not have a default value. By adding a
-  default value to your App Services schema *before* deleting the property from
-  your data model, Device Sync
+You can make your changes from the client or server side:
 
-  .. todo how is this supposed to work exactly??
+- **Client Side:** Use :ref:`Development Mode <development-mode>` to let App
+  Services handle the server-side schema updates.
+- **Server Side:** Manually add the default value to the schema.
 
+  If you have existing Atlas documents that are missing the value, the property
+  remains empty until a synced client makes changes or you update the document
+  directly in Atlas.
 
-- Development: Add the default value to your client-side models. Device Sync
-  updates the schema the next time you sync data. If you have existing Atlas
-  documents that are missing a value, the property remains empty until a synced
-  client makes changes or you update the document directly in Atlas.
-- Production:
+Set Default Value in App Services UI
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To set a default value to an existing property in App Services:
-
-.. note:: You Can't Set a Default Value from Table View
+To set a default value through the App Services UI:
 
 #. Navigate to :guilabel:`Schemas` screen:
 
@@ -293,11 +287,277 @@ To set a default value to an existing property in App Services:
       :alt: Setting default value using the Schema screen editor
       :lightbox:
 
-For more information on how default values are helpful when modifying
-existing Atlas documents, see :ref:`<schema-update-add-required-property>`.
+.. warning:: Default Type Must Match the Property Type
 
-.. warning:: Ensure the default value type and property's type are the same
-
-   The default field does not have type validation. If the default field's type
-   and the property's type are not the same, the error will indicate that
+   The default field does *not* have type validation. If the default field
+   type and the property type are not the same, an error indicates that
    the document is missing a required field.
+
+.. _schema-update-add-required-property:
+.. _schema-update-add-optional-property:
+
+Add a Required or Optional Property
+-----------------------------------
+
+Adding a new property is a non-breaking change when made to the server-side
+schema or the client-side SDK data model. However, if you have existing Atlas
+documents that may be impacted by this change, you should consider making the
+property optional to avoid having to update them.
+
+.. tip:: Always Set Default Values for Required Properties
+
+  We recommend that you always set a default value when adding a required
+  property.
+
+  If you don't set a default value and a client doesn't include
+  the added property, the server populates the missing required field with a
+  zero or blank value (for example, 0, "", or 0.0 depending on the property
+  type) when the document syncs.
+
+You can make your changes from the client or server side:
+
+- **Client Side:** Use :ref:`Development Mode <development-mode>` to let App
+  Services handle the server-side schema updates.
+- **Server Side:** Manually add the property to both the client model and the
+  schema.
+
+  If you have existing Atlas documents that are impacted by this change, you
+  must update them with the new property or they cannot sync to the client.
+  This may give client users the impression that the data has been lost.
+
+.. important:: May Require Terminating Device Sync for Large Collections
+
+  If you have existing documents in Atlas and you add a new property,
+  the server retrieves the documents in Atlas for the collection and re-inserts
+  them to get the new values. This is expected behavior, but the server temporarily halts syncing data until the process completes.
+
+  However, if the amount of unsynced documents exceeds the limit of 100,000
+  documents, you must :ref:`terminate and re-enable Device Sync
+  <terminating-realm-sync>`, despite this being a non-breaking change. For more
+  information, refer to :ref:`unsynced-documents`.
+
+.. _schema-update-remove-object-type:
+
+Remove an Object Type
+---------------------
+
+Removing an existing object type is handled differently depending on where you
+make the change:
+
+- **Client Side:** Removing an object type from the client-side model is
+  considered a *non-breaking change*.
+
+  You can either:
+
+  - Use :ref:`Development Mode <development-mode>` to let App Services handle
+    the server-side schema updates.
+  - Manually remove the object type from the client model and leave it in place
+    on the server-side schema.
+- **Server Side:** Removing an object type from the server-side schema is a
+  *schema versioning change*. You must manually add the object type to the
+  schema, and App Services creates a backward-compatible schema version.
+
+.. _schema-update-remove-property:
+
+Remove a Property
+-----------------
+
+Removing an existing optional or required property is handled differently
+depending on where you make the change:
+
+- **Client Side:** Removing a property from the client-side SDK model is a
+  *non-breaking change*.
+
+  You can either:
+
+  - Use :ref:`Development Mode <development-mode>` to let App Services handle
+    the server-side schema updates.
+
+  - Manually remove the property from the client model and leave it in place
+    on the server-side schema. This does not delete the property from the
+    database. Instead, new objects retain the removed property populated with a
+    zero or blank value (for example, 0, "", ``null`` depending on the property
+    type).
+- **Server Side:** Removing a property from the server-side schema is a
+  *schema versioning change*. You must manually add the property to the schema,
+  and App Services creates a backward-compatible schema version.
+
+.. _schema-update-change-property-status:
+
+Change a Property's Status Between Optional and Required
+--------------------------------------------------------
+
+Changing the optionality of an existing property is handled differently
+depending on where you make the change:
+
+- **Client Side:** Changing the status of an existing property from the
+  client-side model is considered a *breaking change*. Use :ref:`Development
+  Mode <development-mode>` to let App Services handle the server-side schema
+  updates. This requires you to delete all local data before connecting to the
+  server again, but you don't have to terminate Device Sync. For more
+  information, refer to :ref:`update-data-model-development-mode`.
+- **Server Side:** Changing the status of an existing property from the
+  server-side schema is a *schema versioning change*. You must manually update
+  the schema, and App Services creates a backward-compatible schema version.
+
+  If you have existing Atlas documents that are impacted by this change, you
+  must update them with the updated property or they cannot sync to the client.
+  This may give client users the impression that the data has been lost.
+
+  To ensure the impacted documents can continue syncing to client devices, you
+  can either:
+
+  - Change the old field name on each document to match the new model
+  - Add a new field to each document with a name that matches the new model,
+    and populate it with the value from the old field
+
+.. tip:: Always Set Default Values for Required Properties
+
+   We recommend that you  set a default value when making a property required.
+
+   If you don't set a default value and a client doesn't include
+   the added property, the server populates the missing required field with a
+   zero or blank value (for example, 0, "", or 0.0 depending on the property
+   type) when the document syncs.
+
+.. _schema-update-change-object-type-name:
+
+Change an Object's Name
+-----------------------
+
+Renaming an object type is a breaking change to both the server-side schema and
+the client-side object model. Unless you have Development Mode enabled, this
+change requires you to terminate Device Sync and perform a client reset.
+
+To avoid breaking your data model, consider the following alternatives to
+renaming an object type:
+
+- **Remap the name in the client.** If you are using one of the following Atlas
+  Device SDK languages, you can avoid breaking your data model by remapping a
+  new object or class name to your existing name. This effectively renames your
+  client-side object while keeping the original name on the server, and avoids
+  having to perform a client reset.
+
+  Remapping an object or class name is supported in the following SDKs:
+
+  - :ref:`Flutter SDK <flutter-map-property>`
+  - :ref:`Java SDK <java-rename-object>`
+  - :ref:`Kotlin SDK <kotlin-remap-a-property>`
+  - :ref:`.NET SDK <dotnet-rename-object>`
+  - :ref:`Node.js SDK <node-remap-a-property>`
+  - :ref:`React Native SDK <react-native-remap-a-property>`
+
+- **Create a partner collection.** Implementing a :ref:`partner collection
+  strategy <schema-partner_collection-strategy>` lets you keep your existing
+  collection and schema. Instead, you create a partner collection with the new
+  schema definition in place and use database triggers to maintain writes to
+  both collections.
+
+If you choose to change the object's name, you can make your changes from the
+client or server side:
+
+- **Client Side:** Use :ref:`Development Mode <development-mode>` to let App
+  Services handle the server-side schema updates. This requires you to delete
+  all local data before connecting to the server again, but you don't have to
+  terminate Device Sync. For more information,
+  refer to :ref:`update-data-model-development-mode`.
+- **Server Side:** Manually update the schema to reflect the new object name.
+  This creates a new minimum schema version and requires you to :ref:`terminate
+  and re-enable Device Sync <pause-or-terminate-sync>`, then perform a
+  :ref:`client reset <client-resets>` to restore Sync.
+
+.. _schema-update-change-property-name:
+
+Change a Property Name
+----------------------
+
+Renaming a property is a breaking change to both the server-side schema and
+the client-side object model. Unless you have Development Mode enabled, this
+change requires you to terminate Device Sync and perform a client reset.
+
+To avoid breaking your data model, consider the following alternatives to
+renaming an existing property:
+
+- **Remap the name in the client.** If you are using one of the following Atlas
+  Device SDK languages, you can avoid breaking your data model by remapping a
+  new property name to your existing name. This effectively renames your
+  client-side property while keeping the original name on the server, and avoids
+  having to perform a client reset.
+
+  Remapping property name is supported in the following SDKs:
+
+- :ref:`Flutter SDK <flutter-map-property>`
+- :ref:`Java SDK <java-rename-field>`
+- :ref:`Kotlin SDK <kotlin-remap-a-property>`
+- :ref:`.NET SDK <dotnet-rename-property>`
+- :ref:`Node.js SDK <node-remap-a-property>`
+- :ref:`React Native SDK <react-native-remap-a-property>`
+- :ref:`Swift SDK <swift-rename-property>`
+
+- **Create a partner collection.** Implementing a :ref:`partner collection
+  strategy <schema-partner_collection-strategy>` lets you keep your existing
+  collection and schema. Instead, you create a partner collection with the new
+  schema definition in place and use database triggers to maintain writes to
+  both collections.
+
+If you choose to change the property's name, you can make your changes from the client or server side:
+
+- **Client Side:** Use :ref:`Development Mode <development-mode>` to let App
+  Services handle the server-side schema updates. This requires you to delete
+  all local data before connecting to the server again, but you don't have to
+  terminate Device Sync. For more information,
+  refer to :ref:`update-data-model-development-mode`.
+- **Server Side:** Manually update the schema to reflect the new object name.
+  This creates a new minimum schema version and requires you to :ref:`terminate
+  and re-enable Device Sync <pause-or-terminate-sync>`, then perform a
+  :ref:`client reset <client-resets>` to restore Sync.
+
+  If you have existing Atlas documents that are impacted by this change, you
+  must update them with the new property or they cannot sync to the client.
+  This may give client users the impression that the data has been lost.
+
+  To ensure the impacted documents can continue syncing to client devices, you
+  can either:
+
+  - Change the old field name on each document to match the new model
+  - Add a new field to each document with a name that matches the new model,
+    and populate it with the value from the old field
+
+.. _schema-update-change-property-type-but-keep-name:
+
+Change a Property Data Type
+---------------------------
+
+Changing the data type of an existing property is a breaking change to both the
+server-side schema and the client-side object model. Unless you have Development
+Mode enabled, this change requires you to terminate Device Sync and perform a
+client reset.
+
+To avoid breaking your data model, consider implementing a :ref:`partner
+collection strategy <schema-partner_collection-strategy>`, where you create a
+partner collection with the new schema definition in place and use database
+triggers to maintain writes to it and your existing collection.
+
+If you choose to change the property's data type, you can make your changes from
+the client or server side:
+
+- **Client Side:** Use :ref:`Development Mode <development-mode>` to let App
+  Services handle the server-side schema updates. This requires you to delete
+  all local data before connecting to the server again, but you don't have to
+  terminate Device Sync. For more information,
+  refer to :ref:`update-data-model-development-mode`.
+- **Server Side:** Manually update the schema to reflect the new data type.
+  This creates a new minimum schema version and requires you to :ref:`terminate
+  and re-enable Device Sync <pause-or-terminate-sync>`, then perform a
+  :ref:`client reset <client-resets>` to restore Sync.
+
+  If you have existing Atlas documents that are impacted by this change, you
+  must update them with the new data type or they cannot sync to the client.
+  This may give client users the impression that the data has been lost.
+
+  To ensure the impacted documents can continue syncing to client devices, you
+  can either:
+
+  - Change the old field name on each document to match the new model
+  - Add a new field to each document with the type that matches the new model,
+    and populate it with the value from the old field

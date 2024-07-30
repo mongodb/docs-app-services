@@ -88,6 +88,12 @@ client-side SDK object models. This feature speeds up development by allowing
 you to :ref:`define your data model <create-sync-schema>` directly in
 your client application code.
 
+.. important:: Disable Development Mode for Production Apps
+
+   Development Mode is *not* intended for production use. Ensure that you
+   disable Development Mode before you make your app accessible in a production
+   environment.
+
 When you sync a client database, App Services maps every synced object type
 to its own collection in the database specified by
 :ref:`sync-config-database-name`, which becomes the server-side schema. As you
@@ -114,8 +120,8 @@ When you enable Development Mode for your app, the following occurs:
 
 Learn more about creating or updating your data model with Development Mode:
 
-- :ref:`<create-schema-from-rom>`.
-- :ref:`<update-data-model-development-mode>`.
+- :ref:`<create-schema-for-backend-realm-app>`
+- :ref:`<update-data-model-development-mode>`
 
 .. include:: /includes/device-sync/warn-enable-dev-mode-deletes-schema-version.rst
 

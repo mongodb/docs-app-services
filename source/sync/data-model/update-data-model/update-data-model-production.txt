@@ -57,7 +57,6 @@ App Services handles updates to versioned schemas according to the type of chang
   with all previous versions and require you to manually handle reconnecting
   clients at the new minimum version.
 
-
 .. important:: Schema Versioning is Incompatible with Development Mode
 
    You must :ref:`disable Development Mode <enable-development-mode>` to use
@@ -66,25 +65,6 @@ App Services handles updates to versioned schemas according to the type of chang
    If you enable Development Mode in an app with versioned schemas, the server
    deletes all existing versions. This will break any clients using a versioned
    schema.
-
-
-
-.. For supported Atlas Device SDKs, you have the option to set the schema version
-.. from the client code. Note that this is not a requirement; you can use schema
-.. versioning with SDKs that don't support this feature.
-
-.. TODO: update with links to supported SDK docs once they're available
-.. For more information, refer to the following SDK documentation:
-
-.. - C++ SDK: v2.0.0 or later
-.. - Flutter SDK: v2.2.0 or later
-.. - Kotlin SDK: version TBD
-.. - .NET SDK: v12.1.0 or later
-.. - Node.js SDK: version TBD
-.. - React Native SDK: version TBD
-.. - Swift SDK: version TBD
-
-.. This feature is *not* supported in the Java SDK. Use the Kotlin SDK instead.
 
 Non-Breaking Changes
 ~~~~~~~~~~~~~~~~~~~~
@@ -105,18 +85,28 @@ does not require additional handling.
 
 .. note:: Clients on Lower Schema Version Cannot Access Added Elements
 
-   Because non-breaking changes are added to the current version, clients can only reference added elements (objects or properties added as part of the non-breaking changeset) if they connect at the current schema version or higher.
+   Because non-breaking changes are added to the current version, clients can
+   only reference added elements (objects or properties added as part of the
+   non-breaking changeset) if they connect at the current schema version or
+   higher.
+
+If schema versioning is disabled in your app, non-breaking changes are handled
+the same. They are applied to the same single schema with no version and clients
+must update their models to access the new elements.
 
 Schema Versioning Changes
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-:ref:`Schema versioning changes <breaking-changes-schema-versioning-overview>`
+:ref:`Schema versioning changes <schema-versioning-overview>`
 are a special subset of breaking changes. You can make schema versioning changes
 to your server-side schema, and the server creates a new backward-compatible
 version. You can then update the client models to the new schema without having
-to perform a client reset.
+to perform a client reset. Note that you cannot update your schema with schema
+versioning changes using the {+cli+} or automated deploy with GitHub. You must
+use the App Services UI.
 
-The following are considered schema versioning changes when made to your server-side schema:
+The following are considered schema versioning changes when made to your
+server-side schema:
 
 - Removing an existing object type
 - Removing an existing property
@@ -125,8 +115,13 @@ The following are considered schema versioning changes when made to your server-
 When deployed, the server provides a server-initiated migration path to the new
 schema version that automatically handles existing clients without breaking
 compatibility. Existing clients can continue connect with an older schema
-version or update their client models and connect at the new schema version. This is described in more detail in the
+version or update their client models and connect at the new schema version.
+This is described in more detail in the
 :ref:`update-data-model-production-app-procedure` procedure below.
+
+If schema versioning is disabled in your app, schema versioning changes are
+treated as breaking changes and require a client reset to restore connectivity
+with existing clients.
 
 Breaking Changes
 ~~~~~~~~~~~~~~~~
@@ -145,11 +140,14 @@ clients.
    directly. To learn how to implement this strategy, refer to
    :ref:`migrate-schema-partner-collection`.
 
-While schema versioning is enabled, you can make breaking changes to your
-server-side schema, and the server sets the updated schema as the new minimum
-schema version. It is *not* backward compatible with any previous versions.
+You can make breaking changes to your server-side schema, and the server sets
+the updated schema as the new minimum schema version. It is *not* backward
+compatible with any previous versions. Note that you cannot update your schema
+with breaking changes using the {+cli+} or automated deploy with GitHub. You
+must use the App Services UI.
 
-The following are considered breaking changes when made to your server-side schema:
+The following are considered breaking changes when made to your server-side
+schema:
 
 - Renaming an existing object type
 - Renaming an existing property *
@@ -167,6 +165,9 @@ described in more detail in the
    If you perform a client reset, there is no way to migrate data from
    clients that are using an old version of the data model. If clients have any
    unsynced data, that data will be lost and cannot be recovered.
+
+If schema versioning is disabled in your app, breaking changes are handled the
+same, except they overwrite the current schema and there is no version history.
 
 .. _update-data-model-production-app-procedure:
 
@@ -198,7 +199,7 @@ For information on the specific updates you can make, refer to :ref:`update-your
         then re-enable Sync to enable the schema versioning feature. To learn
         how, refer to :ref:`pause-or-terminate-sync`.
 
-   .. step:: Navigate to the :guilabel:`Schema` Screen
+   .. step:: Navigate to the Schema Screen
 
       .. include:: /includes/navigation/nav-to-schema-page.rst
 
@@ -214,14 +215,14 @@ For information on the specific updates you can make, refer to :ref:`update-your
       Find and select the collection you want to edit the schema for, then make
       your changes.
 
-      .. include:: /includes/tip-define-default-values.rst
+      .. include:: /includes/device-sync/tip-define-default-values.rst
 
       Do one of the following to save your changes, depending on whether you
       are using :ref:`deployment drafts <update-realm-app>` in your app:
 
       - If drafts are disabled, click :guilabel:`Save`.
       - If drafts are enabled, click :guilabel:`Save Draft`. From the banner,
-         click :guilabel:`Review Draft & Deploy`.
+        click :guilabel:`Review Draft & Deploy`.
 
    .. step:: Confirm and Deploy Changes
 
@@ -307,33 +308,44 @@ For information on the specific updates you can make, refer to :ref:`update-your
                terminates Device Sync, deploys your changes, then re-enables
                Sync.
 
-            3. After Device Sync re-initializes, your changes are applied. The
+               After Device Sync re-initializes, your changes are applied. The
                schema becomes the new minimum schema version. It is not backward compatible with any previous versions.
 
             4. To restore connectivity with existing clients, you *must* perform
-               a client reset. This is because terminating and re-enabling
-               Device Sync always requires a client reset to restore
-               connectivity with existing clients.
+               a client reset to restore connectivity with existing clients at
+               the new minimum schema version.
 
                For more information on how to handle client resets, refer to
                :ref:`client-resets`.
 
+.. _set-schema-version-from-client:
+
 Set a Schema Version from Your Client
 --------------------------------------
 
-To set a schema version from the client, your app must also use a minimum
-Device SDK version:
+To set a schema version from the client, your app must use a minimum SDK
+version:
 
-.. TODO: confirm sdk versions & link out to SDK docs re. setting schema version
-
-- C++ SDK - unsupported
+- C++ SDK - version TBD
 - Flutter SDK v2.1.0
 - Java SDK v10.18.0
-- Kotlin SDK  - unsupported
+- Kotlin SDK - version TBD
 - .NET SDK v11.7.0
 - Node.js SDK v12.6.0
 - React Native SDK v12.6.0
 - Swift SDK v10.46.0
+
+..   To learn how to set a schema version from the client, refer to the Atlas
+..   Device SDK documentation for your preferred language:
+
+..   - :ref:`TBD - C++ SDK <tbd>`
+..   - :ref:`TBD - Flutter SDK <tbd>`
+..   - :ref:`TBD - Java SDK <tbd>`
+..   - :ref:`TBD - Kotlin SDK <tbd>`
+..   - :ref:`TBD - .NET SDK <tbd>`
+..   - :ref:`TBD - Node SDK <tbd>`
+..   - :ref:`TBD - React Native SDK <tbd>`
+..   - :ref:`TBD - Swift SDK <tbd>`
 
 
 .. _view-schema-version:
@@ -341,23 +353,22 @@ Device SDK version:
 View Schemas
 ------------
 
-.. TODO: Link out to respective sdk procedures for setting schema version from client?
-
 If you have multiple schema versions available, you can do the following from the App Services UI:
 
 - View your previous schemas.
 - Generate SDK data models based on previous schema versions.
 
-#. Navigate to the :guilabel:`Device Sync` screen:
+To get started, navigate to the :guilabel:`Device Sync` screen:
 
-   .. include:: /includes/navigation/nav-to-device-sync-page.rst
+.. include:: /includes/navigation/nav-to-device-sync-page.rst
 
 #. Select the :guilabel:`Sync Models` tab. The :guilabel:`Sync schema version`
    dropdown field displays the current schema version by default.
 
 #. Use the dropdown to select previous versions. Schemas are listed in version
-   order and grouped by backward compatibility. When you select a different
-   version, the timestamp updates to indicate the version creation date, and the generated SDK data models update to reflect the selected version.
+   order and grouped by backward compatibility.
+
+   When you select a different version, the timestamp updates with the version's creation date, and the generated SDK data models update to reflect the selected version.
 
    If you select a schema version that is not backward compatible with previous
    versions, a warning displays.
@@ -379,88 +390,37 @@ If you have multiple schema versions available, you can do the following from th
 Troubleshooting
 ---------------
 
-.. TODO: update with server-side errors (client-side errors will be updated in the SDK docs)
-
 You might encounter one of the following errors when attempting to update your
 data model:
 
 Client provided invalid schema version
-  If you try to connect a client database with a schema version
-  - greater than what's supported by the app
-  - Opening a Realm with a schema version less than the earliest valid version (Making breaking changes invalidates all prior schema versions)
+  If you try to connect a client database with a schema version that's either:
+  - Greater than the current schema version.
+  - Less than the minimum required version. This may occur after making a
+  breaking change, which invalidates all previous schema versions.
+
+  To resolve, ensure that you set the schema version in the client to
+  version that is either equal to or greater than the minimum required version.
 
 Changes cannot be made in additive-only schema mode
-  If you make a breaking change and connect a client with data in its local
-  database file, the app will fail at startup with an error indicating that the
-  noted ``changes cannot be made in additive-only schema mode``.
+  If you connect a client database using synchronous open, the app will fail at
+  startup with an error indicating that the noted ``changes cannot be made in
+  additive-only schema mode``.
 
-  To resolve, ensure
-  that you delete all existing local data, as described above, before
-  re-attempting to connect with your changes.
-  (Migrating a Realm’s schema version using synchronous open)
+  To resolve, ensure that the first time you connect to the server after making
+  versioned schema changes, you connect asynchronously. This allows the server
+  to perform the migration and upgrade the client models.
 
 Server schema has changed since the last time the client connected; please update your SDK version to avoid future client resets
-   QBSv2 only: connecting after an additive schema change has been made on the server, AND the client doesn’t support server initiated bootstraps
+   Client attempted to connect after making a non-breaking to the server-side
+   schema when the client SDK doesn't support server-initiated bootstraps.
+
+   To resolve, update the client SDK to a version that supports server-initiated
+   bootstrapping.
 
 Client schema version force bumped
-   SDK doesn’t support schema migrations, and the client’s version was forcibly bumped (i.e. due to a breaking change)
+   The client's schema version was forcibly bumped to a new minimum version due
+   to a breaking change, but the client SDK doesn't support schema migrations.
 
-
-Examples
---------
-
-We are updating the data model for our mobile todo app.
-
-Our current schema:
-
-.. list-table::
-   :header-rows: 1
-   :widths: 50 50
-
-   * - Schema v0
-     - .. code-block:: json
-         :caption: (string)
-
-         {
-         "title": "Item",
-         "properties": {
-            "_id": {
-               "bsonType": "objectId"
-            },
-            "task": {
-               "bsonType": "string"
-            },
-            "isCompleted": {
-               "bsonType": "bool"
-            }
-         },
-            "required": [
-               "title"
-            ]
-         }
-   * - Schema v1
-     - .. code-block:: json
-         :caption: (string)
-
-         {
-         "title": "Item",
-         "properties": {
-            "_id": {
-               "bsonType": "objectId"
-            },
-            "task": {
-               "bsonType": "string"
-            },
-            "isCompleted": {
-               "bsonType": "bool"
-            }
-         },
-            "required": [
-               "title"
-            ]
-         }
-
-
-
-
-
+   To resolve, update the client SDK to a version that supports schema
+   migrations.

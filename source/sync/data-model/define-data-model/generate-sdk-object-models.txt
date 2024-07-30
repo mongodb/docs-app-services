@@ -19,7 +19,7 @@ Generate SDK Models from an App Services Schema
    :class: singlecol
 
 When defining a :ref:`data model <device-sync-data-model>` to use with Device
-Sync, you can choose to define your App Services schema first, then have App
+Sync, you can choose to define your server-side schema first, then have App
 Services automatically generate the corresponding language-specific object
 models. You can then copy the generated models directly in your client app.
 
@@ -46,20 +46,20 @@ UI or using the {+cli+}.
 
 .. procedure::
 
-   .. step:: Generate Your App Services Schema
+   .. step:: Before You Begin
 
-      If you don't already have an App Services schema defined for each
-      object type that you plan to sync, you can generate one from existing data in the collection, then modify as needed.
-
-      For instructions, continue to to :ref:`define-a-schema`.
-
-      To work with Device Sync, your App Services schema must meet the following
+      To work with Device Sync, ensure that your schema meets the following
       requirements:
 
       - All objects *must* have a primary key field called``_id``. The ``_id``
         can be of type ``string``, ``int``, or ``objectId``.
       - Your schema object :ref:`type names <sync-type-name>` cannot exceed
         {+name-char-limit+} UTF-8 characters.
+
+      If you don't already have a schema defined for each
+      object type that you plan to sync, you can generate one from existing data
+      in the collection, then modify as needed. Or you can manually define it in
+      App Services. For instructions, continue to to :ref:`define-a-schema`.
 
       .. note:: Limitation of Generated App Services Schemas
 
@@ -68,7 +68,7 @@ UI or using the {+cli+}.
          type properties. To include a required or mixed data type property in
          your data model, you must manually edit your schema as needed.
 
-   .. step:: Generate Data Models Based On Your Schema
+   .. step:: Generate SDK Object Models
 
       .. tabs-realm-admin-interfaces::
 
@@ -86,13 +86,10 @@ UI or using the {+cli+}.
 
             .. note:: Generate Previous Schema Versions
 
-               If you have multiple schema versions available, the current schema
+               If you have multiple :ref:`schema versions <schema-versioning>` available, the current schema
                version displays by default. Use the :guilabel:`Sync schema version`
                dropdown field to select previous versions. The generated SDK data
                models update to reflect the selected schema version.
-
-            .. image:: /images/translate-jsonschema-into-realm-data-model.png
-               :alt: Generated SDK data models in App Services UI
 
          .. tab::
             :tabid: cli
@@ -122,36 +119,39 @@ UI or using the {+cli+}.
 
    .. step:: Add the Generated Models to Your Client Code
 
-   .. tabs-realm-admin-interfaces::
+      .. tabs-realm-admin-interfaces::
 
-      .. tab::
-         :tabid: ui
+         .. tab::
+            :tabid: ui
 
-         Copy the generated models to your clipboard, then paste them directly
-         into your client code.
+            Copy the generated models to your clipboard, then paste them directly
+            into your client code.
 
-         You can copy individual models or all models:
+            You can copy individual models or all models:
 
-         - To copy all models for the selected language, click
-            :guilabel:`Copy All Data Models`.
+            - To copy all models for the selected language, click
+               :guilabel:`Copy All Data Models`.
 
-            When prompted, choose whether you want to include import
-            statements (default) or exclude them from the copied data, then
-            click :guilabel:`Copy`.
-         - To copy a single model, click the :guilabel:`Copy` icon for the
-            data model code block.
+               When prompted, choose whether you want to include import
+               statements (default) or exclude them from the copied data, then
+               click :guilabel:`Copy`.
+            - To copy a single model, click the :guilabel:`Copy` icon for the
+               data model code block.
 
-      .. tab::
-         :tabid: cli
+            .. image:: /images/translate-jsonschema-into-realm-data-model.png
+               :alt: Generated SDK data models in App Services UI
 
-         Copy the generated models from your terminal, then paste them into
-         your client code.
+         .. tab::
+            :tabid: cli
 
-   .. step:: Open a Synced Database with the SDK Data Model
+            Copy the generated models from your terminal, then paste them into
+            your client code.
 
-      You can use the data model in your client application immediately.
+   .. step:: Connect a Client Using the SDK Models
+
+      You can use the generated models in your client application immediately.
       Refer to the Atlas Device SDK documentation to open a
-      synced database with the generated model:
+      synced database with the generated models:
 
       - :ref:`Flutter SDK <flutter-sync>`
       - :ref:`Java SDK <java-sync-data>`
@@ -160,3 +160,16 @@ UI or using the {+cli+}.
       - :ref:`Node.js SDK <node-sync-changes-between-devices>`
       - :ref:`React Native SDK <react-native-realm-sync>`
       - :ref:`Swift SDK <ios-sync-changes-between-devices>`
+
+Troubleshooting
+---------------
+
+You might encounter one of the following errors when attempting to define your data model:
+
+Top-level schema is missing _id primary key field
+  If any of your primary object types are missing a primary key field called
+  ``_id``, they cannot sync to Atlas.
+
+  To resolve, ensure that all primary object types defined in your data model
+  meet this requirement. The ``_id`` can be of type ``string``, ``int``, or
+  ``objectId``. This does not apply to embedded objects.

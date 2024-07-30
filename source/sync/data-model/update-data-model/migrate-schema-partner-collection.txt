@@ -1,4 +1,5 @@
 .. _migrate-schema-partner-collection:
+.. _schema-partner_collection-strategy:
 .. _partner_collections:
 
 ============================================
@@ -7,6 +8,7 @@ Update Data Model using a Partner Collection
 
 .. meta::
    :description: Apply breaking data model changes using the partner collection strategy for a Device Sync-enabled production app.
+   :keywords: Realm
 
 .. facet::
    :name: genre
@@ -21,11 +23,12 @@ Update Data Model using a Partner Collection
 Updating a production app's data model with breaking changes requires
 terminating and re-enabling Device Sync, then manually restoring connectivity
 with existing clients through a client reset. This process risks significant
-downtime, negative impacts to existing clients, and potential data loss.
+downtime and potential data loss for existing clients.
 
-An alternative approach to making breaking changes to your data model directly
-is to create a new "partner collection" with the desired schema changes. You
-might use this approach if:
+An alternative approach to updating your data model directly is to create a new
+"partner collection" with the breaking changes.
+
+You may prefer this approach if:
 
 - You can't tolerate losing unsynced data as a result of a client reset.
 - You need to maintain backward compatibility with older clients that can't update.
@@ -37,7 +40,7 @@ If you prefer to update your production app's data model directly, refer to
 
    These constraints and strategies apply specifically to apps in production. If
    your app is still in development, we highly recommend that you use
-   Development Mode to make breaking data model changes directly in your client
+   Development Mode. This lets you make breaking changes directly in your client
    code without requiring additional action. For more information, refer to
    :ref:`update-data-model-development-mode`.
 
@@ -53,12 +56,13 @@ After you create the partner collection, you can copy the data from the existing
 collection, then set up database triggers to keep the data in sync between the
 two collections.
 
-Procedure
----------
+Create a Partner Collection
+---------------------------
 
 The following procedure walks through creating a new ``TaskV2`` partner
-collection for an existing ``Task`` collection because we want to change the
-data type of the ``_id`` field from ``objectId`` to ``string``:
+collection for an existing ``Task`` collection.
+
+This is because We need to make a breaking change to our existing data model: we want to change the data type of the ``_id`` field from ``objectId`` to ``string``. This change is not backward-compatible with existing clients, so we create a new partner collection with the change implemented.
 
 .. code-block:: json
     :caption: Schema for initial collection

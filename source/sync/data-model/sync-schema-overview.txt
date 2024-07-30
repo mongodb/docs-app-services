@@ -24,7 +24,7 @@ Define a Data Model for Device Sync
    :hidden:
 
    Define SDK Objects in Client </sync/data-model/define-data-model/create-a-schema>
-   Define JSON Schema in App Services
+   Generate SDK Objects from Schema
    </sync/data-model/define-data-model/generate-sdk-object-models>
 
 
@@ -33,7 +33,7 @@ It ensures that your data complies with a specific structure, contains
 only valid values, and only changes in ways that you expect.
 
 Defining your data model is also a key part of configuring and using Atlas
-Device Sync. That's because your data model lets App Services validate the
+Device Sync. That's because Device Sync uses your data model to validate the
 idiomatic objects uploaded from client devices and translate them to JSON
 documents stored in your linked Atlas :ref:`data source <data-sources>`.
 
@@ -42,15 +42,15 @@ documents stored in your linked Atlas :ref:`data source <data-sources>`.
 Device Sync Data Model
 ----------------------
 
-To ensure App Services can correctly translate and apply changes between synced
-client databases and Atlas, Device Sync requires a data model that maps the
-client models to the server:
+To ensure the Device Sync server can correctly translate and apply changes
+between synced client databases and Atlas, Device Sync requires a data model
+that maps the client models to the server:
 
 App Services Schema (JSON)
   The server-side schema that defines data as a JSON document. Each schema
   corresponds to an Atlas collection. App Services uses these schemas to
   translate synced client data from SDK objects to documents in Atlas. For
-  more information on App Services schemas, refer to :ref:`schemas`.
+  more information, refer to :ref:`schemas`.
 
 SDK Data Model (language specific)
   The client-side data models that define the object types that sync
@@ -64,60 +64,65 @@ defined in your SDK data model.
 App Services also supports mapping to multiple SDK data models. For example, if
 you're developing for iOS using the Swift SDK and for Android using the Kotlin
 SDK, you can define your object types in both languages. As long as both models
-map consistently to shared data source, then clients using either platform can
-then sync to Atlas successfully.
+map consistently to the shared data source, then clients using either platform
+can sync to Atlas successfully.
+
+Example Data Model
+~~~~~~~~~~~~~~~~~~
 
 In the following example, we have a todo mobile app that uses the Atlas Device
-SDK for Kotlin. The data model consists of ``item`` and ``list`` objects, which
-are defined as Kotlin objects in the client code. Each Kotlin object maps to an
-Atlas collection of the same name (``Item`` and ``List``) in our ``todo``
-database. Each collection has its own App Services schema defined in JSON format that maps to the corresponding SDK model.
+SDK for Kotlin. Our data model consists of two object types: ``Item`` and
+``List``. We'll sync them to our linked Atlas database: ``todo``.
+
+- The ``item`` and ``list`` object types are defined as Kotlin objects in the
+  client code.
+- Each of these Kotlin objects map to an Atlas collection of the same name
+  (``Item`` and ``List``) in our database.
+- Each collection has its own schema defined in JSON format that maps to the
+  corresponding SDK model.
 
 .. figure:: /images/sync-data-model.png
    :alt: Device Sync data model
    :lightbox:
 
-To learn more about how App Services maps client data to an Atlas collection, refer to :ref:`sync-data-model-mapping`.
+To learn more about how Device Sync maps your client data to an Atlas
+collection, refer to :ref:`sync-data-model-mapping`.
 
-Defining Your Data Model
-------------------------
+Approaches to Defining Your Data Model
+--------------------------------------
 
 You can define your data model from your client application first or from App
-Services first, then generate the corresponding models or schema:
+Services first, then generate the corresponding models or schema.
 
-- **Define your SDK object models first.** With Device Sync's Development Mode
-  feature, you can define your object models natively in
-  your preferred programming language. App Services can then automatically
-  generate the corresponding JSON schema for each synced object type.
+Define SDK Objects in the Client App
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  This is the recommended approach if you prefer to work directly in your client
-  code. To learn how, continue to :ref:`create-schema-for-backend-realm-app`.
+If you prefer to work directly in your client code, you can define your data
+model client side first.
 
-- **Generate SDK models from an App Services schema.** After creating your
-  document schema in App Services, you can automatically generate the
-  corresponding SDK object models. You can copy these models directly into your client application and use them the same way you would any regular object or struct in your preferred programming language.
+With Device Sync's Development Mode feature, you can define your object models
+natively in your preferred programming language. App Services can then
+automatically generate the corresponding JSON schema for each synced object
+type.
 
-  This approach is useful if you already have a lot of data in Atlas or if you
-  plan to build apps with multiple languages. To learn how, continue to :ref:`generate-sdk-object-models`.
+To learn how, continue to :ref:`create-schema-for-backend-realm-app`.
 
-Troubleshooting
----------------
+Define JSON Schema in App Services
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You might encounter one of the following errors when attempting to define your data model:
+If you already have a lot of data in Atlas or if you plan to build apps with
+multiple languages, you can define your schema in App Services first. You can
+choose to either:
 
-Top-level schema is missing _id primary key field
-  If any of your SDK object types are missing a primary key field called
-  ``_id``, App Services cannot sync them to Atlas. To resolve, ensure that all
-  of the object types in your client meet this requirement. The ``_id`` can be
-  of type ``string``, ``int``, or ``objectId``. For more information, refer to
-  the Atlas Device SDK documentation for defining a data model in your preferred
-  language:
+- Generate a schema from existing data in the collection, and modify as needed.
+- Define a schema manually by adding field-level schema definitions.
 
-      - :ref:`C++ SDK <cpp-object-models>`
-      - :ref:`Flutter SDK <flutter-define-realm-object-schema>`
-      - :ref:`Java SDK <java-define-a-realm-object-schema>`
-      - :ref:`Kotlin SDK <kotlin-supported-types>`
-      - :ref:`.NET SDK <dotnet-sync-changes-between-devices>`
-      - :ref:`Node.js SDK <node-define-a-realm-object-schema>`
-      - :ref:`React Native SDK <react-native-define-a-realm-object-schema>`
-      - :ref:`Swift SDK <swift-object-models>`
+To learn how, continue to :ref:`define-a-schema`.
+
+After creating your document schema, you can automatically generate the
+corresponding object models in the SDK language of your choice. You can copy
+these models directly into your client application and use them the same way you
+would any regular object or struct in your preferred programming language.
+
+To learn how, continue to :ref:`generate-sdk-object-models`.
+
