@@ -173,8 +173,6 @@ client application. The SDKs use **subscriptions** to maintain those queries on
 the client side. Through these subscriptions, your applications sync objects
 with the backend app and can watch for and react to changes.
 
-.. include:: /includes/warn-device-sync-query-size-limit.rst
-
 To create queries from your client application, refer to the Realm SDK documentation:
 
 - :ref:`Flexible Sync - Flutter SDK <flutter-sync>`
@@ -184,5 +182,10 @@ To create queries from your client application, refer to the Realm SDK documenta
 - :ref:`Flexible Sync - Node.js SDK <node-flexible-sync>`
 - :ref:`Flexible Sync - React Native SDK <react-native-flexible-sync>`
 - :ref:`Flexible Sync - Swift SDK <ios-flexible-sync>`
+
+.. warning:: Query Size Limit
+
+  The **size limit** for queries from your client application when using Device Sync is
+  **256 kB**. Exceeding this limit in a query will result in a :ref:`LimitsExceeded Error<flexible-sync-errors>`.
 
 .. include:: /includes/important-sync-ignores-custom-collation.rst
