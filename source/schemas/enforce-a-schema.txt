@@ -44,6 +44,13 @@ When using the App Services UI, you can choose to:
 - Generate a schema from existing data in the collection, and modify as needed.
 - Define a schema manually by adding field-level schema definitions.
 
+.. note:: Limitation of Generated App Services Schemas
+
+   If you choose to automatically generate your App Services schema, note
+   that App Services *cannot* generate required properties or mixed data
+   type properties. To include a required or mixed data type property in
+   your data model, you must manually edit your schema as needed.
+
 .. tabs-realm-admin-interfaces::
 
    .. tab::
@@ -51,11 +58,10 @@ When using the App Services UI, you can choose to:
 
       .. procedure::
 
-         .. step:: Navigate to the Schema Screen
+         .. step:: Navigate to the :guilabel:`Schema` Screen
 
-            In the left navigation menu, click :guilabel:`Schema` beneath
-            :guilabel:`Data Access` to open the schema editor. The Collections
-            configuration screen displays in the :guilabel:`Collections` tab.
+            .. include:: /includes/navigation/nav-to-schema-page.rst
+
             Atlas App Services scans your linked cluster for existing
             collections and lists them on the left side of the schema editor.
 
