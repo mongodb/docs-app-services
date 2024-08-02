@@ -5,8 +5,7 @@ Internal Database Usage
 =======================
 
 .. meta::
-   :description: Learn about how Device Sync interacts with your linked Atlas clusters.
-   :keywords: Realm
+   :description: Learn how App Services interacts with your linked Atlas clusters and how to handle unsynced documents.
 
 .. facet::
    :name: genre
@@ -67,8 +66,7 @@ Unsynced Documents
 If a document in a :ref:`synced <sync>` collection does not conform to
 the collection's schema, it cannot be synced to client apps. If there
 are 100,000 or more unsyncable documents, App Services stops syncing 
-with the app. You need to manually resolve this by terminating sync, 
-fixing the unsyncable documents, and then re-enabling sync.
+with the app.
 
 App Services stores a information about unsyncable documents in the
 ``__realm_sync.unsynced_documents`` collection.
