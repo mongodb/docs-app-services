@@ -8,6 +8,14 @@ Update Your Data Model
 
 .. default-domain:: mongodb
 
+.. meta::
+   :description: Learn how to update your data model for Atlas Device Sync.
+   :keywords: Realm
+
+.. facet::
+   :name: genre
+   :values: reference
+
 .. contents:: On this page
    :local:
    :backlinks: none
@@ -213,9 +221,13 @@ while this process is underway.
 
    App Services uses a ``__realm_sync.unsynced_documents`` collection to track 
    unsynced documents. When you add a required property, the re-sync process can 
-   push this collection over the limit of 100,000 documents. In this case, you must 
-   :ref:`terminate and re-enable sync <terminating-realm-sync>`, even though the 
-   change you're making is a non-breaking change. 
+   push this collection over the limit of 100,000 documents. In this case, you
+   have two options:
+   
+   - :ref:`terminate and re-enable sync <terminating-realm-sync>`, even though
+     the change you're making is a non-breaking change. 
+   - Contact support and request a temporary increase in the unsyncable
+     documents limit.
 
 .. _schema-update-add-optional-property:
 
