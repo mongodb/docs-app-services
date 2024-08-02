@@ -58,8 +58,9 @@ Unsynced Documents
 
 If a document in a :ref:`synced <sync>` collection does not conform to
 the collection's schema, it cannot be synced to client apps. If there
-are 100,000 or more unsyncable documents, App Services pauses sync
-for the app.
+are 100,000 or more unsyncable documents, App Services stops syncing 
+with the app. You need to manually resolve this by terminating sync, 
+fixing the unsyncable documents, and then re-enabling sync.
 
 App Services stores a information about unsyncable documents in the
 ``__realm_sync.unsynced_documents`` collection.

@@ -1,3 +1,99 @@
+# July 26, 2024
+
+## Device Sync
+
+- Get Started: Rename references to "Realm" and adjust phrasing for clarity.
+- Configure Sync/Sync Settings: Update page to indicate that the Sync Type field only displays for Partition-Based Sync apps and move the "Cluster to Sync" section to the top of the page.
+- Go to Production with Sync/Optimize Sync Storage in Atlas: Remove references to disabling client maximum offline time and update Device Sync settings screenshot to remove Enable Max Offline Time field.
+- Migrate Sync Modes: Update migration instructions and corresponding screenshots to reflect recent Device Sync UI changes.
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Create a new section on updating permissions using custom user data.
+
+## Define a Data Model
+
+- Schemas/Schema Data Types: Add link to Node.js Counters page under the list of SDKs that support counters.
+
+# July 12, 2024
+
+## Tutorials
+
+- All Device Sync Tutorials: Note that the downloaded .zip file may appear empty for Windows users, and recommend using a third-party zip utility as a workaround.
+
+## Device Sync
+
+- App Builder's Resources/Device Sync Permissions Guide: Fix a typo in "Create subscribeToUser Function" section and add metadata to the page.
+- Go to Production with Sync/Compact an Atlas Volume: Remove outdated information and update procedure with link to the Test Primary Failover page in the Atlas documentation.
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Fix a typo in "User Creation Function" section.
+
+## Connect to MongoDB Data Sources
+
+- CRUD & Aggregation APIs: Remove `$currentOp` from the list of aggregation pipelines stages.
+- Internal Database Usage: Update "Unsynced Documents" section to note that with more than 100,000 unsyncable documents, users must manually terminate Sync, fix the documents, and re-enable Sync.
+
+## Define a Data Model
+
+- Schemas/Define & Enforce a Schema: Add screenshot of the "Schemas" UI to the "Define a Schema" procedure for the App Services UI.
+
+## Monitor App Activity
+
+- Activity Feed & Alerts: Add a link from the "Custom App Services Alerts" section to the App Services Metrics Reference.
+
+## Reference
+
+- App Services CLI: Regenerate and add updated documentation pages for App Services CLI and all children pages.
+- Partition-Based Sync Mode: Added a link to the migration guide from PBS to Flexible Sync.
+
+## Other
+
+- Throughout the docs: Remove old mentions of `realm_config.json` and replace with current name, `root_config.json`.
+- Internal: Update redirects for deprecated `realm-cli` pages to include the missing path directory.
+
+# July 5, 2024
+
+## Data API
+
+- Data API Endpoints: Add note indicating that private endpoints do not support Data API Endpoints.
+- Custom HTTPS Endpoints: Add note indicating that private endpoints do not support HTTPS Endpoints.
+
+## Authenticate & Manage Users
+
+- Define User Metadata: Fix typo and update references using "Realm" to "Atlas Device SDK."
+
+## Secure Your App
+
+- Use a VPC Private Endpoint (Preview): Remove guidance on migrating to HTTPS endpoints and Data API.
+
+## Reference
+
+- Billing:
+
+  - Update formatting of free tier thresholds to represent independent threshold
+    model.
+  - Update page with new billing practice, including new daily free tier limits.
+
+## Release Notes
+
+- Update external changelog with release notes for the CLI, Edge Server, Atlas Events, and more.
+
+## Internal
+
+- Add files for Netlify workflow.
+
+# June 28, 2024
+
+## Device Sync
+
+- Configure and Update Your Data Model/ Data Model Mapping: Correct the minimum Swift SDK version number listed in the Collections in Mixed note.
+
+## Connect to MongoDB Data Sources
+
+- CRUD & Aggregation APIs: Add `distinct` and `explain` to the list of unsupported database commands. Update descriptions for the `$search` and `$out` aggregation pipeline stages.
+
 # June 21, 2024
 
 ## Other
@@ -37,7 +133,7 @@
     - Update "Example" section to demonstrate nested collections of mixed data.
     - Update "Geospatial" section with content moved from Schema Types page.
 - Technical Details
-  - Conflict Resolution: 
+  - Conflict Resolution:
     - Add new "Dictionaries" section to clarify how Device Sync handles conflicts with dictionary keys.
     - Add new "Nested Collections" section.
 

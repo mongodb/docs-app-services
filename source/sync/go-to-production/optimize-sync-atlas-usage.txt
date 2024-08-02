@@ -4,22 +4,24 @@
 Optimize Sync Storage in Atlas
 ==============================
 
-.. default-domain:: mongodb
+.. meta::
+  :description: Atlas Device Sync uses several strategies to optimize storage space for sync data stored in an Atlas cluster.
+
+.. facet::
+  :name: genre
+  :values: reference
 
 .. contents:: On this page
    :local:
    :backlinks: none
    :depth: 2
    :class: singlecol
-   
+
 .. meta::
    :keywords: maxOfflineTime, client, maximum, offline, time, client maximum offline time, maximum offline time, max, max offline time, client max offline time
 
-Overview
---------
-
 Atlas Device Sync uses space in your app's synced Atlas cluster to store
-metadata for sync. This includes a history of changes to each realm.
+metadata for sync. This includes a history of changes to each synced database.
 Atlas App Services minimizes this space usage in your Atlas cluster.
 Minimizing metadata is necessary to reduce the time and data needed for sync.
 
@@ -39,9 +41,8 @@ App Services stores history in your synced Atlas cluster.
 Trimming
 --------
 
-When you set a client maximum offline time in an App that uses :ref:`Flexible
-Sync <flexible-sync>`, **trimming** deletes changes older than the client
-maximum offline time.
+When you set a client maximum offline time in an App, **trimming** deletes
+changes older than the client maximum offline time.
 
 .. _client-maximum-offline-time:
 
@@ -55,8 +56,8 @@ synchronize for more than the specified number of days
 may experience a :ref:`client reset <client-resets>` the next time they
 connect with the backend.
 
-Setting the client maximum offline time to a lower value will decrease the amount 
-of history required by sync. The resulting optimization lowers storage usage 
+Setting the client maximum offline time to a lower value will decrease the amount
+of history required by sync. The resulting optimization lowers storage usage
 in the synced Atlas cluster.
 
 New Apps automatically enable client maximum offline time with a default
@@ -66,8 +67,7 @@ value of 30 days.
 
    Client maximum offline time enables trimming for
    older history. This permanently changes affected
-   history, and can cause client resets in the future even after
-   disabling the feature.
+   history and can cause client resets in the future.
 
 Key Concepts
 ~~~~~~~~~~~~
@@ -97,7 +97,7 @@ after any period of time offline -- weeks, months, or even years --
 and synchronize changes. As time passes, frequently-edited realms
 accumulate many changes. With a large changeset, synchronization
 requires more time and data usage.
-   
+
 Client Maximum Offline Time Does Not Immediately Influence Client Resets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -108,15 +108,13 @@ client reset. Existing history has already been changed by trimming,
 requiring a client reset. New history needs time to accumulate up to
 the new client maximum offline time.
 
-Disabling the client maximum offline time feature stops additional
-trimming, but history that has already been changed by
-trimming will permanently cause client resets in clients.
-
-Decreasing client maximum offline time also does not *immediately*
+Decreasing client maximum offline time does not *immediately*
 change the length of time before clients experience a client reset.
 Client resets begin taking place earlier once the regularly scheduled
 trimming job applies trimming to the newly
 eligible history.
+
+.. _set-the-client-maximum-offline-time:
 
 Set the Client Maximum Offline Time
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,34 +123,32 @@ Set the Client Maximum Offline Time
 
    .. tab::
       :tabid: ui
-      
-      1. Select the :guilabel:`Device Sync` menu in the sidebar.
 
-      #. Under :guilabel:`Sync Type`, make sure :guilabel:`Flexible` is selected. 
+      1. From the App Services UI, click :guilabel:`Device Sync` menu in the
+         sidebar. The :guilabel:`Dashboard` tab displays by default.
 
-      #. Scroll down to the :guilabel:`Advanced Configuration (optional)` dropdown.
-         Click the dropdown to open. 
+      #. Click the :guilabel:`Configuration` tab.
+
+      #. Scroll down to the :guilabel:`Advanced Configuration (optional)`
+         section, and click the dropdown to expand the section.
 
          .. figure:: /images/client-max-offline-time.png
            :width: 750px
-           :alt: The client maximum offline time configuration in a disabled state.
+           :alt: Advanced Configuration section in the App Services UI
 
-      #. Under the :guilabel:`Client Max Offline Time` section, click 
-         the :guilabel:`Enable Max Offline Time` toggle.
-
-      #. Specify a number of days for your application's client maximum
-         offline time. The default value is 30 days. The minimum value is
-         1.
+      #. Under the :guilabel:`Client Max Offline Time` section, specify a number
+         of days for your application's client maximum offline time. The default
+         value is 30 days. The minimum value is 1.
 
       #. Click the :guilabel:`Save Changes` button at the bottom of the screen
          once you are ready to save.
-      
+
       #. In the confirmation window, click the :guilabel:`Save Changes` button again
          to confirm changes.
-   
+
    .. tab::
       :tabid: cli
-      
+
       1. Pull a local copy of the latest version of your app with the
          following :ref:`pull command <appservices-pull>`:
 
@@ -167,7 +163,7 @@ Set the Client Maximum Offline Time
 
          .. code-block:: json
             :caption: ``sync/config.json``
-           
+
             {
                "client_max_offline_days": 42,
             }
@@ -198,47 +194,47 @@ which collections.
 .. example::
 
    Your app may contain 20 or 30 collections, but you want to minimize the
-   number of queryable fields. You can re-use **global queryable fields** 
-   across collections in order to sync objects from every collection. 
-   For example, ``owner_id`` might be a field you want to query in multiple 
+   number of queryable fields. You can re-use **global queryable fields**
+   across collections in order to sync objects from every collection.
+   For example, ``owner_id`` might be a field you want to query in multiple
    collections.
 
    Alternately, you may have ``owner_id`` in multiple collections, but only
-   need to query on it in one collection. In this case, you might make 
+   need to query on it in one collection. In this case, you might make
    ``owner_id`` a **collection queryable field**. This means Sync only has to
    maintain metadata about this field for one collection, instead of storing
-   metadata for all of the collections where you're not querying on this 
+   metadata for all of the collections where you're not querying on this
    field.
 
-   Finally, for Apps where devices want to query one specific facet of the 
-   data, such as ``owner_id == user.id``, you may want to designate the 
-   field an **indexed queryable field**. Indexed queryable fields provide more 
-   efficient performance for Apps where the client only needs to sync on a 
-   small subset of their data - a group of stores or a single user, for 
+   Finally, for Apps where devices want to query one specific facet of the
+   data, such as ``owner_id == user.id``, you may want to designate the
+   field an **indexed queryable field**. Indexed queryable fields provide more
+   efficient performance for Apps where the client only needs to sync on a
+   small subset of their data - a group of stores or a single user, for
    example.
-   
+
    You can have one indexed queryable field per App. An indexed queryable
-   field is a **global queryable field** that must be present and use the 
+   field is a **global queryable field** that must be present and use the
    same eligible data type in each collection you sync.
 
-   For more information, refer to :ref:`queryable-field-scopes` and 
+   For more information, refer to :ref:`queryable-field-scopes` and
    :ref:`fs-indexed-queryable-fields`.
 
-For best performance, open a synced realm with a broad query. Then, add 
-more refined queries to expose targeted sets of data in the client 
+For best performance, open a synced realm with a broad query. Then, add
+more refined queries to expose targeted sets of data in the client
 application. Slicing off working sets from a broad query provides
-better performance than opening multiple synced realms using more 
+better performance than opening multiple synced realms using more
 granular queries.
 
-When you configure queryable fields, consider the broad queries you use 
+When you configure queryable fields, consider the broad queries you use
 for Sync, and select fewer fields that support those broad queries.
 
 .. example::
 
-   In a to-do list app, prefer broad queries such as ``assignee == currentUser`` 
-   or ``projectName == selectedProject`` for a Sync query. This gives you a 
-   couple of broad fields against which to Sync documents. In the client, you 
-   can further refine your query for things like tasks of a certain priority 
+   In a to-do list app, prefer broad queries such as ``assignee == currentUser``
+   or ``projectName == selectedProject`` for a Sync query. This gives you a
+   couple of broad fields against which to Sync documents. In the client, you
+   can further refine your query for things like tasks of a certain priority
    or completion status to slice off a working set.
 
 Summary
@@ -248,8 +244,6 @@ Summary
 - Trimming reduces the space usage for Flexible Sync apps, but can cause client resets
   for clients who have not connected to the backend in more than
   the client maximum offline time (in days).
-- Flexible Sync apps that have disabled a client maximum offline time do not apply trimming,
-  so clients of any age can sync without experiencing a client reset.
 - Adding additional queryable fields to a flexible sync configuration
   will increase storage consumed on an Atlas Cluster. Using broad queries
   and selecting fewer fields that support broad queries decreases storage consumed.

@@ -4,7 +4,7 @@
 Activity Feed & Atlas App Services Alerts
 =========================================
 
-.. meta:: 
+.. meta::
   :description: Learn about the Project Activity Feed and Alerts available for App Services.
 
 .. facet::
@@ -17,17 +17,16 @@ Activity Feed & Atlas App Services Alerts
    :depth: 2
    :class: singlecol
 
-Introduction
-------------
-MongoDB Atlas provides an Activity Feed that displays events for each 
+MongoDB Atlas provides an Activity Feed that displays events for each
 :atlas:`project </organizations-projects/#std-label-projects>`. Atlas App Services
-activities are included in this feed. To view and/or download only 
+activities are included in this feed. To view and/or download only
 App Services events, you can specify a filter, as described below.
 
 Project Activity Feed
 ---------------------
-There are two ways to access the Project Activity Feed: through the 
-Atlas UI, and through the Atlas API. The following Atlas 
+
+There are two ways to access the Project Activity Feed: through the
+Atlas UI, and through the Atlas API. The following Atlas
 documentation pages describe each approach:
 
 - :atlas:`View Activity Feed in the UI </tutorial/activity-feed/>`
@@ -36,13 +35,13 @@ documentation pages describe each approach:
 Filter Activities
 ~~~~~~~~~~~~~~~~~
 
-App Services activities are a subset of 
-:atlas:`Atlas alerts </alerts/>`. You can filter the Project Activity 
-Feed results to show only App Services events, or a subset of 
-App Services events. To do this, click the 
-:guilabel:`Filter by event(s)` menu and check :guilabel:`App Services`. In the 
-right-hand side of the menu, you will see 
-all App Services events selected. Deselect any that you do not want to see. 
+App Services activities are a subset of
+:atlas:`Atlas alerts </alerts/>`. You can filter the Project Activity
+Feed results to show only App Services events, or a subset of
+App Services events. To do this, click the
+:guilabel:`Filter by event(s)` menu and check :guilabel:`App Services`. In the
+right-hand side of the menu, you will see
+all App Services events selected. Deselect any that you do not want to see.
 The feed list automatically updates with each change you make.
 
 .. figure:: /images/activity-feed-filter-events.png
@@ -52,12 +51,12 @@ The feed list automatically updates with each change you make.
 
 .. note:: Filtering By App Services Application
 
-   The Activity Feed does not support filtering events by App Services 
-   application, but each event (and its corresponding alert) provides context 
+   The Activity Feed does not support filtering events by App Services
+   application, but each event (and its corresponding alert) provides context
    and routing information for the appropriate application.
 
-The **Category** for 
-all App Services activities is "App Services"; within that category, there are 
+The **Category** for
+all App Services activities is "App Services"; within that category, there are
 several **Events**:
 
 .. list-table::
@@ -66,29 +65,29 @@ several **Events**:
 
    * - Event Type
      - Condition
-     - Description 
+     - Description
 
    * - :ref:`Device Sync <sync>`
      - Sync Failure
-     - A Sync process has failed and cannot be restarted  
-   
-   * - :ref:`Trigger <trigger-types>` 
+     - A Sync process has failed and cannot be restarted
+
+   * - :ref:`Trigger <trigger-types>`
      - Trigger Failure
-     - A Trigger has failed and cannot be restarted 
-   
-   * - :ref:`Deployment <static-hosting>` 
-     - | URL Confirmation 
+     - A Trigger has failed and cannot be restarted
+
+   * - :ref:`Deployment <static-hosting>`
+     - | URL Confirmation
          for Static Hosting
      - A Custom URL is confirmed for static hosting (Static Hosting is deprecated. :ref:`Learn more <migrate-hosting-graphql>`)
-   
+
    * - :ref:`Deployment <deploy>`
      - Successful Deploy
-     - A user (or Code Deployment) deployment has succeeded 
-   
+     - A user (or Code Deployment) deployment has succeeded
+
    * - :ref:`Deployment <deploy>`
      - Deployment Failure
-     - A user (or Code Deployment) deployment has failed 
-   
+     - A user (or Code Deployment) deployment has failed
+
    * - :ref:`Limit <mongodb-service-limitations-request-traffic>`
      - Request Rate Limit
      - An overall request rate limit was hit
@@ -96,13 +95,15 @@ several **Events**:
 
 App Services Alerts
 -------------------
-There are default alerts that map to three of the activities listed above. In 
-addition, you can create custom alerts for the other App Services 
+
+There are default alerts that map to three of the activities listed above. In
+addition, you can create custom alerts for the other App Services
 activities.
 
 Default Alerts
 ~~~~~~~~~~~~~~
-App Services default alerts trigger a notification and email to the 
+
+App Services default alerts trigger a notification and email to the
 Project Owners. The default App Services alerts occur when:
 
 - A Trigger has failed and cannot be restarted
@@ -117,10 +118,12 @@ Project Owners. The default App Services alerts occur when:
 
 Custom App Services Alerts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-For any activity that is not mapped to a default alert, you can set a custom 
-alert at the Project level.
 
-You create App Services alerts in the same way you :atlas:`create other 
-Atlas alerts </configure-alerts/>`. When creating a new alert, in the 
-":guilabel:`Alert if`" section, select :guilabel:`App Services` from the 
-:guilabel:`Target`. 
+For any activity that is not mapped to a default alert, you can set a custom
+alert at the Project level. For a list of the available App Services metrics,
+refer to :ref:`app-services-metrics`.
+
+You create App Services alerts in the same way you :atlas:`create other
+Atlas alerts </configure-alerts/>`. When creating a new alert, in the
+":guilabel:`Alert if`" section, select :guilabel:`App Services` from the
+:guilabel:`Target`.

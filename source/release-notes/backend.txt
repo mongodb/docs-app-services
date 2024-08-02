@@ -13,6 +13,98 @@ Atlas App Services Changelog
 2024 Releases
 -------------
 
+.. _backend_20240724:
+
+24 July 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- GraphQL and Static Hosting Deprecation 
+
+  - Apps that use GraphQL or Static Hosting will now display banners in their App Services 
+    UI alerting customers of both the GraphQL and Static Hosting deprecations. For more
+    information, refer to the :ref:`migrate-hosting-graphql` page.
+
+  - The GraphQL template app (``web.graphql.todo``) is no longer available when creating a new
+    app through the App Services UI, CLI, or Admin API.
+
+- Fixed bug where disabled Triggers were not resuming properly after being enabled.
+
+- Fixed bug where the Change Origin of Trigger deployments made in the Data Services UI were registered as Admin API
+  instead of Atlas UI.
+
+.. _backend_20240710:
+
+10 July 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Edge Server
+
+  - You can now track the bootstrap progress percentage in the status section of the Edge Server local UI. 
+    For more information on tracking the status of you Edge Server instance, see :ref:`<edge-server-status>`. 
+
+- :ref:`Enabling automatic deployment <deploy-github>` allows App Services to automatically push a copy of your App to your designated repository, 
+  making the :guilabel:`Export your application and upload to GitHub` section in the :guilabel:`Deployment` screen unnecessary. The section is removed and 
+  the description under the :guilabel:`Enable Automatic Deployment` section is updated to make this behavior clear. 
+
+- Deployment logs for your application now record the ``user_id`` for Admin API and CLI requests.
+
+- Fixed bug where :ref:`match expressions <database-triggers-match-expression>` for Triggers were converted to incorrect formats if they contained a regular expression (``$regex``).
+
+- App Services Function names can now include hyphens (-).
+
+- When a free or shared Atlas cluster exceeds 500 collections, the max number of collections for these tiers, you will get an error message.
+  For more information on the operational limits of free or shared clusters, see the :atlas:`Free and Shared Cluster Operational Limits </reference/free-shared-limitations/#operational-limits>`.
+
+- Version metadata for :ref:`Partition-Based Sync Apps <partition-based-sync>` will now be pruned if the deployment version is older than 60 days.
+  For more information on viewing previous App deployments, see :ref:`Deployment History <deployment-history>`. 
+
+- Removed the option to change from Flexible Sync to Partition-Based Sync mode. The :guilabel:`Sync Types` field in the 
+  :guilabel:`Device Sync` configuration screen now only displays if the cluster is associated with a Partition-Based Sync App. 
+  Then, the option to switch sync modes will be left available, as we recommend :ref:`migrating to Flexible Sync <realm-sync-migrate-modes>`.
+
+- Adding or removing collections for :ref:`Data Ingest <asymmetric-sync>` is a destructive change that requires restarting Sync. 
+  In the :guilabel:`Device Sync` configuration screen, a modal now appears to allow you to terminate and restart Sync when confirming additions or removals for Data Ingest collections.
+
+- Fixed bug where :ref:`revoking all of a user's current sessions <revoke-user-sessions>` did not immediately disconnect the user.
+  Now, a user cannot stay connected or sync after all sessions are revoked.
+
+.. _backend_20240626:
+
+26 June 2024 Release
+~~~~~~~~~~~~~~~~~~~~
+
+- Enable Atlas Events: App Services Apps react to changes made in their linked clusters.
+
+  - On cluster deletion, Apps delete datasources and all resources linked to the datasources if they are connected to the deleted cluster.
+
+  - When a user updates a cluster (for example, an instance size change), the next usage of a MongoDB client with
+    the cluster will have a start time of 5 seconds or longer, due to refreshing client connection details. 
+
+- CLI Improvements
+
+  - The CLI defaults to a local deployment model on App creation.
+
+  - The ``push`` command with a ``--dry-run`` flag now prints out the App diff.
+
+  - The CLI command, ``appservices app diff``, now returns the App diff even when there is an error, such as a breaking change.
+
+- Edge Server
+
+  - Fix incorrect prompt for connection strings that included a trailing slash. Atlas Device SDK clients expect no 
+    trailing slash in the connection string.
+
+  - MongDB Compass now correctly shows the count of documents when connecting to an Edge Wire Protocol Server.
+
+- To make billing more intuitive, App Services usage is charged at a daily instead of monthly rate. 
+  Free tier App limits are updated to reflect the new daily model. For more information, see the :ref:`Billing <billing>` page. 
+
+- :ref:`Datasource client configuration documents <appconfig-data_sources>` missing the ``cluster_size`` field are updated to include the field.
+
+- If a Function name contains incorrect formatting upon creation of the Function, the Function name now appears in the validation error message for easy identification.
+ 
+- :ref:`Timeseries collections <time-series-limitation>` not using data ingest are sync incompatible. Fixed error where Edge Server or Sync 
+  instances would attempt to generate schemas for sync-incompatible time series collections.
+
 .. _backend_20240605:
 
 5 June 2024 Release
