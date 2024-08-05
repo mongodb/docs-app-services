@@ -62,5 +62,6 @@ jobs:
               with:
                   regex: "<!-- start insert-links -->.*?<!-- end insert-links -->"
                   appendContentOnMatchOnly: "true"
+                  regexFlags: ims
                   content: "<!-- start insert-links -->${{ needs.get-pr-changes.outputs.staging_links }}<!-- end insert-links -->"
                   token: ${{ secrets.GITHUB_TOKEN }}
