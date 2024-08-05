@@ -60,7 +60,7 @@ jobs:
             - name: Update PR Description
               uses: nefrob/pr-description@v1.1.2
               with:
-                  regex: "<!-- start insert-links --><!-- end insert-links -->"
+                  regex: "<!-- start insert-links -->.*?<!-- end insert-links -->"
                   appendContentOnMatchOnly: "true"
-                  content: ${{ needs.get-pr-changes.outputs.staging_links }}
+                  content: "<!-- start insert-links -->${{ needs.get-pr-changes.outputs.staging_links }}<!-- end insert-links -->"
                   token: ${{ secrets.GITHUB_TOKEN }}
