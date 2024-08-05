@@ -58,8 +58,10 @@ jobs:
               run: |
                 echo "${{ needs.get-pr-changes.outputs.staging_links }}"
             - name: Update PR Description
-              uses: nefrob/pr-description@v1.1.2
+              uses: MongoCaleb/pr-description-action@master
               with:
-                  regex: "<!-- start insert-links -->.*?<!-- end insert-links -->"
-                  content: ${{ needs.get-pr-changes.outputs.staging_links }}
+                  regex: "<!-- start insert-links -->.*<!-- end insert-links -->"
+                  appendContentOnMatchOnly: true
+                  regexFlags: is
+                  content: "<!-- start insert-links -->\n${{ needs.get-pr-changes.outputs.staging_links }}\n<!-- end insert-links -->"
                   token: ${{ secrets.GITHUB_TOKEN }}
