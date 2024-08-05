@@ -3,7 +3,7 @@ on:
     workflow_call:
     pull_request_target:
 jobs:
-    get-pr-changes:
+    add-preview-links:
         name: Get Changed Files
         runs-on: ubuntu-latest
         permissions:
@@ -36,7 +36,7 @@ jobs:
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new_links+="<br/> - ${base_link}${file}"
+                  new_links+="- ${base_link}${file}<br/>"
                 else
                   echo "(file skipped)"
                 fi
@@ -47,19 +47,9 @@ jobs:
               echo "Final new_links string: "
               echo "${new_links}"
               echo "staging_links=${new_links}" >> "$GITHUB_OUTPUT"
-    update-pr-description:
-        name: Update the PR Description
-        needs: get-pr-changes
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - name: Debug
-              id: parser
-              run: |
-                echo "${{ needs.get-pr-changes.outputs.staging_links }}"
-            - name: Update PR Description
-              uses: nefrob/pr-description@v1.1.2
-              with:
-                  regex: "<!-- start insert-links -->.*?<!-- end insert-links -->"
-                  content: ${{ needs.get-pr-changes.outputs.staging_links }}
-                  token: ${{ secrets.GITHUB_TOKEN }}
+          - name: Update the PR Description
+            uses: nefrob/pr-description@v1.1.2
+            with:
+              regex: "<!-- start insert-links -->.*?<!-- end insert-links -->"
+              content: ${{ needs.get-pr-changes.outputs.staging_links }}
+              token: ${{ secrets.GITHUB_TOKEN }}
