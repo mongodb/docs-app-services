@@ -36,7 +36,7 @@ jobs:
                   file="${file#source}"
                   file="${file%.txt}"
                   echo "${base_link}${file}"
-                  new_links+="- ${base_link}${file}<br/>"
+                  new_links+="<br/> - ${base_link}${file}"
                 else
                   echo "(file skipped)"
                 fi
@@ -60,6 +60,8 @@ jobs:
             - name: Update PR Description
               uses: MongoCaleb/pr-description-action@master
               with:
-                  regex: "<!-- start insert-links -->.*?<!-- end insert-links -->"
-                  content: ${{ needs.get-pr-changes.outputs.staging_links }}
+                  regex: "<!-- start insert-links -->.*<!-- end insert-links -->"
+                  appendContentOnMatchOnly: true
+                  regexFlags: is
+                  content: "<!-- start insert-links -->\n${{ needs.get-pr-changes.outputs.staging_links }}\n<!-- end insert-links -->"
                   token: ${{ secrets.GITHUB_TOKEN }}
