@@ -4,6 +4,13 @@
 Internal Database Usage
 =======================
 
+.. meta::
+   :description: Learn how App Services interacts with your linked Atlas clusters and how to handle unsynced documents.
+
+.. facet::
+   :name: genre
+   :values: tutorial
+
 Atlas App Services uses your linked MongoDB Atlas cluster to manage some
 internal operations. In general, you do not need to know about these
 operations to use App Services.
@@ -59,8 +66,7 @@ Unsynced Documents
 If a document in a :ref:`synced <sync>` collection does not conform to
 the collection's schema, it cannot be synced to client apps. If there
 are 100,000 or more unsyncable documents, App Services stops syncing 
-with the app. You need to manually resolve this by terminating sync, 
-fixing the unsyncable documents, and then re-enabling sync.
+with the app.
 
 App Services stores a information about unsyncable documents in the
 ``__realm_sync.unsynced_documents`` collection.
@@ -69,6 +75,13 @@ App Services stores a information about unsyncable documents in the
 
    You can read from the ``__realm_sync.unsynced_documents`` collection,
    but you should not modify it in any way.
+
+If Device Sync is paused due to hitting the 100,000 unsyncable document limit,
+you have two options:
+   
+- :ref:`terminate and re-enable sync <terminating-realm-sync>`. 
+- Contact support and request a temporary increase in the unsyncable
+  documents limit.
 
 A common cause for unsyncable documents is data added or modified
 outside of the context of your app.
