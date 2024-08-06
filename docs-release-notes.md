@@ -1,3 +1,19 @@
+# August 2, 2024
+
+## Device Sync
+
+- Getting Started: Add warning regarding Device Sync query size limit.
+
+- Handle Errors/Sync Errors: Document the ``LimitsExceeded`` Error in the Flexible Sync Errors table.
+
+## Connect to MongoDB Data Sources
+
+- Internal Database Usage: Add additional option for unsyncable doc limit.
+
+## Device Sync/Define and Update Your Data Model
+
+- Update Your Data Model: Add additional option for unsyncable doc limit.
+
 # July 26, 2024
 
 ## Device Sync
