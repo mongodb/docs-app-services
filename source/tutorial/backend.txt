@@ -175,17 +175,15 @@ To create the webhook in your repository:
    ``?secret=tutorial`` appended to the end of the URL:
 
    .. code-block:: text
+      :copyable: false
       
       https://us-west-2.aws.data.mongodb-api.com/app/<App ID>/endpoint/greetNewContributors?secret=tutorial
 
 #. Set the webhook content type to :guilabel:`application/json`.
 
-#. Leave the :guilabel:`Secret` empty. 
-
-   .. note::
-
-      Any value entered here is ignored by the HTTPS endpoint, which is why we 
-      append the secret as a query parameter on the :guilabel:`Payload URL`. 
+#. Leave the :guilabel:`Secret` empty. Any value entered here is ignored by the 
+   HTTPS endpoint, which is why we append the secret as a query parameter on the 
+   payload URL in the preceding steps.
 
 #. Choose to select individual events and configure the webhook to only
    send events for :guilabel:`Issues` and :guilabel:`Pull requests`.
