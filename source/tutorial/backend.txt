@@ -4,6 +4,11 @@
 Tutorial: Build a Serverless GitHub Contribution Tracker using Triggers, Functions, and Values
 ==============================================================================================
 
+
+.. facet::
+   :name: genre 
+   :values: tutorial
+
 .. meta::
    :keywords: code example
    :description: Learn how to use Atlas App Services Triggers, Functions, and Values by building a severless GitHub contribution tracker.
@@ -107,12 +112,15 @@ To create the endpoint:
 
 #. Name the endpoint route ``/greetNewContributors``.
 
+#. Under :guilabel:`Operation Type`, copy the endpoint callback URL. You'll need it 
+   to set up the GitHub webhook later. 
+
 #. Leave the HTTP method set to **POST**.
 
 #. For authorization, choose :guilabel:`Require a Secret`. 
 
-#. Enter a new secret name and click :guilabel:`Create` to create a new secret. Then, enter
-   ``tutorial`` as the secret value. This requires all incoming requests
+#. Enter a new secret name and click :guilabel:`Create` to create a new secret. 
+   Then, enter ``tutorial`` as the secret value. This requires all incoming requests
    to include the query parameter ``secret=tutorial`` in the request
    URL.
 
@@ -132,9 +140,6 @@ To create the endpoint:
       }
 
 #. Click :guilabel:`Save` and deploy the endpoint.
-
-#. Under :guilabel:`Operation Type`, copy the endpoint callback URL. You'll need it 
-   to set up the GitHub webhook later.
 
 .. _function-authentication-settings:
 
@@ -168,37 +173,29 @@ To create the webhook in your repository:
    left navigation menu.
 
 #. `Add a new webhook <https://docs.github.com/en/developers/webhooks-and-events/webhooks/creating-webhooks#setting-up-a-webhook>`__ 
-   and set the :guilabel:`Payload URL` to the URL of the endpoint that you just created. 
-   The URL will look like one of the following depending on your app's
-   :ref:`deployment model <deployment-model>`:
-   
-   .. tabs::
-      
-      .. tab:: Global Apps
-         :tabid: global
+   and set the :guilabel:`Payload URL` to the URL of the endpoint that you just created, 
+   plus a ``secret`` query parameter set to the secret value, such as: ``?secret=tutorial``. 
+   Your payload URL will look similar to the following, with some differences 
+   depending on your app's :ref:`deployment model <deployment-model>`. Note the 
+   ``?secret=tutorial`` appended to the end of the URL:
 
-         .. code-block:: text
-            
-            https://data.mongodb-api.com/app/<App ID>/endpoint/greetNewContributors
+   .. code-block:: text
+      :copyable: false
       
-      .. tab:: Local Apps
-         :tabid: local
-
-         .. code-block:: text
-            
-            https://<Region>.aws.data.mongodb-api.com/app/<App ID>/endpoint/greetNewContributors
+      https://us-west-2.aws.data.mongodb-api.com/app/<App ID>/endpoint/greetNewContributors?secret=tutorial
 
 #. Set the webhook content type to :guilabel:`application/json`.
 
-#. Set the :guilabel:`Secret` to the same secret value you defined for
-   the endpoint: ``tutorial``.
+#. Leave the :guilabel:`Secret` empty. Any value entered here is ignored by the 
+   HTTPS endpoint, which is why we append the secret as a query parameter on the 
+   payload URL in the preceding steps.
 
 #. Choose to select individual events and configure the webhook to only
    send events for :guilabel:`Issues` and :guilabel:`Pull requests`.
 
 #. Click :guilabel:`Add webhook` to save the new webhook.
    
-To confirm that the webhook succesfully calls your endpoint, check your :ref:`application logs <logs>` 
+To confirm that the webhook successfully calls your endpoint, check your :ref:`application logs <logs>` 
 in App Services for entries with the type ``Endpoint``. You can get there by clicking :guilabel:`Logs` 
 in the left navigation menu.
 
