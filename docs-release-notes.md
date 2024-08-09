@@ -1,10 +1,20 @@
+# August 9, 2024
+
+## Edge Server
+
+- Update all page titles to include "preview"
+
+## Tutorial
+
+- GitHub webhook integration tutorial was missing the fact that the secret needs to be appended to the URL, not sent as a GitHub secret in the body.
+
 # August 2, 2024
 
 ## Device Sync
 
 - Getting Started: Add warning regarding Device Sync query size limit.
 
-- Handle Errors/Sync Errors: Document the ``LimitsExceeded`` Error in the Flexible Sync Errors table.
+- Handle Errors/Sync Errors: Document the `LimitsExceeded` Error in the Flexible Sync Errors table.
 
 ## Connect to MongoDB Data Sources
 
@@ -370,6 +380,7 @@
 - Migrate Static Hosting and GraphQL From App Services: New landing page for the deprecated service migration guides. Only available through the deprecation banner.
 
 Throughout the App Services docs:
+
 - Add deprecation banners for GraphQL and Static Hosting where needed.
 - Remove high-level references to our GraphQL API and Static Hosting service to make the features less discoverable.
 
@@ -450,7 +461,7 @@ Throughout the App Services docs:
   - Add the new `error_handler` object property to Database type Trigger payloads in all relevant Trigger endpoints.
   - Update "Authenticate as an App Services adminstrator" endpoint with `mongodb-cloud` as the `ProviderType`, as `mongodb-cloud` is the only supported provider for this endpoint.
   - Fix syntax of schema for `ServiceResponse` and refine endpoint descriptions.
-  -  Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema definitions.
+  - Add "Push App Configuration Files" and "Pull App Configuration Files" endpoints and update related schema definitions.
 - App Services CLI/logs/list: Add `trigger_error_handler` as value for the `--type` flag in the Options table.
 - Billing: Update App Services Requests section to include the new custom error function as an example of a Function Execution billing.
 
@@ -461,6 +472,7 @@ Throughout the App Services docs:
 # February 9, 2024
 
 ## Device Sync
+
 - Get Started: Add info to the "Create queries in your client application" section about Sync ignoring custom collation when evaluating subscriptions.
 
 ## Develop & Deploy Apps
@@ -468,6 +480,7 @@ Throughout the App Services docs:
 - Deploy Automatically with GitHub: Add tabs for CLI and API procedures. Update details about making changes from the CLI.
 
 ## Define Data Access Permissions
+
 Device Sync-Compatible Permissions: Add information about Sync ignoring custom collation when evaluating permissions.
 
 ## Reference
@@ -531,7 +544,7 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 ## Authenticate and Manage Users
 
-- Authentication Providers/Custom JWT: Note that App Services specifies a 30 minute expiry for the access token even if expiry is defined by the Custom JWT's ``exp`` key.
+- Authentication Providers/Custom JWT: Note that App Services specifies a 30 minute expiry for the access token even if expiry is defined by the Custom JWT's `exp` key.
 
 ## Reference
 
