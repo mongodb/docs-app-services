@@ -140,100 +140,66 @@ host.
 
 .. include:: /includes/important-stop-edge-server.rst
 
-.. procedure::
+.. tabs::
 
-   .. step:: Install the Edge Server Code
+   .. tab:: Docker Compose
+      :tabid: docker
 
-      Edge Server uses a command-line tool called ``edgectl`` to manage
-      the Edge Server instance on the host hardware. This includes an install
-      script to manage the installation and install required dependencies.
+      .. include:: /includes/edge/edge-docker-install-procedure.rst
 
-      Use this command to install the command-line tool and the Edge Server 
-      code on the device where you want to run the Edge Server instance:
+   .. tab:: Kubernetes
+      :tabid: kubernetes
 
-      .. code-block:: shell
+      We supply a Kubernetes operator which includes Custom Resource 
+      Definitions and a Controller to simplify running the Edge Server in your
+      own cluster. The Edge Server also uses a MongoDB container for its 
+      internal storage, which is managed by the official `MongoDB Kubernetes
+      Operator <https://www.mongodb.com/docs/kubernetes-operator/master/>`__.
 
-         curl -s https://services.cloud.mongodb.com/edge/install.sh | bash
+      Prerequisites
+      ~~~~~~~~~~~~~
 
-      Follow the prompts to download and install the Edge Server code.
+      For testing or development, we recommend using 
+      `minikube <https://minikube.sigs.k8s.io/docs/start/>`__ or 
+      `k3s <https://k3s.io/>`__.
 
-   .. step:: Initialize the Edge Server Instance
+      You need `Helm <https://helm.sh/docs/intro/install/>`__ to install the
+      operator.
 
-      Use ``edgectl`` to set up the Edge Server instance.
-
-      .. code-block:: shell
-
-         edgectl init --app-id="<INSERT-YOUR-APP-ID-HERE>" --platform=compose
-
-      The minimum required parameters are the ``app-id`` and the ``platform``.
-
-      - ``--app-id``: Provide your Edge Server App ID. For example, 
-        ``--app-id="edge-server-vtoyh"``. For more information, refer to 
-        :ref:`find-app-id`. 
-      - ``--platform``: You can use Docker Compose to install and manage your
-        Edge Server instance in a development environment, or Kubernetes to 
-        manage the instance in a production environment. Valid values are 
-        either ``compose`` or ``kubernetes``.
-
-      You can provide the following optional flags to specify additional
-      configuration details:
-
-      .. include:: /includes/edge/edgectl-init-flags.rst
-
-   .. step:: Supply the Edge Server Token
-
-      When first configuring the Edge Server instance, you're prompted to 
-      supply the Edge Server token. This is the token you got when you added 
-      the instance to your service.
-
-      If you no longer have the token, you can generate a new token from the
-      :ref:`edge-server-details` in your service.
-
-      The Edge Server instance exchanges this token for a secret. It uses the
-      secret to authenticate with Atlas when it syncs data.
-
-   .. step:: (Optional) Create a New User
-
-      If you'd like to connect to the Edge Server instance using a MongoDB
-      Driver or tool, you must have a username/password credential, or bypass
-      authentication. If you already have a username/password credential, or 
-      don't plan to connect to the Edge Server instance using a MongoDB Driver
-      or tool, you can skip this step.
-
-      For more information, refer to :ref:`edge-server-wireprotocol-connect`.
-
-      If you don't already have a username/password credential, you can create
-      one by following the prompts during ``edgectl init``.
-
-      Otherwise, you can manually :ref:`create-email-password-user` later
-      using the App Services UI, the App Services CLI, or the App Services
-      Admin API.
-
-      Alternately, if you plan to implement an authorization flow later, you
-      can bypass authorization with the following command and flag:
-
-      .. code-block:: console
-
-         edgectl config --insecure-disable-auth=true
+      .. include:: /includes/edge/edge-kube-install-procedure.rst
 
 .. _start-and-stop-edge-server:
 
 Start and Stop the Edge Server
 ------------------------------
 
-Use ``edgectl`` to start and stop the Edge Server instance.
+.. tabs::
 
-To start all Edge Server instance containers, use the ``start`` command:
+   .. tab:: Docker Compose
+      :tabid: docker
 
-.. code-block:: shell
+      Use ``edgectl`` to start and stop the Edge Server instance.
 
-   edgectl start
+      To start all Edge Server instance containers, use the ``start`` command:
 
-To stop all Edge Server instance containers, use the ``stop`` command:
+      .. code-block:: shell
 
-.. code-block:: shell
+         edgectl start
 
-   edgectl stop
+      To stop all Edge Server instance containers, use the ``stop`` command:
+
+      .. code-block:: shell
+
+         edgectl stop
+
+   .. tab:: Kubernetes
+      :tabid: kubernetes
+
+      Kubernetes deployments do not have a direct analog to ``edgectl start``
+      and ``edgectl stop``.
+
+      Instead, use your deployment tool to appropriately stop or delete
+      the containers.
 
 .. include:: /includes/important-stop-edge-server.rst
 
@@ -242,7 +208,21 @@ To stop all Edge Server instance containers, use the ``stop`` command:
 Check the Edge Server Status
 ----------------------------
 
-.. include:: /includes/edge/edgectl-status.rst
+.. tabs::
+
+   .. tab:: Docker Compose
+      :tabid: docker
+
+      .. include:: /includes/edge/edgectl-status.rst
+
+   .. tab:: Kubernetes
+      :tabid: kubernetes
+
+      Use ``kubectl`` to check the status of running pods:
+
+      .. code-block:: shell
+
+         kubectl get pods
 
 .. _update-edge-server-instance-config:
 
@@ -250,11 +230,16 @@ Update the Edge Server Instance Configuration
 ---------------------------------------------
 
 You can make changes to an existing Edge Server instance using ``edgectl``.
-After you change the configuration, restart the instance to apply the updates.
 
-.. procedure::
+.. tabs::
 
-   .. step:: Update the Edge Server Configuration
+   .. tab:: Docker Compose
+      :tabid: docker
+
+      .. include:: /includes/edge/edge-docker-update-config-procedure.rst
+
+   .. tab:: Kubernetes
+      :tabid: kubernetes
 
       Use the ``edgectl config`` command with the appropriate flags to update
       the instance:
@@ -263,21 +248,10 @@ After you change the configuration, restart the instance to apply the updates.
 
          edgectl config --YOUR-FLAG-HERE
 
+      When you issue the ``config`` command, the Edge Server operator updates
+      the resource.
+
       .. include:: includes/edge/edgectl-config-flags.rst
-
-   .. step:: Restart the Edge Server Instance
-
-      After you update the configuration, stop the instance:
-
-      .. code-block:: console
-
-         edgectl stop
-
-      And start it again to apply the updates:
-
-      .. code-block:: console
-
-         edgectl start
 
 .. _upgrade-edge-server-version:
 
@@ -303,12 +277,12 @@ or it enters a ``FAILED`` state and cannot connect to Atlas.
 
       .. code-block:: shell
 
-         edgectl update
+         edgectl upgrade --YOUR-FLAG-HERE
 
       Depending on your hardware and network connection, the upgrade 
       process may take seconds to minutes.
 
-      You can optionally specify arguments to upgrade to a specific version:
+      You can specify any of these arguments to perform the upgrade:
 
       .. list-table::
          :header-rows: 1
@@ -318,10 +292,11 @@ or it enters a ``FAILED`` state and cannot connect to Atlas.
            - Type
            - Value
 
-         * - ``--config-path``
+         * - ``--edge-root-dir``
            - String
-           - The location on disk to store configuration files. Defaults to
-             ``~/.mongodb-edge/``.
+           - The location on disk where configuration files are stored. 
+             Defaults to ``~/.mongodb-edge/``. If you have not customized the
+             root directory, you can omit this flag.
 
          * - ``--minor``
            - Boolean
@@ -332,9 +307,18 @@ or it enters a ``FAILED`` state and cannot connect to Atlas.
            - Boolean
            - Upgrade to the next major version. Defaults to ``false``.
 
-         * - ``--to``
+         * - ``--latest``
+           - Boolean
+           - Upgrade to the latest version. Defaults to ``false``.
+
+         * - ``--profile``
            - String
-           - Upgrade (or downgrade) to an exact version. Default ``""``.
+           - The name of the profile to use when executing a given ``edgectl``
+             command. If you do not provide a name, the profile name defaults to
+             the ``app-id``, with an incrementing number appended, starting with
+             ``-01``. When you do not provide a profile flag, ``edgectl`` uses the
+             default profile when executing a command. For more information, refer
+             to :ref:`multiple-edge-servers-on-host`.
 
    .. step:: Configure the Edge Server
 
