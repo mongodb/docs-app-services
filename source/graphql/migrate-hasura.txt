@@ -1,8 +1,8 @@
 .. _migrate-hasura:
 
-=========================
-Migrate GraphQL to Hasura
-=========================
+===============================================
+Migrate GraphQL to Hasura Data Delivery Network
+===============================================
 
 .. meta::
   :description: Learn how to migrate your GraphQL host from Atlas App Services to Hasura.
@@ -22,10 +22,11 @@ Migrate GraphQL to Hasura
    used.
 
 Hasura empowers developers to rapidly build and deploy GraphQL and `REST APIs
-on MongoDB <https://hasura.io/graphql/database/mongodb>`__ and many other data
-sources. By radically cutting down API development times, Hasura enables rapid
-access to data, reduces friction across teams and services, and enables
-enterprises to shorten time to market on data-powered products and features.
+on MongoDB <https://hasura.io/graphql/database/mongodb>`__ and many other 
+`data sources <https://hasura.io/docs/3.0/connectors/overview/>`__. By radically
+cutting down API development times, Hasura enables rapid access to data, reduces
+friction across teams and services, and enables enterprises to shorten time to
+market on data-powered products and features.
 
 Before You Begin
 ----------------
@@ -37,62 +38,22 @@ Migrate to Hasura
 -----------------
 
 Migrating your GraphQL API endpoints from MongoDB Atlas App Services to Hasura
-involves a multi-step process that encompasses setting up your environment in
+is a multi-step process that encompasses setting up your environment in
 Hasura, configuring database connections, migrating schemas, and implementing
 authorization and authentication mechanisms. Below is an expanded guide
 detailing each step, with a focus on authorization and role-based access control
 (RBAC) within Hasura. For more information, check out the `Hasura docs 
-<https://hasura.io/docs/latest/databases/mongodb/mongodb-atlas/>`__.
+<https://hasura.io/docs/3.0/connectors/mongodb/>`__.
 
 To migrate to Hasura:
 
-#. :ref:`Create a new project in Hasura <hasura-create>`
 #. :ref:`Authorize Hasura for MongoDB <hasura-authorize-mongodb>`
-#. :ref:`Migrate your GraphQL schema <hasura-migrate-schema>`
+#. :ref:`Create a new project and connect to Hasura <hasura-create>`
 #. :ref:`Test your GraphQL queries <hasura-test>`
 #. :ref:`Handle authorization and authentication <hasura-auth>`
 #. :ref:`Set up custom resolvers <hasura-resolvers>`
 #. :ref:`Update client applications <hasura-client>`
 #. :ref:`Shut down MongoDB Atlas App Services <hasura-shutdown>`
-
-.. _hasura-create:
-
-Create a New Project in Hasura
-------------------------------
-
-.. procedure::
-
-   .. step::
-
-      After logging in to Hasura, navigate to Projects and create a new project
-      by clicking on :guilabel:`New Project`. Select a pricing plan, cloud
-      provider, and region that aligns with your MongoDB Atlas setup for optimal
-      performance.
-
-      .. image:: /images/migration/new-project.png
-         :alt: Hasura projects page
-
-   .. step::
-
-      After creating your project, take note of the Hasura Cloud IP on this page
-      as you'll use this in your MongoDB Atlas setup to authorize Hasura for
-      MongoDB.
-
-      .. image:: /images/migration/cloud-ip.png
-         :alt: Project information page
-
-   .. step::
-
-      Click on :guilabel:`Launch Console` to open up the Hasura Console.
-
-   .. step::
-
-      Click on the :guilabel:`DATA` tab at the top, choose MongoDB from the list
-      of various databases that Hasura supports, and click :guilabel:`Connect
-      Existing Database`.
-
-      .. image:: /images/migration/connect-database.png
-         :alt: Connect database page
 
 .. _hasura-authorize-mongodb:
 
@@ -111,9 +72,9 @@ GraphQL API for you.
 
    .. step::
 
-      Click the :guilabel:`ADD IP ADDRESS` button and enter the Hasura Cloud IP
-      that you obtained from the Hasura Cloud dashboard earlier. Describe this
-      entry as Hasura. 
+      Click the :guilabel:`ADD IP ADDRESS` button and enter ``0.0.0.0/0``.
+      Describe this entry as Hasura. For a unique IP address, contact `Hasura
+      sales <https://hasura.io/contact-us>`__ about deploying on Private DDN. 
       
       Now, Hasura Cloud can communicate with your MongoDB Atlas instance.
 
@@ -129,73 +90,32 @@ GraphQL API for you.
       .. image:: /images/migration/connection-string.png
          :alt: Get Atlas clust connection string.
 
-   .. step::
+.. _hasura-create:
 
-      Go back to the Hasura Cloud dashboard. On the Connect Existing Database
-      for MongoDB page, enter the name of the MongoDB database you want to
-      connect to and the connection string you copied from the previous step.
+Create a new project and connect to Hasura
+------------------------------------------
 
-      .. image:: /images/migration/add-connection-string.png
-         :alt: Add Atlas connection string to Hasura project.
+The `Hasura docs <https://hasura.io/docs/3.0/getting-started/quickstart>`__ contain
+the details to perform the following steps:
 
-   .. step::
-
-      Click :guilabel:`Connect Database`.
-      You are finished setting up the connection between Hasura and MongoDB,
-      each hosted on their respective Cloud instances.
-
-.. _hasura-migrate-schema:
-
-Migrate GraphQL Schema
-----------------------
-
-Migrate your MongoDB Atlas GraphQL schema to Hasura's GraphQL schema. This
-involves defining your types, queries, mutations, and subscriptions in the
-Hasura Console or the Hasura CLI.
-
-.. procedure::
-
-   .. step::
-
-      In the Hasura console click the Data tab and select your MongoDB database
-      from the left hand pane.
-
-      You'll see all the collections from your MongoDB database.
-
-      .. image:: /images/migration/collections.png
-         :alt: Atlas collections are listed in a table.
-
-   .. step::
-
-      To generate a schema for a collection, click on the :guilabel:`Track`
-      button next to the desired collection.
-
-      You have three options to infer the schema of a collection:
-
-      - Infer the schema from a sample document you copy and paste from your
-        collection.
-      - :guilabel:`Use Database Schema` allows you to use your database's
-        validation schema if one is present in your database (a GraphQL schema
-        will be automatically generated for you).
-      - :guilabel:`Use Existing Logical Model` allows you to select a previously
-        created logical model.
-
-      .. image:: /images/migration/generate-schema.png
-         :alt: Generate a new schema by using a sample document.
-
-   .. step::
-
-      Click the :guilabel:`Validate` button to validate the JSON document. In
-      the next step, you will see the models derived from this document.
-      Finally, click the :guilabel:`Track Collection` button.
+#. Install CLI (Prerequisites)
+#. Log in using the CLI
+#. Initialize a new `supergraph <https://hasura.io/docs/3.0/support/glossary#supergraph>`__
+   in an empty directory
+#. Connect to data
+#. Introspect your data source
+#. Build your local supergraph
+#. Start your supergraph
+#. Create a Hasura cloud project
+#. Build and deploy your supergraph
 
 .. _hasura-test:
 
 Test Your GraphQL Queries
 -------------------------
 
-After tracking a collection and getting a schema, you can navigate to the API
-Explorer page on the Hasura Console to test out some GraphQL queries.
+You can use the API Explorer page on the Hasura Console to test out some
+GraphQL queries.
 
 Hasura also uses the GraphiQL interface, which is similar to how you test
 queries in Atlas App Services.
@@ -212,7 +132,7 @@ Hasura does not directly handle authentication. Instead, it relies on session
 variables provided by an external authentication service. These session
 variables include user, role, and organization information crucial for
 determining data access rights. For details, refer to the `Hasura authentication
-docs <https://hasura.io/docs/latest/auth/overview/>`__
+docs <https://hasura.io/docs/3.0/auth/overview/>`__
 
 Data access permissions, including roles and rule expressions, can be converted
 into Hasura role-based permission rules.
@@ -229,30 +149,25 @@ Cognito, or even a custom solution, to verify the user and set the necessary
 session variables. For configuring JWT or webhook authentication in Hasura,
 refer to the documentation at:
 
-- `JWT Authentication <https://hasura.io/docs/latest/auth/authentication/jwt/>`__
-- `Webhook Authentication <https://hasura.io/docs/latest/auth/authentication/webhook/>`__
+- `JWT Authentication <https://hasura.io/docs/3.0/auth/authentication/jwt/>`__
+- `Webhook Authentication <https://hasura.io/docs/3.0/auth/authentication/webhook/>`__
 
 .. _hasura-resolvers:
 
-Set Up Custom Resolvers
------------------------
+Set Up Custom Resolvers or Business Logic
+-----------------------------------------
 
 If your existing GraphQL API endpoints include custom resolvers or business
-logic, you'll need to implement these in Hasura. Hasura supports custom business
-logic using remote schemas, event triggers, and actions.
+logic, you'll need to implement these in Hasura. Hasura supports:
 
-Hasura Actions can be used to create custom resolvers. Custom queries and
-mutations including their payload type and input type can be defined within
-Hasura, and Hasura can integrate with the resolver function over HTTP. 
-
-.. image:: /images/migration/actions.png
-   :alt: Use Hasura Actions to create custom resolvers.
-
-The resolver function must be deployed somewhere and Hasura can generate the
-JavaScript code for the function.
-
-.. image:: /images/migration/resolver-codegen.png
-   :alt: Hasura auto generates Action code.
+- `Remote schemas <https://hasura.io/connectors/graphql>`__ through its GraphQL
+  Connector
+- `Custom queries <https://hasura.io/docs/3.0/connectors/mongodb/native-operations/native-queries>`__
+  through Native Queries for MongoDB
+- `Custom mutations <https://hasura.io/docs/3.0/connectors/mongodb/native-operations/native-mutations>`__
+  through Native Mutations for MongoDB
+- `Custom business <https://hasura.io/docs/3.0/business-logic/typescript>`__
+  logic through TypeScript
 
 .. _hasura-client:
 
@@ -261,10 +176,9 @@ Update Client Applications
 
 Update any client applications that interact with your GraphQL API endpoints to
 point to the new Hasura endpoint URLs. Any existing Apollo client will work with
-Hasura.
-
-Update the GraphQL operations used by applications to match Hasura-style GraphQL
-operations. 
+Hasura. Refactor your application GraphQL queries and mutations to align with
+Hasura syntax and schema, ensuring compatibility with the new GraphQL API
+structure.
 
 .. _hasura-shutdown:
 
