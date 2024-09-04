@@ -29,9 +29,9 @@ Create an Authentication Trigger
       :tabid: ui
       
       To open the authentication trigger configuration screen in the Atlas App Services UI,
-      click :guilabel:`Triggers` in the left navigation menu, select the
-      :guilabel:`Authentication Triggers` tab, and then click :guilabel:`Add a
-      Trigger`.
+      click :guilabel:`Triggers` in the left navigation menu, click
+      :guilabel:`Create a Trigger` tab, and then select the :guilabel:`Authentication` tab next 
+      to :guilabel:`Trigger Type`.
 
       Configure the trigger and then click :guilabel:`Save` at the bottom of the
       page to add it to your current deployment draft.
@@ -83,18 +83,7 @@ Authentication Triggers have the following configuration options:
      - The type of the trigger. For authentication triggers,
        set this value to ``AUTHENTICATION``.
 
-   * - :guilabel:`Trigger Name`
-
-     - The name of the trigger.
-
-   * - :guilabel:`Linked Function`
-
-     - The name of the function that the trigger
-       executes when it fires. An :ref:`authentication
-       event object <authentication-events>` causes the trigger to fire. 
-       This object is the only argument the trigger passes to the function.
-
-   * - :guilabel:`Operation Type`
+   * - :guilabel:`Action Type`
 
      - The :ref:`authentication operation
        type <authentication-event-operation-types>` that causes the trigger to
@@ -106,6 +95,23 @@ Authentication Triggers have the following configuration options:
        <authentication-providers>` types. The trigger only listens for
        :ref:`authentication events <authentication-events>` produced by these
        providers.
+
+   * - :guilabel:`Event Type`
+
+     - Within the :guilabel:`Event Type` section, you choose what action is taken when 
+       the trigger fires. You can choose to run a :ref:`function <functions>` or use 
+       :ref:`AWS EventBridge <aws-eventbridge>`. 
+
+   * - :guilabel:`Function`
+
+     - The name of the function that the trigger
+       executes when it fires. An :ref:`authentication
+       event object <authentication-events>` causes the trigger to fire. 
+       This object is the only argument the trigger passes to the function.
+
+   * - :guilabel:`Trigger Name`
+
+     - The name of the trigger.
 
 .. _authentication-events:
 
