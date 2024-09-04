@@ -32,7 +32,7 @@ Create a Scheduled Trigger
       1. Click :guilabel:`Triggers` under :guilabel:`Build` in the
          left navigation menu.
       
-      2. Click :guilabel:`Add a Trigger` to open the Trigger configuration page.
+      2. Click :guilabel:`Create a Trigger` to open the Trigger configuration page.
       
       3. Select :guilabel:`Scheduled` for the :guilabel:`Trigger Type`.
       
@@ -96,22 +96,6 @@ Scheduled Triggers have the following configuration options:
 
      - Select :guilabel:`Scheduled`.
 
-   * - | :guilabel:`Name`
-       | ``name: <string>``
-
-     - The name of the trigger.
-
-   * - | :guilabel:`Enabled`
-       | ``disabled: <boolean>``
-
-     - Enabled by default. Used to enable or disable the trigger. 
-   
-   * - | :guilabel:`Skip Events on Re-Enable`
-       | ``skip_catchup_event: <boolean>``
-
-     - Disabled by default. If enabled, any change events that occurred while 
-       this trigger was disabled will not be processed.
-
    * - | :guilabel:`Schedule Type`
        | ``config.schedule: <string>``
 
@@ -121,11 +105,17 @@ Scheduled Triggers have the following configuration options:
 
        An Advanced schedule runs the Trigger based on the custom 
        :ref:`CRON expression <CRON-expressions>` that you define. 
+   
+   * - | :guilabel:`Skip Events on Re-Enable`
+       | ``skip_catchup_event: <boolean>``
 
-   * - | :guilabel:`Function`
+     - Disabled by default. If enabled, any change events that occurred while 
+       this trigger was disabled will not be processed.
+
+   * - | :guilabel:`Event Type`
        | ``function_name: <string>``
 
-     - Within the :guilabel:`Function` section, you choose what action is taken when 
+     - Within the :guilabel:`Event Type` section, you choose what action is taken when 
        the trigger fires. You can choose to run a :ref:`function <functions>` or use 
        :ref:`AWS EventBridge <aws-eventbridge>`. 
 
@@ -133,6 +123,11 @@ Scheduled Triggers have the following configuration options:
 
           A Scheduled Trigger does not pass any arguments to its linked
           Function.
+
+   * - | :guilabel:`Name`
+       | ``name: <string>``
+
+     - The name of the trigger.
 
 .. _CRON-expressions:
 
