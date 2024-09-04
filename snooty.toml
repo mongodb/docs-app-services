@@ -5,7 +5,7 @@ intersphinx = [
   "https://www.mongodb.com/docs/manual/objects.inv",
   "https://www.mongodb.com/docs/atlas/objects.inv",
   "https://www.mongodb.com/docs/atlas/device-sdks/objects.inv",
-  "https://www.mongodb.com/docs/compass/current/objects.inv"
+  "https://www.mongodb.com/docs/compass/current/objects.inv",
 ]
 
 # These are the pages that open when you click on them (instead of just being containers)
@@ -89,24 +89,23 @@ min-user-session-refresh-token-expiration-time = "30 minutes"
 max-user-session-refresh-token-expiration-time = "5 years"
 default-user-session-refresh-token-expiration-time = "60 days"
 
-# Realm Rebrand announcement for .local London
 [[banners]]
 targets = ["*"]
-variant = "info"
+variant = "warning"
 value = """\
-    Realm is now Atlas Device SDK – `Learn More <http://www.mongodb.com/blog/post/realm-now-part-atlas-platform>`__ \
+     Atlas Device Sync, Atlas Edge Server, Data API, and Custom Endpoints are deprecated. Refer to the ref:`deprecation page for details <app-services-deprecation>`.\
     """
 
 [[banners]]
-targets = ["hosting/*.txt"]
+targets = ["admin/*.txt"]
 variant = "warning"
 value = """\
-     Static Hosting is deprecated. :ref:`Learn More <migrate-hosting-graphql>`.\
+     Atlas Device Sync, Atlas Edge Server, Data API, Custom Endpoints, GraphQL, and Static Hosting are deprecated. Endpoints related to these features are also deprecated.\
     """
 
 [[banners]]
-targets = ["graphql/*.txt"]
+targets = ["cli/*.txt"]
 variant = "warning"
 value = """\
-     GraphQL is deprecated. :ref:`Learn More <migrate-hosting-graphql>`.\
+     Atlas Device Sync, Atlas Edge Server, Data API, Custom Endpoints, GraphQL, and Static Hosting are deprecated. Commands related to these features are also deprecated.\
     """
