@@ -2,6 +2,21 @@
 
 This repository contains documentation for MongoDB Atlas App Services.
 
+> [!WARNING]
+> As of September 2024, the following App Services features are deprecated:
+>
+> - Authentication
+> - Device Sync
+> - Data API and HTTPS Endpoints
+> - Edge Server
+>
+> These services will reach end-of-life and be removed on September 30, 2025.
+>
+> With the previously-announced GraphQL and Static Hosting deprecations, all of
+> the documentation in this repository is also deprecated. The documentation will
+> be updated on a best-effort basis until September 30, 2025. After that date,
+> the documentation will no longer be maintained.
+
 ## Contribute
 
 The MongoDB Documentation Project is governed by the terms of the
