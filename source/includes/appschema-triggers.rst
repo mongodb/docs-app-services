@@ -69,10 +69,6 @@ Configuration
      - A document with fields that map to additional configuration
        options for the trigger. The exact configuration fields depend on
        the trigger ``type``.
-       
-       - :ref:`Database Trigger Configuration <config-database-trigger>`
-       - :ref:`Authentication Trigger Configuration <config-authentication-trigger>`
-       - :ref:`Scheduled Trigger Configuration <config-scheduled-trigger>`
 
    * - | ``disabled``
        | Boolean

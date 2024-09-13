@@ -1,8 +1,7 @@
 .. important:: Third Party Services & Push Notifications Deprecation
 
    Third party services and push notifications in App Services have been deprecated
-   in favor of creating HTTP endpoints that use :ref:`external dependencies
-   <external-dependencies>` in functions.
+   in favor of creating HTTP endpoints that use external dependencies in functions.
 
    Webhooks have been renamed to :ref:`HTTPS Endpoints
    <https-endpoints>` with no change in behavior. You should

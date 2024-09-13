@@ -1,7 +1,6 @@
 A :manual:`$project </reference/operator/aggregation/project>`
 expression that selects a subset of fields from each event in the change
-stream. You can use this to :ref:`optimize the trigger's execution
-<database-triggers-project-expression>`.
+stream. You can use this to optimize the trigger's execution.
 
 The expression is an object that maps the name of fields in the change
 event to either a ``0``, which excludes the field, or a ``1``, which

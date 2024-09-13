@@ -17,4 +17,3 @@ for a given change event.
 
    Limit the number of fields that the Trigger processes by using a 
    **$match** expression.
-   :ref:`Learn more. <database-triggers-match-expression>`

@@ -1,6 +1,7 @@
 define: prefix docs/atlas/app-services
 define: base https://www.mongodb.com/${prefix}
 define: versions master
+define: cloud https://www.mongodb.com/docs/atlas
 
 # raw: <source file> -> ${base}/<destination>/
 raw: ${prefix}/manage-apps/create/template-apps/ -> ${base}/template-apps/
@@ -310,3 +311,22 @@ raw: ${prefix}/cli/realm-cli-reference-v1/index -> ${base}/realm-cli/v1/
 
 # Return to using tutorials instead of get started
 raw: ${prefix}/get-started -> ${base}/tutorials/
+
+# Port Triggers content to Atlas docs (DOCSP-43496)
+raw: ${prefix}/triggers/database-triggers -> ${cloud}/atlas-ui/triggers/database-triggers/
+raw: ${prefix}/triggers/authentication-triggers -> ${cloud}/atlas-ui/triggers/scheduled-triggers/
+raw: ${prefix}/triggers/scheduled-triggers -> ${cloud}/atlas-ui/triggers/authentication-triggers/
+raw: ${prefix}/triggers/disable -> ${cloud}/atlas-ui/triggers/disable/
+raw: ${prefix}/triggers/aws-eventbridge -> ${cloud}/atlas-ui/triggers/aws-eventbridge/
+raw: ${prefix}/functions/context -> ${cloud}/atlas-ui/triggers/functions/context/
+raw: ${prefix}/functions/globals -> ${cloud}/atlas-ui/triggers/functions/globals/
+raw: ${prefix}/functions/dependencies -> ${cloud}/atlas-ui/triggers/functions/dependencies/
+raw: ${prefix}/functions/handle-errors -> ${cloud}/atlas-ui/triggers/functions/handle-errors/
+raw: ${prefix}/functions/javascript-support -> ${cloud}/atlas-ui/triggers/functions/javascript-support/
+raw: ${prefix}/functions/mongodb/read -> ${cloud}/atlas-ui/triggers/functions/read/
+raw: ${prefix}/functions/mongodb/write -> ${cloud}/atlas-ui/triggers/functions/write/
+raw: ${prefix}/functions/mongodb/aggregate -> ${cloud}/atlas-ui/triggers/functions/aggregate/
+raw: ${prefix}/functions/mongodb/api -> ${cloud}/atlas-ui/triggers/functions/api/
+raw: ${prefix}/values-and-secrets/define-a-value -> ${cloud}/atlas-ui/triggers/functions/values/
+raw: ${prefix}/values-and-secrets/define-and-manage-secrets -> ${cloud}/atlas-ui/triggers/functions/secrets/
+raw: ${prefix}/values-and-secrets/access-a-value -> ${cloud}/atlas-ui/triggers/functions/values/

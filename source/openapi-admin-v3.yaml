@@ -713,7 +713,7 @@ paths:
         - triggers
       operationId: adminResumeTrigger
       summary: Resume a suspended trigger
-      description: Resume a [suspended](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#suspended-triggers) database trigger.
+      description: Resume a suspended database trigger.
       requestBody:
         description: Configuration options for the resume operation.
         content:
@@ -747,15 +747,13 @@ paths:
         - values
       operationId: adminListValues
       description: |-
-        List all [values](https://www.mongodb.com/docs/realm/values-and-secrets)
-        defined in an application.
+        List all values defined in an application.
       summary: |-
         List all values defined in an application.
       responses:
         "200":
           description: |-
-            [values](https://www.mongodb.com/docs/realm/values-and-secrets) were
-            successfully enumerated.
+            values were successfully enumerated.
           content:
             application/json:
               schema:
@@ -767,8 +765,7 @@ paths:
       operationId: adminCreateValue
       summary: Define a Value in an application
       description: |-
-        Define a [Value](https://www.mongodb.com/docs/realm/values-and-secrets) in
-        an application.
+        Define a Value in an application.
       requestBody:
         description: The value to create.
         required: true
@@ -779,8 +776,7 @@ paths:
       responses:
         "201":
           description: |-
-            The [value](https://www.mongodb.com/docs/realm/values-and-secrets) was
-            successfully defined.
+            The value was successfully defined.
           content:
             application/json:
               schema:
@@ -797,7 +793,7 @@ paths:
       summary: |-
         Retrieve a value definition from an application
       description: |-
-        Retrieve a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
+        Retrieve a value
         definition from an application.
       responses:
         "200":
@@ -813,7 +809,7 @@ paths:
       summary: |-
         Delete a value defined in an application.
       description: |-
-        Delete a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
+        Delete a value
         defined in an application.
       responses:
         "204":
@@ -824,7 +820,7 @@ paths:
       operationId: adminUpdateValue
       summary: Update a value definition in an application
       description: |-
-        Update a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
+        Update a value
         definition in an application.
       responses:
         "200":
@@ -2134,7 +2130,7 @@ paths:
         - functions
       operationId: adminExecuteFunction
       summary: Execute a function
-      description: Execute a [function](https://www.mongodb.com/docs/realm/functions#std-label-functions) for testing.
+      description: Execute a function for testing.
       parameters:
         - name: user_id
           in: query
@@ -2198,8 +2194,7 @@ paths:
       operationId: adminExecuteFunctionSource
       summary: Execute a function's source code for testing
       description: |-
-        Execute a [function](https://www.mongodb.com/docs/realm/functions#std-label-functions)'s source code
-        for testing.
+        Execute a function's source code for testing.
       parameters:
         - name: user_id
           in: query
@@ -3336,8 +3331,7 @@ paths:
       operationId: adminGetAllSecrets
       summary: List secrets
       description: |-
-        List [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets#std-label-define-secret)
-        associated with a Atlas App Services App.
+        List secrets associated with a Atlas App Services App.
       responses:
         "200":
           description: The Secrets were successfully listed.
@@ -3358,7 +3352,7 @@ paths:
         Create a new Secret
       description: |-
         Create a new
-        [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets).
+        Secret.
       requestBody:
         description: The Secret to create.
         required: true
@@ -3396,7 +3390,7 @@ paths:
       summary: Modify a Secret
       description: |-
         Modify a
-        [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
+        Secret
         associated with a Atlas App Services App.
       requestBody:
         description: The modified value of the Secret.
@@ -3423,8 +3417,7 @@ paths:
       operationId: adminDeleteSecret
       summary: Delete a Secret
       description: |-
-        Delete a
-        [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
+        Delete a Secret
         associated with a Atlas App Services App.
       responses:
         "204":
@@ -3435,7 +3428,7 @@ paths:
         - functions
       operationId: adminListFunctions
       summary: List Functions
-      description: List [Functions](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: List Functions.
       responses:
         "200":
           description: Successfully listed.
@@ -3449,7 +3442,7 @@ paths:
         - functions
       operationId: adminCreateFunction
       summary: Create a new Function
-      description: Create a new [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Create a new Function.
       requestBody:
         description: The function to create
         required: true
@@ -3479,7 +3472,7 @@ paths:
         - functions
       operationId: adminGetFunction
       summary: Retrieve a Function
-      description: Retrieve a [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Retrieve a Function.
       responses:
         "200":
           description: The function was successfully retrieved.
@@ -3492,7 +3485,7 @@ paths:
         - functions
       operationId: adminDeleteFunction
       summary: Delete a Function
-      description: Delete a [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Delete a Function.
       responses:
         "204":
           description: The function was successfully deleted.
@@ -3501,7 +3494,7 @@ paths:
         - functions
       operationId: adminUpdateFunction
       summary: Update a Function
-      description: Update a [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Update a Function.
       responses:
         "200":
           description: The function was successfully updated.
@@ -3520,8 +3513,8 @@ paths:
       operationId: adminGetAllDependencies
       summary: List external dependencies
       description: |-
-        List [external
-        dependencies](https://www.mongodb.com/docs/realm/functions/dependencies/) uploaded
+        List external
+        dependencies uploaded
         to the Atlas App Services App.
       responses:
         "200":
@@ -6114,7 +6107,7 @@ components:
           description: |-
             If `validation_method` is set to `"SECRET_AS_QUERY_PARAM"`
             or `"VERIFY_PAYLOAD"`, this is the `_id` of the
-            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+            Secret
             that authorizes requests.
         return_type:
           $ref: "#/components/schemas/EndpointDataFormat"
@@ -6242,7 +6235,7 @@ components:
           description: |-
             If `validation_method` is set to `"SECRET_AS_QUERY_PARAM"`
             or `"VERIFY_PAYLOAD"`, this is the `name` of the
-            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+            Secret
             that authorizes requests.
         can_evaluate:
           type: object
@@ -7079,7 +7072,7 @@ components:
                     type: string
                     description: |-
                       A list of the names of up to three
-                      [Secrets](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                      Secrets
                       that each contain a signing key used by the
                       external authentication system to sign JWTs. Each
                       signing key Secret must be a string with length
@@ -7168,7 +7161,7 @@ components:
                   type: string
                   description: |-
                     The name of a
-                    [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                    Secret
                     that holds your client secret JWT.
 
                     To learn how to create this, see [Create the Client Secret JWT](https://www.mongodb.com/docs/atlas/app-services/authentication/apple/#create-the-client-secret-jwt).
@@ -7214,7 +7207,7 @@ components:
                   type: string
                   description: |-
                     The name of a
-                    [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                    Secret
                     that holds the OAuth 2.0 Client Secret for the Client ID
                     specified in `config.clientId`.
             redirect_uris:
@@ -7284,7 +7277,7 @@ components:
                   type: string
                   description: |-
                     The name of a
-                    [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/)
+                    Secret
                     that holds your Facebook App Secret.
             redirect_uris:
               type: array
@@ -7408,7 +7401,7 @@ components:
           type: string
           description: |-
             The stringified source code for a 
-            [function](https://www.mongodb.com/docs/atlas/app-services/functions/#std-label-functions)
+            function
             that returns an application user's account ID. If defined, endpoints 
             execute the function on every request and run as the user with the 
             ID returned from the function. Cannot be used with `run_as_user_id`.
@@ -7461,7 +7454,7 @@ components:
           type: boolean
           description: |-
             If `true`, the value is a reference by name to a
-            [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/).
+            Secret.
         value:
           $ref: "#/components/schemas/AnyValue"
     ProviderType:
@@ -7762,8 +7755,8 @@ components:
             An object where each field name is an event processor ID and
             each value is an object that configures its corresponding
             event processor. For an example configuration object, see
-            [Send Trigger Events to AWS
-            EventBridge](https://www.mongodb.com/docs/realm/triggers/examples/send-events-aws-eventbridge#std-label-event_processor_example).
+            Send Trigger Events to AWS
+            EventBridge.
           properties:
             FUNCTION:
               type: object
@@ -7921,8 +7914,8 @@ components:
                   type: boolean
                   default: false
                   description: |-
-                    If `true`, the trigger will use the [maximize 
-                    throughput](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#std-label-triggers-maximum-throughput) 
+                    If `true`, the trigger will use the maximize 
+                    throughput
                     option.
                 unordered:
                   type: boolean
@@ -8016,7 +8009,7 @@ components:
               properties:
                 schedule:
                   type: string
-                  description: A [cron expression](https://www.mongodb.com/docs/atlas/app-services/triggers/scheduled-triggers/#cron-expressions) that specifies when the trigger executes.
+                  description: A cron expression that specifies when the trigger executes.
                   example: "0 11 * * *"
                 skip_catchup_events:
                   type: boolean
@@ -9522,7 +9515,7 @@ tags:
       ```
   - name: dependencies
     x-displayName: Dependencies
-    description: Manage your application's [external dependencies](https://www.mongodb.com/docs/atlas/app-services/functions/dependencies/).
+    description: Manage your application's external dependencies.
   - name: edge-server
     x-displayName: Edge Server
     description: View and manage [Edge Server](https://www.mongodb.com/docs/atlas/app-services/edge-server/) instances.
@@ -9584,7 +9577,7 @@ tags:
     description: View and manage your app's [environment](https://www.mongodb.com/docs/atlas/app-services/apps/environment/) and environment values.
   - name: functions
     x-displayName: Functions
-    description: View and manage your app's [functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
+    description: View and manage your app's functions.
   - name: graphql
     x-displayName: GraphQL API
     description: Configure and run GraphQL API operations.
@@ -9666,7 +9659,7 @@ tags:
     description: View and manage your application's [schemas](https://www.mongodb.com/docs/realm/schemas/).
   - name: secrets
     x-displayName: Secrets
-    description: View and manage your application's [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/).
+    description: View and manage your application's secrets.
   - name: security
     x-displayName: Security
     description: Configure your application's [security](https://www.mongodb.com/docs/atlas/app-services/security/).
@@ -9687,7 +9680,7 @@ tags:
     description: Confirm pending users with the built-in email confirmation flow.
   - name: values
     x-displayName: Values
-    description: View and manage your application's [values](https://www.mongodb.com/docs/realm/values-and-secrets/).
+    description: View and manage your application's values.
   - name: notifications
     x-displayName: "[Deprecated] Push Notifications"
     description: View and manage your application's [push notifications](https://www.mongodb.com/docs/atlas/app-services/push-notifications/).

@@ -88,11 +88,7 @@ trigger type. The following fields exist in *all* trigger configuration files:
        | ``object``
      - A document with fields that map to additional configuration options for
        the trigger. The exact configuration fields depend on the trigger
-       ``type``:
-       
-       - :ref:`Database Triggers <config-database-trigger>`
-       - :ref:`Authentication Triggers <config-authentication-trigger>`
-       - :ref:`Scheduled Triggers <config-scheduled-trigger>`
+       ``type``.
 
    * - | ``event_processors``
        | ``object``
@@ -105,9 +101,6 @@ trigger type. The following fields exist in *all* trigger configuration files:
        - "AWS_EVENTBRIDGE"
 
        For more information on Functions, see :ref:`Atlas Functions <functions>`. 
-
-       For more information on AWS EventBridge, see :ref:`Send Trigger Events to AWS EventBridge
-       <aws-eventbridge>`.
 
    * - | ``event_processors.config``
        | ``object``
@@ -313,7 +306,7 @@ two possible configurations depending on the event processor type:
        .. include:: /includes/trigger-auto-resume.rst
 
        For more information on resuming suspended Triggers, see
-       :ref:`Suspended Triggers <suspended_triggers>`.
+       Suspended Triggers.
 
    * - | ``config.unordered``
        | ``boolean``
@@ -362,7 +355,7 @@ two possible configurations depending on the event processor type:
    * - | ``error_handler.config.enabled``
        | ``boolean``
      - If ``true``, error handling is enabled for the AWS EventBridge trigger. For more information on
-       configuring error handling, refer to :ref:`Custom Error Handling <eventbridge-error-handling>`.
+       configuring error handling, refer to Custom Error Handling.
 
    * - | ``error_handler.config.function_name``
        | ``string``
@@ -451,5 +444,5 @@ fires. The following fields exist in *scheduled* trigger configuration files:
    
    * - | ``config.schedule``
        | ``string``
-     - The :ref:`CRON expression <CRON-expressions>` that
+     - The CRON expression that
        schedules the trigger's execution.
