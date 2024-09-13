@@ -48,7 +48,7 @@
        .. note:: System Functions Have No User Data
           
           In system functions, the ``user.data``
-          object is empty. Use :method:`context.runningAsSystem()` to test if
+          object is empty. Use context.runningAsSystem() to test if
           the function is running as a system user.
 
    * - ``custom_data``
