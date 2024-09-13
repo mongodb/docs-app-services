@@ -5,7 +5,7 @@ mind when working with {+adf+}:
 
 - {+adf-datasource+}s :atlas:`do not support write operations </data-federation/supported-unsupported/mql-support/>`.
 
-- You can only access a {+adf-datasource+} from a :ref:`system function <system-functions>`.
+- You can only access a {+adf-datasource+} from a system function.
 
 - You cannot connect to a {+adf-datasource+} via the :ref:`wire protocol <wire-protocol>`.
 

@@ -42,7 +42,7 @@ Configuration
    * - | ``from_secret``
        | Boolean
      - Default: ``false``. If ``true``, the value exposes a
-       :ref:`Secret <app-secret>` instead of a plain-text JSON value.
+       Secret instead of a plain-text JSON value.
    
    * - | ``value``
        | String, Array, or Object
@@ -52,5 +52,5 @@ Configuration
        JSON string, array, or object.
        
        If ``from_secret`` is ``true``, ``value`` is a string that
-       contains the name of the :ref:`Secret <app-secret>` that the
+       contains the name of the Secret that the
        value exposes.

@@ -7,4 +7,4 @@ You can use most :manual:`query selectors
 :manual:`evaluation </reference/operator/query/#evaluation>`,
 :manual:`geospatial </reference/operator/query/#geospatial>`, or
 :manual:`bitwise </reference/operator/query/#bitwise>` selectors. You may 
-only use these selectors in :ref:`system functions <system-functions>`.
+only use these selectors in system functions.

@@ -308,9 +308,6 @@ use a secret string to prove that the request is authorized. You can
 also define a custom authorization scheme that you can use together with
 or instead of the built-in schemes.
 
-To learn how to configure authorization for a specific function, see
-:ref:`Define a Function <define-a-function>`.
-
 Built-In Authorization Schemes
 ++++++++++++++++++++++++++++++
 
@@ -332,7 +329,7 @@ Endpoints support the following built-in authorization schemes:
       the endpoint by including a specific string as the value of the
       ``secret`` query parameter.
       
-      You define the string in a :ref:`secret <app-secret>` and
+      You define the string in a secret and
       reference the secret by name in the endpoint configuration.
 
       .. code-block:: json
@@ -357,7 +354,7 @@ Endpoints support the following built-in authorization schemes:
       Authentication Code)` SHA-256 hash generated from the request body
       and a secret string.
 
-      You define the string in a :ref:`secret <app-secret>` and
+      You define the string in a secret and
       reference the secret by name in the endpoint configuration.
 
       To learn how to sign your requests, see :ref:`Authorize the Request <endpoint-authorize>`.
@@ -410,10 +407,9 @@ to the :guilabel:`Function` section and select
 Depending on your workflow, you can also define and edit endpoint 
 handler functions:
 
-- On the :guilabel:`Functions` page in the :ref:`App Services UI 
-  <define-a-function>`.
+- On the :guilabel:`Functions` page in the App Services UI.
 - In the ``functions`` directory of your application using the 
-  :ref:`App Services CLI <define-a-function>`.
+  App Services CLI.
 - From your client using the :admin-api-endpoint:`Admin API 
   <operation/adminCreateFunction>`.
 

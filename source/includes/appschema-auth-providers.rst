@@ -79,7 +79,7 @@ Configuration
        | Document
      - A document where each field name is a private configuration field
        for the provider and the value of each field is the name of a
-       :ref:`Secret <app-secret>` that stores the configuration value.
+       Secret that stores the configuration value.
    
    * - | ``metadata_fields``
        | Array<Document>

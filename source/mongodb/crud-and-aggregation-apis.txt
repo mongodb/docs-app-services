@@ -37,11 +37,11 @@ For more information on supported features and limitations, see
    Support for an operation may depend on whether you're running the
    operation as an application user or as a system user.
 
-   - A :ref:`user function <user-functions>` runs in the context of a
+   - A user function runs in the context of a
      specific application user and enforces data access permissions and
      schema validation, which makes some operations untenable.
    
-   - A :ref:`system function <system-functions>` runs as a generic
+   - A system function runs as a generic
      system user and is not subject to rules or schema validation. Some
      operations are only available in system functions.
 
@@ -57,9 +57,9 @@ Query Operators
 
 Atlas App Services supports most :manual:`query operators
 </reference/operator/query>` for queries that run in a
-:ref:`user function <user-functions>`. However, some evaluation
+user function. However, some evaluation
 operators and all geospatial and bitwise operators are only available
-in :ref:`system functions <system-functions>`.
+in system functions.
 
 Comparison Operator Availability
 ````````````````````````````````
@@ -269,9 +269,8 @@ Update Operators
 
 App Services supports most :manual:`update operators
 </reference/operator/update>` for queries that run in a
-:ref:`user function <user-functions>`. However, some array update
-operators are only available in :ref:`system functions
-<system-functions>`.
+user function. However, some array update
+operators are only available in system functions.
 
 Field Update Operator Availability
 ``````````````````````````````````
@@ -486,8 +485,8 @@ Query Options
 ~~~~~~~~~~~~~
 
 App Services does not support configuring the following options for any
-CRUD operation in :ref:`user functions <user-functions>`. All query
-options are available in :ref:`system functions <system-functions>`.
+CRUD operation in user functions. All query
+options are available in system functions.
 
 Query Option Availability
 `````````````````````````
@@ -579,7 +578,7 @@ of an :ref:`application user <user-accounts>`.
        | 
        | The :atlas:`$$SEARCH_META </atlas-search/query-syntax/#aggregation-variable>`
        | aggregation variable is only available for functions that 
-       | :ref:`run as system <system-functions>` or if the first role on the 
+       | run as system or if the first role on the 
        | searched collection 
        | has its ``apply_when`` and ``read`` expressions set to ``true``.
        | If neither of these two scenarios apply, ``$$SEARCH_META`` is undefined 
@@ -593,8 +592,7 @@ Aggregation Pipeline Operator Availability
 
 App Services supports all :manual:`aggregation pipeline operators
 </reference/operator/aggregation/>` when you run an aggregation pipeline
-in the :ref:`system user
-<system-functions>` context. 
+in the system user context. 
 
 App Services supports all pipeline operators
 in an :ref:`application user <user-accounts>` context except for the following
@@ -689,4 +687,4 @@ Database Command Availability
 .. rubric::footnotes
 
 .. [#f1] App Services supports ``allowDiskUse`` when run in a Function or 
-   Trigger with :ref:`system-level permissions <system-functions>`.
+   Trigger with system-level permissions.

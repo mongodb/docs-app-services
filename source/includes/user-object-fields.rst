@@ -47,7 +47,7 @@
 
        .. note:: System Functions Have No User Data
           
-          In :ref:`system functions <system-functions>`, the ``user.data``
+          In system functions, the ``user.data``
           object is empty. Use :method:`context.runningAsSystem()` to test if
           the function is running as a system user.
 

@@ -66,8 +66,8 @@ Configuration
    
    * - | ``run_as_system``
        | Boolean
-     - If ``true``, this function :ref:`runs as the system user
-       <system-functions>`. This overrides any values defined for
+     - If ``true``, this function runs as the system user. This overrides any
+       values defined for
        ``run_as_user_id`` and ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id``

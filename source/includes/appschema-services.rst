@@ -90,7 +90,7 @@ Service Configuration
        | Document
      - A document where each field name is a private configuration field
        for the service and the value of each field is the name of a
-       :ref:`Secret <app-secret>` that stores the configuration value.
+       Secret that stores the configuration value.
 
 Service Rules
 ~~~~~~~~~~~~~
@@ -205,8 +205,8 @@ Configuration
    
    * - | ``run_as_system``
        | Boolean
-     - If ``true``, the webhook function :ref:`runs as the system user
-       <system-functions>`. This overrides any values defined for
+     - If ``true``, the webhook function runs as the system user. 
+       This overrides any values defined for
        ``run_as_user_id`` and ``run_as_user_id_script_source``.
    
    * - | ``run_as_user_id``
