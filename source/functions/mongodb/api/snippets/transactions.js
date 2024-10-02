@@ -1,9 +1,9 @@
 exports = function () {
   const client = context.services.get("mongodb-atlas");
 
-  db = client.db("exampleDatabase");
+  const db = client.db("exampleDatabase");
 
-  accounts = db.collection("accounts");
+  const accounts = db.collection("accounts");
   browniePointsTrades = db.collection("browniePointsTrades");
 
   // create user accounts with initial balances
