@@ -34,18 +34,11 @@ async function tradeBrowniePoints(
   // Step 1: Start a Client Session
   const session = client.startSession();
 
-  // Step 2: Optional. Define options to use for the transaction
-  const transactionOptions = {
-    readPreference: "primary",
-    readConcern: { level: "local" },
-    writeConcern: { w: "majority" },
-  };
-
-  // Step 3: Use withTransaction to start a transaction, execute the callback, and commit (or abort on error)
+  // Step 2: Use withTransaction to start a transaction, execute the callback, and commit (or abort on error)
   // Note: The callback for withTransaction MUST be async and/or return a Promise.
   try {
     await session.withTransaction(async () => {
-      // Step 4: Execute the queries you would like to include in one atomic transaction
+      // Step 3: Execute the queries you would like to include in one atomic transaction
       // Important:: You must pass the session to the operations
       await accounts.updateOne(
         { name: userSubtractPoints },
@@ -65,12 +58,12 @@ async function tradeBrowniePoints(
         },
         { session }
       );
-    }, transactionOptions);
+    });
   } catch (err) {
-    // Step 5: Handle errors with a transaction abort
+    // Step 4: Handle errors with a transaction abort
     await session.abortTransaction();
   } finally {
-    // Step 6: End the session when you complete the transaction
+    // Step 5: End the session when you complete the transaction
     await session.endSession();
   }
 }

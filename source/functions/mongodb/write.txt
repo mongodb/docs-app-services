@@ -383,20 +383,12 @@ To perform a transaction:
 1. Obtain and start a client session with ``client.startSession()``.
 
 #. Call ``session.withTransaction()`` to define the transaction. The
-   method takes an async callback function and, optionally, a
-   configuration object that defines custom :manual:`read and write
-   settings
-   </core/transactions/#read-concern-write-concern-read-preference>` for
-   the transaction.
+   method takes an async callback function.
    
    .. code-block:: javascript
       
       session.withTransaction(async () => {
          // ... Run MongoDB operations in this callback
-      }, {
-          readPreference: "primary",
-          readConcern: { level: "local" },
-          writeConcern: { w: "majority" },
       })
 
 #. In the transaction callback function, run the MongoDB queries that
