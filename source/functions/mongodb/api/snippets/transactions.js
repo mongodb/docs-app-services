@@ -4,7 +4,7 @@ exports = function () {
   const db = client.db("exampleDatabase");
 
   const accounts = db.collection("accounts");
-  browniePointsTrades = db.collection("browniePointsTrades");
+  const browniePointsTrades = db.collection("browniePointsTrades");
 
   // create user accounts with initial balances
   accounts.insertOne({ name: "henry", browniePoints: 42 });
