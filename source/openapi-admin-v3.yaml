@@ -7842,15 +7842,12 @@ components:
                 - database
                 - collection
                 - operation_types
-                - full_document
-                - full_document_before_change
-                - unordered
-                - match
               properties:
                 service_id:
                   type: string
                   description: |
-                    The _id value of a linked MongoDB data source.
+                    The `_id` value of a linked MongoDB data source that
+                    contains the watched collection.
                     
                     You can list services with the
                     [Get all services endpoint](#operation/adminListServices).
@@ -7935,6 +7932,7 @@ components:
                     option.
                 unordered:
                   type: boolean
+                  default: false
                   description: |-
                     If `true`, event ordering is disabled and this Trigger
                     can process events in parallel. If `false`, event
@@ -7964,8 +7962,7 @@ components:
         type: AUTHENTICATION
         function_id: 5eea9ca4ca0e356e2c2a148a
         config:
-          operation_type:
-            - CREATE
+          operation_type: CREATE
           providers:
             - api-key
       allOf:
