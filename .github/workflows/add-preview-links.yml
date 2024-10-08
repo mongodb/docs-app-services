@@ -1,0 +1,29 @@
+on:
+    workflow_call:
+    pull_request:
+
+env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # setting GH_TOKEN for the entire workflow
+
+jobs:
+    get-pr-changes:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+            contents: write
+            pull-requests: write
+            repository-projects: write
+        steps:
+        - uses: actions/checkout@v3
+        - run: |
+            git remote -v 
+            echo ${{ github.head_ref }}
+            echo ${{ github.base_ref }}
+            echo ${{github.ref}}
+            git fetch origin
+            git checkout master
+            git status
+            gh pr status
+            gh pr list 
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
