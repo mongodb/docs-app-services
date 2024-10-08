@@ -5547,10 +5547,14 @@ components:
             mongo_service_id:
               type: string
               description: |-
-                The `_id` value of the linked MongoDB data source that contains
-                custom user data.
+                The _id value of a linked MongoDB data source.
+                    
+                You can list services with the
+                [Get all services endpoint](#operation/adminListServices).
 
-                See [Get a Data Source](#operation/adminGetService).
+                Data sources are services whose `type` is "mongodb-atlas".
+                Use the `_id` value for the data source you want to link to
+                the Trigger.
               example: "63c060ed32043ef4c93c2a9c"
             on_user_creation_function_id:
               type: string
@@ -7847,8 +7851,13 @@ components:
                   type: string
                   description: |
                     The _id value of a linked MongoDB data source.
+                    
+                    You can list services with the
+                    [Get all services endpoint](#operation/adminListServices).
 
-                    See [Get a Data Source](#operation/adminGetService).
+                    Data sources are services whose `type` is "mongodb-atlas".
+                    Use the `_id` value for the data source you want to link to
+                    the Trigger.
                 database:
                   type: string
                   description: The name of a database in the linked data source.
