@@ -7839,8 +7839,6 @@ components:
             config:
               required:
                 - service_id
-                - database
-                - collection
                 - operation_types
               properties:
                 service_id:
@@ -7857,23 +7855,40 @@ components:
                     the Trigger.
                 database:
                   type: string
-                  description: The name of a database in the linked data source.
+                  description: |-
+                    The name of a database in the linked data source. If you
+                    omit this parameter, the Source Type changes to
+                    "Deployment," unless you are on a shared tier, in which
+                    case App Services will not let you save the trigger.
                 collection:
                   type: string
                   description: |-
                     The name of a collection in the specified database. The
-                    trigger listens to events from this collection.
+                    trigger listens to events from this collection. If you omit
+                    this parameter, the Source Type changes to "Database."
                 operation_types:
                   type: array
                   minItems: 1
                   items:
                     type: string
-                    enum:
-                      - INSERT
-                      - UPDATE
-                      - REPLACE
-                      - DELETE
-                  description: The type(s) of MongoDB change event that the trigger listens for.
+                  description: |-
+                    The type(s) of MongoDB change event that the trigger
+                    listens for.
+                    
+                    If you specify a collection name, valid operation types
+                    include `"INSERT"`, `"UPDATE"`, `"REPLACE"`, and `"DELETE"`.
+                    
+                    If you specify only a database name, valid
+                    operation types include `"CREATE_COLLECTION"`,
+                    `"MODIFY_COLLECTION"`, `"RENAME_COLLECTION"`,
+                    `"DROP_COLLECTION"`, `"SHARD_COLLECTION"`,
+                    `"RESHARD_COLLECTION"`, and `"REFINE_COLLECTION_SHARD_KEY"`.
+
+                    If you omit both collection and database name, the only
+                    valid operation type is `"DROP_DATABASE"`.
+
+                    For more information, refer to
+                    [Trigger Configuration](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#configuration).
                 match:
                   type: object
                   description: |-
