@@ -145,7 +145,7 @@ two possible configurations depending on the event processor type:
      "type": "DATABASE",
      "disabled": <boolean>,
      "config": {
-       "service_name": "<MongoDB Service Name>",
+       "service_id": "<MongoDB Data Source Service ID>",
        "database": "<Database Name>",
        "collection": "<Collection Name>",
        "operation_types": ["<Operation Type>", ...],
@@ -179,7 +179,7 @@ two possible configurations depending on the event processor type:
      "type": "DATABASE",
      "disabled": <boolean>,
      "config": {
-       "service_name": "<MongoDB Service Name>",
+       "service_id": "<MongoDB Data Source Service ID>",
        "database": "<Database Name>",
        "collection": "<Collection Name>",
        "operation_types": ["<Operation Type>", ...],
@@ -216,10 +216,10 @@ two possible configurations depending on the event processor type:
    * - Field
      - Description
    
-   * - | ``config.service_name``
+   * - | ``config.service_id``
        | ``string``
      
-     - The name of the :ref:`MongoDB data source <appconfig-data_sources>`
+     - The unique identifier of the :ref:`MongoDB data source <appconfig-data_sources>`
        that contains the watched collection. You cannot define a database
        trigger on a :ref:`serverless instance <serverless-caveats>` or
        :ref:`{+adf-instance+} <data-federation-caveats>`.
