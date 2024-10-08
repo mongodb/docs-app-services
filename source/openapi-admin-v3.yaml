@@ -640,7 +640,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/Trigger"
+              "$ref": "#/components/schemas/TriggerConstructor"
       responses:
         "201":
           description: Successfully created.
@@ -7839,18 +7839,13 @@ components:
             config:
               required:
                 - service_id
-                - database
-                - collection
                 - operation_types
-                - full_document
-                - full_document_before_change
-                - unordered
-                - match
               properties:
                 service_id:
                   type: string
                   description: |
-                    The _id value of a linked MongoDB data source.
+                    The `_id` value of a linked MongoDB data source that
+                    contains the watched collection.
                     
                     You can list services with the
                     [Get all services endpoint](#operation/adminListServices).
@@ -7860,23 +7855,51 @@ components:
                     the Trigger.
                 database:
                   type: string
-                  description: The name of a database in the linked data source.
+                  description: |-
+                    The name of a database in the linked data source. If you
+                    omit this parameter, the Source Type changes to
+                    "Deployment," unless you are on a shared tier, in which
+                    case App Services will not let you save the trigger.
                 collection:
                   type: string
                   description: |-
                     The name of a collection in the specified database. The
-                    trigger listens to events from this collection.
+                    trigger listens to events from this collection. If you omit
+                    this parameter, the Source Type changes to "Database."
                 operation_types:
                   type: array
                   minItems: 1
                   items:
                     type: string
-                    enum:
-                      - INSERT
-                      - UPDATE
-                      - REPLACE
-                      - DELETE
-                  description: The type(s) of MongoDB change event that the trigger listens for.
+                  description: |-
+                    The types of MongoDB change event that the trigger
+                    listens for.
+                    
+                    Valid operation types for all triggers include:
+                    
+                    - `"INSERT"`
+                    - `"UPDATE"`
+                    - `"REPLACE"`
+                    - `"DELETE"`
+                    
+                    Additional valid operation types for database and
+                    deployment triggers include: 
+                    
+                    - `"CREATE_COLLECTION"`
+                    - `"MODIFY_COLLECTION"`
+                    - `"RENAME_COLLECTION"`
+                    - `"DROP_COLLECTION"`
+                    - `"SHARD_COLLECTION"`
+                    - `"RESHARD_COLLECTION"`
+                    - `"REFINE_COLLECTION_SHARD_KEY"`
+
+                    Additional valid operation types for deployment triggers
+                    include:
+                    
+                    - `"DROP_DATABASE"`
+
+                    For more information, refer to
+                    [Trigger Configuration](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#configuration).
                 match:
                   type: object
                   description: |-
@@ -7935,6 +7958,7 @@ components:
                     option.
                 unordered:
                   type: boolean
+                  default: false
                   description: |-
                     If `true`, event ordering is disabled and this Trigger
                     can process events in parallel. If `false`, event
@@ -7964,8 +7988,7 @@ components:
         type: AUTHENTICATION
         function_id: 5eea9ca4ca0e356e2c2a148a
         config:
-          operation_type:
-            - CREATE
+          operation_type: CREATE
           providers:
             - api-key
       allOf:
