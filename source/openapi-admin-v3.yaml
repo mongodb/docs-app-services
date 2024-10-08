@@ -7875,17 +7875,28 @@ components:
                     The type(s) of MongoDB change event that the trigger
                     listens for.
                     
-                    If you specify a collection name, valid operation types
-                    include `"INSERT"`, `"UPDATE"`, `"REPLACE"`, and `"DELETE"`.
+                    Valid operation types for all triggers include:
                     
-                    If you specify only a database name, valid
-                    operation types include `"CREATE_COLLECTION"`,
-                    `"MODIFY_COLLECTION"`, `"RENAME_COLLECTION"`,
-                    `"DROP_COLLECTION"`, `"SHARD_COLLECTION"`,
-                    `"RESHARD_COLLECTION"`, and `"REFINE_COLLECTION_SHARD_KEY"`.
+                    - `"INSERT"`
+                    - `"UPDATE"`
+                    - `"REPLACE"`
+                    - `"DELETE"`
+                    
+                    Additional valid operation types for database and
+                    deployment triggers include: 
+                    
+                    - `"CREATE_COLLECTION"`
+                    - `"MODIFY_COLLECTION"`
+                    - `"RENAME_COLLECTION"`
+                    - `"DROP_COLLECTION"`
+                    - `"SHARD_COLLECTION"`
+                    - `"RESHARD_COLLECTION"`
+                    - `"REFINE_COLLECTION_SHARD_KEY"`
 
-                    If you omit both collection and database name, the only
-                    valid operation type is `"DROP_DATABASE"`.
+                    Additional valid operation types for deployment triggers
+                    include:
+                    
+                    - `"DROP_DATABASE"`
 
                     For more information, refer to
                     [Trigger Configuration](https://www.mongodb.com/docs/atlas/app-services/triggers/database-triggers/#configuration).
