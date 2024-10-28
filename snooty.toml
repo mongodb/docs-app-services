@@ -90,6 +90,13 @@ max-user-session-refresh-token-expiration-time = "5 years"
 default-user-session-refresh-token-expiration-time = "60 days"
 
 [[banners]]
+targets = ["triggers/*.txt"]
+variant = "info"
+value = """\
+     The Triggers documentation is moving to the :ref:`Atlas docs <atlas-triggers>`. Please refer to the docs in their new location in the future.\
+    """
+
+[[banners]]
 targets = ["*"]
 variant = "warning"
 value = """\
@@ -108,11 +115,4 @@ targets = ["cli/*.txt"]
 variant = "warning"
 value = """\
      Atlas Device Sync, Atlas Edge Server, Data API, HTTPS Endpoints, GraphQL, and Static Hosting are deprecated. Commands related to these features are also deprecated.\
-    """
-
-[[banners]]
-targets = ["triggers/*.txt"]
-variant = "info"
-value = """\
-     The Triggers documentation is moving to the :ref:`Atlas docs <atlas-triggers>`. Please refer to the docs in their new location in the future. The Triggers documentation will be removed from the App Services docs.\
     """
