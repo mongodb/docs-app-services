@@ -1,0 +1,74 @@
+.. meta::
+   :robots: nosnippet
+
+.. _aws_appsync:
+
+============================
+AWS App Sync Migration Guide
+============================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+
+As of September 2024, :ref:`Device Services is deprecated <device-sync-deprecation>`. 
+There are many :ref:`third-party services <alternative_solutions>` you can use 
+to migrate your App Services app. This page provides guidance in using 
+AWS AppSync. 
+
+What is AWS AppSync?
+--------------------
+`AWS AppSync <https://aws.amazon.com/appsync/>`__ is a serverless platform that 
+you can use to keep your data synchronized between devices through GraphQL and 
+Pub/Sub APIs. Combined with MongoDB Atlas as the backend datastore, you maintain 
+many of the benefits of Device Sync.
+
+System Architecture
+-------------------
+
+Device Sync
+~~~~~~~~~~~
+
+The following diagram shows the typical Device Sync architecture:
+
+.. image:: /images/migration/device_sync_architecture.png
+   :alt: A diagram showing a typical Device Sync architecture.
+
+In this architecture, your app uses the Realm APIs to communicate directly with 
+Atlas App Services, which handles data storage, synchronization, and conflict 
+resolution.
+
+The data flow is:
+
+- Data is stored in each device’s local realm db.
+- A user makes changes on the device. 
+- Device Sync APIs send changes to Atlas App Services.
+- Atlas App Services performs any necessary conflict resolution, stores the changes 
+  in Atlas, and syncs the changes to the other devices.
+- Device Sync APIs updates the data in each device’s local realm.
+
+AWS AppServices
+~~~~~~~~~~~~~~~
+
+When you migrate from Device Sync to AWS AppSync, you will need to make the 
+following changes to your architecture:
+
+- Use AWS AppSync to handle data synchronization 
+- Use an AWS Lambda Resolver to send data to Atlas via the MongoDB driver SDKs 
+- Use AWS Event Bridge to listen for event triggers from Atlas 
+- Add a Database Trigger to Atlas 
+
+You will also change 2 parts of your client code:
+
+- Because AppSync uses GraphQL, you will use the AWS AppSync API to communicate 
+  with it AppSync
+- The local data store also changes from a Realm database to the default 
+  datastore on the device (typically SQLite), or another one of your choice.
+
+The following diagram shows a typical example of the new architecture:
+
+.. image:: /images/migration/aws_appsync_architecture.png
+   :alt: A diagram showing a typical Device Sync architecture.
+
