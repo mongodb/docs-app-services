@@ -78,10 +78,11 @@ Migration Steps
 MongoDB Atlas
 ~~~~~~~~~~~~~
 
-If needed, update the database security and network access.
-Create a Database Trigger that fires an EventBridge event. 
+- If needed, update the database security and network access.
+- Create a Database Trigger that fires an event whenever data in your database 
+  or collection changes. 
 
-AWS 
+AWS
 ~~~
 
 EventBridge
@@ -93,18 +94,23 @@ EventBridge
 
 AWS Lambda Resolver
 ```````````````````
-- Create Lambda functions with the MongoDB Data APIs or MongoDB drivers
+- Create a Lambda resolver based on the ``MongoDB-DataAPI`` template. For details 
+  on this process, refer to the Readme in the 
+  `MongoDB-API GitHub repo <https://github.com/mongodb-partners/MongoDB-API>`__. 
 
 AWS AppSync
 ```````````
-- Set up security
+- Configure IAM permissions
 - Link to the Lambda Resolver
+- Create GraphQL schemas for your data.
 
 Application Code
 ~~~~~~~~~~~~~~~~
 
-- Replace the Realm SDKs with the MongoDB driver to read and write to Atlas.
-- Add drivers to write and read from the device’s datastore (the default is 
-  SQLite in both iOS and Android environments.) 
-- What’s the advantage of using AWS Amplify here?
+- Replace the Realm SDKs with code to call the AppSync GraphQL endpoints. You can 
+  use your existing platform with the appropriate AWS SDKs, or use AWS Amplify, 
+  which provides native support for connecting to AWS services.
+- Add drivers to write and read from the device’s datastore. The default datastore 
+  is SQLite in both iOS and Android environments, but use the database that  
+  meets your needs.
 
