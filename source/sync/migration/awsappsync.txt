@@ -72,3 +72,39 @@ The following diagram shows a typical example of the new architecture:
 .. image:: /images/migration/aws_appsync_architecture.png
    :alt: A diagram showing a typical Device Sync architecture.
 
+Migration Steps
+---------------
+
+MongoDB Atlas
+~~~~~~~~~~~~~
+
+If needed, update the database security and network access.
+Create a Database Trigger that fires an EventBridge event. 
+
+AWS 
+~~~
+
+EventBridge
+```````````
+- Configure Atlas as the partner source.
+- Configure AWS AppSync as the target.
+- Create a mapping of the event body’s fields to AppSync’s GraphQL endpoints
+- Configure security
+
+AWS Lambda Resolver
+```````````````````
+- Create Lambda functions with the MongoDB Data APIs or MongoDB drivers
+
+AWS AppSync
+```````````
+- Set up security
+- Link to the Lambda Resolver
+
+Application Code
+~~~~~~~~~~~~~~~~
+
+- Replace the Realm SDKs with the MongoDB driver to read and write to Atlas.
+- Add drivers to write and read from the device’s datastore (the default is 
+  SQLite in both iOS and Android environments.) 
+- What’s the advantage of using AWS Amplify here?
+
