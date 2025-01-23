@@ -74,6 +74,8 @@ The following diagram shows a typical example of the new architecture:
 
 Migration Steps
 ---------------
+The following sections outline the high-level tasks you need to perform to 
+migrate your existing Device Sync architecture to AWS AppSync.
 
 MongoDB Atlas
 ~~~~~~~~~~~~~
@@ -97,15 +99,18 @@ AWS Lambda Resolver
 - Create a Lambda resolver based on the ``MongoDB-DataAPI`` template. For details 
   on this process, refer to the Readme in the 
   `MongoDB-API GitHub repo <https://github.com/mongodb-partners/MongoDB-API>`__. 
+   - Configure Lambda authorization via IAM
 
 AWS AppSync
 ```````````
 - Configure IAM permissions
-- Link to the Lambda Resolver
+- Link to the Lambda Resolver, using Lambda authorization.
 - Create GraphQL schemas for your data.
 
 Application Code
 ~~~~~~~~~~~~~~~~
+Once you have your backend architecture migrated, you need to make a few changes 
+to your client app:
 
 - Replace the Realm SDKs with code to call the AppSync GraphQL endpoints. You can 
   use your existing platform with the appropriate AWS SDKs, or use AWS Amplify, 
