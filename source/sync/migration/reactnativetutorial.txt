@@ -1553,6 +1553,222 @@ and the changes should be propagating to Atlas.
 You can verify this by viewing your MongoDB collection in the Atlas UI or in 
 MongoDB Compass.
 
-.. image:: /images/migration/react_native_guide/image15.png
+.. image:: /images/migration/react_native_guide/image15.gif
    :alt: Screenshot of the UI
    :lightbox:
+
+Phase 6: Final Touches and Clean Up
+-----------------------------------
+
+This final phase covers how to implement two optional app-testing features
+as well as how to clean up your project of any unneeded code and
+dependencies.
+
+In the process of creating this application, the following features were
+omitted: **Show All Tasks** and the **Offline mode** switch. These features
+are useful for testing app functionality and are *not- intended to be used
+in a production application.
+
+.. note::
+
+   The steps related to these features are marked as optional. Feel free to
+   skip these optional steps if this is not of interest to you.
+
+Implement the Show All Toggle (Optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To implement the optional Show All toggle, a second bucket will be created
+that will be activated based on a `client parameter <https://docs.powersync.com/usage/sync-rules/advanced-topics/client-parameters>`__.
+You will apply this by disconnecting the current sync session and
+reconnecting with a new value set. This value will be a boolean called
+``view_all``, which will be used as an insecure backdoor to show all the
+todo list items ever created in the cluster. This functionality helps
+showcase that the buckets can be dynamically created based on certain
+parameters.
+
+.. note::
+
+   The methodology used here is insecure, so the
+   ``accept_potentially_dangerous_queries`` flag will need to be activated
+   on the bucket to perform this. A secure way of accomplishing this would
+   be to base it on a user role and update the users authorizations in
+   their backing database, which is out of scope for this guide.
+
+To get started, navigate to your PowerSync dashboard and update the
+sync-rules to include a bucket based on the ``view_all`` parameter being
+set:
+
+.. code-block:: bash
+
+   bucket_definitions:
+      user_buckets:
+         parameters: 
+         - SELECT request.user_id() as user_id
+         data:
+         - SELECT _id as id, - FROM "Item" WHERE bucket.user_id = 'global'
+            OR owner_id = bucket.user_id
+      view_all_bucket:
+         accept_potentially_dangerous_queries: true
+         parameters:
+         - SELECT (request.parameters() ->> 'view_all') as view_all 
+         data:
+         - SELECT _id as id, -  FROM "Item" WHERE bucket.view_all = true
+
+Note that bucket definitions are combined together, so when the
+``view_all_bucket`` is active, it will be added to the ``user_buckets``
+data.
+
+Next, update ``source/PowerSync.ts`` in your project to include a local
+variable to determine the ``view_all`` flag state, and apply it to the
+parameters of the connection instance:
+
+.. code-block:: bash
+
+   let viewAll = false;
+   
+   export const setupPowerSync = (): PowerSyncDatabase => {
+      const connector = new Connector();
+      powerSync.connect(connector, {params: {view_all: viewAll}});
+      return powerSync;
+   };
+   
+   export const resetPowerSync = async () => {
+      await powerSync.disconnectAndClear();
+      setupPowerSync();
+   };
+   
+   export const toggleViewAll = () => {
+      viewAll = !viewAll;
+      resetPowerSync();
+   };
+
+Finally, update ``source/ItemListView.tsx`` to invoke the ``toggleViewAll``
+method in the ``onValueChange`` attribute of the “Show All Tasks” switch:
+
+.. code-block:: bash
+
+   <Text style={styles.toggleText}>Show All Tasks</Text>
+   <Switch
+      trackColor={{true: '#00ED64'}}
+      onValueChange={() => {
+         setShowAllItems(!showAllItems);
+         toggleViewAll();
+      }}
+      value={showAllItems}
+   />
+
+Now restart your application and verify the app works as intended:
+
+.. image:: /images/migration/react_native_guide/image25.gif
+   :alt: Screenshot of the UI
+   :lightbox:
+
+Implement Offline Mode Toggle (Optional)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To implement the optional Offline Mode toggle, you will need to disconnect
+the sync session and reconnect it. This will allow you to make local
+changes while not connected to sync and verify that they are sent when the
+sync session is reestablished.
+
+You will add a variable for the connection state, then create a method to
+toggle this and invoke the ``connect`` and ``disconnect`` methods on the
+PowerSync client.
+
+First, add the following to ``source/PowerSync.ts``:
+
+.. code-block:: bash
+
+   let connection = true;
+   
+   export const toggleConnection = () => {
+      if (connection) {
+         powerSync.disconnect();
+      } else {
+         setupPowerSync();
+      }
+      connection = !connection;
+   };
+
+Next, refactor the ``source/OfflineModeButton.tsx`` to remove the Realm
+functionality and replace it with by invoking the new method:
+
+.. code-block:: bash
+
+   import {toggleConnection} from './PowerSync';
+   
+   export function OfflineModeButton() {
+      const [pauseSync, togglePauseSync] = useState(false);
+   
+      return (
+         <Pressable
+         onPress={() => {
+            toggleConnection();
+            togglePauseSync(!pauseSync);
+         }}>
+         <Text style={styles.buttonText}>
+            {pauseSync ? 'Enable Sync' : 'Disable Sync'}
+         </Text>
+         </Pressable>
+      );
+   }
+   
+   // styles...
+
+Finally, open ``source/App.tsx`` and uncomment the ``headerRight``
+component back into the ``Stack.Screen`` of the application:
+
+.. code-block:: bash
+
+   <Stack.Screen
+      name="Your To-Do List"
+      component={ItemListView}
+      options={{
+         headerTitleAlign: 'center',
+         headerLeft,
+         headerRight,
+      }}
+   />
+
+Now, verify the updates by opening a second instance of the app, then
+making some changes:
+
+.. image:: /images/migration/react_native_guide/image7.gif
+   :alt: Screenshot of the UI
+   :lightbox:
+
+Cleanup Project
+~~~~~~~~~~~~~~~
+
+Finally, you can clean up your project.
+
+The following files can safely be deleted:
+
+- ``atlasConfig.json``
+- ``source/WelcomeView.tsx``
+
+You can also remove the following dependencies from your ``package.json``:
+
+- ``@realm/react``
+- ``realm``
+
+Conclusion and Next Steps
+-------------------------
+
+This guide should have provided you with the building blocks to begin your
+migration journey to PowerSync.
+
+To summarize, by following this guide, you should have accomplished the
+following:
+
+- Deployed a MongoDB database with sample data
+- Deployed a PowerSync service that syncs the sample data
+- Learned how to view and query this data using the Diagnostics Tool
+- Converted a Device Sync mobile application to local only
+- Migrated from a local-only Realm database to PowerSync
+- Set up syncing from PowerSync to a mobile database
+- Created a backend to push changes from the PowerSync client to MongoDB
+
+For next steps, try taking a small piece of your mobile application and
+converting it to use PowerSync. And keep an eye out for future documentation
+that goes over more advanced use cases.
