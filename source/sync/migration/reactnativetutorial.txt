@@ -1,0 +1,311 @@
+.. meta::
+   :robots: nosnippet
+
+.. _aws_appsync:
+
+================================================================
+Migrate a React Native Application from Device Sync to PowerSync
+================================================================
+
+.. contents:: On this page
+   :local:
+   :backlinks: none
+   :depth: 2
+   :class: singlecol
+   
+
+As of September 2024, the Atlas Device SDKs (Realm), Device Sync, and
+App Services have been deprecated. This means that users of these services
+will have to migrate to another solution by September 2025. If you need more
+time, reach out to support.
+
+PowerSync is a top alternative to Atlas Device Sync. It is an SQLite-based
+solution and could be the right solution to migrate to if you have a mobile
+application using Device Sync.
+
+This article will guide you through the steps you need to take in order to
+migrate a Device Sync mobile application, written in React Native, to
+PowerSync. Your backend data will stay in Atlas, so you will need to
+configure the PowerSync service, update the local database schemas and
+bindings, and set up a backend service for writing to Atlas.
+
+Phase 1: Preparation and Setup
+------------------------------
+
+Deploy an Atlas Cluster
+~~~~~~~~~~~~~~~~~~~~~~~
+
+First, you need to deploy an Atlas Cluster and put in some test data. This
+will guide you as if you are setting up Atlas for the first time. If you
+already have a cluster deployed, feel free to skip ahead.
+
+1. Navigate to MongoDB Atlas and register for an Atlas account, or sign in
+   if you already have an account.
+2. Next, create a cluster.
+
+   For test purposes, select the M0 (free) cluster with the default settings.
+   Feel free to make any additional changes to suit your needs.
+
+3. Click **Create Deployment**.
+
+   You are returned to your dashboard. The **Connect to Cluster** modal displays
+   automatically.
+
+4. Click **Choose a connection method**, then select **Drivers**.
+
+   From this screen, copy the URL that displays in step 3. Add your connection
+   string into your application code. This is your connection string; it is
+   required to access your MongoDB instance.
+
+   Save the connection string for future reference. You will create a username
+   and password in the next steps that the PowerSync instance will use to
+   connect to the database.
+
+5. Click **Done** to close the modal.
+
+   After your cluster finishes deploying, your dashboard should look similar
+   to the following.
+
+6. Click **Add data** to create a new database.
+
+   From the **Create a Database on Atlas** card, click **START**.
+
+   Create a database called PowerSync and a collection called Item, then click
+   **Create Database**.
+
+   Finally, you need to create a new user that PowerSync will use to connect to
+   this database.
+
+   In the left sidebar, click **Database Access** under the Security heading.
+
+   Click **Add New Database User**, and create a new user called powersync and
+   provide a password. Note the username and password to use in the connection
+   string you copied earlier.
+
+   .. note::
+
+      If your username or password contains any of the following special
+      characters, you must convert them to a URL-safe format for your connection
+      string: `$`, `:`, `/`, `?`, `#`, `[`, `]`, `@`. You can do this manually
+      or use a URL-encoding application, such as `urlencoder.org`.
+
+In the **Database User Privileges** section, click **Add Specific Privilege** and
+add a privilege for a `readWrite` and a `dbAdmin` role for the PowerSync
+database.
+
+Click **Add User**.
+
+You should see the newly created user with the required database permissions.
+
+For more details on user permissions, refer to the MongoDB section of the
+PowerSync Source Database Setup guide.
+
+Add PowerSync IPs to IP Access List
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order for PowerSync to access the database running in Atlas, you must add
+the service IP addresses to the IP access list. These IP addresses are listed
+in the PowerSync Security & IP Filtering documentation.
+
+In the left sidebar, click **Network Access** under the Security heading.
+
+Click **+ Add IP Address** and enter the IP address. To better assist anyone
+administering this list in the future, we also recommend entering **PowerSync**
+as the optional comment.
+
+Click **Confirm**, and repeat for each IP.
+
+Import Sample Data
+~~~~~~~~~~~~~~~~~~
+
+If you haven’t already, update the placeholders in the connection string that
+you copied earlier with the username and password for your database user.
+
+In this step, you will import some sample data that will be used to sync data
+in future steps.
+
+First, install MongoDB Database Tools to gain access to `mongoimport`.
+Refer to the Installation guide instructions for your operating system.
+
+After you have installed database-tools, enter the following in the terminal
+to confirm that you can access `mongoimport`::
+
+   mongoimport --version
+
+This should return the version of the tool. Consult the above Installation
+guide if you are having problems.
+
+Next, create a JSON file called `sample.json` with the following content::
+
+   [
+     {
+       "isComplete": false,
+       "summary": "Complete project documentation",
+       "owner_id": "mockUserId"
+     },
+     {
+       "isComplete": true,
+       "summary": "Buy groceries",
+       "owner_id": "mockUserId"
+     },
+     {
+       "isComplete": false,
+       "summary": "Schedule dentist appointment",
+       "owner_id": "mockUserId"
+     },
+     {
+       "isComplete": false,
+       "summary": "Prepare presentation for next week",
+       "owner_id": "mockUserId"
+     },
+     {
+       "isComplete": true,
+       "summary": "Pay utility bills",
+       "owner_id": "mockUserId"
+     },
+     {
+       "isComplete": false,
+       "summary": "Fix bug in login system",
+       "owner_id": "mockUserId2"
+     },
+     {
+       "isComplete": false,
+       "summary": "Call mom",
+       "owner_id": "mockUserId"
+     },
+     {
+       "isComplete": true,
+       "summary": "Submit expense reports",
+       "owner_id": "mockUserId2"
+     },
+     {
+       "isComplete": false,
+       "summary": "Plan team building event",
+       "owner_id": "mockUserId2"
+     },
+     {
+       "isComplete": false,
+       "summary": "Review pull requests",
+       "owner_id": "mockUserId2"
+     }
+   ]
+
+This sample data contains some to-do list items. The `owner_id` will be used
+for filtering examples later in this tutorial.
+
+To import this JSON, enter the following command, replacing the
+`<connection-string>` placeholder with your connection string::
+
+   mongoimport --uri="<connection-string>" --db=PowerSync --collection=Item
+   --file=sample.json --jsonArray
+
+You should see the following message:
+
+   10 document(s) imported successfully. 0 document(s) failed to import.
+
+If not, confirm that your command parameters (including connection string)
+are correct and that your Atlas user has the correct database access.
+
+You can view and manage the inserted documents by either navigating to your
+collection in the Atlas UI or using the MongoDB Compass visual desktop
+application. To view and manage your database and collections through MongoDB
+Compass, you must connect using the same connection string.
+
+Setup PowerSync
+~~~~~~~~~~~~~~~
+
+Now navigate to PowerSync and register or sign in.
+
+If you are signing in for the first time, you will need to create a new
+instance to get started.
+
+Create a new instance called TodoList.
+
+Select MongoDB as the connecting database.
+
+Use your Atlas connection string to populate the connection settings.
+
+Click **Test connection** to ensure you can connect successfully.
+
+If you see the following error, confirm that all of the required PowerSync
+service IPs are in your Atlas IP access list.
+
+If you are still having issues, refer to the PowerSync Database Connection
+Guide for MongoDB connections.
+
+Click **Next** to deploy your new PowerSync instance. This can take a few
+minutes to complete.
+
+After your instance is deployed, you can ensure that you can view the migrated
+data by creating some basic sync rules.
+
+First, remove the default sync rules and replace them with the following::
+
+   bucket_definitions:
+     user_buckets:
+       parameters: SELECT request.user_id() as user_id
+       data:
+         - SELECT _id as id, * FROM "Item" WHERE bucket.user_id = 'global'
+           OR owner_id = bucket.user_id
+
+For items to sync correctly to the PowerSync service, note the following:
+
+- The `_id` must be mapped to `id`.
+- The collection name “Item” must be enclosed in quotation marks. This is
+  because our collection name starts with a capital letter.
+- The user-specific buckets must match to a user_id of global, which provides
+  access to the entire database. Otherwise, you will match on the provided
+  user_id, which will be retrieved from the auth token.
+
+Note that PowerSync Sync Rules are a pretty deep topic. To learn more, you can
+check out this Sync Rules blog post or the PowerSync Sync Rules documentation.
+
+Click **Save and Deploy**. Once again, it may take quite a few minutes for the
+deployment to finish.
+
+After the deployment completes, you should see the appropriate status.
+
+If you get any errors, ensure that the PowerSync user is set up with the
+permissions listed in the PowerSync Source Database Setup documentation.
+
+Click **Manage instances** to review the sync rules and deployment status.
+
+View Synced Data
+----------------
+
+To finalize this setup, you will use the PowerSync Diagnostics App to view the
+to-do list items you have just created and added to your sync rules.
+
+To use this tool, you first need to create a development token.
+
+In the left sidebar, click the ellipsis (…) next to TodoList to open the
+context menu for this instance, and select **Edit Instance**.
+
+Select the **Client Auth** tab, and click **Enable development tokens**. Click
+**Save and deploy**.
+
+Click the ellipsis (…) next to TodoList to open the context menu for this
+instance again, and select **Generate Development Token**.
+
+You will be asked to provide a token subject/user_id. This will act as the
+user_id, and you can set up your sync rules to act upon it.
+
+With the sync rules we defined earlier, you can set the subject/user_id to
+`global` to generate a token that will have access to the entire dataset. You
+can also set this to `mockUserId` or `mockUserId2` to sync on a specific
+`owner_id`.
+
+Copy the generated token, then open the Diagnostics App and paste in the
+Development Token.
+
+.. note::
+
+   The Development Token will expire in 12 hours. The diagnostics tool will
+   stop syncing with Atlas after expiry, so you must generate a new token if
+   you want it to resume syncing.
+
+You should see a page similar to this one.
+
+In the right sidebar, click **SQL Console**.
+
+Create a `SELECT` query to view all items.
