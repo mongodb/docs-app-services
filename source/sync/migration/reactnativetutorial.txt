@@ -106,11 +106,11 @@ already have a cluster deployed, feel free to skip ahead.
 
       If your username or password contains any of the following special
       characters, you must convert them to a URL-safe format for your connection
-      string: `$`, `:`, `/`, `?`, `#`, `[`, `]`, `@`. You can do this manually
+      string: ``$``, ``:``, ``/``, ``?``, ``#``, ``[``, ``]``, ``@``. You can do this manually
       or use a URL-encoding application, such as `urlencoder.org <https://urlencoder.org>`__.
 
    In the **Database User Privileges** section, click **Add Specific Privilege** and
-   add a privilege for a `readWrite` and a `dbAdmin` role for the PowerSync
+   add a privilege for a ``readWrite`` and a ``dbAdmin`` role for the PowerSync
    database.
 
    .. image:: /images/migration/react_native_guide/image22.png
@@ -148,18 +148,20 @@ you copied earlier with the username and password for your database user.
 In this step, you will import some sample data that will be used to sync data
 in future steps.
 
-First, install MongoDB Database Tools to gain access to `mongoimport`.
+First, install MongoDB Database Tools to gain access to ``mongoimport``.
 Refer to the Installation guide instructions for your operating system.
 
 After you have installed database-tools, enter the following in the terminal
-to confirm that you can access `mongoimport`::
+to confirm that you can access ``mongoimport``::
 
    mongoimport --version
 
 This should return the version of the tool. Consult the above Installation
 guide if you are having problems.
 
-Next, create a JSON file called `sample.json` with the following content::
+Next, create a JSON file called ``sample.json`` with the following contents:
+
+.. code-block::
 
    [
      {
@@ -214,11 +216,11 @@ Next, create a JSON file called `sample.json` with the following content::
      }
    ]
 
-This sample data contains some to-do list items. The `owner_id` will be used
+This sample data contains some to-do list items. The ``owner_id`` will be used
 for filtering examples later in this tutorial.
 
 To import this JSON, enter the following command, replacing the
-`<connection-string>` placeholder with your connection string::
+``<connection-string>`` placeholder with your connection string::
 
    mongoimport --uri="<connection-string>" --db=PowerSync --collection=Item
    --file=sample.json --jsonArray
@@ -236,6 +238,8 @@ application. To view and manage your database and collections through MongoDB
 Compass, you must connect using the same connection string.
 
 .. image:: /images/migration/react_native_guide/image10.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 Setup PowerSync
 ~~~~~~~~~~~~~~~
@@ -248,14 +252,20 @@ instance to get started.
 Create a new instance called TodoList.
 
 .. image:: /images/migration/react_native_guide/image5.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 Select MongoDB as the connecting database.
 
 .. image:: /images/migration/react_native_guide/image13.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 Use your Atlas connection string to populate the connection settings.
 
 .. image:: /images/migration/react_native_guide/image20.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 Click **Test connection** to ensure you can connect successfully.
 
@@ -263,6 +273,8 @@ If you see the following error, confirm that all of the required PowerSync
 service IPs are in your Atlas IP access list.
 
 .. image:: /images/migration/react_native_guide/image21.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 If you are still having issues, refer to the PowerSync Database Connection
 Guide for MongoDB connections.
@@ -286,7 +298,7 @@ First, remove the default sync rules and replace them with the following::
 
 For items to sync correctly to the PowerSync service, note the following:
 
-- The `_id` must be mapped to `id`.
+- The ``_id`` must be mapped to ``id``.
 - The collection name “Item” must be enclosed in quotation marks. This is
   because our collection name starts with a capital letter.
 - The user-specific buckets must match to a user_id of global, which provides
@@ -302,6 +314,8 @@ deployment to finish.
 After the deployment completes, you should see the following:
 
 .. image:: /images/migration/react_native_guide/image23.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 After the deployment completes, you should see the appropriate status.
 
@@ -325,6 +339,8 @@ Select the **Client Auth** tab, and click **Enable development tokens**. Click
 **Save and deploy**.
 
 .. image:: /images/migration/react_native_guide/image14.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 Click the ellipsis (…) next to TodoList to open the context menu for this
 instance again, and select **Generate Development Token**.
@@ -333,9 +349,9 @@ You will be asked to provide a token subject/user_id. This will act as the
 user_id, and you can set up your sync rules to act upon it.
 
 With the sync rules we defined earlier, you can set the subject/user_id to
-`global` to generate a token that will have access to the entire dataset. You
-can also set this to `mockUserId` or `mockUserId2` to sync on a specific
-`owner_id`.
+``global`` to generate a token that will have access to the entire dataset. You
+can also set this to ``mockUserId`` or ``mockUserId2`` to sync on a specific
+``owner_id``.
 
 Copy the generated token, then open the Diagnostics App and paste in the
 Development Token.
@@ -349,9 +365,13 @@ Development Token.
 You should see a page similar to this one.
 
 .. image:: /images/migration/react_native_guide/image11.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
 In the right sidebar, click **SQL Console**.
 
-Create a `SELECT` query to view all items.
+Create a ``SELECT`` query to view all items.
 
 .. image:: /images/migration/react_native_guide/image8.png
+   :alt: Screenshot of the UI
+   :lightbox:
