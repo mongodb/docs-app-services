@@ -184,7 +184,7 @@ guide if you are having problems.
 
 Next, create a JSON file called ``sample.json`` with the following contents:
 
-.. code-block::
+.. code-block:: bash
 
    [
      {
@@ -310,7 +310,7 @@ data by creating some basic sync rules.
 
 First, remove the default sync rules and replace them with the following::
 
-.. code-block::
+.. code-block:: bash
 
    bucket_definitions:
      user_buckets:
@@ -398,3 +398,320 @@ Create a ``SELECT`` query to view all items.
 .. image:: /images/migration/react_native_guide/image8.png
    :alt: Screenshot of the UI
    :lightbox:
+
+You now have all the services necessary to sync your MongoDB database to a 
+mobile application.
+
+Phase 2: Prepare Realm App for Migration
+========================================
+
+Clone Initial Project
+---------------------
+
+In this phase, you are going to clone a Realm todo list application for React 
+Native. The `main` branch of the `example repository <https://github.com/takameyer/realm2powersync>`_
+contains the final result of the migration.
+
+To follow along with this guide using the example repo, checkout the `00-Start-Here` 
+branch:
+
+.. code-block:: bash
+
+   git clone https://github.com/takameyer/realm2powersync
+   cd realm2powersync
+   git checkout 00-Start-Here
+
+Next, install the dependencies, so that the editor can pick up any imports and 
+ensure there are no errors as you’re editing this project. 
+
+.. code-block:: bash
+
+   npm install
+
+Because the application assumes there is an Atlas cluster with an active Device 
+Sync service, it is not yet runnable. In the next steps, you will make the 
+modifications needed to run the project as a local-only application.
+
+Refactor Device Sync Project to Local Only
+------------------------------------------
+
+You must remove the Atlas Device Sync parts so that the application is 
+running with local-only data. 
+
+First, open `source/AppWrapper.txs`, and remove the `AppProvider`, 
+`UserProvider`, and `sync` configuration. 
+
+The updated `AppWrapper.txs` file should resemble the following:
+
+.. code-block:: javascript
+
+   import React from 'react';
+   import { StyleSheet, View, ActivityIndicator } from 'react-native';
+   import { RealmProvider } from '@realm/react';
+
+   import { App } from './App';
+
+   import { Item } from './ItemSchema';
+
+   const LoadingIndicator = () => {
+     return (
+       <View style={styles.activityContainer}>
+         <ActivityIndicator size="large" />
+       </View>
+     );
+   };
+
+   export const AppWrapper = () => {
+     return (
+       <RealmProvider schema={[Item]} fallback={LoadingIndicator}>
+         <App />
+       </RealmProvider>
+     );
+   };
+
+   // styles...
+
+Next, open `source/App.tsx`, and remove the parts about `dataExplorerLink` 
+and the header buttons for `OfflineMode` and `Logout` (this will be implemented 
+later).
+
+The updated `App.tsx` file should resemble the following:
+
+.. code-block:: javascript
+
+   import React from 'react';
+   import { SafeAreaProvider } from 'react-native-safe-area-context';
+   import { StyleSheet, Text, View } from 'react-native';
+   import { NavigationContainer } from '@react-navigation/native';
+   import { createStackNavigator } from '@react-navigation/stack';
+
+   import { LogoutButton } from './LogoutButton';
+   import { ItemListView } from './ItemListView';
+   import { OfflineModeButton } from './OfflineModeButton';
+
+   const Stack = createStackNavigator();
+
+   const headerRight = () => {
+     return <OfflineModeButton />;
+   };
+
+   const headerLeft = () => {
+     return <LogoutButton />;
+   };
+
+   export const App = () => {
+     return (
+       <>
+         {/* All screens nested in RealmProvider have access
+                to the configured realm's hooks. */}
+         <SafeAreaProvider>
+           <NavigationContainer>
+             <Stack.Navigator>
+               <Stack.Screen
+                 name="Your To-Do List"
+                 component={ItemListView}
+                 options={{
+                   headerTitleAlign: 'center',
+                   //headerLeft,
+                   //headerRight,
+                 }}
+               />
+             </Stack.Navigator>
+           </NavigationContainer>
+
+           <View style={styles.footer}>
+             <Text style={styles.footerText}>
+               Log in with the same account on another device or simulator to see
+               your list sync in real time.
+             </Text>
+           </View>
+         </SafeAreaProvider>
+       </>
+     );
+   };
+
+   // styles...
+
+Finally, open `source/ItemListView.tsx`, and make the following updates:
+
+- Remove the flexible sync subscription code
+- Replace user with a mock user
+  - `const user={ id: 'mockUserId' };`
+- Remove any `dataExplorerer` references
+- Remove functionality of the `Show All Tasks` switch (this will be implemented 
+  later)
+
+The updated `ItemListView.tsx` file should resemble the following:
+
+.. code-block:: javascript
+
+   import React, { useCallback, useState, useEffect } from 'react';
+   import { BSON } from 'realm';
+   import { useRealm, useQuery } from '@realm/react';
+   import { SafeAreaProvider } from 'react-native-safe-area-context';
+   import { Alert, FlatList, StyleSheet, Switch, Text, View } from 'react-native';
+   import { Button, Overlay, ListItem } from '@rneui/base';
+
+   import { CreateToDoPrompt } from './CreateToDoPrompt';
+
+   import { Item } from './ItemSchema';
+   import { colors } from './Colors';
+
+   export function ItemListView() {
+     const realm = useRealm();
+     const items = useQuery(Item).sorted('_id');
+     const user = { id: 'mockUserId' };
+
+     const [showNewItemOverlay, setShowNewItemOverlay] = useState(false);
+
+     const [showAllItems, setShowAllItems] = useState(true);
+
+     // createItem() takes in a summary and then creates an Item object with that summary
+     const createItem = useCallback(
+       ({ summary }: { summary: string }) => {
+         // if the realm exists, create an Item
+         realm.write(() => {
+           return new Item(realm, {
+             summary,
+             owner_id: user?.id,
+           });
+         });
+       },
+       [realm, user],
+     );
+
+     // deleteItem() deletes an Item with a particular _id
+     const deleteItem = useCallback(
+       (id: BSON.ObjectId) => {
+         // if the realm exists, get the Item with a particular _id and delete it
+         const item = realm.objectForPrimaryKey(Item, id); // search for a realm object with a primary key that is an objectId
+         if (item) {
+           if (item.owner_id !== user?.id) {
+             Alert.alert("You can't delete someone else's task!");
+           } else {
+             realm.write(() => {
+               realm.delete(item);
+             });
+           }
+         }
+       },
+       [realm, user],
+     );
+     // toggleItemIsComplete() updates an Item with a particular _id to be 'completed'
+     const toggleItemIsComplete = useCallback(
+       (id: BSON.ObjectId) => {
+         // if the realm exists, get the Item with a particular _id and update it's 'isCompleted' field
+         const item = realm.objectForPrimaryKey(Item, id); // search for a realm object with a primary key that is an objectId
+         if (item) {
+           if (item.owner_id !== user?.id) {
+             Alert.alert("You can't modify someone else's task!");
+           } else {
+             realm.write(() => {
+               item.isComplete = !item.isComplete;
+             });
+           }
+         }
+       },
+       [realm, user],
+     );
+
+     return (
+       <SafeAreaProvider>
+         <View style={styles.viewWrapper}>
+           <View style={styles.toggleRow}>
+             <Text style={styles.toggleText}>Show All Tasks</Text>
+             <Switch
+               trackColor={{ true: '#00ED64' }}
+               onValueChange={() => {
+                 setShowAllItems(!showAllItems);
+               }}
+               value={showAllItems}
+             />
+           </View>
+           <Overlay
+             isVisible={showNewItemOverlay}
+             overlayStyle={styles.overlay}
+             onBackdropPress={() => setShowNewItemOverlay(false)}>
+             <CreateToDoPrompt
+               onSubmit={({ summary }) => {
+                 setShowNewItemOverlay(false);
+                 createItem({ summary });
+               }}
+             />
+           </Overlay>
+           <FlatList
+             keyExtractor={item => item._id.toString()}
+             data={items}
+             renderItem={({ item }) => (
+               <ListItem key={`${item._id}`} bottomDivider topDivider>
+                 <ListItem.Title style={styles.itemTitle}>
+                   {item.summary}
+                 </ListItem.Title>
+                 <ListItem.Subtitle style={styles.itemSubtitle}>
+                   <Text>{item.owner_id === user?.id ? '(mine)' : ''}</Text>
+                 </ListItem.Subtitle>
+                 <ListItem.Content>
+                   {!item.isComplete && (
+                     <Button
+                       title="Mark done"
+                       type="clear"
+                       onPress={() => toggleItemIsComplete(item._id)}
+                     />
+                   )}
+                   <Button
+                     title="Delete"
+                     type="clear"
+                     onPress={() => deleteItem(item._id)}
+                   />
+                 </ListItem.Content>
+               </ListItem>
+             )}
+           />
+           <Button
+             title="Add To-Do"
+             buttonStyle={styles.addToDoButton}
+             onPress={() => setShowNewItemOverlay(true)}
+           />
+         </View>
+       </SafeAreaProvider>
+     );
+   }
+
+   // styles...
+
+With these changes, the app should work against a local database.
+
+Run and Verify Changes
+----------------------
+
+Before you begin the migration, you need to build and run the updated 
+application to verify that it works as intended. 
+
+- For iOS, run the following commands:
+
+  .. code-block:: bash
+
+     npx pod-install
+     npm run ios
+
+- For Android, run the following command:
+
+  .. code-block:: bash
+
+     npm run android
+
+Note that any build errors are out of the scope of this documentation. If you 
+are experiencing build-related issues, consult the `React Native documentation <https://reactnative.dev/docs/set-up-your-environment>`_
+to ensure that your environment is set up correctly.
+
+While your app is running, you can verify the basic functionality. You should 
+be able to:
+
+- Create new items
+- Mark items as done
+- Delete items
+
+   .. image:: /images/migration/react_native_guide/image16.png
+      :alt: Screenshot of the UI
+      :lightbox:
+
