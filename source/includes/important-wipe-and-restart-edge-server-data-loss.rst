@@ -9,6 +9,3 @@
 
    If the data was written by a MongoDB Driver or tool using the Wire Protocol,
    the unsynced data is unrecoverable.
-
-   Before Edge Server moves from Public Preview to General Availability, you
-   will have the option to recover local data when this error occurs.
