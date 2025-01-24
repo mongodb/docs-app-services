@@ -43,8 +43,12 @@ already have a cluster deployed, feel free to skip ahead.
    if you already have an account.
 2. Next, create a cluster.
 
+   .. image:: /images/migration/react_native_guide/image16.png
+
    For test purposes, select the M0 (free) cluster with the default settings.
    Feel free to make any additional changes to suit your needs.
+
+   .. image:: /images/migration/react_native_guide/image1.png
 
 3. Click **Create Deployment**.
 
@@ -52,6 +56,8 @@ already have a cluster deployed, feel free to skip ahead.
    automatically.
 
 4. Click **Choose a connection method**, then select **Drivers**.
+
+   .. image:: /images/migration/react_native_guide/image2.png
 
    From this screen, copy the URL that displays in step 3. Add your connection
    string into your application code. This is your connection string; it is
@@ -63,20 +69,34 @@ already have a cluster deployed, feel free to skip ahead.
 
 5. Click **Done** to close the modal.
 
+   .. image:: /images/migration/react_native_guide/image27.png
    After your cluster finishes deploying, your dashboard should look similar
    to the following.
 
 6. Click **Add data** to create a new database.
 
+   .. image:: /images/migration/react_native_guide/image12.png
+
    From the **Create a Database on Atlas** card, click **START**.
+
+   .. image:: /images/migration/react_native_guide/image17.png
 
    Create a database called PowerSync and a collection called Item, then click
    **Create Database**.
+
+   .. image:: /images/migration/react_native_guide/image26.png
+
+   You are returned to the dashboard and should see the newly created database 
+   and collection:
+
+   .. image:: /images/migration/react_native_guide/image3.png
 
    Finally, you need to create a new user that PowerSync will use to connect to
    this database.
 
    In the left sidebar, click **Database Access** under the Security heading.
+
+   .. image:: /images/migration/react_native_guide/image4.png
 
    Click **Add New Database User**, and create a new user called powersync and
    provide a password. Note the username and password to use in the connection
@@ -87,15 +107,19 @@ already have a cluster deployed, feel free to skip ahead.
       If your username or password contains any of the following special
       characters, you must convert them to a URL-safe format for your connection
       string: `$`, `:`, `/`, `?`, `#`, `[`, `]`, `@`. You can do this manually
-      or use a URL-encoding application, such as `urlencoder.org`.
+      or use a URL-encoding application, such as `urlencoder.org <https://urlencoder.org>`__.
 
-In the **Database User Privileges** section, click **Add Specific Privilege** and
-add a privilege for a `readWrite` and a `dbAdmin` role for the PowerSync
-database.
+   In the **Database User Privileges** section, click **Add Specific Privilege** and
+   add a privilege for a `readWrite` and a `dbAdmin` role for the PowerSync
+   database.
 
-Click **Add User**.
+   .. image:: /images/migration/react_native_guide/image22.png
 
-You should see the newly created user with the required database permissions.
+   Click **Add User**.
+
+   You should see the newly created user with the required database permissions.
+
+   .. image:: /images/migration/react_native_guide/image24.png
 
 For more details on user permissions, refer to the MongoDB section of the
 PowerSync Source Database Setup guide.
@@ -211,6 +235,8 @@ collection in the Atlas UI or using the MongoDB Compass visual desktop
 application. To view and manage your database and collections through MongoDB
 Compass, you must connect using the same connection string.
 
+.. image:: /images/migration/react_native_guide/image10.png
+
 Setup PowerSync
 ~~~~~~~~~~~~~~~
 
@@ -221,14 +247,22 @@ instance to get started.
 
 Create a new instance called TodoList.
 
+.. image:: /images/migration/react_native_guide/image5.png
+
 Select MongoDB as the connecting database.
 
+.. image:: /images/migration/react_native_guide/image13.png
+
 Use your Atlas connection string to populate the connection settings.
+
+.. image:: /images/migration/react_native_guide/image20.png
 
 Click **Test connection** to ensure you can connect successfully.
 
 If you see the following error, confirm that all of the required PowerSync
 service IPs are in your Atlas IP access list.
+
+.. image:: /images/migration/react_native_guide/image21.png
 
 If you are still having issues, refer to the PowerSync Database Connection
 Guide for MongoDB connections.
@@ -240,6 +274,8 @@ After your instance is deployed, you can ensure that you can view the migrated
 data by creating some basic sync rules.
 
 First, remove the default sync rules and replace them with the following::
+
+.. code-block::
 
    bucket_definitions:
      user_buckets:
@@ -263,6 +299,10 @@ check out this Sync Rules blog post or the PowerSync Sync Rules documentation.
 Click **Save and Deploy**. Once again, it may take quite a few minutes for the
 deployment to finish.
 
+After the deployment completes, you should see the following:
+
+.. image:: /images/migration/react_native_guide/image23.png
+
 After the deployment completes, you should see the appropriate status.
 
 If you get any errors, ensure that the PowerSync user is set up with the
@@ -283,6 +323,8 @@ context menu for this instance, and select **Edit Instance**.
 
 Select the **Client Auth** tab, and click **Enable development tokens**. Click
 **Save and deploy**.
+
+.. image:: /images/migration/react_native_guide/image14.png
 
 Click the ellipsis (…) next to TodoList to open the context menu for this
 instance again, and select **Generate Development Token**.
@@ -306,6 +348,10 @@ Development Token.
 
 You should see a page similar to this one.
 
+.. image:: /images/migration/react_native_guide/image11.png
+
 In the right sidebar, click **SQL Console**.
 
 Create a `SELECT` query to view all items.
+
+.. image:: /images/migration/react_native_guide/image8.png
