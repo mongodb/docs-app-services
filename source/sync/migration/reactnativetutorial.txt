@@ -354,7 +354,7 @@ permissions listed in the PowerSync Source Database Setup documentation.
 Click **Manage instances** to review the sync rules and deployment status.
 
 View Synced Data
-----------------
+~~~~~~~~~~~~~~~~
 
 To finalize this setup, you will use the PowerSync Diagnostics App to view the
 to-do list items you have just created and added to your sync rules.
@@ -1260,3 +1260,274 @@ If you are still encountering issues, you can view the changes made up to this
 point in the 
 `03-Sync-Data-From-Atlas <https://github.com/takameyer/realm2powersync/tree/03-Sync-Data-From-Atlas>`__ 
 branch of the example repository.
+
+
+Phase 5: Implement Backend API
+------------------------------
+
+Inspect Connector
+~~~~~~~~~~~~~~~~~
+
+Now that your data is syncing into the mobile application, the next step is to create
+a way to propagate local changes to Atlas.
+
+In this phase, you will:
+
+- Implement the `uploadData` method in your `Connector`
+- Create a simple backend server to handle operations from the mobile device
+
+For the sake of simplicity, this guide will run the server locally. For production use
+cases, you should consider using a cloud service to handle these requests (e.g.
+JourneyApps offers `serverless cloud functions <https://docs.journeyapps.com/reference
+/cloudcode/triggering-a-cloudcode-task/trigger-cc-via-http>`_ to help with this).
+
+Begin by looking at the operations sent to the `uploadData` method when local changes
+are made in the mobile application.
+
+Make the following changes to `source/PowerSync.ts`::
+
+  async uploadData(database: AbstractPowerSyncDatabase) {
+    const batch = await database.getCrudBatch();
+    console.log('batch', JSON.stringify(batch, null, 2));
+  }
+
+Next, you’ll make changes in the mobile application that include:
+
+- Deleting an item
+- Toggling an item as complete or incomplete
+- Adding a new item
+
+With the log messages above you can see the structure of these operations:
+
+.. code-block:: bash
+
+  } LOG  {
+    "op_id": 11,
+    "op": "PATCH",
+    "type": "Item",
+    "id": "67728b8839f5e3e9d6bbb72d",
+    "tx_id": 11,
+    "data": {
+      "isComplete": 0
+    }
+  } LOG  {
+    "op_id": 12,
+    "op": "DELETE",
+    "type": "Item",
+    "id": "67728b8839f5e3e9d6bbb72f",
+    "tx_id": 12
+  } LOG  {
+    "op_id": 13,
+    "op": "PUT",
+    "type": "Item",
+    "id": "677a7b9a8d89f19835ca0a07",
+    "tx_id": 13,
+    "data": {
+      "isComplete": 0,
+      "owner_id": "mockUserId",
+      "summary": "Test"
+    }
+  }'
+
+Implement Upload Method
+~~~~~~~~~~~~~~~~~~~~~~~
+
+You should have enough information to create a backend server.
+
+Finish implementing the `uploadData` method to send this information in a fetch
+request.
+
+First, add a new value to your `.env`::
+
+.. code-block:: bash
+
+   BACKEND_ENDPOINT=http://localhost:8000
+
+and ``types/env.d.ts``:
+
+.. code-block:: bash
+
+   declare module '@env' {
+      export const AUTH_TOKEN: string;
+      export const POWERSYNC_ENDPOINT: string;
+      export const BACKEND_ENDPOINT: string;
+   }
+
+If you are using the Android emulator, you must ensure that requests to `localhost` on
+port 8000 are being forwarded out of the emulator and into your local machine. To
+enable this, run the following command:
+
+.. code-block:: bash
+
+   adb reverse tcp:8000 tcp:8000
+
+Next, add an import of the ``BACKEND_ENDPOINT`` to ``source/PowerSync.ts``, and 
+update the ``uploadData`` method::
+
+.. code-block:: bash
+
+   async uploadData(database: AbstractPowerSyncDatabase) {
+      const batch = await database.getCrudBatch();
+
+      if (batch === null) {
+         return;
+      }
+
+      const result = await fetch(`${BACKEND_ENDPOINT}/update`, {
+         method: 'POST',
+         headers: {
+         'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(batch.crud),
+      });
+
+      if (!result.ok) {
+         throw new Error('Failed to upload data');
+      }
+
+      batch.complete();
+   }
+
+The updated method will now send an array of CRUD operations to the backend endpoint:
+
+- If the application is offline, it will simply fail.
+- If the application receives a positive response, it will mark the operations as
+  complete and the batch of operations will be removed from the mobile
+  application.
+
+Create Backend Server
+#####################
+
+Now, create a new folder in your project called ``backend``::
+
+  mkdir backend
+
+Then, create a ``package.json`` file::
+
+.. code-block:: bash
+
+   {
+      "main": "index.js",
+      "scripts": {
+         "start": "node --env-file=.env index.js"
+      },
+      "dependencies": {
+         "express": "^4.21.2",
+         "mongodb": "^6.12.0"
+      }
+   }
+
+This ``package.json`` includes a ``start`` script that adds variables from a 
+``.env`` into the service.
+
+Create a new ``.env`` with your Atlas ``connection string`` from earlier:
+
+.. code-block:: bash
+
+   MONGODB_URI=<connection_string>
+
+Now, install the dependencies:
+
+.. code-block:: bash
+
+   npm install
+
+Note that this guide will not include how to add TypeScript and other tooling to this
+service, but you can feel free to do so. Additionally, the guide keeps validation to a
+minimum and only implements the changes required to prepare the data coming from the
+mobile application to be inserted into MongoDB.
+
+First, create an `index.js` with the following contents:
+
+.. code-block:: bash
+
+   const express = require("express");
+   const { MongoClient, ObjectId } = require("mongodb");
+
+   const app = express();
+   app.use(express.json());
+
+   // MongoDB setup
+   const client = new MongoClient(
+      process.env.MONGODB_URI || "mongodb://localhost:27017",
+   );
+
+   // Helper function to coerce isComplete to boolean
+   function coerceItemData(data) {
+      if (data && "isComplete" in data) {
+         data.isComplete = !!Number(data.isComplete);
+      }
+      return data;
+   }
+
+   async function start() {
+      await client.connect();
+      const db = client.db("PowerSync");
+      const items = db.collection("Item");
+
+      app.post("/update", async (req, res) => {
+         const operations = req.body;
+
+         try {
+         for (const op of operations) {
+            console.log(JSON.stringify(op, null, 2));
+            switch (op.op) {
+               case "PUT":
+               await items.insertOne({
+                  ...coerceItemData(op.data),
+                  _id: new ObjectId(op.id),
+               });
+               break;
+
+               case "PATCH":
+               await items.updateOne(
+                  { _id: new ObjectId(op.id) },
+                  { $set: coerceItemData(op.data) },
+               );
+               break;
+
+               case "DELETE":
+               await items.deleteOne({
+                  _id: new ObjectId(op.id),
+               });
+               break;
+            }
+         }
+         res.json({ success: true });
+         } catch (error) {
+         res.status(500).json({ error: error.message });
+         }
+      });
+
+      app.listen(8000, () => {
+         console.log("Server running on port 8000");
+      });
+   }
+
+   start().catch(console.error);
+
+Note from the service above that the ``isComplete`` is coerced into a ``boolean``
+value. This ensures that the new todolist items arrive into MongoDB with ``true`` or
+``false```` instead of a 0 or 1. An ``ObjectId`` instance is also being created out of the
+``op.id``. Setting this to the ``_id`` property will shape the data to MongoDB
+requirements and best practices.
+
+Run and Verify Changes
+~~~~~~~~~~~~~~~~~~~~~~
+
+Now you can spin up the server::
+
+.. code-block:: bash
+
+   npm start
+
+The mobile application should already be trying to send operations to this endpoint.
+The `console.log` statement should show the requests as they are being sent, and the
+changes should be propagating to Atlas.
+
+You can verify this by viewing your MongoDB collection in the Atlas UI or in MongoDB
+Compass.
+
+.. image:: /images/migration/react_native_guide/image15.png
+   :alt: Screenshot of the UI
+   :lightbox:
