@@ -415,7 +415,7 @@ Clone Initial Project
 ~~~~~~~~~~~~~~~~~~~~~
 
 In this phase, you are going to clone a Realm todo list application for React 
-Native. The ``main`` branch of the `example repository <https://github.com/takameyer/realm2powersync>`_
+Native. The ``main`` branch of the `example repository <https://github.com/takameyer/realm2powersync>`__
 contains the final result of the migration.
 
 To follow along with this guide using the example repo, checkout the ``00-Start-Here``
@@ -707,7 +707,7 @@ application to verify that it works as intended.
      npm run android
 
 Note that any build errors are out of the scope of this documentation. If you 
-are experiencing build-related issues, consult the `React Native documentation <https://reactnative.dev/docs/set-up-your-environment>`_
+are experiencing build-related issues, consult the `React Native documentation <https://reactnative.dev/docs/set-up-your-environment>`__
 to ensure that your environment is set up correctly.
 
 While your app is running, you can verify the basic functionality. You should 
@@ -793,7 +793,9 @@ a quick reference of the available types:
 | blob    | binary data                          |
 +---------+--------------------------------------+
 
-For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows::
+For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows:
+
+.. code-block:: bash
 
    import {column, Schema, Table} from '@powersync/react-native';
 
@@ -827,7 +829,9 @@ PowerSync client. This functionality is provided through the
 component.
 
 First, update ``source/AppWrapper.tsx`` to use the ``PowerSyncContext`` and 
-initialize your PowerSync client::
+initialize your PowerSync client:
+
+.. code-block:: bash
 
    import React from 'react';
    import {App} from './App';
@@ -851,12 +855,15 @@ initialize your PowerSync client::
      );
    };
 
-Next, update ``ItemListView.tsx`` to use the PowerSync client. To achieve this, you must update the hooks used at the top of this component:
+Next, update ``ItemListView.tsx`` to use the PowerSync client. To achieve this, you 
+must update the hooks used at the top of this component:
 
 * To get access to the local database for making writes and updates, use the ``usePowerSync`` hook.
 * To get a list of todo list items that automatically rerender on update, use the ``useQuery`` hook.
 
-Replace lines using ``@realm/react``, ``useQuery``, and ``useRealm`` to instead use the PowerSync hooks::
+Replace lines using ``@realm/react``, ``useQuery``, and ``useRealm`` to instead use the PowerSync hooks:
+
+.. code-block:: bash
 
    export function ItemListView() {
      const db = usePowerSync();
@@ -864,13 +871,20 @@ Replace lines using ``@realm/react``, ``useQuery``, and ``useRealm`` to instead 
 
    //...
 
-Note that the data property returned from ``useQuery`` contains the items. Rename it from ``data`` to ``items`` for clarity.
+Note that the data property returned from ``useQuery`` contains the items. Rename 
+it from ``data`` to ``items`` for clarity.
 
-Next, you need to update the ``createItem``, ``deleteItem``, and ``toggleItemIsComplete`` methods.
+Next, you need to update the ``createItem``, ``deleteItem``, and 
+``toggleItemIsComplete`` methods.
 
-For all of these methods, you will be depending on the ``db`` object returned from ``usePowerSync``. As with Realm, the local database will need to open a transaction to perform any mutable operations, such as insert, update, or delete. You will also add try/catch blocks to propagate any errors to the frontend of the application.
+For all of these methods, you will be depending on the ``db`` object returned from 
+``usePowerSync``. As with Realm, the local database will need to open a transaction 
+to perform any mutable operations, such as insert, update, or delete. You will 
+also add try/catch blocks to propagate any errors to the frontend of the application.
 
-The ``createItem`` method can be implemented as follows::
+The ``createItem`` method can be implemented as follows:
+
+.. code-block:: bash
 
    // createItem() takes in a summary and then creates an Item object with that summary
    const createItem = useCallback(
@@ -891,11 +905,19 @@ The ``createItem`` method can be implemented as follows::
      [db],
    );
 
-For this implementation, the code is importing ``ObjectId`` from ``bson`` to create the unique ids for each item. Keep in mind that PowerSync expects the primary key items to be named ``id``. You will need to make updates in the code to account for this.
+For this implementation, the code is importing ``ObjectId`` from ``bson`` to 
+create the unique ids for each item. Keep in mind that PowerSync expects the 
+primary key items to be named ``id``. You will need to make updates in the code 
+to account for this.
 
-This code also implements the default values for the items directly in this logic. In this case, ``isComplete`` is initialized to false, and the ``id`` is initialized with the string result of the newly created ``ObjectId``.
+This code also implements the default values for the items directly in this logic. 
+In this case, ``isComplete`` is initialized to false, and the ``id`` is initialized 
+with the string result of the newly created ``ObjectId``.
 
-The ``deleteItem`` and ``toggleItemIsComplete`` methods are similar, so implement them as follows::
+The ``deleteItem`` and ``toggleItemIsComplete`` methods are similar, so implement 
+them as follows:
+
+.. code-block:: bash
 
    // deleteItem() deletes an Item with a particular _id
    const deleteItem = useCallback(
@@ -1261,7 +1283,6 @@ point in the
 `03-Sync-Data-From-Atlas <https://github.com/takameyer/realm2powersync/tree/03-Sync-Data-From-Atlas>`__ 
 branch of the example repository.
 
-
 Phase 5: Implement Backend API
 ------------------------------
 
@@ -1273,23 +1294,25 @@ a way to propagate local changes to Atlas.
 
 In this phase, you will:
 
-- Implement the `uploadData` method in your `Connector`
+- Implement the ``uploadData`` method in your ``Connector``
 - Create a simple backend server to handle operations from the mobile device
 
 For the sake of simplicity, this guide will run the server locally. For production use
 cases, you should consider using a cloud service to handle these requests (e.g.
 JourneyApps offers `serverless cloud functions <https://docs.journeyapps.com/reference
-/cloudcode/triggering-a-cloudcode-task/trigger-cc-via-http>`_ to help with this).
+/cloudcode/triggering-a-cloudcode-task/trigger-cc-via-http>`__ to help with this).
 
-Begin by looking at the operations sent to the `uploadData` method when local changes
+Begin by looking at the operations sent to the ``uploadData`` method when local changes
 are made in the mobile application.
 
-Make the following changes to `source/PowerSync.ts`::
+Make the following changes to ``source/PowerSync.ts``:
 
-  async uploadData(database: AbstractPowerSyncDatabase) {
-    const batch = await database.getCrudBatch();
-    console.log('batch', JSON.stringify(batch, null, 2));
-  }
+.. code-block:: bash
+
+   async uploadData(database: AbstractPowerSyncDatabase) {
+      const batch = await database.getCrudBatch();
+      console.log('batch', JSON.stringify(batch, null, 2));
+   }
 
 Next, you’ll make changes in the mobile application that include:
 
@@ -1301,33 +1324,33 @@ With the log messages above you can see the structure of these operations:
 
 .. code-block:: bash
 
-  } LOG  {
-    "op_id": 11,
-    "op": "PATCH",
-    "type": "Item",
-    "id": "67728b8839f5e3e9d6bbb72d",
-    "tx_id": 11,
-    "data": {
-      "isComplete": 0
-    }
-  } LOG  {
-    "op_id": 12,
-    "op": "DELETE",
-    "type": "Item",
-    "id": "67728b8839f5e3e9d6bbb72f",
-    "tx_id": 12
-  } LOG  {
-    "op_id": 13,
-    "op": "PUT",
-    "type": "Item",
-    "id": "677a7b9a8d89f19835ca0a07",
-    "tx_id": 13,
-    "data": {
-      "isComplete": 0,
-      "owner_id": "mockUserId",
-      "summary": "Test"
-    }
-  }'
+   } LOG  {
+      "op_id": 11,
+      "op": "PATCH",
+      "type": "Item",
+      "id": "67728b8839f5e3e9d6bbb72d",
+      "tx_id": 11,
+      "data": {
+         "isComplete": 0
+      }
+   } LOG  {
+      "op_id": 12,
+      "op": "DELETE",
+      "type": "Item",
+      "id": "67728b8839f5e3e9d6bbb72f",
+      "tx_id": 12
+   } LOG  {
+      "op_id": 13,
+      "op": "PUT",
+      "type": "Item",
+      "id": "677a7b9a8d89f19835ca0a07",
+      "tx_id": 13,
+      "data": {
+         "isComplete": 0,
+         "owner_id": "mockUserId",
+         "summary": "Test"
+      }
+   }'
 
 Implement Upload Method
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -1337,7 +1360,7 @@ You should have enough information to create a backend server.
 Finish implementing the `uploadData` method to send this information in a fetch
 request.
 
-First, add a new value to your `.env`::
+First, add a new value to your ``.env``:
 
 .. code-block:: bash
 
@@ -1353,16 +1376,16 @@ and ``types/env.d.ts``:
       export const BACKEND_ENDPOINT: string;
    }
 
-If you are using the Android emulator, you must ensure that requests to `localhost` on
-port 8000 are being forwarded out of the emulator and into your local machine. To
-enable this, run the following command:
+If you are using the Android emulator, you must ensure that requests to 
+``localhost`` on port ``8000`` are being forwarded out of the emulator and into your 
+local machine. To enable this, run the following command:
 
 .. code-block:: bash
 
    adb reverse tcp:8000 tcp:8000
 
 Next, add an import of the ``BACKEND_ENDPOINT`` to ``source/PowerSync.ts``, and 
-update the ``uploadData`` method::
+update the ``uploadData`` method:
 
 .. code-block:: bash
 
@@ -1396,13 +1419,15 @@ The updated method will now send an array of CRUD operations to the backend endp
   application.
 
 Create Backend Server
-#####################
+~~~~~~~~~~~~~~~~~~~~~
 
-Now, create a new folder in your project called ``backend``::
+Now, create a new folder in your project called ``backend``:
 
-  mkdir backend
+.. code-block:: bash
 
-Then, create a ``package.json`` file::
+   mkdir backend
+
+Then, create a ``package.json`` file:
 
 .. code-block:: bash
 
@@ -1515,18 +1540,18 @@ requirements and best practices.
 Run and Verify Changes
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Now you can spin up the server::
+Now you can spin up the server:
 
 .. code-block:: bash
 
    npm start
 
 The mobile application should already be trying to send operations to this endpoint.
-The `console.log` statement should show the requests as they are being sent, and the
-changes should be propagating to Atlas.
+The ``console.log`` statement should show the requests as they are being sent, 
+and the changes should be propagating to Atlas.
 
-You can verify this by viewing your MongoDB collection in the Atlas UI or in MongoDB
-Compass.
+You can verify this by viewing your MongoDB collection in the Atlas UI or in 
+MongoDB Compass.
 
 .. image:: /images/migration/react_native_guide/image15.png
    :alt: Screenshot of the UI
