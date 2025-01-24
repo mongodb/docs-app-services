@@ -721,25 +721,35 @@ be able to:
    :alt: Screenshot of the UI
    :lightbox:
 
-Phase 3: Migrate from Realm to the PowerSync client
-===================================================
+Phase 3: Migrate from Realm to the PowerSync Client
+---------------------------------------------------
 
 Install Dependencies
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
-Now that you have a local-only Realm application running, you can begin to convert this application to use a local-only version of the PowerSync client.
+Now that you have a local-only Realm application running, you can begin to convert 
+this application to use a local-only version of the PowerSync client.
 
-PowerSync uses an SQLite-based database, so you will need to make some modifications to the schema to ensure that it is compatible.
+PowerSync uses an SQLite-based database, so you will need to make some modifications 
+to the schema to ensure that it is compatible.
 
-To accomplish this, you’ll need to set up the PowerSync client. For detailed instructions, you can refer to the `@powersync/react-native npm repository <https://www.npmjs.com/package/@powersync/react-native>`_ or the `PowerSync React Native Setup <https://docs.powersync.com/client-sdk-references/react-native-and-expo#1-define-the-schema>`_ documentation.
+To accomplish this, you’ll need to set up the PowerSync client. For detailed 
+instructions, you can refer to the `@powersync/react-native npm repository 
+<https://www.npmjs.com/package/@powersync/react-native>`__ or the 
+`PowerSync React Native Setup <https://docs.powersync.com/client-sdk-references/react-native-and-expo#1-define-the-schema>`__ 
+documentation.
 
-First, run the following command to add dependencies for the PowerSync React Native Client, the backing SQLite database, an async iterator polyfill (required as per instructions), as well as the `bson` dependency (used to generate `ObjectId`s for inserting documents into MongoDB):
+First, run the following command to add dependencies for the PowerSync React Native 
+Client, the backing SQLite database, an async iterator polyfill (required as per 
+instructions), as well as the ``bson`` dependency (used to generate ``ObjectId``s for 
+inserting documents into MongoDB):
 
 .. code-block:: bash
 
    npm install @powersync/react-native @journeyapps/react-native-quick-sqlite @azure/core-asynciterator-polyfill bson
 
-To setup the polyfill, open ``index.js``, and add ``import '@azure/core-asynciterator-polyfill';`` to the top of the file.
+To setup the polyfill, open ``index.js``, and add ``import '@azure/core-asynciterator-polyfill';`` 
+to the top of the file.
 
 The updated ``index.js`` file should resemble the following:
 
@@ -756,14 +766,18 @@ The updated ``index.js`` file should resemble the following:
 Now that the dependencies are added, you need to rebuild the application:
 
 * For iOS, run ``pod-install``.
-* For Android, update the minimum required SDK to 24 to be compatible with ``react-native-quick-sqlite``. To do this, open ``android/build.gradle`` and change ``minSdkVersion`` from 21 to 24.
+* For Android, update the minimum required SDK to 24 to be compatible with 
+  ``react-native-quick-sqlite``. To do this, open ``android/build.gradle`` and 
+  change ``minSdkVersion`` from 21 to 24.
 
 Migrate Data Schema
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 Now you will set up the data types and schemas for the local database.
 
-Refer to the `PowerSync MongoDB Type Mapping <https://docs.powersync.com/usage/sync-rules/types#mongodb-beta-type-mapping>`_ documentation to determine how to set up your specific schema. The following is a quick reference of the available types:
+Refer to the `PowerSync MongoDB Type Mapping <https://docs.powersync.com/usage/sync-rules/types#mongodb-beta-type-mapping>`__ 
+documentation to determine how to set up your specific schema. The following is 
+a quick reference of the available types:
 
 +---------+--------------------------------------+
 | Type    | Description                          |
@@ -796,12 +810,14 @@ For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows::
    export type Database = (typeof AppSchema)['types'];
    export type Item = Database['Item'];
 
-IMPORTANT: The property name passed into ``Schema`` represents the name of the local table and the MongoDB collection. In this case, ensure it is named ``Item``.
+IMPORTANT: The property name passed into ``Schema`` represents the name of the 
+local table and the MongoDB collection. In this case, ensure it is named ``Item``.
 
-Note that this code exports the types directly out of the ``AppSchema``, instead of having to define them manually.
+Note that this code exports the types directly out of the ``AppSchema``, instead 
+of having to define them manually.
 
 Refactor Application Code
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To get access to PowerSync and bind your data, you will need access to the 
 `hooks <https://react.dev/learn/reusing-logic-with-custom-hooks#custom-hooks-sharing-logic-between-components>`__ 
@@ -964,7 +980,7 @@ The updated ``FlatList`` should now resemble the following:
    />
 
 Run and Verify Changes
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 After you are done updating the code, you should be able to use a local PowerSync 
 client.
@@ -996,7 +1012,7 @@ Phase 4: Sync Data from Atlas to PowerSync
 ------------------------------------------
 
 Initial Setup
--------------
+~~~~~~~~~~~~~
 
 You should now have a running PowerSync service that contains synchronized data 
 from Atlas, which has been verified using the PowerSync diagnostics tool.
@@ -1053,7 +1069,7 @@ endpoint and token that you saved:
    AUTH_TOKEN=<dev-token>
 
 Refactor Client Code
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 You will need to refactor your application slightly so that it can connect to 
 your PowerSync instance.
@@ -1213,7 +1229,7 @@ Then, modify ``App.tsx`` to show the ``Reset`` button in the left side of the he
    // styles...
 
 Run and Verify Changes
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Lastly, the ``react-native-dotenv`` library requires our React Native server to be 
 reset with a cleared cache, which is normal when adding functionality to Babel.
