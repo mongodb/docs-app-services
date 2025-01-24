@@ -44,11 +44,15 @@ already have a cluster deployed, feel free to skip ahead.
 2. Next, create a cluster.
 
    .. image:: /images/migration/react_native_guide/image16.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    For test purposes, select the M0 (free) cluster with the default settings.
    Feel free to make any additional changes to suit your needs.
 
    .. image:: /images/migration/react_native_guide/image1.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
 3. Click **Create Deployment**.
 
@@ -58,6 +62,8 @@ already have a cluster deployed, feel free to skip ahead.
 4. Click **Choose a connection method**, then select **Drivers**.
 
    .. image:: /images/migration/react_native_guide/image2.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    From this screen, copy the URL that displays in step 3. Add your connection
    string into your application code. This is your connection string; it is
@@ -70,26 +76,37 @@ already have a cluster deployed, feel free to skip ahead.
 5. Click **Done** to close the modal.
 
    .. image:: /images/migration/react_native_guide/image27.png
+      :alt: Screenshot of the UI
+      :lightbox:
+
    After your cluster finishes deploying, your dashboard should look similar
    to the following.
 
 6. Click **Add data** to create a new database.
 
    .. image:: /images/migration/react_native_guide/image12.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    From the **Create a Database on Atlas** card, click **START**.
 
    .. image:: /images/migration/react_native_guide/image17.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    Create a database called PowerSync and a collection called Item, then click
    **Create Database**.
 
    .. image:: /images/migration/react_native_guide/image26.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    You are returned to the dashboard and should see the newly created database 
    and collection:
 
    .. image:: /images/migration/react_native_guide/image3.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    Finally, you need to create a new user that PowerSync will use to connect to
    this database.
@@ -97,6 +114,8 @@ already have a cluster deployed, feel free to skip ahead.
    In the left sidebar, click **Database Access** under the Security heading.
 
    .. image:: /images/migration/react_native_guide/image4.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    Click **Add New Database User**, and create a new user called powersync and
    provide a password. Note the username and password to use in the connection
@@ -114,12 +133,16 @@ already have a cluster deployed, feel free to skip ahead.
    database.
 
    .. image:: /images/migration/react_native_guide/image22.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
    Click **Add User**.
 
    You should see the newly created user with the required database permissions.
 
    .. image:: /images/migration/react_native_guide/image24.png
+      :alt: Screenshot of the UI
+      :lightbox:
 
 For more details on user permissions, refer to the MongoDB section of the
 PowerSync Source Database Setup guide.
@@ -152,7 +175,7 @@ First, install MongoDB Database Tools to gain access to ``mongoimport``.
 Refer to the Installation guide instructions for your operating system.
 
 After you have installed database-tools, enter the following in the terminal
-to confirm that you can access ``mongoimport``::
+to confirm that you can access ``mongoimport``:
 
    mongoimport --version
 
@@ -220,7 +243,7 @@ This sample data contains some to-do list items. The ``owner_id`` will be used
 for filtering examples later in this tutorial.
 
 To import this JSON, enter the following command, replacing the
-``<connection-string>`` placeholder with your connection string::
+``<connection-string>`` placeholder with your connection string:
 
    mongoimport --uri="<connection-string>" --db=PowerSync --collection=Item
    --file=sample.json --jsonArray
