@@ -717,7 +717,530 @@ be able to:
 - Mark items as done
 - Delete items
 
-.. image:: /images/migration/react_native_guide/image16.png
+.. image:: /images/migration/react_native_guide/image9.png
    :alt: Screenshot of the UI
    :lightbox:
 
+Phase 3: Migrate from Realm to the PowerSync client
+===================================================
+
+Install Dependencies
+--------------------
+
+Now that you have a local-only Realm application running, you can begin to convert this application to use a local-only version of the PowerSync client.
+
+PowerSync uses an SQLite-based database, so you will need to make some modifications to the schema to ensure that it is compatible.
+
+To accomplish this, you’ll need to set up the PowerSync client. For detailed instructions, you can refer to the `@powersync/react-native npm repository <https://www.npmjs.com/package/@powersync/react-native>`_ or the `PowerSync React Native Setup <https://docs.powersync.com/client-sdk-references/react-native-and-expo#1-define-the-schema>`_ documentation.
+
+First, run the following command to add dependencies for the PowerSync React Native Client, the backing SQLite database, an async iterator polyfill (required as per instructions), as well as the `bson` dependency (used to generate `ObjectId`s for inserting documents into MongoDB):
+
+.. code-block:: bash
+
+   npm install @powersync/react-native @journeyapps/react-native-quick-sqlite @azure/core-asynciterator-polyfill bson
+
+To setup the polyfill, open ``index.js``, and add ``import '@azure/core-asynciterator-polyfill';`` to the top of the file.
+
+The updated ``index.js`` file should resemble the following:
+
+.. code-block:: javascript
+
+   import '@azure/core-asynciterator-polyfill';
+   import 'react-native-get-random-values';
+   import {AppRegistry} from 'react-native';
+   import {AppWrapper} from './source/AppWrapper';
+   import {name as appName} from './app.json';
+
+   AppRegistry.registerComponent(appName, () => AppWrapper);
+
+Now that the dependencies are added, you need to rebuild the application:
+
+* For iOS, run ``pod-install``.
+* For Android, update the minimum required SDK to 24 to be compatible with ``react-native-quick-sqlite``. To do this, open ``android/build.gradle`` and change ``minSdkVersion`` from 21 to 24.
+
+Migrate Data Schema
+-------------------
+
+Now you will set up the data types and schemas for the local database.
+
+Refer to the `PowerSync MongoDB Type Mapping <https://docs.powersync.com/usage/sync-rules/types#mongodb-beta-type-mapping>`_ documentation to determine how to set up your specific schema. The following is a quick reference of the available types:
+
++---------+--------------------------------------+
+| Type    | Description                          |
++=========+======================================+
+| null    | undefined, or unset values           |
++---------+--------------------------------------+
+| integer | a 64-bit signed integer              |
++---------+--------------------------------------+
+| real    | a 64-bit floating point number       |
++---------+--------------------------------------+
+| text    | an UTF-8 text string                 |
++---------+--------------------------------------+
+| blob    | binary data                          |
++---------+--------------------------------------+
+
+For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows::
+
+   import {column, Schema, Table} from '@powersync/react-native';
+
+   export const ItemSchema = new Table({
+     isComplete: column.integer,
+     summary: column.text,
+     owner_id: column.text,
+   });
+
+   export const AppSchema = new Schema({
+     Item: ItemSchema,
+   });
+
+   export type Database = (typeof AppSchema)['types'];
+   export type Item = Database['Item'];
+
+IMPORTANT: The property name passed into ``Schema`` represents the name of the local table and the MongoDB collection. In this case, ensure it is named ``Item``.
+
+Note that this code exports the types directly out of the ``AppSchema``, instead of having to define them manually.
+
+Refactor Application Code
+-------------------------
+
+To get access to PowerSync and bind your data, you will need access to the 
+`hooks <https://react.dev/learn/reusing-logic-with-custom-hooks#custom-hooks-sharing-logic-between-components>`__ 
+and `providers <https://react.dev/reference/react/createContext>`__ for the 
+PowerSync client. This functionality is provided through the 
+`PowerSyncContext <https://powersync-ja.github.io/powersync-js/react-native-sdk>`__ 
+component.
+
+First, update ``source/AppWrapper.tsx`` to use the ``PowerSyncContext`` and 
+initialize your PowerSync client::
+
+   import React from 'react';
+   import {App} from './App';
+   import {AppSchema} from './ItemSchema';
+   import {PowerSyncContext, PowerSyncDatabase} from '@powersync/react-native';
+
+   const powerSync = new PowerSyncDatabase({
+     schema: AppSchema,
+     database: {
+       dbFilename: 'powersync.db',
+     },
+   });
+
+   powerSync.init();
+
+   export const AppWrapper = () => {
+     return (
+       <PowerSyncContext.Provider value={powerSync}>
+         <App />
+       </PowerSyncContext.Provider>
+     );
+   };
+
+Next, update ``ItemListView.tsx`` to use the PowerSync client. To achieve this, you must update the hooks used at the top of this component:
+
+* To get access to the local database for making writes and updates, use the ``usePowerSync`` hook.
+* To get a list of todo list items that automatically rerender on update, use the ``useQuery`` hook.
+
+Replace lines using ``@realm/react``, ``useQuery``, and ``useRealm`` to instead use the PowerSync hooks::
+
+   export function ItemListView() {
+     const db = usePowerSync();
+     const {data: items} = useQuery<Item>('SELECT * FROM Item');
+
+   //...
+
+Note that the data property returned from ``useQuery`` contains the items. Rename it from ``data`` to ``items`` for clarity.
+
+Next, you need to update the ``createItem``, ``deleteItem``, and ``toggleItemIsComplete`` methods.
+
+For all of these methods, you will be depending on the ``db`` object returned from ``usePowerSync``. As with Realm, the local database will need to open a transaction to perform any mutable operations, such as insert, update, or delete. You will also add try/catch blocks to propagate any errors to the frontend of the application.
+
+The ``createItem`` method can be implemented as follows::
+
+   // createItem() takes in a summary and then creates an Item object with that summary
+   const createItem = useCallback(
+     async ({summary}: {summary: string}) => {
+       try {
+         // start a write transaction to insert the new Item
+         db.writeTransaction(async tx => {
+           await tx.execute(
+             'INSERT INTO Item (id, summary, owner_id, isComplete) VALUES (?, ?, ?, ?)',
+
+             [new ObjectId().toHexString(), summary, user?.id, false],
+           );
+         });
+       } catch (ex: any) {
+         Alert.alert('Error', ex?.message);
+       }
+     },
+     [db],
+   );
+
+For this implementation, the code is importing ``ObjectId`` from ``bson`` to create the unique ids for each item. Keep in mind that PowerSync expects the primary key items to be named ``id``. You will need to make updates in the code to account for this.
+
+This code also implements the default values for the items directly in this logic. In this case, ``isComplete`` is initialized to false, and the ``id`` is initialized with the string result of the newly created ``ObjectId``.
+
+The ``deleteItem`` and ``toggleItemIsComplete`` methods are similar, so implement them as follows::
+
+   // deleteItem() deletes an Item with a particular _id
+   const deleteItem = useCallback(
+     async (id: String) => {
+       // start a write transaction to delete the Item
+       try {
+         db.writeTransaction(async tx => {
+           await tx.execute('DELETE FROM Item WHERE id = ?', [id]);
+         });
+       } catch (ex: any) {
+         Alert.alert('Error', ex?.message);
+       }
+     },
+     [db],
+   );
+
+   // toggleItemIsComplete() updates an Item with a particular _id to be 'completed'
+   const toggleItemIsComplete = useCallback(
+     async (id: String) => {
+       // start a write transaction to update the Item
+       try {
+         db.writeTransaction(async tx => {
+           await tx.execute(
+             'UPDATE Item SET isComplete = NOT isComplete WHERE id = ?',
+             [id],
+           );
+         });
+       } catch (ex: any) {
+         Alert.alert('Error', ex?.message);
+       }
+     },
+     [db],
+   );
+
+Finally, update the rendered ``FlatList`` to use ``id`` in place of ``_id``:
+
+* Update the ``keyExtractor`` of the ``FlatList`` to use the ``id`` string directly.
+* Previously, the database was returning an ``ObjectId``. This will need to be converted into a string.
+
+The updated ``FlatList`` should now resemble the following:
+
+.. code-block:: jsx
+
+   <FlatList
+     keyExtractor={item => item.id}
+     data={items}
+     renderItem={({item}) => (
+       <ListItem key={`${item.id}`} bottomDivider topDivider>
+         <ListItem.Title style={styles.itemTitle}>
+           {item.summary}
+         </ListItem.Title>
+         <ListItem.Subtitle style={styles.itemSubtitle}>
+           <Text>{item.owner_id === user?.id ? '(mine)' : ''}</Text>
+         </ListItem.Subtitle>
+         <ListItem.Content>
+           <Pressable
+             accessibilityLabel={`Mark task as ${
+               item.isComplete ? 'not done' : 'done'
+             }`}
+             onPress={() => toggleItemIsComplete(item.id)}
+             style={[
+               styles.status,
+               item.isComplete && styles.statusCompleted,
+             ]}>
+             <Text style={styles.statusIcon}>
+               {item.isComplete ? '✓' : '○'}
+             </Text>
+           </Pressable>
+         </ListItem.Content>
+         <ListItem.Content>
+           <Pressable
+             accessibilityLabel={'Remove Item'}
+             onPress={() => deleteItem(item.id)}
+             style={styles.delete}>
+             <Text style={[styles.statusIcon, {color: 'blue'}]}>
+               DELETE
+             </Text>
+           </Pressable>
+         </ListItem.Content>
+       </ListItem>
+     )}
+   />
+
+Run and Verify Changes
+----------------------
+
+After you are done updating the code, you should be able to use a local PowerSync 
+client.
+
+To verify, rebuild the application. If you are using iOS, don’t forget to update 
+the Pods with ``npx pod-install``.
+
+.. image:: /images/migration/react_native_guide/image8.png
+   :alt: Screenshot of the UI
+   :lightbox:
+
+You should now have a working application that enables you to add, update, and 
+delete todo list items using PowerSync.  
+
+If you encounter issues, you can view the changes made up to this point in 
+the `02-Migrate-Local-Client <https://github.com/takameyer/realm2powersync/tree/02-Migrate-Local-Client>`__  
+branch of the example repository. 
+
+Your mobile application is now ready to sync data in real-time from MongoDB.
+
+.. note:: 
+   
+   You have probably noticed that the Realm data has not yet been migrated. 
+   This guide assumes that the MongoDB cluster hosted in Atlas is the source of 
+   truth for the data and sync this to the application. Migrating local data is 
+   out of scope for this tutorial but may be addressed in future documentation.
+
+Phase 4: Sync Data from Atlas to PowerSync
+------------------------------------------
+
+Initial Setup
+-------------
+
+You should now have a running PowerSync service that contains synchronized data 
+from Atlas, which has been verified using the PowerSync diagnostics tool.
+
+In this phase, you will get this data to sync into the React Native application.
+
+To get started, you need to create a way to set some environment variables for tokens and endpoints.
+
+First, install ``react-native-dotenv`` to your dev dependencies. This is a babel 
+plugin that takes a ``.env`` file from the root of the project and enables you to 
+import environment variables directly into the application.
+
+.. code-block:: bash
+
+   npm install -D react-native-dotenv
+
+Next, extend the ``babel.config.js``:
+
+.. code-block:: javascript
+
+   module.exports = {
+     presets: ['module:metro-react-native-babel-preset'],
+     plugins: ['module:react-native-dotenv'],
+   };
+
+Then, add typings in ``types/env.d.ts`` for the variables we want to import:
+
+.. code-block:: typescript
+
+   declare module '@env' {
+     export const AUTH_TOKEN: string;
+     export const POWERSYNC_ENDPOINT: string;
+   }
+
+From PowerSync, you will retrieve the values you need for the environment variables.
+
+In the left sidebar, click **…** next to **TodoList** to open the context menu 
+for this instance, and select **Edit Instance**. Copy the URL, and save it for 
+future reference.
+
+.. image:: /images/migration/react_native_guide/image6.png
+   :alt: Screenshot of the UI
+   :lightbox:
+
+Next, generate a new dev token for your instance with the **subject/user_id**
+``mockUserId``. Copy the generated token, and save it for future reference.
+
+From your application project, create a ``.env`` file, and paste the PowerSync 
+endpoint and token that you saved:
+
+.. code-block:: text
+
+   POWERSYNC_ENDPOINT=<endpoint>
+   AUTH_TOKEN=<dev-token>
+
+Refactor Client Code
+--------------------
+
+You will need to refactor your application slightly so that it can connect to 
+your PowerSync instance.
+
+First, create a new file in ``source`` called ``PowerSync.ts`` and paste in the following:
+
+.. code-block:: javascript
+
+   import { AppSchema } from './ItemSchema';
+   import {
+     AbstractPowerSyncDatabase,
+     PowerSyncDatabase,
+   } from '@powersync/react-native';
+
+   import { AUTH_TOKEN, POWERSYNC_ENDPOINT } from '@env';
+
+   const powerSync = new PowerSyncDatabase({
+     schema: AppSchema,
+     database: {
+       dbFilename: 'powersync.db',
+     },
+   });
+
+   powerSync.init();
+
+   class Connector {
+     async fetchCredentials() {
+       return {
+         endpoint: POWERSYNC_ENDPOINT,
+         token: AUTH_TOKEN,
+       };
+     }
+     async uploadData(database: AbstractPowerSyncDatabase) {
+       console.log('Uploading data');
+     }
+   }
+
+   export const setupPowerSync = (): PowerSyncDatabase => {
+     const connector = new Connector();
+     powerSync.connect(connector);
+     return powerSync;
+   };
+
+   export const resetPowerSync = async () => {
+     await powerSync.disconnectAndClear();
+     setupPowerSync();
+   };
+
+This file does the following:
+
+- Creates a new ``Connector`` class, which will be used to set the dev token and 
+  PowerSync endpoint in our PowerSync client.
+- Defines a mocked-out ``uploadData`` function, which will be used in the following
+  phase to push changes to Atlas.
+- Defines methods to set and reset our PowerSync client. Resetting the client will 
+  be useful for development right now, as any changes made will be placed in a queue. 
+  Until these changes are processed, you won’t be receiving any new updates.
+
+Next, update ``AppWrapper.tsx`` to use the new ``setupPowerSync`` method:
+
+.. code-block:: javascript
+
+   import { PowerSyncContext } from '@powersync/react-native';
+   import React from 'react';
+   import { App } from './App';
+   import { setupPowerSync } from './PowerSync';
+
+   const powerSync = setupPowerSync();
+
+   export const AppWrapper = () => {
+     return (
+       <PowerSyncContext.Provider value={powerSync}>
+         <App />
+       </PowerSyncContext.Provider>
+     );
+   };
+
+Then, refactor ``LogoutButton.tsx`` to implement the ``resetPowerSync`` method. 
+Rename it to ``ResetButton.tsx`` and update its contents as follows:
+
+.. code-block:: javascript
+
+   import React, { useCallback } from 'react';
+   import { Pressable, Alert, View, Text, StyleSheet } from 'react-native';
+   import { colors } from './Colors';
+   import { resetPowerSync } from './PowerSync';
+
+   export function ResetButton() {
+     const signOut = useCallback(() => {
+       resetPowerSync();
+     }, []);
+
+     return (
+       <Pressable
+         onPress={() => {
+           Alert.alert('Reset Database?', '', [
+             {
+               text: 'Yes, Reset Database',
+               style: 'destructive',
+               onPress: () => signOut(),
+             },
+             { text: 'Cancel', style: 'cancel' },
+           ]);
+         }}>
+         <View style={styles.buttonContainer}>
+           <Text style={styles.buttonText}>Reset</Text>
+         </View>
+       </Pressable>
+     );
+   }
+
+   // styles...
+
+Then, modify ``App.tsx`` to show the ``Reset`` button in the left side of the header:
+
+.. code-block:: javascript
+
+   // other imports ...
+
+   import { ResetButton } from './ResetButton';
+
+   //...
+
+   const headerLeft = () => {
+     return <ResetButton />;
+   };
+
+   export const App = () => {
+     return (
+       <>
+         <SafeAreaProvider>
+           <NavigationContainer>
+             <Stack.Navigator>
+               <Stack.Screen
+                 name="Your To-Do List"
+                 component={ItemListView}
+                 options={{
+                   headerTitleAlign: 'center',
+                   headerLeft,
+                   //headerRight,
+                 }}
+               />
+             </Stack.Navigator>
+           </NavigationContainer>
+
+           <View style={styles.footer}>
+             <Text style={styles.footerText}>
+               Log in with the same account on another device or simulator to see
+               your list sync in real time.
+             </Text>
+           </View>
+         </SafeAreaProvider>
+       </>
+     );
+   };
+
+   // styles...
+
+Run and Verify Changes
+----------------------
+
+Lastly, the ``react-native-dotenv`` library requires our React Native server to be 
+reset with a cleared cache, which is normal when adding functionality to Babel.
+
+To do this, bring down any currently running React Native instances with ``ctrl-c``, 
+then enter the following to run the instance with a cleared cache:
+
+.. code-block:: bash
+
+   npm start -- --reset-cache
+
+You should now be all set up to sync your Atlas data into your React Native application.
+
+Now reset the application. If you made modifications to the application's local 
+database before, you will need to click the new ``Reset`` button to reset the local 
+database with the contents of what is stored in Atlas.
+
+You should now see all the todo list items for ``mockUserId``: 
+
+.. image:: /images/migration/react_native_guide/image19.png
+   :alt: Screenshot of the UI
+   :lightbox:
+
+If you encounter issues, delete the application in your emulator/simulator and 
+rebuild it to start from scratch.
+
+If you are still encountering issues, you can view the changes made up to this 
+point in the 
+`03-Sync-Data-From-Atlas <https://github.com/takameyer/realm2powersync/tree/03-Sync-Data-From-Atlas>`__ 
+branch of the example repository.
