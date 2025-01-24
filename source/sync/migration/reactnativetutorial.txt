@@ -177,6 +177,8 @@ Refer to the Installation guide instructions for your operating system.
 After you have installed database-tools, enter the following in the terminal
 to confirm that you can access ``mongoimport``:
 
+.. code-block:: bash
+
    mongoimport --version
 
 This should return the version of the tool. Consult the above Installation
@@ -245,10 +247,14 @@ for filtering examples later in this tutorial.
 To import this JSON, enter the following command, replacing the
 ``<connection-string>`` placeholder with your connection string:
 
+.. code-block:: bash
+
    mongoimport --uri="<connection-string>" --db=PowerSync --collection=Item
    --file=sample.json --jsonArray
 
 You should see the following message:
+
+.. code-block:: bash
 
    10 document(s) imported successfully. 0 document(s) failed to import.
 
@@ -308,7 +314,7 @@ minutes to complete.
 After your instance is deployed, you can ensure that you can view the migrated
 data by creating some basic sync rules.
 
-First, remove the default sync rules and replace them with the following::
+First, remove the default sync rules and replace them with the following:
 
 .. code-block:: bash
 
@@ -403,16 +409,16 @@ You now have all the services necessary to sync your MongoDB database to a
 mobile application.
 
 Phase 2: Prepare Realm App for Migration
-========================================
+----------------------------------------
 
 Clone Initial Project
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 In this phase, you are going to clone a Realm todo list application for React 
-Native. The `main` branch of the `example repository <https://github.com/takameyer/realm2powersync>`_
+Native. The ``main`` branch of the `example repository <https://github.com/takameyer/realm2powersync>`_
 contains the final result of the migration.
 
-To follow along with this guide using the example repo, checkout the `00-Start-Here` 
+To follow along with this guide using the example repo, checkout the ``00-Start-Here``
 branch:
 
 .. code-block:: bash
@@ -433,15 +439,15 @@ Sync service, it is not yet runnable. In the next steps, you will make the
 modifications needed to run the project as a local-only application.
 
 Refactor Device Sync Project to Local Only
-------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You must remove the Atlas Device Sync parts so that the application is 
 running with local-only data. 
 
-First, open `source/AppWrapper.txs`, and remove the `AppProvider`, 
-`UserProvider`, and `sync` configuration. 
+First, open ``source/AppWrapper.txs``, and remove the ``AppProvider``, 
+``UserProvider``, and ``sync`` configuration. 
 
-The updated `AppWrapper.txs` file should resemble the following:
+The updated ``AppWrapper.txs`` file should resemble the following:
 
 .. code-block:: javascript
 
@@ -471,11 +477,11 @@ The updated `AppWrapper.txs` file should resemble the following:
 
    // styles...
 
-Next, open `source/App.tsx`, and remove the parts about `dataExplorerLink` 
-and the header buttons for `OfflineMode` and `Logout` (this will be implemented 
+Next, open ``source/App.tsx``, and remove the parts about ``dataExplorerLink`` 
+and the header buttons for ``OfflineMode`` and ``Logout`` (this will be implemented 
 later).
 
-The updated `App.tsx` file should resemble the following:
+The updated ``App.tsx`` file should resemble the following:
 
 .. code-block:: javascript
 
@@ -532,16 +538,16 @@ The updated `App.tsx` file should resemble the following:
 
    // styles...
 
-Finally, open `source/ItemListView.tsx`, and make the following updates:
+Finally, open ``source/ItemListView.tsx``, and make the following updates:
 
 - Remove the flexible sync subscription code
-- Replace user with a mock user
-  - `const user={ id: 'mockUserId' };`
-- Remove any `dataExplorerer` references
-- Remove functionality of the `Show All Tasks` switch (this will be implemented 
+- Replace user with a mock user:
+  - ``const user={ id: 'mockUserId' };``
+- Remove any ``dataExplorerer`` references
+- Remove functionality of the ``Show All Tasks`` switch (this will be implemented 
   later)
 
-The updated `ItemListView.tsx` file should resemble the following:
+The updated ``ItemListView.tsx`` file should resemble the following:
 
 .. code-block:: javascript
 
@@ -682,7 +688,7 @@ The updated `ItemListView.tsx` file should resemble the following:
 With these changes, the app should work against a local database.
 
 Run and Verify Changes
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Before you begin the migration, you need to build and run the updated 
 application to verify that it works as intended. 
@@ -711,7 +717,7 @@ be able to:
 - Mark items as done
 - Delete items
 
-   .. image:: /images/migration/react_native_guide/image16.png
-      :alt: Screenshot of the UI
-      :lightbox:
+.. image:: /images/migration/react_native_guide/image16.png
+   :alt: Screenshot of the UI
+   :lightbox:
 
