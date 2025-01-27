@@ -1,9 +1,5 @@
 # August 9, 2024
 
-## Edge Server
-
-- Update all page titles to include "preview"
-
 ## Tutorial
 
 - GitHub webhook integration tutorial was missing the fact that the secret needs to be appended to the URL, not sent as a GitHub secret in the body.
@@ -104,7 +100,7 @@
 
 ## Release Notes
 
-- Update external changelog with release notes for the CLI, Edge Server, Atlas Events, and more.
+- Update external changelog with release notes for the CLI, Atlas Events, and more.
 
 ## Internal
 
@@ -127,7 +123,7 @@
 - Throughout docs
   - Typo fixes: Change "the the" to "the" on several pages.
   - Add meta information for internal search improvements to pages with the typo fixes.
-  - Replace images on the App Services, Device Sync, and Edge Server landing pages with images that are more compatible with upcoming dark mode support.
+  - Replace images on the App Services, and Device Sync landing pages with images that are more compatible with upcoming dark mode support.
 
 # June 14, 2024
 
@@ -175,17 +171,13 @@
 
 ## Release Notes
 
-- Update external changelog with release notes for Device Sync and Edge Server dashboard updates and a change for requests authenticated through Private Link.
+- Update external changelog with release notes for Device Sync dashboard updates and a change for requests authenticated through Private Link.
 
 # May 24, 2024
 
 ## Device Sync
 
 - Configure Sync/Enable Atlas Device Sync: For the Admin API procedure, add a step for enabling Development Mode and clarify procedure steps for enabling Sync.
-
-## Edge Server
-
-- Manage Edge Servers: Add a new "Edge Server Limitations" section with details about Edge Server not supporting time series collections, the full range of MongoDB Aggregation and CRUD APIs, or Data Ingest.
 
 ## Secure Your App
 
@@ -207,39 +199,7 @@
 
 - Internal: Update test suite dependencies to resolve security vulnerability alerts.
 
-# May 10, 2024
-
-## Edge Server
-
-- Configure Edge Server: New "Simulate Offline Connectivity" section describing how to use offline demo mode.
-
 # May 3, 2024
-
-## Edge Server
-
-- Landing Page:
-  - Update details for Public Preview. Add information about using MongoDB Drivers and tools. Update existing information about Atlas Device SDK-specific behavior.
-  - Landing Page: Add marketing CTA and link to Public Preview announcement blog entry.
-- Manage Edge Servers: New page describing how to manage Edge Servers in Atlas.
-- Configure Edge Server:
-  - Update the page for the Public Preview. Add `edgectl` commands and build out new sections with additional details.
-  - Add information about managing `edgectl` profiles with the various `profile` commands.
-  - New "Simulate Offline Connectivity" section describing how to use offline demo mode.
-- Connect to an Edge Server: Update the page for the Public Preview. Add details about roaming with Atlas Device SDK, connecting with the Wire Protocol with authentication, and connecting with Compass.
-- Edge Server MongoDB API Support: Add `findAndModify` command to update options.
-- Edge Server Permissions Guide: New page providing a high-level overview of Edge Server permissions and how they relate to client permissions.
-- Monitor Edge Server: New page with information about Edge Server logs, metrics, and status.
-
-## Reference
-
-- Admin API: New Edge Server endpoints:
-  - List Edge Server instances
-  - Get information about an Edge Server instance
-  - Create an Edge Server instance
-  - Delete an Edge Server instance
-  - Regenerate an Edge Server registration key
-  - Rename an Edge Server instance
-- Billing: New "Atlas Edge Server" section with high-level information about billing while in Public Preview.
 
 ## Release Notes
 
@@ -498,11 +458,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 - Migrate Device Sync Modes: Remove duplicate sentence.
 
-## Edge Server
-
-- Configure Edge Server: Update the config object to remove fields that are no longer present and add new fields.
-- Connect to Edge Server: Update instructions to connect to the Edge Server to refer to `baseURL` instead of `hostname`.
-
 ## Define Data Access Permissions
 
 - Role-based Permissions: Add note about security consideration for roles and filters for queries.
@@ -558,11 +513,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
   - Add Flutter SDK to the list of SDKs that support Data Ingest.
   - Note that attempting to change an indexed queryable field value on device causes a compensating write error. Link to the compensating write error documentation for more information.
 - Handle Errors/Sync Errors: Add attempting to change an indexed queryable field value to the list of conditions that can trigger a compensating write error.
-
-## Edge Server
-
-- Connect to Edge Server: Move the "Connect" section from the "Use MongoDB APIs with Edge Server" page. Add details about the different ways you can connect - via Device SDK or the MongoDB connection URI.
-- Use MongoDB APIs with Edge Server: Remove the "Connect" section. Link to its new location on the "Connect to Edge Server" page.
 
 ## Data API
 
@@ -620,10 +570,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 - Update external change log with release notes for dark mode, disabling PBS in the UI, and more.
 
 # November 10, 2023
-
-## Edge Server
-
-- Configure Edge Server: Clarify "Required Network Access" details.
 
 ## Functions
 
@@ -693,10 +639,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 # October 6, 2023
 
-## Edge Server
-
-- Configure Edge Server: Add details for upgrading the Edge Server.
-
 ## Data API
 
 - Custom HTTPS Endpoints: Add more detail for creating a custom HTTPS endpoint function.
@@ -719,10 +661,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 # September 29, 2023
 
-## Edge Server
-
-- Landing Page: Update the CTA to learn more about the Preview to point to a new Edge Server product marketing page.
-
 ## Data API
 
 - Data API OpenAPI Reference: Fix a semantic error in the spec. This resolves a HELP issue with a customer getting errors when trying to use the spec in an internal tool and in Swagger.
@@ -736,13 +674,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 ## Device Sync
 
 - Configure Sync/Sync Settings: Development Mode: Add "Breaking Changes" subsection with details on an update that allows breaking changes in development mode.
-
-## Edge Server
-
-- Landing Page: Create landing page for the new Edge Server section.
-- Configure to Edge Server: Create a new subpage with installation requirements and instructions for configuring Edge Server.
-- Connect to Edge Server: Create a new subpage for connecting to the Edge Server with an example from the SwiftUI template app.
-- Use MongoDB APIs with Edge Server: Create a new subpage with details on MongoDB operations via wireprotocol supported by Edge Server.
 
 ## Data API
 
@@ -766,10 +697,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
   - Triggers/Create a Trigger: Update `POST` for creating a trigger to use `function_id` in example payload instead of `function_name` and `event_processors`.
 
 # September 8, 2023
-
-## App Builder's Resources
-
-- Configure & Connect to an Edge Server: Fix small spelling typo.
 
 ## Device Sync
 
@@ -941,12 +868,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 - Add 12 July 2023 and 28 June 2023 release notes
 
-# July 14, 2023
-
-## Device Sync
-
-- Edge Server: Update `tiered_sync` naming to `edge_server` based on engineering updates, add more supported auth providers, clarify websocket connection details
-
 # July 3, 2023
 
 ## Triggers
@@ -975,7 +896,6 @@ Device Sync-Compatible Permissions: Add information about Sync ignoring custom c
 
 ## Device Sync
 
-- App Builder/Configure & Connect to an Edge Server: Rename "Tiered Device Sync" to "Edge Server" and make the page public
 - Migrate Sync Modes: Add .NET SDK v11.1.0 as a minimum SDK version that supports Partition-Based Sync to Flexible Sync migration
 
 ## Other
