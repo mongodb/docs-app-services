@@ -58,10 +58,6 @@ Atlas App Services Changelog
 10 July 2024 Release
 ~~~~~~~~~~~~~~~~~~~~
 
-- Edge Server
-
-  - You can now track the bootstrap progress percentage in the status section of the Edge Server local UI. 
-
 - :ref:`Enabling automatic deployment <deploy-github>` allows App Services to automatically push a copy of your App to your designated repository, 
   making the :guilabel:`Export your application and upload to GitHub` section in the :guilabel:`Deployment` screen unnecessary. The section is removed and 
   the description under the :guilabel:`Enable Automatic Deployment` section is updated to make this behavior clear. 
@@ -108,13 +104,6 @@ Atlas App Services Changelog
 
   - The CLI command, ``appservices app diff``, now returns the App diff even when there is an error, such as a breaking change.
 
-- Edge Server
-
-  - Fix incorrect prompt for connection strings that included a trailing slash. Atlas Device SDK clients expect no 
-    trailing slash in the connection string.
-
-  - MongDB Compass now correctly shows the count of documents when connecting to an Edge Wire Protocol Server.
-
 - To make billing more intuitive, App Services usage is charged at a daily instead of monthly rate. 
   Free tier App limits are updated to reflect the new daily model. For more information, see the :ref:`Billing <billing>` page. 
 
@@ -122,8 +111,7 @@ Atlas App Services Changelog
 
 - If a Function name contains incorrect formatting upon creation of the Function, the Function name now appears in the validation error message for easy identification.
  
-- :ref:`Timeseries collections <time-series-limitation>` not using data ingest are sync incompatible. Fixed error where Edge Server or Sync 
-  instances would attempt to generate schemas for sync-incompatible time series collections.
+- :ref:`Timeseries collections <time-series-limitation>` not using data ingest are sync incompatible. 
 
 .. _backend_20240605:
 
@@ -148,8 +136,6 @@ Atlas App Services Changelog
 - Device Sync apps with an indexed queryable field now support schemas that do not contain the indexed queryable field. 
   Previously, the indexed queryable field was required to appear in the schemas of all of your Sync collections. 
 
-- Fixed Edge Server authentication for Email/Password authentication with the C++ driver.
-
 .. _backend_20240522:
 
 22 May 2024 Release
@@ -159,9 +145,6 @@ Atlas App Services Changelog
   checked against the app's IP Access List.
 
 - The Device Sync Dashboard shows a more up-to-date time for Last Cluster Event Processed.
-
-- In the Edge Server dashboard, the Last Connection time is shown in more readable 
-  time units rather than as a timestamp. 
 
 .. _backend_20240508:
 
@@ -240,7 +223,6 @@ Atlas App Services Changelog
 
 - Updated ``ErrOperationCanceled`` error message to be more descriptive where appropriate.
 
-- Edge Server now respects client reset message from Cloud Sync Servers. 
 
 .. _backend_20240306:
 
@@ -297,8 +279,6 @@ Atlas App Services Changelog
 - Raised the default websocket read limit from 16 MB to 20 MB. Added an app-level config setting to raise the read limit if needed.
 
 - Added an App Services Admin API endpoint to trigger a client reset.
-  
-- Added Edge Server support for multi-architecture builds for Raspberry Pi.
 
 .. _backend_20240110:
 
@@ -418,8 +398,6 @@ Atlas App Services Changelog
 
 - Added support for programmatic informational CLI announcements.
 
-- Added support for ``show dbs`` and ``show collections`` on the Atlas Edge Server.
-
 - UI Improvements
 
   - Trigger match and project expressions maintain formatting and are prettified on reload.
@@ -494,7 +472,6 @@ Atlas App Services Changelog
 12 July 2023 Release
 ~~~~~~~~~~~~~~~~~~~~
 
-- Renamed "Tiered Device Sync" to "Device Sync Edge Server"
 - Added "Device Sync" to the left side navigation in the Atlas UI
 
 .. _backend_20230628:
