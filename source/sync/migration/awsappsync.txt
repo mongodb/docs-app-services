@@ -36,9 +36,9 @@ The following diagram shows the typical Device Sync architecture:
 .. image:: /images/migration/device_sync_architecture.png
    :alt: A diagram showing a typical Device Sync architecture.
 
-In this architecture, your app uses the Realm APIs to communicate directly with 
-Atlas App Services, which handles data storage, synchronization, and conflict 
-resolution.
+In this architecture, your app uses the Atlas Device Sync APIs to communicate 
+directly with Atlas App Services, which handles data storage, synchronization, 
+and conflict resolution.
 
 The data flow is:
 
@@ -47,7 +47,7 @@ The data flow is:
 - Device Sync APIs send changes to Atlas App Services.
 - Atlas App Services performs any necessary conflict resolution, stores the changes 
   in Atlas, and syncs the changes to the other devices.
-- Device Sync APIs updates the data in each device’s local realm.
+- Device Sync APIs update the data in each device’s local realm.
 
 AWS AppServices
 ~~~~~~~~~~~~~~~
@@ -60,11 +60,11 @@ following changes to your architecture:
 - Use AWS Event Bridge to listen for event triggers from Atlas 
 - Add a Database Trigger to Atlas 
 
-You will also change 2 parts of your client code:
+You also need to change the following in your client code:
 
-- Because AppSync uses GraphQL, you will use the AWS AppSync API to communicate 
-  with it AppSync
-- The local data store also changes from a Realm database to the default 
+- Because AppSync uses GraphQL, you need to use AWS AppSync APIs to access 
+  GraphQL endpoints from your application.
+- Change the local datastore from a Realm database to the default 
   datastore on the device (typically SQLite), or another one of your choice.
 
 The following diagram shows a typical example of the new architecture:
