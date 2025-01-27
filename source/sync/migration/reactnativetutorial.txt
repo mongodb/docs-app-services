@@ -65,13 +65,14 @@ already have a cluster deployed, feel free to skip ahead.
       :alt: Screenshot of the UI
       :lightbox:
 
-   From this screen, copy the URL that displays in step 3. Add your connection
-   string into your application code. This is your connection string; it is
-   required to access your MongoDB instance.
-
-   Save the connection string for future reference. You will create a username
-   and password in the next steps that the PowerSync instance will use to
-   connect to the database.
+   From this screen, copy the URL that displays in step 3. 
+   
+   **Add your connection string into your application code.** This is your 
+   connection string; it is required to access your MongoDB instance. Save the 
+   connection string for future reference. 
+   
+   You will create a username and password in the next steps that the PowerSync 
+   instance will use to connect to the database.
 
 5. Click **Done** to close the modal.
 
@@ -117,7 +118,7 @@ already have a cluster deployed, feel free to skip ahead.
       :alt: Screenshot of the UI
       :lightbox:
 
-   Click **Add New Database User**, and create a new user called powersync and
+   Click **Add New Database User**, and create a new user called ``powersync`` and
    provide a password. Note the username and password to use in the connection
    string you copied earlier.
 
@@ -145,14 +146,17 @@ already have a cluster deployed, feel free to skip ahead.
       :lightbox:
 
 For more details on user permissions, refer to the MongoDB section of the
-PowerSync Source Database Setup guide.
+`PowerSync Source Database Setup <https://docs.powersync.com/installation/database-setup#permissions-required-mongodb-atlas>__ 
+guide.
 
 Add PowerSync IPs to IP Access List
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order for PowerSync to access the database running in Atlas, you must add
 the service IP addresses to the IP access list. These IP addresses are listed
-in the PowerSync Security & IP Filtering documentation.
+in the 
+`PowerSync Security & IP Filtering <https://docs.powersync.com/installation/database-setup/security-and-ip-filtering>`__ 
+documentation.
 
 In the left sidebar, click **Network Access** under the Security heading.
 
@@ -172,9 +176,10 @@ In this step, you will import some sample data that will be used to sync data
 in future steps.
 
 First, install MongoDB Database Tools to gain access to ``mongoimport``.
-Refer to the Installation guide instructions for your operating system.
+Refer to the `Installation guide <https://www.mongodb.com/docs/database-tools/installation/>`__ 
+instructions for your operating system.
 
-After you have installed database-tools, enter the following in the terminal
+After you have installed ``database-tools``, enter the following in the terminal
 to confirm that you can access ``mongoimport``:
 
 .. code-block:: bash
@@ -273,12 +278,12 @@ Compass, you must connect using the same connection string.
 Setup PowerSync
 ~~~~~~~~~~~~~~~
 
-Now navigate to PowerSync and register or sign in.
+Now navigate to `PowerSync <https://www.powersync.com>`__ and register or sign in.
 
 If you are signing in for the first time, you will need to create a new
 instance to get started.
 
-Create a new instance called TodoList.
+Create a new instance called ``TodoList``.
 
 .. image:: /images/migration/react_native_guide/image5.png
    :alt: Screenshot of the UI
@@ -330,9 +335,9 @@ For items to sync correctly to the PowerSync service, note the following:
 - The ``_id`` must be mapped to ``id``.
 - The collection name “Item” must be enclosed in quotation marks. This is
   because our collection name starts with a capital letter.
-- The user-specific buckets must match to a user_id of global, which provides
+- The user-specific buckets must match to a ``user_id`` of ``global``, which provides
   access to the entire database. Otherwise, you will match on the provided
-  user_id, which will be retrieved from the auth token.
+  ``user_id``, which will be retrieved from the auth token.
 
 Note that PowerSync Sync Rules are a pretty deep topic. To learn more, you can
 check out this Sync Rules blog post or the PowerSync Sync Rules documentation.
@@ -375,15 +380,16 @@ Click the ellipsis (…) next to TodoList to open the context menu for this
 instance again, and select **Generate Development Token**.
 
 You will be asked to provide a token subject/user_id. This will act as the
-user_id, and you can set up your sync rules to act upon it.
+``user_id``, and you can set up your sync rules to act upon it.
 
 With the sync rules we defined earlier, you can set the subject/user_id to
 ``global`` to generate a token that will have access to the entire dataset. You
 can also set this to ``mockUserId`` or ``mockUserId2`` to sync on a specific
 ``owner_id``.
 
-Copy the generated token, then open the Diagnostics App and paste in the
-Development Token.
+Copy the generated token, then open the 
+`Diagnostics App <https://diagnostics-app.powersync.com/login>`__ and paste in 
+the Development Token.
 
 .. note::
 
@@ -693,18 +699,18 @@ Run and Verify Changes
 Before you begin the migration, you need to build and run the updated 
 application to verify that it works as intended. 
 
-- For iOS, run the following commands:
+For iOS, run the following commands:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-     npx pod-install
-     npm run ios
+   npx pod-install
+   npm run ios
 
-- For Android, run the following command:
+For Android, run the following command:
 
-  .. code-block:: bash
+.. code-block:: bash
 
-     npm run android
+   npm run android
 
 Note that any build errors are out of the scope of this documentation. If you 
 are experiencing build-related issues, consult the `React Native documentation <https://reactnative.dev/docs/set-up-your-environment>`__
@@ -779,19 +785,24 @@ Refer to the `PowerSync MongoDB Type Mapping <https://docs.powersync.com/usage/s
 documentation to determine how to set up your specific schema. The following is 
 a quick reference of the available types:
 
-+---------+--------------------------------------+
-| Type    | Description                          |
-+=========+======================================+
-| null    | undefined, or unset values           |
-+---------+--------------------------------------+
-| integer | a 64-bit signed integer              |
-+---------+--------------------------------------+
-| real    | a 64-bit floating point number       |
-+---------+--------------------------------------+
-| text    | an UTF-8 text string                 |
-+---------+--------------------------------------+
-| blob    | binary data                          |
-+---------+--------------------------------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 6 18
+
+   * - Type
+     - Description
+
+   * - null
+     - undefined, or unset values
+   * - integer
+     - a 64-bit signed integer
+   * - real
+     - a 64-bit floating point number
+   * - text
+     - a UTF-8 text string  
+   * - blob
+     - binary data
+
 
 For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows:
 
@@ -812,8 +823,11 @@ For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows:
    export type Database = (typeof AppSchema)['types'];
    export type Item = Database['Item'];
 
-IMPORTANT: The property name passed into ``Schema`` represents the name of the 
-local table and the MongoDB collection. In this case, ensure it is named ``Item``.
+.. important::
+   
+   The property name passed into ``Schema`` represents the name of the 
+   local table and the MongoDB collection. In this case, ensure it is named 
+   ``Item``.
 
 Note that this code exports the types directly out of the ``AppSchema``, instead 
 of having to define them manually.
@@ -1533,9 +1547,9 @@ First, create an `index.js` with the following contents:
 
 Note from the service above that the ``isComplete`` is coerced into a ``boolean``
 value. This ensures that the new todolist items arrive into MongoDB with ``true`` or
-``false```` instead of a 0 or 1. An ``ObjectId`` instance is also being created out of the
-``op.id``. Setting this to the ``_id`` property will shape the data to MongoDB
-requirements and best practices.
+``false`` instead of a ``1`` or ``0``. An ``ObjectId`` instance is also being 
+created out of the ``op.id``. Setting this to the ``_id`` property will shape the 
+data to MongoDB requirements and best practices.
 
 Run and Verify Changes
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -1556,6 +1570,15 @@ MongoDB Compass.
 .. image:: /images/migration/react_native_guide/image15.gif
    :alt: Screenshot of the UI
    :lightbox:
+
+You should now have a fully functional mobile application that syncs data to and 
+from Atlas. You can also try turning off the wifi to test how the app functions 
+when it is offline.
+
+If you encounter issues, you can view the changes made up to this point in the 
+`04-Write-To-Backend <https://github.com/takameyer/realm2powersync/tree/04-Write-To-Backend>`__ 
+branch of the example repository. 
+
 
 Phase 6: Final Touches and Clean Up
 -----------------------------------
