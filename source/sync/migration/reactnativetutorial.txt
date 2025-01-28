@@ -29,6 +29,8 @@ PowerSync. Your backend data will stay in Atlas, so you will need to
 configure the PowerSync service, update the local database schemas and
 bindings, and set up a backend service for writing to Atlas.
 
+This tutorial uses a Realm todo list application for React Native available in the [realm2powersync example repository](https://github.com/takameyer/realm2powersync/tree/main). 
+
 Phase 1: Preparation and Setup
 ------------------------------
 
@@ -142,8 +144,7 @@ already have a cluster deployed, feel free to skip ahead.
       :lightbox:
 
 For more details on user permissions, refer to the MongoDB section of the
-`PowerSync Source Database Setup 
-<https://docs.powersync.com/installation/database-setup#permissions-required-mongodb-atlas>`__ 
+`PowerSync Source Database Setup <https://docs.powersync.com/installation/database-setup#permissions-required-mongodb-atlas>`__ 
 guide.
 
 Add PowerSync IPs to IP Access List
@@ -307,8 +308,9 @@ service IPs are in your Atlas IP access list.
    :alt: Screenshot of the UI
    :lightbox:
 
-If you are still having issues, refer to the PowerSync Database Connection
-Guide for MongoDB connections.
+If you are still having issues, refer to the 
+`PowerSync Database Connection Guide <https://docs.powersync.com/installation/database-connection#mongodb-beta-specifics>`__ 
+for MongoDB connections.
 
 Click **Next** to deploy your new PowerSync instance. This can take a few
 minutes to complete.
@@ -336,8 +338,10 @@ For items to sync correctly to the PowerSync service, note the following:
   access to the entire database. Otherwise, you will match on the provided
   ``user_id``, which will be retrieved from the auth token.
 
-Note that PowerSync Sync Rules are a pretty deep topic. To learn more, you can
-check out this Sync Rules blog post or the PowerSync Sync Rules documentation.
+Note that PowerSync Sync Rules are a pretty deep topic. To learn more, you can check out this 
+`Sync Rules blog post <https://www.powersync.com/blog/sync-rules-from-first-principles-partial-replication-to-sqlite>`__ 
+or the 
+`PowerSync Sync Rules <https://docs.powersync.com/usage/sync-rules>`__ documentation.
 
 Click **Save and Deploy**. Once again, it may take quite a few minutes for the
 deployment to finish.
@@ -350,15 +354,19 @@ After the deployment completes, you should see the following:
 
 After the deployment completes, you should see the appropriate status.
 
-If you get any errors, ensure that the PowerSync user is set up with the
-permissions listed in the PowerSync Source Database Setup documentation.
+If you get any errors, ensure that the `PowerSync` user is set up with the
+permissions listed in the 
+`PowerSync Source Database Setup <https://docs.powersync.com/installation/database-setup#mongodb-beta>`__ 
+documentation.
 
 Click **Manage instances** to review the sync rules and deployment status.
 
 View Synced Data
 ~~~~~~~~~~~~~~~~
 
-To finalize this setup, you will use the PowerSync Diagnostics App to view the
+To finalize this setup, you will use the 
+`PowerSync Diagnostics App <https://diagnostics-app.powersync.com/login>` 
+to view the
 to-do list items you have just created and added to your sync rules.
 
 To use this tool, you first need to create a development token.
