@@ -29,7 +29,8 @@ PowerSync. Your backend data will stay in Atlas, so you will need to
 configure the PowerSync service, update the local database schemas and
 bindings, and set up a backend service for writing to Atlas.
 
-This tutorial uses a Realm todo list application for React Native available in the [realm2powersync example repository](https://github.com/takameyer/realm2powersync/tree/main). 
+This tutorial uses a Realm todo list application for React Native available in the
+`realm2powersync example repository <https://github.com/takameyer/realm2powersync/tree/main>`__. 
 
 Phase 1: Preparation and Setup
 ------------------------------
@@ -320,7 +321,7 @@ data by creating some basic sync rules.
 
 First, remove the default sync rules and replace them with the following:
 
-.. code-block:: bash
+.. code-block:: yaml
 
    bucket_definitions:
      user_buckets:
@@ -365,9 +366,8 @@ View Synced Data
 ~~~~~~~~~~~~~~~~
 
 To finalize this setup, you will use the 
-`PowerSync Diagnostics App <https://diagnostics-app.powersync.com/login>` 
-to view the
-to-do list items you have just created and added to your sync rules.
+`PowerSync Diagnostics App <https://diagnostics-app.powersync.com/login>`__  
+to view the to-do list items you have just created and added to your sync rules.
 
 To use this tool, you first need to create a development token.
 
@@ -729,6 +729,7 @@ be able to:
 - Delete items
 
 .. image:: /images/migration/react_native_guide/image9.png
+   :width: 350px
    :alt: Screenshot of the UI
    :lightbox:
 
@@ -811,7 +812,7 @@ a quick reference of the available types:
 
 For this tutorial, you will modify ``source/ItemSchema.tsx`` as follows:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    import {column, Schema, Table} from '@powersync/react-native';
 
@@ -850,7 +851,7 @@ component.
 First, update ``source/AppWrapper.tsx`` to use the ``PowerSyncContext`` and 
 initialize your PowerSync client:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    import React from 'react';
    import {App} from './App';
@@ -882,7 +883,7 @@ must update the hooks used at the top of this component:
 
 Replace lines using ``@realm/react``, ``useQuery``, and ``useRealm`` to instead use the PowerSync hooks:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    export function ItemListView() {
      const db = usePowerSync();
@@ -903,7 +904,7 @@ also add try/catch blocks to propagate any errors to the frontend of the applica
 
 The ``createItem`` method can be implemented as follows:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    // createItem() takes in a summary and then creates an Item object with that summary
    const createItem = useCallback(
@@ -936,7 +937,7 @@ with the string result of the newly created ``ObjectId``.
 The ``deleteItem`` and ``toggleItemIsComplete`` methods are similar, so implement 
 them as follows:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    // deleteItem() deletes an Item with a particular _id
    const deleteItem = useCallback(
@@ -978,7 +979,7 @@ Finally, update the rendered ``FlatList`` to use ``id`` in place of ``_id``:
 
 The updated ``FlatList`` should now resemble the following:
 
-.. code-block:: jsx
+.. code-block:: javascript
 
    <FlatList
      keyExtractor={item => item.id}
@@ -1291,6 +1292,7 @@ database with the contents of what is stored in Atlas.
 You should now see all the todo list items for ``mockUserId``: 
 
 .. image:: /images/migration/react_native_guide/image19.png
+   :width: 350px
    :alt: Screenshot of the UI
    :lightbox:
 
@@ -1326,7 +1328,7 @@ are made in the mobile application.
 
 Make the following changes to ``source/PowerSync.ts``:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    async uploadData(database: AbstractPowerSyncDatabase) {
       const batch = await database.getCrudBatch();
@@ -1341,7 +1343,7 @@ Next, you’ll make changes in the mobile application that include:
 
 With the log messages above you can see the structure of these operations:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    } LOG  {
       "op_id": 11,
@@ -1387,7 +1389,7 @@ First, add a new value to your ``.env``:
 
 and ``types/env.d.ts``:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    declare module '@env' {
       export const AUTH_TOKEN: string;
@@ -1406,7 +1408,7 @@ local machine. To enable this, run the following command:
 Next, add an import of the ``BACKEND_ENDPOINT`` to ``source/PowerSync.ts``, and 
 update the ``uploadData`` method:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    async uploadData(database: AbstractPowerSyncDatabase) {
       const batch = await database.getCrudBatch();
@@ -1448,7 +1450,7 @@ Now, create a new folder in your project called ``backend``:
 
 Then, create a ``package.json`` file:
 
-.. code-block:: bash
+.. code-block:: json
 
    {
       "main": "index.js",
@@ -1483,7 +1485,7 @@ mobile application to be inserted into MongoDB.
 
 First, create an `index.js` with the following contents:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    const express = require("express");
    const { MongoClient, ObjectId } = require("mongodb");
@@ -1606,7 +1608,8 @@ Implement the Show All Toggle (Optional)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To implement the optional Show All toggle, a second bucket will be created
-that will be activated based on a `client parameter <https://docs.powersync.com/usage/sync-rules/advanced-topics/client-parameters>`__.
+that will be activated based on a 
+`client parameter <https://docs.powersync.com/usage/sync-rules/advanced-topics/client-parameters>`__.
 You will apply this by disconnecting the current sync session and
 reconnecting with a new value set. This value will be a boolean called
 ``view_all``, which will be used as an insecure backdoor to show all the
@@ -1626,7 +1629,7 @@ To get started, navigate to your PowerSync dashboard and update the
 sync-rules to include a bucket based on the ``view_all`` parameter being
 set:
 
-.. code-block:: bash
+.. code-block:: yaml
 
    bucket_definitions:
       user_buckets:
@@ -1650,7 +1653,7 @@ Next, update ``source/PowerSync.ts`` in your project to include a local
 variable to determine the ``view_all`` flag state, and apply it to the
 parameters of the connection instance:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    let viewAll = false;
    
@@ -1673,7 +1676,7 @@ parameters of the connection instance:
 Finally, update ``source/ItemListView.tsx`` to invoke the ``toggleViewAll``
 method in the ``onValueChange`` attribute of the “Show All Tasks” switch:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    <Text style={styles.toggleText}>Show All Tasks</Text>
    <Switch
@@ -1705,7 +1708,7 @@ PowerSync client.
 
 First, add the following to ``source/PowerSync.ts``:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    let connection = true;
    
@@ -1721,7 +1724,7 @@ First, add the following to ``source/PowerSync.ts``:
 Next, refactor the ``source/OfflineModeButton.tsx`` to remove the Realm
 functionality and replace it with by invoking the new method:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    import {toggleConnection} from './PowerSync';
    
@@ -1746,7 +1749,7 @@ functionality and replace it with by invoking the new method:
 Finally, open ``source/App.tsx`` and uncomment the ``headerRight``
 component back into the ``Stack.Screen`` of the application:
 
-.. code-block:: bash
+.. code-block:: javascript
 
    <Stack.Screen
       name="Your To-Do List"
