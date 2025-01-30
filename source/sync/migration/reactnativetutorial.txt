@@ -1762,14 +1762,14 @@ set:
          parameters: 
          - SELECT request.user_id() as user_id
          data:
-         - SELECT _id as id, - FROM "Item" WHERE bucket.user_id = 'global'
+         - SELECT _id as id FROM "Item" WHERE bucket.user_id = 'global'
             OR owner_id = bucket.user_id
       view_all_bucket:
          accept_potentially_dangerous_queries: true
          parameters:
          - SELECT (request.parameters() ->> 'view_all') as view_all 
          data:
-         - SELECT _id as id, -  FROM "Item" WHERE bucket.view_all = true
+         - SELECT _id as id FROM "Item" WHERE bucket.view_all = true
 
 Note that bucket definitions are combined together, so when the
 ``view_all_bucket`` is active, it will be added to the ``user_buckets``
@@ -1777,7 +1777,9 @@ data.
 
 Next, update ``source/PowerSync.ts`` in your project to include a local
 variable to determine the ``view_all`` flag state, and apply it to the
-parameters of the connection instance:
+parameters of the connection instance.
+
+First, add a ``viewAll`` parameter and update the ``setupPowerSync`` function:
 
 .. code-block:: javascript
 
@@ -1788,7 +1790,11 @@ parameters of the connection instance:
       powerSync.connect(connector, {params: {view_all: viewAll}});
       return powerSync;
    };
-   
+
+Then, add the following two functions:
+
+.. code-block:: javascript
+ 
    export const resetPowerSync = async () => {
       await powerSync.disconnectAndClear();
       setupPowerSync();
@@ -1799,8 +1805,18 @@ parameters of the connection instance:
       resetPowerSync();
    };
 
-Finally, update ``source/ItemListView.tsx`` to invoke the ``toggleViewAll``
-method in the ``onValueChange`` attribute of the “Show All Tasks” switch:
+
+Finally, update ``source/ItemListView.tsx``.
+
+First, import ``toggleViewAll`` from ``PowerSync``:
+
+.. code-block:: javascript
+
+   import { toggleViewAll } from './PowerSync';
+
+Then modify the ``onValueChange`` attribute of the “Show All Tasks” 
+switch to invoke the ``toggleViewAll`` method. Use the following code to 
+replace the ``Text`` and ``Switch`` components:
 
 .. code-block:: javascript
 
@@ -1848,10 +1864,14 @@ First, add the following to ``source/PowerSync.ts``:
    };
 
 Next, refactor the ``source/OfflineModeButton.tsx`` to remove the Realm
-functionality and replace it with by invoking the new method:
+functionality and replace it by invoking the new ``toggleConnection`` method. 
+You will also need to add some ``import``s:
 
 .. code-block:: javascript
 
+   import { useState } from 'react';
+   import { Pressable, Text, StyleSheet } from 'react-native';
+   import { colors } from './Colors';
    import {toggleConnection} from './PowerSync';
    
    export function OfflineModeButton() {
@@ -1870,12 +1890,18 @@ functionality and replace it with by invoking the new method:
       );
    }
    
-   // styles...
+   const styles = StyleSheet.create({
+     buttonText: {
+       padding: 12,
+       color: colors.primary,
+     },
+   });
 
 Finally, open ``source/App.tsx`` and uncomment the ``headerRight``
 component back into the ``Stack.Screen`` of the application:
 
 .. code-block:: javascript
+   :emphasize-lines: 7
 
    <Stack.Screen
       name="Your To-Do List"
