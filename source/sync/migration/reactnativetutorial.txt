@@ -458,6 +458,11 @@ branch:
 Next, install the dependencies, so that the editor can pick up any imports and 
 ensure there are no errors as you’re editing this project. 
 
+.. important::
+
+   This tutorial assumes you have the latest version of 
+   `Node.js <https://nodejs.org>`__ installed.
+
 .. code-block:: bash
 
    npm install
@@ -1474,6 +1479,9 @@ cases, you should consider using a cloud service to handle these requests (e.g.
 JourneyApps offers `serverless cloud functions <https://docs.journeyapps.com/reference
 /cloudcode/triggering-a-cloudcode-task/trigger-cc-via-http>`__ to help with this).
 
+Implement Upload Method
+~~~~~~~~~~~~~~~~~~~~~~~
+
 Begin by looking at the operations sent to the ``uploadData`` method when local changes
 are made in the mobile application.
 
@@ -1491,43 +1499,6 @@ Next, you’ll make changes in the mobile application that include:
 - Deleting an item
 - Toggling an item as complete or incomplete
 - Adding a new item
-
-With the log messages above you can see the structure of these operations:
-
-.. code-block:: javascript
-
-   } LOG  {
-      "op_id": 11,
-      "op": "PATCH",
-      "type": "Item",
-      "id": "67728b8839f5e3e9d6bbb72d",
-      "tx_id": 11,
-      "data": {
-         "isComplete": 0
-      }
-   } LOG  {
-      "op_id": 12,
-      "op": "DELETE",
-      "type": "Item",
-      "id": "67728b8839f5e3e9d6bbb72f",
-      "tx_id": 12
-   } LOG  {
-      "op_id": 13,
-      "op": "PUT",
-      "type": "Item",
-      "id": "677a7b9a8d89f19835ca0a07",
-      "tx_id": 13,
-      "data": {
-         "isComplete": 0,
-         "owner_id": "mockUserId",
-         "summary": "Test"
-      }
-   }'
-
-Implement Upload Method
-~~~~~~~~~~~~~~~~~~~~~~~
-
-You should have enough information to create a backend server.
 
 Finish implementing the ``uploadData`` method to send this information in a fetch
 request.
@@ -1741,7 +1712,6 @@ when it is offline.
 If you encounter issues, you can view the changes made up to this point in the 
 `04-Write-To-Backend <https://github.com/takameyer/realm2powersync/tree/04-Write-To-Backend>`__ 
 branch of the example repository. 
-
 
 Phase 6: Final Touches and Clean Up
 -----------------------------------
