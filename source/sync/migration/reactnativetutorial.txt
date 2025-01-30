@@ -69,6 +69,10 @@ already have a cluster deployed, feel free to skip ahead.
       :lightbox:
 
    From this screen, copy the URL that displays in step 3. 
+
+   .. image:: /images/migration/react_native_guide/image27.png
+      :alt: Screenshot of the UI
+      :lightbox:
    
    **Add your connection string into your application code.** This is your 
    connection string; it is required to access your MongoDB instance. Save the 
@@ -78,10 +82,6 @@ already have a cluster deployed, feel free to skip ahead.
    instance will use to connect to the database.
 
 5. Click **Done** to close the modal.
-
-   .. image:: /images/migration/react_native_guide/image27.png
-      :alt: Screenshot of the UI
-      :lightbox:
 
    After your cluster finishes deploying, your dashboard should look similar
    to the following.
@@ -129,7 +129,7 @@ already have a cluster deployed, feel free to skip ahead.
 
       If your username or password contains any of the following special
       characters, you must convert them to a URL-safe format for your connection
-      string: ``$``, ``:``, ``/``, ``?``, ``#``, ``[``, ``]``, ``@``. You can do this manually
+      string: ``$``, ``:``, ``/``, ``?``, ``!``, ``#``, ``[``, ``]``, ``@``. You can do this manually
       or use a URL-encoding application, such as `urlencoder.org <https://urlencoder.org>`__.
 
    In the **Database User Privileges** section, click **Add Specific Privilege** and
@@ -300,6 +300,15 @@ Select MongoDB as the connecting database.
 
 Use your Atlas connection string to populate the connection settings.
 
+.. important::
+
+   Use a shortened version of your connection string that does not contain 
+   your username, password, or other URL parameters. For example, your 
+   connection will look like ``mongodb+srv://m0cluster.h6folge.mongodb.net/``.
+
+Enter the Database name ("PowerSync"), username ("powersync"), and the password 
+you assigned to this account in a previous step.
+
 .. image:: /images/migration/react_native_guide/image20.png
    :alt: Screenshot of the UI
    :lightbox:
@@ -370,16 +379,15 @@ View Synced Data
 ~~~~~~~~~~~~~~~~
 
 To finalize this setup, you will use the 
-`PowerSync Diagnostics App <https://diagnostics-app.powersync.com/login>`__  
-to view the to-do list items you have just created and added to your sync rules.
+PowerSync Diagnostics App to view the to-do list items you have just created and 
+added to your sync rules. To use this tool, you first need to create a development 
+token.
 
-To use this tool, you first need to create a development token.
-
-In the left sidebar, click the ellipsis (…) next to TodoList to open the
-context menu for this instance, and select **Edit Instance**.
-
-Select the **Client Auth** tab, and click **Enable development tokens**. Click
-**Save and deploy**.
+- At the top of the PowerSync page, click ``Manage Instances``. 
+- In the left sidebar, click the ellipsis (…) next to TodoList to open the context menu for this instance, 
+and then select **Edit Instance**.
+- Select the **Client Auth** tab, and click **Enable development tokens**. 
+- Click **Save and deploy**.
 
 .. image:: /images/migration/react_native_guide/image14.png
    :alt: Screenshot of the UI
@@ -412,9 +420,13 @@ You should see a page similar to this one.
    :alt: Screenshot of the UI
    :lightbox:
 
-In the right sidebar, click **SQL Console**.
+In the left sidebar, click **SQL Console**.
 
-Create a ``SELECT`` query to view all items.
+Create a ``SELECT`` query to view all items:
+
+.. code-block:: bash
+
+   SELECT * FROM Item
 
 .. image:: /images/migration/react_native_guide/image8.png
    :width: 350px
@@ -491,7 +503,14 @@ The updated ``AppWrapper.txs`` file should resemble the following:
      );
    };
 
-   // styles...
+   const styles = StyleSheet.create({
+     activityContainer: {
+       flex: 1,
+       flexDirection: 'row',
+       justifyContent: 'space-around',
+       padding: 10,
+     },
+   });
 
 Next, open ``source/App.tsx``, and remove the parts about ``dataExplorerLink`` 
 and the header buttons for ``OfflineMode`` and ``Logout`` (this will be implemented 
@@ -552,7 +571,21 @@ The updated ``App.tsx`` file should resemble the following:
      );
    };
 
-   // styles...
+   const styles = StyleSheet.create({
+     footerText: {
+       fontSize: 12,
+       textAlign: 'center',
+       marginVertical: 4,
+     },
+     hyperlink: {
+       color: 'blue',
+     },
+     footer: {
+       paddingHorizontal: 24,
+       paddingVertical: 12,
+     },
+   });
+
 
 Finally, open ``source/ItemListView.tsx``, and make the following updates:
 
@@ -699,7 +732,75 @@ The updated ``ItemListView.tsx`` file should resemble the following:
      );
    }
 
-   // styles...
+   const styles = StyleSheet.create({
+     viewWrapper: {
+       flex: 1,
+     },
+     sectionContainer: {
+       marginTop: 32,
+       paddingHorizontal: 24,
+     },
+     addToDoButton: {
+       backgroundColor: colors.primary,
+       borderRadius: 4,
+       margin: 5,
+     },
+     completeButton: {
+       backgroundColor: colors.primary,
+       borderRadius: 4,
+       margin: 5,
+     },
+     showCompletedButton: {
+       borderRadius: 4,
+       margin: 5,
+     },
+     showCompletedIcon: {
+       marginRight: 5,
+     },
+     itemTitle: {
+       flex: 1,
+     },
+     itemSubtitle: {
+       color: '#979797',
+       flex: 1,
+     },
+     toggleRow: {
+       flexDirection: 'row',
+       alignItems: 'center',
+       padding: 12,
+     },
+     toggleText: {
+       flex: 1,
+       fontSize: 16,
+     },
+     overlay: {
+       backgroundColor: 'white',
+     },
+     status: {
+       width: 40,
+       height: 40,
+       justifyContent: 'center',
+       borderRadius: 5,
+       borderWidth: 1,
+       borderColor: '#d3d3d3',
+       backgroundColor: '#ffffff',
+       alignSelf: 'flex-end',
+     },
+     delete: {
+       alignSelf: 'flex-end',
+       width: 65,
+       marginHorizontal: 12,
+     },
+     statusCompleted: {
+       borderColor: colors.purple,
+     },
+     statusIcon: {
+       textAlign: 'center',
+       fontSize: 17,
+       color: colors.purple,
+     },
+   });
+
 
 With these changes, the app should work against a local database.
 
@@ -883,29 +984,36 @@ initialize your PowerSync client:
 Next, update ``ItemListView.tsx`` to use the PowerSync client. To achieve this, you 
 must update the hooks used at the top of this component:
 
-* To get access to the local database for making writes and updates, use the ``usePowerSync`` hook.
-* To get a list of todo list items that automatically rerender on update, use the ``useQuery`` hook.
+- To get access to the local database for making writes and updates, use the ``usePowerSync`` hook.
+- To get a list of todo list items that automatically rerender on update, use the ``useQuery`` hook.
 
-Replace lines using ``@realm/react``, ``useQuery``, and ``useRealm`` to instead use the PowerSync hooks:
+Make the following changes:
 
-.. code-block:: javascript
+- Remove ``import { BSON } from 'realm';``
+- Add ``import { ObjectId } from 'bson';``
+- Change the first two lines of the ``ItemListView`` function to match the following:
 
-   export function ItemListView() {
-     const db = usePowerSync();
-     const {data: items} = useQuery<Item>('SELECT * FROM Item');
+  .. code-block:: javascript
 
-   //...
-
-Note that the data property returned from ``useQuery`` contains the items. Rename 
-it from ``data`` to ``items`` for clarity.
+     export function ItemListView() {
+       const db = usePowerSync();
+       const {data: items} = useQuery<Item>('SELECT * FROM Item');
 
 Next, you need to update the ``createItem``, ``deleteItem``, and 
 ``toggleItemIsComplete`` methods.
 
-For all of these methods, you will be depending on the ``db`` object returned from 
-``usePowerSync``. As with Realm, the local database will need to open a transaction 
+For each of these methods, you will be using the ``db`` object returned from 
+``usePowerSync``. As with Realm, the local database opens a transaction 
 to perform any mutable operations, such as insert, update, or delete. You will 
 also add try/catch blocks to propagate any errors to the frontend of the application.
+
+Note that the code is importing ``ObjectId`` from ``bson`` to 
+create the unique ids for each item. Keep in mind that PowerSync expects the 
+primary key items to be named ``id``. 
+
+The create code also implements the default values for the items directly in this logic. 
+In this case, ``isComplete`` is initialized to false, and the ``id`` is initialized 
+with the string result of the newly created ``ObjectId``.
 
 The ``createItem`` method can be implemented as follows:
 
@@ -919,7 +1027,6 @@ The ``createItem`` method can be implemented as follows:
          db.writeTransaction(async tx => {
            await tx.execute(
              'INSERT INTO Item (id, summary, owner_id, isComplete) VALUES (?, ?, ?, ?)',
-
              [new ObjectId().toHexString(), summary, user?.id, false],
            );
          });
@@ -929,15 +1036,6 @@ The ``createItem`` method can be implemented as follows:
      },
      [db],
    );
-
-For this implementation, the code is importing ``ObjectId`` from ``bson`` to 
-create the unique ids for each item. Keep in mind that PowerSync expects the 
-primary key items to be named ``id``. You will need to make updates in the code 
-to account for this.
-
-This code also implements the default values for the items directly in this logic. 
-In this case, ``isComplete`` is initialized to false, and the ``id`` is initialized 
-with the string result of the newly created ``ObjectId``.
 
 The ``deleteItem`` and ``toggleItemIsComplete`` methods are similar, so implement 
 them as follows:
@@ -977,12 +1075,13 @@ them as follows:
      [db],
    );
 
-Finally, update the rendered ``FlatList`` to use ``id`` in place of ``_id``:
+Finally, update the rendered ``FlatList``. You will:
 
-* Update the ``keyExtractor`` of the ``FlatList`` to use the ``id`` string directly.
-* Previously, the database was returning an ``ObjectId``. This will need to be converted into a string.
+- Replace instances of ``_id`` with ``id``
+- Update the ``keyExtractor`` of the ``FlatList`` to use the ``id`` string directly.
+- Previously, the database was returning an ``ObjectId``. This will need to be converted into a string.
 
-The updated ``FlatList`` should now resemble the following:
+The updated ``FlatList`` now resembles the following:
 
 .. code-block:: javascript
 
@@ -1077,16 +1176,18 @@ import environment variables directly into the application.
 
    npm install -D react-native-dotenv
 
-Next, extend the ``babel.config.js``:
+Next, add the following line to the ``babel.config.js`` file:
 
 .. code-block:: javascript
+   :emphasize-lines: 3
 
    module.exports = {
      presets: ['module:metro-react-native-babel-preset'],
      plugins: ['module:react-native-dotenv'],
    };
 
-Then, add typings in ``types/env.d.ts`` for the variables we want to import:
+Create a new directory called ``types``, and in that, create a new file named 
+``env.d.ts`` that contains the following variables we want to import:
 
 .. code-block:: typescript
 
@@ -1095,21 +1196,23 @@ Then, add typings in ``types/env.d.ts`` for the variables we want to import:
      export const POWERSYNC_ENDPOINT: string;
    }
 
-From PowerSync, you will retrieve the values you need for the environment variables.
+You need to retrieve the values you need for the environment variables from 
+PowerSync. 
 
-In the left sidebar, click **…** next to **TodoList** to open the context menu 
-for this instance, and select **Edit Instance**. Copy the URL, and save it for 
-future reference.
+- In the PowerSync console, in the left sidebar, click **…** next to 
+  **TodoList** to open the context menu.
+- Select **Edit Instance**. 
+- Copy and save the URL.
 
 .. image:: /images/migration/react_native_guide/image6.png
    :alt: Screenshot of the UI
    :lightbox:
 
 Next, generate a new dev token for your instance with the **subject/user_id**
-``mockUserId``. Copy the generated token, and save it for future reference.
+``mockUserId``. Copy and save the generated token.
 
-From your application project, create a ``.env`` file, and paste the PowerSync 
-endpoint and token that you saved:
+From your application project, create a ``.env`` file at the root directory, and 
+paste the PowerSync endpoint and token that you just generated:
 
 .. code-block:: text
 
@@ -1228,26 +1331,55 @@ Rename it to ``ResetButton.tsx`` and update its contents as follows:
        </Pressable>
      );
    }
+   
+   const styles = StyleSheet.create({
+     buttonContainer: {
+       paddingHorizontal: 12,
+     },
+     buttonText: {
+       fontSize: 16,
+       color: colors.primary,
+     },
+   });
 
-   // styles...
 
 Then, modify ``App.tsx`` to show the ``Reset`` button in the left side of the header:
 
+- Replace ``import { LogoutButton } from './LogoutButton';`` with 
+  ``import { ResetButton } from './ResetButton';``
+
+- In the ``headerLeft``, replace the existing line with ``return <ResetButton />;``
+
+- Uncomment the line ``//headerLeft`` so that the Reset button will be displayed.
+
+Your changes will look like the following:
+
 .. code-block:: javascript
 
-   // other imports ...
-
+   import React from 'react';
+   import { SafeAreaProvider } from 'react-native-safe-area-context';
+   import { StyleSheet, Text, View } from 'react-native';
+   import { NavigationContainer } from '@react-navigation/native';
+   import { createStackNavigator } from '@react-navigation/stack';
    import { ResetButton } from './ResetButton';
-
-   //...
-
+   import { ItemListView } from './ItemListView';
+   import { OfflineModeButton } from './OfflineModeButton';
+   
+   const Stack = createStackNavigator();
+   
+   const headerRight = () => {
+     return <OfflineModeButton />;
+   };
+   
    const headerLeft = () => {
      return <ResetButton />;
    };
-
+   
    export const App = () => {
      return (
        <>
+         {/* All screens nested in RealmProvider have access
+                to the configured realm's hooks. */}
          <SafeAreaProvider>
            <NavigationContainer>
              <Stack.Navigator>
@@ -1262,7 +1394,7 @@ Then, modify ``App.tsx`` to show the ``Reset`` button in the left side of the he
                />
              </Stack.Navigator>
            </NavigationContainer>
-
+   
            <View style={styles.footer}>
              <Text style={styles.footerText}>
                Log in with the same account on another device or simulator to see
@@ -1273,8 +1405,21 @@ Then, modify ``App.tsx`` to show the ``Reset`` button in the left side of the he
        </>
      );
    };
-
-   // styles...
+   
+   const styles = StyleSheet.create({
+     footerText: {
+       fontSize: 12,
+       textAlign: 'center',
+       marginVertical: 4,
+     },
+     hyperlink: {
+       color: 'blue',
+     },
+     footer: {
+       paddingHorizontal: 24,
+       paddingVertical: 12,
+     },
+   });
 
 Run and Verify Changes
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -1411,8 +1556,13 @@ local machine. To enable this, run the following command:
 
    adb reverse tcp:8000 tcp:8000
 
-Next, add an import of the ``BACKEND_ENDPOINT`` to ``source/PowerSync.ts``, and 
-update the ``uploadData`` method:
+Next, add ``BACKEND_ENDPOINT`` to the import statement in ``source/PowerSync.ts``:
+
+.. code-block:: javascript
+
+   import { AUTH_TOKEN, POWERSYNC_ENDPOINT, BACKEND_ENDPOINT } from '@env';
+
+Then update the ``uploadData`` method:
 
 .. code-block:: javascript
 
