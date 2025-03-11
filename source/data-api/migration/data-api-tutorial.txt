@@ -168,6 +168,7 @@ The server includes middleware for the following:
    max: parseInt(process.env.RATE_LIMIT_MAX, 10), // Limit each IP to 100 requests per windowMs
    message: { message: process.env.RATE_LIMIT_MESSAGE },
    });
+   // Apply the rate limiter to all requests
    app.use(limiter);
 
    // Middleware for parsing requests
@@ -199,6 +200,7 @@ The server includes middleware for the following:
    console.log(`Server is running on port ${PORT}`);
    });
 
+
 Define the Routes
 ~~~~~~~~~~~~~~~~~
 
@@ -208,18 +210,25 @@ The HTTP POST requests are mapped to their corresponding controller functions.
 .. code-block:: javascript
    :caption: routes/api.js
 
-   const express = require('express');
-   const dbController = require('../controllers/dbController');
+    /**
+    * Defines the routes for all API endpoints and maps them to the corresponding functions in the dbController class.
+    */
+    const express = require('express');
+    const dbController = require('../controllers/dbController');
 
-   const router = express.Router();
+    const router = express.Router();
 
-   router.post('/insertOne', dbController.insertOne);
-   router.post('/findOne', dbController.findOne);
-   router.post('/find', dbController.find);
-   router.post('/updateOne', dbController.updateOne);
-   router.post('/deleteOne', dbController.deleteOne);
-   router.post('/aggregate', dbController.aggregate);
-   module.exports = router;
+    router.post('/insertOne', dbController.insertOne);
+    router.post('/insertMany', dbController.insertMany);
+    router.post('/findOne', dbController.findOne);
+    router.post('/find', dbController.find);
+    router.post('/updateOne', dbController.updateOne);
+    router.post('/deleteOne', dbController.deleteOne);
+    router.post('/deleteMany', dbController.deleteMany);
+    router.post('/aggregate', dbController.aggregate);
+
+    module.exports = router;
+
 
 Connect to MongoDB
 ~~~~~~~~~~~~~~~~~~
@@ -265,6 +274,7 @@ in the MongoDB Node.js Driver documentation.
    }
    return connections[database];
    };
+
    module.exports = getDatabaseConnection;
 
 
@@ -282,48 +292,51 @@ It also does the following:
 .. code-block:: javascript
    :caption: models/dynamicModel.js
 
-   const mongoose = require("mongoose");
-   const getDatabaseConnection = require("../connection/databaseManager");
+    // Import the mongoose library for MongoDB object modeling
+    const mongoose = require("mongoose");
+    // Import the function to get a database connection
+    const getDatabaseConnection = require("../connection/databaseManager");
 
-   // Initialize an empty object to cache models to avoid redundant models
-   const modelsCache = {}; // Cache for models (database.collection -> Model)
+    // Initialize an empty object to cache models
+    // This helps in reusing models and avoiding redundant model creation
+    const modelsCache = {}; // Cache for models (database.collection -> Model)
 
-   /**
-   * Creates and retrieves a dynamic model for a given database and collection.
-   * This function ensures that the same model is reused if it has already been created.
-   *
-   * @param {string} database - The name of the database.
-   * @param {string} collection - The name of the collection.
-   * @returns {mongoose.Model} - The Mongoose model instance for the specified collection.
-   */
-   const getModel = (database, collection) => {
+    /**
+    * Creates and retrieves a dynamic model for a given database and collection.
+    * This function ensures that the same model is reused if it has already been created.
+    *
+    * @param {string} database - The name of the database.
+    * @param {string} collection - The name of the collection.
+    * @returns {mongoose.Model} - The Mongoose model instance for the specified collection.
+    */
+    const getModel = (database, collection) => {
+    // Create a unique key for the model based on the database and collection names
+    const modelKey = `${database}.${collection}`;
 
-   // Create a unique key for the model based on database and collection names
-   const modelKey = `${database}.${collection}`;
+    // Check if the model already exists in the cache
+    // If it does, return the cached model
+    if (modelsCache[modelKey]) {
+        return modelsCache[modelKey];
+    }
 
-   // If model already exists in the cache, return cached model
-   if (modelsCache[modelKey]) {
-      return modelsCache[modelKey];
-   }
+    // Get the database connection for the specified database
+    const dbConnection = getDatabaseConnection(database);
 
-   // Get the connection for the specified database
-   const dbConnection = getDatabaseConnection(database);
+    // Define a flexible schema with no predefined structure
+    // This allows the schema to accept any fields
+    const schema = new mongoose.Schema({}, { strict: false });
 
-   // Define a flexible schema with no predefined structure
-   // This allows the schema to accept any fields
-   const schema = new mongoose.Schema({}, { strict: false });
+    // Create the model using the database connection, collection name, and schema
+    // Cache the model for future use
+    const model = dbConnection.model(collection, schema, collection);
+    modelsCache[modelKey] = model;
 
-   // Create the model using the db connection, collection name, and schema
-   // Cache the model for future use
-   const model = dbConnection.model(collection, schema, collection);
-   modelsCache[modelKey] = model;
+    // Return the newly created model
+    return model;
+    };
 
-   // Return the newly created model
-   return model;
-   };
-
-   // Export the getModel function as a module
-   module.exports = getModel;
+    // Export the getModel function as a module
+    module.exports = getModel;
 
 
 Implement the Controller
@@ -338,140 +351,151 @@ The API currently supports the following operations:
 - Insert One
 - Insert Many
 - Find One
-- Find Multiple
+- Find Many
 - Update One
+- Update Many
 - Delete One
+- Delete Many
 - Aggregate
 
 
 .. code-block:: javascript
    :caption: controllers/dbController.js
 
-   /**
-   * Contains the logic for all defined CRUD and aggregation operations. 
-   * Each method interacts with the database and handles errors gracefully.
-   */
-   const getModel = require("../models/dynamicModel");
-   class DbController {
-        async insertOne(req, res) {
-            const { database, collection, document } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.insertOne(document);
-                if (!result || result.length === 0) {
-                return res.status(400).json({ success: false, message: "Insertion failed" });
-                }
-                res.status(201).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+    /**
+    * Contains the logic for all CRUD and aggregation operations.
+    * Each method interacts with the database and handles errors gracefully.
+    */
+    const getModel = require("../models/dynamicModel");
+
+    class DbController {
+    async insertOne(req, res) {
+        const { database, collection, document } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.insertOne(document);
+        if (!result) {
+            return res.status(400).json({ success: false, message: "Insertion failed" });
         }
-        async insertMany(req, res) {
-            const { database, collection, documents } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.insertMany(documents);
-                if (!result || result.length === 0) {
-                return res.status(400).json({ success: false, message: "Insertion failed" });
-                }
-                res.status(201).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+        res.status(201).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
         }
-        async findOne(req, res) {
-            const { database, collection, filter, projection } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.findOne(filter, projection);
-                if (!result) {
-                return res.status(404).json({ success: false, message: "No record found" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+    }
+
+    async insertMany(req, res) {
+        const { database, collection, documents } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.insertMany(documents);
+        if (!result || result.length === 0) {
+            return res.status(400).json({ success: false, message: "Insertion failed" });
         }
-        async find(req, res) {
-            const { database, collection, filter, projection, sort, limit } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.find(filter, projection).sort(sort).limit(limit);
-                if (!result || result.length === 0) {
-                return res.status(404).json({ success: false, message: "No records found" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+        res.status(201).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
         }
-        async updateOne(req, res) {
-            const { database, collection, filter, update, upsert } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.updateOne(filter, update, { upsert });
-                if (result.matchedCount === 0) {
-                return res.status(404).json({ success: false, message: "No records updated" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+    }
+
+    async findOne(req, res) {
+        const { database, collection, filter, projection } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.findOne(filter, projection);
+        if (!result) {
+            return res.status(404).json({ success: false, message: "No record found" });
         }
-        async updateMany(req, res) {
-            const { database, collection, filter, update } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.updateMany(filter, update);
-                if (result.matchedCount === 0) {
-                return res.status(404).json({ success: false, message: "No records updated" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
         }
-        async deleteOne(req, res) {
-            const { database, collection, filter } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.deleteOne(filter);
-                if (result.deletedCount === 0) {
-                return res.status(404).json({ success: false, message: "No records deleted" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+    }
+
+    async find(req, res) {
+        const { database, collection, filter, projection, sort, limit } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.find(filter, projection).sort(sort).limit(limit);
+        if (!result || result.length === 0) {
+            return res.status(404).json({ success: false, message: "No records found" });
         }
-        async deleteMany(req, res) {
-            const { database, collection, filter } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.deleteMany(filter);
-                if (result.deletedCount === 0) {
-                return res.status(404).json({ success: false, message: "No records deleted" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
         }
-        async aggregate(req, res) {
-            const { database, collection, pipeline } = req.body;
-            try {
-                const Model = getModel(database, collection);
-                const result = await Model.aggregate(pipeline);
-                if (!result || result.length === 0) {
-                return res.status(404).json({ success: false, message: "No aggregation results found" });
-                }
-                res.status(200).json({ success: true, result });
-            } catch (error) {
-                res.status(500).json({ success: false, error: error.message });
-            }
+    }
+
+    async updateOne(req, res) {
+        const { database, collection, filter, update, upsert } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.updateOne(filter, update, { upsert });
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ success: false, message: "No records updated" });
         }
-   }
-   module.exports = new DbController();
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+        }
+    }
+
+    async updateMany(req, res) {
+        const { database, collection, filter, update } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.updateMany(filter, update);
+        if (result.matchedCount === 0) {
+            return res.status(404).json({ success: false, message: "No records updated" });
+        }
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+        }
+    }
+
+    async deleteOne(req, res) {
+        const { database, collection, filter } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.deleteOne(filter);
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ success: false, message: "No records deleted" });
+        }
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+        }
+    }
+
+    async deleteMany(req, res) {
+        const { database, collection, filter } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.deleteMany(filter);
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ success: false, message: "No records deleted" });
+        }
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+        }
+    }
+
+    async aggregate(req, res) {
+        const { database, collection, pipeline } = req.body;
+        try {
+        const Model = getModel(database, collection);
+        const result = await Model.aggregate(pipeline);
+        if (!result || result.length === 0) {
+            return res.status(404).json({ success: false, message: "No aggregation results found" });
+        }
+        res.status(200).json({ success: true, result });
+        } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+        }
+    }
+    }
+    module.exports = new DbController();
 
 
 Example API Requests
@@ -500,11 +524,18 @@ reloads every time you save changes to a project file.
 Send Requests
 ~~~~~~~~~~~~~
 
-To run the following example cURL commands, you must update the ``<YOUR_API_KEY>`` and
+With the server running, you can send requests using the following cURL
+commands.
+
+Before running these example commands, ensure that you update the ``<YOUR_API_KEY>`` and
 ``<YOUR_API_SECRET>`` placeholders with your credentials.
 
-Insert One Document
-```````````````````
+Insert Documents
+````````````````
+
+The following examples demonstrate inserting one or multiple documents.
+
+Insert a new user document into the ``users`` collection:
 
 .. code-block:: shell
    :caption: Insert One
@@ -517,13 +548,12 @@ Insert One Document
                "database": "sample_mflix",
                "collection": "users",
                "document": {
-                   "name": "Stella Thomas",
-                   "email": "stella.thomas@example.org",
+                   "name": "Marcus Bell",
+                   "email": "marcus.bell@example.com",
                    "password": "lucky13" }
             }'
 
-Insert Many Documents
-`````````````````````
+Insert multiple user documents into the ``users`` collection:
 
 .. code-block:: shell
    :caption: Insert Many
@@ -537,16 +567,23 @@ Insert Many Documents
                "collection": "users",
                "documents": [
                   { "name": "Marvin Diaz",
-                    "email": "marvin.diaz@example.org",
+                    "email": "marvin.diaz@example.com",
                     "password": "123unicorn" },
                   { "name": "Delores Lambert",
-                    "email": "delores.lambert@example.org",
-                    "password": "cats&dogs" }
+                    "email": "delores.lambert@example.com",
+                    "password": "cats&dogs" },
+                  { "name": "Gregor Ulrich",
+                    "email": "gregor.ulrich@example.com",
+                    "password": "securePass123" }
                ]
             }'
 
-Find One Document
-`````````````````
+Find Documents
+``````````````
+
+The following examples demonstrate finding one or multiple documents.
+
+Find a user by name and return only the email address:
 
 .. code-block:: shell
    :caption: Find One
@@ -562,8 +599,8 @@ Find One Document
                "projection": { "email": 1, "_id": 0 }
             }'
 
-Find Multiple Documents
-```````````````````````
+Find all users with email addresses ending in specified domain. Then, sort
+results by name, and return only the name and email of the first 10:
 
 .. code-block:: shell
    :caption: Find
@@ -575,14 +612,17 @@ Find Multiple Documents
         -d '{
                 "database": "sample_mflix",
                 "collection": "users",
-                "filter": { "email": { "$regex": "example.org$" } },
+                "filter": { "email": { "$regex": "example\\.com$" } },
                 "projection": { "name": 1, "email": 1, "_id": 0 },
                 "sort": { "name": 1 },
                 "limit": 10
             }'
 
-Update One Document
-```````````````````
+Update Documents
+````````````````
+The following examples demonstrate updating one or multiple documents.
+
+Update the email address for a user with the specified email:
 
 .. code-block:: shell
    :caption: Update One
@@ -594,13 +634,43 @@ Update One Document
         -d '{
                 "database": "sample_mflix",
                 "collection": "users",
-                "filter": { "email": "marvin.diaz@example.org" },
-                "update": { "$set": { "password": "newSecurePass456" } },
+                "filter": { "email": "marvin.diaz@example.com" },
+                "update": { "$set": { "password": "456pegasus" } },
                 "upsert": false
             }'
 
-Delete One Document
-```````````````````
+Update the email address for all users with the specified domain:
+
+.. code-block:: shell
+   :caption: Update Many
+
+   curl -X POST http://localhost:7438/api/updateMany \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: <YOUR_API_KEY>" \
+        -H "x-api-secret: <YOUR_API_SECRET>" \
+        -d '{
+            "database": "sample_mflix",
+            "collection": "users",
+            "filter": { "email": { "$regex": "@example\\.com$" } },
+            "update": {
+                "$set": {
+                    "email": {
+                        "$replaceAll": {
+                            "input": "$email",
+                            "find": "@example.com",
+                            "replacement": "@example.org"
+                        }
+                    }
+                }
+            },
+            "upsert": false
+            }'
+
+Delete
+``````
+The following examples demonstrate deleting one or multiple documents.
+
+Delete document with specified name:
 
 .. code-block:: shell
    :caption: Delete One
@@ -612,11 +682,29 @@ Delete One Document
         -d '{
                 "database": "sample_mflix",
                 "collection": "users",
-                "filter": { "email": "delores.lambert@example.org" }
+                "filter": { "name": "Delores Lambert" }
+            }'
+
+Delete all documents with names starting with "M":
+
+.. code-block:: shell
+   :caption: Delete Many
+
+   curl -X POST http://localhost:7438/api/deleteMany \
+        -H "Content-Type: application/json" \
+        -H "x-api-key: <YOUR_API_KEY>" \
+        -H "x-api-secret: <YOUR_API_SECRET>" \
+        -d '{
+                "database": "sample_mflix",
+                "collection": "users",
+                "filter": { "name": { "$regex": "^M" } }
             }'
 
 Aggregate Documents
 ```````````````````
+
+The following example demonstrates an aggregation operation that groups users
+by email and counts the number of occurrences:
 
 .. code-block:: shell
    :caption: Aggregate
