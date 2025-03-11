@@ -164,9 +164,9 @@ The server includes middleware for the following:
 
    // Middleware for rate limiting
    const limiter = rateLimit({
-   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10), // 15 minutes
-   max: parseInt(process.env.RATE_LIMIT_MAX, 10), // Limit each IP to 100 requests per windowMs
-   message: { message: process.env.RATE_LIMIT_MESSAGE },
+      windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10), // 15 minutes
+      max: parseInt(process.env.RATE_LIMIT_MAX, 10), // Limit each IP to 100 requests per windowMs
+      message: { message: process.env.RATE_LIMIT_MESSAGE },
    });
    // Apply the rate limiter to all requests
    app.use(limiter);
@@ -176,19 +176,19 @@ The server includes middleware for the following:
 
    // Middleware for API key authentication and logging
    app.use((req, res, next) => {
-   logger.info({
-      method: req.method,
-      url: req.originalUrl,
-      body: req.body,
-      headers: req.headers,
-   });
-   const apiKey = req.headers["x-api-key"];
-   const apiSecret = req.headers["x-api-secret"];
-   if (apiKey === API_KEY && apiSecret === API_SECRET) {
-      next(); // Proceed to the next middleware or route
-   } else {
-      res.status(403).json({ message: "Forbidden: Invalid API Key or Secret" });
-   }
+      logger.info({
+         method: req.method,
+         url: req.originalUrl,
+         body: req.body,
+         headers: req.headers,
+      });
+      const apiKey = req.headers["x-api-key"];
+      const apiSecret = req.headers["x-api-secret"];
+      if (apiKey === API_KEY && apiSecret === API_SECRET) {
+         next(); // Proceed to the next middleware or route
+      } else {
+         res.status(403).json({ message: "Forbidden: Invalid API Key or Secret" });
+      }
    });
 
    // Middleware for API routing
@@ -197,7 +197,7 @@ The server includes middleware for the following:
    // Start the server
    const PORT = process.env.PORT || 3000;
    app.listen(PORT, () => {
-   console.log(`Server is running on port ${PORT}`);
+      console.log(`Server is running on port ${PORT}`);
    });
 
 
@@ -253,26 +253,26 @@ in the MongoDB Node.js Driver documentation.
    * @returns {mongoose.Connection} - Mongoose connection instance.
    */
    const getDatabaseConnection = (database) => {
-   const baseURI = process.env.MONGO_URI;
-   const options = process.env.MONGO_OPTIONS || "";
-   if (!baseURI) {
-      throw new Error("MONGO_URI is not defined in .env file");
-   }
+      const baseURI = process.env.MONGO_URI;
+      const options = process.env.MONGO_OPTIONS || "";
+      if (!baseURI) {
+         throw new Error("MONGO_URI is not defined in .env file");
+      }
 
-   // If connection does not exist, create it
-   if (!connections[database]) {
-      connections[database] = mongoose.createConnection(
-         `${baseURI}/${database}${options}`
-      );
-      // Handle connection errors
-      connections[database].on("error", (err) => {
-         console.error(`MongoDB connection error for ${database}:`, err);
-      });
-      connections[database].once("open", () => {
-         console.log(`Connected to MongoDB database: ${database}`);
-      });
-   }
-   return connections[database];
+      // If connection does not exist, create it
+      if (!connections[database]) {
+         connections[database] = mongoose.createConnection(
+            `${baseURI}/${database}${options}`
+         );
+         // Handle connection errors
+         connections[database].on("error", (err) => {
+            console.error(`MongoDB connection error for ${database}:`, err);
+         });
+         connections[database].once("open", () => {
+            console.log(`Connected to MongoDB database: ${database}`);
+         });
+      }
+      return connections[database];
    };
 
    module.exports = getDatabaseConnection;
@@ -310,29 +310,29 @@ It also does the following:
     * @returns {mongoose.Model} - The Mongoose model instance for the specified collection.
     */
     const getModel = (database, collection) => {
-    // Create a unique key for the model based on the database and collection names
-    const modelKey = `${database}.${collection}`;
+      // Create a unique key for the model based on the database and collection names
+      const modelKey = `${database}.${collection}`;
 
-    // Check if the model already exists in the cache
-    // If it does, return the cached model
-    if (modelsCache[modelKey]) {
-        return modelsCache[modelKey];
-    }
+      // Check if the model already exists in the cache
+      // If it does, return the cached model
+      if (modelsCache[modelKey]) {
+         return modelsCache[modelKey];
+      }
 
-    // Get the database connection for the specified database
-    const dbConnection = getDatabaseConnection(database);
+      // Get the database connection for the specified database
+      const dbConnection = getDatabaseConnection(database);
 
-    // Define a flexible schema with no predefined structure
-    // This allows the schema to accept any fields
-    const schema = new mongoose.Schema({}, { strict: false });
+      // Define a flexible schema with no predefined structure
+      // This allows the schema to accept any fields
+      const schema = new mongoose.Schema({}, { strict: false });
 
-    // Create the model using the database connection, collection name, and schema
-    // Cache the model for future use
-    const model = dbConnection.model(collection, schema, collection);
-    modelsCache[modelKey] = model;
+      // Create the model using the database connection, collection name, and schema
+      // Cache the model for future use
+      const model = dbConnection.model(collection, schema, collection);
+      modelsCache[modelKey] = model;
 
-    // Return the newly created model
-    return model;
+      // Return the newly created model
+      return model;
     };
 
     // Export the getModel function as a module
@@ -369,132 +369,150 @@ The API currently supports the following operations:
     const getModel = require("../models/dynamicModel");
 
     class DbController {
-    async insertOne(req, res) {
-        const { database, collection, document } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.insertOne(document);
-        if (!result) {
-            return res.status(400).json({ success: false, message: "Insertion failed" });
-        }
-        res.status(201).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
+      async insertOne(req, res) {
+         const { database, collection, document } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.insertOne(document);
+            if (!result) {
+               return res
+               .status(400)
+               .json({ success: false, message: "Insertion failed" });
+            }
+            res.status(201).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async insertMany(req, res) {
+         const { database, collection, documents } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.insertMany(documents);
+            if (!result || result.length === 0) {
+               return res
+               .status(400)
+               .json({ success: false, message: "Insertion failed" });
+            }
+            res.status(201).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async findOne(req, res) {
+         const { database, collection, filter, projection } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.findOne(filter, projection);
+            if (!result) {
+               return res
+               .status(404)
+               .json({ success: false, message: "No record found" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async find(req, res) {
+         const { database, collection, filter, projection, sort, limit } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.find(filter, projection).sort(sort).limit(limit);
+            if (!result || result.length === 0) {
+               return res
+               .status(404)
+               .json({ success: false, message: "No records found" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+         r  es.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async updateOne(req, res) {
+         const { database, collection, filter, update, upsert } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.updateOne(filter, update, { upsert });
+            if (result.matchedCount === 0) {
+               return res
+               .status(404)
+               .json({ success: false, message: "No records updated" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async updateMany(req, res) {
+         const { database, collection, filter, update } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.updateMany(filter, update);
+            if (result.matchedCount === 0) {
+               return res
+               .status(404)
+               .json({ success: false, message: "No records updated" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async deleteOne(req, res) {
+         const { database, collection, filter } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.deleteOne(filter);
+            if (result.deletedCount === 0) {
+               return res
+               .status(404)
+               .json({ success: false, message: "No records deleted" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async deleteMany(req, res) {
+         const { database, collection, filter } = req.body;
+         try {
+         const Model = getModel(database, collection);
+         const result = await Model.deleteMany(filter);
+         if (result.deletedCount === 0) {
+               return res
+               .status(404).json({ success: false, message: "No records deleted" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
+
+      async aggregate(req, res) {
+         const { database, collection, pipeline } = req.body;
+         try {
+            const Model = getModel(database, collection);
+            const result = await Model.aggregate(pipeline);
+            if (!result || result.length === 0) {
+               return res
+               .status(404)
+               .json({ success: false, message: "No aggregation results found" });
+            }
+            res.status(200).json({ success: true, result });
+         } catch (error) {
+            res.status(500).json({ success: false, error: error.message });
+         }
+      }
     }
 
-    async insertMany(req, res) {
-        const { database, collection, documents } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.insertMany(documents);
-        if (!result || result.length === 0) {
-            return res.status(400).json({ success: false, message: "Insertion failed" });
-        }
-        res.status(201).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async findOne(req, res) {
-        const { database, collection, filter, projection } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.findOne(filter, projection);
-        if (!result) {
-            return res.status(404).json({ success: false, message: "No record found" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async find(req, res) {
-        const { database, collection, filter, projection, sort, limit } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.find(filter, projection).sort(sort).limit(limit);
-        if (!result || result.length === 0) {
-            return res.status(404).json({ success: false, message: "No records found" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async updateOne(req, res) {
-        const { database, collection, filter, update, upsert } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.updateOne(filter, update, { upsert });
-        if (result.matchedCount === 0) {
-            return res.status(404).json({ success: false, message: "No records updated" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async updateMany(req, res) {
-        const { database, collection, filter, update } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.updateMany(filter, update);
-        if (result.matchedCount === 0) {
-            return res.status(404).json({ success: false, message: "No records updated" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async deleteOne(req, res) {
-        const { database, collection, filter } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.deleteOne(filter);
-        if (result.deletedCount === 0) {
-            return res.status(404).json({ success: false, message: "No records deleted" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async deleteMany(req, res) {
-        const { database, collection, filter } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.deleteMany(filter);
-        if (result.deletedCount === 0) {
-            return res.status(404).json({ success: false, message: "No records deleted" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-
-    async aggregate(req, res) {
-        const { database, collection, pipeline } = req.body;
-        try {
-        const Model = getModel(database, collection);
-        const result = await Model.aggregate(pipeline);
-        if (!result || result.length === 0) {
-            return res.status(404).json({ success: false, message: "No aggregation results found" });
-        }
-        res.status(200).json({ success: true, result });
-        } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-        }
-    }
-    }
     module.exports = new DbController();
 
 
