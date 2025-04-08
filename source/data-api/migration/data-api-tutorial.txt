@@ -12,7 +12,7 @@ Guide: Implement an Express.js Alternative to the Atlas Data API
    :backlinks: none
    :depth: 2
    :class: singlecol
-   
+
 As of September 2024, the Atlas Data API has been deprecated. If you use this
 service, you must migrate to another solution before September 2025.
 
@@ -22,10 +22,11 @@ driver-based custom API to replicate the functionality of the Data API.
 
 The API template is built with Node.js and `Express <https://expressjs.com>`__,
 and supports deployment on `Vercel <https://vercel.com>`__.
-The backend service is secured with API key-based authorization and uses the
-`MongoDB Node.js driver <https://nodejs.org/en>`__ along with
+The backend service uses the
+`MongoDB Node.js driver <https://nodejs.org/en>`__ with
 `Mongoose <https://mongoosejs.com>`__ to perform CRUD (Create, Read, Update, and
-Delete) and aggregation operations on your data.
+Delete) and aggregation operations on your data, and secures access using a
+simple API key-based authorization.
 
 The project source code is available in the following GitHub repository:
 `https://github.com/abhishekmongoDB/data-api-alternative
@@ -61,14 +62,14 @@ Project Structure
    ├── package.json
    └── vercel.json
 
-The main files are: 
+The main files are:
 
 - **.env:** The configuration file holding credentials, connection details, and project settings.
 - **index.js:** The main entry point for the Express server.
-- **routes/api.js:** Exposes the API endpoints mapped to their corresponding business logic.  
+- **routes/api.js:** Exposes the API endpoints mapped to their corresponding business logic.
 - **connection/databaseManager.js:** Manages and caches MongoDB database connections.
 - **models/dynamicModel.js:** Dynamically generated Mongoose models that support schemaless Atlas data.
-- **controllers/dbController.js:** The business logic for the defined CRUD and aggregation operations.  
+- **controllers/dbController.js:** The business logic for the defined CRUD and aggregation operations.
 
 These files are described in more detail below.
 
@@ -80,23 +81,19 @@ Prerequisites
 
 - A deployed MongoDB cluster or local instance with a
   `valid connection string <https://www.mongodb.com/docs/manual/reference/connection-string/>`__.
-- A valid `Atlas API key
-  <https://www.mongodb.com/docs/atlas/configure-api-access/#std-label-create-org-api-key>`__
-  to authenticate requests.
-  You can grant programmatic access at the organization or project level.
 - The latest stable version of `Node.js and npm (Node Package Manager) <https://nodejs.org/en>`__
   installed.
 
 Set Up the Project
 ~~~~~~~~~~~~~~~~~~
 
-Clone the repository and install the dependencies: 
+Clone the repository and install the dependencies:
 
 .. code-block:: shell
 
    git clone https://github.com/abhishekmongoDB/data-api-alternative.git
    cd data-api-alternative
-   npm install 
+   npm install
 
 Define Environment Variables
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,7 +106,9 @@ following code:
    # Replace with your deployment credentials
    MONGO_URI="<MONGO_URI>"
    MONGO_OPTIONS="<MONGO_OPTIONS>" # Optional
-   API_KEY="<API_KEY>" 
+
+   # Replace with your locally defined secrets for basic proxy auth
+   API_KEY="<API_KEY>"
    API_SECRET="<API_SECRET>"
 
    # Project variables
@@ -118,7 +117,7 @@ following code:
    RATE_LIMIT_MAX=100 # Maximum requests per window
    RATE_LIMIT_MESSAGE=Too many requests, please try again later.
 
-Replace the following placeholders with your credentials: 
+Replace the following placeholders with your credentials:
 
 - ``MONGO_URI`` Replace with the connection string for your deployment. For more information, see `Connection String Formats <https://www.mongodb.com/docs/manual/reference/connection-string/#connection-string-formats>`__.
 
@@ -127,8 +126,8 @@ Replace the following placeholders with your credentials:
     ``"mongodb+srv://[<user>:<pw>@]<cluster>.<projectId>.mongodb.net"``
 
 - ``MONGO_OPTIONS`` Replace with the optional query string specifying any connection-specific options. For more information, see `Connection String Options <https://www.mongodb.com/docs/manual/reference/connection-string-options/>`__.
-- ``API_KEY`` Replace with a valid API key.   
-- ``API_SECRET`` Replace with the corresponding API secret.
+- ``API_KEY`` Replace with a locally defined key used to authenticate requests to your proxy server. This is not an Atlas API key.
+- ``API_SECRET`` Replace with the corresponding locally defined secret.
 
 Initialize the Server
 ~~~~~~~~~~~~~~~~~~~~~
@@ -148,8 +147,8 @@ The server includes middleware for the following:
    :caption: index.js
 
    /**
-   * This file initializes the server, validates API keys for added security,
-   * and routes requests to the appropriate controller methods.
+   * This file initializes the Express server, validates locally defined API keys,
+   * applies basic rate limiting, and routes incoming requests to API controller methods.
    */
    const rateLimit = require("express-rate-limit");
    const express = require("express");
@@ -157,8 +156,9 @@ The server includes middleware for the following:
    const logger = require("./utils/logging");
    require("dotenv").config();
 
-   const API_KEY = process.env.API_KEY; // Load API key from .env
-   const API_SECRET = process.env.API_SECRET; // Load API secret from .env
+   // Load local shared secrets from environment variables
+   const API_KEY = process.env.API_KEY;
+   const API_SECRET = process.env.API_SECRET;
 
    const app = express();
 
@@ -174,7 +174,8 @@ The server includes middleware for the following:
    // Middleware for parsing requests
    app.use(express.json());
 
-   // Middleware for API key authentication and logging
+   // Middleware for basic API key authentication
+   // NOTE: Replace this with your preferred authentication method in production
    app.use((req, res, next) => {
       logger.info({
          method: req.method,
@@ -185,7 +186,7 @@ The server includes middleware for the following:
       const apiKey = req.headers["x-api-key"];
       const apiSecret = req.headers["x-api-secret"];
       if (apiKey === API_KEY && apiSecret === API_SECRET) {
-         next(); // Proceed to the next middleware or route
+         next(); // Authorized
       } else {
          res.status(403).json({ message: "Forbidden: Invalid API Key or Secret" });
       }
@@ -237,7 +238,7 @@ The ``databaseManager.js`` file handles the MongoDB database connections using
 the ``mongoose`` library. Connection details are stored in the ``.env`` file.
 
 For an exhaustive list of available options, see
-:node-driver:`Connection Options </node/current/fundamentals/connection/connection-options/>`
+:node-driver:`Connection Options <node/current/fundamentals/connection/connection-options/>`
 in the MongoDB Node.js Driver documentation.
 
 .. code-block:: javascript
@@ -742,16 +743,19 @@ by email and counts the number of occurrences:
 Next Steps
 ----------
 
-This guide illustrated how you might implement a custom driver-based API as an
-alternative to the deprecated Atlas Data API. However, the template app is
-limited in scope and demonstrates basic functionality only. We strongly
-recommend implementing additional enhancements to meet your specific
-requirements.  
+This guide demonstrated how to implement a custom driver-based API as an
+alternative to the deprecated Atlas Data API. The provided app is limited in
+scope and is intended only as a template that can be adapted and extended to
+meet your specific needs and requirements.
 
-Additional Features 
+We strongly recommend adding production-ready security and reliability
+features—-such as authentication, logging, error handling, and input
+validation—-before deploying.
+
+Additional Features
 ~~~~~~~~~~~~~~~~~~~
 
-The following are recommended features to enhance the template app:  
+The following are recommended features to enhance the template app:
 
 - **Enhanced Logging:** Implement structured logging for better observability and debugging.
 - **Error Tracking:** Integrate with error tracking tools to monitor API health.
