@@ -22,9 +22,8 @@ info:
     - Values & Secrets
 
     The Admin API is for application development, configuration, and
-    deployment. To actually use the features you configure with the
-    Admin API, client applications connect with an [Atlas Device
-    SDK](https://mongodb.com/docs/realm/) or over an HTTPS API specific
+    deployment. To use the features you configure with the
+    Admin API, client applications connect with an HTTPS API specific
     to your App.
 
     ## Project & Application IDs
@@ -747,14 +746,14 @@ paths:
         - values
       operationId: adminListValues
       description: |-
-        List all [values](https://www.mongodb.com/docs/realm/values-and-secrets)
+        List all [values](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets)
         defined in an application.
       summary: |-
         List all values defined in an application.
       responses:
         "200":
           description: |-
-            [values](https://www.mongodb.com/docs/realm/values-and-secrets) were
+            [values](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets) were
             successfully enumerated.
           content:
             application/json:
@@ -767,7 +766,7 @@ paths:
       operationId: adminCreateValue
       summary: Define a Value in an application
       description: |-
-        Define a [Value](https://www.mongodb.com/docs/realm/values-and-secrets) in
+        Define a [Value](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets) in
         an application.
       requestBody:
         description: The value to create.
@@ -779,7 +778,7 @@ paths:
       responses:
         "201":
           description: |-
-            The [value](https://www.mongodb.com/docs/realm/values-and-secrets) was
+            The [value](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets) was
             successfully defined.
           content:
             application/json:
@@ -797,7 +796,7 @@ paths:
       summary: |-
         Retrieve a value definition from an application
       description: |-
-        Retrieve a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
+        Retrieve a [value](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets)
         definition from an application.
       responses:
         "200":
@@ -813,7 +812,7 @@ paths:
       summary: |-
         Delete a value defined in an application.
       description: |-
-        Delete a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
+        Delete a [value](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets)
         defined in an application.
       responses:
         "204":
@@ -824,7 +823,7 @@ paths:
       operationId: adminUpdateValue
       summary: Update a value definition in an application
       description: |-
-        Update a [value](https://www.mongodb.com/docs/realm/values-and-secrets)
+        Update a [value](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets)
         definition in an application.
       responses:
         "200":
@@ -962,7 +961,7 @@ paths:
         - services
       operationId: adminUpdateService
       summary: Update a service
-      description: Update a [service](https://www.mongodb.com/docs/realm/services#std-label-services).
+      description: Update a service.
       responses:
         "200":
           description: Successfully updated.
@@ -1066,7 +1065,7 @@ paths:
       summary: Run a command associated with a service
       description: |-
         Run a command associated with a
-        [service](https://www.mongodb.com/docs/realm/services#std-label-services).
+        [service](https://www.mongodb.com/docs/atlas/app-services/reference/services).
       responses:
         "200":
           description: Successfully executed.
@@ -1394,7 +1393,7 @@ paths:
         - webhooks
       operationId: adminListWebhooks
       summary: List webhooks
-      description: List [webhooks](https://www.mongodb.com/docs/realm/services#std-label-service-webhooks).
+      description: List webhooks.
       responses:
         "200":
           description: Successfully listed incoming webhooks.
@@ -1407,7 +1406,7 @@ paths:
         - webhooks
       operationId: adminCreateWebhook
       summary: Create a webhook
-      description: Create a [webhook](https://www.mongodb.com/docs/realm/services#std-label-service-webhooks).
+      description: Create a webhook.
       requestBody:
         description: The webhook to create.
         required: true
@@ -1428,7 +1427,7 @@ paths:
         - webhooks
       operationId: adminGetWebhook
       summary: Retrieve a webhook
-      description: Retrieve a [webhook](https://www.mongodb.com/docs/realm/services#std-label-service-webhooks).
+      description: Retrieve a webhook.
       responses:
         "200":
           description: Successfully retrieved.
@@ -1437,7 +1436,7 @@ paths:
         - webhooks
       operationId: adminDeleteWebhook
       summary: Delete a webhook
-      description: Delete a [webhook](https://www.mongodb.com/docs/realm/services#std-label-service-webhooks).
+      description: Delete a webhook.
       responses:
         "204":
           description: Successfully deleted.
@@ -1446,7 +1445,7 @@ paths:
         - webhooks
       operationId: adminUpdateWebhook
       summary: Update a webhook
-      description: Update a [webhook](https://www.mongodb.com/docs/realm/services#std-label-service-webhooks).
+      description: Update a webhook.
       requestBody:
         required: true
         description: The updated state of the webhook.
@@ -1493,7 +1492,7 @@ paths:
       summary: Get Partition-Based Sync information
       description: |-
         Retrieve partition field data when using 
-        [Partition-Based Sync](https://www.mongodb.com/docs/realm/reference/partition-based-sync/).
+        [Partition-Based Sync](https://www.mongodb.com/docs/atlas/app-services/reference/partition-based-sync).
       responses:
         "200":
           description: Successfully retrieved.
@@ -1515,7 +1514,7 @@ paths:
       operationId: adminListNotifications
       summary: List push notifications
       description: |-
-        List [push notifications](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications).
+        List [push notifications](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications).
       parameters:
         - name: state
           in: query
@@ -1538,7 +1537,7 @@ paths:
       summary: Create a push notification
       description: |-
         Create a [push
-        notification](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications).
+        notification](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications).
       requestBody:
         required: true
         description: The notification to create.
@@ -1632,7 +1631,7 @@ paths:
       summary: Retrieve a push notification message
       description: |-
         Retrieve a [push
-        notification](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications)
+        notification](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications)
         message.
       responses:
         "200":
@@ -1648,7 +1647,7 @@ paths:
       summary: Delete a push notification message
       description: |-
         Delete a [push
-        notification](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications)
+        notification](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications)
         message.
       responses:
         "204":
@@ -1660,7 +1659,7 @@ paths:
       summary: Update a push notification
       description: |-
         Update a [push
-        notification](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications)
+        notification](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications)
         message.
       responses:
         "200":
@@ -1681,7 +1680,7 @@ paths:
       summary: Set a push notification's type
       description: |-
         Set a [push
-        notification's](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications)
+        notification's](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications)
         type.
       responses:
         "200":
@@ -1698,7 +1697,7 @@ paths:
       summary: Send a push notification
       description: |-
         Send a [push
-        notification](https://www.mongodb.com/docs/realm/push-notifications#std-label-push-notifications).
+        notification](https://www.mongodb.com/docs/atlas/app-services/reference/push-notifications).
       responses:
         "200":
           description: Successfully sent.
@@ -1825,7 +1824,7 @@ paths:
                         type: object
                         description: |-
                           Contains [custom user
-                          data](https://www.mongodb.com/docs/realm/users/enable-custom-user-data#std-label-custom-user-data)
+                          data](https://www.mongodb.com/docs/atlas/app-services/users/custom-metadata/#custom-user-data)
                           if it exists for the user. Only present if the access token is created
                           after custom user data is enabled and configured. Omitted if empty.
                       domain_id:
@@ -1865,7 +1864,7 @@ paths:
         - users
       operationId: adminGetUser
       summary: Get a User
-      description: Get a specific [user account](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts) by ID.
+      description: Get a specific [user account](https://www.mongodb.com/docs/atlas/app-services/authentication) by ID.
       responses:
         "200":
           description: Success
@@ -1878,7 +1877,7 @@ paths:
         - users
       operationId: adminDeleteUser
       summary: Delete a user
-      description: Delete a specific [user account](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts) by ID.
+      description: Delete a specific [user account](https://www.mongodb.com/docs/atlas/app-services/authentication) by ID.
       responses:
         "204":
           description: Deleted
@@ -1949,7 +1948,7 @@ paths:
       operationId: adminUserLogout
       summary: Revoke user sessions
       description: |-
-        Revoke all of a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts)'s
+        Revoke all of a [user](https://www.mongodb.com/docs/atlas/app-services/authentication)'s
         sessions.
       responses:
         "204":
@@ -1965,7 +1964,7 @@ paths:
         - users
       operationId: adminEnableUser
       summary: Enable a user
-      description: Enable a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Enable a [user](https://www.mongodb.com/docs/atlas/app-services/authentication).
       responses:
         "204":
           description: Successfully enabled.
@@ -1980,7 +1979,7 @@ paths:
         - users
       operationId: adminDisableUser
       summary: Disable a user
-      description: Disable a [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Disable a [user](https://www.mongodb.com/docs/atlas/app-services/authentication).
       responses:
         "204":
           description: Successfully disabled.
@@ -2069,7 +2068,7 @@ paths:
         - users
       operationId: adminDeletePendingEmailPasswordUser
       summary: Delete a pending email/password authentication user
-      description: Delete a pending [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Delete a pending [user](https://www.mongodb.com/docs/atlas/app-services/authentication).
       responses:
         "204":
           description: Successfully deleted.
@@ -2086,7 +2085,7 @@ paths:
       summary: Send a confirmation email
       description: |-
         Send a [confirmation
-        email](https://www.mongodb.com/docs/realm/authentication/email-password/).
+        email](https://www.mongodb.com/docs/atlas/app-services/authentication/email-password/).
       responses:
         "200":
           description: Successfully sent.
@@ -2101,7 +2100,7 @@ paths:
         - email
       operationId: adminConfirmPendingUser
       summary: Confirm a pending user
-      description: Confirm a pending [user](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+      description: Confirm a pending [user](https://www.mongodb.com/docs/atlas/app-services/authentication).
       responses:
         "204":
           description: Successfully confirmed.
@@ -2117,7 +2116,7 @@ paths:
       operationId: adminRerunPendingUserConfirmation
       summary: Rerun a user confirmation workflow
       description: |-
-        Reruns a pending user's [confirmation workflow](https://www.mongodb.com/docs/realm/authentication#std-label-user-accounts).
+        Reruns a pending user's [confirmation workflow](https://www.mongodb.com/docs/atlas/app-services/authentication).
       responses:
         "202":
           description: Successfully re-ran confirmation workflow.
@@ -2134,7 +2133,7 @@ paths:
         - functions
       operationId: adminExecuteFunction
       summary: Execute a function
-      description: Execute a [function](https://www.mongodb.com/docs/realm/functions#std-label-functions) for testing.
+      description: Execute a [function](https://www.mongodb.com/docs/atlas/app-services/functions/) for testing.
       parameters:
         - name: user_id
           in: query
@@ -2198,7 +2197,7 @@ paths:
       operationId: adminExecuteFunctionSource
       summary: Execute a function's source code for testing
       description: |-
-        Execute a [function](https://www.mongodb.com/docs/realm/functions#std-label-functions)'s source code
+        Execute a [function](https://www.mongodb.com/docs/atlas/app-services/functions/)'s source code
         for testing.
       parameters:
         - name: user_id
@@ -2260,7 +2259,7 @@ paths:
       operationId: adminListAuthProviders
       summary: List authentication providers in a Atlas App Services App
       description: |-
-        List [authentication providers](https://www.mongodb.com/docs/realm/authentication/)
+        List [authentication providers](https://www.mongodb.com/docs/atlas/app-services/authentication/)
         within a Atlas App Services App.
       responses:
         "200":
@@ -2276,7 +2275,7 @@ paths:
       operationId: adminCreateAuthProvider
       summary: Create an authentication provider
       description: |-
-        Create an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
+        Create an [authentication provider](https://www.mongodb.com/docs/atlas/app-services/authentication/).
       requestBody:
         required: true
         description: ""
@@ -2302,7 +2301,7 @@ paths:
       summary: Retrieve information about authentication provider
       description: |-
         Retrieve information about one of an application's [authentication
-        providers](https://www.mongodb.com/docs/realm/authentication/).
+        providers](https://www.mongodb.com/docs/atlas/app-services/authentication/).
       responses:
         "200":
           description: Successfully retrieved.
@@ -2316,7 +2315,7 @@ paths:
       operationId: adminDeleteAuthProvider
       summary: Delete an authentication provider
       description: |-
-        Delete an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
+        Delete an [authentication provider](https://www.mongodb.com/docs/atlas/app-services/authentication/).
       responses:
         "204":
           description: Successfully deleted.
@@ -2326,7 +2325,7 @@ paths:
       operationId: adminUpdateAuthProvider
       summary: Update an authentication provider
       description: |-
-        Update an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
+        Update an [authentication provider](https://www.mongodb.com/docs/atlas/app-services/authentication/).
       requestBody:
         required: true
         description: ""
@@ -2348,7 +2347,7 @@ paths:
       operationId: adminDisableAuthProvider
       summary: Disable an authentication provider
       description: |-
-        Disable an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
+        Disable an [authentication provider](https://www.mongodb.com/docs/atlas/app-services/authentication/).
       responses:
         "204":
           description: Successfully disabled.
@@ -2363,7 +2362,7 @@ paths:
       operationId: adminEnableAuthProvider
       summary: Enable an authentication provider
       description: |-
-        Enable an [authentication provider](https://www.mongodb.com/docs/realm/authentication/).
+        Enable an [authentication provider](https://www.mongodb.com/docs/atlas/app-services/authentication/).
       responses:
         "204":
           description: Successfully enabled.
@@ -3183,7 +3182,7 @@ paths:
       operationId: adminListApiKeys
       summary: List API keys
       description: |-
-        List [API keys](https://www.mongodb.com/docs/realm/authentication/api-key/)
+        List [API keys](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key)
         associated with a Atlas App Services App.
       responses:
         "200":
@@ -3205,7 +3204,7 @@ paths:
       operationId: adminCreateApiKey
       summary: Create a new API key
       description: |-
-        Create a new [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
+        Create a new [API key](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key).
       requestBody:
         description: The API key to create.
         required: true
@@ -3234,7 +3233,7 @@ paths:
       operationId: adminGetApiKey
       summary: Retrieve information about an API key
       description: |-
-        Retrieve information about an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
+        Retrieve information about an [API key](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key).
       responses:
         "200":
           description: The API key was successfully retrieved.
@@ -3248,7 +3247,7 @@ paths:
       operationId: adminDeleteApiKey
       summary: Delete an API key
       description: |-
-        Delete an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
+        Delete an [API key](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key).
       responses:
         "204":
           description: The API key was successfully deleted.
@@ -3263,7 +3262,7 @@ paths:
       operationId: adminEnableApiKey
       summary: Enable an API key
       description: |-
-        Enable an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
+        Enable an [API key](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key).
       responses:
         "204":
           description: The API key was successfully enabled.
@@ -3278,7 +3277,7 @@ paths:
       operationId: adminDisableApiKey
       summary: Disable an API key
       description: |-
-        Disable an [API key](https://www.mongodb.com/docs/realm/authentication/api-key/).
+        Disable an [API key](https://www.mongodb.com/docs/atlas/app-services/authentication/api-key).
       responses:
         "204":
           description: The API key was successfully disabled.
@@ -3336,7 +3335,7 @@ paths:
       operationId: adminGetAllSecrets
       summary: List secrets
       description: |-
-        List [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets#std-label-define-secret)
+        List [secrets](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/define-and-manage-secrets/#define-a-secret)
         associated with a Atlas App Services App.
       responses:
         "200":
@@ -3358,7 +3357,7 @@ paths:
         Create a new Secret
       description: |-
         Create a new
-        [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets).
+        [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/define-and-manage-secrets).
       requestBody:
         description: The Secret to create.
         required: true
@@ -3396,7 +3395,7 @@ paths:
       summary: Modify a Secret
       description: |-
         Modify a
-        [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
+        [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/define-and-manage-secrets)
         associated with a Atlas App Services App.
       requestBody:
         description: The modified value of the Secret.
@@ -3424,7 +3423,7 @@ paths:
       summary: Delete a Secret
       description: |-
         Delete a
-        [Secret](https://www.mongodb.com/docs/realm/values-and-secrets/define-and-manage-secrets)
+        [Secret](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/define-and-manage-secrets)
         associated with a Atlas App Services App.
       responses:
         "204":
@@ -3435,7 +3434,7 @@ paths:
         - functions
       operationId: adminListFunctions
       summary: List Functions
-      description: List [Functions](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: List [Functions](https://www.mongodb.com/docs/atlas/app-services/functions/).
       responses:
         "200":
           description: Successfully listed.
@@ -3449,7 +3448,7 @@ paths:
         - functions
       operationId: adminCreateFunction
       summary: Create a new Function
-      description: Create a new [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Create a new [Function](https://www.mongodb.com/docs/atlas/app-services/functions/).
       requestBody:
         description: The function to create
         required: true
@@ -3479,7 +3478,7 @@ paths:
         - functions
       operationId: adminGetFunction
       summary: Retrieve a Function
-      description: Retrieve a [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Retrieve a [Function](https://www.mongodb.com/docs/atlas/app-services/functions/).
       responses:
         "200":
           description: The function was successfully retrieved.
@@ -3492,7 +3491,7 @@ paths:
         - functions
       operationId: adminDeleteFunction
       summary: Delete a Function
-      description: Delete a [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Delete a [Function](https://www.mongodb.com/docs/atlas/app-services/functions/).
       responses:
         "204":
           description: The function was successfully deleted.
@@ -3501,7 +3500,7 @@ paths:
         - functions
       operationId: adminUpdateFunction
       summary: Update a Function
-      description: Update a [Function](https://www.mongodb.com/docs/realm/functions#std-label-functions).
+      description: Update a [Function](https://www.mongodb.com/docs/atlas/app-services/functions/).
       responses:
         "200":
           description: The function was successfully updated.
@@ -3521,7 +3520,7 @@ paths:
       summary: List external dependencies
       description: |-
         List [external
-        dependencies](https://www.mongodb.com/docs/realm/functions/dependencies/) uploaded
+        dependencies](https://www.mongodb.com/docs/atlas/app-services/functions/dependencies/) uploaded
         to the Atlas App Services App.
       responses:
         "200":
@@ -4027,7 +4026,7 @@ paths:
                     - file
                   description: |-
                     An [asset metadata
-                    document](https://www.mongodb.com/docs/realm/admin/api/v3#std-label-asset-metadata-document)
+                    document](https://www.mongodb.com/docs/atlas/app-services/admin/api/v3/#std-label-asset-metadata-document)
                     (encoded as JSON).
                 file:
                   type: string
@@ -4078,7 +4077,7 @@ paths:
       summary: List group billing usage in a given period
       description: |-
         List the request, compute, sync, and data transfer usage in a given
-        period for [billing](https://www.mongodb.com/docs/realm/billing) purposes.
+        period for [billing](https://www.mongodb.com/docs/atlas/app-services/billing) purposes.
       parameters:
         - "$ref": "#/components/parameters/GroupId"
         - name: start
@@ -4151,7 +4150,7 @@ paths:
                             - sync_time
                           description: |-
                             The usage metric represented by each data point. See
-                            [billing](https://www.mongodb.com/docs/realm/billing).
+                            [billing](https://www.mongodb.com/docs/atlas/app-services/billing).
                         units:
                           type: string
                           enum:
@@ -4190,7 +4189,7 @@ paths:
       description: |-
         List the request, compute, sync, data transfer, and memory usage of a
         specific app in a given period for
-        [billing](https://www.mongodb.com/docs/realm/billing) purposes.
+        [billing](https://www.mongodb.com/docs/atlas/app-services/billing) purposes.
       parameters:
         - "$ref": "#/components/parameters/GroupId"
         - "$ref": "#/components/parameters/AppId"
@@ -4271,7 +4270,7 @@ paths:
                             - mem_usage
                           description: |-
                             The usage metric represented by each data point. See
-                            [billing](https://www.mongodb.com/docs/realm/billing).
+                            [billing](https://www.mongodb.com/docs/atlas/app-services/billing).
                         units:
                           type: string
                           enum:
@@ -4308,7 +4307,7 @@ paths:
         - schemas
       operationId: adminListSchemas
       summary: List schemas
-      description: List all defined [schemas](https://www.mongodb.com/docs/realm/schemas).
+      description: List all defined [schemas](https://www.mongodb.com/docs/atlas/app-services/schemas).
       responses:
         "200":
           description: "Ok"
@@ -4324,7 +4323,7 @@ paths:
       operationId: adminCreateSchema
       summary: Create a schema
       description: |-
-        Define a new [schema](https://www.mongodb.com/docs/realm/schemas) 
+        Define a new [schema](https://www.mongodb.com/docs/atlas/app-services/schemas) 
         for a linked collection. When creating a schema with this endpoint, 
         ensure that the JSON payload is completely unescaped. Incorrectly 
         escaped JSON formats can lead to errors.
@@ -4354,7 +4353,7 @@ paths:
         - schemas
       operationId: adminGetSchema
       summary: Get a schema
-      description: Get a specific [schema](https://www.mongodb.com/docs/realm/schemas) by its `_id` value.
+      description: Get a specific [schema](https://www.mongodb.com/docs/atlas/app-services/schemas) by its `_id` value.
       responses:
         "200":
           description: OK
@@ -4367,7 +4366,7 @@ paths:
         - schemas
       operationId: adminUpdateSchema
       summary: Update a schema
-      description: Replace an existing [schema](https://www.mongodb.com/docs/realm/schemas) with a new one.
+      description: Replace an existing [schema](https://www.mongodb.com/docs/atlas/app-services/schemas) with a new one.
       requestBody:
         required: true
         content:
@@ -4382,7 +4381,7 @@ paths:
         - schemas
       operationId: adminDeleteSchema
       summary: Delete a schema
-      description: Delete a specific [schema](https://www.mongodb.com/docs/realm/schemas) by its `_id` value.
+      description: Delete a specific [schema](https://www.mongodb.com/docs/atlas/app-services/schemas) by its `_id` value.
       responses:
         "204":
           description: No Content
@@ -4397,7 +4396,7 @@ paths:
         - endpoints
       operationId: adminGetAllEndpoints
       summary: Get all endpoints
-      description: Get all [endpoint](https://www.mongodb.com/docs/realm/endpoints/) configurations.
+      description: Get all [endpoint](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/) configurations.
       responses:
         "200":
           description: OK
@@ -4417,7 +4416,7 @@ paths:
         - endpoints
       operationId: adminCreateEndpoint
       summary: Create an endpoint
-      description: Create a new [endpoint](https://www.mongodb.com/docs/realm/endpoints/).
+      description: Create a new [endpoint](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/).
       requestBody:
         description: A valid [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/https_endpoints/) for the new endpoint.
         required: true
@@ -4448,7 +4447,7 @@ paths:
         - endpoints
       operationId: adminGetEndpoint
       summary: Get an endpoint
-      description: Get a specific [endpoint](https://www.mongodb.com/docs/realm/endpoints/)'s configuration.
+      description: Get a specific [endpoint](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/)'s configuration.
       responses:
         "200":
           description: OK
@@ -4466,7 +4465,7 @@ paths:
         - endpoints
       operationId: adminModifyEndpoint
       summary: Modify an endpoint
-      description: Modify an existing [endpoint](https://www.mongodb.com/docs/realm/endpoints/) configuration.
+      description: Modify an existing [endpoint](https://www.mongodb.com/docs/atlas/app-services/data-api/custom-endpoints/) configuration.
       requestBody:
         description: A valid, updated [configuration object](https://www.mongodb.com/docs/atlas/app-services/reference/config/https_endpoints/) for the endpoint.
         required: true
@@ -4696,7 +4695,7 @@ paths:
         - graphql
       operationId: adminGetAllCustomResolvers
       summary: Get all custom resolvers
-      description: Get all [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configurations from your app's GraphQL API.
+      description: Get all [custom resolver](https://www.mongodb.com/docs/atlas/app-services/graphql/custom-resolvers/) configurations from your app's GraphQL API.
       responses:
         "200":
           description: OK
@@ -4711,7 +4710,7 @@ paths:
         - graphql
       operationId: adminCreateCustomResolver
       summary: Create a custom resolver
-      description: Create a new [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/).
+      description: Create a new [custom resolver](https://www.mongodb.com/docs/atlas/app-services/graphql/custom-resolvers/).
       requestBody:
         description: A valid [custom resolver configuration](https://www.mongodb.com/docs/atlas/app-services/reference/config/graphql#std-label-appconfig-custom-resolver) object.
         required: true
@@ -4736,7 +4735,7 @@ paths:
         - graphql
       operationId: adminGetCustomResolver
       summary: Get a custom resolver
-      description: Get a specific [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      description: Get a specific [custom resolver](https://www.mongodb.com/docs/atlas/app-services/graphql/custom-resolvers/) configuration.
       responses:
         "200":
           description: OK
@@ -4749,7 +4748,7 @@ paths:
         - graphql
       operationId: adminModifyCustomResolver
       summary: Modify a custom resolver
-      description: Modify an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      description: Modify an existing [custom resolver](https://www.mongodb.com/docs/atlas/app-services/graphql/custom-resolvers/) configuration.
       requestBody:
         description: A valid, updated [custom resolver configuration](https://www.mongodb.com/docs/atlas/app-services/reference/config/graphql#std-label-appconfig-custom-resolver) object.
         required: true
@@ -4765,7 +4764,7 @@ paths:
         - graphql
       operationId: adminDeleteCustomResolver
       summary: Delete a custom resolver
-      description: Delete an existing [custom resolver](https://www.mongodb.com/docs/realm/graphql/custom-resolvers/) configuration.
+      description: Delete an existing [custom resolver](https://www.mongodb.com/docs/atlas/app-services/graphql/custom-resolvers/) configuration.
       responses:
         "204":
           description: Deleted
@@ -7341,7 +7340,7 @@ components:
             each value is an object that configures its corresponding
             event processor. For an example configuration object, see
             [Send Trigger Events to AWS
-            EventBridge](https://www.mongodb.com/docs/realm/triggers/examples/send-events-aws-eventbridge#std-label-event_processor_example).
+            EventBridge](https://www.mongodb.com/docs/atlas/app-services/triggers/aws-eventbridge#std-label-event_processor_example).
           properties:
             FUNCTION:
               type: object
@@ -7637,13 +7636,13 @@ components:
           type: string
           description: |-
             The [metadata
-            attribute](https://www.mongodb.com/docs/realm/hosting/file-metadata-attributes)
+            attribute](https://www.mongodb.com/docs/atlas/app-services/hosting/file-metadata-attributes)
             name.
         value:
           type: string
           description: |-
             The [metadata
-            attribute](https://www.mongodb.com/docs/realm/hosting/file-metadata-attributes)
+            attribute](https://www.mongodb.com/docs/atlas/app-services/hosting/file-metadata-attributes)
             value.
     AssetMetadata:
       properties:
@@ -7657,7 +7656,7 @@ components:
           type: array
           description: |-
             An array of documents that each describe a [metadata
-            attribute](https://www.mongodb.com/docs/realm/hosting/file-metadata-attributes)
+            attribute](https://www.mongodb.com/docs/atlas/app-services/hosting/file-metadata-attributes)
             that applies to the asset.
           items:
             "$ref": "#/components/schemas/MetadataAttribute"
@@ -7730,7 +7729,7 @@ components:
           type: array
           description: |-
             An array of documents that each describe a [metadata
-            attribute](https://www.mongodb.com/docs/realm/hosting/file-metadata-attributes)
+            attribute](https://www.mongodb.com/docs/atlas/app-services/hosting/file-metadata-attributes)
             that applies to the asset.
           items:
             "$ref": "#/components/schemas/MetadataAttribute"
@@ -7754,7 +7753,7 @@ components:
             inclusive. The default expiration time is 60 days.
     Relationship:
       type: object
-      description: A [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition.
+      description: A [relationship](https://www.mongodb.com/docs/atlas/app-services/schemas/relationships/) definition.
       properties:
         ref:
           type: string
@@ -7771,7 +7770,7 @@ components:
             - the local field must be defined as an array in the collection schema.
     SchemaDefinition:
       type: object
-      description: A valid [schema](https://www.mongodb.com/docs/realm/schemas) for the collection.
+      description: A valid [schema](https://www.mongodb.com/docs/atlas/app-services/schemas) for the collection.
       properties:
         bsonType:
           type: string
@@ -7832,7 +7831,7 @@ components:
           description: The collection name.
     SchemaRelationships:
       type: object
-      description: Relationships to foreign collections. Each field name is a property in the schema. The corresponding value is a [relationship](https://www.mongodb.com/docs/realm/schemas/relationships/) definition for that field.
+      description: Relationships to foreign collections. Each field name is a property in the schema. The corresponding value is a [relationship](https://www.mongodb.com/docs/atlas/app-services/schemas/relationships/) definition for that field.
       additionalProperties:
         "$ref": "#/components/schemas/Relationship"
     SchemaMetadataInstance:
@@ -9266,10 +9265,10 @@ tags:
     description: View and manage your application's [data access rules](https://www.mongodb.com/docs/atlas/app-services/rules/).
   - name: schemas
     x-displayName: Schemas
-    description: View and manage your application's [schemas](https://www.mongodb.com/docs/realm/schemas/).
+    description: View and manage your application's [schemas](https://www.mongodb.com/docs/atlas/app-services/schemas/).
   - name: secrets
     x-displayName: Secrets
-    description: View and manage your application's [secrets](https://www.mongodb.com/docs/realm/values-and-secrets/).
+    description: View and manage your application's [secrets](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/).
   - name: security
     x-displayName: Security
     description: Configure your application's [security](https://www.mongodb.com/docs/atlas/app-services/security/).
@@ -9278,19 +9277,19 @@ tags:
     description: View and manage your application's [data sources](https://www.mongodb.com/docs/atlas/app-services/mongodb/) and [third-party services [Deprecated]](https://www.mongodb.com/docs/atlas/app-services/reference/services/)
   - name: sync
     x-displayName: Sync
-    description: Get information about [sync](https://www.mongodb.com/docs/realm/sync/) for your application.
+    description: Get information about [sync](https://www.mongodb.com/docs/atlas/app-services/sync/) for your application.
   - name: triggers
     x-displayName: Triggers
     description: View and manage your application's [triggers](https://www.mongodb.com/docs/atlas/app-services/triggers/overview/).
   - name: users
     x-displayName: Users
-    description: View and manage your application's [users](https://www.mongodb.com/docs/realm/authentication/).
+    description: View and manage your application's [users](https://www.mongodb.com/docs/atlas/app-services/authentication/).
   - name: email
     x-displayName: User Confirmation
     description: Confirm pending users with the built-in email confirmation flow.
   - name: values
     x-displayName: Values
-    description: View and manage your application's [values](https://www.mongodb.com/docs/realm/values-and-secrets/).
+    description: View and manage your application's [values](https://www.mongodb.com/docs/atlas/app-services/values-and-secrets/).
   - name: notifications
     x-displayName: "[Deprecated] Push Notifications"
     description: View and manage your application's [push notifications](https://www.mongodb.com/docs/atlas/app-services/push-notifications/).
