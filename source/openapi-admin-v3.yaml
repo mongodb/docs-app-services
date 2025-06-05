@@ -7299,6 +7299,7 @@ components:
         - name
         - type
         - config
+        - event_processors
       properties:
         name:
           type: string
@@ -7322,6 +7323,9 @@ components:
             The App Services backend duplicates the value to the configuration location where you did not define it.
 
             For example, if you define `function_id`, the backend duplicates it to `event_processors.FUNCTION.function_id`.
+
+            If you define `function_id`, `event_processors` is not required. You must provide either `function_id` or
+            `event_processors` when updating a trigger.
         function_name:
           type: string
           description: |-
@@ -7333,6 +7337,9 @@ components:
             The App Services backend duplicates the value to the configuration location where you did not define it.
 
             For example, if you define `function_name`, the backend duplicates it to `event_processors.FUNCTION.function_name`.
+
+            If you define `function_name`, `event_processors` is not required. You must provide either `function_name` or
+            `event_processors` when updating a trigger.
         event_processors:
           type: object
           description: |-
@@ -7358,6 +7365,9 @@ components:
                         The App Services backend duplicates the value to the configuration location where you did not define it.
 
                         For example, if you define `event_processors.FUNCTION.function_id`, the backend duplicates it to `function_id`.
+
+                        If you define `function_id`, `event_processors` is not required. You must provide either `function_id` or
+                        `event_processors` when updating a trigger.
                     function_name:
                       type: string
                       description: |-
@@ -7369,6 +7379,9 @@ components:
                         The App Services backend duplicates the value to the configuration location where you did not define it.
 
                         For example, if you define `event_processors.FUNCTION.function_name`, the backend duplicates it to `function_name`.
+
+                        If you define `function_name`, `event_processors` is not required. You must provide either `function_name` or
+                        `event_processors` when updating a trigger.
             AWS_EVENTBRIDGE:
               type: object
               properties:
@@ -7399,6 +7412,11 @@ components:
           match: {}
           project: {}
           full_document: true
+        event_processors:
+          FUNCTION:
+            config:
+              function_id: "6841b8d3e71dc81bed89dbba"
+              function_name: "Atlas_Triggers_DatabaseInsert_1749137618"
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
         - required:
@@ -7564,6 +7582,11 @@ components:
           operation_type: CREATE
           providers:
             - api-key
+        event_processors:
+          FUNCTION:
+            config:
+              function_id: "6841b8d3e71dc81bed89dbba"
+              function_name: "Atlas_Triggers_Auth_Create_1749137618"
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
         - required:
@@ -7605,6 +7628,11 @@ components:
         function_id: 5eea9ca4ca0e356e2c2a148a
         config:
           schedule: "0 8 * * *"
+        event_processors:
+          FUNCTION:
+            config:
+              function_id: "6841b8d3e71dc81bed89dbba"
+              function_name: "Atlas_Triggers_Monthly_1749137618"
       allOf:
         - $ref: "#/components/schemas/BaseTrigger"
         - required:
