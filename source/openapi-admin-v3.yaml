@@ -7449,8 +7449,11 @@ components:
                   description: |-
                     The name of a database in the linked data source. If you
                     omit this parameter, the Source Type changes to
-                    "Deployment," unless you are on a shared tier, in which
-                    case App Services will not let you save the trigger.
+                    "Deployment." However, shared tier infrastructure does not
+                    support deployment changestreams. If you omit the 'database'
+                    parameter, you receive the 'deployment changestreams are
+                    not supported on shared tier clusters' error. Supply the
+                    database parameter to resolve this error.
                 collection:
                   type: string
                   description: |-
